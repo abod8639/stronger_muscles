@@ -1,19 +1,25 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-Padding sectionTitle(ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Most popular offer',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
+Padding sectionTitle() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    child: Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Most popular offer',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          TextButton(onPressed: () {}, child: const Text('See all')),
-        ],
-      ),
-    );
-  }
+            TextButton(onPressed: () {}, child: const Text('See all')),
+          ],
+        );
+      },
+    ),
+  );
+}

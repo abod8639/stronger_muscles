@@ -25,16 +25,16 @@ class HomeView extends GetView<HomeController> {
               children: [
 
                 // Search bar and filter button
-                searchBar(theme),
+                searchBar(),
 
                 // Shortcuts row
-                shortcutsRow(theme),
+                shortcutsRow(),
 
                 // Promo banner
-                promoBanner(theme),
+                promoBanner(),
 
                 // Section title
-                sectionTitle(theme),
+                sectionTitle(),
 
                 // Horizontal product list
                 productList(theme),
