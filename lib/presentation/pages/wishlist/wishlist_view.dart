@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 
 class WishlistView extends GetView<WishlistController> {
   const WishlistView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(WishlistController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wishlist'),
@@ -23,22 +25,28 @@ class WishlistView extends GetView<WishlistController> {
           itemCount: controller.wishlistItems.length,
           itemBuilder: (context, index) {
             final product = controller.wishlistItems[index];
-            return Card(
-              margin: const EdgeInsets.all(8.0),
-              child: ListTile(
-                leading: CachedNetworkImage(
-                  imageUrl: product.imageUrl,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-                title: Text(product.name),
-                subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => controller.removeFromWishlist(product),
+            return InkWell(
+              onTap: () => Get.to(() => ProductDetailsView(product: product)),
+              child: Card(
+                margin: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: Hero(
+                    tag: product.name,
+                    child: CachedNetworkImage(
+                      imageUrl: product.imageUrl,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                    ),
+                  ),
+                  title: Text(product.name),
+                  subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () => controller.removeFromWishlist(product),
+                  ),
                 ),
               ),
             );

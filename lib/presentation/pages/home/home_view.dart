@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/search_bar.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/shortcuts_row.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/promo_banner.dart';

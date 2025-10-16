@@ -45,8 +45,10 @@ Padding shortcutsRow() {
                               BoxShadow(
                                 color: Theme.of(
                                   context,
-                                ).colorScheme.onSurfaceVariant.withAlpha((0.1 * 255).round()),
-                                blurRadius: 4.0,
+                                ).colorScheme.onSurfaceVariant.withRed(10). withAlpha((0.1 * 255).round()),
+                                blurRadius: 2.0,
+                                blurStyle: BlurStyle.outer,
+                                offset: const Offset(1, 2),
                               ),
                             ],
                             color: theme.colorScheme.surfaceContainerHighest,

@@ -30,12 +30,13 @@ class MainPage extends StatelessWidget {
       bottomNavigationBar: Obx(() {
         final theme = Theme.of(context);
         return BottomNavigationBar(
+          
           currentIndex: controller.tabIndex.value,
           onTap: controller.changeTabIndex,
           type: BottomNavigationBarType.fixed,
           backgroundColor: theme.bottomNavigationBarTheme.backgroundColor ?? theme.colorScheme.surface,
           selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor ?? theme.colorScheme.primary,
-          unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor ?? theme.colorScheme.onSurface.withOpacity(0.6),
+          unselectedItemColor:  theme.bottomNavigationBarTheme.unselectedItemColor ?? theme.colorScheme.onSurface.withOpacity(0.6),
           showUnselectedLabels: true,
           items: const [
             BottomNavigationBarItem(
