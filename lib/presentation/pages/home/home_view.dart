@@ -82,27 +82,7 @@ class HomeView extends GetView<HomeController> {
                 promoBanner(theme),
 
                 // Section title
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Most popular offer',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('See all'),
-                      ),
-                    ],
-                  ),
-                ),
+                sectionTitle(theme),
 
                 // Horizontal product list
                 Obx(() {
@@ -192,6 +172,30 @@ class HomeView extends GetView<HomeController> {
         ),
       ),
     );
+  }
+
+  Padding sectionTitle(ThemeData theme) {
+    return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Most popular offer',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: const Text('See all'),
+                    ),
+                  ],
+                ),
+              );
   }
 
   Padding promoBanner(ThemeData theme) {
