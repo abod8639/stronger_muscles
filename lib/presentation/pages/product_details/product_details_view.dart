@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -17,21 +16,18 @@ class ProductDetailsView extends StatelessWidget {
     final productDetailsController = Get.put(ProductDetailsController(product));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product.name),
-      ),
+      appBar: AppBar(title: Text(product.name)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-                                Hero(
-                      tag: product.id,
+            Hero(
+              tag: product.id,
               child: CachedNetworkImage(
                 imageUrl: product.imageUrl,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.cover,
                 height: 300,
@@ -49,18 +45,10 @@ class ProductDetailsView extends StatelessWidget {
             const SizedBox(height: 8.0),
             Text(
               '\$${product.price.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 20.0,
-                color: Colors.grey,
-              ),
+              style: const TextStyle(fontSize: 20.0, color: Colors.grey),
             ),
             const SizedBox(height: 16.0),
-            Text(
-              product.description,
-              style: const TextStyle(
-                fontSize: 16.0,
-              ),
-            ),
+            Text(product.description, style: const TextStyle(fontSize: 16.0)),
             const SizedBox(height: 32.0),
             Row(
               children: [

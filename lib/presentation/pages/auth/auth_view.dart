@@ -43,6 +43,13 @@ class AuthView extends GetView<AuthController> {
               },
               child: const Text('Sign Up'),
             ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                controller.signInWithGoogle();
+              },
+              child: const Text('Sign in with Google'),
+            ),
           ],
         ),
       ),
