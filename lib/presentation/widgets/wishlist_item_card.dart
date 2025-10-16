@@ -19,6 +19,7 @@ class WishlistItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.surface.withRed(30),
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       elevation: 4.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
@@ -28,7 +29,8 @@ class WishlistItemCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Hero(
                 tag: product.name,
@@ -78,6 +80,7 @@ class WishlistItemCard extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(
+                  size: 30,
                   Icons.delete_forever,
                   color: AppColors.primary,
                 ),
