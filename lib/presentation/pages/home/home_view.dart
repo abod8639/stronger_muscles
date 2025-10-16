@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/sectionTitle.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -76,7 +77,7 @@ class HomeView extends GetView<HomeController> {
                 ),
 
                 // Shortcuts row
-                shortcutsRow( theme),
+                shortcutsRow(theme),
 
                 // Promo banner
                 promoBanner(theme),
@@ -174,182 +175,140 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Padding sectionTitle(ThemeData theme) {
+
+
+  Padding promoBanner(ThemeData theme) {
     return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        height: 140,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          gradient: LinearGradient(
+            colors: [
+              theme.colorScheme.primaryContainer,
+              theme.colorScheme.secondaryContainer,
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Most popular offer',
+                      'Shop with 100% cashback',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('See all'),
+                    const SizedBox(height: 8.0),
+                    Text('On Shopee', style: theme.textTheme.bodyMedium),
+                    const SizedBox(height: 12.0),
+                    SizedBox(
+                      height: 36,
+                      child: ElevatedButton(
+                        onPressed: null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          'I want!',
+                          style: TextStyle(color: theme.colorScheme.onPrimary),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              );
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(right: 12.0),
+              child: Icon(Icons.headset, size: 72, color: Colors.black12),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
-  Padding promoBanner(ThemeData theme) {
+  Padding shortcutsRow(ThemeData theme) {
     return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: Container(
-                  height: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    gradient: LinearGradient(
-                      colors: [
-                        theme.colorScheme.primaryContainer,
-                        theme.colorScheme.secondaryContainer,
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Shop with 100% cashback',
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                'On Shopee',
-                                style: theme.textTheme.bodyMedium,
-                              ),
-                              const SizedBox(height: 12.0),
-                              SizedBox(
-                                height: 36,
-                                child: ElevatedButton(
-                                  onPressed: null,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        theme.colorScheme.primary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'I want!',
-                                    style: TextStyle(
-                                      color: theme.colorScheme.onPrimary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 12.0),
-                        child: Icon(
-                          Icons.headset,
-                          size: 72,
-                          color: Colors.black12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-  }
-
-  Padding shortcutsRow( ThemeData theme) {
-    return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 8.0,
-                ),
-                child: SizedBox(
-                  height: 90,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: List.generate(6, (index) {
-                      final labels = [
-                        'protein',
-                        'Creatine',
-                        'amino',
-                        'BCAA',
-                        'pre-workout',
-                        'mass gainer',
-                      ];
-                      final icons = [
-                        Icons.fitness_center,
-                        Icons.sports_handball,
-                        Icons.local_drink,
-                        Icons.bolt,
-                        Icons.flash_on,
-                        Icons.sports_martial_arts,
-                      ];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Builder(
-                              builder: (context) {
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Theme.of(  context)
-                                            .colorScheme
-                                            .onSurfaceVariant
-                                            .withOpacity(0.1),
-                                        blurRadius: 4.0,
-                                      ),
-                                    ],
-                                    color:
-                                        theme.colorScheme.surfaceContainerHighest,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    icons[index],
-                                    color: theme.colorScheme.primary,
-                                  ),
-                                );
-                              }
-                            ),
-                            const SizedBox(height: 6.0),
-                            SizedBox(
-                              width: 70,
-                              child: Text(
-                                labels[index],
-                                style: const TextStyle(fontSize: 12.0),
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      child: SizedBox(
+        height: 90,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: List.generate(6, (index) {
+            final labels = [
+              'protein',
+              'Creatine',
+              'amino',
+              'BCAA',
+              'pre-workout',
+              'mass gainer',
+            ];
+            final icons = [
+              Icons.fitness_center,
+              Icons.sports_handball,
+              Icons.local_drink,
+              Icons.bolt,
+              Icons.flash_on,
+              Icons.sports_martial_arts,
+            ];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8.0),
+              child: Column(
+                children: [
+                  Builder(
+                    builder: (context) {
+                      return Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant.withOpacity(0.1),
+                              blurRadius: 4.0,
                             ),
                           ],
+                          color: theme.colorScheme.surfaceContainerHighest,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          icons[index],
+                          color: theme.colorScheme.primary,
                         ),
                       );
-                    }),
+                    },
                   ),
-                ),
-              );
+                  const SizedBox(height: 6.0),
+                  SizedBox(
+                    width: 70,
+                    child: Text(
+                      labels[index],
+                      style: const TextStyle(fontSize: 12.0),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
+      ),
+    );
   }
 }
