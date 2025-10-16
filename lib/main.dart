@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/Functions/initControllersApp.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/pages/main_page.dart';
 
 Future<void> main() async {
@@ -38,14 +34,6 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  BindingsBuilder<dynamic> initControllersApp() {
-    return BindingsBuilder(() {
-      Get.lazyPut<AuthController>(() => AuthController());
-      Get.lazyPut<HomeController>(() => HomeController());
-      Get.lazyPut<CartController>(() => CartController());
-      Get.lazyPut<WishlistController>(() => WishlistController());
-      Get.lazyPut<MainController>(() => MainController());
-    });
-  }
+
 }
 

@@ -1,35 +1,35 @@
-
+import 'dart:developer' as developer;
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/data/repositories/product_repository.dart';
 
 class WishlistController extends GetxController {
   final RxList<ProductModel> wishlistItems = <ProductModel>[].obs;
   late Box<String> wishlistBox;
+  final ProductRepository _productRepository = ProductRepository();
 
   @override
   void onInit() {
     super.onInit();
     wishlistBox = Hive.box<String>('wishlist');
-    // In a real app, you would fetch product details based on the IDs stored in the wishlistBox
-    // For now, we'll just add dummy products if the wishlist is not empty
-    if (wishlistBox.isNotEmpty) {
-      wishlistItems.assignAll([
-        ProductModel(
-          id: '1',
-          name: 'Whey Protein',
-          price: 59.99,
-          imageUrl: 'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
-          description: 'High-quality whey protein for muscle growth.',
-        ),
-        ProductModel(
-          id: '2',
-          name: 'Creatine Monohydrate',
-          price: 29.99,
-          imageUrl: 'https://wayupsports.com/cdn/shop/files/10821_368621d1-1d16-402a-93e0-f1c9f0e146af.jpg?v=1692179491&width=1000',
-          description: 'Pure creatine for increased strength and performance.',
-        ),
-      ]);
+    _loadWishlistItems();
+  }
+
+  Future<void> _loadWishlistItems() async {
+    wishlistItems.clear();
+    for (var productId in wishlistBox.keys) {
+      final product = await _productRepository.getProductById(productId);
+      if (product != null) {
+        wishlistItems.add(product);
+      } else {
+        // Optionally, handle cases where a product in the wishlist is no longer available
+        developer.log(
+          'Warning: Product with ID $productId not found.',
+          name: 'WishlistController',
+          level: 900, // WARNING
+        );
+      }
     }
   }
 
