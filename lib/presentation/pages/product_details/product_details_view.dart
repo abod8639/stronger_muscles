@@ -80,6 +80,8 @@ class ProductDetailsView extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
+              // 
+              // button
               Obx(() {
                 return IconButton(
                   icon: Icon(

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/productList.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/promoBanner.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/searchBar.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/sectionTitle.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/shortcutsRow.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/search_bar.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/shortcuts_row.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/promo_banner.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/section_title.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/product_list.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -23,7 +25,6 @@ class HomeView extends GetView<HomeController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 // Search bar and filter button
                 searchBar(),
 
@@ -47,7 +48,4 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
-
-
-
 }
