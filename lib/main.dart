@@ -33,15 +33,19 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      initialBinding: BindingsBuilder(() {
-        Get.lazyPut<AuthController>(() => AuthController());
-        Get.lazyPut<HomeController>(() => HomeController());
-        Get.lazyPut<CartController>(() => CartController());
-        Get.lazyPut<WishlistController>(() => WishlistController());
-        Get.lazyPut<MainController>(() => MainController());
-      }),
+      initialBinding: initControllersApp(),
       home: const MainPage(),
     );
+  }
+
+  BindingsBuilder<dynamic> initControllersApp() {
+    return BindingsBuilder(() {
+      Get.lazyPut<AuthController>(() => AuthController());
+      Get.lazyPut<HomeController>(() => HomeController());
+      Get.lazyPut<CartController>(() => CartController());
+      Get.lazyPut<WishlistController>(() => WishlistController());
+      Get.lazyPut<MainController>(() => MainController());
+    });
   }
 }
 
