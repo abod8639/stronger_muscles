@@ -33,6 +33,14 @@ class ProductRepository {
             'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
         description: 'Boost energy and focus for your workouts.',
       ),
+      ProductModel(
+        id: '4',
+        name: 'Creatine Powder',
+        price:  1909,
+        imageUrl:
+            'https://wayupsports.com/cdn/shop/files/ON_CREATINE_POWDER_300G_a0debbc6-79be-4e04-916e-6f82b813c4e6.jpg?v=1716891377&width=1000',
+        description: 'Boost energy and focus for your workouts.',
+      ),
     ];
 
     return dummyProducts.firstWhereOrNull((product) => product.id == id);
