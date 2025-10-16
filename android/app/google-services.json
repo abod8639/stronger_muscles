@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1610448649",
+    "project_id": "stronger-muscles",
+    "storage_bucket": "stronger-muscles.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1610448649:android:883e915ac856b991fa9dd8",
+        "android_client_info": {
+          "package_name": "com.example.stronger_muscles"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQKwgdNCKk1I6cUMkgytutTYiptQL1qAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
