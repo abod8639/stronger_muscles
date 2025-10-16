@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/firebase_options.dart';
-import 'package:stronger_muscles/view/pages/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
+import 'package:stronger_muscles/presentation/pages/main_page.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-
     options: DefaultFirebaseOptions.currentPlatform,
-
-);
+  );
+  await Hive.initFlutter();
+  Hive.registerAdapter(CartItemModelAdapter());
+  await Hive.openBox<CartItemModel>('cart');
+  await Hive.openBox<String>('wishlist');
   runApp(const MyApp());
 }
 
@@ -20,7 +28,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      home: const MyHomePage(),
+      initialBinding: BindingsBuilder(() {
+        Get.lazyPut<AuthController>(() => AuthController());
+        Get.lazyPut<HomeController>(() => HomeController());
+        Get.lazyPut<CartController>(() => CartController());
+        Get.lazyPut<MainController>(() => MainController());
+      }),
+      home: const MainPage(),
     );
   }
 }
