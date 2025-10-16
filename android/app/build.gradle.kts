@@ -27,10 +27,14 @@ android {
         applicationId = "com.example.stronger_muscles"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        minSdk =  flutter.minSdkVersion // 16
+        targetSdk =  flutter.targetSdkVersion // 28
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // minSdkVersion 16
+        // targetSdkVersion 28
+        // multiDexEnabled true
     }
 
     buildTypes {
