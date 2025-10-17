@@ -61,7 +61,7 @@ Padding promoBanner() {
                 ),
                 const Padding(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.headset, size: 72, color: Colors.black12),
+                  child: Icon(Icons.sports_gymnastics_sharp , size: 72, color: Colors.black26),
                 ),
               ],
             ),
