@@ -32,7 +32,7 @@ class CartView extends GetView<CartController> {
                         id: item.id,
                         name: item.name,
                         price: item.price,
-                        imageUrl: [item.imageUrl.toString()],
+                        imageUrl: [item.imageUrl],
                         description: '',
                       );
                       Get.to(ProductDetailsView(product: product));

@@ -52,6 +52,14 @@ class CartController extends GetxController {
       removeFromCart(item);
     }
   }
+  // isInCart
+  bool isInCart(ProductModel product) {
+    return cartItems.any((item) => item.id == product.id);
+  }
+
+  CartItemModel getCartItem(ProductModel product) {
+    return cartItems.firstWhere((item) => item.id == product.id);
+  }
 
   double get totalPrice => cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 }

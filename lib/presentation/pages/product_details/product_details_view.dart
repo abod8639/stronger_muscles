@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
 class ProductDetailsView extends StatelessWidget {
@@ -24,7 +25,7 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // main image
+              // الصورة الرئيسية
               Obx(() {
                 final selectedImageIndex =
                     productDetailsController.selectedImageIndex.value;
@@ -47,7 +48,7 @@ class ProductDetailsView extends StatelessWidget {
               }),
               const SizedBox(height: 24.0),
 
-              // name 
+              // الاسم
               Text(
                 product.name,
                 style: theme.textTheme.headlineMedium?.copyWith(
@@ -55,7 +56,8 @@ class ProductDetailsView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8.0),
-              // price
+
+              // السعر
               Text(
                 'LE ${product.price.toStringAsFixed(2)}',
                 style: theme.textTheme.headlineSmall?.copyWith(
@@ -64,7 +66,7 @@ class ProductDetailsView extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
 
-              // image list view
+              // الصور المصغّرة
               _ImageListView(product: product),
 
               const SizedBox(height: 24.0),
@@ -82,36 +84,71 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
+      // الجزء السفلي (السلة والمفضلة)
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              // add to cart button
-              Expanded(
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    cartController.addToCart(product);
-                    Get.snackbar(
-                      'Added to cart',
-                      '${product.name} was added to your cart.',
-                    );
-                  },
-                  icon: const Icon(Icons.add_shopping_cart),
-                  label: const Text('Add to Cart'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              // 👇 نستخدم Obx لتحديث واجهة السلة مباشرة
+              Obx(() {
+                final isInCart = cartController.isInCart(product);
+                final CartItemModel? item = isInCart ? cartController.getCartItem(product) : null;
+
+                return Expanded(
+                  child: isInCart
+                      ? Card(
+                          color: theme.colorScheme.surface.withOpacity(0.1),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () =>
+                                      cartController.decreaseQuantity(item!),
+                                ),
+                                Text(
+                                  item!.quantity.toString(),
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () =>
+                                      cartController.increaseQuantity(item),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () {
+                            cartController.addToCart(product);
+                            Get.snackbar(
+                              'Added to cart',
+                              '${product.name} was added to your cart.',
+                            );
+                          },
+                          icon: const Icon(Icons.add_shopping_cart),
+                          label: const Text('Add to Cart'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            padding:
+                                const EdgeInsets.symmetric(vertical: 16.0),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                );
+              }),
+
               const SizedBox(width: 16.0),
-                // favorite button
+
+              // زر المفضلة ❤️
               Obx(() {
                 return IconButton(
                   icon: Icon(
@@ -123,9 +160,8 @@ class ProductDetailsView extends StatelessWidget {
                         : null,
                     size: 32,
                   ),
-                  onPressed: () {
-                    productDetailsController.toggleWishlist();
-                  },
+                  onPressed: () =>
+                      productDetailsController.toggleWishlist(),
                 );
               }),
             ],
@@ -151,9 +187,7 @@ class _ImageListView extends StatelessWidget {
         itemCount: product.imageUrl.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              controller.selectImage(index);
-            },
+            onTap: () => controller.selectImage(index),
             child: Obx(() {
               final isSelected =
                   controller.selectedImageIndex.value == index;
