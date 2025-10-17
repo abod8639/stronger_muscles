@@ -6,6 +6,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 class ProductDetailsController extends GetxController {
   final ProductModel product;
   final RxBool isInWishlist = false.obs;
+  RxInt selectedImageIndex = 0.obs;
   late Box<String> wishlistBow;
 
   ProductDetailsController(this.product);
@@ -25,4 +26,6 @@ class ProductDetailsController extends GetxController {
     }
     isInWishlist.toggle();
   }
+void selectImage(int index) => selectedImageIndex.value = index;
+
 }

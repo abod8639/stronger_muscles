@@ -14,7 +14,12 @@ class ProductRepository {
         name: 'Whey Protein',
         price: 59.99,
         imageUrl:
-            ['https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000'],
+            [
+            'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
+            'https://wayupsports.com/cdn/shop/files/10843_1.jpg?v=1756650182&width=1000',
+            'https://wayupsports.com/cdn/shop/files/10843_2.jpg?v=1756650182&width=1000',
+            'https://wayupsports.com/cdn/shop/files/10843_3.jpg?v=1756650182&width=1000',
+            ],
         description: 'High-quality whey protein for muscle growth.',
       ),
       ProductModel(
