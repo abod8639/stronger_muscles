@@ -14,8 +14,6 @@ class ProductDetailsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cartController = Get.find<CartController>();
-    final productDetailsController = Get.put(ProductDetailsController(product));
 
     return Scaffold(
       appBar: AppBar(title: Text(product.name)),
@@ -25,7 +23,6 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               mainImage(),
 
               const SizedBox(height: 24.0),
@@ -63,12 +60,12 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: bottomIconsRow( theme),
+      bottomNavigationBar: bottomIconsRow(theme),
     );
   }
 
-  BottomAppBar bottomIconsRow(ThemeData theme ) {
-        final cartController = Get.find<CartController>();
+  BottomAppBar bottomIconsRow(ThemeData theme) {
+    final cartController = Get.find<CartController>();
     final productDetailsController = Get.put(ProductDetailsController(product));
     return BottomAppBar(
       child: Padding(
@@ -77,7 +74,9 @@ class ProductDetailsView extends StatelessWidget {
           children: [
             Obx(() {
               final isInCart = cartController.isInCart(product);
-              final CartItemModel? item = isInCart ? cartController.getCartItem(product) : null;
+              final CartItemModel? item = isInCart
+                  ? cartController.getCartItem(product)
+                  : null;
 
               return Expanded(
                 child: isInCart
@@ -120,8 +119,7 @@ class ProductDetailsView extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: theme.colorScheme.onPrimary,
-                          padding:
-                              const EdgeInsets.symmetric(vertical: 16.0),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
                           textStyle: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -144,8 +142,7 @@ class ProductDetailsView extends StatelessWidget {
                       : null,
                   size: 32,
                 ),
-                onPressed: () =>
-                    productDetailsController.toggleWishlist(),
+                onPressed: () => productDetailsController.toggleWishlist(),
               );
             }),
           ],
@@ -155,28 +152,27 @@ class ProductDetailsView extends StatelessWidget {
   }
 
   Obx mainImage() {
-        final productDetailsController = Get.put(ProductDetailsController(product));
+    final productDetailsController = Get.put(ProductDetailsController(product));
 
     return Obx(() {
-              final selectedImageIndex =
-                  productDetailsController.selectedImageIndex.value;
-              return Hero(
-                tag: product.id,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: CachedNetworkImage(
-                    imageUrl: product.imageUrl[selectedImageIndex],
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                    fit: BoxFit.contain,
-                    height: 400,
-                    width: double.infinity,
-                  ),
-                ),
-              );
-            });
+      final selectedImageIndex =
+          productDetailsController.selectedImageIndex.value;
+      return Hero(
+        tag: product.id,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12.0),
+          child: CachedNetworkImage(
+            imageUrl: product.imageUrl[selectedImageIndex],
+            placeholder: (context, url) =>
+                const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            fit: BoxFit.contain,
+            height: 400,
+            width: double.infinity,
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -197,8 +193,7 @@ class ImageListView extends StatelessWidget {
           return GestureDetector(
             onTap: () => controller.selectImage(index),
             child: Obx(() {
-              final isSelected =
-                  controller.selectedImageIndex.value == index;
+              final isSelected = controller.selectedImageIndex.value == index;
               return AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 margin: const EdgeInsets.symmetric(horizontal: 8),
