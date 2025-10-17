@@ -12,9 +12,9 @@ Obx productList(ThemeData theme) {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.8,
-        crossAxisSpacing: 12.0,
-        mainAxisSpacing: 12.0,
+        childAspectRatio: 0.82,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
       ),
       itemCount: controller.products.length,
       itemBuilder: (context, index) {
@@ -59,10 +59,12 @@ Obx productList(ThemeData theme) {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name,
+                        product.name.length > 30
+                            ? '${product.name.substring(0,21)}...'
+                            : product.name,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 6.0),
+                      const SizedBox(height: 5.0),
                       Text(
                         'LE ${product.price.toStringAsFixed(2)}',
                         style: TextStyle(

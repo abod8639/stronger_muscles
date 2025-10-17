@@ -25,26 +25,9 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Obx(() {
-                final selectedImageIndex =
-                    productDetailsController.selectedImageIndex.value;
-                return Hero(
-                  tag: product.id,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12.0),
-                    child: CachedNetworkImage(
-                      imageUrl: product.imageUrl[selectedImageIndex],
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      fit: BoxFit.cover,
-                      height: 300,
-                      width: double.infinity,
-                    ),
-                  ),
-                );
-              }),
+
+              mainImage(),
+
               const SizedBox(height: 24.0),
 
               Text(
@@ -80,89 +63,120 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row(
-            children: [
-              Obx(() {
-                final isInCart = cartController.isInCart(product);
-                final CartItemModel? item = isInCart ? cartController.getCartItem(product) : null;
+      bottomNavigationBar: bottomIconsRow( theme),
+    );
+  }
 
-                return Expanded(
-                  child: isInCart
-                      ? Card(
-                          color: theme.colorScheme.surface.withOpacity(0.1),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove),
-                                  onPressed: () =>
-                                      cartController.decreaseQuantity(item!),
-                                ),
-                                Text(
-                                  item!.quantity.toString(),
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () =>
-                                      cartController.increaseQuantity(item),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : ElevatedButton.icon(
-                          onPressed: () {
-                            cartController.addToCart(product);
-                            Get.snackbar(
-                              duration: const Duration(seconds: 1),
-                              'Added to cart',
-                              '${product.name} was added to your cart.',
-                            );
-                          },
-                          icon: const Icon(Icons.add_shopping_cart),
-                          label: const Text('Add to Cart'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 16.0),
-                            textStyle: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+  BottomAppBar bottomIconsRow(ThemeData theme ) {
+        final cartController = Get.find<CartController>();
+    final productDetailsController = Get.put(ProductDetailsController(product));
+    return BottomAppBar(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          children: [
+            Obx(() {
+              final isInCart = cartController.isInCart(product);
+              final CartItemModel? item = isInCart ? cartController.getCartItem(product) : null;
+
+              return Expanded(
+                child: isInCart
+                    ? Card(
+                        color: theme.colorScheme.surface.withOpacity(0.1),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: () =>
+                                    cartController.decreaseQuantity(item!),
+                              ),
+                              Text(
+                                item!.quantity.toString(),
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add),
+                                onPressed: () =>
+                                    cartController.increaseQuantity(item),
+                              ),
+                            ],
                           ),
                         ),
-                );
-              }),
+                      )
+                    : ElevatedButton.icon(
+                        onPressed: () {
+                          cartController.addToCart(product);
+                          Get.snackbar(
+                            duration: const Duration(seconds: 1),
+                            'Added to cart',
+                            '${product.name} was added to your cart.',
+                          );
+                        },
+                        icon: const Icon(Icons.add_shopping_cart),
+                        label: const Text('Add to Cart'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          padding:
+                              const EdgeInsets.symmetric(vertical: 16.0),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+              );
+            }),
 
-              const SizedBox(width: 16.0),
+            const SizedBox(width: 16.0),
 
-              Obx(() {
-                return IconButton(
-                  icon: Icon(
-                    productDetailsController.isInWishlist.value
-                        ? Icons.favorite
-                        : Icons.favorite_border,
-                    color: productDetailsController.isInWishlist.value
-                        ? theme.colorScheme.primary
-                        : null,
-                    size: 32,
-                  ),
-                  onPressed: () =>
-                      productDetailsController.toggleWishlist(),
-                );
-              }),
-            ],
-          ),
+            Obx(() {
+              return IconButton(
+                icon: Icon(
+                  productDetailsController.isInWishlist.value
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: productDetailsController.isInWishlist.value
+                      ? theme.colorScheme.primary
+                      : null,
+                  size: 32,
+                ),
+                onPressed: () =>
+                    productDetailsController.toggleWishlist(),
+              );
+            }),
+          ],
         ),
       ),
     );
+  }
+
+  Obx mainImage() {
+        final productDetailsController = Get.put(ProductDetailsController(product));
+
+    return Obx(() {
+              final selectedImageIndex =
+                  productDetailsController.selectedImageIndex.value;
+              return Hero(
+                tag: product.id,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: CachedNetworkImage(
+                    imageUrl: product.imageUrl[selectedImageIndex],
+                    placeholder: (context, url) =>
+                        const Center(child: CircularProgressIndicator()),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                    fit: BoxFit.contain,
+                    height: 400,
+                    width: double.infinity,
+                  ),
+                ),
+              );
+            });
   }
 }
 
