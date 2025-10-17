@@ -3,10 +3,27 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 class ProductRepository {
   // This is a dummy repository to simulate fetching product details.
   // In a real application, this would interact with a backend API or a local database.
+
+
+
   Future<ProductModel?> getProductById(String id) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 500));
 
+    return dummyProducts.firstWhereOrNull((product) => product.id == id);
+  }
+}
+
+extension ListExtension<T> on List<T> {
+  T? firstWhereOrNull(bool Function(T element) test) {
+    for (var element in this) {
+      if (test(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
+}
     // Dummy product data
     final List<ProductModel> dummyProducts = [
       ProductModel(
@@ -55,18 +72,3 @@ class ProductRepository {
         description: 'Boost energy and focus for your workouts.',
       ),
     ];
-
-    return dummyProducts.firstWhereOrNull((product) => product.id == id);
-  }
-}
-
-extension ListExtension<T> on List<T> {
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) {
-        return element;
-      }
-    }
-    return null;
-  }
-}

@@ -24,7 +24,7 @@ class CartController extends GetxController {
         id: product.id,
         name: product.name,
         price: product.price,
-        imageUrl: product.imageUrl.first,
+        imageUrl: product.imageUrl.last, // Use the last image URL
       );
       cartItems.add(newItem);
       cartBox.add(newItem);

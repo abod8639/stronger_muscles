@@ -24,7 +24,7 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // الصورة الرئيسية
+              // main image
               Obx(() {
                 final selectedImageIndex =
                     productDetailsController.selectedImageIndex.value;
@@ -47,7 +47,7 @@ class ProductDetailsView extends StatelessWidget {
               }),
               const SizedBox(height: 24.0),
 
-              // الاسم والسعر
+              // name 
               Text(
                 product.name,
                 style: theme.textTheme.headlineMedium?.copyWith(
@@ -55,6 +55,7 @@ class ProductDetailsView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8.0),
+              // price
               Text(
                 'LE ${product.price.toStringAsFixed(2)}',
                 style: theme.textTheme.headlineSmall?.copyWith(
@@ -63,7 +64,7 @@ class ProductDetailsView extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
 
-              // قائمة الصور
+              // image list view
               _ImageListView(product: product),
 
               const SizedBox(height: 24.0),
@@ -81,12 +82,12 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
-      // أزرار الأسفل
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
+              // add to cart button
               Expanded(
                 child: ElevatedButton.icon(
                   onPressed: () {
@@ -110,8 +111,7 @@ class ProductDetailsView extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
-
-              // زر المفضلة
+                // favorite button
               Obx(() {
                 return IconButton(
                   icon: Icon(
