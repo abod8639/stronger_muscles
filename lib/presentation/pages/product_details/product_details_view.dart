@@ -25,7 +25,6 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // الصورة الرئيسية
               Obx(() {
                 final selectedImageIndex =
                     productDetailsController.selectedImageIndex.value;
@@ -48,7 +47,6 @@ class ProductDetailsView extends StatelessWidget {
               }),
               const SizedBox(height: 24.0),
 
-              // الاسم
               Text(
                 product.name,
                 style: theme.textTheme.headlineMedium?.copyWith(
@@ -57,7 +55,6 @@ class ProductDetailsView extends StatelessWidget {
               ),
               const SizedBox(height: 8.0),
 
-              // السعر
               Text(
                 'LE ${product.price.toStringAsFixed(2)}',
                 style: theme.textTheme.headlineSmall?.copyWith(
@@ -66,8 +63,7 @@ class ProductDetailsView extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
 
-              // الصور المصغّرة
-              _ImageListView(product: product),
+              ImageListView(product: product),
 
               const SizedBox(height: 24.0),
               Text(
@@ -84,13 +80,11 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
-      // الجزء السفلي (السلة والمفضلة)
       bottomNavigationBar: BottomAppBar(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row(
             children: [
-              // 👇 نستخدم Obx لتحديث واجهة السلة مباشرة
               Obx(() {
                 final isInCart = cartController.isInCart(product);
                 final CartItemModel? item = isInCart ? cartController.getCartItem(product) : null;
@@ -126,6 +120,7 @@ class ProductDetailsView extends StatelessWidget {
                           onPressed: () {
                             cartController.addToCart(product);
                             Get.snackbar(
+                              duration: const Duration(seconds: 1),
                               'Added to cart',
                               '${product.name} was added to your cart.',
                             );
@@ -148,7 +143,6 @@ class ProductDetailsView extends StatelessWidget {
 
               const SizedBox(width: 16.0),
 
-              // زر المفضلة ❤️
               Obx(() {
                 return IconButton(
                   icon: Icon(
@@ -172,9 +166,9 @@ class ProductDetailsView extends StatelessWidget {
   }
 }
 
-class _ImageListView extends StatelessWidget {
+class ImageListView extends StatelessWidget {
   final ProductModel product;
-  const _ImageListView({required this.product});
+  const ImageListView({required this.product});
 
   @override
   Widget build(BuildContext context) {

@@ -15,7 +15,7 @@ class CartItemModel extends HiveObject {
   final double price;
 
   @HiveField(3)
-  final String imageUrl;
+  final List<String> imageUrl;
 
   @HiveField(4)
   int quantity;

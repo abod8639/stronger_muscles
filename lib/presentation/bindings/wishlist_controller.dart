@@ -13,6 +13,11 @@ class WishlistController extends GetxController {
   void onInit() {
     super.onInit();
     wishlistBox = Hive.box<String>('wishlist');
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
     _loadWishlistItems();
   }
 

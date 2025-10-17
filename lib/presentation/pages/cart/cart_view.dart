@@ -99,6 +99,8 @@ class CartView extends GetView<CartController> {
                         : () {
                             // TODO: integrate payment/checkout flow
                             Get.snackbar(
+                            duration: const Duration(seconds: 1),
+
                               'Checkout',
                               'Checkout flow not implemented',
                               snackPosition: SnackPosition.BOTTOM,

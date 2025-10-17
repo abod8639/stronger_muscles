@@ -3,7 +3,7 @@ class ProductModel {
   final String id;
   final String name;
   final double price;
-  final List<dynamic> imageUrl;
+  final List<String> imageUrl;
   final String description;
 
   ProductModel({

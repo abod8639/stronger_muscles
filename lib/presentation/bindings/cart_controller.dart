@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
@@ -16,7 +15,9 @@ class CartController extends GetxController {
   }
 
   void addToCart(ProductModel product) {
-    final existingItemIndex = cartItems.indexWhere((item) => item.id == product.id);
+    final existingItemIndex = cartItems.indexWhere(
+      (item) => item.id == product.id,
+    );
     if (existingItemIndex != -1) {
       cartItems[existingItemIndex].quantity++;
     } else {
@@ -24,7 +25,7 @@ class CartController extends GetxController {
         id: product.id,
         name: product.name,
         price: product.price,
-        imageUrl: product.imageUrl.last, // Use the last image URL
+        imageUrl: product.imageUrl, // Use the last image URL
       );
       cartItems.add(newItem);
       cartBox.add(newItem);
@@ -52,6 +53,7 @@ class CartController extends GetxController {
       removeFromCart(item);
     }
   }
+
   // isInCart
   bool isInCart(ProductModel product) {
     return cartItems.any((item) => item.id == product.id);
@@ -61,5 +63,6 @@ class CartController extends GetxController {
     return cartItems.firstWhere((item) => item.id == product.id);
   }
 
-  double get totalPrice => cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  double get totalPrice =>
+      cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
 }
