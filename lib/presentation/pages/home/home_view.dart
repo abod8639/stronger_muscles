@@ -27,7 +27,7 @@ class HomeView extends GetView<HomeController> {
                 searchBar(),
 
                 // Shortcuts row
-                shortcutsRow(),
+                selectionsRow(),
 
                 // Promo banner
                 promoBanner(),
