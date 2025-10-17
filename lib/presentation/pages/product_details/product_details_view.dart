@@ -6,7 +6,7 @@ import 'package:stronger_muscles/presentation/bindings/product_details_controlle
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ProductDetailsView extends StatelessWidget {
-  final ProductModel product;
+  final ProductModel product ;
 
   const ProductDetailsView({super.key, required this.product});
 
@@ -29,7 +29,7 @@ class ProductDetailsView extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
                   child: CachedNetworkImage(
-                    imageUrl: product.imageUrl,
+                    imageUrl: product.imageUrl.first,
                     placeholder: (context, url) =>
                         const Center(child: CircularProgressIndicator()),
                     errorWidget: (context, url, error) => const Icon(Icons.error),

@@ -37,7 +37,7 @@ class WishlistItemCard extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: CachedNetworkImage(
-                    imageUrl: product.imageUrl,
+                    imageUrl: product.imageUrl.first,
                     width: 100,
                     height: 100,
                     fit: BoxFit.cover,

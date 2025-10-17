@@ -14,7 +14,7 @@ class ProductRepository {
         name: 'Whey Protein',
         price: 59.99,
         imageUrl:
-            'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
+            ['https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000'],
         description: 'High-quality whey protein for muscle growth.',
       ),
       ProductModel(
@@ -22,7 +22,7 @@ class ProductRepository {
         name: 'Creatine Monohydrate',
         price: 29.99,
         imageUrl:
-            'https://wayupsports.com/cdn/shop/files/10821_368621d1-1d16-402a-93e0-f1c9f0e146af.jpg?v=1692179491&width=1000',
+            ['https://wayupsports.com/cdn/shop/files/10821_368621d1-1d16-402a-93e0-f1c9f0e146af.jpg?v=1692179491&width=1000'],
         description: 'Pure creatine for increased strength and performance.',
       ),
       ProductModel(
@@ -30,7 +30,7 @@ class ProductRepository {
         name: 'Pre-Workout',
         price: 34.99,
         imageUrl:
-            'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
+            ['https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000'],
         description: 'Boost energy and focus for your workouts.',
       ),
       ProductModel(
@@ -38,7 +38,15 @@ class ProductRepository {
         name: 'Creatine Powder',
         price:  1909,
         imageUrl:
-            'https://wayupsports.com/cdn/shop/files/ON_CREATINE_POWDER_300G_a0debbc6-79be-4e04-916e-6f82b813c4e6.jpg?v=1716891377&width=1000',
+            ['https://wayupsports.com/cdn/shop/files/ON_CREATINE_POWDER_300G_a0debbc6-79be-4e04-916e-6f82b813c4e6.jpg?v=1716891377&width=1000'],
+        description: 'Boost energy and focus for your workouts.',
+      ),
+      ProductModel(
+        id: '5',
+        name: 'Clear Blue Shaker',
+        price:  200,
+        imageUrl:
+            ['https://wayupsports.com/cdn/shop/files/6224009096169_max_muscle_7f8a569d-bed6-4563-8c06-e4528df1111b.jpg?v=1683722662&width=1000'],
         description: 'Boost energy and focus for your workouts.',
       ),
     ];
