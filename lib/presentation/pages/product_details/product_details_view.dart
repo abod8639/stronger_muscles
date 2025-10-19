@@ -178,7 +178,7 @@ class ProductDetailsView extends StatelessWidget {
 
 class ImageListView extends StatelessWidget {
   final ProductModel product;
-  const ImageListView({required this.product});
+  const ImageListView({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

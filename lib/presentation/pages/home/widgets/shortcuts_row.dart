@@ -1,87 +1,112 @@
 import 'package:flutter/material.dart';
 
-// selections shortcuts row
 class Selections {
-  final String labels;
-  final IconData icons;
+  final String label;
+  final IconData icon;
+  final void Function()? onTap;
 
-  Selections({required this.labels, required this.icons});
+  Selections({
+    required this.label,
+    required this.icon,
+    this.onTap,
+  });
 }
 
-List<Selections> selections = [
-  Selections(labels: 'protein', icons: Icons.fitness_center),
-  Selections(labels: 'Creatine', icons: Icons.sports_handball),
-  Selections(labels: 'amino', icons: Icons.local_drink),
-  Selections(labels: 'BCAA', icons: Icons.bolt),
-  Selections(labels: 'pre-workout', icons: Icons.flash_on),
-  Selections(labels: 'mass gainer', icons: Icons.sports_martial_arts),
-];
+class SelectionsRow extends StatefulWidget {
+  final List<Selections> selections;
+  final int initialIndex;
 
-Padding selectionsRow() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-    child: Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
+  const SelectionsRow({
+    super.key,
+    required this.selections,
+    this.initialIndex = 0,
+  });
 
-        return SizedBox(
-          height: 90,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: List.generate(6, (index) {
+  @override
+  State<SelectionsRow> createState() => _SelectionsRowState();
+}
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 3,
-                  horizontal: 8.0,
-                ),
-                child: Column(
-                  children: [
-                    Builder(
-                      builder: (context) {
-                        return Container(
-                          width: 56,
-                          height: 56,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant
-                                    .withRed(10)
-                                    .withAlpha((0.1 * 255).round()),
-                                blurRadius: 2.0,
-                                blurStyle: BlurStyle.outer,
-                                offset: const Offset(1, 2),
-                              ),
-                            ],
-                            color: theme.colorScheme.surfaceContainerHighest,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            selections[index].icons,
-                            color: theme.colorScheme.primary,
-                          ),
-                        );
-                      },
+class _SelectionsRowState extends State<SelectionsRow> {
+  late int selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.initialIndex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      child: SizedBox(
+        height: 90,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: widget.selections.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 5),
+          itemBuilder: (context, index) {
+            final item = widget.selections[index];
+            final isSelected = selectedIndex == index;
+
+            return GestureDetector(
+              onTap: () {
+                setState(() => selectedIndex = index);
+                item.onTap?.call();
+              },
+              child: Column(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 180),
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      boxShadow: [
+                        BoxShadow(
+                          color: isSelected
+                              ? theme.colorScheme.primary.withOpacity(0.3)
+                              : theme.colorScheme.primary.withBlue(250) .withOpacity(0.3),
+                          blurRadius: isSelected ? 6 : 3,
+                          offset: const Offset(2, 3),
+                          blurStyle: BlurStyle.outer,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 6.0),
-                    SizedBox(
-                      width: 70,
-                      child: Text(
-                        selections[index].labels,
-                        style: const TextStyle(fontSize: 12.0),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
+                    child: Icon(
+                      item.icon,
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
+                      size: 28,
+                    ),
+                  ),
+                  const SizedBox(height: 6.0),
+                  SizedBox(
+                    width: 70,
+                    child: Text(
+                      item.label,
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? theme.colorScheme.primary
+                            : theme.colorScheme.onSurfaceVariant,
                       ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ],
-                ),
-              );
-            }),
-          ),
-        );
-      },
-    ),
-  );
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
 }
