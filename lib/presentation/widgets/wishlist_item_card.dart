@@ -58,7 +58,7 @@ class WishlistItemCard extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,

@@ -22,7 +22,9 @@ BottomAppBar bottomIconsRow(ThemeData theme, ProductModel product) {
             return Expanded(
               child: isInCart
                   ? Card(
-                      color: theme.colorScheme.surface.withOpacity(0.1),
+                      color: theme.colorScheme.surface.withAlpha(
+                        (255 * 0.1).round(),
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Row(

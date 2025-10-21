@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -26,6 +25,6 @@ class ProductDetailsController extends GetxController {
     }
     isInWishlist.toggle();
   }
-void selectImage(int index) => selectedImageIndex.value = index;
 
+  void selectImage(int index) => selectedImageIndex.value = index;
 }

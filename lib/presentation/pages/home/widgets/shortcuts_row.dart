@@ -5,11 +5,7 @@ class Selections {
   final IconData icon;
   final void Function()? onTap;
 
-  Selections({
-    required this.label,
-    required this.icon,
-    this.onTap,
-  });
+  Selections({required this.label, required this.icon, this.onTap});
 }
 
 class SelectionsRow extends StatefulWidget {
@@ -46,7 +42,7 @@ class _SelectionsRowState extends State<SelectionsRow> {
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
           itemCount: widget.selections.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 5),
+          separatorBuilder: (_, index) => const SizedBox(width: 5),
           itemBuilder: (context, index) {
             final item = widget.selections[index];
             final isSelected = selectedIndex == index;
@@ -68,8 +64,12 @@ class _SelectionsRowState extends State<SelectionsRow> {
                       boxShadow: [
                         BoxShadow(
                           color: isSelected
-                              ? theme.colorScheme.primary.withOpacity(0.3)
-                              : theme.colorScheme.primary.withBlue(250) .withOpacity(0.3),
+                              ? theme.colorScheme.primary.withAlpha(
+                                  (255 * 0.3).round(),
+                                )
+                              : theme.colorScheme.primary
+                                    .withBlue(250)
+                                    .withAlpha((255 * 0.3).round()),
                           blurRadius: isSelected ? 6 : 3,
                           offset: const Offset(2, 3),
                           blurStyle: BlurStyle.outer,
@@ -91,8 +91,9 @@ class _SelectionsRowState extends State<SelectionsRow> {
                       item.label,
                       style: TextStyle(
                         fontSize: 12.0,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.normal,
                         color: isSelected
                             ? theme.colorScheme.primary
                             : theme.colorScheme.onSurfaceVariant,

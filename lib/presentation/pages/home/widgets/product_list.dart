@@ -14,7 +14,7 @@ Obx productList(ThemeData theme) {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.82,
+          childAspectRatio: 0.65,
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 10.0,
         ),

@@ -9,7 +9,7 @@ class AuthController extends GetxController {
   // Google OAuth client ID (used by web/iOS config or manual flows).
   // Keep the ID here so it can be referenced where necessary.
   static const String googleClientId =
-    '1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com';
+      '1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com';
 
   // Use the singleton instance; platforms and plugin versions manage config.
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -20,7 +20,8 @@ class AuthController extends GetxController {
       // Trigger the interactive sign-in flow using the plugin's authenticate
       // method (this version returns an account where `authentication` may
       // expose only `idToken`).
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate(); // user cancelled
+      final GoogleSignInAccount googleUser = await _googleSignIn
+          .authenticate(); // user cancelled
 
       // Obtain the auth details from the request (idToken expected)
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
@@ -33,7 +34,9 @@ class AuthController extends GetxController {
       );
 
       // Once signed in, return the Firebase user
-      final UserCredential userCredential = await _auth.signInWithCredential(credential);
+      final UserCredential userCredential = await _auth.signInWithCredential(
+        credential,
+      );
       return userCredential.user;
     } catch (e) {
       Get.snackbar('Error', e.toString());

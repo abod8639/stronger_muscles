@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/ImageListView.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottomIconsRow.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/mainImage.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
 class ProductDetailsView extends StatelessWidget {
   final ProductModel product;
@@ -58,8 +58,7 @@ class ProductDetailsView extends StatelessWidget {
         ),
       ),
 
-      bottomNavigationBar: bottomIconsRow(theme,product),
+      bottomNavigationBar: bottomIconsRow(theme, product),
     );
   }
-
 }

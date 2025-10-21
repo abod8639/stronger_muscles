@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
-import 'package:stronger_muscles/presentation/widgets/CartItemCard.dart';
+import 'package:stronger_muscles/presentation/widgets/cart_item_card.dart';
 
 class CartView extends GetView<CartController> {
   const CartView({super.key});
@@ -13,7 +13,7 @@ class CartView extends GetView<CartController> {
       appBar: AppBar(
         title: Obx(
           () => Text(
-            'Cart (${controller.cartItems.length})',
+            'Cart  ${controller.cartItems.length} items',
             style: const TextStyle(color: AppColors.white),
           ),
         ),
@@ -99,7 +99,7 @@ class CartView extends GetView<CartController> {
                         : () {
                             // TODO: integrate payment/checkout flow
                             Get.snackbar(
-                            duration: const Duration(seconds: 1),
+                              duration: const Duration(seconds: 1),
 
                               'Checkout',
                               'Checkout flow not implemented',

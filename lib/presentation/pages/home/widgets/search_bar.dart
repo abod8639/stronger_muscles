@@ -3,13 +3,12 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 
 Padding searchBar() {
-
   final controller = Get.find<HomeController>();
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
     child: Builder(
       builder: (context) {
-          final theme = Theme.of(context);
+        final theme = Theme.of(context);
         return Row(
           children: [
             Expanded(
@@ -22,11 +21,16 @@ Padding searchBar() {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.search,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration.collapsed(hintText: 'Search'),
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Search',
+                        ),
                         onChanged: controller.onSearchChanged,
                       ),
                     ),
@@ -43,13 +47,16 @@ Padding searchBar() {
                 shape: BoxShape.circle,
               ),
               child: IconButton(
-                icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
+                icon: Icon(
+                  Icons.tune,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
                 onPressed: () {},
               ),
             ),
           ],
         );
-      }
+      },
     ),
   );
 }
