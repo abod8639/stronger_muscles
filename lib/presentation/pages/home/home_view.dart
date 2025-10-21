@@ -13,6 +13,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    
   final List<Selections> selections = [
   Selections(label: 'Protein', icon: Icons.fitness_center),
   Selections(label: 'Creatine', icon: Icons.sports_handball),
@@ -40,7 +41,6 @@ class HomeView extends GetView<HomeController> {
                 SelectionsRow(
                   selections: selections,
                   initialIndex: 0,
-
                 ),
 
                 // Promo banner
