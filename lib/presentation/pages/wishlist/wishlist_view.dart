@@ -9,7 +9,6 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(WishlistController());
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wishlist', style: TextStyle(color: AppColors.white)),
