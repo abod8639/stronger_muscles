@@ -4,6 +4,7 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_image_controller.dart';
 
 BindingsBuilder<dynamic> initControllersApp() {
   return BindingsBuilder(() {
@@ -12,5 +13,6 @@ BindingsBuilder<dynamic> initControllersApp() {
     Get.lazyPut<CartController>(() => CartController());
     Get.lazyPut<WishlistController>(() => WishlistController());
     Get.lazyPut<MainController>(() => MainController());
+    Get.lazyPut<ProductImageController>(() => ProductImageController());
   });
 }

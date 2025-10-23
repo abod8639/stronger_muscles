@@ -5,16 +5,18 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/controllers/product_image_controller.dart';
 
 class ImageListView extends StatelessWidget {
-  final ScrollController ?scrollController;
+  final ScrollController? scrollController;
   final ProductModel product;
   const ImageListView({
     this.scrollController,
-    super.key, required this.product});
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
-
-  final controller = Get.find<ProductImageController>(tag: product.id);
+    // final controller = Get.find<ProductImageController>(tag: product.id);
+    final controller = Get.put(ProductImageController(),tag: product.id);//(tag: product.id);
 
     return SizedBox(
       height: 100,
