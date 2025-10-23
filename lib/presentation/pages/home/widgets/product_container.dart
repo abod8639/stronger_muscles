@@ -30,16 +30,20 @@ class _ProductContainerState extends State<ProductContainer> {
   @override
   void initState() {
     super.initState();
-    // register the image controller once for this widget's lifecycle
-    imageController = Get.put(ProductImageController());
+    // Create a controller instance scoped/tagged to this product so other
+    // product pages don't interfere.
+    imageController = Get.put(ProductImageController(), tag: widget.product.id);
   }
 
   @override
   void dispose() {
-    // remove controller when this widget is disposed to avoid leaking
-    try {
-      Get.delete<ProductImageController>();
-    } catch (_) {}
+    // Remove the controller when this widget is disposed to avoid leaking
+    // controllers for many products.
+    if (Get.isRegistered<ProductImageController>(tag: widget.product.id)) {
+      try {
+        Get.delete<ProductImageController>(tag: widget.product.id);
+      } catch (_) {}
+    }
     super.dispose();
   }
 
