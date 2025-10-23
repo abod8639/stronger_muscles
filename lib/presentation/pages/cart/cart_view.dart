@@ -51,7 +51,9 @@ class CartView extends GetView<CartController> {
         }
         return Column(
           children: [
+
             SizedBox(height: 10),
+
             Expanded(
               child: ListView.builder(
                 itemCount: controller.cartItems.length,
@@ -63,6 +65,7 @@ class CartView extends GetView<CartController> {
             ),
 
             const Divider(height: 1, color: AppColors.grey),
+
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16.0,
@@ -74,11 +77,14 @@ class CartView extends GetView<CartController> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        
                         const Text(
                           'Total',
                           style: TextStyle(fontSize: 14, color: AppColors.grey),
                         ),
+
                         const SizedBox(height: 4),
+
                         Obx(
                           () => Text(
                             '\$${controller.totalPrice.toStringAsFixed(2)}',
@@ -92,7 +98,9 @@ class CartView extends GetView<CartController> {
                       ],
                     ),
                   ),
+
                   const SizedBox(width: 12),
+
                   ElevatedButton(
                     onPressed: controller.cartItems.isEmpty
                         ? null

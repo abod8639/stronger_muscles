@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
 class ProductDetailsView extends StatelessWidget {
   final ProductModel product;
@@ -21,7 +21,12 @@ class ProductDetailsView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              mainImage(product),
+
+              ProductContainer(
+                scrollController: 0,
+                height: 350.0,
+                product: product, theme: theme),
+              // mainImage(product),
 
               const SizedBox(height: 24.0),
 
@@ -31,6 +36,7 @@ class ProductDetailsView extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
               const SizedBox(height: 8.0),
 
               Text(
@@ -39,20 +45,31 @@ class ProductDetailsView extends StatelessWidget {
                   color: theme.colorScheme.primary,
                 ),
               ),
+
               const SizedBox(height: 16.0),
 
-              ImageListView(product: product),
+              ImageListView(
+                scrollController: ScrollController(
+                  initialScrollOffset: 0,
+                  keepScrollOffset: true,
+                ),
+                product: product),
 
               const SizedBox(height: 24.0),
+
               Text(
                 'Description',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
               const SizedBox(height: 8.0),
+
               Text(product.description, style: theme.textTheme.bodyMedium),
+
               const SizedBox(height: 32.0),
+
             ],
           ),
         ),

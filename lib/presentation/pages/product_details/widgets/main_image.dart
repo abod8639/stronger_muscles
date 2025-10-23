@@ -10,19 +10,16 @@ Obx mainImage(ProductModel product) {
   return Obx(() {
     final selectedImageIndex =
         productDetailsController.selectedImageIndex.value;
-    return Hero(
-      tag: product.id,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12.0),
-        child: CachedNetworkImage(
-          imageUrl: product.imageUrl[selectedImageIndex],
-          placeholder: (context, url) =>
-              const Center(child: CircularProgressIndicator()),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
-          fit: BoxFit.contain,
-          height: 400,
-          width: double.infinity,
-        ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12.0),
+      child: CachedNetworkImage(
+        imageUrl: product.imageUrl[selectedImageIndex],
+        placeholder: (context, url) =>
+        const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+        fit: BoxFit.contain,
+        height: 400,
+        width: double.infinity,
       ),
     );
   });

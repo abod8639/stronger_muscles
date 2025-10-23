@@ -32,26 +32,26 @@ class WishlistItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Hero(
-                tag: product.name,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: CachedNetworkImage(
-                    imageUrl: product.imageUrl.first,
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
+
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: CachedNetworkImage(
+                  imageUrl: product.imageUrl.first,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primary,
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error, color: AppColors.primary),
                   ),
+                  errorWidget: (context, url, error) =>
+                      const Icon(Icons.error, color: AppColors.primary),
                 ),
               ),
+
               const SizedBox(width: 16.0),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,6 +78,7 @@ class WishlistItemCard extends StatelessWidget {
                   ],
                 ),
               ),
+
               IconButton(
                 icon: const Icon(
                   size: 30,
@@ -87,6 +88,7 @@ class WishlistItemCard extends StatelessWidget {
                 onPressed: () => controller.removeFromWishlist(product),
                 tooltip: 'Remove from Wishlist',
               ),
+              
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -22,6 +21,7 @@ class CartItemCard extends StatelessWidget {
       elevation: 4.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       child: InkWell(
+
         onTap: () {
           final product = ProductModel(
             id: item.id,
@@ -39,8 +39,12 @@ class CartItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(width: 100, height: 100,
+
+              SizedBox(
+                width: 100,
+                height: 100,
                 child: ProductContainer(
+                  height: 100,
                   product: ProductModel(
                     id: item.id,
                     name: item.name,
@@ -51,11 +55,14 @@ class CartItemCard extends StatelessWidget {
                   theme: Theme.of(context),
                 ),
               ),
+
               const SizedBox(width: 16.0),
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text(
                       item.name,
                       style: TextStyle(
@@ -66,7 +73,9 @@ class CartItemCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
+
                     const SizedBox(height: 8.0),
+
                     Text(
                       '\$${item.price.toStringAsFixed(2)}',
                       style: const TextStyle(
@@ -78,9 +87,11 @@ class CartItemCard extends StatelessWidget {
                   ],
                 ),
               ),
+
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+
                   IconButton(
                     icon: const Icon(
                       Icons.remove_circle_outline,
@@ -89,10 +100,12 @@ class CartItemCard extends StatelessWidget {
                     onPressed: () => controller.decreaseQuantity(item),
                     tooltip: 'Decrease',
                   ),
+
                   Text(
                     item.quantity.toString(),
                     style: const TextStyle(fontSize: 16),
                   ),
+
                   IconButton(
                     icon: const Icon(
                       Icons.add_circle_outline,
@@ -101,8 +114,10 @@ class CartItemCard extends StatelessWidget {
                     onPressed: () => controller.increaseQuantity(item),
                     tooltip: 'Increase',
                   ),
+
                 ],
               ),
+
             ],
           ),
         ),

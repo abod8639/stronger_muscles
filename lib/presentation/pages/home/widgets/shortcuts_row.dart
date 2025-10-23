@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/product_list.dart';
 
 class Selections {
   final String label;
@@ -9,13 +11,13 @@ class Selections {
 }
 
 class SelectionsRow extends StatefulWidget {
-  final List<Selections> selections;
-  final int initialIndex;
+  // final List<Selections> selections;
+  // final int initialIndex;
 
   const SelectionsRow({
     super.key,
-    required this.selections,
-    this.initialIndex = 0,
+    // required this.selections,
+    // this.initialIndex = 0,
   });
 
   @override
@@ -24,11 +26,12 @@ class SelectionsRow extends StatefulWidget {
 
 class _SelectionsRowState extends State<SelectionsRow> {
   late int selectedIndex;
+      final SectionsController sectionsController = Get.put(SectionsController());
 
   @override
   void initState() {
     super.initState();
-    selectedIndex = widget.initialIndex;
+    selectedIndex = sectionsController.selectedIndex.value;
   }
 
   @override
@@ -41,10 +44,10 @@ class _SelectionsRowState extends State<SelectionsRow> {
         height: 90,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
-          itemCount: widget.selections.length,
+          itemCount: sectionsController.selections.length,
           separatorBuilder: (_, index) => const SizedBox(width: 5),
           itemBuilder: (context, index) {
-            final item = widget.selections[index];
+            final item = sectionsController.selections[index];
             final isSelected = selectedIndex == index;
 
             return GestureDetector(

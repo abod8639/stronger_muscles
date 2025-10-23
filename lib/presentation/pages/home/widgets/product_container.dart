@@ -7,18 +7,29 @@ class ProductContainer extends StatefulWidget {
     super.key,
     required this.product,
     required this.theme,
+    required this.height,
+    this.showName,
+    this.scrollController,
   });
 
   final ProductModel product;
   final ThemeData theme;
+  final double height;
+  final bool? showName;
+  final int? scrollController;
 
   @override
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  int _currentPage = 0;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   int currentPage = widget.scrollController ?? 0;
+  // }
 
+  int? _currentPage;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,92 +49,96 @@ class _ProductContainerState extends State<ProductContainer> {
         children: [
           Stack(
             children: [
-              Hero(
-                tag: widget.product.id,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16.0),
-                  ),
-                  child: SizedBox(
-                    height: 180,
-                    width: double.infinity,
-                    child: PageView.builder(
-                      itemCount: widget.product.imageUrl.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return CachedNetworkImage(
-                          imageUrl: widget.product.imageUrl[index],
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16.0),
+                ),
+                child: SizedBox(
+                  height: widget.height, //180,
+                  width: double.infinity,
+                  child: PageView.builder(
+                    itemCount: widget.product.imageUrl.length,
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                    itemBuilder: (context, index) {
+                      return CachedNetworkImage(
+                        imageUrl: widget.product.imageUrl[index],
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: CircularProgressIndicator(),
                           ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.error, color: Colors.red),
-                          ),
-                        );
-                      },
-                    ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.error, color: Colors.red),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-              if (widget.product.imageUrl.length > 1)
-                Positioned(
-                  bottom: 8.0,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      widget.product.imageUrl.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        height: 8.0,
-                        width: _currentPage == index ? 24.0 : 8.0,
-                        decoration: BoxDecoration(
-                          color: _currentPage == index
-                              ? widget.theme.colorScheme.primary
-                              : Colors.white.withAlpha((255 * 0.7).round()),
-                          borderRadius: BorderRadius.circular(12),
+              if (widget.showName != null && widget.showName == true)
+                if (widget.product.imageUrl.length > 1)
+                  Positioned(
+                    bottom: 8.0,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        widget.product.imageUrl.length,
+                        (index) => AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          height: 5.0,
+                          width: _currentPage == index ? 20.0 : 5.0,
+                          decoration: BoxDecoration(
+                            color: _currentPage == index
+                                ? widget.theme.colorScheme.primary
+                                : Colors.grey.withAlpha((255 * 0.7).round()),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
+
+              const SizedBox.shrink(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.product.name,
-                  style: widget.theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+
+          if (widget.showName != null && widget.showName == true)
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.product.name,
+                    style: widget.theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8.0),
-                Text(
-                  'LE ${widget.product.price.toStringAsFixed(2)}',
-                  style: widget.theme.textTheme.bodyLarge?.copyWith(
-                    color: widget.theme.colorScheme.primary,
-                    fontWeight: FontWeight.w600,
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'LE ${widget.product.price.toStringAsFixed(2)}',
+                    style: widget.theme.textTheme.bodyLarge?.copyWith(
+                      color: widget.theme.colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+
+          const SizedBox.shrink(),
         ],
       ),
     );
