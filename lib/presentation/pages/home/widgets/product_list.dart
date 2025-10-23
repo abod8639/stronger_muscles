@@ -44,7 +44,8 @@ Obx productList(ThemeData theme) {
 // Sections controller 
 
 class SectionsController extends GetxController {
-  var selectedIndex = 0.obs;
+
+  final RxInt selectedIndex = 0.obs;
 
       final List<Selections> selections = [
       Selections(
@@ -70,7 +71,10 @@ class SectionsController extends GetxController {
 
   void updateIndex(int index) {
     selectedIndex.value = index;
+    
   }
+
+
 
 
 }

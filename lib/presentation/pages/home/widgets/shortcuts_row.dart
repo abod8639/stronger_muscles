@@ -11,14 +11,7 @@ class Selections {
 }
 
 class SelectionsRow extends StatefulWidget {
-  // final List<Selections> selections;
-  // final int initialIndex;
-
-  const SelectionsRow({
-    super.key,
-    // required this.selections,
-    // this.initialIndex = 0,
-  });
+  const SelectionsRow({super.key});
 
   @override
   State<SelectionsRow> createState() => _SelectionsRowState();
@@ -26,7 +19,7 @@ class SelectionsRow extends StatefulWidget {
 
 class _SelectionsRowState extends State<SelectionsRow> {
   late int selectedIndex;
-      final SectionsController sectionsController = Get.put(SectionsController());
+  final SectionsController sectionsController = Get.put(SectionsController());
 
   @override
   void initState() {

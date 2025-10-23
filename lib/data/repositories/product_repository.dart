@@ -24,6 +24,11 @@ extension ListExtension<T> on List<T> {
 }
 
 // Dummy product data
+final List<ProductModel> dummyAminoProducts = [];
+final List<ProductModel> dummyBCAAProducts = [];
+final List<ProductModel> dummyPreWorkoutProducts = [];
+final List<ProductModel> dummyMassGainerProducts = [];
+
 final List<ProductModel> dummyProducts = [
   ProductModel(
     id: '1',
@@ -114,5 +119,75 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/6224009096169_max_muscle_7f8a569d-bed6-4563-8c06-e4528df1111b.jpg?v=1683722662&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+  ),
+];
+
+final List<ProductModel> dummyCreatineProducts = [
+  ProductModel(
+    id: '1',
+    name: 'Cera Seeds Creatine Monohydrate 30 Serv 150G',
+    price: 400.00,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/7898588895560.jpg?v=1750146580&width=1000',
+      'https://wayupsports.com/cdn/shop/files/7898588895560_1.jpg?v=1750146580&width=1000'
+          'https://wayupsports.com/cdn/shop/files/7898588895560_2.jpg?v=1750146580&width=1000',
+    ],
+    description: 'Boost energy and focus for your workouts.',
+  ),
+  ProductModel(
+    id: '2',
+    name: 'Red Rex Beef Aminos 100Serv 300Coated Tablets',
+    price: 1300.00,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/6223007823098_max_muscle_5893ce62-7ced-41d1-a63f-368e0689ad66.jpg?v=1702980166&width=1000',
+      'https://wayupsports.com/cdn/shop/files/6223007823098_max_muscle_1_13700fb8-56f6-4a0f-baca-6e8576dceef4.jpg?v=1702980196&width=1000',
+      'https://wayupsports.com/cdn/shop/files/6223007823098_max_muscle_2_0aca455f-fecd-4d02-9bf8-4a66a8d876f7.jpg?v=1702980196&width=1000',
+    ],
+    description: 'Boost energy and focus for your workouts.',
+  ),
+  ProductModel(
+    id: '3',
+    name: 'Creatine Powder',
+    price: 1909,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/ON_CREATINE_POWDER_300G_a0debbc6-79be-4e04-916e-6f82b813c4e6.jpg?v=1716891377&width=1000',
+    ],
+    description: 'Boost energy and focus for your workouts.',
+  ),
+];
+
+final List<ProductModel> dummyProteinProducts = [
+  ProductModel(
+    id: '1',
+    name: 'Whey Gold Standard 149 Servings 4.54 KG Double Rich Chocolate',
+    price: 9499.00,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/115013.jpg?v=1756891715&width=1000',
+      'https://wayupsports.com/cdn/shop/files/115013_1.jpg?v=1756891715&width=1000',
+    ],
+    description: 'Boost energy and focus for your workouts.',
+  ),
+  ProductModel(
+    id: '2',
+    name: 'Whey Protein',
+    price: 59.99,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
+      'https://wayupsports.com/cdn/shop/files/10843_1.jpg?v=1756650182&width=1000',
+      'https://wayupsports.com/cdn/shop/files/10843_2.jpg?v=1756650182&width=1000',
+      'https://wayupsports.com/cdn/shop/files/10843_3.jpg?v=1756650182&width=1000',
+    ],
+    description: 'High-quality whey protein for muscle growth.',
+  ),
+  ProductModel(
+    id: '3',
+    name:
+        'Nutrex 100% Whey Protein Powder 10lbs – 128 Servings - Muscle Growth - Recovery',
+    price: 7700.00,
+    imageUrl: [
+      'https://wayupsports.com/cdn/shop/files/10849.jpg?v=1756654208&width=1000',
+      'https://wayupsports.com/cdn/shop/files/10849_1.jpg?v=1756654208&width=1000',
+    ],
+    description: 'High-quality whey protein for muscle growth.',
   ),
 ];
