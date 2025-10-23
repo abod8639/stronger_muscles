@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/product_list.dart';
+import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
 
 class Selections {
   final String label;

@@ -30,6 +30,7 @@ final List<ProductModel> dummyPreWorkoutProducts = [];
 final List<ProductModel> dummyMassGainerProducts = [];
 
 final List<ProductModel> dummyProducts = [
+// this for home 
   ProductModel(
     id: '1',
     name: 'Whey Protein',
