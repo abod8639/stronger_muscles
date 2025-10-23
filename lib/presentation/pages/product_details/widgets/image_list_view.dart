@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_image_controller.dart';
 
 class ImageListView extends StatelessWidget {
   final ScrollController ?scrollController;
@@ -14,7 +14,7 @@ class ImageListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final controller = Get.find<ProductDetailsController>();
+  final controller = Get.find<ProductImageController>();
 
     return SizedBox(
       height: 100,

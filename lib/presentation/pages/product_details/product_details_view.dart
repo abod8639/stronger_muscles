@@ -25,7 +25,9 @@ class ProductDetailsView extends StatelessWidget {
               ProductContainer(
                 scrollController: 0,
                 height: 350.0,
-                product: product, theme: theme),
+                product: product,
+                theme: theme
+                ),
               // mainImage(product),
 
               const SizedBox(height: 24.0),
@@ -33,7 +35,7 @@ class ProductDetailsView extends StatelessWidget {
               Text(
                 product.name,
                 style: theme.textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,
                 ),
               ),
 
@@ -42,7 +44,7 @@ class ProductDetailsView extends StatelessWidget {
               Text(
                 'LE ${product.price.toStringAsFixed(2)}',
                 style: theme.textTheme.headlineSmall?.copyWith(
-                  color: theme.colorScheme.primary,
+                color: theme.colorScheme.primary,
                 ),
               ),
 
@@ -50,17 +52,18 @@ class ProductDetailsView extends StatelessWidget {
 
               ImageListView(
                 scrollController: ScrollController(
-                  initialScrollOffset: 0,
-                  keepScrollOffset: true,
+                initialScrollOffset: 0,
+                keepScrollOffset: true,
                 ),
-                product: product),
+                product: product
+                ),
 
               const SizedBox(height: 24.0),
 
               Text(
                 'Description',
                 style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,
                 ),
               ),
 

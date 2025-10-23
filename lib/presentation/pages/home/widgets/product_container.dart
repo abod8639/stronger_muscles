@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/presentation/controllers/product_image_controller.dart';
 
 class ProductContainer extends StatefulWidget {
   const ProductContainer({
@@ -23,13 +25,24 @@ class ProductContainer extends StatefulWidget {
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   int currentPage = widget.scrollController ?? 0;
-  // }
+  late final ProductImageController imageController;
 
-  int? _currentPage;
+  @override
+  void initState() {
+    super.initState();
+    // register the image controller once for this widget's lifecycle
+    imageController = Get.put(ProductImageController());
+  }
+
+  @override
+  void dispose() {
+    // remove controller when this widget is disposed to avoid leaking
+    try {
+      Get.delete<ProductImageController>();
+    } catch (_) {}
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -44,6 +57,7 @@ class _ProductContainerState extends State<ProductContainer> {
           ),
         ],
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -57,12 +71,9 @@ class _ProductContainerState extends State<ProductContainer> {
                   height: widget.height, //180,
                   width: double.infinity,
                   child: PageView.builder(
+                    controller: imageController.pageController,
                     itemCount: widget.product.imageUrl.length,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentPage = index;
-                      });
-                    },
+                    onPageChanged: imageController.onPageChanged,
                     itemBuilder: (context, index) {
                       return CachedNetworkImage(
                         imageUrl: widget.product.imageUrl[index],
@@ -92,18 +103,21 @@ class _ProductContainerState extends State<ProductContainer> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         widget.product.imageUrl.length,
-                        (index) => AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          height: 5.0,
-                          width: _currentPage == index ? 20.0 : 5.0,
-                          decoration: BoxDecoration(
-                            color: _currentPage == index
-                                ? widget.theme.colorScheme.primary
-                                : Colors.grey.withAlpha((255 * 0.7).round()),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
+                        (index) => Obx(() {
+                          final isActive = imageController.selectedImageIndex.value == index;
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            height: 5.0,
+                            width: isActive ? 20.0 : 5.0,
+                            decoration: BoxDecoration(
+                              color: isActive
+                                  ? widget.theme.colorScheme.primary
+                                  : Colors.grey.withAlpha((255 * 0.7).round()),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          );
+                        }),
                       ),
                     ),
                   ),
