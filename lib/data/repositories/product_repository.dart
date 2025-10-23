@@ -10,6 +10,41 @@ class ProductRepository {
 
     return dummyProducts.firstWhereOrNull((product) => product.id == id);
   }
+
+  Future<List<ProductModel>> getAllProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyProducts;
+  }
+
+  Future<List<ProductModel>> getProteinProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyProteinProducts;
+  }
+
+  Future<List<ProductModel>> getCreatineProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyCreatineProducts;
+  }
+
+  Future<List<ProductModel>> getAminoProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyAminoProducts;
+  }
+
+  Future<List<ProductModel>> getBCAAProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyBCAAProducts;
+  }
+
+  Future<List<ProductModel>> getPreWorkoutProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyPreWorkoutProducts;
+  }
+
+  Future<List<ProductModel>> getMassGainerProducts() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    return dummyMassGainerProducts;
+  }
 }
 
 extension ListExtension<T> on List<T> {

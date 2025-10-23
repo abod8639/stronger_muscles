@@ -4,9 +4,15 @@ import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 
-Obx productList(ThemeData theme) {
+Widget productList(ThemeData theme) {
   final controller = Get.find<HomeController>();
   return Obx(() {
+    if (controller.isLoading.value) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (controller.products.isEmpty) {
+      return const Center(child: Text('No products found.'));
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: GridView.builder(
