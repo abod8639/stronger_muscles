@@ -12,7 +12,6 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
@@ -36,7 +35,7 @@ class HomeView extends GetView<HomeController> {
                 sectionTitle(),
 
                 // Horizontal product list
-                productList(theme),
+                productList(),
 
                 SizedBox(height: 20),
               ],
