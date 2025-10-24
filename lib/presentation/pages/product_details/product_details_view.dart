@@ -78,7 +78,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomIconsRow(theme, widget.product),
+      bottomNavigationBar: bottomIconsRow(widget.product),
     );
   }
 }
