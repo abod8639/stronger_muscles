@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,14 +13,13 @@ class ProductContainer extends StatefulWidget {
     required this.theme,
     required this.height,
     this.showName,
-    this.scrollController,
+    // this.scrollController,
   });
 
   final ProductModel product;
   final ThemeData theme;
   final double height;
   final bool? showName;
-  final int? scrollController;
 
   @override
   State<ProductContainer> createState() => _ProductContainerState();
@@ -26,24 +27,44 @@ class ProductContainer extends StatefulWidget {
 
 class _ProductContainerState extends State<ProductContainer> {
   late final ProductImageController imageController;
+  late final PageController pageController;
+  late final StreamSubscription<int> _subscription;
 
   @override
   void initState() {
     super.initState();
-    // Create a controller instance scoped/tagged to this product so other
-    // product pages don't interfere.
-    imageController = Get.put(ProductImageController(), tag: widget.product.id);
+    imageController = Get.put(ProductImageController(), tag: widget.product.id,permanent: true  );
+    pageController = PageController();
+    // Listen to changes from other widgets (like ImageListView)
+    _subscription = imageController.selectedImageIndex.listen((index) {
+      if (pageController.hasClients && pageController.page?.round() != index) {
+        pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 
   @override
   void dispose() {
-    // Remove the controller when this widget is disposed to avoid leaking
-    // controllers for many products.
+    _subscription.cancel();
+    pageController.dispose();
+    // FIXME: Deleting the controller here is problematic.
+    // On the home page, multiple ProductContainers can exist for the same product.
+    // If one is disposed (e.g. scrolled out of view), it deletes the controller
+    // for all of them, causing errors.
+    // A proper fix involves managing controller lifecycle at the route level (e.g. with Bindings).
+    // For now, we are not deleting the controller to prevent crashes, but this will leak memory.
+    /*
     if (Get.isRegistered<ProductImageController>(tag: widget.product.id)) {
       try {
         Get.delete<ProductImageController>(tag: widget.product.id);
       } catch (_) {}
     }
+    */
+    // imageController.selectedImageIndex.value = 0;
     super.dispose();
   }
 
@@ -75,7 +96,7 @@ class _ProductContainerState extends State<ProductContainer> {
                   height: widget.height, //180,
                   width: double.infinity,
                   child: PageView.builder(
-                    controller: imageController.pageController,
+                    controller: pageController,
                     itemCount: widget.product.imageUrl.length,
                     onPageChanged: imageController.onPageChanged,
                     itemBuilder: (context, index) {
@@ -108,7 +129,8 @@ class _ProductContainerState extends State<ProductContainer> {
                       children: List.generate(
                         widget.product.imageUrl.length,
                         (index) => Obx(() {
-                          final isActive = imageController.selectedImageIndex.value == index;
+                          final isActive =
+                              imageController.selectedImageIndex.value == index;
                           return AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             margin: const EdgeInsets.symmetric(horizontal: 4.0),

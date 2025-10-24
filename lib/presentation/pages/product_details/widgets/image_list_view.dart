@@ -15,8 +15,7 @@ class ImageListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.find<ProductImageController>(tag: product.id);
-    final controller = Get.put(ProductImageController(),tag: product.id);//(tag: product.id);
+    final controller = Get.find<ProductImageController>(tag: product.id);
 
     return SizedBox(
       height: 100,
