@@ -1,0 +1,72 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+
+class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.put(ProfileController());
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+      ),
+      body: Center(
+        child: Obx(() {
+          if (controller.isLoading.value) {
+            return const CircularProgressIndicator();
+          } else if (controller.user.value == null) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('You are not logged in.'),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () async {
+                    // await controller.signInWithGoogle();
+                  },
+                  child: const Text('Sign in with Google'),
+                ),
+              ],
+            );
+          } else {
+            final user = controller.user.value!;
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(user.photoURL ?? ''),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  user.displayName ?? 'No Name',
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  user.email ?? 'No Email',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: () async {
+                    await controller.signOut();
+                  },
+                  child: const Text('Sign out'),
+                ),
+              ],
+            );
+          }
+        }),
+      ),
+    );
+  }
+}

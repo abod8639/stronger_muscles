@@ -26,6 +26,7 @@ class HomeView extends GetView<HomeController> {
               ()=> Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
                   // Search bar and filter button
                   searchBar(),
               
@@ -33,8 +34,8 @@ class HomeView extends GetView<HomeController> {
                   SelectionsRow(),
               
                   // Promo banner
-                  sectionsController.selectedIndex.value==0? 
-                  promoBanner():SizedBox.shrink(),
+                  sectionsController.selectedIndex.value == 0 ? 
+                  promoBanner() : SizedBox.shrink(),
                  
                   // Section title
                   sectionTitle(),
