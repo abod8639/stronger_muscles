@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
@@ -15,16 +17,19 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   late final ScrollController _imageScrollController;
+  late final ProductDetailsController _productDetailsController;
 
   @override
   void initState() {
     super.initState();
     _imageScrollController = ScrollController();
+    _productDetailsController = Get.put(ProductDetailsController(widget.product));
   }
 
   @override
   void dispose() {
     _imageScrollController.dispose();
+    Get.delete<ProductDetailsController>();
     super.dispose();
   }
 
@@ -44,6 +49,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 height: 350.0,
                 product: widget.product,
                 theme: theme,
+                selectedImageIndex: _productDetailsController.selectedImageIndex,
+                onPageChanged: (index) => _productDetailsController.selectImage(index),
               ),
               const SizedBox(height: 24.0),
               Text(

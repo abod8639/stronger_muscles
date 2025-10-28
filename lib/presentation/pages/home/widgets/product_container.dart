@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/controllers/product_image_controller.dart';
 
 class ProductContainer extends StatefulWidget {
   const ProductContainer({
@@ -13,58 +12,49 @@ class ProductContainer extends StatefulWidget {
     required this.theme,
     required this.height,
     this.showName,
-    // this.scrollController,
+    this.selectedImageIndex,
+    this.onPageChanged,
   });
 
   final ProductModel product;
   final ThemeData theme;
   final double height;
   final bool? showName;
+  final RxInt? selectedImageIndex;
+  final ValueChanged<int>? onPageChanged;
 
   @override
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  late final ProductImageController imageController;
-  late final PageController pageController;
-  late final StreamSubscription<int> _subscription;
+  late final RxInt _selectedImageIndex;
+  late final PageController _pageController;
+  StreamSubscription<int>? _subscription;
 
   @override
   void initState() {
     super.initState();
-    imageController = Get.put(ProductImageController(), tag: widget.product.id,permanent: true  );
-    pageController = PageController();
-    // Listen to changes from other widgets (like ImageListView)
-    _subscription = imageController.selectedImageIndex.listen((index) {
-      if (pageController.hasClients && pageController.page?.round() != index) {
-        pageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
+    _selectedImageIndex = widget.selectedImageIndex ?? 0.obs;
+    _pageController = PageController(initialPage: _selectedImageIndex.value);
+
+    if (widget.selectedImageIndex != null) {
+      _subscription = widget.selectedImageIndex!.listen((index) {
+        if (_pageController.hasClients && _pageController.page?.round() != index) {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
-    pageController.dispose();
-    // FIXME: Deleting the controller here is problematic.
-    // On the home page, multiple ProductContainers can exist for the same product.
-    // If one is disposed (e.g. scrolled out of view), it deletes the controller
-    // for all of them, causing errors.
-    // A proper fix involves managing controller lifecycle at the route level (e.g. with Bindings).
-    // For now, we are not deleting the controller to prevent crashes, but this will leak memory.
-    /*
-    if (Get.isRegistered<ProductImageController>(tag: widget.product.id)) {
-      try {
-        Get.delete<ProductImageController>(tag: widget.product.id);
-      } catch (_) {}
-    }
-    */
-    // imageController.selectedImageIndex.value = 0;
+    _subscription?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -82,7 +72,6 @@ class _ProductContainerState extends State<ProductContainer> {
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -93,12 +82,12 @@ class _ProductContainerState extends State<ProductContainer> {
                   top: Radius.circular(16.0),
                 ),
                 child: SizedBox(
-                  height: widget.height, //180,
+                  height: widget.height,
                   width: double.infinity,
                   child: PageView.builder(
-                    controller: pageController,
+                    controller: _pageController,
                     itemCount: widget.product.imageUrl.length,
-                    onPageChanged: imageController.onPageChanged,
+                    onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
                     itemBuilder: (context, index) {
                       return CachedNetworkImage(
                         imageUrl: widget.product.imageUrl[index],
@@ -129,8 +118,7 @@ class _ProductContainerState extends State<ProductContainer> {
                       children: List.generate(
                         widget.product.imageUrl.length,
                         (index) => Obx(() {
-                          final isActive =
-                              imageController.selectedImageIndex.value == index;
+                          final isActive = _selectedImageIndex.value == index;
                           return AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -147,11 +135,9 @@ class _ProductContainerState extends State<ProductContainer> {
                       ),
                     ),
                   ),
-
               const SizedBox.shrink(),
             ],
           ),
-
           if (widget.showName != null && widget.showName == true)
             Padding(
               padding: const EdgeInsets.all(12.0),
@@ -177,7 +163,6 @@ class _ProductContainerState extends State<ProductContainer> {
                 ],
               ),
             ),
-
           const SizedBox.shrink(),
         ],
       ),

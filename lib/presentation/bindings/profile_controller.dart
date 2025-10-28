@@ -29,28 +29,28 @@ class ProfileController extends GetxController {
 
   
 
-  Future<void> signInWithGoogle() async {
-    try {
-      isLoading.value = true;
-      final GoogleSignInAccount? googleUser = await _googleSignIn
-          .authenticate();
-      if (googleUser == null) {
-        return;
-      }
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await _auth.signInWithCredential(credential);
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-      print("Error during Google sign-in: $e");
-    } finally {
-      isLoading.value = false;
-    }
-  }
+  // Future<void> signInWithGoogle() async {
+  //   try {
+  //     isLoading.value = true;
+  //     final GoogleSignInAccount? googleUser = await _googleSignIn
+  //         .authenticate();
+  //     if (googleUser == null) {
+  //       return;
+  //     }
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleUser.authentication;
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     await _auth.signInWithCredential(credential);
+  //   } catch (e) {
+  //     Get.snackbar('Error', e.toString());
+  //     print("Error during Google sign-in: $e");
+  //   } finally {
+  //     isLoading.value = false;
+  //   }
+  // }
 
   Future<void> signOut() async {
     await _auth.signOut();

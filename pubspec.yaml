@@ -56,7 +56,7 @@ flutter:
   #         weight: 700
   #
 icons_launcher:
-  image_path: "assets/ic_logo_radius.png"
+  image_path: "assets/icon/ChatGPT2.png"
   platforms:
     android:
       enable: true

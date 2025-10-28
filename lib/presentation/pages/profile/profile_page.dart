@@ -39,7 +39,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(user.photoURL ?? ''),
+                    backgroundImage: NetworkImage(user.photoURL ?? 'https://img.freepik.com/premium-vector/man-profile_1083548-15963.jpg?semt=ais_hybrid&w=740&q=80'),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -89,7 +89,8 @@ class ProfilePage extends StatelessWidget {
                 ],
               );
             }
-          }),
+          }
+          ),
         ),
       ),
     );
