@@ -7,15 +7,18 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 
 class ProductContainer extends StatefulWidget {
   const ProductContainer({
+
     super.key,
+
     required this.product,
     required this.theme,
     required this.height,
     this.showName,
     this.selectedImageIndex,
     this.onPageChanged,
+    this.onTap,
   });
-
+  final void Function()? onTap;
   final ProductModel product;
   final ThemeData theme;
   final double height;
@@ -77,33 +80,36 @@ class _ProductContainerState extends State<ProductContainer> {
         children: [
           Stack(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16.0),
-                ),
-                child: SizedBox(
-                  height: widget.height,
-                  width: double.infinity,
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: widget.product.imageUrl.length,
-                    onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: widget.product.imageUrl[index],
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey[200],
-                          child: const Center(
-                            child: CircularProgressIndicator(),
+              GestureDetector(
+                onTap: widget.onTap,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16.0),
+                  ),
+                  child: SizedBox(
+                    height: widget.height,
+                    width: double.infinity,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: widget.product.imageUrl.length,
+                      onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
+                      itemBuilder: (context, index) {
+                        return CachedNetworkImage(
+                          imageUrl: widget.product.imageUrl[index],
+                          fit: BoxFit.contain,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.error, color: Colors.red),
-                        ),
-                      );
-                    },
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.error, color: Colors.red),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -46,6 +47,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ProductContainer(
+                onTap:()=>showImageViewer(
+                      context,
+                      Image.network(widget.product.imageUrl[_productDetailsController.selectedImageIndex.value]).image,
+                      useSafeArea: true,
+                      swipeDismissible: true,
+                      doubleTapZoomable: true,
+                    ),
                 height: 350.0,
                 product: widget.product,
                 theme: theme,

@@ -9,8 +9,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stronger_muscles/presentation/pages/main_page.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   Hive.registerAdapter(CartItemModelAdapter());
   await Hive.openBox<CartItemModel>('cart');
