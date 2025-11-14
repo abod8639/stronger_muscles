@@ -49,6 +49,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               ProductContainer(
                 onTap:()=>showImageViewer(
                       context,
+                      // widget.product.imageUrl.toList(),
                       Image.network(widget.product.imageUrl[_productDetailsController.selectedImageIndex.value]).image,
                       useSafeArea: true,
                       swipeDismissible: true,
