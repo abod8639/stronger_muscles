@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
@@ -9,41 +9,45 @@ import 'package:stronger_muscles/presentation/pages/home/widgets/section_title.d
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_list.dart';
 
 class HomeView extends GetView<HomeController> {
+  // Constants for spacing
+  static const double _bottomPadding = 20.0;
+
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-        final sectionsController = Get.put(SectionsController());
+    final sectionsController = Get.put(SectionsController());
 
     return Scaffold(
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
+            // TODO: Implement refresh functionality
             // await controller.fetchProducts();
           },
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Obx(
-              ()=> Column(
+              () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   // Search bar and filter button
-                  searchBar(),
-              
-                  // Shortcuts row
-                  SelectionsRow(),
-              
-                  // Promo banner
-                  sectionsController.selectedIndex.value == 0 ? 
-                  promoBanner() : SizedBox.shrink(),
-                 
+                  const SearchBar(),
+
+                  // Category shortcuts row
+                  const ShortcutsRow(),
+
+                  // Promo banner (only shown for "All" category)
+                  if (sectionsController.selectedIndex.value == 0)
+                    const PromoBanner(),
+
                   // Section title
-                  sectionTitle(),
-              
-                  // Horizontal product list
-                  productList(),
-              
-                  SizedBox(height: 20),
+                  const SectionTitle(),
+
+                  // Product grid
+                  const ProductList(),
+
+                  const SizedBox(height: _bottomPadding),
                 ],
               ),
             ),
