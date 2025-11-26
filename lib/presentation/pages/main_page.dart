@@ -26,10 +26,7 @@ class MainPage extends StatelessWidget {
       body: Obx(
         () => IndexedStack(index: controller.tabIndex.value, children: pages),
       ),
-      bottomNavigationBar: Obx(() {
-        final theme = Theme.of(context);
-        return myBottomNavigationBar(theme);
-      }),
+      bottomNavigationBar: const MyBottomNavigationBar(),
     );
   }
 }
