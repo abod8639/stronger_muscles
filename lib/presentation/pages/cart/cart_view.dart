@@ -230,7 +230,7 @@ class CartView extends GetView<CartController> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.white,
                   disabledBackgroundColor:
-                      theme.colorScheme.surfaceVariant,
+                      theme.colorScheme.surfaceContainerHighest,
                   disabledForegroundColor:
                       theme.colorScheme.onSurfaceVariant,
                   padding: const EdgeInsets.symmetric(

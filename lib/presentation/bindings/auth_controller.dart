@@ -20,14 +20,10 @@ class AuthController extends GetxController {
       // Trigger the interactive sign-in flow using the plugin's authenticate
       // method (this version returns an account where `authentication` may
       // expose only `idToken`).
-      final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
-
-      if (googleUser == null) {
-        return null; // User cancelled
-      }
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
       // Obtain the auth details from the request (idToken expected)
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
       // Create a new credential. accessToken may be unavailable on some
       // platforms, so pass null for accessToken.

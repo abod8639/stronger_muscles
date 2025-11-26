@@ -114,7 +114,7 @@ class ImageListView extends StatelessWidget {
       placeholder: (context, url) => Container(
         width: _thumbnailSize,
         height: _thumbnailSize,
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         child: const Center(
           child: SizedBox(
             width: 20.0,
@@ -129,7 +129,7 @@ class ImageListView extends StatelessWidget {
       errorWidget: (context, url, error) => Container(
         width: _thumbnailSize,
         height: _thumbnailSize,
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         child: const Icon(
           Icons.image_not_supported_outlined,
           color: AppColors.primary,

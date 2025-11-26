@@ -112,7 +112,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             height: ProductDetailsView._mainImageHeight,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceVariant,
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(ProductDetailsView._mainImageBorderRadius),
                 bottomRight: Radius.circular(ProductDetailsView._mainImageBorderRadius),

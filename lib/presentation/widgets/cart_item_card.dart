@@ -92,7 +92,7 @@ class CartItemCard extends StatelessWidget {
                 placeholder: (context, url) => Container(
                   width: _imageSize,
                   height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: const Center(
                     child: CircularProgressIndicator(
                       color: AppColors.primary,
@@ -103,7 +103,7 @@ class CartItemCard extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   width: _imageSize,
                   height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: const Icon(
                     Icons.image_not_supported_outlined,
                     color: AppColors.primary,
@@ -114,7 +114,7 @@ class CartItemCard extends StatelessWidget {
             : Container(
                 width: _imageSize,
                 height: _imageSize,
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: const Icon(
                   Icons.image_not_supported_outlined,
                   color: AppColors.primary,
@@ -177,7 +177,7 @@ class CartItemCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.3),
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(

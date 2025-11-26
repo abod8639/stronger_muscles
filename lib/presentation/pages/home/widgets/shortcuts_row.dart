@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/selection_model.dart';
 import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
 
 /// Horizontal scrollable row of category shortcuts

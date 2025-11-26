@@ -85,7 +85,7 @@ class BottomIconsRow extends StatelessWidget {
   ) {
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Row(
@@ -191,7 +191,7 @@ class BottomIconsRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: isInWishlist
               ? AppColors.primary.withOpacity(0.1)
-              : theme.colorScheme.surfaceVariant.withOpacity(0.5),
+              : theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: IconButton(

@@ -94,7 +94,7 @@ class WishlistItemCard extends StatelessWidget {
                 placeholder: (context, url) => Container(
                   width: _imageSize,
                   height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: const Center(
                     child: CircularProgressIndicator(
                       color: AppColors.primary,
@@ -105,7 +105,7 @@ class WishlistItemCard extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   width: _imageSize,
                   height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   child: const Icon(
                     Icons.image_not_supported_outlined,
                     color: AppColors.primary,
@@ -116,7 +116,7 @@ class WishlistItemCard extends StatelessWidget {
             : Container(
                 width: _imageSize,
                 height: _imageSize,
-                color: Theme.of(context).colorScheme.surfaceVariant,
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 child: const Icon(
                   Icons.image_not_supported_outlined,
                   color: AppColors.primary,
