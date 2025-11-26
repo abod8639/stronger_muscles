@@ -1,57 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 
 class ProfileController extends GetxController {
-  static const String googleClientId =
-      '1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com';
-
+  final AuthController _authController = Get.find<AuthController>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignInAuthentication _googleSignIn = GoogleSignInAuthentication(
-    idToken: googleClientId,
-  );
-  //  serverClientId: googleClientId,);
 
-
-
-  Rx<User?> user = Rx<User?>(null);
-  RxBool isLoading = false.obs;
+  final Rx<User?> currentUser = Rx<User?>(null);
+  
+  // Expose isLoading from AuthController
+  RxBool get isLoading => _authController.isLoading;
 
   @override
   void onInit() {
     super.onInit();
-    user.value = _auth.currentUser;
+    currentUser.value = _auth.currentUser;
     _auth.authStateChanges().listen((event) {
-      user.value = event;
+      currentUser.value = event;
     });
   }
 
-  
-
-  // Future<void> signInWithGoogle() async {
-  //   try {
-  //     isLoading.value = true;
-  //     final GoogleSignInAccount? googleUser = await _googleSignIn
-  //         .authenticate();
-  //     if (googleUser == null) {
-  //       return;
-  //     }
-  //     final GoogleSignInAuthentication googleAuth =
-  //         await googleUser.authentication;
-  //     final AuthCredential credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth.accessToken,
-  //       idToken: googleAuth.idToken,
-  //     );
-  //     await _auth.signInWithCredential(credential);
-  //   } catch (e) {
-  //     Get.snackbar('Error', e.toString());
-  //     print("Error during Google sign-in: $e");
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
-
   Future<void> signOut() async {
-    await _auth.signOut();
+    await _authController.signOut();
+  }
+
+  Future<void> signInWithGoogle() async {
+    await _authController.signInWithGoogle();
   }
 }

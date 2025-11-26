@@ -6,24 +6,40 @@ class ProductDetailsController extends GetxController {
   final ProductModel product;
   final RxBool isInWishlist = false.obs;
   RxInt selectedImageIndex = 0.obs;
-  late Box<String> wishlistBow;
+  late Box<String> wishlistBox;
 
   ProductDetailsController(this.product);
 
   @override
   void onInit() {
     super.onInit();
-    wishlistBow = Hive.box<String>('wishlist');
-    isInWishlist.value = wishlistBow.containsKey(product.id);
+    _initWishlist();
+  }
+
+  Future<void> _initWishlist() async {
+    try {
+      if (!Hive.isBoxOpen('wishlist')) {
+        wishlistBox = await Hive.openBox<String>('wishlist');
+      } else {
+        wishlistBox = Hive.box<String>('wishlist');
+      }
+      isInWishlist.value = wishlistBox.containsKey(product.id);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to access wishlist: $e');
+    }
   }
 
   void toggleWishlist() {
-    if (isInWishlist.value) {
-      wishlistBow.delete(product.id);
-    } else {
-      wishlistBow.put(product.id, product.id);
+    try {
+      if (isInWishlist.value) {
+        wishlistBox.delete(product.id);
+      } else {
+        wishlistBox.put(product.id, product.id);
+      }
+      isInWishlist.toggle();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update wishlist: $e');
     }
-    isInWishlist.toggle();
   }
 
   void selectImage(int index) => selectedImageIndex.value = index;

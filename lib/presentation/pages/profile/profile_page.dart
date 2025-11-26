@@ -24,7 +24,7 @@ class ProfilePage extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (controller.user.value != null)
+                if (controller.currentUser.value != null)
                   _buildUserProfile(controller)
                 else
                   _buildLoginPrompt(controller),
@@ -33,7 +33,7 @@ class ProfilePage extends StatelessWidget {
                 const SizedBox(height: 10),
                 _buildSettingsList(),
                 const SizedBox(height: 20),
-                if (controller.user.value != null)
+                if (controller.currentUser.value != null)
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildUserProfile(ProfileController controller) {
-    final user = controller.user.value!;
+    final user = controller.currentUser.value!;
     return Center(
       child: Column(
         children: [
@@ -87,7 +87,7 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () async {
-              // await controller.signInWithGoogle();
+              await controller.signInWithGoogle();
             },
             child: const Text('Sign in with Google'),
           ),

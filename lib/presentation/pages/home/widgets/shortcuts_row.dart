@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/data/models/selection_model.dart';
 import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
-
-/// Model for category shortcuts
-class Selections {
-  final String label;
-  final IconData icon;
-
-  Selections({required this.label, required this.icon});
-}
 
 /// Horizontal scrollable row of category shortcuts
 class ShortcutsRow extends StatelessWidget {

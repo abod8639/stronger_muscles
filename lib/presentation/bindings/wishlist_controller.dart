@@ -14,11 +14,23 @@ class WishlistController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    wishlistBox = Hive.box<String>('wishlist');
-    // Listen to box changes
-    _wishlistSubscription = wishlistBox.watch().listen((event) {
-      _loadWishlistItems();
-    });
+    _initBox();
+  }
+
+  Future<void> _initBox() async {
+    try {
+      if (!Hive.isBoxOpen('wishlist')) {
+        wishlistBox = await Hive.openBox<String>('wishlist');
+      } else {
+        wishlistBox = Hive.box<String>('wishlist');
+      }
+      // Listen to box changes
+      _wishlistSubscription = wishlistBox.watch().listen((event) {
+        _loadWishlistItems();
+      });
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to initialize wishlist: $e');
+    }
   }
 
   @override
@@ -34,33 +46,45 @@ class WishlistController extends GetxController {
   }
 
   Future<void> _loadWishlistItems() async {
-    // Using a temporary list to avoid multiple UI updates while looping
-    final List<ProductModel> items = [];
-    for (var productId in wishlistBox.keys) {
-      final product = await _productRepository.getProductById(productId);
-      if (product != null) {
-        items.add(product);
-      } else {
-        developer.log(
-          'Warning: Product with ID $productId not found.',
-          name: 'WishlistController',
-          level: 900, // WARNING
-        );
+    try {
+      // Using a temporary list to avoid multiple UI updates while looping
+      final List<ProductModel> items = [];
+      for (var productId in wishlistBox.keys) {
+        final product = await _productRepository.getProductById(productId);
+        if (product != null) {
+          items.add(product);
+        } else {
+          developer.log(
+            'Warning: Product with ID $productId not found.',
+            name: 'WishlistController',
+            level: 900, // WARNING
+          );
+        }
       }
+      // Assign all at once to trigger a single UI update
+      wishlistItems.assignAll(items);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load wishlist items: $e');
     }
-    // Assign all at once to trigger a single UI update
-    wishlistItems.assignAll(items);
   }
 
   void addToWishlist(ProductModel product) {
-    // The listener will automatically update the UI
-    if (!wishlistBox.containsKey(product.id)) {
-      wishlistBox.put(product.id, product.id);
+    try {
+      // The listener will automatically update the UI
+      if (!wishlistBox.containsKey(product.id)) {
+        wishlistBox.put(product.id, product.id);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to add to wishlist: $e');
     }
   }
 
   void removeFromWishlist(ProductModel product) {
-    // The listener will automatically update the UI
-    wishlistBox.delete(product.id);
+    try {
+      // The listener will automatically update the UI
+      wishlistBox.delete(product.id);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to remove from wishlist: $e');
+    }
   }
 }

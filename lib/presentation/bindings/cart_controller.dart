@@ -10,57 +10,86 @@ class CartController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    cartBox = Hive.box<CartItemModel>('cart');
-    cartItems.assignAll(cartBox.values.toList());
+    _initBox();
+  }
+
+  Future<void> _initBox() async {
+    try {
+      if (!Hive.isBoxOpen('cart')) {
+        cartBox = await Hive.openBox<CartItemModel>('cart');
+      } else {
+        cartBox = Hive.box<CartItemModel>('cart');
+      }
+      cartItems.assignAll(cartBox.values.toList());
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to load cart items: $e');
+    }
   }
 
   void addToCart(ProductModel product) {
-    final existingItemIndex = cartItems.indexWhere(
-      (item) => item.id == product.id,
-    );
-    if (existingItemIndex != -1) {
-      cartItems[existingItemIndex].quantity++;
-    } else {
-      final newItem = CartItemModel(
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        imageUrl: product.imageUrl, // Use the last image URL
+    try {
+      final existingItemIndex = cartItems.indexWhere(
+        (item) => item.id == product.id,
       );
-      cartItems.add(newItem);
-      cartBox.add(newItem);
+      if (existingItemIndex != -1) {
+        final item = cartItems[existingItemIndex];
+        item.quantity++;
+        item.save(); // Hive object save
+        cartItems.refresh();
+      } else {
+        final newItem = CartItemModel(
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          imageUrl: product.imageUrl,
+        );
+        cartBox.add(newItem);
+        cartItems.add(newItem);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to add to cart: $e');
     }
-    cartItems.refresh();
   }
 
   void removeFromCart(CartItemModel item) {
-    cartItems.remove(item);
-    cartBox.delete(item.key);
-  }
-
-  void increaseQuantity(CartItemModel item) {
-    item.quantity++;
-    cartBox.put(item.key, item);
-    cartItems.refresh();
-  }
-
-  void decreaseQuantity(CartItemModel item) {
-    if (item.quantity > 1) {
-      item.quantity--;
-      cartBox.put(item.key, item);
-      cartItems.refresh();
-    } else {
-      removeFromCart(item);
+    try {
+      item.delete(); // Hive object delete
+      cartItems.remove(item);
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to remove from cart: $e');
     }
   }
 
-  // isInCart
+  void increaseQuantity(CartItemModel item) {
+    try {
+      item.quantity++;
+      item.save();
+      cartItems.refresh();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update quantity: $e');
+    }
+  }
+
+  void decreaseQuantity(CartItemModel item) {
+    try {
+      if (item.quantity > 1) {
+        item.quantity--;
+        item.save();
+        cartItems.refresh();
+      } else {
+        removeFromCart(item);
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to update quantity: $e');
+    }
+  }
+
   bool isInCart(ProductModel product) {
     return cartItems.any((item) => item.id == product.id);
   }
 
-  CartItemModel getCartItem(ProductModel product) {
-    return cartItems.firstWhere((item) => item.id == product.id);
+  CartItemModel? getCartItem(ProductModel product) {
+    return cartItems.firstWhereOrNull((item) => item.id == product.id);
   }
 
   double get totalPrice =>
