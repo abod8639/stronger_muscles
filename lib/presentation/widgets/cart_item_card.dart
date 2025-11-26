@@ -80,7 +80,7 @@ class CartItemCard extends StatelessWidget {
     final imageUrl = item.imageUrl.isNotEmpty ? item.imageUrl.first : '';
 
     return Hero(
-      tag: 'product_${item.id}',
+      tag: 'cart_product_${item.id}',
       child: ClipRRect(
         borderRadius: BorderRadius.circular(_imageBorderRadius),
         child: imageUrl.isNotEmpty

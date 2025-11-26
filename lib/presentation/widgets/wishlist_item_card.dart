@@ -82,7 +82,7 @@ class WishlistItemCard extends StatelessWidget {
         : '';
 
     return Hero(
-      tag: 'product_${product.id}',
+      tag: 'wishlist_product_${product.id}',
       child: ClipRRect(
         borderRadius: BorderRadius.circular(_imageBorderRadius),
         child: imageUrl.isNotEmpty
