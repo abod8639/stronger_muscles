@@ -6,7 +6,7 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:stronger_muscles/presentation/pages/main_page.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 Future<void> main() async {
 
@@ -20,6 +20,7 @@ Future<void> main() async {
   
 }
 
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       initialBinding: initControllersApp(),
-      home: const MainPage(),
+      initialRoute: AppRoutes.main,
+      getPages: AppPages.routes,
     );
   }
 }
