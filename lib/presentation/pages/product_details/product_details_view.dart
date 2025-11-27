@@ -33,6 +33,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   void initState() {
     super.initState();
+    // Initialize the ProductDetailsController with the product
+    Get.put(ProductDetailsController(widget.product));
     _imageScrollController = ScrollController();
     
   }

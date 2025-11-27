@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/profile_header.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/quick_actions_row.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/purchase_stats_card.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/recent_orders_list.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/saved_addresses_list.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/login_prompt_card.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -8,141 +16,89 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProfileController());
+    final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Obx(() {
-            if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: CustomScrollView(
+        slivers: [
+          _buildAppBar(context, theme),
+          SliverToBoxAdapter(
+            child: Obx(() {
+              if (controller.isLoading.value) {
+                return const SizedBox(
+                  height: 400,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (controller.currentUser.value != null)
-                  _buildUserProfile(controller)
-                else
-                  _buildLoginPrompt(controller),
-                const SizedBox(height: 30),
-                const Divider(),
-                const SizedBox(height: 10),
-                _buildSettingsList(),
-                const SizedBox(height: 20),
-                if (controller.currentUser.value != null)
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        await controller.signOut();
-                      },
-                      child: const Text('Sign out'),
-                    ),
-                  ),
-              ],
-            );
-          }),
-        ),
-      ),
-    );
-  }
+              if (controller.currentUser.value == null) {
+                return LoginPromptCard(controller: controller, theme: theme);
+              }
 
-  Widget _buildUserProfile(ProfileController controller) {
-    final user = controller.currentUser.value!;
-    return Center(
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage(user.photoURL ?? 'https://img.freepik.com/premium-vector/man-profile_1083548-15963.jpg?semt=ais_hybrid&w=740&q=80'),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            user.displayName ?? 'No Name',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            user.email ?? 'No Email',
-            style: const TextStyle(
-              fontSize: 16,
-            ),
+              return Column(
+                children: [
+                  ProfileHeader(controller: controller, theme: theme),
+                  const SizedBox(height: 16),
+                  QuickActionsRow(controller: controller, theme: theme),
+                  const SizedBox(height: 24),
+                  PurchaseStatsCard(controller: controller, theme: theme),
+                  const SizedBox(height: 24),
+                  RecentOrdersList(controller: controller, theme: theme),
+                  const SizedBox(height: 24),
+                  SavedAddressesList(controller: controller, theme: theme),
+                  const SizedBox(height: 24),
+                  AccountSettingsList(theme: theme),
+                  const SizedBox(height: 24),
+                  _buildSignOutButton(controller, theme),
+                  const SizedBox(height: 32),
+                ],
+              );
+            }),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildLoginPrompt(ProfileController controller) {
-    return Center(
-      child: Column(
-        children: [
-          const Text('You are not logged in.'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              await controller.signInWithGoogle();
-            },
-            child: const Text('Sign in with Google'),
+  Widget _buildAppBar(BuildContext context, ThemeData theme) {
+    final isDark = theme.brightness == Brightness.dark;
+    
+    return SliverAppBar(
+      expandedHeight: 100,
+      pinned: true,
+      backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text(
+          'My Account',
+          style: TextStyle(
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        centerTitle: true,
       ),
     );
   }
 
-  Widget _buildSettingsList() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Settings',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  Widget _buildSignOutButton(ProfileController controller, ThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: OutlinedButton.icon(
+        onPressed: () async {
+          await controller.signOut();
+        },
+        icon: const Icon(Icons.logout),
+        label: const Text('Sign Out'),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.error,
+          side: const BorderSide(color: AppColors.error, width: 1.5),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
-        const SizedBox(height: 10),
-        ListTile(
-          leading: const Icon(Icons.edit),
-          title: const Text('Edit Profile'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.color_lens),
-          title: const Text('Theme'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.language),
-          title: const Text('Language'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.notifications),
-          title: const Text('Notifications'),
-          onTap: () {},
-        ),
-        const Divider(),
-        const SizedBox(height: 10),
-        const Text(
-          'Support',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 10),
-        ListTile(
-          leading: const Icon(Icons.info_outline),
-          title: const Text('About Us'),
-          onTap: () {},
-        ),
-        ListTile(
-          leading: const Icon(Icons.help_outline),
-          title: const Text('Help & Support'),
-          onTap: () {},
-        ),
-      ],
+      ),
     );
   }
 }
