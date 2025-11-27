@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_item_card.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class CartView extends GetView<CartController> {
   // Constants for styling
@@ -264,20 +265,6 @@ class CartView extends GetView<CartController> {
 
   /// Handles the checkout action
   void _handleCheckout() {
-    // TODO: Implement payment/checkout flow
-    Get.snackbar(
-      'Checkout',
-      'Checkout flow not implemented yet',
-      duration: const Duration(seconds: 2),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.primary.withOpacity(0.9),
-      colorText: Colors.white,
-      margin: const EdgeInsets.all(16.0),
-      borderRadius: 8.0,
-      icon: const Icon(
-        Icons.info_outline,
-        color: Colors.white,
-      ),
-    );
+    Get.toNamed(AppRoutes.checkout);
   }
 }

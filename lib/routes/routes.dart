@@ -8,6 +8,8 @@ import 'package:stronger_muscles/presentation/pages/main_page.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/profile_page.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/wishlist_view.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/checkout_view.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/order_success_view.dart';
 
 class AppRoutes {
   static const String main = '/';
@@ -19,6 +21,8 @@ class AppRoutes {
   static const String productDetails = '/product_details';
   static const String wishlist = '/wishlist';
   static const String profile = '/profile';
+  static const String checkout = '/checkout';
+  static const String orderSuccess = '/order_success';
 }
 
 class AppPages {
@@ -65,6 +69,14 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfilePage(),
+    ),
+    GetPage(
+      name: AppRoutes.checkout,
+      page: () => const CheckoutView(),
+    ),
+    GetPage(
+      name: AppRoutes.orderSuccess,
+      page: () => const OrderSuccessView(),
     ),
   ];
 }

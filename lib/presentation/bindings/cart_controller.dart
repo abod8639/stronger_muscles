@@ -94,4 +94,13 @@ class CartController extends GetxController {
 
   double get totalPrice =>
       cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+
+  void clearCart() {
+    try {
+      cartBox.clear();
+      cartItems.clear();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to clear cart: $e');
+    }
+  }
 }
