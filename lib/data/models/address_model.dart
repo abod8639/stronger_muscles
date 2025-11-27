@@ -34,6 +34,12 @@ class AddressModel extends HiveObject {
   @HiveField(9)
   bool isDefault;
 
+  @HiveField(10)
+  final double? latitude;
+
+  @HiveField(11)
+  final double? longitude;
+
   AddressModel({
     required this.id,
     required this.label,
@@ -45,6 +51,8 @@ class AddressModel extends HiveObject {
     required this.postalCode,
     required this.country,
     this.isDefault = false,
+    this.latitude,
+    this.longitude,
   });
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';

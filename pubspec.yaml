@@ -25,6 +25,7 @@ dependencies:
   icons_launcher: ^3.0.3
   easy_image_viewer: ^1.5.1
   intl: ^0.20.2
+  google_maps_flutter: ^2.14.0
 
 dev_dependencies:
   flutter_test:

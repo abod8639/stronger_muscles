@@ -27,13 +27,15 @@ class AddressModelAdapter extends TypeAdapter<AddressModel> {
       postalCode: fields[7] as String,
       country: fields[8] as String,
       isDefault: fields[9] as bool,
+      latitude: fields[10] as double?,
+      longitude: fields[11] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AddressModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +55,11 @@ class AddressModelAdapter extends TypeAdapter<AddressModel> {
       ..writeByte(8)
       ..write(obj.country)
       ..writeByte(9)
-      ..write(obj.isDefault);
+      ..write(obj.isDefault)
+      ..writeByte(10)
+      ..write(obj.latitude)
+      ..writeByte(11)
+      ..write(obj.longitude);
   }
 
   @override

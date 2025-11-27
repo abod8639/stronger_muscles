@@ -4,15 +4,14 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 
 class AccountSettingsList extends StatelessWidget {
-  final ThemeData theme;
 
   const AccountSettingsList({
     super.key,
-    required this.theme,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final themeController = Get.find<ThemeController>();
     final isDark = theme.brightness == Brightness.dark;
 
@@ -57,7 +56,7 @@ class AccountSettingsList extends StatelessWidget {
             trailing: Switch(
               value: themeController.isDarkMode.value,
               onChanged: (val) => themeController.toggleTheme(),
-              activeColor: AppColors.primary,
+              activeThumbColor: AppColors.primary,
             ),
             onTap: () => themeController.toggleTheme(),
             isDark: isDark,

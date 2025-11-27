@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 
 class PurchaseStatsCard extends StatelessWidget {
-  final ProfileController controller;
-  final ThemeData theme;
+
 
   const PurchaseStatsCard({
     super.key,
-    required this.controller,
-    required this.theme,
+
   });
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<ProfileController>();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(20),

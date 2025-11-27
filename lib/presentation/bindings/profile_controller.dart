@@ -92,6 +92,8 @@ class ProfileController extends GetxController {
         postalCode: '11511',
         country: 'Egypt',
         isDefault: true,
+        latitude: 30.0444,
+        longitude: 31.2357,
       ),
     ];
   }

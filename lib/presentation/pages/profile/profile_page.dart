@@ -38,19 +38,19 @@ class ProfilePage extends StatelessWidget {
 
               return Column(
                 children: [
-                  ProfileHeader(controller: controller, theme: theme),
+                  ProfileHeader(),
                   const SizedBox(height: 16),
-                  QuickActionsRow(controller: controller, theme: theme),
+                  QuickActionsRow(),
                   const SizedBox(height: 24),
-                  PurchaseStatsCard(controller: controller, theme: theme),
+                  PurchaseStatsCard(),
                   const SizedBox(height: 24),
-                  RecentOrdersList(controller: controller, theme: theme),
+                  RecentOrdersList(),
                   const SizedBox(height: 24),
-                  SavedAddressesList(controller: controller, theme: theme),
+                  SavedAddressesList(),
                   const SizedBox(height: 24),
-                  AccountSettingsList(theme: theme),
+                  AccountSettingsList(),
                   const SizedBox(height: 24),
-                  _buildSignOutButton(controller, theme),
+                  _buildSignOutButton(controller),
                   const SizedBox(height: 32),
                 ],
               );
@@ -81,24 +81,29 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSignOutButton(ProfileController controller, ThemeData theme) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: OutlinedButton.icon(
-        onPressed: () async {
-          await controller.signOut();
-        },
-        icon: const Icon(Icons.logout),
-        label: const Text('Sign Out'),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.error,
-          side: const BorderSide(color: AppColors.error, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+  Widget _buildSignOutButton(ProfileController controller) {
+    return Builder(
+      builder: (context) {
+        final theme = Theme.of(context);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              await controller.signOut();
+            },
+            icon: const Icon(Icons.logout),
+            label: const Text('Sign Out'),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.error,
+              side: const BorderSide(color: AppColors.error, width: 1.5),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
