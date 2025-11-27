@@ -2,21 +2,29 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-// import 'package:google_sign_in/google_sign_in.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final RxBool isLoading = false.obs;
   // Google OAuth client ID (used by web/iOS config or manual flows).
   // Keep the ID here so it can be referenced where necessary.
-  static const String googleClientId =
-      '1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com';
+  // static const String googleClientId =
+  //     '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
 
-  // Use the singleton instance; platforms and plugin versions manage config.
+  static const String webClientId =
+      '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
+
+  // Use GoogleSignIn singleton instance
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
   Future<User?> signInWithGoogle() async {
     try {
       isLoading.value = true;
+      
+      // Initialize GoogleSignIn with serverClientId for Android
+      await _googleSignIn.initialize(
+        serverClientId: webClientId,
+      );
+      
       // Trigger the interactive sign-in flow using the plugin's authenticate
       // method (this version returns an account where `authentication` may
       // expose only `idToken`).
@@ -39,6 +47,7 @@ class AuthController extends GetxController {
       return userCredential.user;
     } catch (e) {
       Get.snackbar('Error', 'Google Sign-In failed: ${e.toString()}');
+      print('Google Sign-In failed: ${e.toString()}');
       return null;
     } finally {
       isLoading.value = false;

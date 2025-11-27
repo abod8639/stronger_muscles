@@ -12,7 +12,20 @@
           "package_name": "com.example.stronger_muscles"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.stronger_muscles",
+            "certificate_hash": "d2e3c5071167333526e7e68c80031d6f2ebb707c"
+          }
+        },
+        {
+          "client_id": "1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCQKwgdNCKk1I6cUMkgytutTYiptQL1qAc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

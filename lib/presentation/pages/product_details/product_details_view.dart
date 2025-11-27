@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,8 +10,8 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/main
 
 class ProductDetailsView extends StatefulWidget {
   // Constants for consistent sizing and spacing
-  static const double _mainImageHeight = 400.0;
-  static const double _mainImageBorderRadius = 16.0;
+  // static const double _mainImageHeight = 400.0;
+  // static const double _mainImageBorderRadius = 16.0;
   static const double _contentPadding = 16.0;
   static const double _sectionSpacing = 24.0;
   static const double _smallSpacing = 8.0;
@@ -29,13 +28,13 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   late final ScrollController _imageScrollController;
-  late final ProductDetailsController _controller;
+  
 
   @override
   void initState() {
     super.initState();
     _imageScrollController = ScrollController();
-    _controller = Get.put(ProductDetailsController(widget.product));
+    
   }
 
   @override
