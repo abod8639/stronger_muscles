@@ -7,6 +7,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
 class ProductDetailsView extends StatefulWidget {
   // Constants for consistent sizing and spacing
@@ -58,7 +59,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Main Product Image with Hero Animation
-            _buildMainImage(context),
+            MainImage(product: widget.product),
 
             // Product Details Content
             Padding(
@@ -96,63 +97,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     );
   }
 
-  /// Builds the main product image with hero animation and zoom capability
-  Widget _buildMainImage(BuildContext context) {
-    return Obx(() {
-      final selectedIndex = _controller.selectedImageIndex.value;
-      final imageUrl = widget.product.imageUrl.isNotEmpty
-          ? widget.product.imageUrl[selectedIndex]
-          : '';
 
-      return Hero(
-        tag: 'product_${widget.product.id}',
-        child: GestureDetector(
-          onTap: () => _showImageViewer(context, selectedIndex),
-          child: Container(
-            height: ProductDetailsView._mainImageHeight,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(ProductDetailsView._mainImageBorderRadius),
-                bottomRight: Radius.circular(ProductDetailsView._mainImageBorderRadius),
-              ),
-            ),
-            child: imageUrl.isNotEmpty
-                ? ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(ProductDetailsView._mainImageBorderRadius),
-                      bottomRight: Radius.circular(ProductDetailsView._mainImageBorderRadius),
-                    ),
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => const Center(
-                        child: Icon(
-                          Icons.image_not_supported_outlined,
-                          size: 64.0,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  )
-                : const Center(
-                    child: Icon(
-                      Icons.image_not_supported_outlined,
-                      size: 64.0,
-                      color: AppColors.primary,
-                    ),
-                  ),
-          ),
-        ),
-      );
-    });
-  }
 
   /// Builds the product name text
   Widget _buildProductName(ThemeData theme) {
@@ -168,7 +113,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   /// Builds the product price text
   Widget _buildProductPrice(ThemeData theme) {
     return Text(
-      '\$${widget.product.price.toStringAsFixed(2)}',
+      'LE ${widget.product.price.toStringAsFixed(2)}',
       style: theme.textTheme.headlineSmall?.copyWith(
         color: AppColors.primary,
         fontWeight: FontWeight.bold,

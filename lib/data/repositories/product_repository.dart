@@ -4,45 +4,47 @@ class ProductRepository {
   // This is a dummy repository to simulate fetching product details.
   // In a real application, this would interact with a backend API or a local database.
 
+  static const int delay = 100;
+
   Future<ProductModel?> getProductById(String id) async {
     // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
 
     return dummyProducts.firstWhereOrNull((product) => product.id == id);
   }
 
   Future<List<ProductModel>> getAllProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyProducts;
   }
 
   Future<List<ProductModel>> getProteinProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyProteinProducts;
   }
 
   Future<List<ProductModel>> getCreatineProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyCreatineProducts;
   }
 
   Future<List<ProductModel>> getAminoProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyAminoProducts;
   }
 
   Future<List<ProductModel>> getBCAAProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyBCAAProducts;
   }
 
   Future<List<ProductModel>> getPreWorkoutProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyPreWorkoutProducts;
   }
 
   Future<List<ProductModel>> getMassGainerProducts() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: delay));
     return dummyMassGainerProducts;
   }
 }

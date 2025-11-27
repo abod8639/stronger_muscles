@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_item_card.dart';
 
 class CartView extends GetView<CartController> {
@@ -60,6 +61,7 @@ class CartView extends GetView<CartController> {
 
   /// Builds the empty cart state
   Widget _buildEmptyState(BuildContext context, ThemeData theme) {
+    final controller = Get.find<MainController>();
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -91,7 +93,10 @@ class CartView extends GetView<CartController> {
             ),
             const SizedBox(height: 32.0),
             ElevatedButton.icon(
-              onPressed: () => Get.back(),
+              onPressed: () {
+
+                controller.tabIndex.value = 0;
+              },
               icon: const Icon(Icons.shopping_bag_outlined),
               label: const Text('Start Shopping'),
               style: ElevatedButton.styleFrom(

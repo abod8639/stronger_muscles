@@ -12,7 +12,7 @@ class BottomIconsRow extends StatelessWidget {
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
   static const double _iconSize = 32.0;
-  static const double _buttonVerticalPadding = 16.0;
+  static const double _buttonVerticalPadding = 10.0;
   static const double _buttonFontSize = 16.0;
   static const double _quantityFontSize = 18.0;
   static const double _spacing = 16.0;
@@ -152,12 +152,16 @@ class BottomIconsRow extends StatelessWidget {
     CartController cartController,
   ) {
     return Semantics(
+      
+      
       label: 'Add ${product.name} to cart',
       button: true,
       child: ElevatedButton.icon(
+        
         onPressed: () => _handleAddToCart(cartController),
         icon: const Icon(Icons.add_shopping_cart),
         label: const Text('Add to Cart'),
+        
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
