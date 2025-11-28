@@ -7,7 +7,7 @@ class PromoBanner extends StatelessWidget {
   // Constants for styling
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
-  static const double _bannerHeight = 141.0;
+  static const double _bannerHeight = 150.0;
   static const double _borderRadius = 16.0;
   static const double _contentPadding = 16.0;
   static const double _titleSpacing = 8.0;
