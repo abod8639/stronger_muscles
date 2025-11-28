@@ -5,6 +5,7 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_item_card.dart';
 import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class CartView extends GetView<CartController> {
   // Constants for styling
@@ -33,24 +34,24 @@ class CartView extends GetView<CartController> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Obx(() {
         if (controller.cartItems.isEmpty) {
           return _buildEmptyState(context, theme);
         }
-        return _buildCartContent(theme);
+        return _buildCartContent(theme, context);
       }),
     );
   }
 
   /// Builds the app bar with item count
-  PreferredSizeWidget _buildAppBar() {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: Obx(
         () => Text(
           controller.cartItems.isEmpty
-              ? 'Cart'
-              : 'Cart (${controller.cartItems.length})',
+              ? AppLocalizations.of(context)!.cart
+              : '${AppLocalizations.of(context)!.cart} (${controller.cartItems.length})',
           style: const TextStyle(color: AppColors.white),
         ),
       ),
@@ -76,7 +77,7 @@ class CartView extends GetView<CartController> {
             ),
             const SizedBox(height: _emptyIconSpacing),
             Text(
-              'Your cart is empty',
+              AppLocalizations.of(context)!.yourCartIsEmpty,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontSize: _emptyTitleFontSize,
                 fontWeight: FontWeight.bold,
@@ -85,7 +86,7 @@ class CartView extends GetView<CartController> {
             ),
             const SizedBox(height: _emptyTextSpacing),
             Text(
-              'Add products to get started',
+              AppLocalizations.of(context)!.addProductsToGetStarted,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontSize: _emptySubtitleFontSize,
@@ -99,7 +100,7 @@ class CartView extends GetView<CartController> {
                 controller.tabIndex.value = 0;
               },
               icon: const Icon(Icons.shopping_bag_outlined),
-              label: const Text('Start Shopping'),
+              label: Text(AppLocalizations.of(context)!.startShopping),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
@@ -120,7 +121,7 @@ class CartView extends GetView<CartController> {
   }
 
   /// Builds the cart content with items and checkout section
-  Widget _buildCartContent(ThemeData theme) {
+  Widget _buildCartContent(ThemeData theme, BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: _listTopSpacing),
@@ -144,13 +145,13 @@ class CartView extends GetView<CartController> {
         ),
 
         // Checkout section
-        _buildCheckoutSection(theme),
+        _buildCheckoutSection(theme, context),
       ],
     );
   }
 
   /// Builds the checkout section with total and checkout button
-  Widget _buildCheckoutSection(ThemeData theme) {
+  Widget _buildCheckoutSection(ThemeData theme, BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: _checkoutHorizontalPadding,
@@ -178,7 +179,7 @@ class CartView extends GetView<CartController> {
                   Row(
                     children: [
                       Text(
-                        'Total',
+                        AppLocalizations.of(context)!.total,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontSize: _totalLabelFontSize,
                           color: theme.colorScheme.onSurfaceVariant,
@@ -196,7 +197,7 @@ class CartView extends GetView<CartController> {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Text(
-                            '${controller.cartItems.length} ${controller.cartItems.length == 1 ? 'item' : 'items'}',
+                            '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
                             style: TextStyle(
                               fontSize: _itemCountFontSize,
                               fontWeight: FontWeight.bold,
@@ -226,7 +227,7 @@ class CartView extends GetView<CartController> {
 
             // Checkout button
             Semantics(
-              label: 'Proceed to checkout',
+              label: AppLocalizations.of(context)!.proceedToCheckout,
               button: true,
               child: ElevatedButton(
                 onPressed: controller.cartItems.isEmpty
@@ -248,8 +249,8 @@ class CartView extends GetView<CartController> {
                   ),
                   elevation: 2.0,
                 ),
-                child: const Text(
-                  'Checkout',
+                child: Text(
+                  AppLocalizations.of(context)!.checkout,
                   style: TextStyle(
                     fontSize: _checkoutButtonFontSize,
                     fontWeight: FontWeight.bold,

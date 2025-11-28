@@ -164,6 +164,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       swipeDismissible: true,
       doubleTapZoomable: true,
       immersive: false,
+      
     );
   }
 }

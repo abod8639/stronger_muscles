@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class SignUpPage extends GetView<AuthController> {
   final VoidCallback onSignInTap;
@@ -27,7 +28,7 @@ class SignUpPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Create Account',
+                AppLocalizations.of(context)!.createAccount,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -36,7 +37,7 @@ class SignUpPage extends GetView<AuthController> {
               ),
               const SizedBox(height: 8.0),
               Text(
-                'Sign up to get started',
+                AppLocalizations.of(context)!.signUpToGetStarted,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: Colors.grey[600],
@@ -45,15 +46,15 @@ class SignUpPage extends GetView<AuthController> {
               const SizedBox(height: 32.0),
               AuthTextField(
                 controller: emailController,
-                label: 'Email',
+                label: AppLocalizations.of(context)!.email,
                 icon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return AppLocalizations.of(context)!.enterEmail;
                   }
                   if (!GetUtils.isEmail(value)) {
-                    return 'Please enter a valid email';
+                    return AppLocalizations.of(context)!.validEmail;
                   }
                   return null;
                 },
@@ -61,15 +62,15 @@ class SignUpPage extends GetView<AuthController> {
               const SizedBox(height: 16.0),
               AuthTextField(
                 controller: passwordController,
-                label: 'Password',
+                label: AppLocalizations.of(context)!.password,
                 icon: Icons.lock_outline,
                 isPassword: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return AppLocalizations.of(context)!.enterPassword;
                   }
                   if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
+                    return AppLocalizations.of(context)!.passwordLength;
                   }
                   return null;
                 },
@@ -77,16 +78,16 @@ class SignUpPage extends GetView<AuthController> {
               const SizedBox(height: 16.0),
               AuthTextField(
                 controller: confirmPasswordController,
-                label: 'Confirm Password',
+                label: AppLocalizations.of(context)!.confirmPassword,
                 icon: Icons.lock_outline,
                 isPassword: true,
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please confirm your password';
+                    return AppLocalizations.of(context)!.confirmYourPassword;
                   }
                   if (value != passwordController.text) {
-                    return 'Passwords do not match';
+                    return AppLocalizations.of(context)!.passwordsDoNotMatch;
                   }
                   return null;
                 },
@@ -113,9 +114,9 @@ class SignUpPage extends GetView<AuthController> {
                           ),
                           elevation: 2,
                         ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.signUp,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -127,14 +128,14 @@ class SignUpPage extends GetView<AuthController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Already have an account? ",
+                    AppLocalizations.of(context)!.alreadyHaveAccount,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   TextButton(
                     onPressed: onSignInTap,
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

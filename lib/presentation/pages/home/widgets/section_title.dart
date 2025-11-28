@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Section title widget with "See all" button
 class SectionTitle extends StatelessWidget {
@@ -21,7 +22,7 @@ class SectionTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Most Popular Offers',
+            AppLocalizations.of(context)!.mostPopularOffers,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
@@ -31,7 +32,7 @@ class SectionTitle extends StatelessWidget {
             onPressed: () {
               // TODO: Implement see all functionality
             },
-            child: const Text('See all'),
+            child: Text(AppLocalizations.of(context)!.seeAll),
           ),
         ],
       ),

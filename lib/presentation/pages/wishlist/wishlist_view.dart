@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/wishlist_item_card.dart'; // Import the new widget
-import 'package:stronger_muscles/core/constants/app_colors.dart'; // Import AppColors for styling
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart'; // Import AppColors for styling
 
 class WishlistView extends GetView<WishlistController> {
   const WishlistView({super.key});
@@ -11,25 +12,25 @@ class WishlistView extends GetView<WishlistController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wishlist', style: TextStyle(color: AppColors.white)),
+        title: Text(AppLocalizations.of(context)!.wishlist, style: const TextStyle(color: AppColors.white)),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: Obx(() {
         if (controller.wishlistItems.isEmpty) {
-          return const Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.favorite_border, size: 80, color: AppColors.grey),
-                SizedBox(height: 16.0),
+                const Icon(Icons.favorite_border, size: 80, color: AppColors.grey),
+                const SizedBox(height: 16.0),
                 Text(
-                  'Your wishlist is empty.',
-                  style: TextStyle(fontSize: 18.0, color: AppColors.grey),
+                  AppLocalizations.of(context)!.yourWishlistIsEmpty,
+                  style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
                 ),
-                Text(
-                  'Start adding your favorite products!',
-                  style: TextStyle(fontSize: 16.0, color: AppColors.grey),
+                 Text(
+                  AppLocalizations.of(context)!.startAddingFavorites,
+                  style: const TextStyle(fontSize: 16.0, color: AppColors.grey),
                 ),
               ],
             ),

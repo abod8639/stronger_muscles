@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class SignInPage extends GetView<AuthController> {
   final VoidCallback onSignUpTap;
@@ -26,7 +27,7 @@ class SignInPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Welcome Back!',
+                AppLocalizations.of(context)!.welcomeBack,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -35,7 +36,7 @@ class SignInPage extends GetView<AuthController> {
               ),
               const SizedBox(height: 8.0),
               Text(
-                'Sign in to continue',
+                AppLocalizations.of(context)!.signInToContinue,
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: Colors.grey[600],
@@ -44,15 +45,15 @@ class SignInPage extends GetView<AuthController> {
               const SizedBox(height: 32.0),
               AuthTextField(
                 controller: emailController,
-                label: 'Email',
+                label: AppLocalizations.of(context)!.email,
                 icon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return AppLocalizations.of(context)!.enterEmail;
                   }
                   if (!GetUtils.isEmail(value)) {
-                    return 'Please enter a valid email';
+                    return AppLocalizations.of(context)!.validEmail;
                   }
                   return null;
                 },
@@ -60,16 +61,16 @@ class SignInPage extends GetView<AuthController> {
               const SizedBox(height: 16.0),
               AuthTextField(
                 controller: passwordController,
-                label: 'Password',
+                label: AppLocalizations.of(context)!.password,
                 icon: Icons.lock_outline,
                 isPassword: true,
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return AppLocalizations.of(context)!.enterPassword;
                   }
                   if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
+                    return AppLocalizations.of(context)!.passwordLength;
                   }
                   return null;
                 },
@@ -80,9 +81,9 @@ class SignInPage extends GetView<AuthController> {
                 child: TextButton(
                   onPressed: () {
                     // TODO: Implement forgot password
-                    Get.snackbar('Info', 'Forgot password not implemented yet');
+                    Get.snackbar('Info', AppLocalizations.of(context)!.forgotPasswordNotImplemented);
                   },
-                  child: const Text('Forgot Password?'),
+                  child: Text(AppLocalizations.of(context)!.forgotPassword),
                 ),
               ),
               const SizedBox(height: 24.0),
@@ -107,9 +108,9 @@ class SignInPage extends GetView<AuthController> {
                           ),
                           elevation: 2,
                         ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.login,
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -123,7 +124,7 @@ class SignInPage extends GetView<AuthController> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
-                      'OR',
+                      AppLocalizations.of(context)!.or,
                       style: TextStyle(color: Colors.grey[500]),
                     ),
                   ),
@@ -134,7 +135,7 @@ class SignInPage extends GetView<AuthController> {
               OutlinedButton.icon(
                 onPressed: () => controller.signInWithGoogle(),
                 icon: const Icon(Icons.g_mobiledata, size: 28), // Using built-in icon as placeholder
-                label: const Text('Sign in with Google'),
+                label: Text(AppLocalizations.of(context)!.signInWithGoogle),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   shape: RoundedRectangleBorder(
@@ -148,14 +149,14 @@ class SignInPage extends GetView<AuthController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't have an account? ",
+                    AppLocalizations.of(context)!.dontHaveAccount,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   TextButton(
                     onPressed: onSignUpTap,
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: Text(
+                      AppLocalizations.of(context)!.signUp,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],

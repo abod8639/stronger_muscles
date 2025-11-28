@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Horizontal scrollable row of category shortcuts
 class ShortcutsRow extends StatelessWidget {
@@ -59,7 +60,7 @@ class ShortcutsRow extends StatelessWidget {
       final isSelected = controller.selectedIndex.value == index;
 
       return Semantics(
-        label: '${item.label} category',
+        label: '${_getLocalizedLabel(context, item.label)} category',
         selected: isSelected,
         button: true,
         child: GestureDetector(
@@ -102,7 +103,7 @@ class ShortcutsRow extends StatelessWidget {
               SizedBox(
                 width: _labelWidth,
                 child: Text(
-                  item.label,
+                  _getLocalizedLabel(context, item.label),
                   style: TextStyle(
                     fontSize: _labelFontSize,
                     fontWeight:
@@ -121,6 +122,28 @@ class ShortcutsRow extends StatelessWidget {
         ),
       );
     });
+  }
+
+  String _getLocalizedLabel(BuildContext context, String key) {
+    final localizations = AppLocalizations.of(context)!;
+    switch (key) {
+      case 'categoryHome':
+        return localizations.categoryHome;
+      case 'categoryProtein':
+        return localizations.categoryProtein;
+      case 'categoryCreatine':
+        return localizations.categoryCreatine;
+      case 'categoryAmino':
+        return localizations.categoryAmino;
+      case 'categoryBCAA':
+        return localizations.categoryBCAA;
+      case 'categoryPreWorkout':
+        return localizations.categoryPreWorkout;
+      case 'categoryMassGainer':
+        return localizations.categoryMassGainer;
+      default:
+        return key;
+    }
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/profile_header.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/quick_actions_row.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/purchase_stats_card.dart';
@@ -50,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 24),
                   AccountSettingsList(),
                   const SizedBox(height: 24),
-                  _buildSignOutButton(controller),
+                  _buildSignOutButton(controller, context),
                   const SizedBox(height: 32),
                 ],
               );
@@ -70,7 +71,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
       flexibleSpace: FlexibleSpaceBar(
         title: Text(
-          'My Account',
+          AppLocalizations.of(context)!.myAccount,
           style: TextStyle(
             color: AppColors.white,
             fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildSignOutButton(ProfileController controller) {
+  Widget _buildSignOutButton(ProfileController controller, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: OutlinedButton.icon(
@@ -89,7 +90,7 @@ class ProfilePage extends StatelessWidget {
           await controller.signOut();
         },
         icon: const Icon(Icons.logout),
-        label: const Text('Sign Out'),
+        label: Text(AppLocalizations.of(context)!.signOut),
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.error,
           side: const BorderSide(color: AppColors.error, width: 1.5),

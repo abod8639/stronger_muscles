@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Promotional banner widget displayed on the home page
 class PromoBanner extends StatelessWidget {
@@ -52,7 +53,7 @@ class PromoBanner extends StatelessWidget {
                   children: [
                     // Title
                     Text(
-                      'Special Offer!',
+                      AppLocalizations.of(context)!.specialOffer,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onPrimaryContainer,
@@ -62,7 +63,7 @@ class PromoBanner extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      'Get 20% off on all products',
+                      AppLocalizations.of(context)!.getDiscount,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onPrimaryContainer,
                       ),
@@ -84,7 +85,7 @@ class PromoBanner extends StatelessWidget {
                           ),
                           elevation: 2.0,
                         ),
-                        child: const Text('Shop Now'),
+                        child: Text(AppLocalizations.of(context)!.shopNow),
                       ),
                     ),
                   ],

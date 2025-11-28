@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Custom search bar widget with filter button for the home page
 class SearchBar extends StatelessWidget {
@@ -46,8 +47,8 @@ class SearchBar extends StatelessWidget {
                   const SizedBox(width: _iconSpacing),
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration.collapsed(
-                        hintText: 'Search products...',
+                      decoration: InputDecoration.collapsed(
+                        hintText: AppLocalizations.of(context)!.searchProducts,
                       ),
                       onChanged: controller.onSearchChanged,
                       textInputAction: TextInputAction.search,
@@ -62,7 +63,7 @@ class SearchBar extends StatelessWidget {
 
           // Filter button
           Semantics(
-            label: 'Filter products',
+            label: AppLocalizations.of(context)!.filterProducts,
             button: true,
             child: Container(
               width: _iconButtonSize,
@@ -79,7 +80,7 @@ class SearchBar extends StatelessWidget {
                 onPressed: () {
                   // TODO: Implement filter functionality
                 },
-                tooltip: 'Filter',
+                tooltip: AppLocalizations.of(context)!.filter,
               ),
             ),
           ),

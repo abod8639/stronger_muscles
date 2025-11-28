@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AccountSettingsList extends StatelessWidget {
 
@@ -34,7 +35,7 @@ class AccountSettingsList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(
-              'Account Settings',
+              AppLocalizations.of(context)!.accountSettings,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppColors.white : AppColors.black,
@@ -42,17 +43,19 @@ class AccountSettingsList extends StatelessWidget {
             ),
           ),
           _buildSettingItem(
+            context: context,
             icon: Icons.person_outline,
-            title: 'Edit Profile',
+            title: AppLocalizations.of(context)!.editProfile,
             onTap: () {},
             isDark: isDark,
           ),
           _buildDivider(isDark),
           Obx(() => _buildSettingItem(
+            context: context,
             icon: themeController.isDarkMode.value 
                 ? Icons.dark_mode_outlined 
                 : Icons.light_mode_outlined,
-            title: 'Theme',
+            title: AppLocalizations.of(context)!.theme,
             trailing: Switch(
               value: themeController.isDarkMode.value,
               onChanged: (val) => themeController.toggleTheme(),
@@ -63,30 +66,39 @@ class AccountSettingsList extends StatelessWidget {
           )),
           _buildDivider(isDark),
           _buildSettingItem(
+            context: context,
             icon: Icons.notifications_outlined,
-            title: 'Notifications',
+            title: AppLocalizations.of(context)!.notifications,
             onTap: () {},
             isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
+            context: context,
             icon: Icons.language_outlined,
-            title: 'Language',
-            trailing: const Text('English', style: TextStyle(color: AppColors.greyDark)),
-            onTap: () {},
+            title: AppLocalizations.of(context)!.language,
+            trailing: Text(
+              Localizations.localeOf(context).languageCode == 'ar' 
+                  ? AppLocalizations.of(context)!.arabic 
+                  : AppLocalizations.of(context)!.english,
+              style: const TextStyle(color: AppColors.greyDark),
+            ),
+            onTap: () => _showLanguageDialog(context),
             isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
+            context: context,
             icon: Icons.help_outline,
-            title: 'Help & Support',
+            title: AppLocalizations.of(context)!.helpSupport,
             onTap: () {},
             isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
+            context: context,
             icon: Icons.info_outline,
-            title: 'About',
+            title: AppLocalizations.of(context)!.about,
             onTap: () {},
             isLast: true,
             isDark: isDark,
@@ -96,7 +108,41 @@ class AccountSettingsList extends StatelessWidget {
     );
   }
 
+  void _showLanguageDialog(BuildContext context) {
+    final currentLocale = Localizations.localeOf(context).languageCode;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.language),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              title: Text(AppLocalizations.of(context)!.english),
+              value: 'en',
+              groupValue: currentLocale,
+              onChanged: (value) {
+                Get.updateLocale(const Locale('en'));
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<String>(
+              title: Text(AppLocalizations.of(context)!.arabic),
+              value: 'ar',
+              groupValue: currentLocale,
+              onChanged: (value) {
+                Get.updateLocale(const Locale('ar'));
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSettingItem({
+    required BuildContext context,
     required IconData icon,
     required String title,
     Widget? trailing,

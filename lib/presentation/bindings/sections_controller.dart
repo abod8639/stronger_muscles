@@ -11,13 +11,13 @@ class SectionsController extends GetxController {
   final RxInt selectedIndex = 0.obs;
 
   final List<Selections> selections = [
-    Selections(label: 'Home', icon: Icons.home),
-    Selections(label: 'Protein', icon: Icons.fitness_center),
-    Selections(label: 'Creatine', icon: Icons.sports_handball),
-    Selections(label: 'Amino', icon: Icons.local_drink),
-    Selections(label: 'BCAA', icon: Icons.bolt),
-    Selections(label: 'Pre-workout', icon: Icons.flash_on),
-    Selections(label: 'Mass Gainer', icon: Icons.sports_martial_arts),
+    Selections(label: 'categoryHome', icon: Icons.home),
+    Selections(label: 'categoryProtein', icon: Icons.fitness_center),
+    Selections(label: 'categoryCreatine', icon: Icons.sports_handball),
+    Selections(label: 'categoryAmino', icon: Icons.local_drink),
+    Selections(label: 'categoryBCAA', icon: Icons.bolt),
+    Selections(label: 'categoryPreWorkout', icon: Icons.flash_on),
+    Selections(label: 'categoryMassGainer', icon: Icons.sports_martial_arts),
   ];
 
   @override
