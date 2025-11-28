@@ -12,6 +12,7 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Future<void> main() async {
@@ -28,7 +29,7 @@ Future<void> main() async {
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');
   await Hive.openBox<String>('wishlist');
-  await Hive.openBox('settings'); // For theme settings
+  await Hive.openBox('settings'); // For theme and language settings
   
   runApp(const MyApp());
   
@@ -40,8 +41,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize ThemeController
+    // Initialize Controllers
     final themeController = Get.put(ThemeController());
+    final languageController = Get.put(LanguageController());
 
     return Obx(() => GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: languageController.currentLocale.value,
     ));
   }
 }

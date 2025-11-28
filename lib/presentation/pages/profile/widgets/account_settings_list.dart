@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AccountSettingsList extends StatelessWidget {
@@ -77,12 +78,13 @@ class AccountSettingsList extends StatelessWidget {
             context: context,
             icon: Icons.language_outlined,
             title: AppLocalizations.of(context)!.language,
-            trailing: Text(
-              Localizations.localeOf(context).languageCode == 'ar' 
-                  ? AppLocalizations.of(context)!.arabic 
-                  : AppLocalizations.of(context)!.english,
-              style: const TextStyle(color: AppColors.greyDark),
-            ),
+            trailing: Obx(() {
+              final languageController = Get.find<LanguageController>();
+              return Text(
+                languageController.currentLanguageName,
+                style: const TextStyle(color: AppColors.greyDark),
+              );
+            }),
             onTap: () => _showLanguageDialog(context),
             isDark: isDark,
           ),
@@ -109,34 +111,35 @@ class AccountSettingsList extends StatelessWidget {
   }
 
   void _showLanguageDialog(BuildContext context) {
-    final currentLocale = Localizations.localeOf(context).languageCode;
+    final languageController = Get.find<LanguageController>();
+    
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.language),
-        content: Column(
+        content: Obx(() => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             RadioListTile<String>(
               title: Text(AppLocalizations.of(context)!.english),
               value: 'en',
-              groupValue: currentLocale,
+              groupValue: languageController.currentLocale.value.languageCode,
               onChanged: (value) {
-                Get.updateLocale(const Locale('en'));
+                languageController.changeLanguage(const Locale('en'));
                 Navigator.pop(context);
               },
             ),
             RadioListTile<String>(
               title: Text(AppLocalizations.of(context)!.arabic),
               value: 'ar',
-              groupValue: currentLocale,
+              groupValue: languageController.currentLocale.value.languageCode,
               onChanged: (value) {
-                Get.updateLocale(const Locale('ar'));
+                languageController.changeLanguage(const Locale('ar'));
                 Navigator.pop(context);
               },
             ),
           ],
-        ),
+        )),
       ),
     );
   }
