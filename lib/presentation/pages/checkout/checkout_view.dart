@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {

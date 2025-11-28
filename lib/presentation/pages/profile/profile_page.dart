@@ -82,28 +82,23 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildSignOutButton(ProfileController controller) {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: OutlinedButton.icon(
-            onPressed: () async {
-              await controller.signOut();
-            },
-            icon: const Icon(Icons.logout),
-            label: const Text('Sign Out'),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.error,
-              side: const BorderSide(color: AppColors.error, width: 1.5),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: OutlinedButton.icon(
+        onPressed: () async {
+          await controller.signOut();
+        },
+        icon: const Icon(Icons.logout),
+        label: const Text('Sign Out'),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.error,
+          side: const BorderSide(color: AppColors.error, width: 1.5),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        );
-      }
+        ),
+      ),
     );
   }
 }

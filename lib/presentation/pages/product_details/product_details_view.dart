@@ -60,7 +60,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Main Product Image with Hero Animation
-            MainImage(product: widget.product),
+            MainImage(
+              product: widget.product,
+              onImageTap: (index) => _showImageViewer(context, index),
+            ),
 
             // Product Details Content
             Padding(

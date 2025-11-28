@@ -6,8 +6,13 @@ import 'package:stronger_muscles/presentation/bindings/product_details_controlle
 
 class MainImage extends StatefulWidget {
   final ProductModel product;
+  final Function(int)? onImageTap;
 
-  const MainImage({super.key, required this.product});
+  const MainImage({
+    super.key,
+    required this.product,
+    this.onImageTap, // Callback for image tap
+  });
 
   @override
   State<MainImage> createState() => _MainImageState();
@@ -55,14 +60,17 @@ class _MainImageState extends State<MainImage> {
           _controller.selectImage(index);
         },
         itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12.0),
-            child: CachedNetworkImage(
-              imageUrl: widget.product.imageUrl[index],
-              placeholder: (context, url) =>
-                  const Center(child: CircularProgressIndicator()),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-              fit: BoxFit.contain,
+          return GestureDetector(
+            onTap: () => widget.onImageTap?.call(index),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: CachedNetworkImage(
+                imageUrl: widget.product.imageUrl[index],
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+                fit: BoxFit.contain,
+              ),
             ),
           );
         },
