@@ -164,7 +164,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       swipeDismissible: true,
       doubleTapZoomable: true,
       immersive: false,
-      
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      // barrierColor:  Colors.black, // Theme.of(context).colorScheme.onPrimary,
+      closeButtonColor: Theme.of(context).colorScheme.onSurface,
     );
   }
 }

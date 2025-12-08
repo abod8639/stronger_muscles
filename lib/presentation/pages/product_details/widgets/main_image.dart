@@ -54,6 +54,7 @@ class _MainImageState extends State<MainImage> {
       height: 400,
       width: double.infinity,
       child: PageView.builder(
+      
         controller: _pageController,
         itemCount: widget.product.imageUrl.length,
         onPageChanged: (index) {

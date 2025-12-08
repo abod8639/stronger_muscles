@@ -158,6 +158,35 @@ final List<ProductModel> dummyProducts = [
     ],
     description: 'Boost energy and focus for your workouts.',
   ),
+  // ProductModel(
+  //   id: '10',
+  //   name: 'سوبيا',
+  //   price: 67,
+  //   imageUrl: [
+  //     'https://mediaaws.almasryalyoum.com/news/large/2015/06/20/341071_0.jpeg',
+  //   ],
+  //   description: 'Boost energy and focus for your workouts.',
+  // ),
+  // ProductModel(
+  //   id: '11',
+  //   name: 'سحلب',
+  //   price: 67,
+  //   imageUrl: [
+  //     'https://upload.wikimedia.org/wikipedia/ar/6/60/%D8%A7%D9%84%D8%B3%D8%AD%D9%84%D8%A8.JPG',
+  //     'https://img-global.cpcdn.com/recipes/8d8a0c3084974b5d/680x781cq80/%D8%A7%D9%84%D8%B5%D9%88%D8%B1%D8%A9-%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%D8%A9-%D9%84%D9%88%D8%B5%D9%81%D8%A9%D8%B3%D8%AD%D9%84%D8%A8-%D8%A8%D9%86%D8%B4%D8%A3-%D8%A7%D9%84%D8%B0%D8%B1%D9%87.jpg',
+  //   ],
+  //   description: 'Boost energy and focus for your workouts.',
+  // ),
+  // ProductModel(
+  //   id: '12',
+  //   name: 'اوباما',
+  //   price: 6,
+  //   imageUrl: [
+  //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbbqeHVl5dNrsH_cCVzp6XilhpyQv0oQDKflVfxNbEay47zGmDgJDbkj7nKCITlPRKBdg&usqp=CAU',
+  //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR30QJ5X8wkjRafP8B00pMksMUN7tXhFVjgtBXeAEaR7xwjJOkw0ReyQLpRf9szQaSZwQw&usqp=CAU',
+  //   ],
+  //   description: 'Boost energy and focus for your workouts.',
+  // ),
 ];
 
 final List<ProductModel> dummyCreatineProducts = [
