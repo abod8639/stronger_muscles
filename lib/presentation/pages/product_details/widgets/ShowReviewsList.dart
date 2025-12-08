@@ -194,7 +194,10 @@ class ShowReviewsList extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primary.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
+        border: Border.all(                  // ShowReviewsList(
+                  //   reviews: widget.reviews,
+                  //   theme: widget.theme,
+                  // ),
           color: AppColors.primary.withOpacity(0.3),
           width: 1,
         ),
@@ -233,6 +236,8 @@ class ShowReviewsList extends StatelessWidget {
         ),
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             Icons.rate_review_outlined,

@@ -1,4 +1,5 @@
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/data/repositories/fake_review.dart';
 
 class ProductRepository {
   // This is a dummy repository to simulate fetching product details.
@@ -81,6 +82,7 @@ final List<ProductModel> dummyProducts = [
     description: 'High-quality whey protein for muscle growth11.',
     strars: 4.5,
     reviewCount: 100,
+    reviews: FakeReviews.getFakeReviews()
   ),
   ProductModel(
     id: '2',
@@ -92,6 +94,8 @@ final List<ProductModel> dummyProducts = [
     description: 'Pure creatine for increased strength and performance.',
         strars: 4.0,
     reviewCount: 2900,
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '3',
@@ -105,6 +109,8 @@ final List<ProductModel> dummyProducts = [
     description: 'Boost energy and focus for your workouts.',
     strars: 2.0,
     reviewCount: 300,
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '4',
@@ -116,6 +122,8 @@ final List<ProductModel> dummyProducts = [
     description: 'Boost energy and focus for your workouts.',
     strars: 5.0,
     reviewCount: 460,
+        reviews: FakeReviews.getFakeReviews()
+
       ),
   ProductModel(
     id: '5',
@@ -125,6 +133,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/ON_ASPAC_SERIOUS_MASS_STRAW_5.44KG_162fb477-102e-4204-9d69-3c272b80b295.jpg?v=1731850641&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '6',
@@ -135,6 +145,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/6223007821032_max_muscle1_7551ddcf-61a2-46bd-b1c9-c302c99666b6.jpg?v=1683721704&width=600',
     ],
     description: 'Boost energy and focus for your workouts.',
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '7',
@@ -145,6 +157,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/Alpha_6771fb77-9250-46d4-b1ec-7635e23d06a3.jpg?v=1694077386&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '8',
@@ -155,7 +169,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/7898588895560_1.jpg?v=1750146580&width=1000'
           'https://wayupsports.com/cdn/shop/files/7898588895560_2.jpg?v=1750146580&width=1000',
     ],
-    description: 'Boost energy and focus for your workouts.',
+    description: 'Boost energy and focus for your workouts.',    reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '9',
@@ -165,6 +180,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/6224009096169_max_muscle_7f8a569d-bed6-4563-8c06-e4528df1111b.jpg?v=1683722662&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   // ProductModel(
   //   id: '10',
@@ -208,6 +225,8 @@ final List<ProductModel> dummyCreatineProducts = [
           'https://wayupsports.com/cdn/shop/files/7898588895560_2.jpg?v=1750146580&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+        reviews: FakeReviews.getFakeReviews()
+
   ),
   ProductModel(
     id: '2',

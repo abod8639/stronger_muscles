@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/ReviewModel.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/ShowReviewsList.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/StarsRecord.dart';
 
 /// A beautiful expandable description card with animations
@@ -227,11 +226,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                     theme: widget.theme,
                     stars: widget.stars,
                     reviewCount: widget.reviewCount,
-                  ),
-                  // Reviews list
-                  ShowReviewsList(
-                    reviews: widget.reviews,
-                    theme: widget.theme,
                   ),
                 ],
               ),
