@@ -8,7 +8,6 @@ class ExpandableDescriptionCard extends StatefulWidget {
   final double? stars;
   final int? reviewCount;
 
-
   const ExpandableDescriptionCard({
     super.key,
     required this.description,
@@ -219,38 +218,17 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                     ),
 
                   // Stars record
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Row(
-                      children: [
-                        ..._buildStarRating(widget.stars ?? 0),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${widget.stars?.toStringAsFixed(1) ?? 'N/A'} (${widget.reviewCount ?? 0} reviews)',
-                          style: widget.theme.textTheme.bodyMedium?.copyWith(
-                            color: widget.theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  StarsRecord(
+                    theme: widget.theme,
+                    stars: widget.stars,
+                    reviewCount: widget.reviewCount,
+                  )
                 ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  _buildStarRating(double stars) {
-    return List.generate(
-      stars.floor(),
-      (index) => Icon(Icons.star_rounded, color: Colors.amber, size: 20),
-    ) +
-        List.generate(
-          5 - stars.floor(),
-          (index) =>  Icon(Icons.star_rounded, color: Colors.grey, size: 20),
     );
   }
 
@@ -269,4 +247,47 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
     return textPainter.didExceedMaxLines;
   }
+}
+
+class StarsRecord extends StatelessWidget {
+  final ThemeData theme;
+  final double? stars;
+  final int? reviewCount;
+
+  const StarsRecord({
+    super.key,
+    required this.theme,
+    this.stars,
+    this.reviewCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Row(
+        children: [
+          ..._buildStarRating(stars ?? 0),
+          const SizedBox(width: 8),
+          Text(
+            '${stars?.toStringAsFixed(1) ?? 'N/A'} (${reviewCount ?? 0} reviews)',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+_buildStarRating(double stars) {
+  return List.generate(
+        stars.floor(),
+        (index) => Icon(Icons.star_rounded, color: Colors.amber, size: 20),
+      ) +
+      List.generate(
+        5 - stars.floor(),
+        (index) => Icon(Icons.star_rounded, color: Colors.grey, size: 20),
+      );
+}
 }
