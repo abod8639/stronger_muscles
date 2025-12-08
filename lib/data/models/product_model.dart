@@ -1,3 +1,5 @@
+import 'package:stronger_muscles/data/models/ReviewModel.dart';
+
 class ProductModel {
   final String id;
   final String name;
@@ -6,6 +8,9 @@ class ProductModel {
   final String description;
   final double? strars;
   final int? reviewCount;
+  final List<ReviewModel> reviews;
+  
+
 
 
   ProductModel({
@@ -16,5 +21,5 @@ class ProductModel {
     required this.description,
     this.strars,
     this.reviewCount,
-  });
+    this.reviews = const [],});
 }
