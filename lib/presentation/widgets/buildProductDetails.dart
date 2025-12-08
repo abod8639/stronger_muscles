@@ -1,13 +1,13 @@
 
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 
+       const double titleFontSize = 18.0;
+       const double priceFontSize = 16.0;
+       const int maxTitleLines = 2;
 /// Builds the product details section (name and price)
   Widget buildProductDetails(ProductModel product) {
-       const double _titleFontSize = 18.0;
-       const double _priceFontSize = 16.0;
-       const int _maxTitleLines = 2;
 
     return Builder(
       builder: (context) {
@@ -20,11 +20,11 @@ import 'package:stronger_muscles/data/models/product_model.dart';
             Text(
               product.name,
               style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: _titleFontSize,
+                fontSize: titleFontSize,
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
               ),
-              maxLines: _maxTitleLines,
+              maxLines: maxTitleLines,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 8.0),
@@ -33,7 +33,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
             Text(
               '\$${product.price.toStringAsFixed(2)}',
               style: theme.textTheme.titleSmall?.copyWith(
-                fontSize: _priceFontSize,
+                fontSize: priceFontSize,
                 color: AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
