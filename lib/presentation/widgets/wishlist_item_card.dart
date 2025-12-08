@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/presentation/widgets/buildProductDetails.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductImage.dart';
 
 class WishlistItemCard extends StatelessWidget {
@@ -14,10 +15,7 @@ class WishlistItemCard extends StatelessWidget {
   static const double _verticalPadding = 8.0;
   static const double _contentPadding = 12.0;
   static const double _spacing = 16.0;
-  static const double _titleFontSize = 18.0;
-  static const double _priceFontSize = 16.0;
   static const double _iconSize = 28.0;
-  static const int _maxTitleLines = 2;
 
   final ProductModel product;
   final WishlistController controller;
@@ -61,7 +59,7 @@ class WishlistItemCard extends StatelessWidget {
 
               // Product Details
               Expanded(
-                child: _buildProductDetails(context),
+                child: buildProductDetails(product),
               ),
 
               // Delete Button
@@ -73,40 +71,6 @@ class WishlistItemCard extends StatelessWidget {
     );
   }
 
-
-  /// Builds the product details section (name and price)
-  Widget _buildProductDetails(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Product Name
-        Text(
-          product.name,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontSize: _titleFontSize,
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-          maxLines: _maxTitleLines,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 8.0),
-        
-        // Product Price
-        Text(
-          '\$${product.price.toStringAsFixed(2)}',
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontSize: _priceFontSize,
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
 
   /// Builds the delete button with semantic label for accessibility
   Widget _buildDeleteButton(BuildContext context) {
