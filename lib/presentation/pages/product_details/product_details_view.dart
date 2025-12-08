@@ -11,9 +11,6 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/imag
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
 class ProductDetailsView extends StatefulWidget {
-  // Constants for consistent sizing and spacing
-  // static const double _mainImageHeight = 400.0;
-  // static const double _mainImageBorderRadius = 16.0;
   static const double _contentPadding = 16.0;
   static const double _sectionSpacing = 24.0;
   static const double _smallSpacing = 8.0;
@@ -98,12 +95,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     );
   }
 
-
-
-
-
-
-
   /// Shows the image viewer with zoom capability
   void _showImageViewer(BuildContext context, int initialIndex) {
     if (widget.product.imageUrl.isEmpty) return;
@@ -120,4 +111,5 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       closeButtonColor: Theme.of(context).colorScheme.onSurface,
     );
   }
+  
 }

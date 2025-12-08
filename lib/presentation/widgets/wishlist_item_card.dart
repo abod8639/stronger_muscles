@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/presentation/widgets/buildProductImage.dart';
 
 class WishlistItemCard extends StatelessWidget {
   // Constants for consistent sizing and spacing
-  static const double _imageSize = 100.0;
   static const double _borderRadius = 12.0;
-  static const double _imageBorderRadius = 8.0;
   static const double _cardElevation = 2.0;
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
@@ -57,7 +55,7 @@ class WishlistItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Product Image with Hero Animation
-              _buildProductImage(context),
+              buildProductImage( product),
 
               const SizedBox(width: _spacing),
 
@@ -75,57 +73,6 @@ class WishlistItemCard extends StatelessWidget {
     );
   }
 
-  /// Builds the product image with hero animation and error handling
-  Widget _buildProductImage(BuildContext context) {
-    final imageUrl = product.imageUrl.isNotEmpty 
-        ? product.imageUrl.first 
-        : '';
-
-    return Hero(
-      tag: 'wishlist_product_${product.id}',
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(_imageBorderRadius),
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: _imageSize,
-                height: _imageSize,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  width: _imageSize,
-                  height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                      strokeWidth: 2.0,
-                    ),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  width: _imageSize,
-                  height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: const Icon(
-                    Icons.image_not_supported_outlined,
-                    color: AppColors.primary,
-                    size: 40.0,
-                  ),
-                ),
-              )
-            : Container(
-                width: _imageSize,
-                height: _imageSize,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                child: const Icon(
-                  Icons.image_not_supported_outlined,
-                  color: AppColors.primary,
-                  size: 40.0,
-                ),
-              ),
-      ),
-    );
-  }
 
   /// Builds the product details section (name and price)
   Widget _buildProductDetails(BuildContext context) {
