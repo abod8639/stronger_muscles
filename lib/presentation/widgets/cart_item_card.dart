@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/functions/tap.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 
@@ -235,7 +236,7 @@ class CartItemCard extends StatelessWidget {
                 color: AppColors.primary,
                 size: _iconSize,
               ),
-              onPressed: () => _handleDecrease(context),
+              onPressed: () => doubleTapPrevention( () => _handleDecrease(context)),
               tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
               splashRadius: 20.0,
               padding: const EdgeInsets.all(4.0),
