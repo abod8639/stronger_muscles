@@ -6,6 +6,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductName.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductPrice.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
@@ -72,7 +73,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
                   // Product Price
-                  buildProductPrice(theme),
+                  buildProductPrice(widget.product, theme),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Image Thumbnails
@@ -85,7 +86,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Description Section
-                  _buildDescriptionSection(theme),
+                  buildDescriptionSection(widget.product, theme),
                   const SizedBox(height: ProductDetailsView._bottomPadding),
                 ],
               ),
@@ -99,20 +100,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
 
 
-  /// Builds the product price text
-  Widget buildProductPrice(ThemeData theme) {
-    return Text(
-      'LE ${widget.product.price.toStringAsFixed(2)}',
-      style: theme.textTheme.headlineSmall?.copyWith(
-        color: AppColors.primary,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
+
 
   /// Builds the enhanced description section with expandable functionality
-  Widget _buildDescriptionSection(ThemeData theme) {
-    if (widget.product.description.isEmpty) {
+  Widget buildDescriptionSection(ProductModel product, ThemeData theme) {
+    if (product.description.isEmpty) {
       return const SizedBox.shrink();
     }
 
