@@ -8,7 +8,6 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductCartDetails.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductCartImage.dart';
-import 'package:stronger_muscles/presentation/widgets/buildProductDetails.dart';
 
 class CartItemCard extends StatelessWidget {
   // Constants for consistent sizing and spacing
@@ -18,11 +17,8 @@ class CartItemCard extends StatelessWidget {
   static const double _verticalPadding = 8.0;
   static const double _contentPadding = 12.0;
   static const double _spacing = 16.0;
-  static const double _titleFontSize = 18.0;
-  static const double _priceFontSize = 16.0;
   static const double _quantityFontSize = 16.0;
   static const double _iconSize = 28.0;
-  static const int _maxTitleLines = 2;
 
   final CartItemModel item;
   final CartController controller;
@@ -56,7 +52,7 @@ class CartItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Product Image with Hero Animation
-              buildProductCartImage(),
+              buildProductCartImage(item ),
 
               const SizedBox(width: _spacing),
 

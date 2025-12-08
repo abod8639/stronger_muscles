@@ -2,7 +2,7 @@
   import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/data/models/cart_item_model.dart';
 
 
   const double _imageSize = 100.0;
@@ -10,7 +10,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
   const double _imageBorderRadius = 8.0;
 
 /// Builds the product image with hero animation and error handling
-  Widget buildProductCartImage(ProductModel item) {
+  Widget buildProductCartImage(CartItemModel item) {
     final imageUrl = item.imageUrl.isNotEmpty ? item.imageUrl.first : '';
 
     return Builder(
