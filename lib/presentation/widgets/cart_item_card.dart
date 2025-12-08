@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/functions/tap.dart';
+import 'package:stronger_muscles/functions/doubleTapPrevention.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/presentation/widgets/buildProductCartDetails.dart';
+import 'package:stronger_muscles/presentation/widgets/buildProductCartImage.dart';
+import 'package:stronger_muscles/presentation/widgets/buildProductDetails.dart';
 
 class CartItemCard extends StatelessWidget {
   // Constants for consistent sizing and spacing
-  static const double _imageSize = 100.0;
   static const double _borderRadius = 12.0;
-  static const double _imageBorderRadius = 8.0;
   static const double _cardElevation = 2.0;
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
@@ -56,13 +56,13 @@ class CartItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Product Image with Hero Animation
-              _buildProductImage(context),
+              buildProductCartImage(),
 
               const SizedBox(width: _spacing),
 
               // Product Details
               Expanded(
-                child: _buildProductDetails(context),
+                child: buildProductCartDetails(item),
               ),
 
               const SizedBox(width: 8.0),
@@ -73,102 +73,6 @@ class CartItemCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  /// Builds the product image with hero animation and error handling
-  Widget _buildProductImage(BuildContext context) {
-    final imageUrl = item.imageUrl.isNotEmpty ? item.imageUrl.first : '';
-
-    return Hero(
-      tag: 'cart_product_${item.id}',
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(_imageBorderRadius),
-        child: imageUrl.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: imageUrl,
-                width: _imageSize,
-                height: _imageSize,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  width: _imageSize,
-                  height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                      strokeWidth: 2.0,
-                    ),
-                  ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  width: _imageSize,
-                  height: _imageSize,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: const Icon(
-                    Icons.image_not_supported_outlined,
-                    color: AppColors.primary,
-                    size: 40.0,
-                  ),
-                ),
-              )
-            : Container(
-                width: _imageSize,
-                height: _imageSize,
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                child: const Icon(
-                  Icons.image_not_supported_outlined,
-                  color: AppColors.primary,
-                  size: 40.0,
-                ),
-              ),
-      ),
-    );
-  }
-
-  /// Builds the product details section (name and price)
-  Widget _buildProductDetails(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Product Name
-        Text(
-          item.name,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontSize: _titleFontSize,
-            fontWeight: FontWeight.bold,
-            color: theme.colorScheme.onSurface,
-          ),
-          maxLines: _maxTitleLines,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 8.0),
-
-        // Product Price
-        Text(
-          '\$${item.price.toStringAsFixed(2)}',
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontSize: _priceFontSize,
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-
-        const SizedBox(height: 4.0),
-
-        // Total Price (if quantity > 1)
-        if (item.quantity > 1)
-          Text(
-            'Total: \$${(item.price * item.quantity).toStringAsFixed(2)}',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-      ],
     );
   }
 
