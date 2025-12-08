@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/presentation/widgets/buildDeleteButton.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductDetails.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductImage.dart';
 
@@ -15,7 +16,6 @@ class WishlistItemCard extends StatelessWidget {
   static const double _verticalPadding = 8.0;
   static const double _contentPadding = 12.0;
   static const double _spacing = 16.0;
-  static const double _iconSize = 28.0;
 
   final ProductModel product;
   final WishlistController controller;
@@ -53,60 +53,41 @@ class WishlistItemCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Product Image with Hero Animation
-              buildProductImage( product),
+              buildProductImage(product),
 
               const SizedBox(width: _spacing),
 
               // Product Details
-              Expanded(
-                child: buildProductDetails(product),
-              ),
+              Expanded(child: buildProductDetails(product)),
 
               // Delete Button
-              _buildDeleteButton(context),
+              buildDeleteButtonFromWishlist(product),
             ],
           ),
         ),
       ),
     );
   }
+}
 
+/// Handles the delete action with optional confirmation
+void handleDeleteFromWishlist(BuildContext context, ProductModel product) {
+  final controller = Get.find<WishlistController>();
 
-  /// Builds the delete button with semantic label for accessibility
-  Widget _buildDeleteButton(BuildContext context) {
-    return Semantics(
-      label: 'Remove ${product.name} from wishlist',
-      button: true,
-      child: IconButton(
-        icon: const Icon(
-          Icons.delete_outline_rounded,
-          size: _iconSize,
-          color: AppColors.primary,
-        ),
-        onPressed: () => _handleDelete(context),
-        tooltip: 'Remove from Wishlist',
-        splashRadius: 24.0,
+  // Show a snackbar for undo functionality
+  controller.removeFromWishlist(product);
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('${product.name} removed from wishlist'),
+      duration: const Duration(seconds: 2),
+      action: SnackBarAction(
+        label: 'UNDO',
+        textColor: AppColors.primary,
+        onPressed: () {
+          controller.addToWishlist(product);
+        },
       ),
-    );
-  }
-
-  /// Handles the delete action with optional confirmation
-  void _handleDelete(BuildContext context) {
-    // Show a snackbar for undo functionality
-    controller.removeFromWishlist(product);
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('${product.name} removed from wishlist'),
-        duration: const Duration(seconds: 2),
-        action: SnackBarAction(
-          label: 'UNDO',
-          textColor: AppColors.primary,
-          onPressed: () {
-            controller.addToWishlist(product);
-          },
-        ),
-      ),
-    );
-  }
+    ),
+  );
 }
