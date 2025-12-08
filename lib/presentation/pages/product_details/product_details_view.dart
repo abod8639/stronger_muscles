@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/ShowReviewsList.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildDescriptionSection.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductName.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductPrice.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildShowReviewsListSection.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
@@ -88,10 +88,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._bottomPadding),
 
                   // Reviews Section
-                  ShowReviewsList(
-                    reviews: widget.product.reviews,
-                    theme: theme,
-                  ),
+                  buildShowReviewsListSection(widget.product, theme),
                 ],
               ),
             ),

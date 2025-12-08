@@ -84,6 +84,14 @@ class FakeReviews {
         rating: 4.0,
         createdAt: DateTime.now().subtract(const Duration(days: 90)),
       ),
+      ReviewModel(
+        userId: 'user_011',
+        userName: 'hosam gogo',
+        comment:
+            'Good value for money. Does the job well and I haven\'t had any issues so far. Solid product overall.',
+        rating: 3.5,
+        createdAt: DateTime.now().subtract(const Duration(days: 90)),
+      ),
     ];
   }
 
