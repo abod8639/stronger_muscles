@@ -80,6 +80,7 @@ final List<ProductModel> dummyProducts = [
     ],
     description: 'High-quality whey protein for muscle growth11.',
     strars: 4.5,
+    reviewCount: 100,
   ),
   ProductModel(
     id: '2',
@@ -89,6 +90,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/10821_368621d1-1d16-402a-93e0-f1c9f0e146af.jpg?v=1692179491&width=1000',
     ],
     description: 'Pure creatine for increased strength and performance.',
+        strars: 4.0,
+    reviewCount: 2900,
   ),
   ProductModel(
     id: '3',
@@ -100,6 +103,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/6223007823098_max_muscle_2_0aca455f-fecd-4d02-9bf8-4a66a8d876f7.jpg?v=1702980196&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
+    strars: 2.0,
+    reviewCount: 300,
   ),
   ProductModel(
     id: '4',
@@ -109,7 +114,9 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/ON_CREATINE_POWDER_300G_a0debbc6-79be-4e04-916e-6f82b813c4e6.jpg?v=1716891377&width=1000',
     ],
     description: 'Boost energy and focus for your workouts.',
-  ),
+    strars: 5.0,
+    reviewCount: 460,
+      ),
   ProductModel(
     id: '5',
     name: 'Serious Mass',

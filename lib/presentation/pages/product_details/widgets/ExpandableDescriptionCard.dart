@@ -247,6 +247,10 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     return List.generate(
       stars.floor(),
       (index) => Icon(Icons.star_rounded, color: Colors.amber, size: 20),
+    ) +
+        List.generate(
+          5 - stars.floor(),
+          (index) =>  Icon(Icons.star_rounded, color: Colors.grey, size: 20),
     );
   }
 
