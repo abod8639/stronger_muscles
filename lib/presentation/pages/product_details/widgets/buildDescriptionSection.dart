@@ -9,6 +9,8 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/Expa
     }
 
     return ExpandableDescriptionCard(
+      reviewCount: product.reviewCount,
+      stars: product.strars ?? 0 ,
       description: product.description,
       theme: theme,
     );

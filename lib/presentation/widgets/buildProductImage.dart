@@ -8,8 +8,8 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 /// Builds the product image with hero animation and error handling
   Widget buildProductImage( ProductModel product) {
 
-    const double _imageSize = 100.0;
-    const double _imageBorderRadius = 8.0;
+    const double imageSize = 100.0;
+    const double imageBorderRadius = 8.0;
 
     final imageUrl = product.imageUrl.isNotEmpty 
         ? product.imageUrl.first 
@@ -20,16 +20,16 @@ import 'package:stronger_muscles/data/models/product_model.dart';
         return Hero(
           tag: 'wishlist_product_${product.id}',
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(_imageBorderRadius),
+            borderRadius: BorderRadius.circular(imageBorderRadius),
             child: imageUrl.isNotEmpty
                 ? CachedNetworkImage(
                     imageUrl: imageUrl,
-                    width: _imageSize,
-                    height: _imageSize,
+                    width: imageSize,
+                    height: imageSize,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      width: _imageSize,
-                      height: _imageSize,
+                      width: imageSize,
+                      height: imageSize,
                       color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: const Center(
                         child: CircularProgressIndicator(
@@ -39,8 +39,8 @@ import 'package:stronger_muscles/data/models/product_model.dart';
                       ),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      width: _imageSize,
-                      height: _imageSize,
+                      width: imageSize,
+                      height: imageSize,
                       color: Theme.of(context).colorScheme.surfaceContainerHighest,
                       child: const Icon(
                         Icons.image_not_supported_outlined,
@@ -50,8 +50,8 @@ import 'package:stronger_muscles/data/models/product_model.dart';
                     ),
                   )
                 : Container(
-                    width: _imageSize,
-                    height: _imageSize,
+                    width: imageSize,
+                    height: imageSize,
                     color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     child: const Icon(
                       Icons.image_not_supported_outlined,

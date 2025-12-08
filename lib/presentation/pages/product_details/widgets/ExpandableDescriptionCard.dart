@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 
@@ -6,10 +5,16 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 class ExpandableDescriptionCard extends StatefulWidget {
   final String description;
   final ThemeData theme;
+  final double? stars;
+  final int? reviewCount;
+
 
   const ExpandableDescriptionCard({
+    super.key,
     required this.description,
     required this.theme,
+    this.stars,
+    this.reviewCount,
   });
 
   @override
@@ -212,12 +217,36 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                         ),
                       ),
                     ),
+
+                  // Stars record
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Row(
+                      children: [
+                        ..._buildStarRating(widget.stars ?? 0),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${widget.stars?.toStringAsFixed(1) ?? 'N/A'} (${widget.reviewCount ?? 0} reviews)',
+                          style: widget.theme.textTheme.bodyMedium?.copyWith(
+                            color: widget.theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  _buildStarRating(double stars) {
+    return List.generate(
+      stars.floor(),
+      (index) => Icon(Icons.star_rounded, color: Colors.amber, size: 20),
     );
   }
 

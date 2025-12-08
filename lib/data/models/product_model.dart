@@ -5,6 +5,8 @@ class ProductModel {
   final List<String> imageUrl;
   final String description;
   final double? strars;
+  final int? reviewCount;
+
 
   ProductModel({
     required this.id,
@@ -12,6 +14,7 @@ class ProductModel {
     required this.price,
     required this.imageUrl,
     required this.description,
-     this.strars,
+    this.strars,
+    this.reviewCount,
   });
 }
