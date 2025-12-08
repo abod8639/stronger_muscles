@@ -224,8 +224,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                   // Stars record
                   StarsRecord(
                     theme: widget.theme,
-                    stars: widget.stars,
-                    reviewCount: widget.reviewCount,
+                    reviews: widget.reviews,
                   ),
                 ],
               ),
