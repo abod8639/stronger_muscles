@@ -4,6 +4,7 @@ class ProductModel {
   final double price;
   final List<String> imageUrl;
   final String description;
+  final double? strars;
 
   ProductModel({
     required this.id,
@@ -11,5 +12,6 @@ class ProductModel {
     required this.price,
     required this.imageUrl,
     required this.description,
+     this.strars,
   });
 }

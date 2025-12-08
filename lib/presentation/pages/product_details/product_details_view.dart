@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductName.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 
@@ -67,11 +68,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Product Name
-                  _buildProductName(theme),
+                  buildProductName(widget.product, theme),
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
                   // Product Price
-                  _buildProductPrice(theme),
+                  buildProductPrice(theme),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Image Thumbnails
@@ -96,19 +97,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     );
   }
 
-  /// Builds the product name text
-  Widget _buildProductName(ThemeData theme) {
-    return Text(
-      widget.product.name,
-      style: theme.textTheme.headlineMedium?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: theme.colorScheme.onSurface,
-      ),
-    );
-  }
+
 
   /// Builds the product price text
-  Widget _buildProductPrice(ThemeData theme) {
+  Widget buildProductPrice(ThemeData theme) {
     return Text(
       'LE ${widget.product.price.toStringAsFixed(2)}',
       style: theme.textTheme.headlineSmall?.copyWith(

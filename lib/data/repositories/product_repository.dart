@@ -78,7 +78,8 @@ final List<ProductModel> dummyProducts = [
       'https://wayupsports.com/cdn/shop/files/10843_2.jpg?v=1756650182&width=1000',
       'https://wayupsports.com/cdn/shop/files/10843_3.jpg?v=1756650182&width=1000',
     ],
-    description: 'High-quality whey protein for muscle growth.',
+    description: 'High-quality whey protein for muscle growth11.',
+    strars: 4.5,
   ),
   ProductModel(
     id: '2',
