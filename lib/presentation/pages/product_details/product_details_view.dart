@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildDescriptionSection.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductName.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductPrice.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
@@ -102,17 +103,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
 
 
-  /// Builds the enhanced description section with expandable functionality
-  Widget buildDescriptionSection(ProductModel product, ThemeData theme) {
-    if (product.description.isEmpty) {
-      return const SizedBox.shrink();
-    }
 
-    return _ExpandableDescriptionCard(
-      description: widget.product.description,
-      theme: theme,
-    );
-  }
 
   /// Shows the image viewer with zoom capability
   void _showImageViewer(BuildContext context, int initialIndex) {
@@ -133,21 +124,21 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 }
 
 /// A beautiful expandable description card with animations
-class _ExpandableDescriptionCard extends StatefulWidget {
+class ExpandableDescriptionCard extends StatefulWidget {
   final String description;
   final ThemeData theme;
 
-  const _ExpandableDescriptionCard({
+  const ExpandableDescriptionCard({
     required this.description,
     required this.theme,
   });
 
   @override
-  State<_ExpandableDescriptionCard> createState() =>
-      _ExpandableDescriptionCardState();
+  State<ExpandableDescriptionCard> createState() =>
+      ExpandableDescriptionCardState();
 }
 
-class _ExpandableDescriptionCardState extends State<_ExpandableDescriptionCard>
+class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     with SingleTickerProviderStateMixin {
   bool _isExpanded = false;
   late AnimationController _animationController;
