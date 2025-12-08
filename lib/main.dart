@@ -10,7 +10,6 @@ import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
