@@ -22,6 +22,14 @@ class ProfileHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
+          colors: [
+            AppColors.surfaceDark,
+            AppColors.primary.withAlpha(10),
+          ],
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.05),
@@ -71,7 +79,8 @@ class ProfileHeader extends StatelessWidget {
                 Text(
                   user.email ?? '',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.greyDark,
+                    color: AppColors.grey,
+                    fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
