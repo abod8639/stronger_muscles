@@ -9,8 +9,6 @@ Widget buildDescriptionSection(ProductModel product, ThemeData theme) {
   }
 
   return ExpandableDescriptionCard(
-    reviewCount: product.reviewCount,
-    stars: product.strars ?? 0,
     description: product.description,
     theme: theme,
     reviews: product.reviews,

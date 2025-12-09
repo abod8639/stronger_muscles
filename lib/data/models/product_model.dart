@@ -6,8 +6,6 @@ class ProductModel {
   final double price;
   final List<String> imageUrl;
   final String description;
-  final double? strars;
-  final int? reviewCount;
   final List<ReviewModel> reviews;
   
 
@@ -19,7 +17,6 @@ class ProductModel {
     required this.price,
     required this.imageUrl,
     required this.description,
-    this.strars,
-    this.reviewCount,
-    this.reviews = const [],});
+    required this.reviews,
+    });
 }

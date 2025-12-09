@@ -159,6 +159,7 @@ class CartItemCard extends StatelessWidget {
       price: item.price,
       imageUrl: item.imageUrl,
       description: '',
+      reviews: [],
     );
   }
 
@@ -182,19 +183,26 @@ class CartItemCard extends StatelessWidget {
 
   /// Shows a confirmation dialog before removing the item from cart
   void _showRemoveConfirmation(BuildContext context) {
+    // Immediately remove the item from the cart
+    controller.decreaseQuantity(item);
+
     ScaffoldMessenger.of(context).showSnackBar(
+      
       SnackBar(
-        content: Text('Remove ${item.name} from cart?'),
+
+        content: Text('${item.name} removed from cart.'),
         duration: const Duration(seconds: 3),
         action: SnackBarAction(
-          label: 'REMOVE',
+          label: 'UNDO',
           textColor: AppColors.primary,
           onPressed: () {
-            controller.decreaseQuantity(item);
+            // Add the item back if UNDO is pressed
+            controller.increaseQuantity(item);
           },
         ),
       ),
     );
   }
+
 }
 
