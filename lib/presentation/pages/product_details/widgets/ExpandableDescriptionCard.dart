@@ -95,6 +95,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
           ),
         ],
       ),
+
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
         child: Column(
@@ -131,15 +132,18 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                       size: 20,
                     ),
                   ),
+
                   const SizedBox(width: 12),
+
                   Text(
-                    'Product Description',
-                    style: widget.theme.textTheme.titleLarge?.copyWith(
+                   "productDescription",//   AppLocalizations.of(context)!.productDescription,
+                      style: widget.theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: widget.theme.colorScheme.onSurface,
                       letterSpacing: -0.5,
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -248,18 +252,8 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
       maxLines: _collapsedMaxLines,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
-
     return textPainter.didExceedMaxLines;
   }
+
 }
 
-class  DescriptionContent extends StatelessWidget {
-  const  DescriptionContent({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: null,
-    );
-  }
-}

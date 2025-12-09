@@ -74,5 +74,7 @@
   "noProductsFound": "لم يتم العثور على منتجات.",
   "addToCart": "أضف إلى السلة",
   "addNew": "إضافة جديد",
-  "viewAll": "عرض الكل"
+  "viewAll": "عرض الكل",
+  "productDescription": "وصف المنتج"
+
 }

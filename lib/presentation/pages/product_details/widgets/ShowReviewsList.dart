@@ -28,12 +28,15 @@ class ShowReviewsList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
+              
               Icon(
                 Icons.rate_review,
                 color: AppColors.primary,
                 size: 20,
               ),
+
               const SizedBox(width: 8),
+
               Text(
                 'Customer Reviews',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -41,7 +44,9 @@ class ShowReviewsList extends StatelessWidget {
                   color: theme.colorScheme.onSurface,
                 ),
               ),
+
               const SizedBox(width: 8),
+
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
@@ -59,7 +64,9 @@ class ShowReviewsList extends StatelessWidget {
             ],
           ),
         ),
+
         const SizedBox(height: 12),
+
         // Reviews list
         ListView.separated(
           shrinkWrap: true,
@@ -70,6 +77,7 @@ class ShowReviewsList extends StatelessWidget {
             return _buildReviewCard(reviews[index]);
           },
         ),
+
       ],
     );
   }
@@ -288,4 +296,6 @@ class ShowReviewsList extends StatelessWidget {
       return '${years}y ago';
     }
   }
+
+
 }

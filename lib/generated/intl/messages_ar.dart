@@ -103,6 +103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "payment": MessageLookupByLibrary.simpleMessage("الدفع"),
     "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع:"),
     "proceedToCheckout": MessageLookupByLibrary.simpleMessage("المتابعة للدفع"),
+    "productDescription": MessageLookupByLibrary.simpleMessage("وصف المنتج"),
     "review": MessageLookupByLibrary.simpleMessage("المراجعة"),
     "searchProducts": MessageLookupByLibrary.simpleMessage(
       "البحث عن المنتجات...",

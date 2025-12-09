@@ -126,6 +126,7 @@ class ImageListView extends StatelessWidget {
           ),
         ),
       ),
+
       errorWidget: (context, url, error) => Container(
         width: _thumbnailSize,
         height: _thumbnailSize,
@@ -136,6 +137,7 @@ class ImageListView extends StatelessWidget {
           size: 32.0,
         ),
       ),
+      
     );
   }
 }

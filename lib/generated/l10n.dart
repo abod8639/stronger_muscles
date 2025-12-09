@@ -638,6 +638,16 @@ class S {
   String get viewAll {
     return Intl.message('View All', name: 'viewAll', desc: '', args: []);
   }
+
+  /// `Product Description`
+  String get productDescription {
+    return Intl.message(
+      'Product Description',
+      name: 'productDescription',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

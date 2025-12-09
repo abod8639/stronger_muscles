@@ -234,4 +234,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get viewAll => 'عرض الكل';
+
+  @override
+  String get productDescription => 'وصف المنتج';
 }

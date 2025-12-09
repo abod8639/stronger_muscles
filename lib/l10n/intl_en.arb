@@ -74,5 +74,6 @@
   "noProductsFound": "No products found.",
   "addToCart": "Add to Cart",
   "addNew": "Add New",
-  "viewAll": "View All"
+  "viewAll": "View All",
+  "productDescription": "Product Description"
 }

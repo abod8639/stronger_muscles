@@ -105,6 +105,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "proceedToCheckout": MessageLookupByLibrary.simpleMessage(
       "Proceed to checkout",
     ),
+    "productDescription": MessageLookupByLibrary.simpleMessage(
+      "Product Description",
+    ),
     "review": MessageLookupByLibrary.simpleMessage("Review"),
     "searchProducts": MessageLookupByLibrary.simpleMessage(
       "Search products...",

@@ -50,6 +50,7 @@ class _MainImageState extends State<MainImage> {
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 400,
       width: double.infinity,
@@ -60,6 +61,7 @@ class _MainImageState extends State<MainImage> {
         onPageChanged: (index) {
           _controller.selectImage(index);
         },
+        
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => widget.onImageTap?.call(index),
@@ -68,7 +70,7 @@ class _MainImageState extends State<MainImage> {
               child: CachedNetworkImage(
                 imageUrl: widget.product.imageUrl[index],
                 placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
                 fit: BoxFit.contain,
               ),
@@ -77,5 +79,6 @@ class _MainImageState extends State<MainImage> {
         },
       ),
     );
+
   }
 }

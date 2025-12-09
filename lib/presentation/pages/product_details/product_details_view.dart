@@ -80,6 +80,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       scrollController: _imageScrollController,
                       product: widget.product,
                     ),
+                    
                   if (widget.product.imageUrl.length > 1)
                     const SizedBox(height: ProductDetailsView._sectionSpacing),
 
