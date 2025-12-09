@@ -229,6 +229,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                 ],
               ),
             ),
+            
           ],
         ),
       ),
@@ -249,5 +250,16 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
 
     return textPainter.didExceedMaxLines;
+  }
+}
+
+class  DescriptionContent extends StatelessWidget {
+  const  DescriptionContent({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: null,
+    );
   }
 }

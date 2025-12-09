@@ -51,7 +51,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 24),
                   AccountSettingsList(),
                   const SizedBox(height: 24),
-                  _buildSignOutButton(controller, context),
+                  _buildSignOutButton(controller),
                   const SizedBox(height: 32),
                 ],
               );
@@ -62,44 +62,52 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context, ThemeData theme) {
+  Widget _buildAppBar( ThemeData theme) {
     final isDark = theme.brightness == Brightness.dark;
     
-    return SliverAppBar(
-      expandedHeight: 100,
-      pinned: true,
-      backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          AppLocalizations.of(context)!.myAccount,
-          style: TextStyle(
-            color: AppColors.white,
-            fontWeight: FontWeight.bold,
+    return Builder(
+      builder: (context) {
+        return SliverAppBar(
+          expandedHeight: 100,
+          pinned: true,
+          backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text(
+              AppLocalizations.of(context)!.myAccount,
+              style: TextStyle(
+                color: AppColors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            centerTitle: true,
           ),
-        ),
-        centerTitle: true,
-      ),
+        );
+      }
     );
   }
 
-  Widget _buildSignOutButton(ProfileController controller, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: OutlinedButton.icon(
-        onPressed: () async {
-          await controller.signOut();
-        },
-        icon: const Icon(Icons.logout),
-        label: Text(AppLocalizations.of(context)!.signOut),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.error,
-          side: const BorderSide(color: AppColors.error, width: 1.5),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+  Widget _buildSignOutButton(ProfileController controller) {
+    return Builder(
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: OutlinedButton.icon(
+            onPressed: () async {
+              await controller.signOut();
+            },
+            icon: const Icon(Icons.logout),
+            label: Text(AppLocalizations.of(context)!.signOut),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.error,
+              side: const BorderSide(color: AppColors.error, width: 1.5),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }
