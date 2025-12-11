@@ -46,7 +46,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.product.name), elevation: 0),
@@ -85,11 +84,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Description Section
-                  buildDescriptionSection(widget.product, theme),
+                  buildDescriptionSection(widget.product),
                   const SizedBox(height: ProductDetailsView._bottomPadding),
 
                   // Reviews Section
-                  buildShowReviewsListSection(widget.product, theme),
+                  buildShowReviewsListSection(widget.product),
                 ],
               ),
             ),
