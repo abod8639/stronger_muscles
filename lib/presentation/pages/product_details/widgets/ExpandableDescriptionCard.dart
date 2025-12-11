@@ -6,7 +6,7 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/Star
 /// A beautiful expandable description card with animations
 class ExpandableDescriptionCard extends StatefulWidget {
   final String description;
-  final ThemeData theme;
+  
   final double? stars;
   final int? reviewCount;
   final List<ReviewModel> reviews;  
@@ -14,7 +14,7 @@ class ExpandableDescriptionCard extends StatefulWidget {
   const ExpandableDescriptionCard({
     super.key,
     required this.description,
-    required this.theme,
+    
     this.stars,
     this.reviewCount,
     required this.reviews,
@@ -65,7 +65,8 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = widget.theme.brightness == Brightness.dark;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
@@ -74,12 +75,12 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  widget.theme.colorScheme.surface,
-                  widget.theme.colorScheme.surface.withOpacity(0.8),
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surface.withOpacity(0.8),
                 ]
               : [
-                  widget.theme.colorScheme.surface,
-                  widget.theme.colorScheme.primaryContainer.withOpacity(0.1),
+                  theme.colorScheme.surface,
+                  theme.colorScheme.primaryContainer.withOpacity(0.1),
                 ],
         ),
         borderRadius: BorderRadius.circular(16),
@@ -137,9 +138,9 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
                   Text(
                    "productDescription",//   AppLocalizations.of(context)!.productDescription,
-                      style: widget.theme.textTheme.titleLarge?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: widget.theme.colorScheme.onSurface,
+                      color: theme.colorScheme.onSurface,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -159,16 +160,16 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                       widget.description,
                       maxLines: _collapsedMaxLines,
                       overflow: TextOverflow.ellipsis,
-                      style: widget.theme.textTheme.bodyLarge?.copyWith(
-                        color: widget.theme.colorScheme.onSurfaceVariant,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                         height: 1.6,
                         letterSpacing: 0.2,
                       ),
                     ),
                     secondChild: Text(
                       widget.description,
-                      style: widget.theme.textTheme.bodyLarge?.copyWith(
-                        color: widget.theme.colorScheme.onSurfaceVariant,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                         height: 1.6,
                         letterSpacing: 0.2,
                       ),
@@ -204,7 +205,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                             children: [
                               Text(
                                 _isExpanded ? 'Read less' : 'Read more',
-                                style: widget.theme.textTheme.bodyMedium
+                                style: theme.textTheme.bodyMedium
                                     ?.copyWith(
                                       color: AppColors.primary,
                                       fontWeight: FontWeight.w600,
@@ -227,7 +228,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
                   // Stars record
                   StarsRecord(
-                    theme: widget.theme,
+                    theme: theme,
                     reviews: widget.reviews,
                   ),
                 ],
@@ -239,12 +240,12 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
       ),
     );
   }
-
   bool _shouldShowExpandButton() {
+    final theme = Theme.of(context);
     final textPainter = TextPainter(
       text: TextSpan(
         text: widget.description,
-        style: widget.theme.textTheme.bodyLarge?.copyWith(
+        style: theme.textTheme.bodyLarge?.copyWith(
           height: 1.6,
           letterSpacing: 0.2,
         ),
@@ -254,6 +255,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
     return textPainter.didExceedMaxLines;
   }
+
 
 }
 

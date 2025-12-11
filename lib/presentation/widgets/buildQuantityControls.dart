@@ -12,9 +12,8 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
    const double _iconSize = 28.0;
 
 /// Builds the quantity control buttons
-  Widget buildQuantityControls(BuildContext context, ProductModel product) {
+  Widget buildQuantityControls( ProductModel product) {
     final controller = Get.find<CartController>();
-    final theme = Theme.of(context);
 
     return Obx(() {
       final item = controller.getCartItem(product);
@@ -23,78 +22,83 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
         return const SizedBox.shrink();
       }
 
-      return Container(
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Increase Button
-            Semantics(
-              label: 'Increase quantity of ${item.name}',
-              button: true,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.add_circle_outline,
-                  color: AppColors.primary,
-                  size: _iconSize,
-                ),
-                onPressed: () => controller.increaseQuantity(item),
-                tooltip: 'Increase',
-                splashRadius: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                  minWidth: 40.0,
-                  minHeight: 40.0,
-                ),
-              ),
+      return Builder(
+        builder: (context) {
+    final theme = Theme.of(context);
+          return Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(8.0),
             ),
-
-            // Quantity Display
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              child: Text(
-                item.quantity.toString(),
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontSize: _quantityFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Increase Button
+                Semantics(
+                  label: 'Increase quantity of ${item.name}',
+                  button: true,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.add_circle_outline,
+                      color: AppColors.primary,
+                      size: _iconSize,
+                    ),
+                    onPressed: () => controller.increaseQuantity(item),
+                    tooltip: 'Increase',
+                    splashRadius: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                      minWidth: 40.0,
+                      minHeight: 40.0,
+                    ),
+                  ),
                 ),
-              ),
+          
+                // Quantity Display
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(
+                    item.quantity.toString(),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontSize: _quantityFontSize,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+          
+                // Decrease Button
+                Semantics(
+                  label: item.quantity > 1
+                      ? 'Decrease quantity of ${item.name}'
+                      : 'Remove ${item.name} from cart',
+                  button: true,
+                  child: IconButton(
+                    icon: Icon(
+                      item.quantity > 1
+                          ? Icons.remove_circle_outline
+                          : Icons.delete_outline_rounded,
+                      color: AppColors.primary,
+                      size: _iconSize,
+                    ),
+                    onPressed: () => doubleTapPrevention( () => showRemoveConfirmation(context, product)), 
+                    tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
+                    splashRadius: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                      minWidth: 40.0,
+                      minHeight: 40.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
-
-            // Decrease Button
-            Semantics(
-              label: item.quantity > 1
-                  ? 'Decrease quantity of ${item.name}'
-                  : 'Remove ${item.name} from cart',
-              button: true,
-              child: IconButton(
-                icon: Icon(
-                  item.quantity > 1
-                      ? Icons.remove_circle_outline
-                      : Icons.delete_outline_rounded,
-                  color: AppColors.primary,
-                  size: _iconSize,
-                ),
-                onPressed: () => doubleTapPrevention( () => showRemoveConfirmation(context, product)), 
-                tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
-                splashRadius: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                  minWidth: 40.0,
-                  minHeight: 40.0,
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        }
       );
     });
   }

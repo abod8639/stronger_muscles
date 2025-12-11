@@ -60,7 +60,7 @@ class CartItemCard extends StatelessWidget {
               const SizedBox(width: 8.0),
 
               // Quantity Controls
-              buildQuantityControls(context, _toProductModel()),
+              buildQuantityControls( _toProductModel()),
             ],
           ),
         ),

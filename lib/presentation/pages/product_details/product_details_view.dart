@@ -67,11 +67,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Product Name
-                  buildProductName(widget.product, theme),
+                  buildProductName(widget.product),
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
                   // Product Price
-                  buildProductPrice(widget.product, theme),
+                  buildProductPrice(widget.product),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Image Thumbnails
