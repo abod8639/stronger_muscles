@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 
 /// A custom bottom navigation bar widget for the main app navigation.
@@ -20,6 +22,7 @@ class MyBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = Get.find<MainController>();
+    final cartController = Get.put(CartController());
 
     return Obx(
       () => BottomNavigationBar(
@@ -34,19 +37,20 @@ class MyBottomNavigationBar extends StatelessWidget {
         unselectedItemColor:
             theme.bottomNavigationBarTheme.unselectedItemColor ??
                 theme.colorScheme.onSurface
-                    .withAlpha((_unselectedOpacity * 255).round()),
+                    .withValues(alpha: _unselectedOpacity),
         selectedFontSize: _selectedFontSize,
         unselectedFontSize: _unselectedFontSize,
         showUnselectedLabels: true,
         showSelectedLabels: true,
         enableFeedback: true,
-        items: _buildNavigationItems(controller.tabIndex.value),
+        items: _buildNavigationItems(controller.tabIndex.value, cartController),
       ),
     );
   }
 
   /// Builds the navigation items with dynamic icons based on selection state.
-  List<BottomNavigationBarItem> _buildNavigationItems(int currentIndex) {
+  List<BottomNavigationBarItem> _buildNavigationItems(
+      int currentIndex, CartController cartController) {
     return [
       BottomNavigationBarItem(
         icon: Icon(
@@ -65,12 +69,21 @@ class MyBottomNavigationBar extends StatelessWidget {
         tooltip: 'Navigate to Wishlist',
       ),
       BottomNavigationBarItem(
-        icon: Icon(
-          currentIndex == 2
-              ? Icons.shopping_cart
-              : Icons.shopping_cart_outlined,
-          size: _iconSize,
-        ),
+        icon: Obx(() {
+          final count = cartController.cartItems.length;
+          return Badge(
+            isLabelVisible: count > 0,
+            label: Text('$count'),
+            backgroundColor: AppColors.primary,
+            textColor: Colors.white,
+            child: Icon(
+              currentIndex == 2
+                  ? Icons.shopping_cart
+                  : Icons.shopping_cart_outlined,
+              size: _iconSize,
+            ),
+          );
+        }),
         label: 'Cart',
         tooltip: 'Navigate to Cart',
       ),
@@ -102,13 +115,37 @@ BottomNavigationBar myBottomNavigationBar(ThemeData theme) {
     selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor ??
         theme.colorScheme.primary,
     unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor ??
-        theme.colorScheme.onSurface.withAlpha((0.6 * 255).round()),
+        theme.colorScheme.onSurface.withValues(alpha: 0.6),
     showUnselectedLabels: true,
-    items: const [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
-      BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-      BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+    items:  [
+      const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+      const BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
+      BottomNavigationBarItem(icon: cartIcon() , label: 'Cart'),
+      const BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
     ],
+  );
+}
+
+
+Widget cartIcon() {
+  final controller = Get.put(CartController());
+  return Obx(
+    () {
+      final itemCount = controller.cartItems.length; 
+      return Badge(
+        backgroundColor: AppColors.primary,
+        isLabelVisible: itemCount > 0,
+        label: Text(
+          itemCount.toString(),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+          ),
+        ),
+        child: const Icon(
+          Icons.shopping_cart,
+        ),
+      );
+    },
   );
 }
