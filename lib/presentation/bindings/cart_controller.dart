@@ -50,7 +50,7 @@ class CartController extends GetxController {
       Get.snackbar('Error', 'Failed to add to cart: $e');
     }
   }
-
+ 
   void removeFromCart(CartItemModel item) {
     try {
       item.delete(); // Hive object delete

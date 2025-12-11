@@ -28,7 +28,7 @@ class BottomIconsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cartController = Get.find<CartController>();
+    final cartController = Get.put(CartController());
     final productDetailsController = Get.find<ProductDetailsController>();
 
     return BottomAppBar(

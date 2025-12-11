@@ -5,9 +5,9 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 
+  final controller = Get.find<WishlistController>();
 /// Handles the delete action with optional confirmation
 void handleDeleteFromWishlist(BuildContext context, ProductModel product) {
-  final controller = Get.find<WishlistController>();
 
   // Show a snackbar for undo functionality
   controller.removeFromWishlist(product);

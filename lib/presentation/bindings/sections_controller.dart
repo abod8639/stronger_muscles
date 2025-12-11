@@ -6,7 +6,7 @@ import 'package:stronger_muscles/data/models/selection_model.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 
 class SectionsController extends GetxController {
-  final HomeController _homeController = Get.find<HomeController>();
+  final HomeController _homeController = Get.put(HomeController());
 
   final RxInt selectedIndex = 0.obs;
 
