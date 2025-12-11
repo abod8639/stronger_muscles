@@ -2,11 +2,16 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/repositories/product_repository.dart';
 
+import 'package:stronger_muscles/presentation/bindings/search_controller.dart';
+
 class HomeController extends GetxController {
   final ProductRepository _productRepository = ProductRepository();
 
-  final products = <ProductModel>[].obs;
-  final _allProducts = <ProductModel>[].obs; // for search
+  final searchController = Get.put(ProductSearchController());
+
+  // Expose filtered products for the UI
+  RxList<ProductModel> get products => searchController.filteredProducts;
+
   final isLoading = false.obs;
   final selectedSectionIndex = 0.obs;
 
@@ -46,22 +51,12 @@ class HomeController extends GetxController {
         default:
           fetchedProducts = [];
       }
-      products.assignAll(fetchedProducts);
-      _allProducts.assignAll(fetchedProducts);
+      
+      // Update the search controller with the new data
+      searchController.setProducts(fetchedProducts);
+      
     } finally {
       isLoading.value = false;
     }
-  }
-
-  /// Simple client-side search that filters products by name.
-  void onSearchChanged(String query) {
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) {
-      products.assignAll(_allProducts);
-      return;
-    }
-    products.assignAll(
-      _allProducts.where((p) => p.name.toLowerCase().contains(q)).toList(),
-    );
   }
 }

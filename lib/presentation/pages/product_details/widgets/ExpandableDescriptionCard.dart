@@ -107,6 +107,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
             HeaderWithIconandTitle(),
 
             // Description content
+
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -138,7 +139,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                   ),
 
                   // Show "Read more/less" only if text is long enough
-                  if (_shouldShowExpandButton())
+                  if (shouldShowExpandButton())
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
                       child: InkWell(
@@ -197,7 +198,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
       ),
     );
   }
-  bool _shouldShowExpandButton() {
+  bool shouldShowExpandButton() {
     final theme = Theme.of(context);
     final textPainter = TextPainter(
       text: TextSpan(
