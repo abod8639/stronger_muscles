@@ -4,7 +4,9 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/doubleTapPrevention.dart';
+import 'package:stronger_muscles/functions/handleDeleteFromCart.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductCartDetails.dart';
 import 'package:stronger_muscles/presentation/widgets/buildProductCartImage.dart';
@@ -21,16 +23,16 @@ class CartItemCard extends StatelessWidget {
   static const double _iconSize = 28.0;
 
   final CartItemModel item;
-  final CartController controller;
 
   const CartItemCard({
     super.key,
     required this.item,
-    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
+        final controller = Get.find<MainController>();
+
     final theme = Theme.of(context);
 
     return Card(
@@ -74,6 +76,7 @@ class CartItemCard extends StatelessWidget {
 
   /// Builds the quantity control buttons
   Widget _buildQuantityControls(BuildContext context) {
+    final controller = Get.find<CartController>();
     final theme = Theme.of(context);
 
     return Container(
@@ -136,7 +139,7 @@ class CartItemCard extends StatelessWidget {
                 color: AppColors.primary,
                 size: _iconSize,
               ),
-              onPressed: () => doubleTapPrevention( () => _handleDecrease(context)),
+              onPressed: () => doubleTapPrevention( () => showRemoveConfirmation(context, item)), //  _handleDecrease(context)),
               tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
               splashRadius: 20.0,
               padding: const EdgeInsets.all(4.0),
@@ -171,38 +174,7 @@ class CartItemCard extends StatelessWidget {
     );
   }
 
-  /// Handles the decrease quantity action
-  void _handleDecrease(BuildContext context) {
-    if (item.quantity > 1) {
-      controller.decreaseQuantity(item);
-    } else {
-      // Show confirmation before removing the last item
-      _showRemoveConfirmation(context);
-    }
-  }
 
-  /// Shows a confirmation dialog before removing the item from cart
-  void _showRemoveConfirmation(BuildContext context) {
-    // Immediately remove the item from the cart
-    controller.decreaseQuantity(item);
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      
-      SnackBar(
-
-        content: Text('${item.name} removed from cart.'),
-        duration: const Duration(seconds: 3),
-        action: SnackBarAction(
-          label: 'UNDO',
-          textColor: AppColors.primary,
-          onPressed: () {
-            // Add the item back if UNDO is pressed
-            controller.increaseQuantity(item);
-          },
-        ),
-      ),
-    );
-  }
 
 }
 

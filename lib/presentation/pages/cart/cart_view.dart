@@ -39,7 +39,7 @@ class CartView extends GetView<CartController> {
         if (controller.cartItems.isEmpty) {
           return _buildEmptyState(context, theme);
         }
-        return _buildCartContent(theme, context);
+        return _buildCartContent(theme);
       }),
     );
   }
@@ -121,7 +121,7 @@ class CartView extends GetView<CartController> {
   }
 
   /// Builds the cart content with items and checkout section
-  Widget _buildCartContent(ThemeData theme, BuildContext context) {
+  Widget _buildCartContent(ThemeData theme) {
     return Column(
       children: [
         const SizedBox(height: _listTopSpacing),
@@ -133,7 +133,7 @@ class CartView extends GetView<CartController> {
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               final item = controller.cartItems[index];
-              return CartItemCard(item: item, controller: controller);
+              return CartItemCard(item: item);
             },
           ),
         ),
@@ -145,122 +145,126 @@ class CartView extends GetView<CartController> {
         ),
 
         // Checkout section
-        _buildCheckoutSection(theme, context),
+        _buildCheckoutSection(theme),
       ],
     );
   }
 
   /// Builds the checkout section with total and checkout button
-  Widget _buildCheckoutSection(ThemeData theme, BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _checkoutHorizontalPadding,
-        vertical: _checkoutVerticalPadding,
-      ),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10.0,
-            offset: const Offset(0, -2),
+  Widget _buildCheckoutSection(ThemeData theme) {
+    return Builder(
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: _checkoutHorizontalPadding,
+            vertical: _checkoutVerticalPadding,
           ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // Total price section
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10.0,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Row(
+              children: [
+                // Total price section
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        AppLocalizations.of(context)!.total,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontSize: _totalLabelFontSize,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Obx(
-                        () => Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
-                            vertical: 2.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Text(
-                            '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
-                            style: TextStyle(
-                              fontSize: _itemCountFontSize,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
+                      Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.total,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontSize: _totalLabelFontSize,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Obx(
+                            () => Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 2.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              child: Text(
+                                '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
+                                style: TextStyle(
+                                  fontSize: _itemCountFontSize,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: _smallSpacing),
+                      Obx(
+                        () => Text(
+                          '\$${controller.totalPrice.toStringAsFixed(2)}',
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontSize: _totalPriceFontSize,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: _smallSpacing),
-                  Obx(
-                    () => Text(
-                      '\$${controller.totalPrice.toStringAsFixed(2)}',
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontSize: _totalPriceFontSize,
+                ),
+        
+                const SizedBox(width: _spacing),
+        
+                // Checkout button
+                Semantics(
+                  label: AppLocalizations.of(context)!.proceedToCheckout,
+                  button: true,
+                  child: ElevatedButton(
+                    onPressed: controller.cartItems.isEmpty
+                        ? null
+                        : () => _handleCheckout(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                      disabledBackgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      disabledForegroundColor:
+                          theme.colorScheme.onSurfaceVariant,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: _checkoutButtonPadding,
+                        vertical: _checkoutButtonVerticalPadding,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+                      ),
+                      elevation: 2.0,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.checkout,
+                      style: TextStyle(
+                        fontSize: _checkoutButtonFontSize,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-
-            const SizedBox(width: _spacing),
-
-            // Checkout button
-            Semantics(
-              label: AppLocalizations.of(context)!.proceedToCheckout,
-              button: true,
-              child: ElevatedButton(
-                onPressed: controller.cartItems.isEmpty
-                    ? null
-                    : () => _handleCheckout(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
-                  disabledBackgroundColor:
-                      theme.colorScheme.surfaceContainerHighest,
-                  disabledForegroundColor:
-                      theme.colorScheme.onSurfaceVariant,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: _checkoutButtonPadding,
-                    vertical: _checkoutButtonVerticalPadding,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(_checkoutButtonRadius),
-                  ),
-                  elevation: 2.0,
                 ),
-                child: Text(
-                  AppLocalizations.of(context)!.checkout,
-                  style: TextStyle(
-                    fontSize: _checkoutButtonFontSize,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 

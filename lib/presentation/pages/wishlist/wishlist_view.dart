@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
-import 'package:stronger_muscles/presentation/widgets/wishlist_item_card.dart'; // Import the new widget
+import 'package:stronger_muscles/presentation/pages/wishlist/widget/wishlist_item_card.dart'; // Import the new widget
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart'; // Import AppColors for styling
 
