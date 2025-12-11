@@ -74,7 +74,7 @@ class BottomIconsRow extends StatelessWidget {
 
     return isInCart && item != null
         ? _buildQuantityControls(theme, cartController, item)
-        : _buildAddToCartButton(theme, cartController);
+        : buildAddToCartButton(theme, cartController);
   }
 
   /// Builds the quantity control widget for items already in cart
@@ -147,7 +147,7 @@ class BottomIconsRow extends StatelessWidget {
   }
 
   /// Builds the Add to Cart button
-  Widget _buildAddToCartButton(
+  Widget buildAddToCartButton(
     ThemeData theme,
     CartController cartController,
   ) {

@@ -22,66 +22,76 @@ class SearchBar extends StatelessWidget {
     final theme = Theme.of(context);
     final controller = Get.find<HomeController>();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _horizontalPadding,
-        vertical: _verticalPadding,
-      ),
-      child: Row(
-        children: [
-          // Search input field
-          Expanded(
-            child: Container(
-              height: _searchBarHeight,
-              padding: const EdgeInsets.symmetric(horizontal: _innerPadding),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(_borderRadius),
-              ),
-              child: Row(
-                children: [
-                  Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
-                  const SizedBox(width: _iconSpacing),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration.collapsed(
-                        hintText: AppLocalizations.of(context)!.searchProducts,
-                      ),
-                      onChanged: controller.searchController.onSearchChanged,
-                      textInputAction: TextInputAction.search,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
 
-          const SizedBox(width: _spacing),
+  
 
-          // Filter button
-          Semantics(
-            label: AppLocalizations.of(context)!.filterProducts,
-            button: true,
-            child: Container(
-              width: _iconButtonSize,
-              height: _iconButtonSize,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: Icon(
-                  Icons.tune,
-                  color: theme.colorScheme.onSurfaceVariant,
+    return SliverAppBar(
+      floating: true,
+      snap: true,
+      pinned: false,
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      toolbarHeight: _searchBarHeight + _verticalPadding * 2,
+      titleSpacing: _horizontalPadding,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: _verticalPadding),
+        child: Row(
+          children: [
+            // Search input field
+            Expanded(
+              child: Container(
+                height: _searchBarHeight,
+                padding: const EdgeInsets.symmetric(horizontal: _innerPadding),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(_borderRadius),
                 ),
-                onPressed: () {
-                  _showFilterBottomSheet(context, controller);
-                },
-                tooltip: AppLocalizations.of(context)!.filter,
+                child: Row(
+                  children: [
+                    Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
+                    const SizedBox(width: _iconSpacing),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration.collapsed(
+                          hintText: AppLocalizations.of(context)!.searchProducts,
+                        ),
+                        onChanged: controller.searchController.onSearchChanged,
+                        textInputAction: TextInputAction.search,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+      
+            const SizedBox(width: _spacing),
+      
+            // Filter button
+            Semantics(
+              label: AppLocalizations.of(context)!.filterProducts,
+              button: true,
+              child: Container(
+                width: _iconButtonSize,
+                height: _iconButtonSize,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHighest,
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.tune,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  onPressed: () {
+                    _showFilterBottomSheet(context, controller);
+                  },
+                  tooltip: AppLocalizations.of(context)!.filter,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

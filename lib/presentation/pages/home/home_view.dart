@@ -25,32 +25,31 @@ class HomeView extends GetView<HomeController> {
             // TODO: Implement refresh functionality
             // await controller.fetchProducts();
           },
-          child: SingleChildScrollView(
+          child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            child: Obx(
-              () => Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Search bar and filter button
-                  const SearchBar(),
+            slivers: [
+              // Search bar and filter button
+              const SearchBar(),
+               
 
-                  // Category shortcuts row
-                  const ShortcutsRow(),
+              // Category shortcuts row
+              const SliverToBoxAdapter(child: ShortcutsRow()),
 
-                  // Promo banner (only shown for "All" category)
-                  if (sectionsController.selectedIndex.value == 0)
-                    const PromoBanner(),
-
-                  // Section title
-                  const SectionTitle(),
-
-                  // Product grid
-                  const ProductList(),
-
-                  const SizedBox(height: _bottomPadding),
-                ],
+              // Promo banner (only shown for "All" category)
+              Obx(
+                () => sectionsController.selectedIndex.value == 0
+                    ? const SliverToBoxAdapter(child: PromoBanner())
+                    : const SliverToBoxAdapter(child: SizedBox.shrink()),
               ),
-            ),
+
+              // Section title
+              const SliverToBoxAdapter(child: SectionTitle()),
+
+              // Product grid
+              const ProductList(),
+
+              const SliverToBoxAdapter(child: SizedBox(height: _bottomPadding)),
+            ],
           ),
         ),
       ),

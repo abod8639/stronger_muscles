@@ -24,64 +24,68 @@ class ProductList extends StatelessWidget {
     return Obx(() {
       // Loading state
       if (controller.isLoading.value) {
-        return const Center(
-          heightFactor: 3,
-          child: CircularProgressIndicator(),
+        return const SliverToBoxAdapter(
+          child: Center(
+            heightFactor: 3,
+            child: CircularProgressIndicator(),
+          ),
         );
       }
 
       // Empty state
       if (controller.products.isEmpty) {
-        return Center(
-          heightFactor: 3,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.shopping_bag_outlined,
-                size: 64.0,
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                'No products found',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+        return SliverToBoxAdapter(
+          child: Center(
+            heightFactor: 3,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 64.0,
+                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16.0),
+                Text(
+                  'No products found',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }
 
       // Product grid
-      return Padding(
+      return SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+        sliver: SliverGrid(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: _crossAxisCount,
             childAspectRatio: _childAspectRatio,
             crossAxisSpacing: _crossAxisSpacing,
             mainAxisSpacing: _mainAxisSpacing,
           ),
-          itemCount: controller.products.length,
-          itemBuilder: (context, index) {
-            final product = controller.products[index];
-            return GestureDetector(
-              onTap: () => Get.to(
-                () => ProductDetailsView(product: product),
-                transition: Transition.fadeIn,
-              ),
-              child: ProductContainer(
-                showName: true,
-                height: _productImageHeight,
-                product: product,
-                theme: theme,
-              ),
-            );
-          },
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final product = controller.products[index];
+              return GestureDetector(
+                onTap: () => Get.to(
+                  () => ProductDetailsView(product: product),
+                  transition: Transition.fadeIn,
+                ),
+                child: ProductContainer(
+                  showName: true,
+                  height: _productImageHeight,
+                  product: product,
+                  theme: theme,
+                ),
+              );
+            },
+            childCount: controller.products.length,
+          ),
         ),
       );
     });
