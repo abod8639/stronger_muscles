@@ -37,7 +37,7 @@ class CartView extends GetView<CartController> {
       appBar: _buildAppBar(context),
       body: Obx(() {
         if (controller.cartItems.isEmpty) {
-          return _buildEmptyState(context, theme);
+          return _buildEmptyState(theme);
         }
         return _buildCartContent(theme);
       }),
@@ -62,61 +62,65 @@ class CartView extends GetView<CartController> {
   }
 
   /// Builds the empty cart state
-  Widget _buildEmptyState(BuildContext context, ThemeData theme) {
+  Widget _buildEmptyState( ThemeData theme) {
     final controller = Get.find<MainController>();
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.shopping_cart_outlined,
-              size: _emptyIconSize,
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
-            ),
-            const SizedBox(height: _emptyIconSpacing),
-            Text(
-              AppLocalizations.of(context)!.yourCartIsEmpty,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontSize: _emptyTitleFontSize,
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: _emptyTextSpacing),
-            Text(
-              AppLocalizations.of(context)!.addProductsToGetStarted,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontSize: _emptySubtitleFontSize,
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
-              ),
-            ),
-            const SizedBox(height: 32.0),
-            ElevatedButton.icon(
-              onPressed: () {
-
-                controller.tabIndex.value = 0;
-              },
-              icon: const Icon(Icons.shopping_bag_outlined),
-              label: Text(AppLocalizations.of(context)!.startShopping),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32.0,
-                  vertical: 16.0,
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_cart_outlined,
+                  size: _emptyIconSize,
+                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+                const SizedBox(height: _emptyIconSpacing),
+                Text(
+                  AppLocalizations.of(context)!.yourCartIsEmpty,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontSize: _emptyTitleFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                elevation: 2.0,
-              ),
+                const SizedBox(height: _emptyTextSpacing),
+                Text(
+                  AppLocalizations.of(context)!.addProductsToGetStarted,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontSize: _emptySubtitleFontSize,
+                    color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                  ),
+                ),
+                const SizedBox(height: 32.0),
+                ElevatedButton.icon(
+                  onPressed: () {
+        
+                    controller.tabIndex.value = 0;
+                  },
+                  icon: const Icon(Icons.shopping_bag_outlined),
+                  label: Text(AppLocalizations.of(context)!.startShopping),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32.0,
+                      vertical: 16.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+                    ),
+                    elevation: 2.0,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 
