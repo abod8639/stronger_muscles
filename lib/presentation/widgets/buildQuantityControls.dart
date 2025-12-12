@@ -10,10 +10,10 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
    const double _quantityFontSize = 16.0;
    const double _iconSize = 28.0;
+   final controller = Get.find<CartController>();
 
 /// Builds the quantity control buttons
   Widget buildQuantityControls( ProductModel product) {
-    final controller = Get.find<CartController>();
 
     return Obx(() {
       final item = controller.getCartItem(product);
