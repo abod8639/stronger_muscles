@@ -20,6 +20,7 @@ class RecentOrdersList extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Obx(() {
+
       if (controller.orders.isEmpty) {
         return const SizedBox.shrink();
       }
@@ -32,6 +33,7 @@ class RecentOrdersList extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+
                 Text(
                   'Recent Orders',
                   style: theme.textTheme.titleLarge?.copyWith(
@@ -43,10 +45,13 @@ class RecentOrdersList extends StatelessWidget {
                   onPressed: () {},
                   child: const Text('View All'),
                 ),
+                
               ],
             ),
           ),
+
           const SizedBox(height: 12),
+
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

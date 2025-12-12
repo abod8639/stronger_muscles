@@ -202,8 +202,8 @@ class _PriceFilterSliderState extends State<_PriceFilterSlider> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('\$${_currentRangeValues.start.toStringAsFixed(0)}'),
-            Text('\$${_currentRangeValues.end.toStringAsFixed(0)}'),
+            Text('LE ${_currentRangeValues.start.toStringAsFixed(0)}'),
+            Text('LE ${_currentRangeValues.end.toStringAsFixed(0)}'),
           ],
         ),
         RangeSlider(
@@ -212,8 +212,8 @@ class _PriceFilterSliderState extends State<_PriceFilterSlider> {
           max: maxData,
           divisions: (maxData - minData) > 0 ? (maxData - minData).toInt() : 1,
           labels: RangeLabels(
-            '\$${_currentRangeValues.start.toStringAsFixed(0)}',
-            '\$${_currentRangeValues.end.toStringAsFixed(0)}',
+            'LE ${_currentRangeValues.start.toStringAsFixed(0)}',
+            'LE ${_currentRangeValues.end.toStringAsFixed(0)}',
           ),
           onChanged: (RangeValues values) {
             setState(() {

@@ -42,23 +42,28 @@ class ProfileController extends GetxController {
     // Mock data for demonstration
     // In production, load from Firebase or API
     orders.value = [
+
       OrderModel(
         id: 'ORD001',
         orderDate: DateTime.now().subtract(const Duration(days: 2)),
         status: 'delivered',
         items: [
+
           OrderItem(
             productId: '1',
             productName: 'Whey Protein',
             price: 899.99,
             quantity: 2,
-            imageUrl: 'https://images.unsplash.com/photo-1593095948071-474c5cc2989d',
+            imageUrl:'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
           ),
+
         ],
         totalAmount: 1799.98,
         shippingAddress: 'Cairo, Egypt',
         trackingNumber: 'TRK123456',
       ),
+
+      
       OrderModel(
         id: 'ORD002',
         orderDate: DateTime.now().subtract(const Duration(days: 7)),

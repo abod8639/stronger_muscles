@@ -121,7 +121,7 @@ final List<ProductModel> dummyProducts = [
   ProductModel(
     id: '5',
     name: 'Serious Mass',
-    price: 4209.00,
+    price: 4200,
     imageUrl: [
       'https://wayupsports.com/cdn/shop/files/ON_ASPAC_SERIOUS_MASS_STRAW_5.44KG_162fb477-102e-4204-9d69-3c272b80b295.jpg?v=1731850641&width=1000',
     ],
@@ -244,7 +244,7 @@ final List<ProductModel> dummyProteinProducts = [
   ProductModel(
     id: '1',
     name: 'Whey Gold Standard 149 Servings 4.54 KG Double Rich Chocolate',
-    price: 9499.00,
+    price: 9499,
     imageUrl: [
       'https://wayupsports.com/cdn/shop/files/115013.jpg?v=1756891715&width=1000',
       'https://wayupsports.com/cdn/shop/files/115013_1.jpg?v=1756891715&width=1000',
