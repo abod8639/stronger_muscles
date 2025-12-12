@@ -7,9 +7,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AccountSettingsList extends StatelessWidget {
 
-  const AccountSettingsList({
-    super.key,
-  });
+  const AccountSettingsList({ super.key });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,6 @@ class AccountSettingsList extends StatelessWidget {
             ),
           ),
           _buildSettingItem(
-            context: context,
             icon: Icons.person_outline,
             title: AppLocalizations.of(context)!.editProfile,
             onTap: () {},
@@ -52,7 +49,6 @@ class AccountSettingsList extends StatelessWidget {
           ),
           _buildDivider(isDark),
           Obx(() => _buildSettingItem(
-            context: context,
             icon: themeController.isDarkMode.value 
                 ? Icons.dark_mode_outlined 
                 : Icons.light_mode_outlined,
@@ -67,15 +63,15 @@ class AccountSettingsList extends StatelessWidget {
           )),
           _buildDivider(isDark),
           _buildSettingItem(
-            context: context,
             icon: Icons.notifications_outlined,
             title: AppLocalizations.of(context)!.notifications,
             onTap: () {},
             isDark: isDark,
           ),
+
           _buildDivider(isDark),
+
           _buildSettingItem(
-            context: context,
             icon: Icons.language_outlined,
             title: AppLocalizations.of(context)!.language,
             trailing: Obx(() {
@@ -90,7 +86,6 @@ class AccountSettingsList extends StatelessWidget {
           ),
           _buildDivider(isDark),
           _buildSettingItem(
-            context: context,
             icon: Icons.help_outline,
             title: AppLocalizations.of(context)!.helpSupport,
             onTap: () {},
@@ -98,7 +93,6 @@ class AccountSettingsList extends StatelessWidget {
           ),
           _buildDivider(isDark),
           _buildSettingItem(
-            context: context,
             icon: Icons.info_outline,
             title: AppLocalizations.of(context)!.about,
             onTap: () {},
@@ -145,7 +139,6 @@ class AccountSettingsList extends StatelessWidget {
   }
 
   Widget _buildSettingItem({
-    required BuildContext context,
     required IconData icon,
     required String title,
     Widget? trailing,
