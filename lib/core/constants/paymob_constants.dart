@@ -1,12 +1,17 @@
-class PaymobConstants {
-  static const String baseUrl = 'https://accept.paymob.com/api';
-  // TODO: Replace with your actual API Key
-  static const String apiKey = 'YOUR_API_KEY_HERE';
-  // TODO: Replace with your actual Integration ID (Card Payment)
-  static const String integrationId = 'YOUR_INTEGRATION_ID_HERE';
-  // TODO: Replace with your actual Iframe ID
-  static const String iframeId = 'YOUR_IFRAME_ID_HERE';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+class PaymobConstants {
+
+  static final String baseUrl = dotenv.env['BASE_URL'] ?? 'fallback_url'; // Use a fallback or use get() for required values
+  static final String apiKey = dotenv.env['API_KEY'] ?? 'fallback_key';
+  static final String secretKey = dotenv.env['SECRET_KEY'] ?? 'fallback_key';
+  static final String publicKey = dotenv.env['PUBLIC_KEY'] ?? 'fallback_key';
+  static final String password = dotenv.env['password'] ?? 'fallback_key';
+  static final String iframeId = dotenv.env['iframeId'] ?? 'fallback_key';
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+  static final String integrationId = dotenv.env['integrationId'] ?? 'fallback_key';
   static const String authEndpoint = '/auth/tokens';
   static const String orderEndpoint = '/ecommerce/orders';
   static const String paymentKeyEndpoint = '/acceptance/payment_keys';
