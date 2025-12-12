@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/buildCheckoutSection.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/cart_item_card.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/checkoutButton.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/buildCartContent.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class CartView extends GetView<CartController> {
@@ -15,13 +13,13 @@ class CartView extends GetView<CartController> {
   static const double _emptyTextSpacing = 8.0;
   static const double _emptyTitleFontSize = 20.0;
   static const double _emptySubtitleFontSize = 14.0;
-  static const double _listTopSpacing = 10.0;
   static const double _checkoutButtonRadius = 12.0;
   const CartView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final controller = Get.find<CartController>();
 
     return Scaffold(
       appBar: _buildAppBar(context),
@@ -29,13 +27,14 @@ class CartView extends GetView<CartController> {
         if (controller.cartItems.isEmpty) {
           return _buildEmptyState(theme);
         }
-        return _buildCartContent(theme);
+        return buildCartContent();
       }),
     );
   }
 
   /// Builds the app bar with item count
   PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final controller = Get.find<CartController>();
     return AppBar(
       title: Obx(
         () => Text(
@@ -112,33 +111,6 @@ class CartView extends GetView<CartController> {
           ),
         );
       },
-    );
-  }
-
-  /// Builds the cart content with items and checkout section
-  Widget _buildCartContent(ThemeData theme) {
-    return Column(
-      children: [
-        const SizedBox(height: _listTopSpacing),
-
-        // Cart items list
-        Expanded(
-          child: ListView.builder(
-            itemCount: controller.cartItems.length,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              final item = controller.cartItems[index];
-              return CartItemCard(item: item);
-            },
-          ),
-        ),
-
-        // Divider
-        Divider(height: 1, color: theme.colorScheme.outlineVariant),
-
-        // Checkout section
-        buildCheckoutSection(),
-      ],
     );
   }
   /// Handles the checkout action

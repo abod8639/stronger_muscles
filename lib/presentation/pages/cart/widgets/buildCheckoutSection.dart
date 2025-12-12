@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/checkoutButton.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/totalPriceSection.dart';
 
 
 
    const double _checkoutHorizontalPadding = 16.0;
-
    const double _checkoutVerticalPadding = 12.0;
-
    const double _spacing = 12.0;
 
 
