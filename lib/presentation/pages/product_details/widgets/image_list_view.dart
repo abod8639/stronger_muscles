@@ -42,7 +42,6 @@ class ImageListView extends StatelessWidget {
         itemCount: product.imageUrl.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => _buildThumbnail(
-          context,
           controller,
           index,
         ),
@@ -51,12 +50,7 @@ class ImageListView extends StatelessWidget {
   }
 
   /// Builds a single thumbnail image
-  Widget _buildThumbnail(
-    BuildContext context,
-    ProductDetailsController controller,
-    int index,
-  ) {
-    final theme = Theme.of(context);
+  Widget _buildThumbnail( ProductDetailsController controller,int index ) {
 
     return Semantics(
       label: 'Product image ${index + 1} of ${product.imageUrl.length}',
@@ -90,7 +84,7 @@ class ImageListView extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(_borderRadius - _padding),
-              child: _buildThumbnailImage(context, theme, index),
+              child: _buildThumbnailImage( index),
             ),
           );
         }),
@@ -99,45 +93,47 @@ class ImageListView extends StatelessWidget {
   }
 
   /// Builds the thumbnail image with error handling
-  Widget _buildThumbnailImage(
-    BuildContext context,
-    ThemeData theme,
-    int index,
-  ) {
+  Widget _buildThumbnailImage( int index ) {
+
     final imageUrl = product.imageUrl[index];
 
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      fit: BoxFit.cover,
-      width: _thumbnailSize,
-      height: _thumbnailSize,
-      placeholder: (context, url) => Container(
-        width: _thumbnailSize,
-        height: _thumbnailSize,
-        color: theme.colorScheme.surfaceContainerHighest,
-        child: const Center(
-          child: SizedBox(
-            width: 20.0,
-            height: 20.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.0,
-              color: AppColors.primary,
+    return Builder(
+      builder: (context) {
+    final theme = Theme.of(context);
+        return CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          width: _thumbnailSize,
+          height: _thumbnailSize,
+          placeholder: (context, url) => Container(
+            width: _thumbnailSize,
+            height: _thumbnailSize,
+            color: theme.colorScheme.surfaceContainerHighest,
+            child: const Center(
+              child: SizedBox(
+                width: 20.0,
+                height: 20.0,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  color: AppColors.primary,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-
-      errorWidget: (context, url, error) => Container(
-        width: _thumbnailSize,
-        height: _thumbnailSize,
-        color: theme.colorScheme.surfaceContainerHighest,
-        child: const Icon(
-          Icons.image_not_supported_outlined,
-          color: AppColors.primary,
-          size: 32.0,
-        ),
-      ),
-      
+        
+          errorWidget: (context, url, error) => Container(
+            width: _thumbnailSize,
+            height: _thumbnailSize,
+            color: theme.colorScheme.surfaceContainerHighest,
+            child: const Icon(
+              Icons.image_not_supported_outlined,
+              color: AppColors.primary,
+              size: 32.0,
+            ),
+          ),
+          
+        );
+      }
     );
   }
 }
