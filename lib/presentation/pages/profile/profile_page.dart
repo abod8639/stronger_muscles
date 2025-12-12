@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
               }
 
               if (controller.currentUser.value == null) {
-                return LoginPromptCard(controller: controller, theme: theme);
+                return LoginPromptCard();
               }
 
               return Column(
