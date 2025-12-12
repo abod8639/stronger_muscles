@@ -214,20 +214,20 @@ class BottomIconsRow extends StatelessWidget {
   /// Handles adding product to cart with feedback
   void _handleAddToCart(CartController cartController) {
     cartController.addToCart(product);
-    Get.snackbar(
-      'Added to Cart',
-      '${product.name} was added to your cart.',
-      duration: const Duration(seconds: 2),
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: AppColors.primary.withOpacity(0.9),
-      colorText: Colors.white,
-      margin: const EdgeInsets.all(16.0),
-      borderRadius: 8.0,
-      icon: const Icon(
-        Icons.check_circle_outline,
-        color: Colors.white,
-      ),
-    );
+    // Get.snackbar(
+    //   'Added to Cart',
+    //   '${product.name} was added to your cart.',
+    //   duration: const Duration(seconds: 2),
+    //   snackPosition: SnackPosition.BOTTOM,
+    //   backgroundColor: AppColors.primary.withOpacity(0.9),
+    //   colorText: Colors.white,
+    //   margin: const EdgeInsets.all(16.0),
+    //   borderRadius: 8.0,
+    //   icon: const Icon(
+    //     Icons.check_circle_outline,
+    //     color: Colors.white,
+    //   ),
+    // );
   }
 }
 

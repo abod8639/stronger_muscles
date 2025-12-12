@@ -169,6 +169,8 @@ class SearchBar extends StatelessWidget {
   }
 }
 
+
+
 class _PriceFilterSlider extends StatefulWidget {
   final HomeController controller;
 
