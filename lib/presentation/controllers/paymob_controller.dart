@@ -16,7 +16,9 @@ class PaymobController extends GetxController {
     String lastName = 'NA',
     String email = 'NA',
     String phone = 'NA',
+
   }) async {
+    
     isLoading.value = true;
     errorMessage.value = '';
 
