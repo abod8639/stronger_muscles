@@ -30,6 +30,7 @@ dependencies:
   intl: ^0.20.2
   google_maps_flutter: ^2.14.0
   dio: ^5.9.0
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +46,7 @@ flutter:
 
   assets:
     - assets/icon/
+    - .env
   #   - images/a_dot_ham.jpeg
   # example:
   # fonts:
