@@ -157,7 +157,7 @@ class SearchBar extends StatelessWidget {
                     // to handle slider dragging smoothly without committing to controller immediately.
                     // But we can just use controller values for now if we want live update,
                     // or better: use StatefulBuilder.
-                    return _PriceFilterSlider(controller: controller);
+                    return PriceFilterSlider();
                   }),
                 ],
               ),
@@ -171,31 +171,32 @@ class SearchBar extends StatelessWidget {
 
 
 
-class _PriceFilterSlider extends StatefulWidget {
-  final HomeController controller;
+class PriceFilterSlider extends StatefulWidget {
 
-  const _PriceFilterSlider({required this.controller});
+  const PriceFilterSlider({super.key});
 
   @override
-  State<_PriceFilterSlider> createState() => _PriceFilterSliderState();
+  State<PriceFilterSlider> createState() => PriceFilterSliderState();
 }
 
-class _PriceFilterSliderState extends State<_PriceFilterSlider> {
+class PriceFilterSliderState extends State<PriceFilterSlider> {
+  final controller = Get.find<HomeController>();
+
   late RangeValues _currentRangeValues;
 
   @override
   void initState() {
     super.initState();
     _currentRangeValues = RangeValues(
-      widget.controller.searchController.filterMinPrice.value,
-      widget.controller.searchController.filterMaxPrice.value,
+      controller.searchController.filterMinPrice.value,
+      controller.searchController.filterMaxPrice.value,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final minData = widget.controller.searchController.dataMinPrice.value;
-    final maxData = widget.controller.searchController.dataMaxPrice.value;
+    final minData = controller.searchController.dataMinPrice.value;
+    final maxData = controller.searchController.dataMaxPrice.value;
 
     return Column(
       children: [
@@ -226,7 +227,7 @@ class _PriceFilterSliderState extends State<_PriceFilterSlider> {
           width: double.infinity,
           child: FilledButton(
             onPressed: () {
-              widget.controller.searchController.applyPriceFilter(
+              controller.searchController.applyPriceFilter(
                 _currentRangeValues.start,
                 _currentRangeValues.end,
               );
