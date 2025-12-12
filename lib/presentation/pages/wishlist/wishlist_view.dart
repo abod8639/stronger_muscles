@@ -40,7 +40,7 @@ class WishlistView extends GetView<WishlistController> {
           itemCount: controller.wishlistItems.length,
           itemBuilder: (context, index) {
             final product = controller.wishlistItems[index];
-            return WishlistItemCard(product: product, controller: controller);
+            return WishlistItemCard(product: product,);
           },
         );
       }),

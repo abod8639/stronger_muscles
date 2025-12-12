@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/bindings/wishlist_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/widget/buildDeleteButton.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/widget/buildProductDetails.dart';
@@ -17,16 +16,15 @@ class WishlistItemCard extends StatelessWidget {
   static const double _spacing = 16.0;
 
   final ProductModel product;
-  final WishlistController controller;
 
   const WishlistItemCard({
     super.key,
     required this.product,
-    required this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
+    // final wishlistController = Get.find<WishlistController>();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -51,6 +49,7 @@ class WishlistItemCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+
               // Product Image with Hero Animation
               buildProductImage(product),
 
