@@ -177,97 +177,118 @@ class CartView extends GetView<CartController> {
             child: Row(
               children: [
                 // Total price section
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.total,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              fontSize: _totalLabelFontSize,
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Obx(
-                            () => Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                                vertical: 2.0,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(12.0),
-                              ),
-                              child: Text(
-                                '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
-                                style: TextStyle(
-                                  fontSize: _itemCountFontSize,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: _smallSpacing),
-                      Obx(
-                        () => Text(
-                          '\$${controller.totalPrice.toStringAsFixed(2)}',
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontSize: _totalPriceFontSize,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                totalPriceSection(),
         
                 const SizedBox(width: _spacing),
         
                 // Checkout button
-                Semantics(
-                  label: AppLocalizations.of(context)!.proceedToCheckout,
-                  button: true,
-                  child: ElevatedButton(
-                    onPressed: controller.cartItems.isEmpty
-                        ? null
-                        : () => _handleCheckout(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      disabledBackgroundColor:
-                          theme.colorScheme.surfaceContainerHighest,
-                      disabledForegroundColor:
-                          theme.colorScheme.onSurfaceVariant,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: _checkoutButtonPadding,
-                        vertical: _checkoutButtonVerticalPadding,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(_checkoutButtonRadius),
-                      ),
-                      elevation: 2.0,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.checkout,
-                      style: TextStyle(
-                        fontSize: _checkoutButtonFontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
+                checkoutButton( ),
+                
               ],
             ),
           ),
         );
+      }
+    );
+  }
+
+  Widget totalPriceSection() {
+    return Builder(
+      builder: (context) {
+            final theme = Theme.of(context);
+
+        return Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.total,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                fontSize: _totalLabelFontSize,
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Obx(
+                              () => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 2.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Text(
+                                  '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
+                                  style: TextStyle(
+                                    fontSize: _itemCountFontSize,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: _smallSpacing),
+                        Obx(
+                          () => Text(
+                            '\$${controller.totalPrice.toStringAsFixed(2)}',
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontSize: _totalPriceFontSize,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+      }
+    );
+  }
+
+  Widget checkoutButton( ) {
+    return Builder(
+      builder: (context) {
+            final theme = Theme.of(context);
+
+        return Semantics(
+                    label: AppLocalizations.of(context)!.proceedToCheckout,
+                    button: true,
+                    child: ElevatedButton(
+                      onPressed: controller.cartItems.isEmpty
+                          ? null
+                          : () => _handleCheckout(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        disabledBackgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
+                        disabledForegroundColor:
+                            theme.colorScheme.onSurfaceVariant,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: _checkoutButtonPadding,
+                          vertical: _checkoutButtonVerticalPadding,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+                        ),
+                        elevation: 2.0,
+                      ),
+                      child: Text(
+                        AppLocalizations.of(context)!.checkout,
+                        style: TextStyle(
+                          fontSize: _checkoutButtonFontSize,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
       }
     );
   }

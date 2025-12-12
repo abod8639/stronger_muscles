@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 
 class HeaderWithIconandTitle extends StatelessWidget {
