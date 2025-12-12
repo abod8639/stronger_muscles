@@ -62,7 +62,7 @@ class CartView extends GetView<CartController> {
   }
 
   /// Builds the empty cart state
-  Widget _buildEmptyState( ThemeData theme) {
+  Widget _buildEmptyState(ThemeData theme) {
     final controller = Get.find<MainController>();
     return Builder(
       builder: (context) {
@@ -98,7 +98,6 @@ class CartView extends GetView<CartController> {
                 const SizedBox(height: 32.0),
                 ElevatedButton.icon(
                   onPressed: () {
-        
                     controller.tabIndex.value = 0;
                   },
                   icon: const Icon(Icons.shopping_bag_outlined),
@@ -111,7 +110,9 @@ class CartView extends GetView<CartController> {
                       vertical: 16.0,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+                      borderRadius: BorderRadius.circular(
+                        _checkoutButtonRadius,
+                      ),
                     ),
                     elevation: 2.0,
                   ),
@@ -120,7 +121,7 @@ class CartView extends GetView<CartController> {
             ),
           ),
         );
-      }
+      },
     );
   }
 
@@ -143,10 +144,7 @@ class CartView extends GetView<CartController> {
         ),
 
         // Divider
-        Divider(
-          height: 1,
-          color: theme.colorScheme.outlineVariant,
-        ),
+        Divider(height: 1, color: theme.colorScheme.outlineVariant),
 
         // Checkout section
         _buildCheckoutSection(theme),
@@ -178,118 +176,116 @@ class CartView extends GetView<CartController> {
               children: [
                 // Total price section
                 totalPriceSection(),
-        
+
                 const SizedBox(width: _spacing),
-        
+
                 // Checkout button
-                checkoutButton( ),
-                
+                checkoutButton(),
               ],
             ),
           ),
         );
-      }
+      },
     );
   }
 
   Widget totalPriceSection() {
     return Builder(
       builder: (context) {
-            final theme = Theme.of(context);
+        final theme = Theme.of(context);
 
         return Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.total,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontSize: _totalLabelFontSize,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            const SizedBox(width: 8.0),
-                            Obx(
-                              () => Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                  vertical: 2.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Text(
-                                  '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
-                                  style: TextStyle(
-                                    fontSize: _itemCountFontSize,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: _smallSpacing),
-                        Obx(
-                          () => Text(
-                            '\$${controller.totalPrice.toStringAsFixed(2)}',
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              fontSize: _totalPriceFontSize,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.total,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontSize: _totalLabelFontSize,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
-                  );
-      }
+                  ),
+                  const SizedBox(width: 8.0),
+                  Obx(
+                    () => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 2.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: Text(
+                        '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
+                        style: TextStyle(
+                          fontSize: _itemCountFontSize,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: _smallSpacing),
+              Obx(
+                () => Text(
+                  '\$${controller.totalPrice.toStringAsFixed(2)}',
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: _totalPriceFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget checkoutButton( ) {
+  Widget checkoutButton() {
     return Builder(
       builder: (context) {
-            final theme = Theme.of(context);
+        final theme = Theme.of(context);
 
         return Semantics(
-                    label: AppLocalizations.of(context)!.proceedToCheckout,
-                    button: true,
-                    child: ElevatedButton(
-                      onPressed: controller.cartItems.isEmpty
-                          ? null
-                          : () => _handleCheckout(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.white,
-                        disabledBackgroundColor:
-                            theme.colorScheme.surfaceContainerHighest,
-                        disabledForegroundColor:
-                            theme.colorScheme.onSurfaceVariant,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: _checkoutButtonPadding,
-                          vertical: _checkoutButtonVerticalPadding,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(_checkoutButtonRadius),
-                        ),
-                        elevation: 2.0,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.checkout,
-                        style: TextStyle(
-                          fontSize: _checkoutButtonFontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  );
-      }
+          label: AppLocalizations.of(context)!.proceedToCheckout,
+          button: true,
+          child: ElevatedButton(
+            onPressed: controller.cartItems.isEmpty
+                ? null
+                : () => _handleCheckout(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.white,
+              disabledBackgroundColor:
+                  theme.colorScheme.surfaceContainerHighest,
+              disabledForegroundColor: theme.colorScheme.onSurfaceVariant,
+              padding: const EdgeInsets.symmetric(
+                horizontal: _checkoutButtonPadding,
+                vertical: _checkoutButtonVerticalPadding,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+              ),
+              elevation: 2.0,
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.checkout,
+              style: TextStyle(
+                fontSize: _checkoutButtonFontSize,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/paymob_constants.dart';
 import 'package:stronger_muscles/data/services/paymob_service.dart';
-
+ 
 class PaymobController extends GetxController {
   final PaymobService _paymobService = PaymobService();
 
