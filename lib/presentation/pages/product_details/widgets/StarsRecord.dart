@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/ReviewModel.dart';
 
 class StarsRecord extends StatelessWidget {
-  final ThemeData theme;
   final List<ReviewModel> reviews;
 
   const StarsRecord({
     super.key,
-    required this.theme,
     required this.reviews,
   });
 
@@ -25,6 +23,7 @@ class StarsRecord extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Use calculated average rating from reviews
     final averageRating = _calculateAverageRating();
     final actualReviewCount = reviews.length;

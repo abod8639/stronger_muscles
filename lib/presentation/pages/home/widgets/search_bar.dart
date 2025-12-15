@@ -22,9 +22,6 @@ class SearchBar extends StatelessWidget {
     final theme = Theme.of(context);
     final controller = Get.find<HomeController>();
 
-
-  
-
     return SliverAppBar(
       floating: true,
       snap: true,

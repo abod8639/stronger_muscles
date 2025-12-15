@@ -7,7 +7,6 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/Star
 /// A beautiful expandable description card with animations
 class ExpandableDescriptionCard extends StatefulWidget {
   final String description;
-  
   final double? stars;
   final int? reviewCount;
   final List<ReviewModel> reviews;  
@@ -15,7 +14,6 @@ class ExpandableDescriptionCard extends StatefulWidget {
   const ExpandableDescriptionCard({
     super.key,
     required this.description,
-    
     this.stars,
     this.reviewCount,
     required this.reviews,
@@ -186,7 +184,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
                   // Stars record
                   StarsRecord(
-                    theme: theme,
                     reviews: widget.reviews,
                   ),
                 ],

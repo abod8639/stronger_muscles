@@ -79,6 +79,5 @@ class _MainImageState extends State<MainImage> {
         },
       ),
     );
-
   }
 }

@@ -209,10 +209,7 @@ class ShowReviewsList extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(                  // ShowReviewsList(
-                      //   reviews: widget.reviews,
-                      //   theme: widget.theme,
-                      // ),
+            border: Border.all(
               color: AppColors.primary.withOpacity(0.3),
               width: 1,
             ),

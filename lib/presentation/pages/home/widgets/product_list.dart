@@ -98,7 +98,6 @@ class ProductList extends StatelessWidget {
 Widget productList() {
   final controller = Get.find<HomeController>();
   return Builder(builder: (context) {
-    final theme = Theme.of(context);
     return Obx(() {
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
