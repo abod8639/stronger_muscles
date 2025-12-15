@@ -24,7 +24,7 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
       return Builder(
         builder: (context) {
-    final theme = Theme.of(context);
+      final theme = Theme.of(context);
           return Container(
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),

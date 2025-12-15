@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 
-       const double titleFontSize = 18.0;
-       const double priceFontSize = 16.0;
-       const int maxTitleLines = 2;
+    const double titleFontSize = 18.0;
+    const double priceFontSize = 16.0;
+    const int maxTitleLines = 2;
 /// Builds the product details section (name and price)
   Widget buildProductDetails(ProductModel product) {
 

@@ -23,7 +23,7 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       body: CustomScrollView(
         slivers: [
-          _buildAppBar( theme),
+          _buildAppBar(theme),
           SliverToBoxAdapter(
             child: Obx(() {
               if (controller.isLoading.value) {

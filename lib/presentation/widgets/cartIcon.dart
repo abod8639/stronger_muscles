@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
-Widget cartIcon() {
   final controller = Get.put(CartController());
+Widget cartIcon() {
   return Obx(
     () {
       final itemCount = controller.cartItems.length; 

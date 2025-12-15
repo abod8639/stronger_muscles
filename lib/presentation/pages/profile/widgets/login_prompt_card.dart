@@ -4,7 +4,6 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 
 class LoginPromptCard extends StatelessWidget {
-  
 
   const LoginPromptCard({ super.key });
 

@@ -7,7 +7,6 @@ import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 
 class RecentOrdersList extends StatelessWidget {
 
-
   const RecentOrdersList({
     super.key,
 
