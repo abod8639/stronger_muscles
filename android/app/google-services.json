@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1610448649-iea7q6mqh0gkua47pjkjpab36lkqg7ff.apps.googleusercontent.com",
+          "client_id": "1610448649-o05kdfbit284rt33h768n5p7f1lra86i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.stronger_muscles",
-            "certificate_hash": "d2e3c5071167333526e7e68c80031d6f2ebb707c"
+            "certificate_hash": "b59d5cfc10c02480471247c40491196325a66988"
           }
         },
         {
