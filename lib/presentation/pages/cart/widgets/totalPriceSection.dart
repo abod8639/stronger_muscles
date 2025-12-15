@@ -16,7 +16,7 @@ const double _totalLabelFontSize = 14.0;
 
    const double _smallSpacing = 4.0;
 
-    final controller = Get.find<CartController>();
+  final controller = Get.find<CartController>();
 
 
   Widget totalPriceSection() {

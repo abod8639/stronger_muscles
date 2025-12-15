@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/handleCheckout.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 
 
  const double _checkoutButtonPadding = 32.0;
@@ -15,7 +15,7 @@ import 'package:stronger_muscles/routes/routes.dart';
 
  const double _checkoutButtonRadius = 12.0;
 
-    final controller = Get.find<CartController>();
+ final controller = Get.find<CartController>();
 
 Widget checkoutButton() {
     return Builder(
@@ -28,7 +28,7 @@ Widget checkoutButton() {
           child: ElevatedButton(
             onPressed: controller.cartItems.isEmpty
                 ? null
-                : () => _handleCheckout(),
+                : () => handleCheckout(),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
@@ -55,8 +55,4 @@ Widget checkoutButton() {
         );
       },
     );
-  }
-
-  void _handleCheckout() {
-    Get.toNamed(AppRoutes.checkout);
   }
