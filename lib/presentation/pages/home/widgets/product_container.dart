@@ -11,7 +11,6 @@ class ProductContainer extends StatefulWidget {
     super.key,
 
     required this.product,
-    required this.theme,
     required this.height,
     this.showName,
     this.selectedImageIndex,
@@ -20,7 +19,6 @@ class ProductContainer extends StatefulWidget {
   });
   final void Function()? onTap;
   final ProductModel product;
-  final ThemeData theme;
   final double height;
   final bool? showName;
   final RxInt? selectedImageIndex;
@@ -31,6 +29,7 @@ class ProductContainer extends StatefulWidget {
 }
 
 class _ProductContainerState extends State<ProductContainer> {
+  
   late final RxInt _selectedImageIndex;
   late final PageController _pageController;
   StreamSubscription<int>? _subscription;
@@ -63,9 +62,11 @@ class _ProductContainerState extends State<ProductContainer> {
 
   @override
   Widget build(BuildContext context) {
+        final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: widget.theme.colorScheme.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
@@ -132,7 +133,7 @@ class _ProductContainerState extends State<ProductContainer> {
                             width: isActive ? 20.0 : 5.0,
                             decoration: BoxDecoration(
                               color: isActive
-                                  ? widget.theme.colorScheme.primary
+                                  ? theme.colorScheme.primary
                                   : Colors.grey.withAlpha((255 * 0.7).round()),
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -152,7 +153,7 @@ class _ProductContainerState extends State<ProductContainer> {
                 children: [
                   Text(
                     widget.product.name,
-                    style: widget.theme.textTheme.titleMedium?.copyWith(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                     maxLines: 2,
@@ -161,8 +162,8 @@ class _ProductContainerState extends State<ProductContainer> {
                   const SizedBox(height: 8.0),
                   Text(
                     'LE ${widget.product.price.toStringAsFixed(2)}',
-                    style: widget.theme.textTheme.bodyLarge?.copyWith(
-                      color: widget.theme.colorScheme.primary,
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.primary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

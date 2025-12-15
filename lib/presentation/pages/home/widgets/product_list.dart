@@ -80,7 +80,6 @@ class ProductList extends StatelessWidget {
                   showName: true,
                   height: _productImageHeight,
                   product: product,
-                  theme: theme,
                 ),
               );
             },
@@ -127,7 +126,6 @@ Widget productList() {
                 showName: true,
                 height: 180,
                 product: product,
-                theme: theme,
               ),
             );
           },
