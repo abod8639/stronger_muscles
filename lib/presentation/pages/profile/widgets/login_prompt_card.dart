@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
 
 class LoginPromptCard extends StatelessWidget {
-
-  const LoginPromptCard({ super.key });
+  const LoginPromptCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +75,10 @@ class LoginPromptCard extends StatelessWidget {
               elevation: 2,
             ),
           ),
+
+          const SizedBox(height: 20),
+          AccountSettingsList(),
+          const SizedBox(height: 20),
         ],
       ),
     );

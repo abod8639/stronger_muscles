@@ -335,7 +335,7 @@ abstract class AppLocalizations {
   /// No description provided for @accountSettings.
   ///
   /// In en, this message translates to:
-  /// **'Account Settings'**
+  /// **'Settings'**
   String get accountSettings;
 
   /// No description provided for @editProfile.

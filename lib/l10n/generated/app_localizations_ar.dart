@@ -127,7 +127,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signOut => 'تسجيل الخروج';
 
   @override
-  String get accountSettings => 'إعدادات الحساب';
+  String get accountSettings => 'إعدادات';
 
   @override
   String get editProfile => 'تعديل الملف الشخصي';

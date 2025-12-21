@@ -440,10 +440,10 @@ class S {
     );
   }
 
-  /// `Account Settings`
+  /// `Settings`
   String get accountSettings {
     return Intl.message(
-      'Account Settings',
+      'Settings',
       name: 'accountSettings',
       desc: '',
       args: [],

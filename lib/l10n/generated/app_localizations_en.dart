@@ -127,7 +127,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signOut => 'Sign Out';
 
   @override
-  String get accountSettings => 'Account Settings';
+  String get accountSettings => 'Settings';
 
   @override
   String get editProfile => 'Edit Profile';
