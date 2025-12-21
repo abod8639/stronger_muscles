@@ -8,7 +8,8 @@ class PaymobConstants {
   static final String publicKey = dotenv.env['PUBLIC_KEY'] ?? 'fallback_key';
   static final String password = dotenv.env['password'] ?? 'fallback_key';
   static final String iframeId = dotenv.env['iframeId'] ?? 'fallback_key';
-
+  static final String webapikey = dotenv.env['WEB_API_KEY'] ?? 'fallback_key';
+  static final String androidapikey = dotenv.env['ANROID_API_KEY'] ?? 'fallback_key';
 
 /////////////////////////////////////////////////////////////////////////////////////
   static final String integrationId = dotenv.env['integrationId'] ?? 'fallback_key';

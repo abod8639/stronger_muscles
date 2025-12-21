@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:stronger_muscles/core/constants/paymob_constants.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,8 +50,8 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDjEUH6qAw-K1kzHK_Yaq_PT2otZPavVb4',
+  static FirebaseOptions web = FirebaseOptions(
+    apiKey: PaymobConstants.webapikey,
     appId: '1:1610448649:web:455e7b0560aefeb7fa9dd8',
     messagingSenderId: '1610448649',
     projectId: 'stronger-muscles',
@@ -59,8 +60,8 @@ class DefaultFirebaseOptions {
     measurementId: 'G-G6PN6F0QS5',
   );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCQKwgdNCKk1I6cUMkgytutTYiptQL1qAc',
+  static  FirebaseOptions android = FirebaseOptions(
+    apiKey: PaymobConstants.androidapikey,
     appId: '1:1610448649:android:883e915ac856b991fa9dd8',
     messagingSenderId: '1610448649',
     projectId: 'stronger-muscles',
