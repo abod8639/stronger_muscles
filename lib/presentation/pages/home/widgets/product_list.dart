@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
+import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 
 /// Grid view of products displayed on the home page
 class ProductList extends StatelessWidget {
   // Constants for grid layout
   static const double _horizontalPadding = 8.0;
-  static const int _crossAxisCount = 2;
-  static const double _childAspectRatio = 0.65;
-  static const double _crossAxisSpacing = 8.0;
   static const double _mainAxisSpacing = 12.0;
   static const double _productImageHeight = 180.0;
 
@@ -62,10 +60,10 @@ class ProductList extends StatelessWidget {
       return SliverPadding(
         padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
         sliver: SliverGrid(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: _crossAxisCount,
-            childAspectRatio: _childAspectRatio,
-            crossAxisSpacing: _crossAxisSpacing,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
+            childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(context),
+            crossAxisSpacing: 8.0,
             mainAxisSpacing: _mainAxisSpacing,
           ),
           delegate: SliverChildBuilderDelegate(

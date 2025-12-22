@@ -20,36 +20,41 @@ class HomeView extends GetView<HomeController> {
 
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            // TODO: Implement refresh functionality
-            // await controller.fetchProducts();
-          },
-          child: CustomScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            slivers: [
-              // Search bar and filter button
-              const SearchBar(),
-               
-
-              // Category shortcuts row
-              const SliverToBoxAdapter(child: ShortcutsRow()),
-
-              // Promo banner (only shown for "All" category)
-              Obx(
-                () => sectionsController.selectedIndex.value == 0
-                    ? const SliverToBoxAdapter(child: PromoBanner())
-                    : const SliverToBoxAdapter(child: SizedBox.shrink()),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1200),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                // TODO: Implement refresh functionality
+                // await controller.fetchProducts();
+              },
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  // Search bar and filter button
+                  const SearchBar(),
+                   
+            
+                  // Category shortcuts row
+                  const SliverToBoxAdapter(child: ShortcutsRow()),
+            
+                  // Promo banner (only shown for "All" category)
+                  Obx(
+                    () => sectionsController.selectedIndex.value == 0
+                        ? const SliverToBoxAdapter(child: PromoBanner())
+                        : const SliverToBoxAdapter(child: SizedBox.shrink()),
+                  ),
+            
+                  // Section title
+                  const SliverToBoxAdapter(child: SectionTitle()),
+            
+                  // Product grid
+                  const ProductList(),
+            
+                  const SliverToBoxAdapter(child: SizedBox(height: _bottomPadding)),
+                ],
               ),
-
-              // Section title
-              const SliverToBoxAdapter(child: SectionTitle()),
-
-              // Product grid
-              const ProductList(),
-
-              const SliverToBoxAdapter(child: SizedBox(height: _bottomPadding)),
-            ],
+            ),
           ),
         ),
       ),
