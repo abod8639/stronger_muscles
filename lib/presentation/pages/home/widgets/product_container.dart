@@ -1,9 +1,8 @@
 import 'dart:async';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/presentation/pages/home/widgets/image_section.dart';
 
 class ProductContainer extends StatefulWidget {
   const ProductContainer({
@@ -114,32 +113,9 @@ class _ProductContainerState extends State<ProductContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          widget.product.name,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          widget.product.description,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant
-                                .withValues(alpha: 0.5),
-                            height: 1.2,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+
+                    TitleAndDescription(product: widget.product),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -189,58 +165,42 @@ class _ProductContainerState extends State<ProductContainer> {
   }
 }
 
-class ImageSection extends StatelessWidget {
-  const ImageSection({
+class TitleAndDescription extends StatelessWidget {
+  const TitleAndDescription({
     super.key,
     required this.product,
-    required PageController pageController,
-  }) : _pageController = pageController;
+  });
 
   final ProductModel product;
 
-  final PageController _pageController;
-
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
-    return GestureDetector(
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(16.0),
-        ),
-        child: Container(
-          width: double.maxFinite,
-          color: theme
-              .colorScheme
-              .surfaceContainerLowest, // Slight background for image
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: product.imageUrl.length,
-
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(
-                  8.0,
-                ), // Padding for the image inside
-                child: CachedNetworkImage(
-                  imageUrl: product.imageUrl[index],
-                  fit: BoxFit.contain,
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: theme.colorScheme.primary,
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.broken_image_outlined,
-                    color: theme.colorScheme.error,
-                  ),
-                ),
-              );
-            },
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          product.name,
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            height: 1.2,
           ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-      ),
+        const SizedBox(height: 4.0),
+        Text(
+          product.description,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant
+                .withValues(alpha: 0.5),
+            height: 1.2,
+          ),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }
