@@ -71,7 +71,7 @@ class ProductList extends StatelessWidget {
                 () => ProductDetailsView(product: product),
                 transition: Transition.fadeIn,
               ),
-              child: ProductContainer(showName: true, product: product),
+              child: ProductContainer(showName: true, product: product ),
             );
           }, childCount: controller.products.length),
         ),

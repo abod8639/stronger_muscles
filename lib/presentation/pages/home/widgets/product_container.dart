@@ -10,44 +10,27 @@ class ProductContainer extends StatefulWidget {
     super.key,
     required this.product,
     this.showName,
-    this.selectedImageIndex,
-    this.onPageChanged,
-    this.onTap,
   });
 
-  final void Function()? onTap;
   final ProductModel product;
   final bool? showName;
-  final RxInt? selectedImageIndex;
-  final ValueChanged<int>? onPageChanged;
 
   @override
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  late final RxInt _selectedImageIndex;
+  
   late final PageController _pageController;
+  final _selectedImageIndex = 0.obs;
   StreamSubscription<int>? _subscription;
 
   @override
   void initState() {
     super.initState();
-    _selectedImageIndex = widget.selectedImageIndex ?? 0.obs;
-    _pageController = PageController(initialPage: _selectedImageIndex.value);
+    _pageController = PageController(initialPage: 0);
 
-    if (widget.selectedImageIndex != null) {
-      _subscription = widget.selectedImageIndex!.listen((index) {
-        if (_pageController.hasClients &&
-            _pageController.page?.round() != index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      });
-    }
+
   }
 
   @override
@@ -83,10 +66,8 @@ class _ProductContainerState extends State<ProductContainer> {
             child: Stack(
               children: [
                 ImageSection(
-                  widget: widget,
-                  theme: theme,
+                  product: widget.product,
                   pageController: _pageController, 
-                  selectedImageIndex: _selectedImageIndex
                   ),
                 // Indicators
                 if (widget.showName != null && widget.showName == true)
@@ -211,21 +192,18 @@ class _ProductContainerState extends State<ProductContainer> {
 class ImageSection extends StatelessWidget {
   const ImageSection({
     super.key,
-    required this.widget,
-    required this.theme,
+    required this.product,
     required PageController pageController,
-    required RxInt selectedImageIndex,
-  }) : _pageController = pageController, _selectedImageIndex = selectedImageIndex;
+  }) : _pageController = pageController;
 
-  final ProductContainer widget;
-  final ThemeData theme;
+  final ProductModel product;
+
   final PageController _pageController;
-  final RxInt _selectedImageIndex;
 
   @override
   Widget build(BuildContext context) {
+        final theme = Theme.of(context);
     return GestureDetector(
-      onTap: widget.onTap,
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(16.0),
@@ -237,17 +215,15 @@ class ImageSection extends StatelessWidget {
               .surfaceContainerLowest, // Slight background for image
           child: PageView.builder(
             controller: _pageController,
-            itemCount: widget.product.imageUrl.length,
-            onPageChanged:
-                widget.onPageChanged ??
-                (index) => _selectedImageIndex.value = index,
+            itemCount: product.imageUrl.length,
+
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(
                   8.0,
                 ), // Padding for the image inside
                 child: CachedNetworkImage(
-                  imageUrl: widget.product.imageUrl[index],
+                  imageUrl: product.imageUrl[index],
                   fit: BoxFit.contain,
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(
