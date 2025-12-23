@@ -81,7 +81,9 @@ class PromoBanner extends StatelessWidget {
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(_buttonBorderRadius),
+                            borderRadius: BorderRadius.circular(
+                              _buttonBorderRadius,
+                            ),
                           ),
                           elevation: 2.0,
                         ),
@@ -110,7 +112,7 @@ class PromoBanner extends StatelessWidget {
 }
 
 /// Legacy function for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [PromoBanner] widget instead.
 @Deprecated('Use PromoBanner widget instead')
 Padding promoBanner() {

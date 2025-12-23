@@ -46,12 +46,17 @@ class SearchBar extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
+                    Icon(
+                      Icons.search,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
                     const SizedBox(width: _iconSpacing),
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration.collapsed(
-                          hintText: AppLocalizations.of(context)!.searchProducts,
+                          hintText: AppLocalizations.of(
+                            context,
+                          )!.searchProducts,
                         ),
                         onChanged: controller.searchController.onSearchChanged,
                         textInputAction: TextInputAction.search,
@@ -61,9 +66,9 @@ class SearchBar extends StatelessWidget {
                 ),
               ),
             ),
-      
+
             const SizedBox(width: _spacing),
-      
+
             // Filter button
             Semantics(
               label: AppLocalizations.of(context)!.filterProducts,
@@ -149,7 +154,7 @@ class SearchBar extends StatelessWidget {
                       );
                     }
 
-                    // Local state for the slider within Obx is tricky, 
+                    // Local state for the slider within Obx is tricky,
                     // ideally we should use a StatefulBuilder for the sheet content
                     // to handle slider dragging smoothly without committing to controller immediately.
                     // But we can just use controller values for now if we want live update,
@@ -166,10 +171,7 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-
-
 class PriceFilterSlider extends StatefulWidget {
-
   const PriceFilterSlider({super.key});
 
   @override
@@ -270,7 +272,8 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
                           decoration: const InputDecoration.collapsed(
                             hintText: 'Search',
                           ),
-                          onChanged: controller.searchController.onSearchChanged,
+                          onChanged:
+                              controller.searchController.onSearchChanged,
                         ),
                       ),
                     ],

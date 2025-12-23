@@ -19,6 +19,7 @@ class HomeView extends GetView<HomeController> {
     final sectionsController = Get.put(SectionsController());
 
     return Scaffold(
+      // drawer: const Drawer(),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

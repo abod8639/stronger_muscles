@@ -28,16 +28,15 @@ class ShortcutsRow extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemCount: sectionsController.selections.length,
           separatorBuilder: (_, index) => const SizedBox(width: _spacing),
-          itemBuilder: (context, index) => buildShortcutItem( index ),
+          itemBuilder: (context, index) => buildShortcutItem(index),
         ),
       ),
     );
   }
-
 }
 
 /// Legacy class name for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [ShortcutsRow] instead.
 @Deprecated('Use ShortcutsRow instead')
 class SelectionsRow extends ShortcutsRow {

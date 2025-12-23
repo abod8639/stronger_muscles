@@ -7,10 +7,9 @@ import 'package:stronger_muscles/presentation/pages/product_details/product_deta
 
 /// Grid view of products displayed on the home page
 class ProductList extends StatelessWidget {
-  // Constants for grid layout
   static const double _horizontalPadding = 8.0;
   static const double _mainAxisSpacing = 12.0;
-  static const double _productImageHeight = 180.0;
+  static const double _crossAxisSpacing = 8.0;
 
   const ProductList({super.key});
 
@@ -23,10 +22,7 @@ class ProductList extends StatelessWidget {
       // Loading state
       if (controller.isLoading.value) {
         return const SliverToBoxAdapter(
-          child: Center(
-            heightFactor: 3,
-            child: CircularProgressIndicator(),
-          ),
+          child: Center(heightFactor: 3, child: CircularProgressIndicator()),
         );
       }
 
@@ -41,7 +37,9 @@ class ProductList extends StatelessWidget {
                 Icon(
                   Icons.shopping_bag_outlined,
                   size: 64.0,
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                  color: theme.colorScheme.onSurfaceVariant.withValues(
+                    alpha: 0.5,
+                  ),
                 ),
                 const SizedBox(height: 16.0),
                 Text(
@@ -63,26 +61,19 @@ class ProductList extends StatelessWidget {
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
             childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(context),
-            crossAxisSpacing: 8.0,
+            crossAxisSpacing: _crossAxisSpacing,
             mainAxisSpacing: _mainAxisSpacing,
           ),
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final product = controller.products[index];
-              return GestureDetector(
-                onTap: () => Get.to(
-                  () => ProductDetailsView(product: product),
-                  transition: Transition.fadeIn,
-                ),
-                child: ProductContainer(
-                  showName: true,
-                  height: _productImageHeight,
-                  product: product,
-                ),
-              );
-            },
-            childCount: controller.products.length,
-          ),
+          delegate: SliverChildBuilderDelegate((context, index) {
+            final product = controller.products[index];
+            return GestureDetector(
+              onTap: () => Get.to(
+                () => ProductDetailsView(product: product),
+                transition: Transition.fadeIn,
+              ),
+              child: ProductContainer(showName: true, product: product),
+            );
+          }, childCount: controller.products.length),
         ),
       );
     });
@@ -90,45 +81,42 @@ class ProductList extends StatelessWidget {
 }
 
 /// Legacy function for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [ProductList] widget instead.
 @Deprecated('Use ProductList widget instead')
 Widget productList() {
   final controller = Get.find<HomeController>();
-  return Builder(builder: (context) {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-      if (controller.products.isEmpty) {
-        return const Center(child: Text('No products found.'));
-      }
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.65,
-            crossAxisSpacing: 5.0,
-            mainAxisSpacing: 10.0,
+  return Builder(
+    builder: (context) {
+      return Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller.products.isEmpty) {
+          return const Center(child: Text('No products found.'));
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.65,
+              crossAxisSpacing: 5.0,
+              mainAxisSpacing: 10.0,
+            ),
+            itemCount: controller.products.length,
+            itemBuilder: (context, index) {
+              final product = controller.products[index];
+              return GestureDetector(
+                onTap: () => Get.to(() => ProductDetailsView(product: product)),
+                child: ProductContainer(showName: true, product: product),
+              );
+            },
           ),
-          itemCount: controller.products.length,
-          itemBuilder: (context, index) {
-            final product = controller.products[index];
-            return GestureDetector(
-              onTap: () => Get.to(() => ProductDetailsView(product: product)),
-              child: ProductContainer(
-                showName: true,
-                height: 180,
-                product: product,
-              ),
-            );
-          },
-        ),
-      );
-    });
-  });
+        );
+      });
+    },
+  );
 }
-

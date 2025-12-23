@@ -7,19 +7,16 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 
 class ProductContainer extends StatefulWidget {
   const ProductContainer({
-
     super.key,
-
     required this.product,
-    required this.height,
     this.showName,
     this.selectedImageIndex,
     this.onPageChanged,
     this.onTap,
   });
+
   final void Function()? onTap;
   final ProductModel product;
-  final double height;
   final bool? showName;
   final RxInt? selectedImageIndex;
   final ValueChanged<int>? onPageChanged;
@@ -29,7 +26,6 @@ class ProductContainer extends StatefulWidget {
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  
   late final RxInt _selectedImageIndex;
   late final PageController _pageController;
   StreamSubscription<int>? _subscription;
@@ -42,7 +38,8 @@ class _ProductContainerState extends State<ProductContainer> {
 
     if (widget.selectedImageIndex != null) {
       _subscription = widget.selectedImageIndex!.listen((index) {
-        if (_pageController.hasClients && _pageController.page?.round() != index) {
+        if (_pageController.hasClients &&
+            _pageController.page?.round() != index) {
           _pageController.animateToPage(
             index,
             duration: const Duration(milliseconds: 300),
@@ -62,7 +59,7 @@ class _ProductContainerState extends State<ProductContainer> {
 
   @override
   Widget build(BuildContext context) {
-        final theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return Container(
       decoration: BoxDecoration(
@@ -70,108 +67,203 @@ class _ProductContainerState extends State<ProductContainer> {
         borderRadius: BorderRadius.circular(16.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha((255 * 0.05).round()),
-            blurRadius: 10.0,
-            offset: const Offset(0, 5),
+            color: theme.shadowColor.withValues(alpha: 0.08),
+            blurRadius: 15.0,
+            offset: const Offset(0, 4),
+            spreadRadius: 2,
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              GestureDetector(
-                onTap: widget.onTap,
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(16.0),
+          // Image Section
+          Expanded(
+            flex: 3,
+            child: Stack(
+              children: [
+                ImageSection(
+                  widget: widget,
+                  theme: theme,
+                  pageController: _pageController, 
+                  selectedImageIndex: _selectedImageIndex
                   ),
-                  child: SizedBox(
-                    height: widget.height,
-                    width: double.infinity,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: widget.product.imageUrl.length,
-                      onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
-                      itemBuilder: (context, index) {
-                        return CachedNetworkImage(
-                          imageUrl: widget.product.imageUrl[index],
-                          fit: BoxFit.contain,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.error, color: Colors.red),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-              if (widget.showName != null && widget.showName == true)
-                if (widget.product.imageUrl.length > 1)
-                  Positioned(
-                    bottom: 8.0,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        widget.product.imageUrl.length,
-                        (index) => Obx(() {
-                          final isActive = _selectedImageIndex.value == index;
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            height: 5.0,
-                            width: isActive ? 20.0 : 5.0,
-                            decoration: BoxDecoration(
-                              color: isActive
-                                  ? theme.colorScheme.primary
-                                  : Colors.grey.withAlpha((255 * 0.7).round()),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          );
-                        }),
+                // Indicators
+                if (widget.showName != null && widget.showName == true)
+                  if (widget.product.imageUrl.length > 1)
+                    Positioned(
+                      bottom: 10.0,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          widget.product.imageUrl.length,
+                          (index) => Obx(() {
+                            final isActive = _selectedImageIndex.value == index;
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 2.0,
+                              ),
+                              height: 4.0,
+                              width: isActive ? 16.0 : 4.0,
+                              decoration: BoxDecoration(
+                                color: isActive
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.surface.withAlpha(100),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            );
+                          }),
+                        ),
                       ),
                     ),
-                  ),
-              const SizedBox.shrink(),
-            ],
+              ],
+            ),
           ),
+
+          // Details Section
           if (widget.showName != null && widget.showName == true)
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.product.name,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12.0, 8.0, 12.0, 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          widget.product.name,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4.0),
+                        Text(
+                          widget.product.description,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.5),
+                            height: 1.2,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'LE ${widget.product.price.toStringAsFixed(2)}',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LE ${widget.product.price.toStringAsFixed(2)}',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        if (widget.product.reviews.isNotEmpty)
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                size: 16.0,
+                                color: Colors.amber,
+                              ),
+                              const SizedBox(width: 4.0),
+                              Text(
+                                (widget.product.reviews
+                                            .map((e) => e.rating)
+                                            .fold(0.0, (a, b) => a + b) /
+                                        widget.product.reviews.length)
+                                    .toStringAsFixed(1),
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                ' (${widget.product.reviews.length})',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          const SizedBox.shrink(),
         ],
+      ),
+    );
+  }
+}
+
+class ImageSection extends StatelessWidget {
+  const ImageSection({
+    super.key,
+    required this.widget,
+    required this.theme,
+    required PageController pageController,
+    required RxInt selectedImageIndex,
+  }) : _pageController = pageController, _selectedImageIndex = selectedImageIndex;
+
+  final ProductContainer widget;
+  final ThemeData theme;
+  final PageController _pageController;
+  final RxInt _selectedImageIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(16.0),
+        ),
+        child: Container(
+          width: double.maxFinite,
+          color: theme
+              .colorScheme
+              .surfaceContainerLowest, // Slight background for image
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.product.imageUrl.length,
+            onPageChanged:
+                widget.onPageChanged ??
+                (index) => _selectedImageIndex.value = index,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(
+                  8.0,
+                ), // Padding for the image inside
+                child: CachedNetworkImage(
+                  imageUrl: widget.product.imageUrl[index],
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.broken_image_outlined,
+                    color: theme.colorScheme.error,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

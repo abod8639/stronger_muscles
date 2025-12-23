@@ -41,7 +41,7 @@ class SectionTitle extends StatelessWidget {
 }
 
 /// Legacy function for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [SectionTitle] widget instead.
 @Deprecated('Use SectionTitle widget instead')
 Padding sectionTitle() {
