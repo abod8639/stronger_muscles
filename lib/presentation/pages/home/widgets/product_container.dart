@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -10,27 +11,44 @@ class ProductContainer extends StatefulWidget {
     super.key,
     required this.product,
     this.showName,
+    this.selectedImageIndex,
+    this.onPageChanged,
+    this.onTap,
   });
 
+  final void Function()? onTap;
   final ProductModel product;
   final bool? showName;
+  final RxInt? selectedImageIndex;
+  final ValueChanged<int>? onPageChanged;
 
   @override
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
 class _ProductContainerState extends State<ProductContainer> {
-  
+  late final RxInt _selectedImageIndex;
   late final PageController _pageController;
-  final _selectedImageIndex = 0.obs;
   StreamSubscription<int>? _subscription;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 0);
+    _selectedImageIndex = widget.selectedImageIndex ?? 0.obs;
+    _pageController = PageController(initialPage: _selectedImageIndex.value);
 
-
+    if (widget.selectedImageIndex != null) {
+      _subscription = widget.selectedImageIndex!.listen((index) {
+        if (_pageController.hasClients &&
+            _pageController.page?.round() != index) {
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -66,40 +84,15 @@ class _ProductContainerState extends State<ProductContainer> {
             child: Stack(
               children: [
                 ImageSection(
-                  product: widget.product,
+                  widget: widget,
+                  theme: theme,
                   pageController: _pageController, 
+                  selectedImageIndex: _selectedImageIndex
                   ),
                 // Indicators
                 if (widget.showName != null && widget.showName == true)
                   if (widget.product.imageUrl.length > 1)
-                    Positioned(
-                      bottom: 10.0,
-                      left: 0,
-                      right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          widget.product.imageUrl.length,
-                          (index) => Obx(() {
-                            final isActive = _selectedImageIndex.value == index;
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 300),
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 2.0,
-                              ),
-                              height: 4.0,
-                              width: isActive ? 16.0 : 4.0,
-                              decoration: BoxDecoration(
-                                color: isActive
-                                    ? theme.colorScheme.primary
-                                    : theme.colorScheme.surface.withAlpha(100),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                            );
-                          }),
-                        ),
-                      ),
-                    ),
+                    ImageIndicators(product: widget.product, selectedImageIndex: _selectedImageIndex),
               ],
             ),
           ),
@@ -114,7 +107,6 @@ class _ProductContainerState extends State<ProductContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
                     TitleAndDescription(product: widget.product),
 
                     Row(
@@ -165,3 +157,48 @@ class _ProductContainerState extends State<ProductContainer> {
     );
   }
 }
+
+class ImageIndicators extends StatelessWidget {
+  const ImageIndicators({
+    super.key,
+    required this.product,
+    required RxInt selectedImageIndex,
+  }) : _selectedImageIndex = selectedImageIndex;
+
+  final ProductModel product;
+  final RxInt _selectedImageIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Positioned(
+      bottom: 10.0,
+      left: 0,
+      right: 0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(
+          product.imageUrl.length,
+          (index) => Obx(() {
+            final isActive = _selectedImageIndex.value == index;
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 2.0,
+              ),
+              height: 4.0,
+              width: isActive ? 16.0 : 4.0,
+              decoration: BoxDecoration(
+                color: isActive
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surface.withAlpha(100),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
