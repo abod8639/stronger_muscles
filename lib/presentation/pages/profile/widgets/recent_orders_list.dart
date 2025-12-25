@@ -132,18 +132,25 @@ class RecentOrdersList extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      order.items.first.imageUrl,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 50,
-                        height: 50,
-                        color: AppColors.greyLight,
-                        child: const Icon(Icons.image, color: AppColors.greyDark),
-                      ),
-                    ),
+                    child: order.items != null && order.items!.isNotEmpty
+                      ? Image.network(
+                          order.items!.first.imageUrl ?? '',
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: 50,
+                            height: 50,
+                            color: AppColors.greyLight,
+                            child: const Icon(Icons.image, color: AppColors.greyDark),
+                          ),
+                        )
+                      : Container(
+                          width: 50,
+                          height: 50,
+                          color: AppColors.greyLight,
+                          child: const Icon(Icons.image, color: AppColors.greyDark),
+                        ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -151,7 +158,9 @@ class RecentOrdersList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          order.items.first.productName,
+                          order.items?.isNotEmpty == true 
+                            ? order.items!.first.productName 
+                            : 'Order Items',
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: isDark ? AppColors.white : AppColors.black,
@@ -159,9 +168,9 @@ class RecentOrdersList extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (order.items.length > 1)
+                        if ((order.items?.length ?? 0) > 1)
                           Text(
-                            '+${order.items.length - 1} more items',
+                            '+${(order.items?.length ?? 1) - 1} more items',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: AppColors.greyDark,
                             ),

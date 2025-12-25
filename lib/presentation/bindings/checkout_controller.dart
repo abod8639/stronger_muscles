@@ -58,18 +58,24 @@ class CheckoutController extends GetxController {
     isProcessing.value = true;
 
     try {
+      final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
       final order = OrderModel(
-        id: 'ORD-${DateTime.now().millisecondsSinceEpoch}',
+        id: orderId,
+        userId: '', // TODO: Get from auth
         orderDate: DateTime.now(),
         status: 'pending',
-        items: _cartController.cartItems.map((item) => OrderItem(
-          productId: item.id,
-          productName: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          imageUrl: item.imageUrl.first,
-        )).toList(),
+        addressId: selectedAddress.value!.id,
+        subtotal: _cartController.totalPrice,
         totalAmount: _cartController.totalPrice,
+        items: _cartController.cartItems.map((item) => OrderItemModel(
+          id: 'item-${DateTime.now().millisecondsSinceEpoch}-${item.productId}',
+          orderId: orderId,
+          productId: item.productId,
+          productName: item.productName,
+          unitPrice: item.price,
+          quantity: item.quantity,
+          imageUrl: item.imageUrls.isNotEmpty ? item.imageUrls.first : null,
+        )).toList(),
         shippingAddress: selectedAddress.value!.street, // Simplified for now
         trackingNumber: '',
       );

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/ShowReviewsList.dart';
 
-/// Builds the enhanced description section with expandable functionality
+/// Builds the reviews list section
+/// Reviews are now fetched separately from a ReviewRepository
 Widget buildShowReviewsListSection(ProductModel product) {
-  if (product.reviews.isEmpty) {
+  if (product.reviewCount == 0) {
     return const SizedBox.shrink();
   }
 
-  return ShowReviewsList(reviews: product.reviews);
+  // TODO: Fetch reviews from ReviewRepository using product.id
+  return ShowReviewsList(reviews: const []);
 }

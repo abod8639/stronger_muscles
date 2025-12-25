@@ -2,9 +2,11 @@ import 'package:stronger_muscles/data/models/ReviewModel.dart';
 
 /// Fake reviews data for testing and demonstration purposes
 class FakeReviews {
-  static List<ReviewModel> getFakeReviews() {
+  static List<ReviewModel> getFakeReviews({String productId = 'default'}) {
     return [
       ReviewModel(
+        id: 'review_001',
+        productId: productId,
         userId: 'user_001',
         userName: 'Sarah Johnson',
         comment:
@@ -13,6 +15,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 2)),
       ),
       ReviewModel(
+        id: 'review_002',
+        productId: productId,
         userId: 'user_002',
         userName: 'Mike Thompson',
         comment:
@@ -21,6 +25,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 5)),
       ),
       ReviewModel(
+        id: 'review_003',
+        productId: productId,
         userId: 'user_003',
         userName: 'Emily Chen',
         comment:
@@ -29,6 +35,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 12)),
       ),
       ReviewModel(
+        id: 'review_004',
+        productId: productId,
         userId: 'user_004',
         userName: 'David Martinez',
         comment:
@@ -37,6 +45,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 18)),
       ),
       ReviewModel(
+        id: 'review_005',
+        productId: productId,
         userId: 'user_005',
         userName: 'Jessica Williams',
         comment:
@@ -45,6 +55,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 25)),
       ),
       ReviewModel(
+        id: 'review_006',
+        productId: productId,
         userId: 'user_006',
         userName: 'Alex Brown',
         comment:
@@ -53,6 +65,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 30)),
       ),
       ReviewModel(
+        id: 'review_007',
+        productId: productId,
         userId: 'user_007',
         userName: 'Rachel Green',
         comment:
@@ -61,6 +75,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 45)),
       ),
       ReviewModel(
+        id: 'review_008',
+        productId: productId,
         userId: 'user_008',
         userName: 'Tom Anderson',
         comment:
@@ -69,6 +85,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 60)),
       ),
       ReviewModel(
+        id: 'review_009',
+        productId: productId,
         userId: 'user_009',
         userName: 'Lisa Parker',
         comment:
@@ -77,6 +95,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 75)),
       ),
       ReviewModel(
+        id: 'review_010',
+        productId: productId,
         userId: 'user_010',
         userName: 'James Wilson',
         comment:
@@ -85,6 +105,8 @@ class FakeReviews {
         createdAt: DateTime.now().subtract(const Duration(days: 90)),
       ),
       ReviewModel(
+        id: 'review_011',
+        productId: productId,
         userId: 'user_011',
         userName: 'hosam gogo',
         comment:
@@ -96,21 +118,21 @@ class FakeReviews {
   }
 
   /// Get a subset of reviews for testing
-  static List<ReviewModel> getTopReviews({int count = 5}) {
-    final allReviews = getFakeReviews();
+  static List<ReviewModel> getTopReviews({int count = 5, String productId = 'default'}) {
+    final allReviews = getFakeReviews(productId: productId);
     return allReviews.take(count).toList();
   }
 
   /// Get reviews filtered by minimum rating
-  static List<ReviewModel> getReviewsByRating(double minRating) {
-    return getFakeReviews()
+  static List<ReviewModel> getReviewsByRating(double minRating, {String productId = 'default'}) {
+    return getFakeReviews(productId: productId)
         .where((review) => review.rating >= minRating)
         .toList();
   }
 
   /// Calculate average rating
-  static double getAverageRating() {
-    final reviews = getFakeReviews();
+  static double getAverageRating({String productId = 'default'}) {
+    final reviews = getFakeReviews(productId: productId);
     if (reviews.isEmpty) return 0.0;
     
     final totalRating = reviews.fold<double>(

@@ -18,33 +18,66 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
     };
     return OrderModel(
       id: fields[0] as String,
-      orderDate: fields[1] as DateTime,
-      status: fields[2] as String,
-      items: (fields[3] as List).cast<OrderItem>(),
-      totalAmount: fields[4] as double,
-      shippingAddress: fields[5] as String,
-      trackingNumber: fields[6] as String?,
+      userId: fields[1] as String,
+      orderDate: fields[2] as DateTime,
+      status: fields[3] as String,
+      paymentStatus: fields[4] as String,
+      paymentMethod: fields[5] as String,
+      addressId: fields[6] as String,
+      shippingAddressSnapshot: fields[7] as String?,
+      subtotal: fields[8] as double,
+      shippingCost: fields[9] as double,
+      discount: fields[10] as double,
+      totalAmount: fields[11] as double,
+      trackingNumber: fields[12] as String?,
+      notes: fields[13] as String?,
+      createdAt: fields[14] as DateTime?,
+      updatedAt: fields[15] as DateTime?,
+      items: (fields[16] as List?)?.cast<OrderItemModel>(),
+      shippingAddress: fields[17] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.orderDate)
+      ..write(obj.userId)
       ..writeByte(2)
-      ..write(obj.status)
+      ..write(obj.orderDate)
       ..writeByte(3)
-      ..write(obj.items)
+      ..write(obj.status)
       ..writeByte(4)
-      ..write(obj.totalAmount)
+      ..write(obj.paymentStatus)
       ..writeByte(5)
-      ..write(obj.shippingAddress)
+      ..write(obj.paymentMethod)
       ..writeByte(6)
-      ..write(obj.trackingNumber);
+      ..write(obj.addressId)
+      ..writeByte(7)
+      ..write(obj.shippingAddressSnapshot)
+      ..writeByte(8)
+      ..write(obj.subtotal)
+      ..writeByte(9)
+      ..write(obj.shippingCost)
+      ..writeByte(10)
+      ..write(obj.discount)
+      ..writeByte(11)
+      ..write(obj.totalAmount)
+      ..writeByte(12)
+      ..write(obj.trackingNumber)
+      ..writeByte(13)
+      ..write(obj.notes)
+      ..writeByte(14)
+      ..write(obj.createdAt)
+      ..writeByte(15)
+      ..write(obj.updatedAt)
+      ..writeByte(16)
+      ..write(obj.items)
+      ..writeByte(17)
+      ..write(obj.shippingAddress);
   }
 
   @override
@@ -58,39 +91,51 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
           typeId == other.typeId;
 }
 
-class OrderItemAdapter extends TypeAdapter<OrderItem> {
+class OrderItemModelAdapter extends TypeAdapter<OrderItemModel> {
   @override
   final int typeId = 3;
 
   @override
-  OrderItem read(BinaryReader reader) {
+  OrderItemModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return OrderItem(
-      productId: fields[0] as String,
-      productName: fields[1] as String,
-      price: fields[2] as double,
-      quantity: fields[3] as int,
-      imageUrl: fields[4] as String,
+    return OrderItemModel(
+      id: fields[0] as String,
+      orderId: fields[1] as String,
+      productId: fields[2] as String,
+      productName: fields[3] as String,
+      unitPrice: fields[4] as double,
+      quantity: fields[5] as int,
+      subtotal: fields[6] as double?,
+      imageUrl: fields[7] as String?,
+      createdAt: fields[8] as DateTime?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, OrderItem obj) {
+  void write(BinaryWriter writer, OrderItemModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.productId)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.productName)
+      ..write(obj.orderId)
       ..writeByte(2)
-      ..write(obj.price)
+      ..write(obj.productId)
       ..writeByte(3)
-      ..write(obj.quantity)
+      ..write(obj.productName)
       ..writeByte(4)
-      ..write(obj.imageUrl);
+      ..write(obj.unitPrice)
+      ..writeByte(5)
+      ..write(obj.quantity)
+      ..writeByte(6)
+      ..write(obj.subtotal)
+      ..writeByte(7)
+      ..write(obj.imageUrl)
+      ..writeByte(8)
+      ..write(obj.createdAt);
   }
 
   @override
@@ -99,7 +144,7 @@ class OrderItemAdapter extends TypeAdapter<OrderItem> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is OrderItemAdapter &&
+      other is OrderItemModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

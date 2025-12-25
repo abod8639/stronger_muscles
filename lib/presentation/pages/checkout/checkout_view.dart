@@ -208,13 +208,13 @@ class CheckoutView extends GetView<CheckoutController> {
               final item = cartController.cartItems[index];
               return ListTile(
                 leading: Image.network(
-                  item.imageUrl.first,
+                  item.imageUrls.first,
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => const Icon(Icons.image),
                 ),
-                title: Text(item.name),
+                title: Text(item.productName),
                 subtitle: Text('${item.quantity} x \$${item.price}'),
                 trailing: Text('\$${(item.price * item.quantity).toStringAsFixed(2)}'),
               );

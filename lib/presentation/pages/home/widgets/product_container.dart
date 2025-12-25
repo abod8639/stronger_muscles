@@ -91,7 +91,7 @@ class _ProductContainerState extends State<ProductContainer> {
                   ),
                 // Indicators
                 if (widget.showName != null && widget.showName == true)
-                  if (widget.product.imageUrl.length > 1)
+                  if (widget.product.imageUrls.length > 1)
                     ImageIndicators(
                       product: widget.product, 
                       selectedImageIndex: _selectedImageIndex
@@ -122,7 +122,7 @@ class _ProductContainerState extends State<ProductContainer> {
                             fontWeight: FontWeight.w800,
                           ),
                         ),
-                        if (widget.product.reviews.isNotEmpty)
+                        if (widget.product.reviewCount > 0)
                           Row(
                             children: [
                               Icon(
@@ -132,17 +132,13 @@ class _ProductContainerState extends State<ProductContainer> {
                               ),
                               const SizedBox(width: 4.0),
                               Text(
-                                (widget.product.reviews
-                                            .map((e) => e.rating)
-                                            .fold(0.0, (a, b) => a + b) /
-                                        widget.product.reviews.length)
-                                    .toStringAsFixed(1),
+                                widget.product.averageRating.toStringAsFixed(1),
                                 style: theme.textTheme.labelMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               Text(
-                                ' (${widget.product.reviews.length})',
+                                ' (${widget.product.reviewCount})',
                                 style: theme.textTheme.labelSmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),

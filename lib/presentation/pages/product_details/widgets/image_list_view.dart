@@ -30,7 +30,7 @@ class ImageListView extends StatelessWidget {
     final controller = Get.find<ProductDetailsController>();
 
     // Don't show if there's only one image or no images
-    if (product.imageUrl.length <= 1) {
+    if (product.imageUrls.length <= 1) {
       return const SizedBox.shrink();
     }
 
@@ -39,7 +39,7 @@ class ImageListView extends StatelessWidget {
       child: ListView.builder(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: product.imageUrl.length,
+        itemCount: product.imageUrls.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => _buildThumbnail(
           controller,
@@ -53,7 +53,7 @@ class ImageListView extends StatelessWidget {
   Widget _buildThumbnail( ProductDetailsController controller,int index ) {
 
     return Semantics(
-      label: 'Product image ${index + 1} of ${product.imageUrl.length}',
+      label: 'Product image ${index + 1} of ${product.imageUrls.length}',
       button: true,
       child: GestureDetector(
         onTap: () => controller.selectImage(index),
@@ -95,7 +95,7 @@ class ImageListView extends StatelessWidget {
   /// Builds the thumbnail image with error handling
   Widget _buildThumbnailImage( int index ) {
 
-    final imageUrl = product.imageUrl[index];
+    final imageUrl = product.imageUrls[index];
 
     return Builder(
       builder: (context) {

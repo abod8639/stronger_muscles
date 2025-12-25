@@ -28,7 +28,7 @@ class AddressModelAdapter extends TypeAdapter<AddressModel> {
       country: fields[8] as String,
       isDefault: fields[9] as bool,
       latitude: fields[10] as double?,
-      longitude: fields[11] as double?,
+      longitude: fields[11] as double?, userId: '',
     );
   }
 

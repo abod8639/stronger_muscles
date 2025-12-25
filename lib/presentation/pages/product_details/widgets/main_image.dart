@@ -57,7 +57,7 @@ class _MainImageState extends State<MainImage> {
       child: PageView.builder(
       
         controller: _pageController,
-        itemCount: widget.product.imageUrl.length,
+        itemCount: widget.product.imageUrls.length,
         onPageChanged: (index) {
           _controller.selectImage(index);
         },
@@ -68,7 +68,7 @@ class _MainImageState extends State<MainImage> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: CachedNetworkImage(
-                imageUrl: widget.product.imageUrl[index],
+                imageUrl: widget.product.imageUrls[index],
                 placeholder: (context, url) =>
                 const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) => const Icon(Icons.error),

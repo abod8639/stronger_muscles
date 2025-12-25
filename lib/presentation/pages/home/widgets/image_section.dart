@@ -33,7 +33,7 @@ class ImageSection extends StatelessWidget {
               .surfaceContainerLowest, // Slight background for image
           child: PageView.builder(
             controller: _pageController,
-            itemCount: widget.product.imageUrl.length,
+            itemCount: widget.product.imageUrls.length,
             onPageChanged:
                 widget.onPageChanged ??
                 (index) => _selectedImageIndex.value = index,
@@ -43,7 +43,7 @@ class ImageSection extends StatelessWidget {
                   8.0,
                 ), // Padding for the image inside
                 child: CachedNetworkImage(
-                  imageUrl: widget.product.imageUrl[index],
+                  imageUrl: widget.product.imageUrls[index],
                   fit: BoxFit.contain,
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(

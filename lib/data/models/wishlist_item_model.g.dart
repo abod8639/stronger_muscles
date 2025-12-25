@@ -1,37 +1,36 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cart_item_model.dart';
+part of 'wishlist_item_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
+class WishlistItemModelAdapter extends TypeAdapter<WishlistItemModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 9;
 
   @override
-  CartItemModel read(BinaryReader reader) {
+  WishlistItemModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CartItemModel(
+    return WishlistItemModel(
       id: fields[0] as String,
       userId: fields[1] as String,
       productId: fields[2] as String,
-      productName: fields[3] as String,
-      price: fields[4] as double,
-      imageUrls: (fields[5] as List).cast<String>(),
-      quantity: fields[6] as int,
-      addedAt: fields[7] as DateTime?,
+      addedAt: fields[3] as DateTime?,
+      productName: fields[4] as String?,
+      productPrice: fields[5] as double?,
+      productImageUrl: fields[6] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, CartItemModel obj) {
+  void write(BinaryWriter writer, WishlistItemModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -39,15 +38,13 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
       ..writeByte(2)
       ..write(obj.productId)
       ..writeByte(3)
-      ..write(obj.productName)
+      ..write(obj.addedAt)
       ..writeByte(4)
-      ..write(obj.price)
+      ..write(obj.productName)
       ..writeByte(5)
-      ..write(obj.imageUrls)
+      ..write(obj.productPrice)
       ..writeByte(6)
-      ..write(obj.quantity)
-      ..writeByte(7)
-      ..write(obj.addedAt);
+      ..write(obj.productImageUrl);
   }
 
   @override
@@ -56,7 +53,7 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CartItemModelAdapter &&
+      other is WishlistItemModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

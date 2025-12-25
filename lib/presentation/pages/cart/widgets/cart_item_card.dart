@@ -71,12 +71,12 @@ class CartItemCard extends StatelessWidget {
   /// Converts CartItemModel to ProductModel
   ProductModel _toProductModel() {
     return ProductModel(
-      id: item.id,
-      name: item.name,
+      id: item.productId,
+      name: item.productName,
       price: item.price,
-      imageUrl: item.imageUrl,
+      imageUrls: item.imageUrls,
       description: '',
-      reviews: [],
+      categoryId: '',
     );
   }
 

@@ -23,7 +23,7 @@ class ImageIndicators extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(
-          product.imageUrl.length,
+          product.imageUrls.length,
           (index) => Obx(() {
             final isActive = _selectedImageIndex.value == index;
             return AnimatedContainer(

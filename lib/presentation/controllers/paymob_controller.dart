@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/core/constants/paymob_constants.dart';
 import 'package:stronger_muscles/data/services/paymob_service.dart';
  
 class PaymobController extends GetxController {
@@ -61,7 +60,7 @@ class PaymobController extends GetxController {
   }
 
   void _launchPaymentWebView(String paymentKey) {
-    final String url = 'https://accept.paymob.com/api/acceptance/iframes/${PaymobConstants.iframeId}?payment_token=$paymentKey';
+    final String url = paymentKey;
     print("Navigate to: $url");
     
     // For now, we will just print the URL. 

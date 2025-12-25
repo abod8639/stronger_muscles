@@ -10,9 +10,10 @@ Widget buildDescriptionSection(ProductModel product) {
 
   return ExpandableDescriptionCard(
     description: product.description,
-    
-    reviews: product.reviews,
+    // Reviews are now fetched separately from a ReviewRepository
+    reviews: const [],
   );
 }
+
 
 

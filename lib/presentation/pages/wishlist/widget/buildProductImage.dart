@@ -11,8 +11,8 @@ import 'package:stronger_muscles/data/models/product_model.dart';
     const double imageSize = 100.0;
     const double imageBorderRadius = 8.0;
 
-    final imageUrl = product.imageUrl.isNotEmpty 
-        ? product.imageUrl.first 
+    final imageUrl = product.imageUrls.isNotEmpty 
+        ? product.imageUrls.first 
         : '';
 
     return Builder(

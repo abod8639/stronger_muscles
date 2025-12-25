@@ -45,20 +45,23 @@ class ProfileController extends GetxController {
 
       OrderModel(
         id: 'ORD001',
+        userId: currentUser.value?.uid ?? '',
         orderDate: DateTime.now().subtract(const Duration(days: 2)),
         status: 'delivered',
+        addressId: 'ADDR001',
+        subtotal: 1799.98,
+        totalAmount: 1799.98,
         items: [
-
-          OrderItem(
+          OrderItemModel(
+            id: 'item1',
+            orderId: 'ORD001',
             productId: '1',
             productName: 'Whey Protein',
-            price: 899.99,
+            unitPrice: 899.99,
             quantity: 2,
             imageUrl:'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
           ),
-
         ],
-        totalAmount: 1799.98,
         shippingAddress: 'Cairo, Egypt',
         trackingNumber: 'TRK123456',
       ),
@@ -66,18 +69,23 @@ class ProfileController extends GetxController {
       
       OrderModel(
         id: 'ORD002',
+        userId: currentUser.value?.uid ?? '',
         orderDate: DateTime.now().subtract(const Duration(days: 7)),
         status: 'delivered',
+        addressId: 'ADDR001',
+        subtotal: 499.99,
+        totalAmount: 499.99,
         items: [
-          OrderItem(
+          OrderItemModel(
+            id: 'item2',
+            orderId: 'ORD002',
             productId: '2',
             productName: 'Creatine Monohydrate',
-            price: 499.99,
+            unitPrice: 499.99,
             quantity: 1,
             imageUrl: 'https://images.unsplash.com/photo-1579722821273-0f6c7d44362f',
           ),
         ],
-        totalAmount: 499.99,
         shippingAddress: 'Cairo, Egypt',
       ),
     ];
@@ -88,6 +96,7 @@ class ProfileController extends GetxController {
     addresses.value = [
       AddressModel(
         id: 'ADDR001',
+        userId: currentUser.value?.uid ?? '',
         label: 'Home',
         fullName: currentUser.value?.displayName ?? 'User Name',
         phoneNumber: '+20 123 456 7890',

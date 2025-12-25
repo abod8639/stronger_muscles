@@ -29,7 +29,7 @@ class CartController extends GetxController {
   void addToCart(ProductModel product) {
     try {
       final existingItemIndex = cartItems.indexWhere(
-        (item) => item.id == product.id,
+        (item) => item.productId == product.id,
       );
       if (existingItemIndex != -1) {
         final item = cartItems[existingItemIndex];
@@ -38,10 +38,12 @@ class CartController extends GetxController {
         cartItems.refresh();
       } else {
         final newItem = CartItemModel(
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          imageUrl: product.imageUrl,
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          userId: '', // TODO: Get from auth controller
+          productId: product.id,
+          productName: product.name,
+          price: product.effectivePrice,
+          imageUrls: product.imageUrls,
         );
         cartBox.add(newItem);
         cartItems.add(newItem);
@@ -50,6 +52,7 @@ class CartController extends GetxController {
       Get.snackbar('Error', 'Failed to add to cart: $e');
     }
   }
+
  
   void removeFromCart(CartItemModel item) {
     try {
@@ -85,11 +88,11 @@ class CartController extends GetxController {
   }
 
   bool isInCart(ProductModel product) {
-    return cartItems.any((item) => item.id == product.id);
+    return cartItems.any((item) => item.productId == product.id);
   }
 
   CartItemModel? getCartItem(ProductModel product) {
-    return cartItems.firstWhereOrNull((item) => item.id == product.id);
+    return cartItems.firstWhereOrNull((item) => item.productId == product.id);
   }
 
   double get totalPrice =>

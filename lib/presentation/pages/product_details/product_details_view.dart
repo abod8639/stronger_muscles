@@ -74,13 +74,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Image Thumbnails
-                  if (widget.product.imageUrl.length > 1)
+                  if (widget.product.imageUrls.length > 1)
                     ImageListView(
                       scrollController: _imageScrollController,
                       product: widget.product,
                     ),
                     
-                  if (widget.product.imageUrl.length > 1)
+                  if (widget.product.imageUrls.length > 1)
                     const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Description Section
@@ -101,11 +101,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   /// Shows the image viewer with zoom capability
   void _showImageViewer(BuildContext context, int initialIndex) {
-    if (widget.product.imageUrl.isEmpty) return;
+    if (widget.product.imageUrls.isEmpty) return;
 
     showImageViewer(
       context,
-      Image.network(widget.product.imageUrl[initialIndex]).image,
+      Image.network(widget.product.imageUrls[initialIndex]).image,
       useSafeArea: true,
       swipeDismissible: true,
       doubleTapZoomable: true,

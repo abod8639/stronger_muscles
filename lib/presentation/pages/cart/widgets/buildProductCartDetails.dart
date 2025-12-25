@@ -23,7 +23,7 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
           children: [
             // Product Name
             Text(
-              item.name,
+              item.productName,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontSize: _titleFontSize,
                 fontWeight: FontWeight.bold,
