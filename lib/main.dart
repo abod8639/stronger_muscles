@@ -10,6 +10,7 @@ import 'package:stronger_muscles/firebase_options.dart';
 import 'package:stronger_muscles/functions/init_controllers_app.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
 import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/data/models/category_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
@@ -33,10 +34,12 @@ Future<void> main() async {
   Hive.registerAdapter(AddressModelAdapter());
   Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(ProductModelAdapter());
+  Hive.registerAdapter(CategoryModelAdapter());
   
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');
   await Hive.openBox<String>('wishlist');
+  await Hive.openBox<CategoryModel>('categories');
   await Hive.openBox('settings'); // For theme and language settings
   
   runApp(const MyApp());

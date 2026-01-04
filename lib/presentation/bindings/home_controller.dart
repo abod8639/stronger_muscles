@@ -25,7 +25,7 @@ class HomeController extends GetxController {
     fetchProductsForSection(selectedSectionIndex.value);
   }
 
-  Future<void> fetchProductsForSection(int index) async {
+  Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
     isLoading.value = true;
     isError.value = false;
@@ -34,18 +34,20 @@ class HomeController extends GetxController {
     
     try {
       List<ProductModel> fetchedProducts;
-      String? categoryId;
       
-      switch (index) {
-        case 0: categoryId = null; break;
-        case 1: categoryId = 'cat-protein'; break; // Was cat_supplements
-        case 2: categoryId = 'cat-amino'; break; // Was cat_equipment
-        case 3: categoryId = 'cat-vitamins'; break; // Was cat_clothing
-        case 4: categoryId = 'cat-preworkout'; break; // Was bcaa
-        case 5: categoryId = 'cat-recovery'; break; // Was preworkout
-        case 6: categoryId = 'cat-fatburner'; break; // Was massgainer
-        case 7: categoryId = 'cat-health'; break;
-        default: categoryId = null;
+      // If categoryId is not provided, we might still be using the old index-based logic
+      // but let's prioritize categoryId if present.
+      if (categoryId == null && index != 0) {
+        // Fallback for any legacy calls that don't pass categoryId yet
+        switch (index) {
+          case 1: categoryId = 'cat-protein'; break;
+          case 2: categoryId = 'cat-amino'; break;
+          case 3: categoryId = 'cat-vitamins'; break;
+          case 4: categoryId = 'cat-preworkout'; break;
+          case 5: categoryId = 'cat-recovery'; break;
+          case 6: categoryId = 'cat-fatburner'; break;
+          case 7: categoryId = 'cat-health'; break;
+        }
       }
 
       fetchedProducts = await _productService.getProducts(categoryId: categoryId);

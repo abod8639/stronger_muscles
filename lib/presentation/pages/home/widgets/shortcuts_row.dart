@@ -16,7 +16,7 @@ class ShortcutsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final sectionsController = Get.find<SectionsController>();
 
-    return Padding(
+    return Obx(() => Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: _horizontalPadding,
         vertical: _verticalPadding,
@@ -31,14 +31,8 @@ class ShortcutsRow extends StatelessWidget {
           itemBuilder: (context, index) => buildShortcutItem(index),
         ),
       ),
-    );
+    ));
   }
 }
 
-/// Legacy class name for backward compatibility.
-///
-/// **Deprecated**: Use [ShortcutsRow] instead.
-@Deprecated('Use ShortcutsRow instead')
-class SelectionsRow extends ShortcutsRow {
-  const SelectionsRow({super.key});
-}
+

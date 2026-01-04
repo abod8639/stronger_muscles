@@ -25,7 +25,10 @@ class HomeView extends GetView<HomeController> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
-              onRefresh: () => controller.refreshHome(),
+              onRefresh: () async {
+                await controller.refreshHome();
+                await Get.find<SectionsController>().fetchCategories();
+              },
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 slivers: [
