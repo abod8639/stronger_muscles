@@ -1,4 +1,4 @@
-import 'package:stronger_muscles/data/models/ReviewModel.dart';
+import 'package:stronger_muscles/data/models/review_model.dart';
 
 /// Fake reviews data for testing and demonstration purposes
 class FakeReviews {

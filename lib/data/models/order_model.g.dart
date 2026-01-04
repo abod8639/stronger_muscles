@@ -108,7 +108,7 @@ class OrderItemModelAdapter extends TypeAdapter<OrderItemModel> {
       productName: fields[3] as String,
       unitPrice: fields[4] as double,
       quantity: fields[5] as int,
-      subtotal: fields[6] as double?,
+      subtotal: fields[6] as double,
       imageUrl: fields[7] as String?,
       createdAt: fields[8] as DateTime?,
     );
@@ -148,3 +148,86 @@ class OrderItemModelAdapter extends TypeAdapter<OrderItemModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
+    _$OrderModelImpl(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      orderDate: DateTime.parse(json['order_date'] as String),
+      status: json['status'] as String? ?? 'pending',
+      paymentStatus: json['payment_status'] as String? ?? 'pending',
+      paymentMethod: json['payment_method'] as String? ?? 'card',
+      addressId: json['address_id'] as String,
+      shippingAddressSnapshot: json['shipping_address_snapshot'] as String?,
+      subtotal: (json['subtotal'] as num).toDouble(),
+      shippingCost: (json['shipping_cost'] as num?)?.toDouble() ?? 0,
+      discount: (json['discount'] as num?)?.toDouble() ?? 0,
+      totalAmount: (json['total_amount'] as num).toDouble(),
+      trackingNumber: json['tracking_number'] as String?,
+      notes: json['notes'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
+      items: (json['order_items'] as List<dynamic>?)
+          ?.map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      shippingAddress: json['shipping_address'] as String?,
+    );
+
+Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.userId,
+      'order_date': instance.orderDate.toIso8601String(),
+      'status': instance.status,
+      'payment_status': instance.paymentStatus,
+      'payment_method': instance.paymentMethod,
+      'address_id': instance.addressId,
+      'shipping_address_snapshot': instance.shippingAddressSnapshot,
+      'subtotal': instance.subtotal,
+      'shipping_cost': instance.shippingCost,
+      'discount': instance.discount,
+      'total_amount': instance.totalAmount,
+      'tracking_number': instance.trackingNumber,
+      'notes': instance.notes,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
+      'order_items': instance.items,
+      'shipping_address': instance.shippingAddress,
+    };
+
+_$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
+    _$OrderItemModelImpl(
+      id: json['id'] as String,
+      orderId: json['order_id'] as String,
+      productId: json['product_id'] as String,
+      productName: json['product_name'] as String,
+      unitPrice: (json['unit_price'] as num).toDouble(),
+      quantity: (json['quantity'] as num).toInt(),
+      subtotal: (json['subtotal'] as num).toDouble(),
+      imageUrl: json['image_url'] as String?,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+    );
+
+Map<String, dynamic> _$$OrderItemModelImplToJson(
+        _$OrderItemModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'order_id': instance.orderId,
+      'product_id': instance.productId,
+      'product_name': instance.productName,
+      'unit_price': instance.unitPrice,
+      'quantity': instance.quantity,
+      'subtotal': instance.subtotal,
+      'image_url': instance.imageUrl,
+      'created_at': instance.createdAt?.toIso8601String(),
+    };

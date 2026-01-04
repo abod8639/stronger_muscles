@@ -37,6 +37,10 @@
   "categoryBCAA": "BCAA",
   "categoryPreWorkout": "مكملات الطاقة",
   "categoryMassGainer": "زيادة الوزن",
+  "categoryVitamins": "فيتامينات",
+  "categoryRecovery": "التعافي",
+  "categoryFatBurner": "حرق الدهون",
+  "categoryHealth": "الصحة العامة",
   "myAccount": "حسابي",
   "signOut": "تسجيل الخروج",
   "accountSettings": "إعدادات",
@@ -75,6 +79,7 @@
   "addToCart": "أضف إلى السلة",
   "addNew": "إضافة جديد",
   "viewAll": "عرض الكل",
-  "productDescription": "وصف المنتج"
-
+  "productDescription": "وصف المنتج",
+  "fullName": "الاسم الكامل",
+  "enterName": "يرجى إدخال اسمك الكامل"
 }

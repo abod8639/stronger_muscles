@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/buildProductCartDetails.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/buildProductCartImage.dart';
-import 'package:stronger_muscles/presentation/widgets/buildQuantityControls.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_details.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_image.dart';
+import 'package:stronger_muscles/presentation/widgets/build_quantity_controls.dart';
 
 class CartItemCard extends StatelessWidget {
   // Constants for consistent sizing and spacing

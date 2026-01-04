@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/buildCartContent.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/build_cart_content.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class CartView extends GetView<CartController> {

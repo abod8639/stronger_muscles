@@ -33,9 +33,11 @@ class CartController extends GetxController {
       );
       if (existingItemIndex != -1) {
         final item = cartItems[existingItemIndex];
-        item.quantity++;
-        item.save(); // Hive object save
-        cartItems.refresh();
+        final updatedItem = item.copyWith(quantity: item.quantity + 1);
+        
+        // Update both the box and the observable list
+        cartBox.putAt(existingItemIndex, updatedItem);
+        cartItems[existingItemIndex] = updatedItem;
       } else {
         final newItem = CartItemModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -56,8 +58,11 @@ class CartController extends GetxController {
  
   void removeFromCart(CartItemModel item) {
     try {
-      item.delete(); // Hive object delete
-      cartItems.remove(item);
+      final index = cartItems.indexOf(item);
+      if (index != -1) {
+        cartBox.deleteAt(index);
+        cartItems.removeAt(index);
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to remove from cart: $e');
     }
@@ -65,9 +70,12 @@ class CartController extends GetxController {
 
   void increaseQuantity(CartItemModel item) {
     try {
-      item.quantity++;
-      item.save();
-      cartItems.refresh();
+      final index = cartItems.indexOf(item);
+      if (index != -1) {
+        final updatedItem = item.copyWith(quantity: item.quantity + 1);
+        cartBox.putAt(index, updatedItem);
+        cartItems[index] = updatedItem;
+      }
     } catch (e) {
       Get.snackbar('Error', 'Failed to update quantity: $e');
     }
@@ -75,12 +83,15 @@ class CartController extends GetxController {
 
   void decreaseQuantity(CartItemModel item) {
     try {
-      if (item.quantity > 1) {
-        item.quantity--;
-        item.save();
-        cartItems.refresh();
-      } else {
-        removeFromCart(item);
+      final index = cartItems.indexOf(item);
+      if (index != -1) {
+        if (item.quantity > 1) {
+          final updatedItem = item.copyWith(quantity: item.quantity - 1);
+          cartBox.putAt(index, updatedItem);
+          cartItems[index] = updatedItem;
+        } else {
+          removeFromCart(item);
+        }
       }
     } catch (e) {
       Get.snackbar('Error', 'Failed to update quantity: $e');

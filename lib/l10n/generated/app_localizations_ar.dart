@@ -121,6 +121,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categoryMassGainer => 'زيادة الوزن';
 
   @override
+  String get categoryVitamins => 'فيتامينات';
+
+  @override
+  String get categoryRecovery => 'التعافي';
+
+  @override
+  String get categoryFatBurner => 'حرق الدهون';
+
+  @override
+  String get categoryHealth => 'الصحة العامة';
+
+  @override
   String get myAccount => 'حسابي';
 
   @override
@@ -237,4 +249,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get productDescription => 'وصف المنتج';
+
+  @override
+  String get fullName => 'الاسم الكامل';
+
+  @override
+  String get enterName => 'يرجى إدخال اسمك الكامل';
 }

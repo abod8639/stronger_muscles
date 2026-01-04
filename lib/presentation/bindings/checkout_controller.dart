@@ -74,6 +74,7 @@ class CheckoutController extends GetxController {
           productName: item.productName,
           unitPrice: item.price,
           quantity: item.quantity,
+          subtotal: item.price * item.quantity,
           imageUrl: item.imageUrls.isNotEmpty ? item.imageUrls.first : null,
         )).toList(),
         shippingAddress: selectedAddress.value!.street, // Simplified for now

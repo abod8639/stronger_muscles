@@ -6,17 +6,17 @@ part of 'cart_item_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
+class CartItemModelAdapter extends TypeAdapter<_$CartItemModelImpl> {
   @override
   final int typeId = 0;
 
   @override
-  CartItemModel read(BinaryReader reader) {
+  _$CartItemModelImpl read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CartItemModel(
+    return _$CartItemModelImpl(
       id: fields[0] as String,
       userId: fields[1] as String,
       productId: fields[2] as String,
@@ -29,7 +29,7 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
   }
 
   @override
-  void write(BinaryWriter writer, CartItemModel obj) {
+  void write(BinaryWriter writer, _$CartItemModelImpl obj) {
     writer
       ..writeByte(8)
       ..writeByte(0)
@@ -42,12 +42,12 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
       ..write(obj.productName)
       ..writeByte(4)
       ..write(obj.price)
-      ..writeByte(5)
-      ..write(obj.imageUrls)
       ..writeByte(6)
       ..write(obj.quantity)
       ..writeByte(7)
-      ..write(obj.addedAt);
+      ..write(obj.addedAt)
+      ..writeByte(5)
+      ..write(obj.imageUrls);
   }
 
   @override
@@ -60,3 +60,36 @@ class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$CartItemModelImpl _$$CartItemModelImplFromJson(Map<String, dynamic> json) =>
+    _$CartItemModelImpl(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      productId: json['product_id'] as String,
+      productName: json['product_name'] as String,
+      price: (json['price'] as num).toDouble(),
+      imageUrls: (json['image_urls'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      addedAt: json['added_at'] == null
+          ? null
+          : DateTime.parse(json['added_at'] as String),
+    );
+
+Map<String, dynamic> _$$CartItemModelImplToJson(_$CartItemModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.userId,
+      'product_id': instance.productId,
+      'product_name': instance.productName,
+      'price': instance.price,
+      'image_urls': instance.imageUrls,
+      'quantity': instance.quantity,
+      'added_at': instance.addedAt?.toIso8601String(),
+    };

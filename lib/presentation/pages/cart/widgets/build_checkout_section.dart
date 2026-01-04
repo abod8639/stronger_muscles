@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/checkoutButton.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/totalPriceSection.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/checkout_button.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/total_price_section.dart';
 
 
 

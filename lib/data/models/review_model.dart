@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'ReviewModel.g.dart';
+part 'review_model.g.dart';
 
 @HiveType(typeId: 8)
 class ReviewModel extends HiveObject {

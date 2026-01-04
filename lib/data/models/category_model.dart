@@ -41,11 +41,11 @@ class CategoryModel extends HiveObject {
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       description: json['description'],
-      imageUrl: json['imageUrl'],
-      sortOrder: json['sortOrder'] ?? 0,
-      isActive: json['isActive'] ?? true,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
+      imageUrl: json['image_url'],
+      sortOrder: json['sort_order'] ?? 0,
+      isActive: json['is_active'] == 1 || json['is_active'] == true,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
           : DateTime.now(),
     );
   }
@@ -55,10 +55,10 @@ class CategoryModel extends HiveObject {
         'id': id,
         'name': name,
         'description': description,
-        'imageUrl': imageUrl,
-        'sortOrder': sortOrder,
-        'isActive': isActive,
-        'createdAt': createdAt.toIso8601String(),
+        'image_url': imageUrl,
+        'sort_order': sortOrder,
+        'is_active': isActive,
+        'created_at': createdAt.toIso8601String(),
       };
 
   /// Create a copy with updated fields

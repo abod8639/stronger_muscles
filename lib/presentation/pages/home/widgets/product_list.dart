@@ -26,8 +26,47 @@ class ProductList extends StatelessWidget {
         );
       }
 
+      // Error state
+      if (controller.isError.value) {
+        return SliverToBoxAdapter(
+          child: Center(
+            heightFactor: 3,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    controller.isConnectionError.value ? Icons.wifi_off_rounded : Icons.error_outline_rounded,
+                    size: 64.0,
+                    color: Colors.red.withOpacity(0.5),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Text(
+                    controller.errorMessage.value,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                  if (controller.isConnectionError.value) ...[
+                    const SizedBox(height: 16.0),
+                    ElevatedButton.icon(
+                      onPressed: () => controller.fetchProductsForSection(controller.selectedSectionIndex.value),
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('إعادة محاولة'),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
       // Empty state
       if (controller.products.isEmpty) {
+
         return SliverToBoxAdapter(
           child: Center(
             heightFactor: 3,

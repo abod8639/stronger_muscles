@@ -13,6 +13,7 @@ class PaymobConstants {
   static final String paymentKey = dotenv.env['PAYMENT_KEY'] ?? 'fallback_key';
 
 /////////////////////////////////////////////////////////////////////////////////////
+
   static final String integrationId = dotenv.env['integrationId'] ?? 'fallback_key';
   static const String authEndpoint = '/auth/tokens';
   static const String orderEndpoint = '/ecommerce/orders';

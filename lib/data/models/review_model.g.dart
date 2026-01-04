@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ReviewModel.dart';
+part of 'review_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

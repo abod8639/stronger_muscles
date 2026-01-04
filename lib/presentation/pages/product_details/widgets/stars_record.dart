@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/data/models/ReviewModel.dart';
+import 'package:stronger_muscles/data/models/review_model.dart';
 
 class StarsRecord extends StatelessWidget {
   final List<ReviewModel> reviews;

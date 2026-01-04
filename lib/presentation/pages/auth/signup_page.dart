@@ -13,6 +13,7 @@ class SignUpPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+    final nameController = TextEditingController();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final confirmPasswordController = TextEditingController();
@@ -44,6 +45,18 @@ class SignUpPage extends GetView<AuthController> {
                 ),
               ),
               const SizedBox(height: 32.0),
+              AuthTextField(
+                controller: nameController,
+                label: AppLocalizations.of(context)!.fullName,
+                icon: Icons.person_outline,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return AppLocalizations.of(context)!.enterName;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
               AuthTextField(
                 controller: emailController,
                 label: AppLocalizations.of(context)!.email,
@@ -102,6 +115,7 @@ class SignUpPage extends GetView<AuthController> {
                             controller.signUpWithEmail(
                               emailController.text.trim(),
                               passwordController.text,
+                              nameController.text.trim(),
                             );
                           }
                         },

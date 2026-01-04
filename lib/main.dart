@@ -4,6 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/data/models/user_model.dart';
 import 'package:stronger_muscles/firebase_options.dart';
 import 'package:stronger_muscles/functions/init_controllers_app.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
@@ -27,7 +29,10 @@ Future<void> main() async {
   // Register Adapters
   Hive.registerAdapter(CartItemModelAdapter());
   Hive.registerAdapter(OrderModelAdapter());
+  Hive.registerAdapter(OrderItemModelAdapter());
   Hive.registerAdapter(AddressModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(ProductModelAdapter());
   
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');

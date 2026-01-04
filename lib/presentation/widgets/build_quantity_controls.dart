@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/functions/doubleTapPrevention.dart';
-import 'package:stronger_muscles/functions/handleDeleteFromCart.dart';
+import 'package:stronger_muscles/functions/double_tap_prevention.dart';
+import 'package:stronger_muscles/functions/handle_delete_from_cart.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
 

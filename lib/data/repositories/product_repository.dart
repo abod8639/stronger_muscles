@@ -1,5 +1,6 @@
-import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/data/models/category_model.dart';
+import '../../data/models/product_model.dart';
+import '../../data/models/category_model.dart';
+import 'package:collection/collection.dart';
 
 class ProductRepository {
   // This is a dummy repository to simulate fetching product details.
@@ -82,16 +83,6 @@ class ProductRepository {
   }
 }
 
-extension ListExtension<T> on List<T> {
-  T? firstWhereOrNull(bool Function(T element) test) {
-    for (var element in this) {
-      if (test(element)) {
-        return element;
-      }
-    }
-    return null;
-  }
-}
 
 // Dummy product data with new structure
 final List<ProductModel> dummyProducts = [
@@ -109,7 +100,7 @@ final List<ProductModel> dummyProducts = [
     description: 'High-quality whey protein for muscle growth.',
     categoryId: 'protein',
     stockQuantity: 50,
-    averageRating: 4.8,
+    // averageRating: 4.8,
     reviewCount: 125,
     brand: 'Optimum Nutrition',
     servingSize: '30g',

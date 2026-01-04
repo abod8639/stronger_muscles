@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/ReviewModel.dart';
+import 'package:stronger_muscles/data/models/review_model.dart';
 
 class ShowReviewsList extends StatelessWidget {
   final List<ReviewModel> reviews;

@@ -37,6 +37,10 @@
   "categoryBCAA": "BCAA",
   "categoryPreWorkout": "Pre-workout",
   "categoryMassGainer": "Mass Gainer",
+  "categoryVitamins": "Vitamins",
+  "categoryRecovery": "Recovery",
+  "categoryFatBurner": "Fat Burner",
+  "categoryHealth": "Health",
   "myAccount": "My Account",
   "signOut": "Sign Out",
   "accountSettings": "Settings",
@@ -75,5 +79,7 @@
   "addToCart": "Add to Cart",
   "addNew": "Add New",
   "viewAll": "View All",
-  "productDescription": "Product Description"
+  "productDescription": "Product Description",
+  "fullName": "Full Name",
+  "enterName": "Please enter your full name"
 }

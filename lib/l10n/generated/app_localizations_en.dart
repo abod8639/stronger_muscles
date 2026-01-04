@@ -121,6 +121,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryMassGainer => 'Mass Gainer';
 
   @override
+  String get categoryVitamins => 'Vitamins';
+
+  @override
+  String get categoryRecovery => 'Recovery';
+
+  @override
+  String get categoryFatBurner => 'Fat Burner';
+
+  @override
+  String get categoryHealth => 'Health';
+
+  @override
   String get myAccount => 'My Account';
 
   @override
@@ -237,4 +249,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productDescription => 'Product Description';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get enterName => 'Please enter your full name';
 }

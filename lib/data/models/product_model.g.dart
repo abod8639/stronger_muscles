@@ -84,3 +84,54 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
+    _$ProductModelImpl(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      price: (json['price'] as num).toDouble(),
+      discountPrice: (json['discountPrice'] as num?)?.toDouble(),
+      imageUrls: (json['imageUrls'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      description: json['description'] as String,
+      categoryId: json['categoryId'] as String,
+      stockQuantity: (json['stockQuantity'] as num?)?.toInt() ?? 0,
+      averageRating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
+      brand: json['brand'] as String?,
+      servingSize: json['servingSize'] as String?,
+      servingsPerContainer: (json['servingsPerContainer'] as num?)?.toInt(),
+      isActive: json['isActive'] as bool? ?? true,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
+    );
+
+Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'price': instance.price,
+      'discountPrice': instance.discountPrice,
+      'imageUrls': instance.imageUrls,
+      'description': instance.description,
+      'categoryId': instance.categoryId,
+      'stockQuantity': instance.stockQuantity,
+      'averageRating': instance.averageRating,
+      'reviewCount': instance.reviewCount,
+      'brand': instance.brand,
+      'servingSize': instance.servingSize,
+      'servingsPerContainer': instance.servingsPerContainer,
+      'isActive': instance.isActive,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
+    };

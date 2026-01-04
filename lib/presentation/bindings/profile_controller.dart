@@ -59,7 +59,8 @@ class ProfileController extends GetxController {
             productName: 'Whey Protein',
             unitPrice: 899.99,
             quantity: 2,
-            imageUrl:'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000',
+            subtotal: 1799.98,
+            imageUrl:'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000', 
           ),
         ],
         shippingAddress: 'Cairo, Egypt',
@@ -77,6 +78,8 @@ class ProfileController extends GetxController {
         totalAmount: 499.99,
         items: [
           OrderItemModel(
+            subtotal: 499.99,
+            createdAt: DateTime.now(),
             id: 'item2',
             orderId: 'ORD002',
             productId: '2',

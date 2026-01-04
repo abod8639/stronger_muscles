@@ -420,6 +420,46 @@ class S {
     );
   }
 
+  /// `Vitamins`
+  String get categoryVitamins {
+    return Intl.message(
+      'Vitamins',
+      name: 'categoryVitamins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recovery`
+  String get categoryRecovery {
+    return Intl.message(
+      'Recovery',
+      name: 'categoryRecovery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fat Burner`
+  String get categoryFatBurner {
+    return Intl.message(
+      'Fat Burner',
+      name: 'categoryFatBurner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Health`
+  String get categoryHealth {
+    return Intl.message(
+      'Health',
+      name: 'categoryHealth',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My Account`
   String get myAccount {
     return Intl.message(
@@ -805,6 +845,26 @@ class S {
     return Intl.message(
       'Product Description',
       name: 'productDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full Name`
+  String get fullName {
+    return Intl.message(
+      'Full Name',
+      name: 'fullName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your full name`
+  String get enterName {
+    return Intl.message(
+      'Please enter your full name',
+      name: 'enterName',
       desc: '',
       args: [],
     );

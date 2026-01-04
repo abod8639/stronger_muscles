@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildDescriptionSection.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductName.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductPrice.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildShowReviewsListSection.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_description_section.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_name.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_show_reviews_list_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 

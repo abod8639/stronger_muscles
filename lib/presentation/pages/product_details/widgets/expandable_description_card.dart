@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/ReviewModel.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/HeaderWithIconandTitle.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/StarsRecord.dart';
+import 'package:stronger_muscles/data/models/review_model.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/header_with_icon_and_title.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/stars_record.dart';
 
 /// A beautiful expandable description card with animations
 class ExpandableDescriptionCard extends StatefulWidget {

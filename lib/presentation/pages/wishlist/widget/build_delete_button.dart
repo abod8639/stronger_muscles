@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/functions/%20handleDeleteFromWishlist.dart';
+import 'package:stronger_muscles/functions/handle_delete_from_wishlist.dart';
 
 /// Builds the delete button with semantic label for accessibility
   Widget buildDeleteButtonFromWishlist(ProductModel product) {

@@ -17,9 +17,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return UserModel(
-      id: fields[0] as String,
+      id: fields[0] as int,
       email: fields[1] as String,
-      displayName: fields[2] as String?,
+      name: fields[2] as String,
       photoUrl: fields[3] as String?,
       phoneNumber: fields[4] as String?,
       defaultAddressId: fields[5] as String?,
@@ -27,8 +27,8 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       notificationsEnabled: fields[7] as bool,
       isActive: fields[8] as bool,
       createdAt: fields[9] as DateTime?,
-      updatedAt: fields[10] as DateTime?,
-      lastLogin: fields[11] as DateTime?,
+      lastLogin: fields[10] as DateTime?,
+      token: fields[11] as String?,
     );
   }
 
@@ -41,7 +41,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(1)
       ..write(obj.email)
       ..writeByte(2)
-      ..write(obj.displayName)
+      ..write(obj.name)
       ..writeByte(3)
       ..write(obj.photoUrl)
       ..writeByte(4)
@@ -57,9 +57,9 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(9)
       ..write(obj.createdAt)
       ..writeByte(10)
-      ..write(obj.updatedAt)
+      ..write(obj.lastLogin)
       ..writeByte(11)
-      ..write(obj.lastLogin);
+      ..write(obj.token);
   }
 
   @override
@@ -72,3 +72,43 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
+    _$UserModelImpl(
+      id: (json['id'] as num).toInt(),
+      email: json['email'] as String,
+      name: json['name'] as String,
+      photoUrl: json['photo_url'] as String?,
+      phoneNumber: json['phone_number'] as String?,
+      defaultAddressId: json['default_address_id'] as String?,
+      preferredLanguage: json['preferred_language'] as String? ?? 'ar',
+      notificationsEnabled: json['notifications_enabled'] as bool? ?? true,
+      isActive: json['is_active'] as bool? ?? true,
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      lastLogin: json['last_login'] == null
+          ? null
+          : DateTime.parse(json['last_login'] as String),
+      token: json['token'] as String?,
+    );
+
+Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'email': instance.email,
+      'name': instance.name,
+      'photo_url': instance.photoUrl,
+      'phone_number': instance.phoneNumber,
+      'default_address_id': instance.defaultAddressId,
+      'preferred_language': instance.preferredLanguage,
+      'notifications_enabled': instance.notificationsEnabled,
+      'is_active': instance.isActive,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'last_login': instance.lastLogin?.toIso8601String(),
+      'token': instance.token,
+    };

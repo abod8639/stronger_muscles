@@ -97,16 +97,18 @@ String getLocalizedLabel(BuildContext context, String key) {
       return localizations.categoryHome;
     case 'categoryProtein':
       return localizations.categoryProtein;
-    case 'categoryCreatine':
-      return localizations.categoryCreatine;
     case 'categoryAmino':
       return localizations.categoryAmino;
-    case 'categoryBCAA':
-      return localizations.categoryBCAA;
+    case 'categoryVitamins':
+      return localizations.categoryVitamins;
     case 'categoryPreWorkout':
       return localizations.categoryPreWorkout;
-    case 'categoryMassGainer':
-      return localizations.categoryMassGainer;
+    case 'categoryRecovery':
+      return localizations.categoryRecovery;
+    case 'categoryFatBurner':
+      return localizations.categoryFatBurner;
+    case 'categoryHealth':
+      return localizations.categoryHealth;
     default:
       return key;
   }

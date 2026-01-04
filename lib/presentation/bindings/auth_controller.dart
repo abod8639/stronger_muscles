@@ -1,108 +1,113 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../core/services/auth_service.dart';
+import '../../data/models/user_model.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  final AuthService _authService = Get.put(
+    AuthService(),
+  ); // Ensure AuthService is initialized
+
   final RxBool isLoading = false.obs;
-  // Google OAuth client ID (used by web/iOS config or manual flows).
-  // Keep the ID here so it can be referenced where necessary.
-  // static const String googleClientId =
-  //     '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
+  final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
 
   static const String webClientId =
       '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
 
-  // Use GoogleSignIn singleton instance
-  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  @override
+  void onInit() {
+    super.onInit();
+    _checkCurrentUser();
+  }
+
+  Future<void> _checkCurrentUser() async {
+    final user = await _authService.getCurrentUser();
+    if (user != null) {
+      currentUser.value = user;
+    }
+  }
 
   Future<User?> signInWithGoogle() async {
     try {
       isLoading.value = true;
-      
-      // Initialize GoogleSignIn with serverClientId for Android
-      await _googleSignIn.initialize(
-        serverClientId: webClientId,
-      );
-      
-      // Trigger the interactive sign-in flow using the plugin's authenticate
-      // method (this version returns an account where `authentication` may
-      // expose only `idToken`).
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      await _googleSignIn.initialize(serverClientId: webClientId);
+      final GoogleSignInAccount googleUser = await _googleSignIn
+          .authenticate();
 
-      // Obtain the auth details from the request (idToken expected)
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      // if (googleUser == null) return null;
 
-      // Create a new credential. accessToken may be unavailable on some
-      // platforms, so pass null for accessToken.
+      final GoogleSignInAuthentication googleAuth =
+          googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         accessToken: null,
       );
 
-      // Once signed in, return the Firebase user
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
+
+      // TODO: Sync with Backend API using the ID token or user details?
+      // For now, we return Firebase User, but ideally we calls api to register/login in backend
+
       return userCredential.user;
     } catch (e) {
       Get.snackbar('Error', 'Google Sign-In failed: ${e.toString()}');
-      print('Google Sign-In failed: ${e.toString()}');
       return null;
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<User?> signInWithEmail(String email, String password) async {
+  Future<void> signInWithEmail(String email, String password) async {
     try {
       isLoading.value = true;
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
+      // 1. Firebase Login (Optional, based on requirement)
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      // 2. Backend API Login
+      final user = await _authService.login(email: email, password: password);
+      currentUser.value = user;
+
+      Get.offAllNamed('/home'); // Or main route
     } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred';
-      if (e.code == 'user-not-found') {
-        message = 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        message = 'Wrong password provided.';
-      } else {
-        message = e.message ?? message;
-      }
-      Get.snackbar('Error', message);
-      return null;
+      Get.snackbar('Auth Error', e.message ?? 'Login failed');
     } catch (e) {
       Get.snackbar('Error', e.toString());
-      return null;
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<User?> signUpWithEmail(String email, String password) async {
+  Future<void> signUpWithEmail(
+    String email,
+    String password,
+    String name,
+  ) async {
     try {
       isLoading.value = true;
-      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      // 1. Firebase Register
+      await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
+
+      // 2. Backend API Register
+      final user = await _authService.register(
+        email: email,
+        password: password,
+        name: name,
+      );
+      currentUser.value = user;
+
+      Get.offAllNamed('/home');
     } on FirebaseAuthException catch (e) {
-      String message = 'An error occurred';
-      if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'The account already exists for that email.';
-      } else {
-        message = e.message ?? message;
-      }
-      Get.snackbar('Error', message);
-      return null;
+      Get.snackbar('Auth Error', e.message ?? 'Registration failed');
     } catch (e) {
       Get.snackbar('Error', e.toString());
-      return null;
     } finally {
       isLoading.value = false;
     }
@@ -111,5 +116,8 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();
+    await _authService.logout();
+    currentUser.value = null;
+    Get.offAllNamed('/login'); // Adjust route
   }
 }

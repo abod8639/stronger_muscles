@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/buildDeleteButton.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/buildProductDetails.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/buildProductImage.dart';
+import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_delete_button.dart';
+import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_details.dart';
+import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_image.dart';
 
 class WishlistItemCard extends StatelessWidget {
   // Constants for consistent sizing and spacing

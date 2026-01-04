@@ -320,6 +320,30 @@ abstract class AppLocalizations {
   /// **'Mass Gainer'**
   String get categoryMassGainer;
 
+  /// No description provided for @categoryVitamins.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamins'**
+  String get categoryVitamins;
+
+  /// No description provided for @categoryRecovery.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery'**
+  String get categoryRecovery;
+
+  /// No description provided for @categoryFatBurner.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat Burner'**
+  String get categoryFatBurner;
+
+  /// No description provided for @categoryHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get categoryHealth;
+
   /// No description provided for @myAccount.
   ///
   /// In en, this message translates to:
@@ -553,6 +577,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Product Description'**
   String get productDescription;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @enterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your full name'**
+  String get enterName;
 }
 
 class _AppLocalizationsDelegate

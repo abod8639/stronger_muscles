@@ -40,12 +40,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "categoryAmino": MessageLookupByLibrary.simpleMessage("أمينو"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
         "categoryCreatine": MessageLookupByLibrary.simpleMessage("كرياتين"),
+        "categoryFatBurner": MessageLookupByLibrary.simpleMessage("حرق الدهون"),
+        "categoryHealth": MessageLookupByLibrary.simpleMessage("الصحة العامة"),
         "categoryHome": MessageLookupByLibrary.simpleMessage("الرئيسية"),
         "categoryMassGainer":
             MessageLookupByLibrary.simpleMessage("زيادة الوزن"),
         "categoryPreWorkout":
             MessageLookupByLibrary.simpleMessage("مكملات الطاقة"),
         "categoryProtein": MessageLookupByLibrary.simpleMessage("بروتين"),
+        "categoryRecovery": MessageLookupByLibrary.simpleMessage("التعافي"),
+        "categoryVitamins": MessageLookupByLibrary.simpleMessage("فيتامينات"),
         "checkout": MessageLookupByLibrary.simpleMessage("الدفع"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
@@ -62,6 +66,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "english": MessageLookupByLibrary.simpleMessage("الإنجليزية"),
         "enterEmail": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال البريد الإلكتروني"),
+        "enterName":
+            MessageLookupByLibrary.simpleMessage("يرجى إدخال اسمك الكامل"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
         "filter": MessageLookupByLibrary.simpleMessage("تصفية"),
@@ -71,6 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
         "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
             "نسيت كلمة المرور لم يتم تنفيذها بعد"),
+        "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
         "getDiscount": MessageLookupByLibrary.simpleMessage(
             "احصل على خصم 20% على جميع المنتجات"),
         "helpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),

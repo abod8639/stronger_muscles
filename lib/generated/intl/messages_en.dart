@@ -40,12 +40,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "categoryAmino": MessageLookupByLibrary.simpleMessage("Amino"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
         "categoryCreatine": MessageLookupByLibrary.simpleMessage("Creatine"),
+        "categoryFatBurner": MessageLookupByLibrary.simpleMessage("Fat Burner"),
+        "categoryHealth": MessageLookupByLibrary.simpleMessage("Health"),
         "categoryHome": MessageLookupByLibrary.simpleMessage("Home"),
         "categoryMassGainer":
             MessageLookupByLibrary.simpleMessage("Mass Gainer"),
         "categoryPreWorkout":
             MessageLookupByLibrary.simpleMessage("Pre-workout"),
         "categoryProtein": MessageLookupByLibrary.simpleMessage("Protein"),
+        "categoryRecovery": MessageLookupByLibrary.simpleMessage("Recovery"),
+        "categoryVitamins": MessageLookupByLibrary.simpleMessage("Vitamins"),
         "checkout": MessageLookupByLibrary.simpleMessage("Checkout"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
@@ -61,6 +65,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "english": MessageLookupByLibrary.simpleMessage("English"),
         "enterEmail":
             MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "enterName":
+            MessageLookupByLibrary.simpleMessage("Please enter your full name"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
         "filter": MessageLookupByLibrary.simpleMessage("Filter"),
@@ -70,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot Password?"),
         "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
             "Forgot password not implemented yet"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
         "getDiscount":
             MessageLookupByLibrary.simpleMessage("Get 20% off on all products"),
         "helpSupport": MessageLookupByLibrary.simpleMessage("Help & Support"),

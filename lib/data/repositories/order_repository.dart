@@ -1,4 +1,4 @@
-import 'package:stronger_muscles/data/models/order_model.dart';
+import '../../data/models/order_model.dart';
 
 class OrderRepository {
   Future<void> createOrder(OrderModel order) async {
