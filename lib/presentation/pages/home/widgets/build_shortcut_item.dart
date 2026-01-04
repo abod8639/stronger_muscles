@@ -109,6 +109,8 @@ String getLocalizedLabel(BuildContext context, String key) {
       return localizations.categoryFatBurner;
     case 'categoryHealth':
       return localizations.categoryHealth;
+    case 'Creatine':
+      return localizations.categoryCreatine;
     default:
       return key;
   }

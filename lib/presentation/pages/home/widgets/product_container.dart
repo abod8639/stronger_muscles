@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/image_indicators.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/image_section.dart';
@@ -115,13 +116,27 @@ class _ProductContainerState extends State<ProductContainer> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'LE ${widget.product.price.toStringAsFixed(2)}',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
+                 Wrap(
+          spacing: 8,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Text(
+              'LE ${widget.product.effectivePrice.toStringAsFixed(2)}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: AppColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            if (widget.product.hasDiscount)
+              Text(
+                'LE ${widget.product.price.toStringAsFixed(2)}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: Colors.grey,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+          ],
+        ),
                         if (widget.product.reviewCount > 0)
                           Row(
                             children: [

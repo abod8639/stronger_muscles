@@ -43,54 +43,7 @@ class ProfileController extends GetxController {
     // In production, load from Firebase or API
     orders.value = [
 
-      OrderModel(
-        id: 'ORD001',
-        userId: currentUser.value?.uid ?? '',
-        orderDate: DateTime.now().subtract(const Duration(days: 2)),
-        status: 'delivered',
-        addressId: 'ADDR001',
-        subtotal: 1799.98,
-        totalAmount: 1799.98,
-        items: [
-          OrderItemModel(
-            id: 'item1',
-            orderId: 'ORD001',
-            productId: '1',
-            productName: 'Whey Protein',
-            unitPrice: 899.99,
-            quantity: 2,
-            subtotal: 1799.98,
-            imageUrl:'https://wayupsports.com/cdn/shop/files/10843.jpg?v=1756650182&width=1000', 
-          ),
-        ],
-        shippingAddress: 'Cairo, Egypt',
-        trackingNumber: 'TRK123456',
-      ),
 
-      
-      OrderModel(
-        id: 'ORD002',
-        userId: currentUser.value?.uid ?? '',
-        orderDate: DateTime.now().subtract(const Duration(days: 7)),
-        status: 'delivered',
-        addressId: 'ADDR001',
-        subtotal: 499.99,
-        totalAmount: 499.99,
-        items: [
-          OrderItemModel(
-            subtotal: 499.99,
-            createdAt: DateTime.now(),
-            id: 'item2',
-            orderId: 'ORD002',
-            productId: '2',
-            productName: 'Creatine Monohydrate',
-            unitPrice: 499.99,
-            quantity: 1,
-            imageUrl: 'https://images.unsplash.com/photo-1579722821273-0f6c7d44362f',
-          ),
-        ],
-        shippingAddress: 'Cairo, Egypt',
-      ),
     ];
   }
 
