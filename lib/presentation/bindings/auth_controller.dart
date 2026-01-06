@@ -71,7 +71,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> signInWithEmail(String email, String password) async {
+Future<void> signInWithEmail({
+  required String email, 
+  required String password}) async {
     try {
       isLoading.value = true;
       // 1. Firebase Login (Optional, based on requirement)

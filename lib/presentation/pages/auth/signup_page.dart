@@ -19,12 +19,16 @@ class SignUpPage extends GetView<AuthController> {
     final confirmPasswordController = TextEditingController();
     final theme = Theme.of(context);
 
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: formKey,
-          child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Form(
+            key: formKey,
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -159,7 +163,7 @@ class SignUpPage extends GetView<AuthController> {
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   TextButton(
-                    onPressed: ()=> Get.to(SignInPage()  ),
+                    onPressed: () => Get.to(() => const SignInPage()),
                     child: Text(
                       AppLocalizations.of(context)!.login,
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -170,6 +174,7 @@ class SignUpPage extends GetView<AuthController> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

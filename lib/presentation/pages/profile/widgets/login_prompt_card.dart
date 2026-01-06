@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/presentation/pages/auth/auth_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
 
 class LoginPromptCard extends StatelessWidget {
@@ -60,15 +61,34 @@ class LoginPromptCard extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           ElevatedButton.icon(
-            onPressed: () async {
-              await controller.signInWithGoogle();
-            },
+            onPressed: () => Get.to(() => const AuthView()),
             icon: const Icon(Icons.login),
-            label: const Text('Sign in with Google'),
+            label: const Text('Login / Register'),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 2,
+            ),
+          ),
+
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () async {
+              await controller.signInWithGoogle();
+            },
+            icon: const Icon(Icons.g_mobiledata_outlined,
+            size: 35,
+            ),
+            label: const Text('Sign in with Google'),
+            style: ElevatedButton.styleFrom(
+              
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),

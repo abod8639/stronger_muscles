@@ -96,14 +96,6 @@ class MyBottomNavigationBar extends StatelessWidget {
         label: 'Profile',
         tooltip: 'Navigate to Profile',
       ),
-      BottomNavigationBarItem(
-        icon: Icon(
-          Icons.input_sharp,
-          size: _iconSize,
-        ),
-        label: 'Profile',
-        tooltip: 'Navigate to Profile',
-      ),
     ];
   }
 }
