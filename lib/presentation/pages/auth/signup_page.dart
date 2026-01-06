@@ -144,7 +144,7 @@ class SignUpPage extends GetView<AuthController> {
                             const SizedBox(height: 24.0),
               OutlinedButton.icon(
                 onPressed: () => controller.signInWithGoogle(),
-                icon: const Icon(Icons.g_mobiledata, size: 28), // Using built-in icon as placeholder
+                icon: const Icon(Icons.g_mobiledata, size: 30), // Using built-in icon as placeholder
                 label: Text(AppLocalizations.of(context)!.signInWithGoogle),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
