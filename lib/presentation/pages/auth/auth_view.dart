@@ -19,7 +19,7 @@ class AuthView extends GetView<AuthController> {
             transitionBuilder: (child, animation) {
               return FadeTransition(opacity: animation, child: child);
             },
-            child: isSignIn.value
+            child: isSignIn.value 
                 ? SignInPage(onSignUpTap: () => isSignIn.value = false)
                 : SignUpPage(onSignInTap: () => isSignIn.value = true),
           ),

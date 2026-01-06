@@ -41,17 +41,13 @@ class ImageListView extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: product.imageUrls.length,
         physics: const BouncingScrollPhysics(),
-        itemBuilder: (context, index) => _buildThumbnail(
-          controller,
-          index,
-        ),
+        itemBuilder: (context, index) => _buildThumbnail(controller, index),
       ),
     );
   }
 
   /// Builds a single thumbnail image
-  Widget _buildThumbnail( ProductDetailsController controller,int index ) {
-
+  Widget _buildThumbnail(ProductDetailsController controller, int index) {
     return Semantics(
       label: 'Product image ${index + 1} of ${product.imageUrls.length}',
       button: true,
@@ -66,9 +62,7 @@ class ImageListView extends StatelessWidget {
             padding: const EdgeInsets.all(_padding),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected
-                    ? AppColors.primary
-                    : Colors.transparent,
+                color: isSelected ? AppColors.primary : Colors.transparent,
                 width: _borderWidth,
               ),
               borderRadius: BorderRadius.circular(_borderRadius),
@@ -84,7 +78,7 @@ class ImageListView extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(_borderRadius - _padding),
-              child: _buildThumbnailImage( index),
+              child: _buildThumbnailImage(index),
             ),
           );
         }),
@@ -93,13 +87,12 @@ class ImageListView extends StatelessWidget {
   }
 
   /// Builds the thumbnail image with error handling
-  Widget _buildThumbnailImage( int index ) {
-
+  Widget _buildThumbnailImage(int index) {
     final imageUrl = product.imageUrls[index];
 
     return Builder(
       builder: (context) {
-    final theme = Theme.of(context);
+        final theme = Theme.of(context);
         return CachedNetworkImage(
           imageUrl: imageUrl,
           fit: BoxFit.cover,
@@ -120,7 +113,7 @@ class ImageListView extends StatelessWidget {
               ),
             ),
           ),
-        
+
           errorWidget: (context, url, error) => Container(
             width: _thumbnailSize,
             height: _thumbnailSize,
@@ -131,9 +124,8 @@ class ImageListView extends StatelessWidget {
               size: 32.0,
             ),
           ),
-          
         );
-      }
+      },
     );
   }
 }

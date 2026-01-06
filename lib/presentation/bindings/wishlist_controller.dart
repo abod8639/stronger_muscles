@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -10,8 +11,8 @@ class WishlistController extends GetxController {
   late Box<String> wishlistBox;
   final ProductRepository _productRepository = ProductRepository();
   StreamSubscription<BoxEvent>? _wishlistSubscription;
-// lllll
-// ttttt 
+  // lllll
+  // ttttt
   @override
   void onInit() {
     super.onInit();
@@ -47,11 +48,28 @@ class WishlistController extends GetxController {
   }
 
   Future<void> _loadWishlistItems() async {
+    print(wishlistItems);
+    print(wishlistItems.length);
     try {
       // Using a temporary list to avoid multiple UI updates while looping
       final List<ProductModel> items = [];
       for (var productId in wishlistBox.keys) {
-        final product = await _productRepository.getProductById(productId);
+        final stored = wishlistBox.get(productId);
+        ProductModel? product;
+        if (stored is String && stored.trim().startsWith('{')) {
+          try {
+            final Map<String, dynamic> json = jsonDecode(stored);
+            product = ProductModel.fromJson(json);
+          } catch (_) {
+            product = null;
+          }
+        }
+
+        // Fallback to repository lookup if we couldn't decode stored value
+        if (product == null) {
+          product = await _productRepository.getProductById(productId.toString());
+        }
+
         if (product != null) {
           items.add(product);
         } else {

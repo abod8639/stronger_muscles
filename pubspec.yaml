@@ -33,6 +33,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
+  internet_connection_checker_plus: ^2.9.1+2
 
 dev_dependencies:
   flutter_test:

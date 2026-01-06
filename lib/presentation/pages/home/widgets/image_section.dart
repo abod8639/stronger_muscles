@@ -40,7 +40,7 @@ class ImageSection extends StatelessWidget {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.all(
-                  8.0,
+                  8.0
                 ), // Padding for the image inside
                 child: CachedNetworkImage(
                   imageUrl: widget.product.imageUrls[index],

@@ -43,19 +43,28 @@ class AuthController extends GetxController {
           googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
-        accessToken: null,
+        // accessToken: null,
       );
 
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
 
-      // TODO: Sync with Backend API using the ID token or user details?
-      // For now, we return Firebase User, but ideally we calls api to register/login in backend
+      // إرسال معلومات المستخدم إلى Backend
+      if (userCredential.user != null) {
+        final firebaseUser = userCredential.user!;
+        final user = await _authService.googleSignIn(
+          email: firebaseUser.email ?? googleUser.email,
+          name: firebaseUser.displayName ?? googleUser.displayName ?? 'User',
+          photoUrl: firebaseUser.photoURL,
+        );
+        currentUser.value = user;
+        Get.offAllNamed('/home'); // انتقل إلى الصفحة الرئيسية
+      }
 
       return userCredential.user;
     } catch (e) {
-      Get.snackbar('Error', 'Google Sign-In failed: ${e.toString()}');
+      Get.snackbar('خطأ', 'فشل تسجيل الدخول عبر Google: ${e.toString()}');
       return null;
     } finally {
       isLoading.value = false;

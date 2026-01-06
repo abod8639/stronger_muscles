@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/presentation/pages/auth/signin_page.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class SignUpPage extends GetView<AuthController> {
-  final VoidCallback onSignInTap;
-
-  const SignUpPage({super.key, required this.onSignInTap});
+ final VoidCallback? onSignInTap;
+  const SignUpPage({super.key, this.onSignInTap, });
 
   @override
   Widget build(BuildContext context) {
@@ -137,6 +137,19 @@ class SignUpPage extends GetView<AuthController> {
                         ),
                       ),
               ),
+                            const SizedBox(height: 24.0),
+              OutlinedButton.icon(
+                onPressed: () => controller.signInWithGoogle(),
+                icon: const Icon(Icons.g_mobiledata, size: 28), // Using built-in icon as placeholder
+                label: Text(AppLocalizations.of(context)!.signInWithGoogle),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  side: BorderSide(color: Colors.grey[300]!),
+                ),
+              ),
               const SizedBox(height: 24.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +159,7 @@ class SignUpPage extends GetView<AuthController> {
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   TextButton(
-                    onPressed: onSignInTap,
+                    onPressed: ()=> Get.to(SignInPage()  ),
                     child: Text(
                       AppLocalizations.of(context)!.login,
                       style: const TextStyle(fontWeight: FontWeight.bold),

@@ -96,6 +96,14 @@ class MyBottomNavigationBar extends StatelessWidget {
         label: 'Profile',
         tooltip: 'Navigate to Profile',
       ),
+      BottomNavigationBarItem(
+        icon: Icon(
+          Icons.input_sharp,
+          size: _iconSize,
+        ),
+        label: 'Profile',
+        tooltip: 'Navigate to Profile',
+      ),
     ];
   }
 }
@@ -122,7 +130,7 @@ BottomNavigationBar myBottomNavigationBar(ThemeData theme) {
       const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
       const BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
       BottomNavigationBarItem(icon: cartIcon() , label: 'Cart'),
-      const BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      const BottomNavigationBarItem(icon: Icon(Icons.input_sharp), label: 'Profile'),
     ],
   );
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -34,7 +36,8 @@ class ProductDetailsController extends GetxController {
       if (isInWishlist.value) {
         wishlistBox.delete(product.id);
       } else {
-        wishlistBox.put(product.id, product.id);
+        // Store full product JSON so wishlist can load without external repository
+        wishlistBox.put(product.id, jsonEncode(product.toJson()));
       }
       isInWishlist.toggle();
     } catch (e) {

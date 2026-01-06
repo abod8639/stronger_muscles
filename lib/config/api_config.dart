@@ -8,13 +8,14 @@ class ApiConfig {
     // Note: 'dart:io' imports cause crashes on Web, so we removed Platform logic for this specific test.
     // return 'http://localhost:8080';
     return 'http://192.168.1.17:8080'; // Change to your PC's IP
-    // return 'http://127.0.0.1:8080'; // Change to your PC's IP
+    // return 'http://10.0.2.2:8080'; // Change to your PC's IP
 
   }
 
   // Auth
   static const String register = '/api/auth/register';
   static const String login = '/api/auth/login';
+  static const String googleSignIn = '/api/auth/google-signin';
   static const String me = '/api/auth/me';
 
   // Products

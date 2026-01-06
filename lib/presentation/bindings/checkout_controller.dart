@@ -61,7 +61,7 @@ class CheckoutController extends GetxController {
       final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
       final order = OrderModel(
         id: orderId,
-        userId: '', // TODO: Get from auth
+        userId: _profileController.currentUser.value?.uid ?? '', // TODO: Get from auth
         orderDate: DateTime.now(),
         status: 'pending',
         addressId: selectedAddress.value!.id,

@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class SignInPage extends GetView<AuthController> {
-  final VoidCallback onSignUpTap;
+  final VoidCallback? onSignUpTap;
 
-  const SignInPage({super.key, required this.onSignUpTap});
+  const SignInPage({super.key,  this.onSignUpTap});
 
   @override
   Widget build(BuildContext context) {
+
     final formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
@@ -153,7 +155,7 @@ class SignInPage extends GetView<AuthController> {
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                   TextButton(
-                    onPressed: onSignUpTap,
+                    onPressed:()=> Get.to(()=> SignUpPage()  ),
                     child: Text(
                       AppLocalizations.of(context)!.signUp,
                       style: const TextStyle(fontWeight: FontWeight.bold),

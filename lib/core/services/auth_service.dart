@@ -77,6 +77,35 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<UserModel> googleSignIn({
+    required String email,
+    required String name,
+    String? photoUrl,
+  }) async {
+    try {
+      final response = await _apiService.post(
+        ApiConfig.googleSignIn,
+        data: {
+          'email': email,
+          'name': name,
+          'photo_url': photoUrl,
+        },
+      );
+
+      final body = jsonDecode(response.body);
+      final user = UserModel.fromJson(body['user']);
+      final token = body['token'];
+
+      if (token != null) {
+        await StorageService.saveToken(token);
+      }
+
+      return user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> logout() async {
     await StorageService.deleteToken();
   }
