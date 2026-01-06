@@ -111,7 +111,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       doubleTapZoomable: true,
       immersive: false,
       backgroundColor: Theme.of(context).colorScheme.surface,
-      closeButtonColor: Theme.of(context).colorScheme.onSurface,
+      closeButtonColor: Theme.of(context).primaryColor,
     );
   }
   
