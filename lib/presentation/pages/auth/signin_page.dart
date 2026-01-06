@@ -37,8 +37,6 @@ class SignInPage extends GetView<AuthController> {
                   emailController, 
                   passwordController
                   ),
-                Column(children: [],),
-
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
