@@ -17,6 +17,7 @@ import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
 
 Future<void> main() async {
 
@@ -72,6 +73,17 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       locale: languageController.currentLocale.value,
+      builder: (context, child) => Stack(
+        children: [
+          child!,
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: InternetConnectionBanner(),
+          ),
+        ],
+      ),
     ));
   }
 }
