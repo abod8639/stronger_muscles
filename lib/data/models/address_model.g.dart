@@ -17,16 +17,16 @@ class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return _$AddressModelImpl(
-      id: fields[0] as String,
-      userId: fields[1] as String,
-      label: fields[2] as String,
-      fullName: fields[3] as String,
-      phoneNumber: fields[4] as String,
+      id: fields[0] as int,
+      userId: fields[1] as int?,
+      label: fields[2] as String?,
+      fullName: fields[3] as String?,
+      phone: fields[4] as String?,
       street: fields[5] as String,
       city: fields[6] as String,
-      state: fields[7] as String,
-      postalCode: fields[8] as String,
-      country: fields[9] as String,
+      state: fields[7] as String?,
+      postalCode: fields[8] as String?,
+      country: fields[9] as String?,
       isDefault: fields[10] as bool,
       latitude: fields[11] as double?,
       longitude: fields[12] as double?,
@@ -48,7 +48,7 @@ class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
       ..writeByte(3)
       ..write(obj.fullName)
       ..writeByte(4)
-      ..write(obj.phoneNumber)
+      ..write(obj.phone)
       ..writeByte(5)
       ..write(obj.street)
       ..writeByte(6)
@@ -88,16 +88,16 @@ class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
 
 _$AddressModelImpl _$$AddressModelImplFromJson(Map<String, dynamic> json) =>
     _$AddressModelImpl(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      label: json['label'] as String,
-      fullName: json['full_name'] as String,
-      phoneNumber: json['phone_number'] as String,
+      id: (json['id'] as num).toInt(),
+      userId: (json['user_id'] as num?)?.toInt(),
+      label: json['label'] as String?,
+      fullName: json['full_name'] as String?,
+      phone: json['phone'] as String?,
       street: json['street'] as String,
       city: json['city'] as String,
-      state: json['state'] as String,
-      postalCode: json['postal_code'] as String,
-      country: json['country'] as String,
+      state: json['state'] as String?,
+      postalCode: json['postal_code'] as String?,
+      country: json['country'] as String?,
       isDefault: json['is_default'] as bool? ?? false,
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
@@ -115,7 +115,7 @@ Map<String, dynamic> _$$AddressModelImplToJson(_$AddressModelImpl instance) =>
       'user_id': instance.userId,
       'label': instance.label,
       'full_name': instance.fullName,
-      'phone_number': instance.phoneNumber,
+      'phone': instance.phone,
       'street': instance.street,
       'city': instance.city,
       'state': instance.state,

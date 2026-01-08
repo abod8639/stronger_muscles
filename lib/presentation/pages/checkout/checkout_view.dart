@@ -108,7 +108,7 @@ class CheckoutView extends GetView<CheckoutController> {
                     value: address,
                     groupValue: controller.selectedAddress.value,
                     onChanged: (value) => controller.setAddress(value!),
-                    title: Text(address.label, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    title: Text(address.label??"error", style: const TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text(address.fullAddress),
                     activeColor: AppColors.primary,
                   ),

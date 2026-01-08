@@ -30,8 +30,7 @@ mixin _$UserModel {
   @JsonKey(name: 'photo_url')
   String? get photoUrl => throw _privateConstructorUsedError;
   @HiveField(4)
-  @JsonKey(name: 'phone_number')
-  String? get phoneNumber => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
   @HiveField(5)
   @JsonKey(name: 'default_address_id')
   String? get defaultAddressId => throw _privateConstructorUsedError;
@@ -47,9 +46,20 @@ mixin _$UserModel {
   @HiveField(9)
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @HiveField(10)
+  @JsonKey(name: 'last_login')
   DateTime? get lastLogin => throw _privateConstructorUsedError;
   @HiveField(11)
   String? get token => throw _privateConstructorUsedError;
+  @HiveField(12)
+  String? get role => throw _privateConstructorUsedError;
+  @HiveField(13)
+  @JsonKey(name: 'total_spent')
+  double? get totalSpent => throw _privateConstructorUsedError;
+  @HiveField(14)
+  @JsonKey(name: 'orders_count')
+  int? get ordersCount => throw _privateConstructorUsedError;
+  @HiveField(15)
+  List<AddressModel>? get addresses => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,7 +77,7 @@ abstract class $UserModelCopyWith<$Res> {
       @HiveField(1) String email,
       @HiveField(2) String name,
       @HiveField(3) @JsonKey(name: 'photo_url') String? photoUrl,
-      @HiveField(4) @JsonKey(name: 'phone_number') String? phoneNumber,
+      @HiveField(4) String? phone,
       @HiveField(5)
       @JsonKey(name: 'default_address_id')
       String? defaultAddressId,
@@ -79,8 +89,12 @@ abstract class $UserModelCopyWith<$Res> {
       bool notificationsEnabled,
       @HiveField(8) @JsonKey(name: 'is_active') bool isActive,
       @HiveField(9) DateTime? createdAt,
-      @HiveField(10) DateTime? lastLogin,
-      @HiveField(11) String? token});
+      @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
+      @HiveField(11) String? token,
+      @HiveField(12) String? role,
+      @HiveField(13) @JsonKey(name: 'total_spent') double? totalSpent,
+      @HiveField(14) @JsonKey(name: 'orders_count') int? ordersCount,
+      @HiveField(15) List<AddressModel>? addresses});
 }
 
 /// @nodoc
@@ -100,7 +114,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? email = null,
     Object? name = null,
     Object? photoUrl = freezed,
-    Object? phoneNumber = freezed,
+    Object? phone = freezed,
     Object? defaultAddressId = freezed,
     Object? preferredLanguage = null,
     Object? notificationsEnabled = null,
@@ -108,6 +122,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? createdAt = freezed,
     Object? lastLogin = freezed,
     Object? token = freezed,
+    Object? role = freezed,
+    Object? totalSpent = freezed,
+    Object? ordersCount = freezed,
+    Object? addresses = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -126,9 +144,9 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: freezed == phoneNumber
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
               as String?,
       defaultAddressId: freezed == defaultAddressId
           ? _value.defaultAddressId
@@ -158,6 +176,22 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
+      totalSpent: freezed == totalSpent
+          ? _value.totalSpent
+          : totalSpent // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ordersCount: freezed == ordersCount
+          ? _value.ordersCount
+          : ordersCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      addresses: freezed == addresses
+          ? _value.addresses
+          : addresses // ignore: cast_nullable_to_non_nullable
+              as List<AddressModel>?,
     ) as $Val);
   }
 }
@@ -175,7 +209,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       @HiveField(1) String email,
       @HiveField(2) String name,
       @HiveField(3) @JsonKey(name: 'photo_url') String? photoUrl,
-      @HiveField(4) @JsonKey(name: 'phone_number') String? phoneNumber,
+      @HiveField(4) String? phone,
       @HiveField(5)
       @JsonKey(name: 'default_address_id')
       String? defaultAddressId,
@@ -187,8 +221,12 @@ abstract class _$$UserModelImplCopyWith<$Res>
       bool notificationsEnabled,
       @HiveField(8) @JsonKey(name: 'is_active') bool isActive,
       @HiveField(9) DateTime? createdAt,
-      @HiveField(10) DateTime? lastLogin,
-      @HiveField(11) String? token});
+      @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
+      @HiveField(11) String? token,
+      @HiveField(12) String? role,
+      @HiveField(13) @JsonKey(name: 'total_spent') double? totalSpent,
+      @HiveField(14) @JsonKey(name: 'orders_count') int? ordersCount,
+      @HiveField(15) List<AddressModel>? addresses});
 }
 
 /// @nodoc
@@ -206,7 +244,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? email = null,
     Object? name = null,
     Object? photoUrl = freezed,
-    Object? phoneNumber = freezed,
+    Object? phone = freezed,
     Object? defaultAddressId = freezed,
     Object? preferredLanguage = null,
     Object? notificationsEnabled = null,
@@ -214,6 +252,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? lastLogin = freezed,
     Object? token = freezed,
+    Object? role = freezed,
+    Object? totalSpent = freezed,
+    Object? ordersCount = freezed,
+    Object? addresses = freezed,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -232,9 +274,9 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: freezed == phoneNumber
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
               as String?,
       defaultAddressId: freezed == defaultAddressId
           ? _value.defaultAddressId
@@ -264,6 +306,22 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String?,
+      role: freezed == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String?,
+      totalSpent: freezed == totalSpent
+          ? _value.totalSpent
+          : totalSpent // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ordersCount: freezed == ordersCount
+          ? _value.ordersCount
+          : ordersCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+      addresses: freezed == addresses
+          ? _value._addresses
+          : addresses // ignore: cast_nullable_to_non_nullable
+              as List<AddressModel>?,
     ));
   }
 }
@@ -276,7 +334,7 @@ class _$UserModelImpl implements _UserModel {
       @HiveField(1) required this.email,
       @HiveField(2) required this.name,
       @HiveField(3) @JsonKey(name: 'photo_url') this.photoUrl,
-      @HiveField(4) @JsonKey(name: 'phone_number') this.phoneNumber,
+      @HiveField(4) this.phone,
       @HiveField(5) @JsonKey(name: 'default_address_id') this.defaultAddressId,
       @HiveField(6)
       @JsonKey(name: 'preferred_language')
@@ -286,8 +344,13 @@ class _$UserModelImpl implements _UserModel {
       this.notificationsEnabled = true,
       @HiveField(8) @JsonKey(name: 'is_active') this.isActive = true,
       @HiveField(9) this.createdAt,
-      @HiveField(10) this.lastLogin,
-      @HiveField(11) this.token});
+      @HiveField(10) @JsonKey(name: 'last_login') this.lastLogin,
+      @HiveField(11) this.token,
+      @HiveField(12) this.role,
+      @HiveField(13) @JsonKey(name: 'total_spent') this.totalSpent,
+      @HiveField(14) @JsonKey(name: 'orders_count') this.ordersCount,
+      @HiveField(15) final List<AddressModel>? addresses})
+      : _addresses = addresses;
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -307,8 +370,7 @@ class _$UserModelImpl implements _UserModel {
   final String? photoUrl;
   @override
   @HiveField(4)
-  @JsonKey(name: 'phone_number')
-  final String? phoneNumber;
+  final String? phone;
   @override
   @HiveField(5)
   @JsonKey(name: 'default_address_id')
@@ -330,14 +392,36 @@ class _$UserModelImpl implements _UserModel {
   final DateTime? createdAt;
   @override
   @HiveField(10)
+  @JsonKey(name: 'last_login')
   final DateTime? lastLogin;
   @override
   @HiveField(11)
   final String? token;
+  @override
+  @HiveField(12)
+  final String? role;
+  @override
+  @HiveField(13)
+  @JsonKey(name: 'total_spent')
+  final double? totalSpent;
+  @override
+  @HiveField(14)
+  @JsonKey(name: 'orders_count')
+  final int? ordersCount;
+  final List<AddressModel>? _addresses;
+  @override
+  @HiveField(15)
+  List<AddressModel>? get addresses {
+    final value = _addresses;
+    if (value == null) return null;
+    if (_addresses is EqualUnmodifiableListView) return _addresses;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, name: $name, photoUrl: $photoUrl, phoneNumber: $phoneNumber, defaultAddressId: $defaultAddressId, preferredLanguage: $preferredLanguage, notificationsEnabled: $notificationsEnabled, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin, token: $token)';
+    return 'UserModel(id: $id, email: $email, name: $name, photoUrl: $photoUrl, phone: $phone, defaultAddressId: $defaultAddressId, preferredLanguage: $preferredLanguage, notificationsEnabled: $notificationsEnabled, isActive: $isActive, createdAt: $createdAt, lastLogin: $lastLogin, token: $token, role: $role, totalSpent: $totalSpent, ordersCount: $ordersCount, addresses: $addresses)';
   }
 
   @override
@@ -350,8 +434,7 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.defaultAddressId, defaultAddressId) ||
                 other.defaultAddressId == defaultAddressId) &&
             (identical(other.preferredLanguage, preferredLanguage) ||
@@ -364,7 +447,14 @@ class _$UserModelImpl implements _UserModel {
                 other.createdAt == createdAt) &&
             (identical(other.lastLogin, lastLogin) ||
                 other.lastLogin == lastLogin) &&
-            (identical(other.token, token) || other.token == token));
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.totalSpent, totalSpent) ||
+                other.totalSpent == totalSpent) &&
+            (identical(other.ordersCount, ordersCount) ||
+                other.ordersCount == ordersCount) &&
+            const DeepCollectionEquality()
+                .equals(other._addresses, _addresses));
   }
 
   @JsonKey(ignore: true)
@@ -375,14 +465,18 @@ class _$UserModelImpl implements _UserModel {
       email,
       name,
       photoUrl,
-      phoneNumber,
+      phone,
       defaultAddressId,
       preferredLanguage,
       notificationsEnabled,
       isActive,
       createdAt,
       lastLogin,
-      token);
+      token,
+      role,
+      totalSpent,
+      ordersCount,
+      const DeepCollectionEquality().hash(_addresses));
 
   @JsonKey(ignore: true)
   @override
@@ -404,7 +498,7 @@ abstract class _UserModel implements UserModel {
       @HiveField(1) required final String email,
       @HiveField(2) required final String name,
       @HiveField(3) @JsonKey(name: 'photo_url') final String? photoUrl,
-      @HiveField(4) @JsonKey(name: 'phone_number') final String? phoneNumber,
+      @HiveField(4) final String? phone,
       @HiveField(5)
       @JsonKey(name: 'default_address_id')
       final String? defaultAddressId,
@@ -416,8 +510,12 @@ abstract class _UserModel implements UserModel {
       final bool notificationsEnabled,
       @HiveField(8) @JsonKey(name: 'is_active') final bool isActive,
       @HiveField(9) final DateTime? createdAt,
-      @HiveField(10) final DateTime? lastLogin,
-      @HiveField(11) final String? token}) = _$UserModelImpl;
+      @HiveField(10) @JsonKey(name: 'last_login') final DateTime? lastLogin,
+      @HiveField(11) final String? token,
+      @HiveField(12) final String? role,
+      @HiveField(13) @JsonKey(name: 'total_spent') final double? totalSpent,
+      @HiveField(14) @JsonKey(name: 'orders_count') final int? ordersCount,
+      @HiveField(15) final List<AddressModel>? addresses}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -437,8 +535,7 @@ abstract class _UserModel implements UserModel {
   String? get photoUrl;
   @override
   @HiveField(4)
-  @JsonKey(name: 'phone_number')
-  String? get phoneNumber;
+  String? get phone;
   @override
   @HiveField(5)
   @JsonKey(name: 'default_address_id')
@@ -460,10 +557,25 @@ abstract class _UserModel implements UserModel {
   DateTime? get createdAt;
   @override
   @HiveField(10)
+  @JsonKey(name: 'last_login')
   DateTime? get lastLogin;
   @override
   @HiveField(11)
   String? get token;
+  @override
+  @HiveField(12)
+  String? get role;
+  @override
+  @HiveField(13)
+  @JsonKey(name: 'total_spent')
+  double? get totalSpent;
+  @override
+  @HiveField(14)
+  @JsonKey(name: 'orders_count')
+  int? get ordersCount;
+  @override
+  @HiveField(15)
+  List<AddressModel>? get addresses;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

@@ -101,7 +101,7 @@ class SavedAddressesList extends StatelessWidget {
                       tiltGesturesEnabled: false,
                       markers: {
                         Marker(
-                          markerId: MarkerId(address.id),
+                          markerId: MarkerId(address.id.toString()),
                           position: LatLng(address.latitude!, address.longitude!),
                         ),
                       },
@@ -126,7 +126,7 @@ class SavedAddressesList extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          address.label,
+                          address.label ?? 'Other',
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: isDark ? AppColors.white : AppColors.black,
@@ -153,7 +153,7 @@ class SavedAddressesList extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      address.fullName,
+                      address.fullName ?? '',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: isDark ? AppColors.white : AppColors.black,
@@ -168,7 +168,7 @@ class SavedAddressesList extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      address.phoneNumber,
+                      address.phone ?? '',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.greyDark,
                       ),

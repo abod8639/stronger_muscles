@@ -8,17 +8,17 @@ part 'address_model.g.dart';
 class AddressModel with _$AddressModel {
   @HiveType(typeId: 4, adapterName: 'AddressModelAdapter')
   const factory AddressModel({
-    @HiveField(0) required String id,
-    @HiveField(1) required String userId,
-    @HiveField(2) required String label, // 'Home', 'Work', 'Other'
-    @HiveField(3) required String fullName,
-    @HiveField(4) required String phoneNumber,
+    @HiveField(0) required int id,
+    @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+    @HiveField(2) String? label,
+    @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
+    @HiveField(4) String? phone,
     @HiveField(5) required String street,
     @HiveField(6) required String city,
-    @HiveField(7) required String state,
-    @HiveField(8) required String postalCode,
-    @HiveField(9) required String country,
-    @HiveField(10) @Default(false) bool isDefault,
+    @HiveField(7) String? state,
+    @HiveField(8) @JsonKey(name: 'postal_code') String? postalCode,
+    @HiveField(9) String? country,
+    @HiveField(10) @JsonKey(name: 'is_default') @Default(false) bool isDefault,
     @HiveField(11) double? latitude,
     @HiveField(12) double? longitude,
     @HiveField(13) DateTime? createdAt,

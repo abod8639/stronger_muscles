@@ -61,10 +61,10 @@ class CheckoutController extends GetxController {
       final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
       final order = OrderModel(
         id: orderId,
-        userId: _profileController.currentUser.value?.uid ?? '', // TODO: Get from auth
+        userId: _profileController.currentUser.value?.uid ?? '0', // TODO: Get from auth
         orderDate: DateTime.now(),
         status: 'pending',
-        addressId: selectedAddress.value!.id,
+        addressId: selectedAddress.value!.id.toString(),
         subtotal: _cartController.totalPrice,
         totalAmount: _cartController.totalPrice,
         items: _cartController.cartItems.map((item) => OrderItemModel(

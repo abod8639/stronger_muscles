@@ -21,27 +21,30 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AddressModel {
   @HiveField(0)
-  String get id => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   @HiveField(1)
-  String get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
+  int? get userId => throw _privateConstructorUsedError;
   @HiveField(2)
-  String get label =>
-      throw _privateConstructorUsedError; // 'Home', 'Work', 'Other'
+  String? get label => throw _privateConstructorUsedError;
   @HiveField(3)
-  String get fullName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'full_name')
+  String? get fullName => throw _privateConstructorUsedError;
   @HiveField(4)
-  String get phoneNumber => throw _privateConstructorUsedError;
+  String? get phone => throw _privateConstructorUsedError;
   @HiveField(5)
   String get street => throw _privateConstructorUsedError;
   @HiveField(6)
   String get city => throw _privateConstructorUsedError;
   @HiveField(7)
-  String get state => throw _privateConstructorUsedError;
+  String? get state => throw _privateConstructorUsedError;
   @HiveField(8)
-  String get postalCode => throw _privateConstructorUsedError;
+  @JsonKey(name: 'postal_code')
+  String? get postalCode => throw _privateConstructorUsedError;
   @HiveField(9)
-  String get country => throw _privateConstructorUsedError;
+  String? get country => throw _privateConstructorUsedError;
   @HiveField(10)
+  @JsonKey(name: 'is_default')
   bool get isDefault => throw _privateConstructorUsedError;
   @HiveField(11)
   double? get latitude => throw _privateConstructorUsedError;
@@ -65,17 +68,17 @@ abstract class $AddressModelCopyWith<$Res> {
       _$AddressModelCopyWithImpl<$Res, AddressModel>;
   @useResult
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String userId,
-      @HiveField(2) String label,
-      @HiveField(3) String fullName,
-      @HiveField(4) String phoneNumber,
+      {@HiveField(0) int id,
+      @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+      @HiveField(2) String? label,
+      @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
+      @HiveField(4) String? phone,
       @HiveField(5) String street,
       @HiveField(6) String city,
-      @HiveField(7) String state,
-      @HiveField(8) String postalCode,
-      @HiveField(9) String country,
-      @HiveField(10) bool isDefault,
+      @HiveField(7) String? state,
+      @HiveField(8) @JsonKey(name: 'postal_code') String? postalCode,
+      @HiveField(9) String? country,
+      @HiveField(10) @JsonKey(name: 'is_default') bool isDefault,
       @HiveField(11) double? latitude,
       @HiveField(12) double? longitude,
       @HiveField(13) DateTime? createdAt,
@@ -96,15 +99,15 @@ class _$AddressModelCopyWithImpl<$Res, $Val extends AddressModel>
   @override
   $Res call({
     Object? id = null,
-    Object? userId = null,
-    Object? label = null,
-    Object? fullName = null,
-    Object? phoneNumber = null,
+    Object? userId = freezed,
+    Object? label = freezed,
+    Object? fullName = freezed,
+    Object? phone = freezed,
     Object? street = null,
     Object? city = null,
-    Object? state = null,
-    Object? postalCode = null,
-    Object? country = null,
+    Object? state = freezed,
+    Object? postalCode = freezed,
+    Object? country = freezed,
     Object? isDefault = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
@@ -115,23 +118,23 @@ class _$AddressModelCopyWithImpl<$Res, $Val extends AddressModel>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
+              as int,
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      label: null == label
+              as int?,
+      label: freezed == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
-              as String,
-      fullName: null == fullName
+              as String?,
+      fullName: freezed == fullName
           ? _value.fullName
           : fullName // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: null == phoneNumber
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
       street: null == street
           ? _value.street
           : street // ignore: cast_nullable_to_non_nullable
@@ -140,18 +143,18 @@ class _$AddressModelCopyWithImpl<$Res, $Val extends AddressModel>
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
               as String,
-      state: null == state
+      state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String,
-      postalCode: null == postalCode
+              as String?,
+      postalCode: freezed == postalCode
           ? _value.postalCode
           : postalCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      country: null == country
+              as String?,
+      country: freezed == country
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isDefault: null == isDefault
           ? _value.isDefault
           : isDefault // ignore: cast_nullable_to_non_nullable
@@ -185,17 +188,17 @@ abstract class _$$AddressModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String userId,
-      @HiveField(2) String label,
-      @HiveField(3) String fullName,
-      @HiveField(4) String phoneNumber,
+      {@HiveField(0) int id,
+      @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+      @HiveField(2) String? label,
+      @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
+      @HiveField(4) String? phone,
       @HiveField(5) String street,
       @HiveField(6) String city,
-      @HiveField(7) String state,
-      @HiveField(8) String postalCode,
-      @HiveField(9) String country,
-      @HiveField(10) bool isDefault,
+      @HiveField(7) String? state,
+      @HiveField(8) @JsonKey(name: 'postal_code') String? postalCode,
+      @HiveField(9) String? country,
+      @HiveField(10) @JsonKey(name: 'is_default') bool isDefault,
       @HiveField(11) double? latitude,
       @HiveField(12) double? longitude,
       @HiveField(13) DateTime? createdAt,
@@ -214,15 +217,15 @@ class __$$AddressModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? userId = null,
-    Object? label = null,
-    Object? fullName = null,
-    Object? phoneNumber = null,
+    Object? userId = freezed,
+    Object? label = freezed,
+    Object? fullName = freezed,
+    Object? phone = freezed,
     Object? street = null,
     Object? city = null,
-    Object? state = null,
-    Object? postalCode = null,
-    Object? country = null,
+    Object? state = freezed,
+    Object? postalCode = freezed,
+    Object? country = freezed,
     Object? isDefault = null,
     Object? latitude = freezed,
     Object? longitude = freezed,
@@ -233,23 +236,23 @@ class __$$AddressModelImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: null == userId
+              as int,
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      label: null == label
+              as int?,
+      label: freezed == label
           ? _value.label
           : label // ignore: cast_nullable_to_non_nullable
-              as String,
-      fullName: null == fullName
+              as String?,
+      fullName: freezed == fullName
           ? _value.fullName
           : fullName // ignore: cast_nullable_to_non_nullable
-              as String,
-      phoneNumber: null == phoneNumber
-          ? _value.phoneNumber
-          : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      phone: freezed == phone
+          ? _value.phone
+          : phone // ignore: cast_nullable_to_non_nullable
+              as String?,
       street: null == street
           ? _value.street
           : street // ignore: cast_nullable_to_non_nullable
@@ -258,18 +261,18 @@ class __$$AddressModelImplCopyWithImpl<$Res>
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
               as String,
-      state: null == state
+      state: freezed == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
-              as String,
-      postalCode: null == postalCode
+              as String?,
+      postalCode: freezed == postalCode
           ? _value.postalCode
           : postalCode // ignore: cast_nullable_to_non_nullable
-              as String,
-      country: null == country
+              as String?,
+      country: freezed == country
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       isDefault: null == isDefault
           ? _value.isDefault
           : isDefault // ignore: cast_nullable_to_non_nullable
@@ -300,16 +303,16 @@ class __$$AddressModelImplCopyWithImpl<$Res>
 class _$AddressModelImpl extends _AddressModel {
   const _$AddressModelImpl(
       {@HiveField(0) required this.id,
-      @HiveField(1) required this.userId,
-      @HiveField(2) required this.label,
-      @HiveField(3) required this.fullName,
-      @HiveField(4) required this.phoneNumber,
+      @HiveField(1) @JsonKey(name: 'user_id') this.userId,
+      @HiveField(2) this.label,
+      @HiveField(3) @JsonKey(name: 'full_name') this.fullName,
+      @HiveField(4) this.phone,
       @HiveField(5) required this.street,
       @HiveField(6) required this.city,
-      @HiveField(7) required this.state,
-      @HiveField(8) required this.postalCode,
-      @HiveField(9) required this.country,
-      @HiveField(10) this.isDefault = false,
+      @HiveField(7) this.state,
+      @HiveField(8) @JsonKey(name: 'postal_code') this.postalCode,
+      @HiveField(9) this.country,
+      @HiveField(10) @JsonKey(name: 'is_default') this.isDefault = false,
       @HiveField(11) this.latitude,
       @HiveField(12) this.longitude,
       @HiveField(13) this.createdAt,
@@ -321,20 +324,21 @@ class _$AddressModelImpl extends _AddressModel {
 
   @override
   @HiveField(0)
-  final String id;
+  final int id;
   @override
   @HiveField(1)
-  final String userId;
+  @JsonKey(name: 'user_id')
+  final int? userId;
   @override
   @HiveField(2)
-  final String label;
-// 'Home', 'Work', 'Other'
+  final String? label;
   @override
   @HiveField(3)
-  final String fullName;
+  @JsonKey(name: 'full_name')
+  final String? fullName;
   @override
   @HiveField(4)
-  final String phoneNumber;
+  final String? phone;
   @override
   @HiveField(5)
   final String street;
@@ -343,16 +347,17 @@ class _$AddressModelImpl extends _AddressModel {
   final String city;
   @override
   @HiveField(7)
-  final String state;
+  final String? state;
   @override
   @HiveField(8)
-  final String postalCode;
+  @JsonKey(name: 'postal_code')
+  final String? postalCode;
   @override
   @HiveField(9)
-  final String country;
+  final String? country;
   @override
-  @JsonKey()
   @HiveField(10)
+  @JsonKey(name: 'is_default')
   final bool isDefault;
   @override
   @HiveField(11)
@@ -369,7 +374,7 @@ class _$AddressModelImpl extends _AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel(id: $id, userId: $userId, label: $label, fullName: $fullName, phoneNumber: $phoneNumber, street: $street, city: $city, state: $state, postalCode: $postalCode, country: $country, isDefault: $isDefault, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'AddressModel(id: $id, userId: $userId, label: $label, fullName: $fullName, phone: $phone, street: $street, city: $city, state: $state, postalCode: $postalCode, country: $country, isDefault: $isDefault, latitude: $latitude, longitude: $longitude, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 
   @override
@@ -382,8 +387,7 @@ class _$AddressModelImpl extends _AddressModel {
             (identical(other.label, label) || other.label == label) &&
             (identical(other.fullName, fullName) ||
                 other.fullName == fullName) &&
-            (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber) &&
+            (identical(other.phone, phone) || other.phone == phone) &&
             (identical(other.street, street) || other.street == street) &&
             (identical(other.city, city) || other.city == city) &&
             (identical(other.state, state) || other.state == state) &&
@@ -410,7 +414,7 @@ class _$AddressModelImpl extends _AddressModel {
       userId,
       label,
       fullName,
-      phoneNumber,
+      phone,
       street,
       city,
       state,
@@ -438,17 +442,17 @@ class _$AddressModelImpl extends _AddressModel {
 
 abstract class _AddressModel extends AddressModel {
   const factory _AddressModel(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final String userId,
-      @HiveField(2) required final String label,
-      @HiveField(3) required final String fullName,
-      @HiveField(4) required final String phoneNumber,
+      {@HiveField(0) required final int id,
+      @HiveField(1) @JsonKey(name: 'user_id') final int? userId,
+      @HiveField(2) final String? label,
+      @HiveField(3) @JsonKey(name: 'full_name') final String? fullName,
+      @HiveField(4) final String? phone,
       @HiveField(5) required final String street,
       @HiveField(6) required final String city,
-      @HiveField(7) required final String state,
-      @HiveField(8) required final String postalCode,
-      @HiveField(9) required final String country,
-      @HiveField(10) final bool isDefault,
+      @HiveField(7) final String? state,
+      @HiveField(8) @JsonKey(name: 'postal_code') final String? postalCode,
+      @HiveField(9) final String? country,
+      @HiveField(10) @JsonKey(name: 'is_default') final bool isDefault,
       @HiveField(11) final double? latitude,
       @HiveField(12) final double? longitude,
       @HiveField(13) final DateTime? createdAt,
@@ -460,19 +464,21 @@ abstract class _AddressModel extends AddressModel {
 
   @override
   @HiveField(0)
-  String get id;
+  int get id;
   @override
   @HiveField(1)
-  String get userId;
+  @JsonKey(name: 'user_id')
+  int? get userId;
   @override
   @HiveField(2)
-  String get label;
-  @override // 'Home', 'Work', 'Other'
+  String? get label;
+  @override
   @HiveField(3)
-  String get fullName;
+  @JsonKey(name: 'full_name')
+  String? get fullName;
   @override
   @HiveField(4)
-  String get phoneNumber;
+  String? get phone;
   @override
   @HiveField(5)
   String get street;
@@ -481,15 +487,17 @@ abstract class _AddressModel extends AddressModel {
   String get city;
   @override
   @HiveField(7)
-  String get state;
+  String? get state;
   @override
   @HiveField(8)
-  String get postalCode;
+  @JsonKey(name: 'postal_code')
+  String? get postalCode;
   @override
   @HiveField(9)
-  String get country;
+  String? get country;
   @override
   @HiveField(10)
+  @JsonKey(name: 'is_default')
   bool get isDefault;
   @override
   @HiveField(11)

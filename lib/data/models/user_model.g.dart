@@ -21,7 +21,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       email: fields[1] as String,
       name: fields[2] as String,
       photoUrl: fields[3] as String?,
-      phoneNumber: fields[4] as String?,
+      phone: fields[4] as String?,
       defaultAddressId: fields[5] as String?,
       preferredLanguage: fields[6] as String,
       notificationsEnabled: fields[7] as bool,
@@ -29,13 +29,17 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       createdAt: fields[9] as DateTime?,
       lastLogin: fields[10] as DateTime?,
       token: fields[11] as String?,
+      role: fields[12] as String?,
+      totalSpent: fields[13] as double?,
+      ordersCount: fields[14] as int?,
+      addresses: (fields[15] as List?)?.cast<AddressModel>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -45,7 +49,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(3)
       ..write(obj.photoUrl)
       ..writeByte(4)
-      ..write(obj.phoneNumber)
+      ..write(obj.phone)
       ..writeByte(5)
       ..write(obj.defaultAddressId)
       ..writeByte(6)
@@ -59,7 +63,15 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       ..writeByte(10)
       ..write(obj.lastLogin)
       ..writeByte(11)
-      ..write(obj.token);
+      ..write(obj.token)
+      ..writeByte(12)
+      ..write(obj.role)
+      ..writeByte(13)
+      ..write(obj.totalSpent)
+      ..writeByte(14)
+      ..write(obj.ordersCount)
+      ..writeByte(15)
+      ..write(obj.addresses);
   }
 
   @override
@@ -83,7 +95,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String,
       name: json['name'] as String,
       photoUrl: json['photo_url'] as String?,
-      phoneNumber: json['phone_number'] as String?,
+      phone: json['phone'] as String?,
       defaultAddressId: json['default_address_id'] as String?,
       preferredLanguage: json['preferred_language'] as String? ?? 'ar',
       notificationsEnabled: json['notifications_enabled'] as bool? ?? true,
@@ -95,6 +107,12 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['last_login'] as String),
       token: json['token'] as String?,
+      role: json['role'] as String?,
+      totalSpent: (json['total_spent'] as num?)?.toDouble(),
+      ordersCount: (json['orders_count'] as num?)?.toInt(),
+      addresses: (json['addresses'] as List<dynamic>?)
+          ?.map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -103,7 +121,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'email': instance.email,
       'name': instance.name,
       'photo_url': instance.photoUrl,
-      'phone_number': instance.phoneNumber,
+      'phone': instance.phone,
       'default_address_id': instance.defaultAddressId,
       'preferred_language': instance.preferredLanguage,
       'notifications_enabled': instance.notificationsEnabled,
@@ -111,4 +129,8 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'created_at': instance.createdAt?.toIso8601String(),
       'last_login': instance.lastLogin?.toIso8601String(),
       'token': instance.token,
+      'role': instance.role,
+      'total_spent': instance.totalSpent,
+      'orders_count': instance.ordersCount,
+      'addresses': instance.addresses,
     };

@@ -51,11 +51,11 @@ class ProfileController extends GetxController {
     // Mock data for demonstration
     addresses.value = [
       AddressModel(
-        id: 'ADDR001',
-        userId: currentUser.value?.uid ?? '',
+        id: 1,
+        userId: 1,
         label: 'Home',
         fullName: currentUser.value?.displayName ?? 'User Name',
-        phoneNumber: '+20 123 456 7890',
+        phone: '+20 123 456 7890',
         street: '123 Main Street',
         city: 'Cairo',
         state: 'Cairo Governorate',

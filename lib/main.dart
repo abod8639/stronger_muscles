@@ -23,8 +23,7 @@ Future<void> main() async {
     );
   }
   await Hive.initFlutter();
-
-  hiveInit();
+  await hiveInit();
   runApp(const MyApp());
 }
 
