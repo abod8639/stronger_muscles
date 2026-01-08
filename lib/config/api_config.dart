@@ -13,10 +13,10 @@ class ApiConfig {
   }
 
   // Auth
-  static const String register = '/api/auth/register';
-  static const String login = '/api/auth/login';
-  static const String googleSignIn = '/api/auth/google-signin';
-  static const String me = '/api/auth/me';
+  static const String register = '/api/v1/auth/register';
+  static const String login = '/api/v1/auth/login';
+  static const String googleSignIn = '/api/v1/auth/google-signin';
+  static const String me = '/api/v1/auth/me';
 
   // Products
   static const String products = '/api/v1/products';
@@ -29,5 +29,8 @@ class ApiConfig {
 
   // Categories
   static const String categories = '/api/v1/categories';
+  
+  // Dashboard
+  static const String usersStats = '/api/v1/dashboard/users-stats';
   
 }

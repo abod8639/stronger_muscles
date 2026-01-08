@@ -10,9 +10,13 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
+   final controller = Get.put(WishlistController());
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.wishlist, style: const TextStyle(color: AppColors.white)),
+        title: Text(
+          AppLocalizations.of(context)!.wishlist,
+          style: const TextStyle(color: AppColors.white),
+        ),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
@@ -22,13 +26,17 @@ class WishlistView extends GetView<WishlistController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.favorite_border, size: 80, color: AppColors.grey),
+                const Icon(
+                  Icons.favorite_border,
+                  size: 80,
+                  color: AppColors.grey,
+                ),
                 const SizedBox(height: 16.0),
                 Text(
                   AppLocalizations.of(context)!.yourWishlistIsEmpty,
                   style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
                 ),
-                 Text(
+                Text(
                   AppLocalizations.of(context)!.startAddingFavorites,
                   style: const TextStyle(fontSize: 16.0, color: AppColors.grey),
                 ),
@@ -40,7 +48,7 @@ class WishlistView extends GetView<WishlistController> {
           itemCount: controller.wishlistItems.length,
           itemBuilder: (context, index) {
             final product = controller.wishlistItems[index];
-            return WishlistItemCard(product: product,);
+            return WishlistItemCard(product: product);
           },
         );
       }),

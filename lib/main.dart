@@ -42,6 +42,7 @@ Future<void> main() async {
   await Hive.openBox<String>('wishlist');
   await Hive.openBox<CategoryModel>('categories');
   await Hive.openBox('settings'); // For theme and language settings
+  await Hive.openBox('auth_box'); // Open the box for auth tokens
   
   runApp(const MyApp());
   

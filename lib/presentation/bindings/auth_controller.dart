@@ -4,6 +4,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../core/services/auth_service.dart';
 import '../../data/models/user_model.dart';
 
+import '../../routes/routes.dart';
+
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -59,7 +61,7 @@ class AuthController extends GetxController {
           photoUrl: firebaseUser.photoURL,
         );
         currentUser.value = user;
-        Get.offAllNamed('/home'); // انتقل إلى الصفحة الرئيسية
+        Get.offAllNamed(AppRoutes.main); // انتقل إلى الصفحة الرئيسية
       }
 
       return userCredential.user;
@@ -76,18 +78,27 @@ Future<void> signInWithEmail({
   required String password}) async {
     try {
       isLoading.value = true;
+      
+      print('🔐 محاولة تسجيل الدخول: $email');
+      
       // 1. Firebase Login (Optional, based on requirement)
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      print('✅ نجح تسجيل الدخول في Firebase');
 
       // 2. Backend API Login
       final user = await _authService.login(email: email, password: password);
+      print('✅ نجح تسجيل الدخول في Backend: ${user.email}');
+      
       currentUser.value = user;
-
-      Get.offAllNamed('/home'); // Or main route
+      
+      Get.offAllNamed(AppRoutes.main);
+      print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('Auth Error', e.message ?? 'Login failed');
+      print('❌ خطأ Firebase: ${e.code} - ${e.message}');
+      Get.snackbar('خطأ المصادقة', e.message ?? 'فشل تسجيل الدخول');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      print('❌ خطأ عام: $e');
+      Get.snackbar('خطأ', e.toString());
     } finally {
       isLoading.value = false;
     }
@@ -100,11 +111,15 @@ Future<void> signInWithEmail({
   ) async {
     try {
       isLoading.value = true;
+      
+      print('📝 محاولة إنشاء حساب: $email');
+      
       // 1. Firebase Register
       await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      print('✅ نجح إنشاء الحساب في Firebase');
 
       // 2. Backend API Register
       final user = await _authService.register(
@@ -112,13 +127,18 @@ Future<void> signInWithEmail({
         password: password,
         name: name,
       );
+      print('✅ نجح إنشاء الحساب في Backend: ${user.email}');
+      
       currentUser.value = user;
 
-      Get.offAllNamed('/home');
+      Get.offAllNamed(AppRoutes.main);
+      print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('Auth Error', e.message ?? 'Registration failed');
+      print('❌ خطأ Firebase: ${e.code} - ${e.message}');
+      Get.snackbar('خطأ المصادقة', e.message ?? 'فشل إنشاء الحساب');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      print('❌ خطأ عام: $e');
+      Get.snackbar('خطأ', e.toString());
     } finally {
       isLoading.value = false;
     }
