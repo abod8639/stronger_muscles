@@ -93,6 +93,39 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<UserModel> updateProfile({
+    String? name,
+    String? email,
+    String? phone,
+    String? photoUrl,
+  }) async {
+    try {
+      final response = await _apiService.put(
+        ApiConfig.updateProfile,
+        data: {
+          if (name != null) 'name': name,
+          if (email != null) 'email': email,
+          if (phone != null) 'phone': phone,
+          if (photoUrl != null) 'photo_url': photoUrl,
+        },
+      );
+
+      print('📝 Update Profile Response: ${response.body}');
+      
+      final body = jsonDecode(response.body);
+      final user = UserModel.fromJson(body['user'] ?? body);
+      
+      return user;
+    } on Failure catch (e) {
+      print('❌ Update Profile API Error: ${e.message}');
+      throw e.message;
+    } catch (e) {
+      print('❌ Update Profile Error: $e');
+      throw e.toString();
+    }
+  }
+
+
   Future<UserModel> googleSignIn({
     required String email,
     required String name,

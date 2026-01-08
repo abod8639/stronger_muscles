@@ -6,7 +6,7 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 
 class ProfileController extends GetxController {
-  final AuthController _authController = Get.put(AuthController());
+  final AuthController _authController = Get.find<AuthController>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final Rx<User?> currentUser = Rx<User?>(null);

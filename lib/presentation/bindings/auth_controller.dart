@@ -144,6 +144,32 @@ Future<void> signInWithEmail({
     }
   }
 
+  Future<void> updateUserProfile({
+    String? name,
+    String? email,
+    String? phone,
+    String? photoUrl,
+  }) async {
+    try {
+      isLoading.value = true;
+      
+      final updatedUser = await _authService.updateProfile(
+        name: name,
+        email: email,
+        phone: phone,
+        photoUrl: photoUrl,
+      );
+      
+      currentUser.value = updatedUser;
+      print('✅ تم تحديث بيانات المستخدم');
+    } catch (e) {
+      print('❌ خطأ في تحديث البيانات: $e');
+      rethrow;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> signOut() async {
     await _auth.signOut();
     await _googleSignIn.signOut();

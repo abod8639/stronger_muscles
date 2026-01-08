@@ -10,6 +10,10 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/buil
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_show_reviews_list_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_badges.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_info.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_ingredients_section.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_usage_and_warnings.dart';
 
 class ProductDetailsView extends StatefulWidget {
   static const double _contentPadding = 16.0;
@@ -46,6 +50,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(title: Text(widget.product.name), elevation: 0),
@@ -69,6 +75,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   buildProductName(widget.product),
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
+                  // Product Badges (Featured, New, Best Seller)
+                  buildProductBadges(widget.product),
+                  const SizedBox(height: ProductDetailsView._mediumSpacing),
+
                   // Product Price
                   buildProductPrice(widget.product),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
@@ -85,10 +95,23 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
                   // Description Section
                   buildDescriptionSection(widget.product),
-                  const SizedBox(height: ProductDetailsView._bottomPadding),
+                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+
+                  // Product Info (Brand, SKU, Weight, etc.)
+                  buildProductInfo(widget.product, isDark),
+                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+
+                  // Ingredients
+                  buildIngredientsSection(widget.product, isDark),
+                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+
+                  // Usage Instructions & Warnings
+                  buildUsageAndWarnings(widget.product, isDark),
+                  const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Reviews Section
                   buildShowReviewsListSection(widget.product),
+                  const SizedBox(height: ProductDetailsView._bottomPadding),
                 ],
               ),
             ),

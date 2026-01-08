@@ -17,6 +17,7 @@ class ApiConfig {
   static const String login = '/api/v1/auth/login';
   static const String googleSignIn = '/api/v1/auth/google-signin';
   static const String me = '/api/v1/auth/me';
+  static const String updateProfile = '/api/v1/auth/update-profile';
 
   // Products
   static const String products = '/api/v1/products';
@@ -29,6 +30,9 @@ class ApiConfig {
 
   // Categories
   static const String categories = '/api/v1/categories';
+  
+  // Addresses
+  static const String addresses = '/api/v1/addresses';
   
   // Dashboard
   static const String usersStats = '/api/v1/dashboard/users-stats';

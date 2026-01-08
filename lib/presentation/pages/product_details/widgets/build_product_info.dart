@@ -1,0 +1,107 @@
+import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/data/models/product_model.dart';
+
+Widget buildProductInfo(ProductModel product, bool isDark) {
+  final infoItems = <Widget>[];
+  
+  // Brand
+  if (product.brand != null) {
+    infoItems.add(_buildInfoRow('العلامة التجارية', product.brand!, isDark));
+  }
+  
+  // SKU
+  if (product.sku != null) {
+    infoItems.add(_buildInfoRow('رمز المنتج', product.sku!, isDark));
+  }
+  
+  // Serving Size
+  if (product.servingSize != null) {
+    infoItems.add(_buildInfoRow('حجم الحصة', product.servingSize!, isDark));
+  }
+  
+  // Servings Per Container
+  if (product.servingsPerContainer != null) {
+    infoItems.add(_buildInfoRow('عدد الحصص', '${product.servingsPerContainer}', isDark));
+  }
+  
+  // Weight
+  if (product.weight != null) {
+    infoItems.add(_buildInfoRow('الوزن', '${product.weight} كجم', isDark));
+  }
+  
+  // Size
+  if (product.size != null) {
+    infoItems.add(_buildInfoRow('الحجم', product.size!, isDark));
+  }
+  
+  // Manufacturer
+  if (product.manufacturer != null) {
+    infoItems.add(_buildInfoRow('الشركة المصنعة', product.manufacturer!, isDark));
+  }
+  
+  // Country of Origin
+  if (product.countryOfOrigin != null) {
+    infoItems.add(_buildInfoRow('بلد المنشأ', product.countryOfOrigin!, isDark));
+  }
+  
+  if (infoItems.isEmpty) return const SizedBox.shrink();
+  
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'معلومات المنتج',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: isDark ? AppColors.white : AppColors.black,
+        ),
+      ),
+      const SizedBox(height: 12),
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.surfaceDark : AppColors.greyLight.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: infoItems,
+        ),
+      ),
+    ],
+  );
+}
+
+Widget _buildInfoRow(String label, String value, bool isDark) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppColors.grey : AppColors.greyDark,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppColors.white : AppColors.black,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
