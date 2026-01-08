@@ -10,6 +10,7 @@ import 'package:stronger_muscles/presentation/pages/profile/widgets/recent_order
 import 'package:stronger_muscles/presentation/pages/profile/widgets/saved_addresses_list.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/login_prompt_card.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -39,7 +40,12 @@ class ProfilePage extends StatelessWidget {
 
               return Column(
                 children: [
-                  ProfileHeader(),
+                  GestureDetector(
+        onTap: () {
+          Get.toNamed(AppRoutes.editUserInfo);
+        },
+        child:
+                  ProfileHeader(),),
                   const SizedBox(height: 16),
                   QuickActionsRow(),
                   const SizedBox(height: 24),

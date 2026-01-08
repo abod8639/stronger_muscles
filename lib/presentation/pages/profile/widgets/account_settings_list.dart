@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class AccountSettingsList extends StatelessWidget {
 
@@ -44,7 +45,9 @@ class AccountSettingsList extends StatelessWidget {
           _buildSettingItem(
             icon: Icons.person_outline,
             title: AppLocalizations.of(context)!.editProfile,
-            onTap: () {},
+            onTap: () {
+              Get.toNamed(AppRoutes.editUserInfo);
+            },
             isDark: isDark,
           ),
           _buildDivider(isDark),
