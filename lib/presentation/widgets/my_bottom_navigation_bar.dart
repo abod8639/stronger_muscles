@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_icon.dart';
+import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
 
 /// A custom bottom navigation bar widget for the main app navigation.
 /// 
@@ -27,6 +28,7 @@ class MyBottomNavigationBar extends StatelessWidget {
 
     return Obx(
       () => BottomNavigationBar(
+        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
         currentIndex: controller.tabIndex.value,
         onTap: controller.changeTabIndex,
         type: BottomNavigationBarType.fixed,

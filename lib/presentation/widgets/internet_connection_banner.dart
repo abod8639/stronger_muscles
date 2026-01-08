@@ -14,9 +14,10 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
 
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
         color: Colors.red.shade600,
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(
