@@ -91,6 +91,10 @@ class SectionsController extends GetxController {
         return Icons.local_fire_department;
       case 'cat-health':
         return Icons.favorite;
+      case 'cat-mass-gainer':
+        return Icons.monitor_weight_outlined;
+      case 'cat-carb':
+        return Icons.bakery_dining_outlined;
       default:
         return Icons.category;
     }

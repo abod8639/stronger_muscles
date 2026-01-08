@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -128,7 +129,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
     showImageViewer(
       context,
-      Image.network(widget.product.imageUrls[initialIndex]).image,
+      CachedNetworkImage (
+        imageUrl:  widget.product.imageUrls[initialIndex]) as ImageProvider<Object>,
       useSafeArea: true,
       swipeDismissible: true,
       doubleTapZoomable: true,

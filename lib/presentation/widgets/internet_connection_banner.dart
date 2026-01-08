@@ -20,6 +20,7 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(width: 30),
             const Icon(
               Icons.wifi_off,
               color: Colors.white,

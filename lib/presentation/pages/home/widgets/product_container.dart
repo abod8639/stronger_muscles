@@ -85,8 +85,8 @@ class _ProductContainerState extends State<ProductContainer> {
             child: Stack(
               children: [
                 ImageSection(
+                  // product: widget.product,
                   widget: widget,
-                  theme: theme,
                   pageController: _pageController, 
                   selectedImageIndex: _selectedImageIndex
                   ),

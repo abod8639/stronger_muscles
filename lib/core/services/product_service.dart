@@ -33,16 +33,34 @@ class ProductService extends GetxService {
         print('DEBUG: Response data type: ${decodedData.runtimeType}');
 
         if (decodedData is List) {
-          return (decodedData)
-              .map((json) => ProductModel.fromJson(json))
+          final products = (decodedData)
+              .map((json) {
+                print('DEBUG: Product JSON: $json');
+                final product = ProductModel.fromJson(json);
+                print('DEBUG: Parsed product - Name: ${product.name}, ImageUrls: ${product.imageUrls}');
+                return product;
+              })
               .toList();
+          return products;
         } else if (decodedData is Map) {
           final data = decodedData['data'];
           if (data is List) {
-            return data.map((json) => ProductModel.fromJson(json)).toList();
+            final products = data.map((json) {
+              print('DEBUG: Product JSON: $json');
+              final product = ProductModel.fromJson(json);
+              print('DEBUG: Parsed product - Name: ${product.name}, ImageUrls: ${product.imageUrls}');
+              return product;
+            }).toList();
+            return products;
           } else if (data is Map && data['data'] is List) {
             final innerList = data['data'] as List;
-            return innerList.map((json) => ProductModel.fromJson(json)).toList();
+            final products = innerList.map((json) {
+              print('DEBUG: Product JSON: $json');
+              final product = ProductModel.fromJson(json);
+              print('DEBUG: Parsed product - Name: ${product.name}, ImageUrls: ${product.imageUrls}');
+              return product;
+            }).toList();
+            return products;
           }
         }
       } else {

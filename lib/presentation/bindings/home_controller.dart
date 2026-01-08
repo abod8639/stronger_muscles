@@ -47,6 +47,8 @@ class HomeController extends GetxController {
           case 5: categoryId = 'cat-recovery'; break;
           case 6: categoryId = 'cat-fatburner'; break;
           case 7: categoryId = 'cat-health'; break;
+          case 8: categoryId = 'cat-mass-gainer'; break;
+          case 9: categoryId = 'cat-carb'; break;
         }
       }
 

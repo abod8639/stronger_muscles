@@ -27,7 +27,6 @@ class HomeView extends GetView<HomeController> {
             child: RefreshIndicator(
               onRefresh: () async {
                 await controller.refreshHome();
-                await Get.find<SectionsController>().fetchCategories();
               },
               child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),

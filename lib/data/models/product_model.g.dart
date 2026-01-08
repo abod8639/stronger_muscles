@@ -54,13 +54,14 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       slug: fields[34] as String?,
       createdAt: fields[35] as DateTime?,
       updatedAt: fields[36] as DateTime?,
+      flavors: (fields[37] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ProductModel obj) {
     writer
-      ..writeByte(37)
+      ..writeByte(38)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -134,7 +135,9 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ..writeByte(35)
       ..write(obj.createdAt)
       ..writeByte(36)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(37)
+      ..write(obj.flavors);
   }
 
   @override
@@ -157,20 +160,20 @@ _$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       name: json['name'] as String,
       price: (json['price'] as num).toDouble(),
-      discountPrice: (json['discount_price'] as num?)?.toDouble(),
-      imageUrls: (json['image_urls'] as List<dynamic>?)
+      discountPrice: (json['discountPrice'] as num?)?.toDouble(),
+      imageUrls: (json['imageUrls'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
       description: json['description'] as String? ?? '',
-      categoryId: json['category_id'] as String?,
-      stockQuantity: (json['stock_quantity'] as num?)?.toInt() ?? 0,
-      averageRating: (json['average_rating'] as num?)?.toDouble() ?? 0.0,
-      reviewCount: (json['review_count'] as num?)?.toInt() ?? 0,
+      categoryId: json['categoryId'] as String?,
+      stockQuantity: (json['stockQuantity'] as num?)?.toInt() ?? 0,
+      averageRating: (json['averageRating'] as num?)?.toDouble() ?? 0.0,
+      reviewCount: (json['reviewCount'] as num?)?.toInt() ?? 0,
       brand: json['brand'] as String?,
-      servingSize: json['serving_size'] as String?,
-      servingsPerContainer: (json['servings_per_container'] as num?)?.toInt(),
-      isActive: json['is_active'] as bool? ?? true,
+      servingSize: json['servingSize'] as String?,
+      servingsPerContainer: (json['servingsPerContainer'] as num?)?.toInt(),
+      isActive: json['isActive'] as bool? ?? true,
       sku: json['sku'] as String?,
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
@@ -208,6 +211,8 @@ _$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
+      flavors:
+          (json['flavor'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
@@ -215,17 +220,17 @@ Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
       'id': instance.id,
       'name': instance.name,
       'price': instance.price,
-      'discount_price': instance.discountPrice,
-      'image_urls': instance.imageUrls,
+      'discountPrice': instance.discountPrice,
+      'imageUrls': instance.imageUrls,
       'description': instance.description,
-      'category_id': instance.categoryId,
-      'stock_quantity': instance.stockQuantity,
-      'average_rating': instance.averageRating,
-      'review_count': instance.reviewCount,
+      'categoryId': instance.categoryId,
+      'stockQuantity': instance.stockQuantity,
+      'averageRating': instance.averageRating,
+      'reviewCount': instance.reviewCount,
       'brand': instance.brand,
-      'serving_size': instance.servingSize,
-      'servings_per_container': instance.servingsPerContainer,
-      'is_active': instance.isActive,
+      'servingSize': instance.servingSize,
+      'servingsPerContainer': instance.servingsPerContainer,
+      'isActive': instance.isActive,
       'sku': instance.sku,
       'tags': instance.tags,
       'weight': instance.weight,
@@ -249,4 +254,5 @@ Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
       'slug': instance.slug,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
+      'flavor': instance.flavors,
     };
