@@ -325,4 +325,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get removeFromCart => 'Remove from Cart';
+
+  @override
+  String get flavor => 'Flavor';
 }

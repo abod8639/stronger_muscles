@@ -104,5 +104,6 @@
   "ingredients": "Ingredients",
   "addedToCart": "Added to Cart",
   "decreaseQuantity": "Decrease Quantity",
-  "removeFromCart": "Remove from Cart"
+  "removeFromCart": "Remove from Cart",
+  "flavor": "Flavor"
 }

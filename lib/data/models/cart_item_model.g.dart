@@ -25,13 +25,20 @@ class CartItemModelAdapter extends TypeAdapter<_$CartItemModelImpl> {
       imageUrls: (fields[5] as List).cast<String>(),
       quantity: fields[6] as int,
       addedAt: fields[7] as DateTime?,
+      selectedFlavor: fields[8] as String?,
+      brand: fields[9] as String?,
+      weight: fields[10] as double?,
+      size: fields[11] as String?,
+      sku: fields[12] as String?,
+      categoryId: fields[13] as String?,
+      flavors: (fields[14] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, _$CartItemModelImpl obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -46,8 +53,22 @@ class CartItemModelAdapter extends TypeAdapter<_$CartItemModelImpl> {
       ..write(obj.quantity)
       ..writeByte(7)
       ..write(obj.addedAt)
+      ..writeByte(8)
+      ..write(obj.selectedFlavor)
+      ..writeByte(9)
+      ..write(obj.brand)
+      ..writeByte(10)
+      ..write(obj.weight)
+      ..writeByte(11)
+      ..write(obj.size)
+      ..writeByte(12)
+      ..write(obj.sku)
+      ..writeByte(13)
+      ..write(obj.categoryId)
       ..writeByte(5)
-      ..write(obj.imageUrls);
+      ..write(obj.imageUrls)
+      ..writeByte(14)
+      ..write(obj.flavors);
   }
 
   @override
@@ -80,6 +101,16 @@ _$CartItemModelImpl _$$CartItemModelImplFromJson(Map<String, dynamic> json) =>
       addedAt: json['added_at'] == null
           ? null
           : DateTime.parse(json['added_at'] as String),
+      selectedFlavor: json['selected_flavor'] as String?,
+      brand: json['brand'] as String?,
+      weight: (json['weight'] as num?)?.toDouble(),
+      size: json['size'] as String?,
+      sku: json['sku'] as String?,
+      categoryId: json['category_id'] as String?,
+      flavors: (json['flavors'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$CartItemModelImplToJson(_$CartItemModelImpl instance) =>
@@ -92,4 +123,11 @@ Map<String, dynamic> _$$CartItemModelImplToJson(_$CartItemModelImpl instance) =>
       'image_urls': instance.imageUrls,
       'quantity': instance.quantity,
       'added_at': instance.addedAt?.toIso8601String(),
+      'selected_flavor': instance.selectedFlavor,
+      'brand': instance.brand,
+      'weight': instance.weight,
+      'size': instance.size,
+      'sku': instance.sku,
+      'category_id': instance.categoryId,
+      'flavors': instance.flavors,
     };

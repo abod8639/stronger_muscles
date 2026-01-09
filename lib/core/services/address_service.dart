@@ -30,7 +30,7 @@ class AddressService extends GetxService {
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.addresses,
+        ApiConfig.orders,
         data: address.toJson(),
       );
       

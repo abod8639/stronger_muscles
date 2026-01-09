@@ -34,7 +34,7 @@ class ProfileController extends GetxController {
 
   Future<void> _loadUserData() async {
     await _loadOrders();
-    await _loadAddresses();
+    await loadAddresses();
     await _loadWishlistCount();
   }
 
@@ -47,7 +47,7 @@ class ProfileController extends GetxController {
     ];
   }
 
-  Future<void> _loadAddresses() async {
+  Future<void> loadAddresses() async {
     // Mock data for demonstration
     addresses.value = [
       AddressModel(

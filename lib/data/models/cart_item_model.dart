@@ -16,6 +16,14 @@ class CartItemModel with _$CartItemModel {
     @HiveField(5) @JsonKey(name: 'image_urls') @Default([]) List<String> imageUrls,
     @HiveField(6) @Default(1) int quantity,
     @HiveField(7) @JsonKey(name: 'added_at') DateTime? addedAt,
+    @HiveField(8) @JsonKey(name: 'selected_flavor') String? selectedFlavor,
+    @HiveField(9) String? brand,
+    @HiveField(10) double? weight,
+    @HiveField(11) String? size,
+    @HiveField(12) String? sku,
+    @HiveField(13) @JsonKey(name: 'category_id') String? categoryId,
+    @HiveField(14) @JsonKey(name: 'flavors') @Default([]) List<String>? flavors,
+
   }) = _CartItemModel;
 
   const CartItemModel._();

@@ -84,6 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "filter": MessageLookupByLibrary.simpleMessage("تصفية"),
         "filterProducts":
             MessageLookupByLibrary.simpleMessage("تصفية المنتجات"),
+        "flavor": MessageLookupByLibrary.simpleMessage("النكهة"),
         "forgotPassword":
             MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
         "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(

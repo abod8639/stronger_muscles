@@ -104,5 +104,6 @@
   "ingredients": "المكونات",
   "addedToCart": "تم إضافة المنتج إلى السلة",
   "removeFromCart": "إزالة من السلة",
-  "decreaseQuantity": "العدد"
+  "decreaseQuantity": "العدد",
+  "flavor": "النكهة"
 }

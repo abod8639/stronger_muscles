@@ -76,7 +76,12 @@ class CartItemCard extends StatelessWidget {
       price: item.price,
       imageUrls: item.imageUrls,
       description: '',
-      categoryId: '',
+      brand: item.brand,
+      weight: item.weight,
+      size: item.size,
+      sku: item.sku,
+      categoryId: item.categoryId ?? '',
+      flavors: item.selectedFlavor != null ? [item.selectedFlavor!] : [],
     );
   }
 

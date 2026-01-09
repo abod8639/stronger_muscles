@@ -13,6 +13,7 @@ class AuthController extends GetxController {
     AuthService(),
   ); // Ensure AuthService is initialized
 
+  final RxString userId = ''.obs;
   final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
 
@@ -36,13 +37,11 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       await _googleSignIn.initialize(serverClientId: webClientId);
-      final GoogleSignInAccount googleUser = await _googleSignIn
-          .authenticate();
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
       // if (googleUser == null) return null;
 
-      final GoogleSignInAuthentication googleAuth =
-          googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
         // accessToken: null,
@@ -51,7 +50,7 @@ class AuthController extends GetxController {
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
-
+        userId.value = userCredential.user!.uid;
       // إرسال معلومات المستخدم إلى Backend
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;
@@ -73,14 +72,15 @@ class AuthController extends GetxController {
     }
   }
 
-Future<void> signInWithEmail({
-  required String email, 
-  required String password}) async {
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
     try {
       isLoading.value = true;
-      
+
       print('🔐 محاولة تسجيل الدخول: $email');
-      
+
       // 1. Firebase Login (Optional, based on requirement)
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       print('✅ نجح تسجيل الدخول في Firebase');
@@ -88,9 +88,9 @@ Future<void> signInWithEmail({
       // 2. Backend API Login
       final user = await _authService.login(email: email, password: password);
       print('✅ نجح تسجيل الدخول في Backend: ${user.email}');
-      
+
       currentUser.value = user;
-      
+
       Get.offAllNamed(AppRoutes.main);
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } on FirebaseAuthException catch (e) {
@@ -111,9 +111,9 @@ Future<void> signInWithEmail({
   ) async {
     try {
       isLoading.value = true;
-      
+
       print('📝 محاولة إنشاء حساب: $email');
-      
+
       // 1. Firebase Register
       await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -128,7 +128,7 @@ Future<void> signInWithEmail({
         name: name,
       );
       print('✅ نجح إنشاء الحساب في Backend: ${user.email}');
-      
+
       currentUser.value = user;
 
       Get.offAllNamed(AppRoutes.main);
@@ -152,14 +152,14 @@ Future<void> signInWithEmail({
   }) async {
     try {
       isLoading.value = true;
-      
+
       final updatedUser = await _authService.updateProfile(
         name: name,
         email: email,
         phone: phone,
         photoUrl: photoUrl,
       );
-      
+
       currentUser.value = updatedUser;
       print('✅ تم تحديث بيانات المستخدم');
     } catch (e) {

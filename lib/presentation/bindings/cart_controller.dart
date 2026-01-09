@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+// import 'package:get/get_core/src/get_main.dart' as firebaseUser;
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 
 class CartController extends GetxController {
   final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
@@ -26,10 +28,12 @@ class CartController extends GetxController {
     }
   }
 
-  void addToCart(ProductModel product) {
+  void addToCart(ProductModel product, {String? selectedFlavor}) {
     try {
       final existingItemIndex = cartItems.indexWhere(
-        (item) => item.productId == product.id,
+        (item) =>
+            item.productId == product.id &&
+            item.selectedFlavor == selectedFlavor,
       );
       if (existingItemIndex != -1) {
         final item = cartItems[existingItemIndex];
@@ -41,11 +45,18 @@ class CartController extends GetxController {
       } else {
         final newItem = CartItemModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
-          userId: '', // TODO: Get from auth controller
+           userId:    Get.find<AuthController>().userId.value, // TODO: Get from auth controller
           productId: product.id,
           productName: product.name,
           price: product.effectivePrice,
           imageUrls: product.imageUrls,
+          selectedFlavor: selectedFlavor,
+          brand: product.brand,
+          weight: product.weight,
+          size: product.size,
+          sku: product.sku,
+          categoryId: product.categoryId,
+          addedAt: DateTime.now(),
         );
         cartBox.add(newItem);
         cartItems.add(newItem);
@@ -98,12 +109,14 @@ class CartController extends GetxController {
     }
   }
 
-  bool isInCart(ProductModel product) {
-    return cartItems.any((item) => item.productId == product.id);
+  bool isInCart(ProductModel product, {String? selectedFlavor}) {
+    return cartItems.any((item) =>
+        item.productId == product.id && item.selectedFlavor == selectedFlavor);
   }
 
-  CartItemModel? getCartItem(ProductModel product) {
-    return cartItems.firstWhereOrNull((item) => item.productId == product.id);
+  CartItemModel? getCartItem(ProductModel product, {String? selectedFlavor}) {
+    return cartItems.firstWhereOrNull((item) =>
+        item.productId == product.id && item.selectedFlavor == selectedFlavor);
   }
 
   double get totalPrice =>

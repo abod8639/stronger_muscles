@@ -727,6 +727,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove from Cart'**
   String get removeFromCart;
+
+  /// No description provided for @flavor.
+  ///
+  /// In en, this message translates to:
+  /// **'Flavor'**
+  String get flavor;
 }
 
 class _AppLocalizationsDelegate

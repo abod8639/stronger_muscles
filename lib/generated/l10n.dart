@@ -1099,6 +1099,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Flavor`
+  String get flavor {
+    return Intl.message(
+      'Flavor',
+      name: 'flavor',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

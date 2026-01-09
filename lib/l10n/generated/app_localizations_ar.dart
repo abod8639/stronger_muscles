@@ -324,4 +324,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get removeFromCart => 'إزالة من السلة';
+
+  @override
+  String get flavor => 'النكهة';
 }

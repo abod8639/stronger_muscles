@@ -41,6 +41,23 @@ mixin _$CartItemModel {
   @HiveField(7)
   @JsonKey(name: 'added_at')
   DateTime? get addedAt => throw _privateConstructorUsedError;
+  @HiveField(8)
+  @JsonKey(name: 'selected_flavor')
+  String? get selectedFlavor => throw _privateConstructorUsedError;
+  @HiveField(9)
+  String? get brand => throw _privateConstructorUsedError;
+  @HiveField(10)
+  double? get weight => throw _privateConstructorUsedError;
+  @HiveField(11)
+  String? get size => throw _privateConstructorUsedError;
+  @HiveField(12)
+  String? get sku => throw _privateConstructorUsedError;
+  @HiveField(13)
+  @JsonKey(name: 'category_id')
+  String? get categoryId => throw _privateConstructorUsedError;
+  @HiveField(14)
+  @JsonKey(name: 'flavors')
+  List<String>? get flavors => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -62,7 +79,14 @@ abstract class $CartItemModelCopyWith<$Res> {
       @HiveField(4) double price,
       @HiveField(5) @JsonKey(name: 'image_urls') List<String> imageUrls,
       @HiveField(6) int quantity,
-      @HiveField(7) @JsonKey(name: 'added_at') DateTime? addedAt});
+      @HiveField(7) @JsonKey(name: 'added_at') DateTime? addedAt,
+      @HiveField(8) @JsonKey(name: 'selected_flavor') String? selectedFlavor,
+      @HiveField(9) String? brand,
+      @HiveField(10) double? weight,
+      @HiveField(11) String? size,
+      @HiveField(12) String? sku,
+      @HiveField(13) @JsonKey(name: 'category_id') String? categoryId,
+      @HiveField(14) @JsonKey(name: 'flavors') List<String>? flavors});
 }
 
 /// @nodoc
@@ -86,6 +110,13 @@ class _$CartItemModelCopyWithImpl<$Res, $Val extends CartItemModel>
     Object? imageUrls = null,
     Object? quantity = null,
     Object? addedAt = freezed,
+    Object? selectedFlavor = freezed,
+    Object? brand = freezed,
+    Object? weight = freezed,
+    Object? size = freezed,
+    Object? sku = freezed,
+    Object? categoryId = freezed,
+    Object? flavors = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -120,6 +151,34 @@ class _$CartItemModelCopyWithImpl<$Res, $Val extends CartItemModel>
           ? _value.addedAt
           : addedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      brand: freezed == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String?,
+      weight: freezed == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as double?,
+      size: freezed == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sku: freezed == sku
+          ? _value.sku
+          : sku // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      flavors: freezed == flavors
+          ? _value.flavors
+          : flavors // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -140,7 +199,14 @@ abstract class _$$CartItemModelImplCopyWith<$Res>
       @HiveField(4) double price,
       @HiveField(5) @JsonKey(name: 'image_urls') List<String> imageUrls,
       @HiveField(6) int quantity,
-      @HiveField(7) @JsonKey(name: 'added_at') DateTime? addedAt});
+      @HiveField(7) @JsonKey(name: 'added_at') DateTime? addedAt,
+      @HiveField(8) @JsonKey(name: 'selected_flavor') String? selectedFlavor,
+      @HiveField(9) String? brand,
+      @HiveField(10) double? weight,
+      @HiveField(11) String? size,
+      @HiveField(12) String? sku,
+      @HiveField(13) @JsonKey(name: 'category_id') String? categoryId,
+      @HiveField(14) @JsonKey(name: 'flavors') List<String>? flavors});
 }
 
 /// @nodoc
@@ -162,6 +228,13 @@ class __$$CartItemModelImplCopyWithImpl<$Res>
     Object? imageUrls = null,
     Object? quantity = null,
     Object? addedAt = freezed,
+    Object? selectedFlavor = freezed,
+    Object? brand = freezed,
+    Object? weight = freezed,
+    Object? size = freezed,
+    Object? sku = freezed,
+    Object? categoryId = freezed,
+    Object? flavors = freezed,
   }) {
     return _then(_$CartItemModelImpl(
       id: null == id
@@ -196,6 +269,34 @@ class __$$CartItemModelImplCopyWithImpl<$Res>
           ? _value.addedAt
           : addedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      brand: freezed == brand
+          ? _value.brand
+          : brand // ignore: cast_nullable_to_non_nullable
+              as String?,
+      weight: freezed == weight
+          ? _value.weight
+          : weight // ignore: cast_nullable_to_non_nullable
+              as double?,
+      size: freezed == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as String?,
+      sku: freezed == sku
+          ? _value.sku
+          : sku // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      flavors: freezed == flavors
+          ? _value._flavors
+          : flavors // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -214,8 +315,18 @@ class _$CartItemModelImpl extends _CartItemModel {
       @JsonKey(name: 'image_urls')
       final List<String> imageUrls = const [],
       @HiveField(6) this.quantity = 1,
-      @HiveField(7) @JsonKey(name: 'added_at') this.addedAt})
+      @HiveField(7) @JsonKey(name: 'added_at') this.addedAt,
+      @HiveField(8) @JsonKey(name: 'selected_flavor') this.selectedFlavor,
+      @HiveField(9) this.brand,
+      @HiveField(10) this.weight,
+      @HiveField(11) this.size,
+      @HiveField(12) this.sku,
+      @HiveField(13) @JsonKey(name: 'category_id') this.categoryId,
+      @HiveField(14)
+      @JsonKey(name: 'flavors')
+      final List<String>? flavors = const []})
       : _imageUrls = imageUrls,
+        _flavors = flavors,
         super._();
 
   factory _$CartItemModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -257,10 +368,41 @@ class _$CartItemModelImpl extends _CartItemModel {
   @HiveField(7)
   @JsonKey(name: 'added_at')
   final DateTime? addedAt;
+  @override
+  @HiveField(8)
+  @JsonKey(name: 'selected_flavor')
+  final String? selectedFlavor;
+  @override
+  @HiveField(9)
+  final String? brand;
+  @override
+  @HiveField(10)
+  final double? weight;
+  @override
+  @HiveField(11)
+  final String? size;
+  @override
+  @HiveField(12)
+  final String? sku;
+  @override
+  @HiveField(13)
+  @JsonKey(name: 'category_id')
+  final String? categoryId;
+  final List<String>? _flavors;
+  @override
+  @HiveField(14)
+  @JsonKey(name: 'flavors')
+  List<String>? get flavors {
+    final value = _flavors;
+    if (value == null) return null;
+    if (_flavors is EqualUnmodifiableListView) return _flavors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'CartItemModel(id: $id, userId: $userId, productId: $productId, productName: $productName, price: $price, imageUrls: $imageUrls, quantity: $quantity, addedAt: $addedAt)';
+    return 'CartItemModel(id: $id, userId: $userId, productId: $productId, productName: $productName, price: $price, imageUrls: $imageUrls, quantity: $quantity, addedAt: $addedAt, selectedFlavor: $selectedFlavor, brand: $brand, weight: $weight, size: $size, sku: $sku, categoryId: $categoryId, flavors: $flavors)';
   }
 
   @override
@@ -279,7 +421,16 @@ class _$CartItemModelImpl extends _CartItemModel {
                 .equals(other._imageUrls, _imageUrls) &&
             (identical(other.quantity, quantity) ||
                 other.quantity == quantity) &&
-            (identical(other.addedAt, addedAt) || other.addedAt == addedAt));
+            (identical(other.addedAt, addedAt) || other.addedAt == addedAt) &&
+            (identical(other.selectedFlavor, selectedFlavor) ||
+                other.selectedFlavor == selectedFlavor) &&
+            (identical(other.brand, brand) || other.brand == brand) &&
+            (identical(other.weight, weight) || other.weight == weight) &&
+            (identical(other.size, size) || other.size == size) &&
+            (identical(other.sku, sku) || other.sku == sku) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            const DeepCollectionEquality().equals(other._flavors, _flavors));
   }
 
   @JsonKey(ignore: true)
@@ -293,7 +444,14 @@ class _$CartItemModelImpl extends _CartItemModel {
       price,
       const DeepCollectionEquality().hash(_imageUrls),
       quantity,
-      addedAt);
+      addedAt,
+      selectedFlavor,
+      brand,
+      weight,
+      size,
+      sku,
+      categoryId,
+      const DeepCollectionEquality().hash(_flavors));
 
   @JsonKey(ignore: true)
   @override
@@ -322,9 +480,18 @@ abstract class _CartItemModel extends CartItemModel {
       @HiveField(4) required final double price,
       @HiveField(5) @JsonKey(name: 'image_urls') final List<String> imageUrls,
       @HiveField(6) final int quantity,
-      @HiveField(7)
-      @JsonKey(name: 'added_at')
-      final DateTime? addedAt}) = _$CartItemModelImpl;
+      @HiveField(7) @JsonKey(name: 'added_at') final DateTime? addedAt,
+      @HiveField(8)
+      @JsonKey(name: 'selected_flavor')
+      final String? selectedFlavor,
+      @HiveField(9) final String? brand,
+      @HiveField(10) final double? weight,
+      @HiveField(11) final String? size,
+      @HiveField(12) final String? sku,
+      @HiveField(13) @JsonKey(name: 'category_id') final String? categoryId,
+      @HiveField(14)
+      @JsonKey(name: 'flavors')
+      final List<String>? flavors}) = _$CartItemModelImpl;
   const _CartItemModel._() : super._();
 
   factory _CartItemModel.fromJson(Map<String, dynamic> json) =
@@ -359,6 +526,30 @@ abstract class _CartItemModel extends CartItemModel {
   @HiveField(7)
   @JsonKey(name: 'added_at')
   DateTime? get addedAt;
+  @override
+  @HiveField(8)
+  @JsonKey(name: 'selected_flavor')
+  String? get selectedFlavor;
+  @override
+  @HiveField(9)
+  String? get brand;
+  @override
+  @HiveField(10)
+  double? get weight;
+  @override
+  @HiveField(11)
+  String? get size;
+  @override
+  @HiveField(12)
+  String? get sku;
+  @override
+  @HiveField(13)
+  @JsonKey(name: 'category_id')
+  String? get categoryId;
+  @override
+  @HiveField(14)
+  @JsonKey(name: 'flavors')
+  List<String>? get flavors;
   @override
   @JsonKey(ignore: true)
   _$$CartItemModelImplCopyWith<_$CartItemModelImpl> get copyWith =>

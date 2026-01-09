@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 
   const double _titleFontSize = 18.0;
@@ -21,6 +22,17 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Brand
+            if (item.brand != null)
+              Text(
+                item.brand!,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            const SizedBox(height: 4.0),
+
             // Product Name
             Text(
               item.productName,
@@ -32,6 +44,20 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
               maxLines: _maxTitleLines,
               overflow: TextOverflow.ellipsis,
             ),
+            
+            // Selected Flavor
+            if (item.selectedFlavor != null && item.selectedFlavor!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  '${AppLocalizations.of(context)!.flavor}: ${item.selectedFlavor}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            
             const SizedBox(height: 8.0),
         
             // Product Price
