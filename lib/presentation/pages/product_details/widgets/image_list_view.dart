@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
 /// Horizontal scrollable list of product image thumbnails
@@ -48,41 +49,45 @@ class ImageListView extends StatelessWidget {
 
   /// Builds a single thumbnail image
   Widget _buildThumbnail(ProductDetailsController controller, int index) {
-    return Semantics(
-      label: 'Product image ${index + 1} of ${product.imageUrls.length}',
-      button: true,
-      child: GestureDetector(
-        onTap: () => controller.selectImage(index),
-        child: Obx(() {
-          final isSelected = controller.selectedImageIndex.value == index;
-          return AnimatedContainer(
-            duration: _animationDuration,
-            curve: Curves.easeInOut,
-            margin: const EdgeInsets.symmetric(horizontal: _horizontalMargin),
-            padding: const EdgeInsets.all(_padding),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: isSelected ? AppColors.primary : Colors.transparent,
-                width: _borderWidth,
-              ),
-              borderRadius: BorderRadius.circular(_borderRadius),
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: AppColors.primary.withOpacity(0.3),
-                        blurRadius: 8.0,
-                        spreadRadius: 1.0,
-                      ),
-                    ]
-                  : null,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(_borderRadius - _padding),
-              child: _buildThumbnailImage(index),
-            ),
-          );
-        }),
-      ),
+    return Builder(
+      builder: (context) {
+        return Semantics(
+          label: '${AppLocalizations.of(context)!.productImage} ${index + 1} of ${product.imageUrls.length}',
+          button: true,
+          child: GestureDetector(
+            onTap: () => controller.selectImage(index),
+            child: Obx(() {
+              final isSelected = controller.selectedImageIndex.value == index;
+              return AnimatedContainer(
+                duration: _animationDuration,
+                curve: Curves.easeInOut,
+                margin: const EdgeInsets.symmetric(horizontal: _horizontalMargin),
+                padding: const EdgeInsets.all(_padding),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    width: _borderWidth,
+                  ),
+                  borderRadius: BorderRadius.circular(_borderRadius),
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.3),
+                            blurRadius: 8.0,
+                            spreadRadius: 1.0,
+                          ),
+                        ]
+                      : null,
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(_borderRadius - _padding),
+                  child: _buildThumbnailImage(index),
+                ),
+              );
+            }),
+          ),
+        );
+      }
     );
   }
 

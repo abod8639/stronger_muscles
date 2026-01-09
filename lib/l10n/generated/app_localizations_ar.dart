@@ -255,4 +255,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get enterName => 'يرجى إدخال اسمك الكامل';
+
+  @override
+  String get selectFlavor => 'اختر النكهة';
+
+  @override
+  String get customerReviews => 'تقييم العملاء';
+
+  @override
+  String get beTheFirstToReviewThisProduct => 'كن أول من يقيم هذا المنتج';
+
+  @override
+  String get noImagesAvailable => 'لا توجد صور متاحة';
+
+  @override
+  String get productImage => 'صورة المنتج';
+
+  @override
+  String get warnings => 'تحذيرات';
+
+  @override
+  String get usageInstructions => 'طريقة الاستخدام';
+
+  @override
+  String get productInfo => 'معلومات المنتج';
+
+  @override
+  String get brand => 'العلامة التجارية';
+
+  @override
+  String get sku => 'رمز المنتج';
+
+  @override
+  String get servingSize => 'حجم الحصة';
+
+  @override
+  String get servingsPerContainer => 'عدد الحصص';
+
+  @override
+  String get weight => 'الوزن';
+
+  @override
+  String get size => 'الحجم';
+
+  @override
+  String get manufacturer => 'الشركة المصنعة';
+
+  @override
+  String get countryOfOrigin => 'بلد المنشأ';
+
+  @override
+  String get newArrival => 'جديد';
+
+  @override
+  String get bestSeller => 'الأكثر مبيعاً';
+
+  @override
+  String get featured => 'مميز';
+
+  @override
+  String get ingredients => 'المكونات';
+
+  @override
+  String get addedToCart => 'تم إضافة المنتج إلى السلة';
+
+  @override
+  String get decreaseQuantity => 'العدد';
+
+  @override
+  String get removeFromCart => 'إزالة من السلة';
 }

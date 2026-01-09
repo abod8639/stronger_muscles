@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
 class MainImage extends StatefulWidget {
@@ -74,7 +75,7 @@ class _MainImageState extends State<MainImage> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'لا توجد صور متاحة',
+                  AppLocalizations.of(context)!.noImagesAvailable,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],

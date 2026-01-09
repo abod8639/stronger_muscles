@@ -30,12 +30,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "addProductsToGetStarted":
             MessageLookupByLibrary.simpleMessage("Add products to get started"),
         "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
+        "addedToCart": MessageLookupByLibrary.simpleMessage("Added to Cart"),
         "address": MessageLookupByLibrary.simpleMessage("Address"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account? "),
         "appTitle": MessageLookupByLibrary.simpleMessage("Stronger Muscles"),
         "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
         "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "beTheFirstToReviewThisProduct": MessageLookupByLibrary.simpleMessage(
+            "Be the first to review this product"),
+        "bestSeller": MessageLookupByLibrary.simpleMessage("Best Seller"),
+        "brand": MessageLookupByLibrary.simpleMessage("Brand"),
         "cart": MessageLookupByLibrary.simpleMessage("Cart"),
         "categoryAmino": MessageLookupByLibrary.simpleMessage("Amino"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
@@ -57,7 +62,13 @@ class MessageLookup extends MessageLookupByLibrary {
             "Please confirm your password"),
         "continueShopping":
             MessageLookupByLibrary.simpleMessage("Continue Shopping"),
+        "countryOfOrigin":
+            MessageLookupByLibrary.simpleMessage("Country of Origin"),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
+        "customerReviews":
+            MessageLookupByLibrary.simpleMessage("Customer Reviews"),
+        "decreaseQuantity":
+            MessageLookupByLibrary.simpleMessage("Decrease Quantity"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
@@ -69,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Please enter your full name"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("Please enter your password"),
+        "featured": MessageLookupByLibrary.simpleMessage("Featured"),
         "filter": MessageLookupByLibrary.simpleMessage("Filter"),
         "filterProducts":
             MessageLookupByLibrary.simpleMessage("Filter products"),
@@ -80,15 +92,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "getDiscount":
             MessageLookupByLibrary.simpleMessage("Get 20% off on all products"),
         "helpSupport": MessageLookupByLibrary.simpleMessage("Help & Support"),
+        "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
         "item": MessageLookupByLibrary.simpleMessage("item"),
         "items": MessageLookupByLibrary.simpleMessage("items"),
         "language": MessageLookupByLibrary.simpleMessage("Language"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "manufacturer": MessageLookupByLibrary.simpleMessage("Manufacturer"),
         "mostPopularOffers":
             MessageLookupByLibrary.simpleMessage("Most Popular Offers"),
         "myAccount": MessageLookupByLibrary.simpleMessage("My Account"),
+        "newArrival": MessageLookupByLibrary.simpleMessage("New Arrival"),
         "noAddressesFound": MessageLookupByLibrary.simpleMessage(
             "No addresses found. Please add one in your profile."),
+        "noImagesAvailable":
+            MessageLookupByLibrary.simpleMessage("No images available"),
         "noProductsFound":
             MessageLookupByLibrary.simpleMessage("No products found."),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
@@ -106,11 +123,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Proceed to checkout"),
         "productDescription":
             MessageLookupByLibrary.simpleMessage("Product Description"),
+        "productImage": MessageLookupByLibrary.simpleMessage("Product Image"),
+        "productInfo": MessageLookupByLibrary.simpleMessage("Product Info"),
+        "removeFromCart":
+            MessageLookupByLibrary.simpleMessage("Remove from Cart"),
         "review": MessageLookupByLibrary.simpleMessage("Review"),
         "searchProducts":
             MessageLookupByLibrary.simpleMessage("Search products..."),
         "seeAll": MessageLookupByLibrary.simpleMessage("See all"),
         "selectFlavor": MessageLookupByLibrary.simpleMessage("Select Flavor"),
+        "servingSize": MessageLookupByLibrary.simpleMessage("Serving Size"),
+        "servingsPerContainer":
+            MessageLookupByLibrary.simpleMessage("Servings Per Container"),
         "shippingTo": MessageLookupByLibrary.simpleMessage("Shipping To:"),
         "shopNow": MessageLookupByLibrary.simpleMessage("Shop Now"),
         "signInToContinue":
@@ -121,6 +145,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "signUpToGetStarted":
             MessageLookupByLibrary.simpleMessage("Sign up to get started"),
+        "size": MessageLookupByLibrary.simpleMessage("Size"),
+        "sku": MessageLookupByLibrary.simpleMessage("SKU"),
         "specialOffer": MessageLookupByLibrary.simpleMessage("Special Offer!"),
         "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
             "Start adding your favorite products!"),
@@ -128,9 +154,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "theme": MessageLookupByLibrary.simpleMessage("Theme"),
         "total": MessageLookupByLibrary.simpleMessage("Total"),
         "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
+        "usageInstructions":
+            MessageLookupByLibrary.simpleMessage("Usage Instructions"),
         "validEmail":
             MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
         "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
+        "warnings": MessageLookupByLibrary.simpleMessage("Warnings"),
+        "weight": MessageLookupByLibrary.simpleMessage("Weight"),
         "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back!"),
         "wishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
         "yourCartIsEmpty":

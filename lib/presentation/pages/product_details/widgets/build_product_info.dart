@@ -1,75 +1,81 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-Widget buildProductInfo(ProductModel product, bool isDark) {
+Widget buildProductInfo(ProductModel product, bool isDark, BuildContext context) {
   final infoItems = <Widget>[];
+  
   
   // Brand
   if (product.brand != null) {
-    infoItems.add(_buildInfoRow('العلامة التجارية', product.brand!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.brand, product.brand!, isDark));
   }
   
   // SKU
   if (product.sku != null) {
-    infoItems.add(_buildInfoRow('رمز المنتج', product.sku!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.sku, product.sku!, isDark));
   }
   
   // Serving Size
   if (product.servingSize != null) {
-    infoItems.add(_buildInfoRow('حجم الحصة', product.servingSize!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.servingSize, product.servingSize!, isDark));
   }
   
   // Servings Per Container
   if (product.servingsPerContainer != null) {
-    infoItems.add(_buildInfoRow('عدد الحصص', '${product.servingsPerContainer}', isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.servingsPerContainer, '${product.servingsPerContainer}', isDark));
   }
   
   // Weight
   if (product.weight != null) {
-    infoItems.add(_buildInfoRow('الوزن', '${product.weight} كجم', isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.weight, '${product.weight} كجم', isDark));
   }
   
   // Size
   if (product.size != null) {
-    infoItems.add(_buildInfoRow('الحجم', product.size!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.size, product.size!, isDark));
   }
   
   // Manufacturer
   if (product.manufacturer != null) {
-    infoItems.add(_buildInfoRow('الشركة المصنعة', product.manufacturer!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.manufacturer, product.manufacturer!, isDark));
   }
   
   // Country of Origin
   if (product.countryOfOrigin != null) {
-    infoItems.add(_buildInfoRow('بلد المنشأ', product.countryOfOrigin!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.countryOfOrigin, product.countryOfOrigin!, isDark));
   }
   
   if (infoItems.isEmpty) return const SizedBox.shrink();
   
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        'معلومات المنتج',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: isDark ? AppColors.white : AppColors.black,
-        ),
-      ),
-      const SizedBox(height: 12),
-      Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceDark : AppColors.greyLight.withOpacity(0.3),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          children: infoItems,
-        ),
-      ),
-    ],
+  return Builder(
+    builder: (context) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.productInfo,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: isDark ? AppColors.white : AppColors.black,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.surfaceDark : AppColors.greyLight.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: infoItems,
+            ),
+          ),
+        ],
+      );
+    }
   );
 }
 

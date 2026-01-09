@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductFlavorSelector extends StatefulWidget {
   final ProductModel product;
@@ -21,7 +22,6 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
   @override
   void initState() {
     super.initState();
-    // اختيار أول نكهة بشكل تلقائي إذا كانت القائمة غير فارغة
     if (widget.product.flavors != null && widget.product.flavors!.isNotEmpty) {
       _selectedFlavor = widget.product.flavors!.first;
     }
@@ -37,8 +37,8 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "اختر النكهة:",
+         Text(
+         AppLocalizations.of(context)!.selectFlavor ,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 10),

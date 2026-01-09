@@ -879,6 +879,226 @@ class S {
       args: [],
     );
   }
+
+  /// `Customer Reviews`
+  String get customerReviews {
+    return Intl.message(
+      'Customer Reviews',
+      name: 'customerReviews',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Be the first to review this product`
+  String get beTheFirstToReviewThisProduct {
+    return Intl.message(
+      'Be the first to review this product',
+      name: 'beTheFirstToReviewThisProduct',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No images available`
+  String get noImagesAvailable {
+    return Intl.message(
+      'No images available',
+      name: 'noImagesAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product Image`
+  String get productImage {
+    return Intl.message(
+      'Product Image',
+      name: 'productImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Warnings`
+  String get warnings {
+    return Intl.message(
+      'Warnings',
+      name: 'warnings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usage Instructions`
+  String get usageInstructions {
+    return Intl.message(
+      'Usage Instructions',
+      name: 'usageInstructions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Product Info`
+  String get productInfo {
+    return Intl.message(
+      'Product Info',
+      name: 'productInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brand`
+  String get brand {
+    return Intl.message(
+      'Brand',
+      name: 'brand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SKU`
+  String get sku {
+    return Intl.message(
+      'SKU',
+      name: 'sku',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Serving Size`
+  String get servingSize {
+    return Intl.message(
+      'Serving Size',
+      name: 'servingSize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Servings Per Container`
+  String get servingsPerContainer {
+    return Intl.message(
+      'Servings Per Container',
+      name: 'servingsPerContainer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weight`
+  String get weight {
+    return Intl.message(
+      'Weight',
+      name: 'weight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size`
+  String get size {
+    return Intl.message(
+      'Size',
+      name: 'size',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manufacturer`
+  String get manufacturer {
+    return Intl.message(
+      'Manufacturer',
+      name: 'manufacturer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Country of Origin`
+  String get countryOfOrigin {
+    return Intl.message(
+      'Country of Origin',
+      name: 'countryOfOrigin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Arrival`
+  String get newArrival {
+    return Intl.message(
+      'New Arrival',
+      name: 'newArrival',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best Seller`
+  String get bestSeller {
+    return Intl.message(
+      'Best Seller',
+      name: 'bestSeller',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Featured`
+  String get featured {
+    return Intl.message(
+      'Featured',
+      name: 'featured',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ingredients`
+  String get ingredients {
+    return Intl.message(
+      'Ingredients',
+      name: 'ingredients',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Added to Cart`
+  String get addedToCart {
+    return Intl.message(
+      'Added to Cart',
+      name: 'addedToCart',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Decrease Quantity`
+  String get decreaseQuantity {
+    return Intl.message(
+      'Decrease Quantity',
+      name: 'decreaseQuantity',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from Cart`
+  String get removeFromCart {
+    return Intl.message(
+      'Remove from Cart',
+      name: 'removeFromCart',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

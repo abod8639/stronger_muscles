@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
@@ -83,66 +84,70 @@ class BottomIconsRow extends StatelessWidget {
     CartController cartController,
     CartItemModel item,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          // Decrease Button
-          Semantics(
-            label: item.quantity > 1
-                ? 'Decrease quantity'
-                : 'Remove from cart',
-            button: true,
-            child: IconButton(
-              icon: Icon(
-                item.quantity > 1
-                    ? Icons.remove_circle_outline
-                    : Icons.delete_outline_rounded,
-                color: AppColors.primary,
-              ),
-              onPressed: () => cartController.decreaseQuantity(item),
-              tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
-              iconSize: _iconButtonSize,
-            ),
+    return Builder(
+      builder: (context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8.0),
           ),
-
-          // Quantity Display
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Text(
-              item.quantity.toString(),
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: _quantityFontSize,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Decrease Button
+              Semantics(
+                label: item.quantity > 1
+                    ? AppLocalizations.of(context)!.decreaseQuantity
+                    : AppLocalizations.of(context)!.removeFromCart,
+                button: true,
+                child: IconButton(
+                  icon: Icon(
+                    item.quantity > 1
+                        ? Icons.remove_circle_outline
+                        : Icons.delete_outline_rounded,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () => cartController.decreaseQuantity(item),
+                  tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
+                  iconSize: _iconButtonSize,
+                ),
               ),
-            ),
-          ),
-
-          // Increase Button
-          Semantics(
-            label: 'Increase quantity',
-            button: true,
-            child: IconButton(
-              icon: const Icon(
-                Icons.add_circle_outline,
-                color: AppColors.primary,
+        
+              // Quantity Display
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  item.quantity.toString(),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontSize: _quantityFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
               ),
-              onPressed: () => cartController.increaseQuantity(item),
-              tooltip: 'Increase',
-              iconSize: _iconButtonSize,
-            ),
+        
+              // Increase Button
+              Semantics(
+                label: 'Increase quantity',
+                button: true,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: () => cartController.increaseQuantity(item),
+                  tooltip: 'Increase',
+                  iconSize: _iconButtonSize,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -273,12 +278,12 @@ Widget bottomIconsRow(ProductModel product) {
                           cartController.addToCart(product);
                           Get.snackbar(
                             duration: const Duration(seconds: 1),
-                            'Added to cart',
-                            '${product.name} was added to your cart.',
+                            AppLocalizations.of(context)!.addedToCart,
+                            '${product.name} ${AppLocalizations.of(context)!.addedToCart}',
                           );
                         },
                         icon: const Icon(Icons.add_shopping_cart),
-                        label: const Text('Add to Cart'),
+                        label: Text(AppLocalizations.of(context)!.addToCart),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.primary,
                           foregroundColor: theme.colorScheme.onPrimary,

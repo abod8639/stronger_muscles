@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class HeaderWithIconandTitle extends StatelessWidget {
   const HeaderWithIconandTitle({
@@ -46,7 +47,7 @@ class HeaderWithIconandTitle extends StatelessWidget {
           const SizedBox(width: 12),
     
           Text(
-           "productDescription",//   AppLocalizations.of(context)!.productDescription,
+             AppLocalizations.of(context)!.productDescription,
               style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,

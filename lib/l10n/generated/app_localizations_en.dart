@@ -255,4 +255,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enterName => 'Please enter your full name';
+
+  @override
+  String get selectFlavor => 'Select Flavor';
+
+  @override
+  String get customerReviews => 'Customer Reviews';
+
+  @override
+  String get beTheFirstToReviewThisProduct =>
+      'Be the first to review this product';
+
+  @override
+  String get noImagesAvailable => 'No images available';
+
+  @override
+  String get productImage => 'Product Image';
+
+  @override
+  String get warnings => 'Warnings';
+
+  @override
+  String get usageInstructions => 'Usage Instructions';
+
+  @override
+  String get productInfo => 'Product Info';
+
+  @override
+  String get brand => 'Brand';
+
+  @override
+  String get sku => 'SKU';
+
+  @override
+  String get servingSize => 'Serving Size';
+
+  @override
+  String get servingsPerContainer => 'Servings Per Container';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String get size => 'Size';
+
+  @override
+  String get manufacturer => 'Manufacturer';
+
+  @override
+  String get countryOfOrigin => 'Country of Origin';
+
+  @override
+  String get newArrival => 'New Arrival';
+
+  @override
+  String get bestSeller => 'Best Seller';
+
+  @override
+  String get featured => 'Featured';
+
+  @override
+  String get ingredients => 'Ingredients';
+
+  @override
+  String get addedToCart => 'Added to Cart';
+
+  @override
+  String get decreaseQuantity => 'Decrease Quantity';
+
+  @override
+  String get removeFromCart => 'Remove from Cart';
 }

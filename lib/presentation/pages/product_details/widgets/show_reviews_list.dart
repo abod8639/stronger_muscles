@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/review_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ShowReviewsList extends StatelessWidget {
   final List<ReviewModel> reviews;
@@ -38,7 +39,7 @@ class ShowReviewsList extends StatelessWidget {
               const SizedBox(width: 8),
 
               Text(
-                'Customer Reviews',
+                AppLocalizations.of(context)!.customerReviews,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface,
@@ -271,7 +272,7 @@ class ShowReviewsList extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Be the first to review this product',
+                AppLocalizations.of(context)!.beTheFirstToReviewThisProduct,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
                 ),

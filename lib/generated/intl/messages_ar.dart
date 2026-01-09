@@ -30,12 +30,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "addProductsToGetStarted":
             MessageLookupByLibrary.simpleMessage("أضف منتجات للبدء"),
         "addToCart": MessageLookupByLibrary.simpleMessage("أضف إلى السلة"),
+        "addedToCart":
+            MessageLookupByLibrary.simpleMessage("تم إضافة المنتج إلى السلة"),
         "address": MessageLookupByLibrary.simpleMessage("العنوان"),
         "alreadyHaveAccount":
             MessageLookupByLibrary.simpleMessage("لديك حساب بالفعل؟ "),
         "appTitle": MessageLookupByLibrary.simpleMessage("عضلات أقوى"),
         "arabic": MessageLookupByLibrary.simpleMessage("العربية"),
         "back": MessageLookupByLibrary.simpleMessage("رجوع"),
+        "beTheFirstToReviewThisProduct":
+            MessageLookupByLibrary.simpleMessage("كن أول من يقيم هذا المنتج"),
+        "bestSeller": MessageLookupByLibrary.simpleMessage("الأكثر مبيعاً"),
+        "brand": MessageLookupByLibrary.simpleMessage("العلامة التجارية"),
         "cart": MessageLookupByLibrary.simpleMessage("السلة"),
         "categoryAmino": MessageLookupByLibrary.simpleMessage("أمينو"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
@@ -57,7 +63,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى تأكيد كلمة المرور"),
         "continueShopping":
             MessageLookupByLibrary.simpleMessage("متابعة التسوق"),
+        "countryOfOrigin": MessageLookupByLibrary.simpleMessage("بلد المنشأ"),
         "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+        "customerReviews":
+            MessageLookupByLibrary.simpleMessage("تقييم العملاء"),
+        "decreaseQuantity": MessageLookupByLibrary.simpleMessage("العدد"),
         "dontHaveAccount":
             MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
         "editProfile":
@@ -70,6 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("يرجى إدخال اسمك الكامل"),
         "enterPassword":
             MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
+        "featured": MessageLookupByLibrary.simpleMessage("مميز"),
         "filter": MessageLookupByLibrary.simpleMessage("تصفية"),
         "filterProducts":
             MessageLookupByLibrary.simpleMessage("تصفية المنتجات"),
@@ -81,15 +92,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "getDiscount": MessageLookupByLibrary.simpleMessage(
             "احصل على خصم 20% على جميع المنتجات"),
         "helpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),
+        "ingredients": MessageLookupByLibrary.simpleMessage("المكونات"),
         "item": MessageLookupByLibrary.simpleMessage("منتج"),
         "items": MessageLookupByLibrary.simpleMessage("منتجات"),
         "language": MessageLookupByLibrary.simpleMessage("اللغة"),
         "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+        "manufacturer": MessageLookupByLibrary.simpleMessage("الشركة المصنعة"),
         "mostPopularOffers":
             MessageLookupByLibrary.simpleMessage("العروض الأكثر شعبية"),
         "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+        "newArrival": MessageLookupByLibrary.simpleMessage("جديد"),
         "noAddressesFound": MessageLookupByLibrary.simpleMessage(
             "لم يتم العثور على عناوين. يرجى إضافة واحد في ملفك الشخصي."),
+        "noImagesAvailable":
+            MessageLookupByLibrary.simpleMessage("لا توجد صور متاحة"),
         "noProductsFound":
             MessageLookupByLibrary.simpleMessage("لم يتم العثور على منتجات."),
         "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
@@ -106,11 +122,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("المتابعة للدفع"),
         "productDescription":
             MessageLookupByLibrary.simpleMessage("وصف المنتج"),
+        "productImage": MessageLookupByLibrary.simpleMessage("صورة المنتج"),
+        "productInfo": MessageLookupByLibrary.simpleMessage("معلومات المنتج"),
+        "removeFromCart":
+            MessageLookupByLibrary.simpleMessage("إزالة من السلة"),
         "review": MessageLookupByLibrary.simpleMessage("المراجعة"),
         "searchProducts":
             MessageLookupByLibrary.simpleMessage("البحث عن المنتجات..."),
         "seeAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
         "selectFlavor": MessageLookupByLibrary.simpleMessage("اختر النكهة"),
+        "servingSize": MessageLookupByLibrary.simpleMessage("حجم الحصة"),
+        "servingsPerContainer":
+            MessageLookupByLibrary.simpleMessage("عدد الحصص"),
         "shippingTo": MessageLookupByLibrary.simpleMessage("الشحن إلى:"),
         "shopNow": MessageLookupByLibrary.simpleMessage("تسوق الآن"),
         "signInToContinue":
@@ -121,6 +144,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
         "signUpToGetStarted":
             MessageLookupByLibrary.simpleMessage("سجل الآن للبدء"),
+        "size": MessageLookupByLibrary.simpleMessage("الحجم"),
+        "sku": MessageLookupByLibrary.simpleMessage("رمز المنتج"),
         "specialOffer": MessageLookupByLibrary.simpleMessage("عرض خاص!"),
         "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
             "ابدأ بإضافة منتجاتك المفضلة!"),
@@ -128,9 +153,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "theme": MessageLookupByLibrary.simpleMessage("المظهر"),
         "total": MessageLookupByLibrary.simpleMessage("الإجمالي"),
         "totalAmount": MessageLookupByLibrary.simpleMessage("المبلغ الإجمالي"),
+        "usageInstructions":
+            MessageLookupByLibrary.simpleMessage("طريقة الاستخدام"),
         "validEmail": MessageLookupByLibrary.simpleMessage(
             "يرجى إدخال بريد إلكتروني صالح"),
         "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "warnings": MessageLookupByLibrary.simpleMessage("تحذيرات"),
+        "weight": MessageLookupByLibrary.simpleMessage("الوزن"),
         "welcomeBack": MessageLookupByLibrary.simpleMessage("مرحبًا بعودتك!"),
         "wishlist": MessageLookupByLibrary.simpleMessage("المفضلة"),
         "yourCartIsEmpty":

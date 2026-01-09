@@ -589,6 +589,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter your full name'**
   String get enterName;
+
+  /// No description provided for @selectFlavor.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Flavor'**
+  String get selectFlavor;
+
+  /// No description provided for @customerReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Reviews'**
+  String get customerReviews;
+
+  /// No description provided for @beTheFirstToReviewThisProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to review this product'**
+  String get beTheFirstToReviewThisProduct;
+
+  /// No description provided for @noImagesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No images available'**
+  String get noImagesAvailable;
+
+  /// No description provided for @productImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Image'**
+  String get productImage;
+
+  /// No description provided for @warnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Warnings'**
+  String get warnings;
+
+  /// No description provided for @usageInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Instructions'**
+  String get usageInstructions;
+
+  /// No description provided for @productInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Info'**
+  String get productInfo;
+
+  /// No description provided for @brand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get brand;
+
+  /// No description provided for @sku.
+  ///
+  /// In en, this message translates to:
+  /// **'SKU'**
+  String get sku;
+
+  /// No description provided for @servingSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Serving Size'**
+  String get servingSize;
+
+  /// No description provided for @servingsPerContainer.
+  ///
+  /// In en, this message translates to:
+  /// **'Servings Per Container'**
+  String get servingsPerContainer;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @size.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get size;
+
+  /// No description provided for @manufacturer.
+  ///
+  /// In en, this message translates to:
+  /// **'Manufacturer'**
+  String get manufacturer;
+
+  /// No description provided for @countryOfOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Country of Origin'**
+  String get countryOfOrigin;
+
+  /// No description provided for @newArrival.
+  ///
+  /// In en, this message translates to:
+  /// **'New Arrival'**
+  String get newArrival;
+
+  /// No description provided for @bestSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Seller'**
+  String get bestSeller;
+
+  /// No description provided for @featured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get featured;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get ingredients;
+
+  /// No description provided for @addedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to Cart'**
+  String get addedToCart;
+
+  /// No description provided for @decreaseQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease Quantity'**
+  String get decreaseQuantity;
+
+  /// No description provided for @removeFromCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Cart'**
+  String get removeFromCart;
 }
 
 class _AppLocalizationsDelegate

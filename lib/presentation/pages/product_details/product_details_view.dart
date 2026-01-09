@@ -77,7 +77,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
                   // Product Badges (Featured, New, Best Seller)
-                  buildProductBadges(widget.product),
+                  buildProductBadges(widget.product,context),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Product Flavors
@@ -113,7 +113,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Product Info (Brand, SKU, Weight, etc.)
-                  buildProductInfo(widget.product, isDark),
+                  buildProductInfo(widget.product, isDark,context),
                   const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Ingredients
