@@ -65,6 +65,10 @@ mixin _$OrderModel {
   List<OrderItemModel>? get items => throw _privateConstructorUsedError;
   @HiveField(17)
   String? get shippingAddress => throw _privateConstructorUsedError;
+  @HiveField(18)
+  String? get selectedFlavor => throw _privateConstructorUsedError;
+  @HiveField(19)
+  String? get selectedSize => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -98,7 +102,9 @@ abstract class $OrderModelCopyWith<$Res> {
       @HiveField(14) DateTime? createdAt,
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-      @HiveField(17) String? shippingAddress});
+      @HiveField(17) String? shippingAddress,
+      @HiveField(18) String? selectedFlavor,
+      @HiveField(19) String? selectedSize});
 }
 
 /// @nodoc
@@ -132,6 +138,8 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
     Object? updatedAt = freezed,
     Object? items = freezed,
     Object? shippingAddress = freezed,
+    Object? selectedFlavor = freezed,
+    Object? selectedSize = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -206,6 +214,14 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           ? _value.shippingAddress
           : shippingAddress // ignore: cast_nullable_to_non_nullable
               as String?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selectedSize: freezed == selectedSize
+          ? _value.selectedSize
+          : selectedSize // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -238,7 +254,9 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @HiveField(14) DateTime? createdAt,
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-      @HiveField(17) String? shippingAddress});
+      @HiveField(17) String? shippingAddress,
+      @HiveField(18) String? selectedFlavor,
+      @HiveField(19) String? selectedSize});
 }
 
 /// @nodoc
@@ -270,6 +288,8 @@ class __$$OrderModelImplCopyWithImpl<$Res>
     Object? updatedAt = freezed,
     Object? items = freezed,
     Object? shippingAddress = freezed,
+    Object? selectedFlavor = freezed,
+    Object? selectedSize = freezed,
   }) {
     return _then(_$OrderModelImpl(
       id: null == id
@@ -344,6 +364,14 @@ class __$$OrderModelImplCopyWithImpl<$Res>
           ? _value.shippingAddress
           : shippingAddress // ignore: cast_nullable_to_non_nullable
               as String?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selectedSize: freezed == selectedSize
+          ? _value.selectedSize
+          : selectedSize // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -377,7 +405,9 @@ class _$OrderModelImpl extends _OrderModel {
       @HiveField(16)
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
-      @HiveField(17) this.shippingAddress})
+      @HiveField(17) this.shippingAddress,
+      @HiveField(18) this.selectedFlavor,
+      @HiveField(19) this.selectedSize})
       : _items = items,
         super._();
 
@@ -458,10 +488,16 @@ class _$OrderModelImpl extends _OrderModel {
   @override
   @HiveField(17)
   final String? shippingAddress;
+  @override
+  @HiveField(18)
+  final String? selectedFlavor;
+  @override
+  @HiveField(19)
+  final String? selectedSize;
 
   @override
   String toString() {
-    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, shippingAddressSnapshot: $shippingAddressSnapshot, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress)';
+    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, shippingAddressSnapshot: $shippingAddressSnapshot, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress, selectedFlavor: $selectedFlavor, selectedSize: $selectedSize)';
   }
 
   @override
@@ -500,31 +536,38 @@ class _$OrderModelImpl extends _OrderModel {
                 other.updatedAt == updatedAt) &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.shippingAddress, shippingAddress) ||
-                other.shippingAddress == shippingAddress));
+                other.shippingAddress == shippingAddress) &&
+            (identical(other.selectedFlavor, selectedFlavor) ||
+                other.selectedFlavor == selectedFlavor) &&
+            (identical(other.selectedSize, selectedSize) ||
+                other.selectedSize == selectedSize));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      userId,
-      orderDate,
-      status,
-      paymentStatus,
-      paymentMethod,
-      addressId,
-      shippingAddressSnapshot,
-      subtotal,
-      shippingCost,
-      discount,
-      totalAmount,
-      trackingNumber,
-      notes,
-      createdAt,
-      updatedAt,
-      const DeepCollectionEquality().hash(_items),
-      shippingAddress);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        userId,
+        orderDate,
+        status,
+        paymentStatus,
+        paymentMethod,
+        addressId,
+        shippingAddressSnapshot,
+        subtotal,
+        shippingCost,
+        discount,
+        totalAmount,
+        trackingNumber,
+        notes,
+        createdAt,
+        updatedAt,
+        const DeepCollectionEquality().hash(_items),
+        shippingAddress,
+        selectedFlavor,
+        selectedSize
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -571,7 +614,9 @@ abstract class _OrderModel extends OrderModel {
       @HiveField(16)
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
-      @HiveField(17) final String? shippingAddress}) = _$OrderModelImpl;
+      @HiveField(17) final String? shippingAddress,
+      @HiveField(18) final String? selectedFlavor,
+      @HiveField(19) final String? selectedSize}) = _$OrderModelImpl;
   const _OrderModel._() : super._();
 
   factory _OrderModel.fromJson(Map<String, dynamic> json) =
@@ -641,6 +686,12 @@ abstract class _OrderModel extends OrderModel {
   @HiveField(17)
   String? get shippingAddress;
   @override
+  @HiveField(18)
+  String? get selectedFlavor;
+  @override
+  @HiveField(19)
+  String? get selectedSize;
+  @override
   @JsonKey(ignore: true)
   _$$OrderModelImplCopyWith<_$OrderModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -676,6 +727,10 @@ mixin _$OrderItemModel {
   String? get imageUrl => throw _privateConstructorUsedError;
   @HiveField(8)
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @HiveField(9)
+  String? get selectedFlavor => throw _privateConstructorUsedError;
+  @HiveField(10)
+  String? get selectedSize => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -698,7 +753,9 @@ abstract class $OrderItemModelCopyWith<$Res> {
       @HiveField(5) int quantity,
       @HiveField(6) double subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
-      @HiveField(8) DateTime? createdAt});
+      @HiveField(8) DateTime? createdAt,
+      @HiveField(9) String? selectedFlavor,
+      @HiveField(10) String? selectedSize});
 }
 
 /// @nodoc
@@ -723,6 +780,8 @@ class _$OrderItemModelCopyWithImpl<$Res, $Val extends OrderItemModel>
     Object? subtotal = null,
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
+    Object? selectedFlavor = freezed,
+    Object? selectedSize = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -761,6 +820,14 @@ class _$OrderItemModelCopyWithImpl<$Res, $Val extends OrderItemModel>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selectedSize: freezed == selectedSize
+          ? _value.selectedSize
+          : selectedSize // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -782,7 +849,9 @@ abstract class _$$OrderItemModelImplCopyWith<$Res>
       @HiveField(5) int quantity,
       @HiveField(6) double subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
-      @HiveField(8) DateTime? createdAt});
+      @HiveField(8) DateTime? createdAt,
+      @HiveField(9) String? selectedFlavor,
+      @HiveField(10) String? selectedSize});
 }
 
 /// @nodoc
@@ -805,6 +874,8 @@ class __$$OrderItemModelImplCopyWithImpl<$Res>
     Object? subtotal = null,
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
+    Object? selectedFlavor = freezed,
+    Object? selectedSize = freezed,
   }) {
     return _then(_$OrderItemModelImpl(
       id: null == id
@@ -843,6 +914,14 @@ class __$$OrderItemModelImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedFlavor: freezed == selectedFlavor
+          ? _value.selectedFlavor
+          : selectedFlavor // ignore: cast_nullable_to_non_nullable
+              as String?,
+      selectedSize: freezed == selectedSize
+          ? _value.selectedSize
+          : selectedSize // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -859,7 +938,9 @@ class _$OrderItemModelImpl implements _OrderItemModel {
       @HiveField(5) required this.quantity,
       @HiveField(6) required this.subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') this.imageUrl,
-      @HiveField(8) this.createdAt});
+      @HiveField(8) this.createdAt,
+      @HiveField(9) this.selectedFlavor,
+      @HiveField(10) this.selectedSize});
 
   factory _$OrderItemModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrderItemModelImplFromJson(json);
@@ -897,10 +978,16 @@ class _$OrderItemModelImpl implements _OrderItemModel {
   @override
   @HiveField(8)
   final DateTime? createdAt;
+  @override
+  @HiveField(9)
+  final String? selectedFlavor;
+  @override
+  @HiveField(10)
+  final String? selectedSize;
 
   @override
   String toString() {
-    return 'OrderItemModel(id: $id, orderId: $orderId, productId: $productId, productName: $productName, unitPrice: $unitPrice, quantity: $quantity, subtotal: $subtotal, imageUrl: $imageUrl, createdAt: $createdAt)';
+    return 'OrderItemModel(id: $id, orderId: $orderId, productId: $productId, productName: $productName, unitPrice: $unitPrice, quantity: $quantity, subtotal: $subtotal, imageUrl: $imageUrl, createdAt: $createdAt, selectedFlavor: $selectedFlavor, selectedSize: $selectedSize)';
   }
 
   @override
@@ -923,13 +1010,28 @@ class _$OrderItemModelImpl implements _OrderItemModel {
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.selectedFlavor, selectedFlavor) ||
+                other.selectedFlavor == selectedFlavor) &&
+            (identical(other.selectedSize, selectedSize) ||
+                other.selectedSize == selectedSize));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, orderId, productId,
-      productName, unitPrice, quantity, subtotal, imageUrl, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      orderId,
+      productId,
+      productName,
+      unitPrice,
+      quantity,
+      subtotal,
+      imageUrl,
+      createdAt,
+      selectedFlavor,
+      selectedSize);
 
   @JsonKey(ignore: true)
   @override
@@ -962,7 +1064,9 @@ abstract class _OrderItemModel implements OrderItemModel {
       @HiveField(5) required final int quantity,
       @HiveField(6) required final double subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') final String? imageUrl,
-      @HiveField(8) final DateTime? createdAt}) = _$OrderItemModelImpl;
+      @HiveField(8) final DateTime? createdAt,
+      @HiveField(9) final String? selectedFlavor,
+      @HiveField(10) final String? selectedSize}) = _$OrderItemModelImpl;
 
   factory _OrderItemModel.fromJson(Map<String, dynamic> json) =
       _$OrderItemModelImpl.fromJson;
@@ -999,6 +1103,12 @@ abstract class _OrderItemModel implements OrderItemModel {
   @override
   @HiveField(8)
   DateTime? get createdAt;
+  @override
+  @HiveField(9)
+  String? get selectedFlavor;
+  @override
+  @HiveField(10)
+  String? get selectedSize;
   @override
   @JsonKey(ignore: true)
   _$$OrderItemModelImplCopyWith<_$OrderItemModelImpl> get copyWith =>

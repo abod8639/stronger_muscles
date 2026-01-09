@@ -26,6 +26,8 @@ class OrderModel with _$OrderModel {
     @HiveField(15) DateTime? updatedAt,
     @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
     @HiveField(17) String? shippingAddress,
+    @HiveField(18) String? selectedFlavor,
+    @HiveField(19) String? selectedSize,
   }) = _OrderModel;
 
   const OrderModel._();
@@ -50,6 +52,8 @@ class OrderItemModel with _$OrderItemModel {
     @HiveField(6) required double subtotal,
     @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
     @HiveField(8) DateTime? createdAt,
+    @HiveField(9) String? selectedFlavor,
+    @HiveField(10) String? selectedSize,
   }) = _OrderItemModel;
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);

@@ -76,6 +76,9 @@ class CheckoutController extends GetxController {
           quantity: item.quantity,
           subtotal: item.product.effectivePrice * item.quantity,
           imageUrl: item.product.imageUrls.isNotEmpty ? item.product.imageUrls.first : null,
+          selectedFlavor: item.selectedFlavor,
+          selectedSize: item.selectedSize,
+
         )).toList(),
         shippingAddress: selectedAddress.value!.street, // Simplified for now
         trackingNumber: '',
