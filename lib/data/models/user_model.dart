@@ -17,8 +17,8 @@ class UserModel with _$UserModel {
     @HiveField(4) String? phone,
     @HiveField(5) @JsonKey(name: 'default_address_id') String? defaultAddressId,
     @HiveField(6) @JsonKey(name: 'preferred_language') @Default('ar') String preferredLanguage,
-    @HiveField(7) @JsonKey(name: 'notifications_enabled') @Default(true) bool notificationsEnabled,
-    @HiveField(8) @JsonKey(name: 'is_active') @Default(true) bool isActive,
+    @HiveField(7) @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt) @Default(true) bool notificationsEnabled,
+    @HiveField(8) @JsonKey(name: 'is_active', fromJson: _boolFromInt) @Default(true) bool isActive,
     @HiveField(9) DateTime? createdAt,
     @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
     @HiveField(11) String? token,
@@ -29,4 +29,11 @@ class UserModel with _$UserModel {
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+}
+
+bool _boolFromInt(dynamic value) {
+  if (value is bool) return value;
+  if (value is int) return value == 1;
+  if (value is String) return value == '1' || value.toLowerCase() == 'true';
+  return false;
 }

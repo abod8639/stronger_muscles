@@ -38,10 +38,10 @@ mixin _$UserModel {
   @JsonKey(name: 'preferred_language')
   String get preferredLanguage => throw _privateConstructorUsedError;
   @HiveField(7)
-  @JsonKey(name: 'notifications_enabled')
+  @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
   bool get notificationsEnabled => throw _privateConstructorUsedError;
   @HiveField(8)
-  @JsonKey(name: 'is_active')
+  @JsonKey(name: 'is_active', fromJson: _boolFromInt)
   bool get isActive => throw _privateConstructorUsedError;
   @HiveField(9)
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -85,9 +85,11 @@ abstract class $UserModelCopyWith<$Res> {
       @JsonKey(name: 'preferred_language')
       String preferredLanguage,
       @HiveField(7)
-      @JsonKey(name: 'notifications_enabled')
+      @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       bool notificationsEnabled,
-      @HiveField(8) @JsonKey(name: 'is_active') bool isActive,
+      @HiveField(8)
+      @JsonKey(name: 'is_active', fromJson: _boolFromInt)
+      bool isActive,
       @HiveField(9) DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
       @HiveField(11) String? token,
@@ -217,9 +219,11 @@ abstract class _$$UserModelImplCopyWith<$Res>
       @JsonKey(name: 'preferred_language')
       String preferredLanguage,
       @HiveField(7)
-      @JsonKey(name: 'notifications_enabled')
+      @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       bool notificationsEnabled,
-      @HiveField(8) @JsonKey(name: 'is_active') bool isActive,
+      @HiveField(8)
+      @JsonKey(name: 'is_active', fromJson: _boolFromInt)
+      bool isActive,
       @HiveField(9) DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
       @HiveField(11) String? token,
@@ -340,9 +344,11 @@ class _$UserModelImpl implements _UserModel {
       @JsonKey(name: 'preferred_language')
       this.preferredLanguage = 'ar',
       @HiveField(7)
-      @JsonKey(name: 'notifications_enabled')
+      @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       this.notificationsEnabled = true,
-      @HiveField(8) @JsonKey(name: 'is_active') this.isActive = true,
+      @HiveField(8)
+      @JsonKey(name: 'is_active', fromJson: _boolFromInt)
+      this.isActive = true,
       @HiveField(9) this.createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') this.lastLogin,
       @HiveField(11) this.token,
@@ -381,11 +387,11 @@ class _$UserModelImpl implements _UserModel {
   final String preferredLanguage;
   @override
   @HiveField(7)
-  @JsonKey(name: 'notifications_enabled')
+  @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
   final bool notificationsEnabled;
   @override
   @HiveField(8)
-  @JsonKey(name: 'is_active')
+  @JsonKey(name: 'is_active', fromJson: _boolFromInt)
   final bool isActive;
   @override
   @HiveField(9)
@@ -506,9 +512,11 @@ abstract class _UserModel implements UserModel {
       @JsonKey(name: 'preferred_language')
       final String preferredLanguage,
       @HiveField(7)
-      @JsonKey(name: 'notifications_enabled')
+      @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       final bool notificationsEnabled,
-      @HiveField(8) @JsonKey(name: 'is_active') final bool isActive,
+      @HiveField(8)
+      @JsonKey(name: 'is_active', fromJson: _boolFromInt)
+      final bool isActive,
       @HiveField(9) final DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') final DateTime? lastLogin,
       @HiveField(11) final String? token,
@@ -546,11 +554,11 @@ abstract class _UserModel implements UserModel {
   String get preferredLanguage;
   @override
   @HiveField(7)
-  @JsonKey(name: 'notifications_enabled')
+  @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
   bool get notificationsEnabled;
   @override
   @HiveField(8)
-  @JsonKey(name: 'is_active')
+  @JsonKey(name: 'is_active', fromJson: _boolFromInt)
   bool get isActive;
   @override
   @HiveField(9)

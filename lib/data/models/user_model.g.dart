@@ -98,8 +98,11 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       phone: json['phone'] as String?,
       defaultAddressId: json['default_address_id'] as String?,
       preferredLanguage: json['preferred_language'] as String? ?? 'ar',
-      notificationsEnabled: json['notifications_enabled'] as bool? ?? true,
-      isActive: json['is_active'] as bool? ?? true,
+      notificationsEnabled: json['notifications_enabled'] == null
+          ? true
+          : _boolFromInt(json['notifications_enabled']),
+      isActive:
+          json['is_active'] == null ? true : _boolFromInt(json['is_active']),
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
