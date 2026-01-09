@@ -34,7 +34,7 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       sku: fields[14] as String?,
       tags: (fields[15] as List).cast<String>(),
       weight: fields[16] as double?,
-      size: fields[17] as String?,
+      size: (fields[17] as List?)?.cast<String>(),
       nutritionFacts: (fields[18] as Map?)?.cast<String, dynamic>(),
       featured: fields[19] as bool,
       newArrival: fields[20] as bool,
@@ -179,7 +179,9 @@ _$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
           (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
               const [],
       weight: (json['weight'] as num?)?.toDouble(),
-      size: json['size'] as String?,
+      size:
+          (json['size'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
       nutritionFacts: json['nutrition_facts'] as Map<String, dynamic>?,
       featured: json['featured'] as bool? ?? false,
       newArrival: json['new_arrival'] as bool? ?? false,

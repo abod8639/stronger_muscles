@@ -34,7 +34,7 @@ Widget buildProductInfo(ProductModel product, bool isDark, BuildContext context)
   
   // Size
   if (product.size != null) {
-    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.size, product.size!, isDark));
+    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.size, product.size!.join(', '), isDark));
   }
   
   // Manufacturer

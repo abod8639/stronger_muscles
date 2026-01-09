@@ -27,7 +27,7 @@ class ProductModel with _$ProductModel {
     @HiveField(14) String? sku,
     @HiveField(15) @Default([]) List<String> tags,
     @HiveField(16) double? weight,
-    @HiveField(17) String? size,
+    @HiveField(17) @JsonKey(name: 'size') @Default([]) List<String>? size,
     
     // Nutrition
     @HiveField(18) @JsonKey(name: 'nutrition_facts') Map<String, dynamic>? nutritionFacts,

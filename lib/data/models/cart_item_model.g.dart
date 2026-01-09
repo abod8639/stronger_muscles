@@ -23,13 +23,14 @@ class CartItemModelAdapter extends TypeAdapter<_$CartItemModelImpl> {
       quantity: fields[3] as int,
       addedAt: fields[4] as DateTime?,
       selectedFlavor: fields[5] as String?,
+      selectedSize: fields[6] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, _$CartItemModelImpl obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class CartItemModelAdapter extends TypeAdapter<_$CartItemModelImpl> {
       ..writeByte(4)
       ..write(obj.addedAt)
       ..writeByte(5)
-      ..write(obj.selectedFlavor);
+      ..write(obj.selectedFlavor)
+      ..writeByte(6)
+      ..write(obj.selectedSize);
   }
 
   @override
@@ -69,6 +72,7 @@ _$CartItemModelImpl _$$CartItemModelImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['added_at'] as String),
       selectedFlavor: json['selected_flavor'] as String?,
+      selectedSize: json['selected_size'] as String?,
     );
 
 Map<String, dynamic> _$$CartItemModelImplToJson(_$CartItemModelImpl instance) =>
@@ -79,4 +83,5 @@ Map<String, dynamic> _$$CartItemModelImplToJson(_$CartItemModelImpl instance) =>
       'quantity': instance.quantity,
       'added_at': instance.addedAt?.toIso8601String(),
       'selected_flavor': instance.selectedFlavor,
+      'selected_size': instance.selectedSize,
     };

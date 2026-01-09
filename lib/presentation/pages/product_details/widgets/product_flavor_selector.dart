@@ -19,6 +19,35 @@ class ProductFlavorSelector extends StatefulWidget {
 class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
   String? _selectedFlavor;
 
+  Color _getFlavorColor(String flavor) {
+    switch (flavor.toLowerCase()) {
+      case 'vanilla':
+        return const Color(0xFFF3E5AB); // Creamy yellow
+      case 'strawberry':
+        return Colors.pink.shade300;
+      case 'choco':
+        return Colors.brown.shade600;
+      case 'mango':
+        return Colors.orange.shade400;
+      case 'caramel':
+        return Colors.amber.shade800;
+      case 'coffee':
+        return Colors.brown.shade800;
+      case 'vanilla cream':
+        return const Color(0xFFFDF5E6); // Old Lace / Cream
+      case 'tot':
+        return Colors.purple.shade600;
+      case 'no flavor':
+        return Colors.grey.shade400;
+      default:
+        return Colors.grey.shade200;
+    }
+  }
+
+  bool _isDarkColor(Color color) {
+    return color.computeLuminance() < 0.5;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -37,19 +66,23 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(
-         AppLocalizations.of(context)!.selectFlavor ,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Text(
+          AppLocalizations.of(context)!.selectFlavor,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-
           children: flavors.map((flavor) {
             final isSelected = _selectedFlavor == flavor;
+            final flavorColor = _getFlavorColor(flavor);
+            final textColor = isSelected
+                ? (_isDarkColor(flavorColor) ? Colors.white : Colors.black)
+                : (_isDarkColor(flavorColor) ? flavorColor : Colors.black87);
+
             return ChoiceChip(
-              backgroundColor: Theme.of(context).colorScheme.surface,
+              backgroundColor: flavorColor.withOpacity(0.15),
               label: Text(flavor),
               selected: isSelected,
               onSelected: (selected) {
@@ -60,18 +93,15 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
                   widget.onFlavorSelected(flavor);
                 }
               },
-              selectedColor: Theme.of(context).primaryColor,
+              selectedColor: flavorColor,
               labelStyle: TextStyle(
-                color: isSelected ? Theme.of(context).scaffoldBackgroundColor : Theme.of(context).primaryColor,
+                color: textColor,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
-              // backgroundColor: Colors.grey.shade200,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: isSelected ? 
-                  Theme.of(context).colorScheme.surface
-                  : 
-                  Theme.of(context).primaryColor.withOpacity(0.5),
+                  color: isSelected ? flavorColor : flavorColor.withOpacity(0.5),
+                  width: isSelected ? 2 : 1,
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),

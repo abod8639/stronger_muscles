@@ -71,11 +71,15 @@ class BottomIconsRow extends StatelessWidget {
   ) {
     final productDetailsController = Get.find<ProductDetailsController>();
     final selectedFlavor = productDetailsController.selectedFlavor.value;
-    
-    final isInCart = cartController.isInCart(product, selectedFlavor: selectedFlavor);
-    final CartItemModel? item =
-        isInCart ? cartController.getCartItem(product, selectedFlavor: selectedFlavor) : null;
-    
+    final selectedSize = productDetailsController.selectedSize.value;
+
+    final isInCart = cartController.isInCart(product,
+        selectedFlavor: selectedFlavor, selectedSize: selectedSize);
+    final CartItemModel? item = isInCart
+        ? cartController.getCartItem(product,
+            selectedFlavor: selectedFlavor, selectedSize: selectedSize)
+        : null;
+
     return isInCart && item != null
         ? _buildQuantityControls(theme, cartController, item)
         : buildAddToCartButton(theme, cartController);
@@ -225,6 +229,7 @@ class BottomIconsRow extends StatelessWidget {
     cartController.addToCart(
       product,
       selectedFlavor: productDetailsController.selectedFlavor.value,
+      selectedSize: productDetailsController.selectedSize.value,
     );
   }
 

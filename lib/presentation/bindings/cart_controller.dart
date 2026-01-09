@@ -28,12 +28,13 @@ class CartController extends GetxController {
     }
   }
 
-  void addToCart(ProductModel product, {String? selectedFlavor}) {
+  void addToCart(ProductModel product, {String? selectedFlavor, String? selectedSize}) {
     try {
       final existingItemIndex = cartItems.indexWhere(
         (item) =>
             item.product.id == product.id &&
-            item.selectedFlavor == selectedFlavor,
+            item.selectedFlavor == selectedFlavor &&
+            item.selectedSize == selectedSize,
       );
       if (existingItemIndex != -1) {
         final item = cartItems[existingItemIndex];
@@ -48,6 +49,7 @@ class CartController extends GetxController {
           userId: Get.find<AuthController>().userId.value,
           product: product,
           selectedFlavor: selectedFlavor,
+          selectedSize: selectedSize,
           addedAt: DateTime.now(),
         );
         cartBox.add(newItem);
@@ -101,14 +103,19 @@ class CartController extends GetxController {
     }
   }
 
-  bool isInCart(ProductModel product, {String? selectedFlavor}) {
+  bool isInCart(ProductModel product, {String? selectedFlavor, String? selectedSize}) {
     return cartItems.any((item) =>
-        item.product.id == product.id && item.selectedFlavor == selectedFlavor);
+        item.product.id == product.id &&
+        item.selectedFlavor == selectedFlavor &&
+        item.selectedSize == selectedSize);
   }
 
-  CartItemModel? getCartItem(ProductModel product, {String? selectedFlavor}) {
+  CartItemModel? getCartItem(ProductModel product,
+      {String? selectedFlavor, String? selectedSize}) {
     return cartItems.firstWhereOrNull((item) =>
-        item.product.id == product.id && item.selectedFlavor == selectedFlavor);
+        item.product.id == product.id &&
+        item.selectedFlavor == selectedFlavor &&
+        item.selectedSize == selectedSize);
   }
 
   double get totalPrice => cartItems.fold(

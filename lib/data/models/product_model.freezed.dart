@@ -64,7 +64,8 @@ mixin _$ProductModel {
   @HiveField(16)
   double? get weight => throw _privateConstructorUsedError;
   @HiveField(17)
-  String? get size => throw _privateConstructorUsedError; // Nutrition
+  @JsonKey(name: 'size')
+  List<String>? get size => throw _privateConstructorUsedError; // Nutrition
   @HiveField(18)
   @JsonKey(name: 'nutrition_facts')
   Map<String, dynamic>? get nutritionFacts =>
@@ -152,7 +153,7 @@ abstract class $ProductModelCopyWith<$Res> {
       @HiveField(14) String? sku,
       @HiveField(15) List<String> tags,
       @HiveField(16) double? weight,
-      @HiveField(17) String? size,
+      @HiveField(17) @JsonKey(name: 'size') List<String>? size,
       @HiveField(18)
       @JsonKey(name: 'nutrition_facts')
       Map<String, dynamic>? nutritionFacts,
@@ -305,7 +306,7 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
       size: freezed == size
           ? _value.size
           : size // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       nutritionFacts: freezed == nutritionFacts
           ? _value.nutritionFacts
           : nutritionFacts // ignore: cast_nullable_to_non_nullable
@@ -418,7 +419,7 @@ abstract class _$$ProductModelImplCopyWith<$Res>
       @HiveField(14) String? sku,
       @HiveField(15) List<String> tags,
       @HiveField(16) double? weight,
-      @HiveField(17) String? size,
+      @HiveField(17) @JsonKey(name: 'size') List<String>? size,
       @HiveField(18)
       @JsonKey(name: 'nutrition_facts')
       Map<String, dynamic>? nutritionFacts,
@@ -567,9 +568,9 @@ class __$$ProductModelImplCopyWithImpl<$Res>
           : weight // ignore: cast_nullable_to_non_nullable
               as double?,
       size: freezed == size
-          ? _value.size
+          ? _value._size
           : size // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       nutritionFacts: freezed == nutritionFacts
           ? _value._nutritionFacts
           : nutritionFacts // ignore: cast_nullable_to_non_nullable
@@ -679,7 +680,7 @@ class _$ProductModelImpl extends _ProductModel {
       @HiveField(14) this.sku,
       @HiveField(15) final List<String> tags = const [],
       @HiveField(16) this.weight,
-      @HiveField(17) this.size,
+      @HiveField(17) @JsonKey(name: 'size') final List<String>? size = const [],
       @HiveField(18)
       @JsonKey(name: 'nutrition_facts')
       final Map<String, dynamic>? nutritionFacts,
@@ -708,6 +709,7 @@ class _$ProductModelImpl extends _ProductModel {
       final List<String>? flavors = const []})
       : _imageUrls = imageUrls,
         _tags = tags,
+        _size = size,
         _nutritionFacts = nutritionFacts,
         _dimensions = dimensions,
         _ingredients = ingredients,
@@ -793,9 +795,18 @@ class _$ProductModelImpl extends _ProductModel {
   @override
   @HiveField(16)
   final double? weight;
+  final List<String>? _size;
   @override
   @HiveField(17)
-  final String? size;
+  @JsonKey(name: 'size')
+  List<String>? get size {
+    final value = _size;
+    if (value == null) return null;
+    if (_size is EqualUnmodifiableListView) return _size;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
 // Nutrition
   final Map<String, dynamic>? _nutritionFacts;
 // Nutrition
@@ -952,7 +963,7 @@ class _$ProductModelImpl extends _ProductModel {
             (identical(other.sku, sku) || other.sku == sku) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.weight, weight) || other.weight == weight) &&
-            (identical(other.size, size) || other.size == size) &&
+            const DeepCollectionEquality().equals(other._size, _size) &&
             const DeepCollectionEquality()
                 .equals(other._nutritionFacts, _nutritionFacts) &&
             (identical(other.featured, featured) ||
@@ -1013,7 +1024,7 @@ class _$ProductModelImpl extends _ProductModel {
         sku,
         const DeepCollectionEquality().hash(_tags),
         weight,
-        size,
+        const DeepCollectionEquality().hash(_size),
         const DeepCollectionEquality().hash(_nutritionFacts),
         featured,
         newArrival,
@@ -1071,7 +1082,7 @@ abstract class _ProductModel extends ProductModel {
       @HiveField(14) final String? sku,
       @HiveField(15) final List<String> tags,
       @HiveField(16) final double? weight,
-      @HiveField(17) final String? size,
+      @HiveField(17) @JsonKey(name: 'size') final List<String>? size,
       @HiveField(18)
       @JsonKey(name: 'nutrition_facts')
       final Map<String, dynamic>? nutritionFacts,
@@ -1171,7 +1182,8 @@ abstract class _ProductModel extends ProductModel {
   double? get weight;
   @override
   @HiveField(17)
-  String? get size;
+  @JsonKey(name: 'size')
+  List<String>? get size;
   @override // Nutrition
   @HiveField(18)
   @JsonKey(name: 'nutrition_facts')

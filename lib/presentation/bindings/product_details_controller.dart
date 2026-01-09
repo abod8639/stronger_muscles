@@ -9,11 +9,13 @@ class ProductDetailsController extends GetxController {
   final RxBool isInWishlist = false.obs;
   RxInt selectedImageIndex = 0.obs;
   final RxString selectedFlavor = "".obs;
+  final RxString selectedSize = "".obs;
   late Box<String> wishlistBox;
 
   ProductDetailsController(this.product) {
     if (product.flavors != null && product.flavors!.isNotEmpty) {
       selectedFlavor.value = product.flavors!.first;
+      selectedSize.value = product.size!.first;
     }
   }
 

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductFlavors.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_description_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_name.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';
@@ -15,6 +15,7 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/buil
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_info.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_ingredients_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_usage_and_warnings.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_size_selector.dart';
 
 class ProductDetailsView extends StatefulWidget {
   static const double _contentPadding = 16.0;
@@ -77,7 +78,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._smallSpacing),
 
                   // Product Badges (Featured, New, Best Seller)
-                  buildProductBadges(widget.product,context),
+                  buildProductBadges(widget.product, context),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
                   // Product Flavors
@@ -87,9 +88,27 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       product: widget.product,
                       onFlavorSelected: (selectedFlavor) {
                         Get.find<ProductDetailsController>()
-                            .selectedFlavor
-                            .value = selectedFlavor;
+                                .selectedFlavor
+                                .value =
+                            selectedFlavor;
                       },
+                    ),
+                    const SizedBox(height: ProductDetailsView._mediumSpacing),
+                  ],
+                  // size
+                  if (widget.product.size != null &&
+                      widget.product.size!.isNotEmpty) ...[
+                    // Obx(
+                    //   () => 
+                      ProductSizeSelector(
+                        product: widget.product,
+                        onSizeSelected: (selectedSize) {
+                          Get.find<ProductDetailsController>()
+                                  .selectedSize
+                                  .value =
+                              selectedSize;
+                        },
+                      // ),
                     ),
                     const SizedBox(height: ProductDetailsView._mediumSpacing),
                   ],
@@ -113,7 +132,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Product Info (Brand, SKU, Weight, etc.)
-                  buildProductInfo(widget.product, isDark,context),
+                  buildProductInfo(widget.product, isDark, context),
                   const SizedBox(height: ProductDetailsView._sectionSpacing),
 
                   // Ingredients

@@ -57,6 +57,19 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
                   ),
                 ),
               ),
+
+            // Selected Size
+            if (item.selectedSize != null && item.selectedSize!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  '${AppLocalizations.of(context)!.size}: ${item.selectedSize}',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
             
             const SizedBox(height: 8.0),
         
