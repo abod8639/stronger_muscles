@@ -60,7 +60,7 @@ class CartItemCard extends StatelessWidget {
               const SizedBox(width: 8.0),
 
               // Quantity Controls
-              buildQuantityControls( _toProductModel()),
+              buildQuantityControls(item.product),
             ],
           ),
         ),
@@ -68,22 +68,8 @@ class CartItemCard extends StatelessWidget {
     );
   }
 
-  /// Converts CartItemModel to ProductModel
-  ProductModel _toProductModel() {
-    return ProductModel(
-      id: item.productId,
-      name: item.productName,
-      price: item.price,
-      imageUrls: item.imageUrls,
-      description: '',
-      brand: item.brand,
-      weight: item.weight,
-      size: item.size,
-      sku: item.sku,
-      categoryId: item.categoryId ?? '',
-      flavors: item.selectedFlavor != null ? [item.selectedFlavor!] : [],
-    );
-  }
+  /// Returns the nested ProductModel
+  ProductModel _toProductModel() => item.product;
 
   /// Navigates to product details page
   void _navigateToProductDetails() {

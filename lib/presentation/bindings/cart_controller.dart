@@ -32,30 +32,22 @@ class CartController extends GetxController {
     try {
       final existingItemIndex = cartItems.indexWhere(
         (item) =>
-            item.productId == product.id &&
+            item.product.id == product.id &&
             item.selectedFlavor == selectedFlavor,
       );
       if (existingItemIndex != -1) {
         final item = cartItems[existingItemIndex];
         final updatedItem = item.copyWith(quantity: item.quantity + 1);
-        
+
         // Update both the box and the observable list
         cartBox.putAt(existingItemIndex, updatedItem);
         cartItems[existingItemIndex] = updatedItem;
       } else {
         final newItem = CartItemModel(
           id: DateTime.now().millisecondsSinceEpoch.toString(),
-           userId:    Get.find<AuthController>().userId.value, // TODO: Get from auth controller
-          productId: product.id,
-          productName: product.name,
-          price: product.effectivePrice,
-          imageUrls: product.imageUrls,
+          userId: Get.find<AuthController>().userId.value,
+          product: product,
           selectedFlavor: selectedFlavor,
-          brand: product.brand,
-          weight: product.weight,
-          size: product.size,
-          sku: product.sku,
-          categoryId: product.categoryId,
           addedAt: DateTime.now(),
         );
         cartBox.add(newItem);
@@ -111,16 +103,16 @@ class CartController extends GetxController {
 
   bool isInCart(ProductModel product, {String? selectedFlavor}) {
     return cartItems.any((item) =>
-        item.productId == product.id && item.selectedFlavor == selectedFlavor);
+        item.product.id == product.id && item.selectedFlavor == selectedFlavor);
   }
 
   CartItemModel? getCartItem(ProductModel product, {String? selectedFlavor}) {
     return cartItems.firstWhereOrNull((item) =>
-        item.productId == product.id && item.selectedFlavor == selectedFlavor);
+        item.product.id == product.id && item.selectedFlavor == selectedFlavor);
   }
 
-  double get totalPrice =>
-      cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+  double get totalPrice => cartItems.fold(
+      0, (sum, item) => sum + (item.product.effectivePrice * item.quantity));
 
   void clearCart() {
     try {

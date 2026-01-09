@@ -23,9 +23,9 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
           mainAxisSize: MainAxisSize.min,
           children: [
             // Brand
-            if (item.brand != null)
+            if (item.product.brand != null)
               Text(
-                item.brand!,
+                item.product.brand!,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
@@ -35,7 +35,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
             // Product Name
             Text(
-              item.productName,
+              item.product.name,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontSize: _titleFontSize,
                 fontWeight: FontWeight.bold,
@@ -62,7 +62,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
         
             // Product Price
             Text(
-              '\$${item.price.toStringAsFixed(2)}',
+              '\$${item.product.effectivePrice.toStringAsFixed(2)}',
               style: theme.textTheme.titleSmall?.copyWith(
                 fontSize: _priceFontSize,
                 color: AppColors.primary,
@@ -75,7 +75,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
             // Total Price (if quantity > 1)
             if (item.quantity > 1)
               Text(
-                'Total: \$${(item.price * item.quantity).toStringAsFixed(2)}',
+                'Total: \$${item.subtotal.toStringAsFixed(2)}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,

@@ -11,7 +11,7 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
 
 /// Builds the product image with hero animation and error handling
   Widget buildProductCartImage(CartItemModel item) {
-    final imageUrl = item.imageUrls.isNotEmpty ? item.imageUrls.first : '';
+    final imageUrl = item.primaryImageUrl ?? '';
 
     return Builder(
       builder: (context) {

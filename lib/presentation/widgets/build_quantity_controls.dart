@@ -35,7 +35,7 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
               children: [
                 // Increase Button
                 Semantics(
-                  label: 'Increase quantity of ${item.productName}',
+                  label: 'Increase quantity of ${item.product.name}',
                   button: true,
                   child: IconButton(
                     icon: const Icon(
@@ -74,8 +74,8 @@ import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
                 // Decrease Button
                 Semantics(
                   label: item.quantity > 1
-                      ? 'Decrease quantity of ${item.productName}'
-                      : 'Remove ${item.productName} from cart',
+                      ? 'Decrease quantity of ${item.product.name}'
+                      : 'Remove ${item.product.name} from cart',
                   button: true,
                   child: IconButton(
                     icon: Icon(
