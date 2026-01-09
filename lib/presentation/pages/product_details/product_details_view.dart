@@ -25,8 +25,15 @@ class ProductDetailsView extends StatefulWidget {
   static const double _bottomPadding = 32.0;
 
   final ProductModel product;
+  final String? selectedFlavor;
+  final String? selectedSize;
 
-  const ProductDetailsView({super.key, required this.product});
+  const ProductDetailsView({
+    super.key,
+    required this.product,
+    this.selectedFlavor,
+    this.selectedSize,
+  });
 
   @override
   State<ProductDetailsView> createState() => _ProductDetailsViewState();
@@ -38,8 +45,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   void initState() {
     super.initState();
-    // Initialize the ProductDetailsController with the product
-    Get.put(ProductDetailsController(widget.product));
+    // Initialize the ProductDetailsController with the product and initial selections
+    Get.put(ProductDetailsController(
+      widget.product,
+      initialFlavor: widget.selectedFlavor,
+      initialSize: widget.selectedSize,
+    ));
     _imageScrollController = ScrollController();
   }
 
@@ -84,32 +95,35 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   // Product Flavors
                   if (widget.product.flavors != null &&
                       widget.product.flavors!.isNotEmpty) ...[
-                    ProductFlavorSelector(
-                      product: widget.product,
-                      onFlavorSelected: (selectedFlavor) {
-                        Get.find<ProductDetailsController>()
-                                .selectedFlavor
-                                .value =
-                            selectedFlavor;
-                      },
-                    ),
+                    Obx(() => ProductFlavorSelector(
+                          product: widget.product,
+                          initialFlavor: Get.find<ProductDetailsController>()
+                              .selectedFlavor
+                              .value,
+                          onFlavorSelected: (selectedFlavor) {
+                            Get.find<ProductDetailsController>()
+                                    .selectedFlavor
+                                    .value =
+                                selectedFlavor;
+                          },
+                        )),
                     const SizedBox(height: ProductDetailsView._mediumSpacing),
                   ],
                   // size
                   if (widget.product.size != null &&
                       widget.product.size!.isNotEmpty) ...[
-                    // Obx(
-                    //   () => 
-                      ProductSizeSelector(
-                        product: widget.product,
-                        onSizeSelected: (selectedSize) {
-                          Get.find<ProductDetailsController>()
-                                  .selectedSize
-                                  .value =
-                              selectedSize;
-                        },
-                      // ),
-                    ),
+                    Obx(() => ProductSizeSelector(
+                          product: widget.product,
+                          initialSize: Get.find<ProductDetailsController>()
+                              .selectedSize
+                              .value,
+                          onSizeSelected: (selectedSize) {
+                            Get.find<ProductDetailsController>()
+                                    .selectedSize
+                                    .value =
+                                selectedSize;
+                          },
+                        )),
                     const SizedBox(height: ProductDetailsView._mediumSpacing),
                   ],
 

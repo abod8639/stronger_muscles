@@ -74,7 +74,11 @@ class CartItemCard extends StatelessWidget {
   /// Navigates to product details page
   void _navigateToProductDetails() {
     Get.to(
-      () => ProductDetailsView(product: _toProductModel()),
+      () => ProductDetailsView(
+        product: _toProductModel(),
+        selectedFlavor: item.selectedFlavor,
+        selectedSize: item.selectedSize,
+      ),
       transition: Transition.fadeIn,
     );
   }

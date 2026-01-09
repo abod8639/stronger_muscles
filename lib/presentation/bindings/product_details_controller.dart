@@ -12,9 +12,20 @@ class ProductDetailsController extends GetxController {
   final RxString selectedSize = "".obs;
   late Box<String> wishlistBox;
 
-  ProductDetailsController(this.product) {
-    if (product.flavors != null && product.flavors!.isNotEmpty) {
+  ProductDetailsController(
+    this.product, {
+    String? initialFlavor,
+    String? initialSize,
+  }) {
+    if (initialFlavor != null && initialFlavor.isNotEmpty) {
+      selectedFlavor.value = initialFlavor;
+    } else if (product.flavors != null && product.flavors!.isNotEmpty) {
       selectedFlavor.value = product.flavors!.first;
+    }
+
+    if (initialSize != null && initialSize.isNotEmpty) {
+      selectedSize.value = initialSize;
+    } else if (product.size != null && product.size!.isNotEmpty) {
       selectedSize.value = product.size!.first;
     }
   }

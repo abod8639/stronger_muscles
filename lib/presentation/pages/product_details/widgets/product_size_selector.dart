@@ -4,11 +4,13 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductSizeSelector extends StatefulWidget {
   final ProductModel product;
+  final String? initialSize;
   final Function(String) onSizeSelected;
 
   const ProductSizeSelector({
     super.key,
     required this.product,
+    this.initialSize,
     required this.onSizeSelected,
   });
 
@@ -22,8 +24,15 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
   @override
   void initState() {
     super.initState();
-    if (widget.product.size != null && widget.product.size!.isNotEmpty) {
-      _selectedSize = widget.product.size!.first;
+    _selectedSize = widget.initialSize ?? 
+        (widget.product.size?.isNotEmpty == true ? widget.product.size!.first : null);
+  }
+
+  @override
+  void didUpdateWidget(ProductSizeSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialSize != oldWidget.initialSize) {
+      _selectedSize = widget.initialSize;
     }
   }
 

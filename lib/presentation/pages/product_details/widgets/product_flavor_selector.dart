@@ -4,11 +4,13 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductFlavorSelector extends StatefulWidget {
   final ProductModel product;
+  final String? initialFlavor;
   final Function(String) onFlavorSelected;
 
   const ProductFlavorSelector({
     super.key,
     required this.product,
+    this.initialFlavor,
     required this.onFlavorSelected,
   });
 
@@ -51,8 +53,15 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
   @override
   void initState() {
     super.initState();
-    if (widget.product.flavors != null && widget.product.flavors!.isNotEmpty) {
-      _selectedFlavor = widget.product.flavors!.first;
+    _selectedFlavor = widget.initialFlavor ?? 
+        (widget.product.flavors?.isNotEmpty == true ? widget.product.flavors!.first : null);
+  }
+
+  @override
+  void didUpdateWidget(ProductFlavorSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialFlavor != oldWidget.initialFlavor) {
+      _selectedFlavor = widget.initialFlavor;
     }
   }
 
