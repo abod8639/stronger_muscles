@@ -59,7 +59,8 @@ class ProductModel with _$ProductModel {
     // Timestamps
     @HiveField(35) DateTime? createdAt,
     @HiveField(36) DateTime? updatedAt,
-    @HiveField(37) @JsonKey(name: 'flavor') List<String>? flavors,
+    @HiveField(37) @JsonKey(name: 'flavors') @Default([]) List<String>? flavors,
+
 
   }) = _ProductModel;
 

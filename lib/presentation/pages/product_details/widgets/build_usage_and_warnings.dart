@@ -96,7 +96,7 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
               ],
             ),
           );
-        }).toList(),
+        }),
       ],
     ],
   );

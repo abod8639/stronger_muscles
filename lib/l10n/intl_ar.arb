@@ -81,5 +81,6 @@
   "viewAll": "عرض الكل",
   "productDescription": "وصف المنتج",
   "fullName": "الاسم الكامل",
-  "enterName": "يرجى إدخال اسمك الكامل"
+  "enterName": "يرجى إدخال اسمك الكامل",
+  "selectFlavor": "اختر النكهة"
 }

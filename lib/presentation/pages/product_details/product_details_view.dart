@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/buildProductFlavors.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_description_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_name.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';
@@ -80,6 +80,20 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   buildProductBadges(widget.product),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
 
+                  // Product Flavors
+                  if (widget.product.flavors != null &&
+                      widget.product.flavors!.isNotEmpty) ...[
+                    ProductFlavorSelector(
+                      product: widget.product,
+                      onFlavorSelected: (selectedFlavor) {
+                        Get.find<ProductDetailsController>()
+                            .selectedFlavor
+                            .value = selectedFlavor;
+                      },
+                    ),
+                    const SizedBox(height: ProductDetailsView._mediumSpacing),
+                  ],
+
                   // Product Price
                   buildProductPrice(widget.product),
                   const SizedBox(height: ProductDetailsView._mediumSpacing),
@@ -90,7 +104,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       scrollController: _imageScrollController,
                       product: widget.product,
                     ),
-                    
+
                   if (widget.product.imageUrls.length > 1)
                     const SizedBox(height: ProductDetailsView._sectionSpacing),
 
@@ -129,8 +143,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
     showImageViewer(
       context,
-      CachedNetworkImage (
-        imageUrl:  widget.product.imageUrls[initialIndex]) as ImageProvider<Object>,
+      NetworkImage(
+        widget.product.imageUrls[initialIndex],
+      ), //   widget.product.imageUrls,
+      // CachedNetworkImage (
+      //   imageUrl:  widget.product.imageUrls[initialIndex]) ,
       useSafeArea: true,
       swipeDismissible: true,
       doubleTapZoomable: true,
@@ -139,5 +156,4 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       closeButtonColor: Theme.of(context).primaryColor,
     );
   }
-  
 }

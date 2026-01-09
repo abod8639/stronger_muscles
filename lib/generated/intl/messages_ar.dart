@@ -110,6 +110,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "searchProducts":
             MessageLookupByLibrary.simpleMessage("البحث عن المنتجات..."),
         "seeAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+        "selectFlavor": MessageLookupByLibrary.simpleMessage("اختر النكهة"),
         "shippingTo": MessageLookupByLibrary.simpleMessage("الشحن إلى:"),
         "shopNow": MessageLookupByLibrary.simpleMessage("تسوق الآن"),
         "signInToContinue":

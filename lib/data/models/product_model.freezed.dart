@@ -117,7 +117,7 @@ mixin _$ProductModel {
   @HiveField(36)
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   @HiveField(37)
-  @JsonKey(name: 'flavor')
+  @JsonKey(name: 'flavors')
   List<String>? get flavors => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -178,7 +178,7 @@ abstract class $ProductModelCopyWith<$Res> {
       @HiveField(34) String? slug,
       @HiveField(35) DateTime? createdAt,
       @HiveField(36) DateTime? updatedAt,
-      @HiveField(37) @JsonKey(name: 'flavor') List<String>? flavors});
+      @HiveField(37) @JsonKey(name: 'flavors') List<String>? flavors});
 }
 
 /// @nodoc
@@ -444,7 +444,7 @@ abstract class _$$ProductModelImplCopyWith<$Res>
       @HiveField(34) String? slug,
       @HiveField(35) DateTime? createdAt,
       @HiveField(36) DateTime? updatedAt,
-      @HiveField(37) @JsonKey(name: 'flavor') List<String>? flavors});
+      @HiveField(37) @JsonKey(name: 'flavors') List<String>? flavors});
 }
 
 /// @nodoc
@@ -703,7 +703,9 @@ class _$ProductModelImpl extends _ProductModel {
       @HiveField(34) this.slug,
       @HiveField(35) this.createdAt,
       @HiveField(36) this.updatedAt,
-      @HiveField(37) @JsonKey(name: 'flavor') final List<String>? flavors})
+      @HiveField(37)
+      @JsonKey(name: 'flavors')
+      final List<String>? flavors = const []})
       : _imageUrls = imageUrls,
         _tags = tags,
         _nutritionFacts = nutritionFacts,
@@ -904,7 +906,7 @@ class _$ProductModelImpl extends _ProductModel {
   final List<String>? _flavors;
   @override
   @HiveField(37)
-  @JsonKey(name: 'flavor')
+  @JsonKey(name: 'flavors')
   List<String>? get flavors {
     final value = _flavors;
     if (value == null) return null;
@@ -1100,7 +1102,7 @@ abstract class _ProductModel extends ProductModel {
       @HiveField(35) final DateTime? createdAt,
       @HiveField(36) final DateTime? updatedAt,
       @HiveField(37)
-      @JsonKey(name: 'flavor')
+      @JsonKey(name: 'flavors')
       final List<String>? flavors}) = _$ProductModelImpl;
   const _ProductModel._() : super._();
 
@@ -1240,7 +1242,7 @@ abstract class _ProductModel extends ProductModel {
   DateTime? get updatedAt;
   @override
   @HiveField(37)
-  @JsonKey(name: 'flavor')
+  @JsonKey(name: 'flavors')
   List<String>? get flavors;
   @override
   @JsonKey(ignore: true)
