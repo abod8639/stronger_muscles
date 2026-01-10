@@ -32,11 +32,6 @@ Widget buildProductInfo(ProductModel product, bool isDark, BuildContext context)
     infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.weight, '${product.weight} كجم', isDark));
   }
   
-  // Size
-  if (product.size != null) {
-    infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.size, product.size!.join(', '), isDark));
-  }
-  
   // Manufacturer
   if (product.manufacturer != null) {
     infoItems.add(_buildInfoRow(AppLocalizations.of(context)!.manufacturer, product.manufacturer!, isDark));
@@ -91,7 +86,8 @@ Widget _buildInfoRow(String label, String value, bool isDark) {
             label,
             style: TextStyle(
               fontSize: 14,
-              color: isDark ? AppColors.grey : AppColors.greyDark,
+              color:isDark ? AppColors.white : AppColors.black,
+              //  isDark ? AppColors.grey : AppColors.greyDark,
               fontWeight: FontWeight.w500,
             ),
           ),
