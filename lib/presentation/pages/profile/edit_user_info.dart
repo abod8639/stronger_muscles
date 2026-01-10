@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -21,17 +22,29 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
   void initState() {
     super.initState();
     final controller = Get.find<AuthController>();
+    final firebaseUser = FirebaseAuth.instance.currentUser;
     
-    // Initialize controllers with current user data
+    // Initialize controllers with current user data (fallback to Firebase)
     nameController = TextEditingController(
-      text: controller.currentUser.value?.name ?? '',
+      text: controller.currentUser.value?.name ?? firebaseUser?.displayName ?? '',
     );
     emailController = TextEditingController(
-      text: controller.currentUser.value?.email ?? '',
+      text: controller.currentUser.value?.email ?? firebaseUser?.email ?? '',
     );
     phoneController = TextEditingController(
-      text: controller.currentUser.value?.phone ?? '',
+      text: controller.currentUser.value?.phone ?? firebaseUser?.phoneNumber ?? '',
     );
+
+    // If data loads later, update controllers if they are still empty
+    ever(controller.currentUser, (user) {
+      if (user != null) {
+        if (nameController.text.isEmpty) nameController.text = user.name;
+        if (emailController.text.isEmpty) emailController.text = user.email;
+        if (phoneController.text.isEmpty && user.phone != null) {
+          phoneController.text = user.phone!;
+        }
+      }
+    });
   }
 
   @override
