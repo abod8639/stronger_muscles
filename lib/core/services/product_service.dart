@@ -18,7 +18,6 @@ class ProductService extends GetxService {
     int limit = 20,
   }) async {
     try {
-      // Build URI with query parameters
       final uri = Uri.parse(_productBaseUrl).replace(queryParameters: {
         if (categoryId != null) 'category': categoryId,
         if (query != null) 'search': query,
