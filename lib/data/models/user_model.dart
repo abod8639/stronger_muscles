@@ -19,7 +19,7 @@ class UserModel with _$UserModel {
     @HiveField(6) @JsonKey(name: 'preferred_language') @Default('ar') String preferredLanguage,
     @HiveField(7) @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt) @Default(true) bool notificationsEnabled,
     @HiveField(8) @JsonKey(name: 'is_active', fromJson: _boolFromInt) @Default(true) bool isActive,
-    @HiveField(9) DateTime? createdAt,
+    @HiveField(9) @JsonKey(name: 'created_at') DateTime? createdAt,
     @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
     @HiveField(11) String? token,
     @HiveField(12) String? role,
