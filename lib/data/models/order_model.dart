@@ -17,7 +17,7 @@ class OrderModel with _$OrderModel {
     @HiveField(6) @JsonKey(name: 'address_id') required String addressId,
     @HiveField(7) @JsonKey(name: 'shipping_address_snapshot') String? shippingAddressSnapshot,
     @HiveField(8) required double subtotal,
-    @HiveField(9) @Default(0) double shippingCost,
+    @HiveField(9) @JsonKey(name: 'shipping_cost') @Default(0) double shippingCost,
     @HiveField(10) @Default(0) double discount,
     @HiveField(11) @JsonKey(name: 'total_amount') required double totalAmount,
     @HiveField(12) @JsonKey(name: 'tracking_number') String? trackingNumber,

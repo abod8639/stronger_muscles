@@ -45,6 +45,7 @@ mixin _$OrderModel {
   @HiveField(8)
   double get subtotal => throw _privateConstructorUsedError;
   @HiveField(9)
+  @JsonKey(name: 'shipping_cost')
   double get shippingCost => throw _privateConstructorUsedError;
   @HiveField(10)
   double get discount => throw _privateConstructorUsedError;
@@ -90,7 +91,7 @@ abstract class $OrderModelCopyWith<$Res> {
       @JsonKey(name: 'shipping_address_snapshot')
       String? shippingAddressSnapshot,
       @HiveField(8) double subtotal,
-      @HiveField(9) double shippingCost,
+      @HiveField(9) @JsonKey(name: 'shipping_cost') double shippingCost,
       @HiveField(10) double discount,
       @HiveField(11) @JsonKey(name: 'total_amount') double totalAmount,
       @HiveField(12) @JsonKey(name: 'tracking_number') String? trackingNumber,
@@ -230,7 +231,7 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @JsonKey(name: 'shipping_address_snapshot')
       String? shippingAddressSnapshot,
       @HiveField(8) double subtotal,
-      @HiveField(9) double shippingCost,
+      @HiveField(9) @JsonKey(name: 'shipping_cost') double shippingCost,
       @HiveField(10) double discount,
       @HiveField(11) @JsonKey(name: 'total_amount') double totalAmount,
       @HiveField(12) @JsonKey(name: 'tracking_number') String? trackingNumber,
@@ -367,7 +368,7 @@ class _$OrderModelImpl extends _OrderModel {
       @JsonKey(name: 'shipping_address_snapshot')
       this.shippingAddressSnapshot,
       @HiveField(8) required this.subtotal,
-      @HiveField(9) this.shippingCost = 0,
+      @HiveField(9) @JsonKey(name: 'shipping_cost') this.shippingCost = 0,
       @HiveField(10) this.discount = 0,
       @HiveField(11) @JsonKey(name: 'total_amount') required this.totalAmount,
       @HiveField(12) @JsonKey(name: 'tracking_number') this.trackingNumber,
@@ -419,8 +420,8 @@ class _$OrderModelImpl extends _OrderModel {
   @HiveField(8)
   final double subtotal;
   @override
-  @JsonKey()
   @HiveField(9)
+  @JsonKey(name: 'shipping_cost')
   final double shippingCost;
   @override
   @JsonKey()
@@ -557,7 +558,7 @@ abstract class _OrderModel extends OrderModel {
       @JsonKey(name: 'shipping_address_snapshot')
       final String? shippingAddressSnapshot,
       @HiveField(8) required final double subtotal,
-      @HiveField(9) final double shippingCost,
+      @HiveField(9) @JsonKey(name: 'shipping_cost') final double shippingCost,
       @HiveField(10) final double discount,
       @HiveField(11)
       @JsonKey(name: 'total_amount')
@@ -612,6 +613,7 @@ abstract class _OrderModel extends OrderModel {
   double get subtotal;
   @override
   @HiveField(9)
+  @JsonKey(name: 'shipping_cost')
   double get shippingCost;
   @override
   @HiveField(10)
