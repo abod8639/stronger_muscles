@@ -72,6 +72,7 @@ class AuthController extends GetxController {
     }
   }
 
+
   Future<void> signInWithEmail({
     required String email,
     required String password,
