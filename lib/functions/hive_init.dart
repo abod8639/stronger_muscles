@@ -19,6 +19,7 @@ Future<void> hiveInit() async {
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');
   await Hive.openBox<String>('wishlist');
+  await Hive.openBox<ProductModel>('products');
   await Hive.openBox<CategoryModel>('categories');
   await Hive.openBox('settings'); // For theme and language settings
   await Hive.openBox('auth_box'); // Open the box for auth tokens
