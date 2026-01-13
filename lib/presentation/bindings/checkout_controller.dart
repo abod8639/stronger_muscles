@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
@@ -61,37 +60,46 @@ class CheckoutController extends GetxController {
       final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
       final order = OrderModel(
         id: orderId,
-        userId: _profileController.currentUser.value?.uid ?? '0', 
+        userId: _profileController.currentUser.value?.uid ?? '0',
         orderDate: DateTime.now(),
         status: 'pending',
         addressId: selectedAddress.value!.id.toString(),
         subtotal: _cartController.totalPrice,
         totalAmount: _cartController.totalPrice,
-        items: _cartController.cartItems.map((item) => OrderItemModel(
-          id: 'item-${DateTime.now().millisecondsSinceEpoch}-${item.product.id}',
-          orderId: orderId,
-          productId: item.product.id,
-          productName: item.product.name,
-          unitPrice: item.product.effectivePrice,
-          quantity: item.quantity,
-          subtotal: item.product.effectivePrice * item.quantity,
-          imageUrl: item.product.imageUrls.isNotEmpty ? item.product.imageUrls.first : null,
-          selectedFlavor: item.selectedFlavor,
-          selectedSize: item.selectedSize,
-
-        )).toList(),
-        shippingAddress: selectedAddress.value!.street, // Simplified for now
+        createdAt: DateTime.now(),
+        discount: 0,
+        shippingCost: 50,
+        notes: 'not${_cartController.notesController.text}',
+        shippingAddressSnapshot: '',
+        shippingAddress: selectedAddress.value!.street,
         trackingNumber: '',
+        paymentMethod: '',
+        paymentStatus: '',
+        updatedAt: DateTime.now(),
+        items: _cartController.cartItems
+            .map(
+              (item) => OrderItemModel(
+                id: 'item-${DateTime.now().millisecondsSinceEpoch}-${item.product.id}',
+                orderId: orderId,
+                productId: item.product.id,
+                productName: item.product.name,
+                unitPrice: item.product.effectivePrice,
+                quantity: item.quantity,
+                subtotal: item.product.effectivePrice * item.quantity,
+                imageUrl: item.product.imageUrls.first,
+                selectedFlavor: item.selectedFlavor,
+                selectedSize: item.selectedSize,
+                createdAt: DateTime.now(),
+              ),
+            ).toList(),
       );
 
       await _orderRepository.createOrder(order);
-      
-      // Clear cart and navigate to success
       _cartController.clearCart();
       Get.offNamed(AppRoutes.orderSuccess);
-      
     } catch (e) {
       Get.snackbar('Error', 'Failed to place order: $e');
+      print(e);
     } finally {
       isProcessing.value = false;
     }

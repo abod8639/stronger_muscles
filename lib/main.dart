@@ -7,12 +7,12 @@ import 'package:stronger_muscles/firebase_options.dart';
 import 'package:stronger_muscles/functions/hive_init.dart';
 import 'package:stronger_muscles/functions/init_controllers_app.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
+import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Initialize Controllers
+    
     final themeController = Get.put(ThemeController());
     final languageController = Get.put(LanguageController());
 
@@ -57,8 +57,8 @@ class MyApp extends StatelessWidget {
           children: [
             child!,
             const Positioned(
-              top: 0,
-              // bottom: 0,
+              // top: 0,
+              bottom: 80,
               left: 0,
               right: 0,
               child: InternetConnectionBanner(),

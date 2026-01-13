@@ -22,7 +22,7 @@ class ProductRepository {
   //   Future<List<ProductModel>> getAllProducts() async {
   //   final snapshot = await _firestore.collection('products').get();
   //   return snapshot.docs.map((doc) => ProductModel.fromJson(doc.data())).toList();
-  // }
+  // }ProductRepository
 
   Future<List<ProductModel>> getProductsByCategory(String categoryId) async {
     await Future.delayed(const Duration(milliseconds: delay));

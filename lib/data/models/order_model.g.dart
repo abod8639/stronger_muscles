@@ -170,7 +170,7 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       addressId: json['address_id'] as String,
       shippingAddressSnapshot: json['shipping_address_snapshot'] as String?,
       subtotal: (json['subtotal'] as num).toDouble(),
-      shippingCost: (json['shipping_cost'] as num?)?.toDouble() ?? 0,
+      shippingCost: (json['shippingCost'] as num?)?.toDouble() ?? 0,
       discount: (json['discount'] as num?)?.toDouble() ?? 0,
       totalAmount: (json['total_amount'] as num).toDouble(),
       trackingNumber: json['tracking_number'] as String?,
@@ -198,7 +198,7 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
       'address_id': instance.addressId,
       'shipping_address_snapshot': instance.shippingAddressSnapshot,
       'subtotal': instance.subtotal,
-      'shipping_cost': instance.shippingCost,
+      'shippingCost': instance.shippingCost,
       'discount': instance.discount,
       'total_amount': instance.totalAmount,
       'tracking_number': instance.trackingNumber,
@@ -222,8 +222,8 @@ _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      selectedFlavor: json['selected_flavor'] as String?,
-      selectedSize: json['selected_size'] as String?,
+      selectedFlavor: json['selectedFlavor'] as String?,
+      selectedSize: json['selectedSize'] as String?,
     );
 
 Map<String, dynamic> _$$OrderItemModelImplToJson(
@@ -238,6 +238,6 @@ Map<String, dynamic> _$$OrderItemModelImplToJson(
       'subtotal': instance.subtotal,
       'image_url': instance.imageUrl,
       'created_at': instance.createdAt?.toIso8601String(),
-      'selected_flavor': instance.selectedFlavor,
-      'selected_size': instance.selectedSize,
+      'selectedFlavor': instance.selectedFlavor,
+      'selectedSize': instance.selectedSize,
     };

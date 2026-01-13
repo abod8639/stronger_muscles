@@ -17,7 +17,7 @@ class OrderModel with _$OrderModel {
     @HiveField(6) @JsonKey(name: 'address_id') required String addressId,
     @HiveField(7) @JsonKey(name: 'shipping_address_snapshot') String? shippingAddressSnapshot,
     @HiveField(8) required double subtotal,
-    @HiveField(9) @JsonKey(name: 'shipping_cost') @Default(0) double shippingCost,
+    @HiveField(9) @JsonKey(name: 'shippingCost') @Default(0) double shippingCost,
     @HiveField(10) @Default(0) double discount,
     @HiveField(11) @JsonKey(name: 'total_amount') required double totalAmount,
     @HiveField(12) @JsonKey(name: 'tracking_number') String? trackingNumber,
@@ -50,8 +50,8 @@ class OrderItemModel with _$OrderItemModel {
     @HiveField(6) required double subtotal,
     @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
     @HiveField(8) DateTime? createdAt,
-    @HiveField(9) String? selectedFlavor,
-    @HiveField(10) String? selectedSize,
+    @HiveField(9) @JsonKey(name: 'selectedFlavor') String? selectedFlavor, // تم التعديل
+    @HiveField(10) @JsonKey(name: 'selectedSize') String? selectedSize,
   }) = _OrderItemModel;
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);

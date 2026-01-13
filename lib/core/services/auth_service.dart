@@ -10,6 +10,7 @@ import 'storage_service.dart';
 class AuthService extends GetxService {
   final ApiService _apiService = Get.put(ApiService());
 
+  
   Future<UserModel> register({
     required String email,
     required String password,
@@ -100,7 +101,7 @@ class AuthService extends GetxService {
     String? photoUrl,
   }) async {
     try {
-      final response = await _apiService.put(
+      final response = await _apiService.post(
         ApiConfig.updateProfile,
         data: {
           if (name != null) 'name': name,
@@ -164,6 +165,7 @@ class AuthService extends GetxService {
 
   Future<void> logout() async {
     await StorageService.deleteToken();
+
   }
 
   // جلب بيانات إحصائيات المستخدمين

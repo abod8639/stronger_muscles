@@ -9,13 +9,12 @@ import '../../routes/routes.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final AuthService _authService = Get.put(
-    AuthService(),
-  ); // Ensure AuthService is initialized
+  final AuthService _authService = Get.put( AuthService()); // Ensure AuthService is initialized
 
   final RxString userId = ''.obs;
   final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
+  final RxString token = ''.obs;
 
   static const String webClientId =
       '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
@@ -51,6 +50,7 @@ class AuthController extends GetxController {
         credential,
       );
         userId.value = userCredential.user!.uid;
+        // token.value = userCredential.user!.idToken!;
       // إرسال معلومات المستخدم إلى Backend
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;

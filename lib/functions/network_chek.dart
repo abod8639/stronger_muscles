@@ -1,17 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
 
-final InternetConnectionController internetConnectionController =
-    Get.find<InternetConnectionController>();
+class NetworkUtils {
+  
+  /// دالة ذكية لتنفيذ الأوامر فقط في حال وجود اتصال
+  static Future<void> runIfConnected(
+    Future<void> Function() action, {
+    String message = "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
+  }) async {
+    // جلب الـ Controller بأمان
+    final controller = Get.find<InternetConnectionController>();
 
-//
+    if (controller.isConnected.value) {
+      await action();
+    } else {
+      showErrorSnackbar(message);
+    }
+  }
 
-Future<bool> checkInternetConnection(Function() function) async {
-  if (internetConnectionController.isConnected.value) {
-    function();
-    return true;
-  } else {
-    print("no internet connection");
-    return false;
+  static void showErrorSnackbar(String message) {
+    Get.rawSnackbar(
+      title: "لا يوجد اتصال",
+      message: message,
+      backgroundColor: Colors.red.withOpacity(0.8),
+      snackPosition: SnackPosition.TOP,
+      margin: const EdgeInsets.all(10),
+      borderRadius: 10,
+      icon: const Icon(Icons.wifi_off, color: Colors.white),
+    );
   }
 }

@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:get/get_core/src/get_main.dart' as firebaseUser;
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -9,10 +9,12 @@ class CartController extends GetxController {
   final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
   late Box<CartItemModel> cartBox;
 
+late TextEditingController notesController;
   @override
   void onInit() {
     super.onInit();
     _initBox();
+    notesController = TextEditingController();
   }
 
   Future<void> _initBox() async {

@@ -46,7 +46,7 @@ class AddressService extends GetxService {
 
   Future<AddressModel> updateAddress(int id, AddressModel address) async {
     try {
-      final response = await _apiService.put(
+      final response = await _apiService.post(
         '${ApiConfig.addresses}/$id',
         data: address.toJson(),
       );
@@ -63,7 +63,7 @@ class AddressService extends GetxService {
 
   Future<void> deleteAddress(int id) async {
     try {
-      await _apiService.delete('${ApiConfig.addresses}/$id');
+      await _apiService.post('${ApiConfig.addresses}/$id');
     } on Failure {
       rethrow;
     } catch (e) {

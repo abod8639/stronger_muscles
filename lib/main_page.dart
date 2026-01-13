@@ -12,22 +12,33 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(MainController());
 
-    final pages = 
-    <Widget>[
+    final controller = Get.put(MainController());
+    // final internetController = Get.put(InternetConnectionController());
+
+    final pages = <Widget>[
       const HomeView(),
       const WishlistView(),
       const CartView(),
       const ProfilePage(),
-
     ];
 
     return Scaffold(
-      body: Obx(
-        () => IndexedStack(index: controller.tabIndex.value, children: pages),
+      body: Column(
+        children: [
+          
+          Expanded(
+            child: Obx(() => IndexedStack(
+                  index: controller.tabIndex.value,
+                  children: pages,
+                )),
+          ),
+          // Obx(() => internetController.isConnected.value 
+    //           // ? const SizedBox.shrink() 
+              // : const InternetConnectionBanner()),
+        ],
       ),
-      bottomNavigationBar: const MyBottomNavigationBar(),
+      bottomNavigationBar: MyBottomNavigationBar(),
     );
   }
 }

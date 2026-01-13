@@ -14,26 +14,28 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
 
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         color: Colors.red.shade600,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(width: 30),
-            const Icon(
-              Icons.wifi_off,
-              color: Colors.white,
-              size: 20,
+            Center(
+              child: const Icon(
+                Icons.wifi_off,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'لا توجد اتصال بالإنترنت',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Center(
+              child: Expanded(
+                child: Text(
+                  'No internet connection',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
               ),
             ),
           ],

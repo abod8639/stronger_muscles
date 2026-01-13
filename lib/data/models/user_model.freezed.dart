@@ -44,6 +44,7 @@ mixin _$UserModel {
   @JsonKey(name: 'is_active', fromJson: _boolFromInt)
   bool get isActive => throw _privateConstructorUsedError;
   @HiveField(9)
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @HiveField(10)
   @JsonKey(name: 'last_login')
@@ -90,7 +91,7 @@ abstract class $UserModelCopyWith<$Res> {
       @HiveField(8)
       @JsonKey(name: 'is_active', fromJson: _boolFromInt)
       bool isActive,
-      @HiveField(9) DateTime? createdAt,
+      @HiveField(9) @JsonKey(name: 'created_at') DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
       @HiveField(11) String? token,
       @HiveField(12) String? role,
@@ -224,7 +225,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       @HiveField(8)
       @JsonKey(name: 'is_active', fromJson: _boolFromInt)
       bool isActive,
-      @HiveField(9) DateTime? createdAt,
+      @HiveField(9) @JsonKey(name: 'created_at') DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
       @HiveField(11) String? token,
       @HiveField(12) String? role,
@@ -349,7 +350,7 @@ class _$UserModelImpl implements _UserModel {
       @HiveField(8)
       @JsonKey(name: 'is_active', fromJson: _boolFromInt)
       this.isActive = true,
-      @HiveField(9) this.createdAt,
+      @HiveField(9) @JsonKey(name: 'created_at') this.createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') this.lastLogin,
       @HiveField(11) this.token,
       @HiveField(12) this.role,
@@ -395,6 +396,7 @@ class _$UserModelImpl implements _UserModel {
   final bool isActive;
   @override
   @HiveField(9)
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
   @HiveField(10)
@@ -517,7 +519,7 @@ abstract class _UserModel implements UserModel {
       @HiveField(8)
       @JsonKey(name: 'is_active', fromJson: _boolFromInt)
       final bool isActive,
-      @HiveField(9) final DateTime? createdAt,
+      @HiveField(9) @JsonKey(name: 'created_at') final DateTime? createdAt,
       @HiveField(10) @JsonKey(name: 'last_login') final DateTime? lastLogin,
       @HiveField(11) final String? token,
       @HiveField(12) final String? role,
@@ -562,6 +564,7 @@ abstract class _UserModel implements UserModel {
   bool get isActive;
   @override
   @HiveField(9)
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
   @HiveField(10)

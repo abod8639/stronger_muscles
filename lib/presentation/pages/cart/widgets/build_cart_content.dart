@@ -33,6 +33,7 @@ Widget buildCartContent() {
 
           // Checkout section
           buildCheckoutSection(),
+          
         ],
       );
     },

@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
@@ -29,13 +31,15 @@ class CheckoutView extends GetView<CheckoutController> {
         return Stepper(
           type: StepperType.horizontal,
           currentStep: controller.currentStep.value,
-          onStepContinue: () {
-            if (controller.currentStep.value == 2) {
-              controller.placeOrder();
-            } else {
-              controller.nextStep();
-            }
-          },
+onStepContinue: () {
+  NetworkUtils.runIfConnected(() async {
+    if (controller.currentStep.value == 2) {
+      await controller.placeOrder();
+    } else {
+      controller.nextStep();
+    }
+  });
+},
           onStepCancel: controller.previousStep,
           controlsBuilder: (context, details) {
             return Padding(
@@ -192,7 +196,7 @@ class CheckoutView extends GetView<CheckoutController> {
 
   Step _buildReviewStep(ThemeData theme) {
     final cartController = Get.find<CartController>();
-    
+
     return Step(
       title: const Text('Review'),
       content: Column(
@@ -207,12 +211,12 @@ class CheckoutView extends GetView<CheckoutController> {
             itemBuilder: (context, index) {
               final item = cartController.cartItems[index];
               return ListTile(
-                leading: Image.network(
-                  item.product.imageUrls.first,
+                leading: CachedNetworkImage(
+                  imageUrl: item.product.imageUrls.first,
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const Icon(Icons.image),
+                  errorWidget: (_, __, ___) => const Icon(Icons.image),
                 ),
                 title: Text(item.product.name),
                 subtitle: Text('${item.quantity} x \$${item.product.effectivePrice}'),
@@ -243,6 +247,19 @@ class CheckoutView extends GetView<CheckoutController> {
           const SizedBox(height: 8),
           const Text('Payment Method:', style: TextStyle(fontWeight: FontWeight.bold)),
           Text(controller.selectedPaymentMethod.value == 'cod' ? 'Cash on Delivery' : 'Credit Card'),
+          const SizedBox(height: 8),
+          // notes
+          const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
+          
+          const SizedBox(height: 8),
+        
+         TextField(
+            controller: cartController.notesController,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'Enter any additional notes',
+            ),
+          ),
         ],
       ),
       isActive: controller.currentStep.value >= 2,

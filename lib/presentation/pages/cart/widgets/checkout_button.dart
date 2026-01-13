@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/handle_checkout.dart';
+import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
@@ -28,7 +29,7 @@ Widget checkoutButton() {
           child: ElevatedButton(
             onPressed: controller.cartItems.isEmpty
                 ? null
-                : () => handleCheckout(),
+                : ()=>  NetworkUtils.runIfConnected(()async => handleCheckout),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
