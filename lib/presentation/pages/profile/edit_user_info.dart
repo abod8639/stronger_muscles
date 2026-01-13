@@ -23,16 +23,20 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
     super.initState();
     final controller = Get.find<AuthController>();
     final firebaseUser = FirebaseAuth.instance.currentUser;
-    
+
     // Initialize controllers with current user data (fallback to Firebase)
     nameController = TextEditingController(
-      text: controller.currentUser.value?.name ?? firebaseUser?.displayName ?? '',
+      text:
+          controller.currentUser.value?.name ?? firebaseUser?.displayName ?? '',
     );
     emailController = TextEditingController(
       text: controller.currentUser.value?.email ?? firebaseUser?.email ?? '',
     );
     phoneController = TextEditingController(
-      text: controller.currentUser.value?.phone ?? firebaseUser?.phoneNumber ?? '',
+      text:
+          controller.currentUser.value?.phone ??
+          firebaseUser?.phoneNumber ??
+          '',
     );
 
     // If data loads later, update controllers if they are still empty
@@ -121,7 +125,9 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
                           color: AppColors.primary,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: isDark ? AppColors.backgroundDark : AppColors.white,
+                            color: isDark
+                                ? AppColors.backgroundDark
+                                : AppColors.white,
                             width: 3,
                           ),
                         ),
@@ -203,7 +209,7 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
                     : ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            await _updateProfile(
+                            await updateProfile(
                               controller,
                               nameController.text.trim(),
                               emailController.text.trim(),
@@ -270,9 +276,7 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyle(
-        color: isDark ? AppColors.white : AppColors.black,
-      ),
+      style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: Icon(icon, color: AppColors.primary),
@@ -290,46 +294,41 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: AppColors.primary,
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         filled: true,
-        fillColor: isDark
-            ? AppColors.surfaceDark
-            : AppColors.white,
+        fillColor: isDark ? AppColors.surfaceDark : AppColors.white,
       ),
     );
   }
+}
 
-  Future<void> _updateProfile(
-    AuthController controller,
-    String name,
-    String email,
-    String phone,
-  ) async {
-    try {
-      await controller.updateUserProfile(
-        name: name,
-        email: email,
-        phone: phone.isEmpty ? null : phone,
-      );
+Future<void> updateProfile(
+  AuthController controller,
+  String name,
+  String email,
+  String phone,
+) async {
+  try {
+    await controller.updateUserProfile(
+      name: name,
+      email: email,
+      phone: phone.isEmpty ? null : phone,
+    );
 
-      Get.back();
-      Get.snackbar(
-        'نجح',
-        'تم تحديث بياناتك بنجاح',
-        backgroundColor: AppColors.primary.withOpacity(0.8),
-        colorText: AppColors.white,
-      );
-    } catch (e) {
-      Get.snackbar(
-        'خطأ',
-        'فشل تحديث البيانات: ${e.toString()}',
-        backgroundColor: Colors.red.withOpacity(0.8),
-        colorText: AppColors.white,
-      );
-    }
+    Get.back();
+    Get.snackbar(
+      'نجح',
+      'تم تحديث بياناتك بنجاح',
+      backgroundColor: AppColors.primary.withOpacity(0.8),
+      colorText: AppColors.white,
+    );
+  } catch (e) {
+    Get.snackbar(
+      'خطأ',
+      'فشل تحديث البيانات: ${e.toString()}',
+      backgroundColor: Colors.red.withOpacity(0.8),
+      colorText: AppColors.white,
+    );
   }
 }
