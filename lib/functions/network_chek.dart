@@ -4,12 +4,10 @@ import 'package:stronger_muscles/presentation/bindings/internet_connection_contr
 
 class NetworkUtils {
   
-  /// دالة ذكية لتنفيذ الأوامر فقط في حال وجود اتصال
   static Future<void> runIfConnected(
     Future<void> Function() action, {
     String message = "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
   }) async {
-    // جلب الـ Controller بأمان
     final controller = Get.find<InternetConnectionController>();
 
     if (controller.isConnected.value) {

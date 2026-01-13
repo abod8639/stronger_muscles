@@ -29,7 +29,7 @@ Widget checkoutButton() {
           child: ElevatedButton(
             onPressed: controller.cartItems.isEmpty
                 ? null
-                : ()=>  NetworkUtils.runIfConnected(()async => handleCheckout),
+                : ()=>  NetworkUtils.runIfConnected(()async => handleCheckout()),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,

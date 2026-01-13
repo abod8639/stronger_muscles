@@ -14,7 +14,6 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final controller = Get.put(MainController());
-    // final internetController = Get.put(InternetConnectionController());
 
     final pages = <Widget>[
       const HomeView(),
@@ -34,7 +33,7 @@ class MainPage extends StatelessWidget {
                 )),
           ),
           // Obx(() => internetController.isConnected.value 
-    //           // ? const SizedBox.shrink() 
+              // ? const SizedBox.shrink() 
               // : const InternetConnectionBanner()),
         ],
       ),
