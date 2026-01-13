@@ -7,6 +7,7 @@ import '../../data/models/product_model.dart';
 import '../errors/failures.dart';
 
 class ProductService extends GetxService {
+  
   String get _productBaseUrl => '${ApiConfig.baseUrl}${ApiConfig.products}';
   
   Box<ProductModel> get _productsBox => Hive.box<ProductModel>('products');
