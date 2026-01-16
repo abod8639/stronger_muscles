@@ -75,6 +75,17 @@ class _AddressFormState extends State<AddressForm> {
     }
   }
 
+  Future<void> _useCurrentLocation() async {
+    await _controller.getCurrentLocation();
+    setState(() {
+      _streetController.text = _controller.streetController.value.text;
+      _cityController.text = _controller.cityController.value.text;
+      _stateController.text = _controller.stateController.value.text;
+      _postalCodeController.text = _controller.postalCodeController.value.text;
+      _countryController.text = _controller.countryController.value.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -92,6 +103,21 @@ class _AddressFormState extends State<AddressForm> {
               widget.address == null ? 'Add New Address' : 'Edit Address',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _useCurrentLocation,
+                icon: const Icon(Icons.my_location),
+                label: const Text('Use Current Location'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 24),
