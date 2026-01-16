@@ -12,7 +12,7 @@ const Duration _animationDuration = Duration(milliseconds: 180);
 
 /// Builds a single shortcut item
 Widget buildShortcutItem(int index) {
-  final sectionsController = Get.find<SectionsController>();
+  final sectionsController = Get.find<CategoriesSectionsController>();
   final item = sectionsController.selections[index];
 
   return Obx(() {

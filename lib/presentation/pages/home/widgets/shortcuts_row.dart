@@ -4,17 +4,17 @@ import 'package:stronger_muscles/presentation/bindings/sections_controller.dart'
 import 'package:stronger_muscles/presentation/pages/home/widgets/build_shortcut_item.dart';
 
 /// Horizontal scrollable row of category shortcuts
-class ShortcutsRow extends StatelessWidget {
+class CategoriesShortcutsRow extends StatelessWidget {
   // Constants for styling
   static const double _horizontalPadding = 12.0;
   static const double _verticalPadding = 8.0;
   static const double _rowHeight = 90.0;
   static const double _spacing = 5.0;
-  const ShortcutsRow({super.key});
+  const CategoriesShortcutsRow({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final sectionsController = Get.find<SectionsController>();
+    final sectionsController = Get.find<CategoriesSectionsController>();
 
     return Obx(() => Padding(
       padding: const EdgeInsets.symmetric(

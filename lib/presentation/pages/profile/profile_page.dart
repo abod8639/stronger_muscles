@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/profile_header.dart';
@@ -19,7 +18,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileController = Get.put(ProfileController());
-    final addressController = Get.put(AddressController());
     final theme = Theme.of(context);
 
     return Scaffold(

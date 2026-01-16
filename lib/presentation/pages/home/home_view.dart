@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final sectionsController = Get.put(SectionsController());
+    final sectionsController = Get.put(CategoriesSectionsController());
 
     return Scaffold(
       // drawer: const Drawer(),
@@ -36,7 +36,7 @@ class HomeView extends GetView<HomeController> {
                    
             
                   // Category shortcuts row
-                  const SliverToBoxAdapter(child: ShortcutsRow()),
+                  const SliverToBoxAdapter(child: CategoriesShortcutsRow()),
             
                   // Promo banner (only shown for "All" category)
                   Obx(
