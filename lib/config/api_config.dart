@@ -31,9 +31,6 @@ class ApiConfig {
   // Categories
   static const String categories = '/api/v1/categories';
   
-  // Addresses
-  static const String addresses = '/api/v1/addresses';
-  
   // Dashboard
   static const String usersStats = '/api/v1/dashboard/users-stats';
   

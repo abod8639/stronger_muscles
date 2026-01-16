@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/data/models/address_model.dart';
 import '../../config/api_config.dart';
 import '../../data/models/user_model.dart';
 import '../../data/models/user_stats_model.dart';
@@ -99,6 +100,7 @@ class AuthService extends GetxService {
     String? email,
     String? phone,
     String? photoUrl,
+    List<AddressModel>? addresses,
   }) async {
     try {
       final response = await _apiService.post(
@@ -108,6 +110,7 @@ class AuthService extends GetxService {
           if (email != null) 'email': email,
           if (phone != null) 'phone': phone,
           if (photoUrl != null) 'photo_url': photoUrl,
+          if (addresses != null) 'addresses': addresses.map((e) => e.toJson()).toList(),
         },
       );
 

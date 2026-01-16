@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/profile_header.dart';
@@ -17,7 +18,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProfileController());
+    final profileController = Get.put(ProfileController());
+    final addressController = Get.put(AddressController());
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -27,14 +29,14 @@ class ProfilePage extends StatelessWidget {
           _buildAppBar(theme),
           SliverToBoxAdapter(
             child: Obx(() {
-              if (controller.isLoading.value) {
+              if (profileController.isLoading.value) {
                 return const SizedBox(
                   height: 400,
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
 
-              if (controller.currentUser.value == null) {
+              if (profileController.currentUser.value == null) {
                 return LoginPromptCard();
               }
 
@@ -57,7 +59,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 24),
                   AccountSettingsList(),
                   const SizedBox(height: 24),
-                  _buildSignOutButton(controller),
+                  _buildSignOutButton(profileController),
                   const SizedBox(height: 32),
                 ],
               );

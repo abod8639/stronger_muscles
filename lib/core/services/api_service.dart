@@ -79,28 +79,34 @@ class ApiService {
     }
   }
 
-  Failure _handleHttpError(http.Response response) {
-    String errorDescription = "خطأ في الخادم: ${response.statusCode}";
-    FailureType failureType = FailureType.server;
+Failure _handleHttpError(http.Response response) {
+  String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
+  FailureType failureType = FailureType.server;
 
-    if (response.statusCode == 401 || response.statusCode == 403) {
-      failureType = FailureType.auth;
-      errorDescription = "غير مصرح لك بالوصول. يرجى تسجيل الدخول مجدداً";
-      StorageService.deleteToken();
-      // Optional: Get.offAllNamed('/login'); 
-    } else {
-      try {
-        final body = jsonDecode(response.body);
-        if (body is Map && body['message'] != null) {
-          errorDescription = body['message'];
-        }
-      } catch (_) {
-        
+  // فحص أخطاء الصلاحيات
+  if (response.statusCode == 401 || response.statusCode == 403) {
+    failureType = FailureType.auth;
+    errorDescription = "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
+    StorageService.deleteToken();
+    // Get.offAllNamed(AppRoutes.login); // يفضل التوجيه التلقائي هنا
+  } 
+  // فحص أخطاء الطلب (مثل 400, 404, 500)
+  else {
+    try {
+      // استخدام utf8.decode لضمان قراءة النصوص العربية بشكل صحيح
+      final dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
+      
+      if (body is Map) {
+        // البحث عن رسالة الخطأ في مفاتيح شائعة (message أو error)
+        errorDescription = body['message'] ?? body['error'] ?? errorDescription;
       }
+    } catch (e) {
+      // إذا فشل تحليل الـ JSON، نبقي على الوصف الافتراضي
     }
-
-    return Failure(message: errorDescription, type: failureType);
   }
+
+  return Failure(message: errorDescription, type: failureType);
+}
 
   dynamic _handleError(dynamic error) {
     if (error is Failure) return error;
