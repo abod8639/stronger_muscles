@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/sections_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/search_bar.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/shortcuts_row.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/promo_banner.dart';

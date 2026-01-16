@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
+import 'package:stronger_muscles/presentation/bindings/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/search_controller.dart';
 
 import 'package:stronger_muscles/core/errors/failures.dart';
@@ -9,6 +10,7 @@ import 'package:stronger_muscles/core/errors/failures.dart';
 class HomeController extends GetxController {
   final ProductService _productService = Get.put(ProductService());
   final searchController = Get.put(ProductSearchController());
+  // final categoriesController = Get.put(CategoriesSectionsController());
 
   // Expose filtered products for the UI
   RxList<ProductModel> get products => searchController.filteredProducts;
@@ -23,6 +25,9 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchProductsForSection(selectedSectionIndex.value);
+    // categoriesController.fetchCategories();
+    // categoriesController.fetchCategories();
+    
   }
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
@@ -88,7 +93,12 @@ class HomeController extends GetxController {
   }
 
 
+
+
   Future<void> refreshHome() async {
     await fetchProductsForSection(selectedSectionIndex.value);
+    if (Get.isRegistered<CategoriesSectionsController>()) {
+      Get.find<CategoriesSectionsController>().fetchCategories();
+    }
   }
 }

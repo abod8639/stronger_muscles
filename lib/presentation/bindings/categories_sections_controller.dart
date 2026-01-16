@@ -5,7 +5,7 @@ import 'package:stronger_muscles/data/models/category_model.dart';
 import 'package:stronger_muscles/data/models/selection_model.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 
-class SectionsController extends GetxController {
+class CategoriesSectionsController extends GetxController {
   final HomeController _homeController = Get.put(HomeController());
   final CategoryService _categoryService = Get.put(CategoryService());
 
@@ -17,8 +17,7 @@ class SectionsController extends GetxController {
     SelectionsModel(
       id: "",
       label: 'categoryHome',
-      icon: Icons.home,
-    ),
+      icon: Icons.home )
   ].obs;
 
   @override
