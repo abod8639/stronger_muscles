@@ -2,11 +2,13 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
+import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CheckoutController extends GetxController {
+  final AuthController _authController = Get.find<AuthController>();
   final CartController _cartController = Get.find<CartController>();
   final ProfileController _profileController = Get.find<ProfileController>();
   final OrderRepository _orderRepository = OrderRepository();
@@ -60,7 +62,7 @@ class CheckoutController extends GetxController {
       final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
       final order = OrderModel(
         id: orderId,
-        userId: _profileController.currentUser.value?.uid ?? '0',
+        userId: _authController.currentUser.value?.id.toString() ?? '0',
         orderDate: DateTime.now(),
         status: 'pending',
         addressId: selectedAddress.value!.id.toString(),

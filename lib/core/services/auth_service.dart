@@ -103,7 +103,7 @@ class AuthService extends GetxService {
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
       
       // Inject existing token into the model if not present in response
-      if (token != null && userMap['token'] == null) {
+      if (userMap['token'] == null) {
         userMap['token'] = token;
       }
       
