@@ -178,4 +178,5 @@ class AuthController extends GetxController {
     currentUser.value = null;
     Get.offAllNamed('/login'); // Adjust route
   }
+
 }

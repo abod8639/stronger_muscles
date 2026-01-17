@@ -19,7 +19,7 @@ class AuthService extends GetxService {
   }) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.register,
+        ApiConfig.googleSignIn,
         data: {
           'email': email,
           'password': password,
@@ -65,13 +65,11 @@ class AuthService extends GetxService {
       
       final body = jsonDecode(response.body);
       final user = UserModel.fromJson(body['user'] ?? body);
-      final token = body['token'];
+      final String token = body['token'];
 
-      if (token != null) {
-        await StorageService.saveToken(token);
-        print('✅ Token saved successfully');
-      }
-
+      await StorageService.saveToken(token);
+      print('✅ Token saved successfully');
+    
       return user;
     } on Failure catch (e) {
       print('❌ Login API Error: ${e.message}');
@@ -87,10 +85,12 @@ class AuthService extends GetxService {
       final token = StorageService.getToken();
       if (token == null) return null;
 
-      final response = await _apiService.get(ApiConfig.me);
+      final response = await _apiService.get(ApiConfig.customerProfile);
+      print('👤 Get Current User Response: ${response.body}');
       final body = jsonDecode(response.body);
-      return UserModel.fromJson(body);
+      return UserModel.fromJson(body['user'] ?? body);
     } catch (e) {
+      print('❌ Get Current User Error: $e');
       return null;
     }
   }
@@ -104,7 +104,7 @@ class AuthService extends GetxService {
   }) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.updateProfile,
+        ApiConfig.updateProfileRoute,
         data: {
           if (name != null) 'name': name,
           if (email != null) 'email': email,

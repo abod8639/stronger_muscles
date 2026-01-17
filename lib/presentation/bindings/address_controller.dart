@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 
 class AddressController extends GetxController {
   final AddressService _addressService = Get.put(AddressService());
-  // final UserModel _userModel = Get.put(UserModel());
   final RxList<AddressModel> addresses = RxList<AddressModel>([]);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;

@@ -7,31 +7,27 @@ class ApiConfig {
     // For Web testing, we use localhost directly.
     // Note: 'dart:io' imports cause crashes on Web, so we removed Platform logic for this specific test.
     // return 'http://localhost:8080';
-    return 'http://192.168.1.17:8080'; // Change to your PC's IP
+    return 'http://192.168.1.17:8080/api/v1'; // Change to your PC's IP
     // return 'http://10.0.2.2:8080'; // Change to your PC's IP
 
   }
 
   // Auth
-  static const String register = '/api/v1/auth/register';
-  static const String login = '/api/v1/auth/login';
-  static const String googleSignIn = '/api/v1/auth/google-signin';
-  static const String me = '/api/v1/auth/me';
-  static const String updateProfile = '/api/v1/auth/update-profile';
+  static const String login = '/auth/login';
+  static const String googleSignIn = '/auth/google-signin';
+  static const String updateProfileRoute = '/auth/update-profile';
 
-  // Products
-  static const String products = '/api/v1/products';
+  // Products (Public)
+  static const String products = '/shop/products';
+  // Categories (Public)
+  static const String categories = '/shop/categories';
   
-  // Orders
-  static const String orders = '/api/v1/orders';
+  // Customer (Protected)
+  static const String customerProfile = '/customer/profile';
+  static const String cart = '/customer/cart';
+  static const String orders = '/customer/orders';
   
-  // Cart
-  static const String cart = '/api/v1/cart';
 
-  // Categories
-  static const String categories = '/api/v1/categories';
-  
-  // Dashboard
-  static const String usersStats = '/api/v1/dashboard/users-stats';
-  
+  // Legacy/Deprecated - Keep for compatibility until services are updated
+  static const String usersStats = '/customer/profile'; 
 }

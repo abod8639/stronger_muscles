@@ -10,7 +10,6 @@ import 'package:stronger_muscles/core/errors/failures.dart';
 class HomeController extends GetxController {
   final ProductService _productService = Get.put(ProductService());
   final searchController = Get.put(ProductSearchController());
-  // final categoriesController = Get.put(CategoriesSectionsController());
 
   // Expose filtered products for the UI
   RxList<ProductModel> get products => searchController.filteredProducts;
@@ -25,9 +24,6 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     fetchProductsForSection(selectedSectionIndex.value);
-    // categoriesController.fetchCategories();
-    // categoriesController.fetchCategories();
-    
   }
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {

@@ -15,7 +15,7 @@ class SavedAddressesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = Get.find<AddressController>();
+    final controller = Get.put(AddressController());
     final isDark = theme.brightness == Brightness.dark;
 
     return Obx(() {
