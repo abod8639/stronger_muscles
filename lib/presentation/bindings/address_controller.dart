@@ -39,7 +39,7 @@ class AddressController extends GetxController {
       errorMessage.value = '';
       
       final fetchedAddresses = await _addressService.getAddresses();
-      addresses.value = fetchedAddresses;
+      addresses.assignAll(fetchedAddresses);
       
       print('✅ تم جلب ${addresses.length} عنوان');
     } catch (e) {
@@ -56,19 +56,20 @@ class AddressController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
       
-      final newAddress = await _addressService.createAddress(address);
-      addresses.add(newAddress);
+      // نرسل الطلب للخادم
+      await _addressService.createAddress(address);
       
-      Get.back(); // Close dialog/form
+      // بدلاً من محاولة إضافة العنصر يدوياً للقائمة المحلية (والتي قد تكون Locked)
+      // نقوم بإعادة جلب العناوين من السيرفر لضمان المزامنة الصحيحة 100%
+      await fetchAddresses();
+      
+      Get.back();
       Get.snackbar('نجح', 'تم إضافة العنوان بنجاح');
-      print('✅ تم إضافة عنوان جديد');
-      
-      // Clear form
       clearForm();
     } catch (e) {
       errorMessage.value = e.toString();
       print('❌ خطأ في إضافة العنوان: $e');
-      Get.snackbar('خطأ', 'فشل إضافة العنوان: $e');
+      Get.snackbar('خطأ', 'فشل إضافة العنوان. تأكد من صحة البيانات.');
     } finally {
       isLoading.value = false;
     }
@@ -121,7 +122,7 @@ class AddressController extends GetxController {
     try {
       // First, unset all default addresses in local state optimistically
       final tempAddresses = addresses.map((e) => e.copyWith(isDefault: false)).toList();
-      addresses.value = tempAddresses; 
+      addresses.assignAll(tempAddresses); 
       
       final address = addresses.firstWhere((addr) => addr.id == id);
       final updatedAddress = address.copyWith(isDefault: true);

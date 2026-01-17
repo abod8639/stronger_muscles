@@ -19,7 +19,8 @@ class AuthService extends GetxService {
   }) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.googleSignIn,
+        ApiConfig.register, 
+        includeAuth: false,
         data: {
           'email': email,
           'password': password,
@@ -30,21 +31,22 @@ class AuthService extends GetxService {
       print('📝 Register Response: ${response.body}');
       
       final body = jsonDecode(response.body);
-      final user = UserModel.fromJson(body['user'] ?? body);
-      final token = body['token'];
-      
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final String? token = body['token']?.toString();
+
       if (token != null) {
+        userMap['token'] = token;
         await StorageService.saveToken(token);
         print('✅ Token saved successfully');
       }
       
-      return user;
+      return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Register API Error: ${e.message}');
       throw e.message;
     } catch (e) {
       print('❌ Register Error: $e');
-      throw e.toString();
+      throw 'حدث خطأ أثناء إنشاء الحساب: ${e.toString()}';
     }
   }
 
@@ -55,6 +57,7 @@ class AuthService extends GetxService {
     try {
       final response = await _apiService.post(
         ApiConfig.login,
+        includeAuth: false,
         data: {
           'email': email,
           'password': password,
@@ -64,19 +67,27 @@ class AuthService extends GetxService {
       print('🔐 Login Response: ${response.body}');
       
       final body = jsonDecode(response.body);
-      final user = UserModel.fromJson(body['user'] ?? body);
-      final String token = body['token'];
+      
+      if (body['status'] == 'error' || (body['status'] == 'success' && body['user'] == null && body['token'] == null)) {
+         throw Failure(message: body['message'] ?? 'فشل تسجيل الدخول', type: FailureType.auth);
+      }
 
-      await StorageService.saveToken(token);
-      print('✅ Token saved successfully');
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final String? token = body['token']?.toString();
+
+      if (token != null) {
+        userMap['token'] = token;
+        await StorageService.saveToken(token);
+        print('✅ Token saved successfully');
+      }
     
-      return user;
+      return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Login API Error: ${e.message}');
       throw e.message;
     } catch (e) {
       print('❌ Login Error: $e');
-      throw e.toString();
+      throw 'حدث خطأ أثناء محاولة تسجيل الدخول: ${e.toString()}';
     }
   }
 
@@ -87,8 +98,16 @@ class AuthService extends GetxService {
 
       final response = await _apiService.get(ApiConfig.customerProfile);
       print('👤 Get Current User Response: ${response.body}');
+      
       final body = jsonDecode(response.body);
-      return UserModel.fromJson(body['user'] ?? body);
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      
+      // Inject existing token into the model if not present in response
+      if (token != null && userMap['token'] == null) {
+        userMap['token'] = token;
+      }
+      
+      return UserModel.fromJson(userMap);
     } catch (e) {
       print('❌ Get Current User Error: $e');
       return null;
@@ -117,15 +136,21 @@ class AuthService extends GetxService {
       print('📝 Update Profile Response: ${response.body}');
       
       final body = jsonDecode(response.body);
-      final user = UserModel.fromJson(body['user'] ?? body);
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
       
-      return user;
+      // Keep existing token
+      final token = StorageService.getToken();
+      if (token != null && userMap['token'] == null) {
+        userMap['token'] = token;
+      }
+      
+      return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Update Profile API Error: ${e.message}');
       throw e.message;
     } catch (e) {
       print('❌ Update Profile Error: $e');
-      throw e.toString();
+      throw 'حدث خطأ أثناء تحديث البيانات: ${e.toString()}';
     }
   }
 
@@ -138,6 +163,7 @@ class AuthService extends GetxService {
     try {
       final response = await _apiService.post(
         ApiConfig.googleSignIn,
+        includeAuth: false,
         data: {
           'email': email,
           'name': name,
@@ -148,21 +174,22 @@ class AuthService extends GetxService {
       print('🔐 Google SignIn Response: ${response.body}');
       
       final body = jsonDecode(response.body);
-      final user = UserModel.fromJson(body['user'] ?? body);
-      final token = body['token'];
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final String? token = body['token']?.toString();
 
       if (token != null) {
+        userMap['token'] = token;
         await StorageService.saveToken(token);
         print('✅ Token saved successfully');
       }
 
-      return user;
+      return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Google SignIn API Error: ${e.message}');
       throw e.message;
     } catch (e) {
       print('❌ Google SignIn Error: $e');
-      throw e.toString();
+      throw 'حدث خطأ أثناء تسجيل الدخول عبر جوجل: ${e.toString()}';
     }
   }
 
