@@ -81,7 +81,7 @@ class ApiService {
     }
   }
 
-Failure _handleHttpError(http.Response response, String path) {
+  Failure _handleHttpError(http.Response response, String path) {
   String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
   FailureType failureType = FailureType.server;
 
@@ -130,5 +130,14 @@ Failure _handleHttpError(http.Response response, String path) {
     }
 
     return Failure(message: errorDescription, type: failureType);
+  }
+
+  Future<http.Response> delete(String path) async {
+  try {
+    final uri = _buildUri(path);
+    final response = await _client.delete(uri, headers: await _getHeaders());
+    return _handleResponse(response, path);
+  } catch (e) {
+    throw _handleError(e);
   }
 }

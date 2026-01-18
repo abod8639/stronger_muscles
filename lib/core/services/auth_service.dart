@@ -208,4 +208,15 @@ class AuthService extends GetxService {
       rethrow;
     }
   }
+
+  Future<void> deleteUser() async {
+    try {
+      await _apiService.delete(ApiConfig.customerProfile);
+      await StorageService.deleteToken();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+
 }

@@ -179,4 +179,10 @@ class AuthController extends GetxController {
     Get.offAllNamed('/login'); // Adjust route
   }
 
+  Future<void> deleteUser() async {
+    await _authService.deleteUser();
+    currentUser.value = null;
+    Get.offAllNamed('/login'); // Adjust route
+  }
+
 }
