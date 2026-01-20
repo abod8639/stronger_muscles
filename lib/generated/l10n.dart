@@ -460,6 +460,16 @@ class S {
     );
   }
 
+  /// `Carbs`
+  String get categoryCarb {
+    return Intl.message(
+      'Carbs',
+      name: 'categoryCarb',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My Account`
   String get myAccount {
     return Intl.message(

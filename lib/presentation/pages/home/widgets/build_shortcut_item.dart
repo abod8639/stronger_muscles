@@ -81,6 +81,7 @@ Widget buildShortcutItem(int index) {
                     maxLines: 1,
                   ),
                 ),
+                
               ],
             ),
           ),
@@ -109,9 +110,15 @@ String getLocalizedLabel(BuildContext context, String key) {
       return localizations.categoryFatBurner;
     case 'categoryHealth':
       return localizations.categoryHealth;
+    case 'Carb':
+    case 'cat-carb':
+    case 'categoryCarb':
+      return localizations.categoryCarb;
     case 'Creatine':
+    case 'categoryCreatine':
       return localizations.categoryCreatine;
     default:
+      // If no match is found, return the key as is (this allows names from DB to show up automatically)
       return key;
   }
 }

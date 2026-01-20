@@ -1,7 +1,5 @@
 
 class ApiConfig {
-  // Set this to true if using Android Emulator, false for Physical Device
-  // static const bool useEmulator = false;
 
   static String get baseUrl {
     // For Web testing, we use localhost directly.

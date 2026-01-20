@@ -6,7 +6,7 @@ import 'package:stronger_muscles/data/models/selection_model.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 
 class CategoriesSectionsController extends GetxController {
-  final HomeController _homeController = Get.put(HomeController());
+  final HomeController _homeController = Get.find<HomeController>();
   final CategoryService _categoryService = Get.put(CategoryService());
 
   final RxInt selectedIndex = 0.obs;
@@ -53,6 +53,12 @@ class CategoriesSectionsController extends GetxController {
   }
 
   void _updateSelections(List<CategoryModel> categoryList) {
+    // Store current selected ID to restore it later
+    String? currentSelectedId;
+    if (selectedIndex.value >= 0 && selectedIndex.value < selections.length) {
+      currentSelectedId = selections[selectedIndex.value].id;
+    }
+
     final List<SelectionsModel> list = [
       SelectionsModel(
         id: "",
@@ -70,6 +76,19 @@ class CategoriesSectionsController extends GetxController {
     }
     
     selections.assignAll(list);
+
+    // Restore selection index based on the ID we had
+    if (currentSelectedId != null) {
+      final newIndex = selections.indexWhere((s) => s.id == currentSelectedId);
+      if (newIndex != -1) {
+        selectedIndex.value = newIndex;
+        _homeController.selectedSectionIndex.value = newIndex;
+      } else {
+        // Fallback to Home if previously selected category is gone
+        selectedIndex.value = 0;
+        _homeController.selectedSectionIndex.value = 0;
+      }
+    }
   }
 
   IconData _getIconForCategory(String id) {

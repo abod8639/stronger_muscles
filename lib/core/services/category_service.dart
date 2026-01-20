@@ -41,33 +41,37 @@ class CategoryService extends GetxService {
     try {
       final response = await _apiService.get(ApiConfig.categories);
 
-      print('DEBUG: Response status: ${response.statusCode}');
+      print('DEBUG: Categories Response status: ${response.statusCode}');
       
-      final decodedData = jsonDecode(response.body);
-      List<CategoryModel> categories = [];
+      final dynamic decodedData = jsonDecode(response.body);
+      List<CategoryModel> categoriesResult = [];
 
-      if (decodedData is Map) {
-        if (decodedData['data'] is List) {
-           final list = decodedData['data'] as List;
-           categories = list.map((json) => CategoryModel.fromJson(json)).toList();
-        } else if (decodedData['status'] == 'success' && decodedData['data'] != null) {
-           // Handle another common wrap if needed
+      if (decodedData is List) {
+        categoriesResult = decodedData.map((json) => CategoryModel.fromJson(json)).toList();
+      } else if (decodedData is Map) {
+        final dynamic data = decodedData['data'];
+        if (data is List) {
+          categoriesResult = data.map((json) => CategoryModel.fromJson(json)).toList();
+        } else if (decodedData['status'] == 'success' && data != null) {
+          // Some APIs wrap success responses differently
+          if (data is List) {
+            categoriesResult = data.map((json) => CategoryModel.fromJson(json)).toList();
+          }
         }
-      } else if (decodedData is List) {
-         categories = decodedData.map((json) => CategoryModel.fromJson(json)).toList();
       }
 
-      if (categories.isNotEmpty) {
-        await _cacheCategories(categories);
+      if (categoriesResult.isNotEmpty) {
+        await _cacheCategories(categoriesResult);
       }
-      return categories;
+      return categoriesResult;
     } on Failure catch (e) {
       print("DEBUG: Failure in getCategories: ${e.message}");
-      // Note: We could fallback to cache here if network fails
-      rethrow;
+      // Fallback to cache if network fails
+      return await getCachedCategories();
     } catch (e) {
       print("DEBUG: Error in getCategories: $e");
-      throw Failure(message: "حدث خطأ غير متوقع عند جلب الأقسام", type: FailureType.unknown, originalError: e);
+      // Fallback to cache if unexpected error
+      return await getCachedCategories();
     }
   }
 }

@@ -133,6 +133,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categoryHealth => 'الصحة العامة';
 
   @override
+  String get categoryCarb => 'كربوهيدرات';
+
+  @override
   String get myAccount => 'حسابي';
 
   @override

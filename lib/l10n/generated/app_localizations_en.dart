@@ -133,6 +133,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoryHealth => 'Health';
 
   @override
+  String get categoryCarb => 'Carbs';
+
+  @override
   String get myAccount => 'My Account';
 
   @override

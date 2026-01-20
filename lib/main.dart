@@ -16,7 +16,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); // Load the .env file
+  await dotenv.load(fileName: ".env"); 
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
           children: [
             child!,
             const Positioned(
-              // top: 0,
               bottom: 80,
               left: 0,
               right: 0,

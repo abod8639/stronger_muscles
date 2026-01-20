@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cart": MessageLookupByLibrary.simpleMessage("السلة"),
         "categoryAmino": MessageLookupByLibrary.simpleMessage("أمينو"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
+        "categoryCarb": MessageLookupByLibrary.simpleMessage("كربوهيدرات"),
         "categoryCreatine": MessageLookupByLibrary.simpleMessage("كرياتين"),
         "categoryFatBurner": MessageLookupByLibrary.simpleMessage("حرق الدهون"),
         "categoryHealth": MessageLookupByLibrary.simpleMessage("الصحة العامة"),

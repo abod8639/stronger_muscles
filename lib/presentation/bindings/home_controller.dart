@@ -36,23 +36,9 @@ class HomeController extends GetxController {
     try {
       List<ProductModel> fetchedProducts;
       
-      // If categoryId is not provided, we might still be using the old index-based logic
-      // but let's prioritize categoryId if present.
-      if (categoryId == null && index != 0) {
-        // Fallback for any legacy calls that don't pass categoryId yet
-        switch (index) {
-          case 1: categoryId = 'cat-protein'; break;
-          case 2: categoryId = 'cat-amino'; break;
-          case 3: categoryId = 'cat-vitamins'; break;
-          case 4: categoryId = 'cat-preworkout'; break;
-          case 5: categoryId = 'cat-recovery'; break;
-          case 6: categoryId = 'cat-fatburner'; break;
-          case 7: categoryId = 'cat-health'; break;
-          case 8: categoryId = 'cat-mass-gainer'; break;
-          case 9: categoryId = 'cat-carb'; break;
-        }
-      }
-
+      // Use categoryId directly if provided by the controller.
+      // Removed hardcoded fallback indices to ensure it's fully dynamic.
+      
       fetchedProducts = await _productService.getProducts(categoryId: categoryId);
       
       // Update the search controller with the new data
@@ -92,9 +78,20 @@ class HomeController extends GetxController {
 
 
   Future<void> refreshHome() async {
-    await fetchProductsForSection(selectedSectionIndex.value);
+    String? categoryId;
     if (Get.isRegistered<CategoriesSectionsController>()) {
-      Get.find<CategoriesSectionsController>().fetchCategories();
+      final sectionsController = Get.find<CategoriesSectionsController>();
+      final index = selectedSectionIndex.value;
+      if (index >= 0 && index < sectionsController.selections.length) {
+        final id = sectionsController.selections[index].id;
+        categoryId = id.isEmpty ? null : id;
+      }
+    }
+
+    await fetchProductsForSection(selectedSectionIndex.value, categoryId: categoryId);
+    
+    if (Get.isRegistered<CategoriesSectionsController>()) {
+      await Get.find<CategoriesSectionsController>().fetchCategories();
     }
   }
 }

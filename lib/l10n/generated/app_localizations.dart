@@ -344,6 +344,12 @@ abstract class AppLocalizations {
   /// **'Health'**
   String get categoryHealth;
 
+  /// No description provided for @categoryCarb.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get categoryCarb;
+
   /// No description provided for @myAccount.
   ///
   /// In en, this message translates to:

@@ -44,6 +44,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cart": MessageLookupByLibrary.simpleMessage("Cart"),
         "categoryAmino": MessageLookupByLibrary.simpleMessage("Amino"),
         "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
+        "categoryCarb": MessageLookupByLibrary.simpleMessage("Carbs"),
         "categoryCreatine": MessageLookupByLibrary.simpleMessage("Creatine"),
         "categoryFatBurner": MessageLookupByLibrary.simpleMessage("Fat Burner"),
         "categoryHealth": MessageLookupByLibrary.simpleMessage("Health"),
