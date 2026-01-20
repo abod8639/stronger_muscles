@@ -126,6 +126,29 @@ class ApiService {
       print(
         '⚠️ Auth Error (${response.statusCode}): $errorDescription | Path: $path | Body: ${response.body}',
       );
+    } else if (response.statusCode == 422) {
+      // Validation Errors
+      try {
+        final dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
+        if (body is Map && body['errors'] != null) {
+          final Map<String, dynamic> errors = body['errors'];
+          final List<String> allErrors = [];
+          errors.forEach((key, value) {
+            if (value is List) {
+              allErrors.addAll(value.map((e) => e.toString()));
+            } else {
+              allErrors.add(value.toString());
+            }
+          });
+          if (allErrors.isNotEmpty) {
+            errorDescription = allErrors.join('\n');
+          }
+        }
+      } catch (_) {}
+      
+      print(
+        '❌ Validation Error (422): $errorDescription | Body: ${response.body}',
+      );
     } else {
       errorDescription = serverMessage ?? errorDescription;
       print(

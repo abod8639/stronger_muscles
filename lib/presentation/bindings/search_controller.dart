@@ -92,7 +92,9 @@ class ProductSearchController extends GetxController {
   }
 
   void _onDebouncedSearch(String query) async {
+    print('DEBUG: _onDebouncedSearch triggered with: "$query"');
     if (query.isEmpty) {
+      print('DEBUG: Query empty, clearing remote results');
       _remoteProducts.clear();
       _applyFilters();
       return;
@@ -100,7 +102,9 @@ class ProductSearchController extends GetxController {
 
     isLoadingRemote.value = true;
     try {
+      print('DEBUG: Calling ProductService.getProducts with search: $query');
       final results = await _productService.getProducts(query: query);
+      print('DEBUG: Received ${results.length} results from server');
       _remoteProducts.assignAll(results);
       
       // Update bounds based on remote search results
@@ -122,15 +126,23 @@ class ProductSearchController extends GetxController {
     final min = filterMinPrice.value;
     final max = filterMaxPrice.value;
 
-    final source = q.isEmpty ? _localProducts : _remoteProducts;
+    final isSearching = q.isNotEmpty;
+    final source = isSearching ? _remoteProducts : _localProducts;
+    
+    print('DEBUG: Applying filters. Mode: ${isSearching ? "Remote" : "Local"}, Source size: ${source.length}, Query: "$q", Range: $min - $max');
 
     filteredProducts.assignAll(
       source.where((p) {
-        // Local filtering logic within the source (local category or remote search)
-        final matchesName = q.isEmpty || p.name.toLowerCase().contains(q.toLowerCase());
+        // If we are searching, we trust the server's name matching, so we only filter by price locally.
+        // If we aren't searching (displaying category), we also don't really need name filtering here 
+        // unless we wanted to filter the category list locally (which we don't currently do).
         final matchesPrice = p.price >= min && p.price <= max;
-        return matchesName && matchesPrice;
+        
+        // Optional: you could still have local name filtering for the category view if you wanted, 
+        // but since search goes to the server, it's safer to trust the server results.
+        return matchesPrice;
       }).toList(),
     );
+    print('DEBUG: filteredProducts result size: ${filteredProducts.length}');
   }
 }
