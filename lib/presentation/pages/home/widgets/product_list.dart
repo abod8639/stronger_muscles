@@ -19,8 +19,15 @@ class ProductList extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Obx(() {
-      // Loading state
+      // Loading state (initial or section change)
       if (controller.isLoading.value) {
+        return const SliverToBoxAdapter(
+          child: Center(heightFactor: 3, child: CircularProgressIndicator()),
+        );
+      }
+
+      // Remote search loading state
+      if (controller.searchController.isLoadingRemote.value) {
         return const SliverToBoxAdapter(
           child: Center(heightFactor: 3, child: CircularProgressIndicator()),
         );
