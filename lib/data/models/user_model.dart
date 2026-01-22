@@ -28,7 +28,12 @@ class UserModel with _$UserModel {
     @HiveField(15) List<AddressModel>? addresses,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    if (json['id'] is String) {
+      json['id'] = int.tryParse(json['id']) ?? 0;
+    }
+    return _$UserModelFromJson(json);
+  }
 }
 
 bool _boolFromInt(dynamic value) {

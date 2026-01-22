@@ -175,7 +175,7 @@ class AuthService extends GetxService {
       
       final body = jsonDecode(response.body);
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
-      final String? token = body['token']?.toString();
+      final String? token = (body['token'] ?? body['access_token'])?.toString();
 
       if (token != null) {
         userMap['token'] = token;

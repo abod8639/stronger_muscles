@@ -13,6 +13,7 @@ class ApiConfig {
   static const String register = '/auth/register';
   static const String googleSignIn = '/auth/google-signin';
   static const String logout = '/auth/logout';
+  static const String testLogin = '/auth/test-login';
   static const String updateProfileRoute = '/auth/update-profile';
 
   // Products (Public)
