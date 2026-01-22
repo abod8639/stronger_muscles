@@ -37,6 +37,7 @@ class ProfilePage extends StatelessWidget {
               if (profileController.currentUser.value == null) {
                 return LoginPromptCard();
               }
+              // orders
 
               return Column(
                 children: [
