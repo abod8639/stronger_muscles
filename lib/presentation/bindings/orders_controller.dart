@@ -35,4 +35,5 @@ class OrdersController extends GetxController {
   Future<void> refreshOrders() async {
     await fetchOrders();
   }
+  
 }

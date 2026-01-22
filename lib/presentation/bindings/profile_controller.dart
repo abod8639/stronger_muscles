@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/data/repositories/order_repository.dart';
+import 'package:stronger_muscles/core/services/address_service.dart';
 
 class ProfileController extends GetxController {
-  final AuthController _authController =Get.put(AuthController());
+  final AuthController _authController = Get.find<AuthController>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final OrderRepository _orderRepository = OrderRepository();
+  final AddressService _addressService = Get.put(AddressService());
 
   final Rx<User?> currentUser = Rx<User?>(null);
   final RxList<OrderModel> orders = <OrderModel>[].obs;
@@ -39,33 +40,23 @@ class ProfileController extends GetxController {
   }
 
   Future<void> _loadOrders() async {
-    // Mock data for demonstration
-    // In production, load from Firebase or API
-    orders.value = [
-
-
-    ];
+    try {
+      final fetchedOrders = await _orderRepository.getUserOrders();
+      orders.assignAll(fetchedOrders);
+      print('✅ Profile: Loaded ${orders.length} orders');
+    } catch (e) {
+      print('❌ Profile: Error loading orders: $e');
+    }
   }
 
   Future<void> loadAddresses() async {
-    // Mock data for demonstration
-    addresses.value = [
-      AddressModel(
-        id: 1,
-        userId: 1,
-        label: 'Home',
-        fullName: currentUser.value?.displayName ?? 'User Name',
-        phone: '+20 123 456 7890',
-        street: '123 Main Street',
-        city: 'Cairo',
-        state: 'Cairo Governorate',
-        postalCode: '11511',
-        country: 'Egypt',
-        isDefault: true,
-        latitude: 30.0444,
-        longitude: 31.2357,
-      ),
-    ];
+    try {
+      final fetchedAddresses = await _addressService.getAddresses();
+      addresses.assignAll(fetchedAddresses);
+      print('✅ Profile: Loaded ${addresses.length} addresses');
+    } catch (e) {
+      print('❌ Profile: Error loading addresses: $e');
+    }
   }
 
   Future<void> _loadWishlistCount() async {
