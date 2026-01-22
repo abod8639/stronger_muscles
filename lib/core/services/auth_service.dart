@@ -194,8 +194,13 @@ class AuthService extends GetxService {
   }
 
   Future<void> logout() async {
-    await StorageService.deleteToken();
-
+    try {
+      await _apiService.post(ApiConfig.logout);
+    } catch (e) {
+      print('❌ Logout API Error: $e');
+    } finally {
+      await StorageService.deleteToken();
+    }
   }
 
   // جلب بيانات إحصائيات المستخدمين
