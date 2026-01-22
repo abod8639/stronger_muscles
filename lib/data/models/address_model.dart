@@ -25,19 +25,6 @@ class AddressModel with _$AddressModel {
     @HiveField(14) DateTime? updatedAt,
   }) = _AddressModel;
 
-        // 'user_id',
-        // 'label',
-        // 'full_name',
-        // 'phone',
-        // 'street',
-        // 'city',
-        // 'state',
-        // 'postal_code',
-        // 'country',
-        // 'is_default',
-        // 'latitude',
-        // 'longitude',
-
   const AddressModel._();
 
   factory AddressModel.fromJson(Map<String, dynamic> json) {

@@ -10,6 +10,7 @@ import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart'
 import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/orders_controller.dart';
 
 BindingsBuilder<dynamic> initControllersApp() {
   return BindingsBuilder(() {
@@ -23,6 +24,7 @@ BindingsBuilder<dynamic> initControllersApp() {
     Get.lazyPut<LanguageController>(() => LanguageController());
     Get.lazyPut<ThemeController>(() => ThemeController());
     Get.lazyPut<AddressController>(() => AddressController());
+    Get.lazyPut<OrdersController>(() => OrdersController());
     Get.put<InternetConnectionController>(InternetConnectionController());
   });
 }

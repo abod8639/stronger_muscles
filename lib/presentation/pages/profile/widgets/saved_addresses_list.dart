@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'address_form.dart';
 
 class SavedAddressesList extends StatelessWidget {
-  const SavedAddressesList({
-    super.key,
-  });
+  const SavedAddressesList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class SavedAddressesList extends StatelessWidget {
                   ),
                 ),
                 TextButton.icon(
-                  onPressed: () => _showAddressForm(context),
+                  onPressed: () => showAddressForm(context),
                   icon: const Icon(Icons.add, size: 18),
                   label: const Text('Add New'),
                 ),
@@ -98,8 +97,9 @@ class SavedAddressesList extends StatelessWidget {
         children: [
           if (address.latitude != null && address.longitude != null)
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
               child: SizedBox(
                 height: 150,
                 width: double.infinity,
@@ -133,8 +133,8 @@ class SavedAddressesList extends StatelessWidget {
                       address.label == 'Home'
                           ? Icons.home_outlined
                           : address.label == 'Work'
-                              ? Icons.work_outline
-                              : Icons.location_on_outlined,
+                          ? Icons.work_outline
+                          : Icons.location_on_outlined,
                       color: AppColors.primary,
                       size: 20,
                     ),
@@ -150,7 +150,9 @@ class SavedAddressesList extends StatelessWidget {
                     if (address.isDefault)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -167,7 +169,7 @@ class SavedAddressesList extends StatelessWidget {
                     PopupMenuButton<String>(
                       onSelected: (value) {
                         if (value == 'edit') {
-                          _showAddressForm(context, address: address);
+                          showAddressForm(context, address: address);
                         } else if (value == 'delete') {
                           controller.deleteAddress(address.id);
                         } else if (value == 'default') {
@@ -176,20 +178,20 @@ class SavedAddressesList extends StatelessWidget {
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
-                          value: 'edit',
-                          child: Text('Edit'),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'delete',
-                          child: Text('Delete'),
-                        ),
-                        if (!address.isDefault)
-                          const PopupMenuItem<String>(
-                            value: 'default',
-                            child: Text('Set as Default'),
-                          ),
-                      ],
+                            const PopupMenuItem<String>(
+                              value: 'edit',
+                              child: Text('Edit'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'delete',
+                              child: Text('Delete'),
+                            ),
+                            if (!address.isDefault)
+                              const PopupMenuItem<String>(
+                                value: 'default',
+                                child: Text('Set as Default'),
+                              ),
+                          ],
                     ),
                   ],
                 ),
@@ -219,18 +221,6 @@ class SavedAddressesList extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  void _showAddressForm(BuildContext context, {AddressModel? address}) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: AddressForm(address: address),
       ),
     );
   }
