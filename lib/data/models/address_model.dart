@@ -40,7 +40,15 @@ class AddressModel with _$AddressModel {
 
   const AddressModel._();
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
+  factory AddressModel.fromJson(Map<String, dynamic> json) {
+    if (json['id'] is String) {
+      json['id'] = int.tryParse(json['id']) ?? 0;
+    }
+    if (json['user_id'] is String) {
+      json['user_id'] = int.tryParse(json['user_id']);
+    }
+    return _$AddressModelFromJson(json);
+  }
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';
   String get shortAddress => '$city, $country';
