@@ -22,7 +22,7 @@ class AddressService extends GetxService {
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
       final user = await _authService.getCurrentUser();
-      if (user == null) throw Exception('المستخدم غير موجود');
+      if (user == null) throw Exception('يرجى تسجيل الدخول أولاً لإضافة عنوان');
 
       // نأخذ نسخة جديدة وقابلة للتعديل تماماً من القائمة الحالية
       final List<AddressModel> currentAddresses = List<AddressModel>.from(user.addresses ?? []);
@@ -120,4 +120,5 @@ class AddressService extends GetxService {
       return null;
     }
   }
+
 }

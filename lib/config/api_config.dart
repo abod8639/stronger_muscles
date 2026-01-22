@@ -2,12 +2,10 @@
 class ApiConfig {
 
   static String get baseUrl {
-    // For Web testing, we use localhost directly.
-    // Note: 'dart:io' imports cause crashes on Web, so we removed Platform logic for this specific test.
-    // return 'http://localhost:8080';
-    return 'http://192.168.1.17:8080/api/v1'; // Change to your PC's IP
-    // return 'http://10.0.2.2:8080'; // Change to your PC's IP
-
+    // استخدم 10.0.2.2 إذا كنت تستخدم محاكي أندرويد (Android Emulator)
+    // استخدم IP جهازك (مثل 192.168.1.17) إذا كنت تستخدم جوال حقيقي
+    const String pcIp = '192.168.1.17'; 
+    return 'http://$pcIp:8080/api/v1';
   }
 
   // Auth
