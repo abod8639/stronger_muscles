@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/address_card.dart';
+
 class SavedAddressesList extends StatelessWidget {
   const SavedAddressesList({super.key});
 
@@ -19,10 +20,10 @@ class SavedAddressesList extends StatelessWidget {
         children: [
           _buildHeader(context, theme, isDark),
           if (controller.isLoading.isTrue && controller.addresses.isEmpty)
-             const Padding(
-               padding: EdgeInsets.all(32.0),
-               child: Center(child: CircularProgressIndicator()),
-             )
+            const Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(child: CircularProgressIndicator()),
+            )
           else if (controller.addresses.isEmpty)
             _buildEmptyState(theme)
           else
@@ -59,11 +60,24 @@ class SavedAddressesList extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          TextButton.icon(
+          // add new address button
+          OutlinedButton.icon(
             onPressed: () => showAddressForm(context),
-            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-            icon: const Icon(Icons.add_location_alt_outlined, size: 20),
-            label: const Text('Add New', style: TextStyle(fontWeight: FontWeight.bold)),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              side: BorderSide(
+                color: AppColors.primary.withOpacity(0.5),
+                width: 1.5,
+              ),
+              backgroundColor: AppColors.primary.withOpacity(0.05),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: StadiumBorder(), // شكل كبسولة احترافي
+            ),
+            icon: const Icon(Icons.add_rounded, size: 20),
+            label: const Text(
+              'Add New',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
           ),
         ],
       ),
@@ -76,9 +90,16 @@ class SavedAddressesList extends StatelessWidget {
         padding: const EdgeInsets.all(40.0),
         child: Column(
           children: [
-            Icon(Icons.location_off_outlined, size: 64, color: Colors.grey[300]),
+            Icon(
+              Icons.location_off_outlined,
+              size: 64,
+              color: Colors.grey[300],
+            ),
             const SizedBox(height: 16),
-            Text('No addresses saved yet', style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey)),
+            Text(
+              'No addresses saved yet',
+              style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
+            ),
           ],
         ),
       ),
