@@ -6,8 +6,6 @@ import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'address_form.dart';
-
 class SavedAddressesList extends StatelessWidget {
   const SavedAddressesList({super.key});
 

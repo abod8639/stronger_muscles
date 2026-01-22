@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class RecentOrdersList extends StatelessWidget {
   const RecentOrdersList({super.key});
@@ -14,47 +13,28 @@ class RecentOrdersList extends StatelessWidget {
     final theme = Theme.of(context);
     final controller = Get.find<ProfileController>();
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context)!;
     final isAr = Get.locale?.languageCode == 'ar';
 
     return Obx(() {
-      if (controller.orders.isEmpty) {
-        return const SizedBox.shrink();
-      }
+      if (controller.orders.isEmpty) return const SizedBox.shrink();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? AppColors.white : AppColors.black,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // TODO: Navigate to All Orders
-                  },
-                  child: Text(l10n.viewAll),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          ListView.builder(
+          _buildHeader(theme, isDark, isAr),
+          const SizedBox(height: 8),
+          ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             itemCount: controller.orders.take(5).length,
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
             itemBuilder: (context, index) {
-              final order = controller.orders[index];
-              return _buildOrderCard(context, order, isDark, isAr);
+              return _OrderCard(
+                order: controller.orders[index],
+                isDark: isDark,
+                isAr: isAr,
+              );
             },
           ),
         ],
@@ -62,142 +42,196 @@ class RecentOrdersList extends StatelessWidget {
     });
   }
 
-  Widget _buildOrderCard(BuildContext context, OrderModel order, bool isDark, bool isAr) {
-    final theme = Theme.of(context);
-    
-    // Status mapping and colors
-    final statusData = _getStatusData(order.status, isAr);
-    final statusColor = statusData['color'] as Color;
-    final statusText = statusData['text'] as String;
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildHeader(ThemeData theme, bool isDark, bool isAr) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                isAr ? 'طلب رقم #${order.id}' : 'Order #${order.id}',
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? AppColors.white : AppColors.black,
-                ),
-              ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                width: 4,
+                height: 20,
                 decoration: BoxDecoration(
-                  color: statusColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(
-                  statusText,
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    color: statusColor,
-                  ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18,
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            DateFormat('MMM dd, yyyy').format(order.orderDate),
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: AppColors.greyDark,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: order.items != null && order.items!.isNotEmpty
-                    ? Image.network(
-                        order.items!.first.imageUrl ?? '',
-                        width: 45,
-                        height: 45,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          width: 45,
-                          height: 45,
-                          color: AppColors.greyLight,
-                          child: const Icon(Icons.inventory_2_outlined, size: 20, color: AppColors.greyDark),
-                        ),
-                      )
-                    : Container(
-                        width: 45,
-                        height: 45,
-                        color: AppColors.greyLight,
-                        child: const Icon(Icons.inventory_2_outlined, size: 20, color: AppColors.greyDark),
-                      ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      order.items?.isNotEmpty == true
-                          ? order.items!.first.productName
-                          : (isAr ? 'منتجات الطلب' : 'Order Items'),
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: isDark ? AppColors.white : AppColors.black,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if ((order.items?.length ?? 0) > 1)
-                      Text(
-                        isAr
-                            ? '+${(order.items!.length) - 1} منتجات أخرى'
-                            : '+${(order.items!.length) - 1} more items',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.greyDark,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '${order.totalAmount.toStringAsFixed(2)}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  Text(
-                    isAr ? 'ج.م' : 'LE',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: AppColors.greyDark,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          TextButton(
+            onPressed: () => Get.toNamed('/orders'), // مثال للتنقل
+            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+            child: Text(isAr ? 'عرض الكل' : 'View All'),
           ),
         ],
       ),
     );
   }
+}
+
+class _OrderCard extends StatelessWidget {
+  final OrderModel order;
+  final bool isDark;
+  final bool isAr;
+
+  const _OrderCard({required this.order, required this.isDark, required this.isAr});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final statusData = _getStatusData(order.status, isAr);
+    final statusColor = statusData['color'] as Color;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF252525) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () { /* الانتقال لتفاصيل الطلب */ },
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              children: [
+                // الجزء العلوي: الرقم والحالة
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(Icons.shopping_bag_outlined, 
+                          size: 18, color: AppColors.primary),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            isAr ? 'طلب #${order.id.toString().substring(0,6)}' : 'Order #${order.id.toString().substring(0,6)}',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Text(
+                            DateFormat('MMM dd, yyyy • hh:mm a').format(order.orderDate),
+                            style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildStatusBadge(statusData['text'], statusColor),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: Divider(height: 1, thickness: 0.5),
+                ),
+                // الجزء السفلي: الصورة والسعر
+                Row(
+                  children: [
+                    _buildProductImage(order.items?.first.imageUrl),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            order.items?.first.productName ?? '',
+                            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if ((order.items?.length ?? 0) > 1)
+                            Text(
+                              isAr ? '+${order.items!.length - 1} منتجات أخرى' : '+${order.items!.length - 1} items more',
+                              style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary),
+                            ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${order.totalAmount.toStringAsFixed(2)}',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        Text(
+                          isAr ? 'ج.م' : 'EGP',
+                          style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge(String text, Color color) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.2)),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildProductImage(String? url) {
+    return Container(
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey[100],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: url != null
+            ? Image.network(url, fit: BoxFit.cover)
+            : Icon(Icons.inventory_2_outlined, color: Colors.grey[400]),
+      ),
+    );
+  }
+
 
   Map<String, dynamic> _getStatusData(String status, bool isAr) {
     switch (status.toLowerCase()) {
