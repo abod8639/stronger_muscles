@@ -9,6 +9,7 @@ class AddressController extends GetxController {
   final RxList<AddressModel> addresses = RxList<AddressModel>([]);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+  final RxBool isDefault = false.obs;
 
   // Controllers for the add address form
   final Rx<TextEditingController> streetController = TextEditingController().obs;
@@ -200,4 +201,6 @@ class AddressController extends GetxController {
     }
     return null;
   }
+
+
 }

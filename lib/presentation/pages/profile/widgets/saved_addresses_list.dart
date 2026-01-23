@@ -37,8 +37,6 @@ class SavedAddressesList extends StatelessWidget {
                 final address = controller.addresses[index];
                 return AddressCard(
                   address: address,
-                  isDark: isDark,
-                  controller: controller,
                 );
               },
             ),

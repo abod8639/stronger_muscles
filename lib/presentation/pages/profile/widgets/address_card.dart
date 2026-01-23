@@ -10,18 +10,20 @@ import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 
 class AddressCard extends StatelessWidget {
   final AddressModel address;
-  final bool isDark;
-  final AddressController controller;
 
-  const AddressCard({required this.address, required this.isDark, required this.controller});
+  const AddressCard({
+    required this.address, 
+    });
+
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
+        color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(20),
         border: address.isDefault 
             ? Border.all(color: AppColors.primary.withOpacity(0.5), width: 1.5) 
@@ -39,7 +41,7 @@ class AddressCard extends StatelessWidget {
         child: Column(
           children: [
             // قسم الخريطة المصغر
-            if (address.latitude != null && address.longitude != null)
+            // if (address.latitude != null && address.longitude != null)
               _buildMapPreview(),
             
             Padding(
@@ -61,34 +63,107 @@ class AddressCard extends StatelessWidget {
     );
   }
 
-  Widget _buildMapPreview() {
-    return SizedBox(
-      height: 120,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(address.latitude!, address.longitude!),
-              zoom: 14,
-            ),
-            liteModeEnabled: true,
-            zoomControlsEnabled: false,
-            myLocationButtonEnabled: false,
-            markers: {
-              Marker(
-                markerId: MarkerId(address.id.toString()),
-                position: LatLng(address.latitude!, address.longitude!),
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-              ),
-            },
-          ),
-          // طبقة شفافة لمنع التفاعل العرضي مع الخريطة داخل القائمة
-          Positioned.fill(child: Container(color: Colors.transparent)),
-        ],
-      ),
-    );
+Widget _buildMapPreview() {
+  // التأكد من وجود إحداثيات قبل رندر الخريطة لتجنب الانهيار
+  if (address.latitude == null || address.longitude == null) {
+    return _buildMapPlaceholder(); // ويدجت بديل في حال عدم وجود إحداثيات
   }
+
+  final LatLng position = LatLng(address.latitude?? 1.0, address.longitude?? 1.0);
+
+  return SizedBox(
+    height: 150, // زيادة الارتفاع قليلاً ليعطي رؤية أوضح للحي
+    width: double.infinity,
+    child: Stack(
+      children: [
+        // الخريطة مع إعدادات محسنة
+        GoogleMap(
+          key: ValueKey('map_${address.id}'), // مفتاح فريد يساعد في إعادة بناء الخريطة بشكل صحيح
+          initialCameraPosition: CameraPosition(
+            target: position,
+            zoom: 15,
+          ),
+          liteModeEnabled: true, // مهم جداً لسلاسة القوائم
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          compassEnabled: false,
+          mapToolbarEnabled: false,
+          onMapCreated: (controller) {
+            // يمكن تطبيق ستايل الخريطة هنا (مثلاً الوضع الليلي)
+          },
+          markers: {
+            Marker(
+              markerId: MarkerId(address.id.toString()),
+              position: position,
+              // استخدام أيقونة افتراضية واضحة
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+            ),
+          },
+        ),
+
+        // 1. طبقة التدرج اللوني (Gradient Overlay) لدمج الخريطة مع الكارت
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.7, 1.0],
+                colors: [
+                  Colors.black.withOpacity(0.1), // تعتيم خفيف في الأعلى
+                  // Colors.transparent,
+                  // isDark ? AppColors.surfaceDark : Colors.white, // دمج مع لون الكارت في الأسفل
+                ],
+              ),
+            ),
+          ),
+        ),
+
+        // 2. طبقة الحماية الشفافة لمنع تعليق التمرير (Scrolling)
+        Positioned.fill(
+          child: GestureDetector(
+            onTap: () {
+              // اختياري: عند الضغط يفتح تطبيق الخرائط الخارجي
+            },
+            child: Container(color: Colors.transparent),
+          ),
+        ),
+        
+        // 3. مؤشر صغير (Location Pin Icon) في الزاوية يعطي طابعاً جمالياً
+        Positioned(
+          top: 12,
+          right: 12,
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              shape: BoxShape.circle,
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+            ),
+            child: Icon(Icons.map_outlined, size: 16, color: AppColors.primary),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// ويدجت بديل في حالة فشل التحميل أو نقص البيانات
+Widget _buildMapPlaceholder() {
+  return Container(
+    height: 150,
+    width: double.infinity,
+    // color: isDark ? Colors.white10 : Colors.grey[100],
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
+        const SizedBox(height: 8),
+        Text("Map unavailable", style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+      ],
+    ),
+  );
+}
 
   Widget _buildCardTopRow(BuildContext context) {
     IconData labelIcon = Icons.location_on_rounded;
@@ -155,8 +230,11 @@ class AddressCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+        final controller = Get.put(AddressController());
+
     return Row(
       children: [
+        Expanded(child: SizedBox.shrink()),
         if (!address.isDefault)
           Expanded(
             child: TextButton(
@@ -166,17 +244,19 @@ class AddressCard extends StatelessWidget {
           ),
         IconButton(
           onPressed: () => showAddressForm(context, address: address),
-          icon: const Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
+          icon: Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey ),
         ),
         IconButton(
           onPressed: () => _confirmDelete(context),
-          icon: const Icon(Icons.delete_outline_rounded, size: 20, color: Colors.redAccent),
+          icon:  Icon(Icons.delete_outline_rounded, size: 20, color: Theme.of(context).colorScheme.error),
         ),
       ],
     );
   }
 
   void _confirmDelete(BuildContext context) {
+        final controller = Get.put(AddressController());
+
     Get.dialog(
       AlertDialog(
         title: const Text('Delete Address?'),

@@ -6,14 +6,12 @@ import 'package:stronger_muscles/presentation/pages/home/widgets/product_contain
 class ImageSection extends StatelessWidget {
   const ImageSection({
     super.key,
-    // required this.product,
     required this.widget,
     required PageController pageController,
     required RxInt selectedImageIndex,
   }) : _pageController = pageController,
        _selectedImageIndex = selectedImageIndex;
 
-  // final ProductModel product;
   final ProductContainer widget;
   final PageController _pageController;
   final RxInt _selectedImageIndex;
@@ -21,90 +19,130 @@ class ImageSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
-    print(
-      'DEBUG: ImageSection - product.imageUrls: ${widget.product.imageUrls}',
-    );
+    final images = widget.product.imageUrls;
 
     return GestureDetector(
       onTap: widget.onTap,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
-        child: Container(
-          width: double.maxFinite,
-          color: theme
-              .colorScheme
-              .surfaceContainerLowest, // Slight background for image
-          child: widget.product.imageUrls.isEmpty
-              ? Center(
-                  child: Column(
+      child: Stack(
+        children: [
+          // خلفية القسم والصور
+          Container(
+            width: double.maxFinite,
+            height: double.infinity, // تأكد من تحديد الارتفاع في الـ parent
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerLowest,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+              child: images.isEmpty
+                  ? _buildNoImage(theme)
+                  : PageView.builder(
+                      controller: _pageController,
+                      itemCount: images.length,
+                      onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
+                      itemBuilder: (context, index) {
+                        return _buildImage(images[index], theme);
+                      },
+                    ),
+            ),
+          ),
+
+          // مؤشر الصفحات (Dots Indicator)
+          if (images.length > 1)
+            Positioned(
+              bottom: 12,
+              left: 0,
+              right: 0,
+              child: Obx(() => Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_not_supported_outlined,
-                        size: 48,
-                        color: theme.colorScheme.error,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'لا توجد صور',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.error,
+                    children: List.generate(
+                      images.length,
+                      (index) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        height: 6,
+                        width: _selectedImageIndex.value == index ? 18 : 6,
+                        decoration: BoxDecoration(
+                          color: _selectedImageIndex.value == index
+                              ? theme.colorScheme.primary
+                              : theme.colorScheme.primary.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ],
-                  ),
-                )
-              : PageView.builder(
-                  controller: _pageController,
-                  itemCount: widget.product.imageUrls.length,
-                  onPageChanged:
-                      widget.onPageChanged ??
-                      (index) => _selectedImageIndex.value = index,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(
-                        8.0,
-                      ), // Padding for the image inside
-                      child: CachedNetworkImage(
-                        imageUrl: widget.product.imageUrls[index],
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) => Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) {
-                          print(
-                            'DEBUG: ImageSection - Error loading image: ${widget.product.imageUrls[index]}, Error: $error',
-                          );
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.broken_image_outlined,
-                                  color: theme.colorScheme.error,
-                                  size: 48,
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'خطأ تحميل الصورة',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.error,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+                    ),
+                  )),
+            ),
+            
+          // علامة "خصم" أو "جديد" اختيارية لزيادة الاحترافية
+          if (widget.product.discountPrice != null)
+             Positioned(
+               top: 10,
+               right: 10,
+               child: Container(
+                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                 decoration: BoxDecoration(
+                   color: Colors.redAccent,
+                   borderRadius: BorderRadius.circular(8),
+                 ),
+                 child: const Text(
+                   'خصم',
+                   style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                 ),
+               ),
+             ),
+        ],
+      ),
+    );
+  }
+
+  // ويدجت عرض الصورة مع التحميل
+  Widget _buildImage(String url, ThemeData theme) {
+    return Container(
+      margin: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12), // حواف ناعمة للصورة نفسها
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.contain,
+          placeholder: (context, url) => _buildShimmerEffect(theme),
+          errorWidget: (context, url, error) => _buildErrorWidget(theme),
         ),
       ),
+    );
+  }
+
+  // تأثير التحميل الشيمر (يمكنك استخدام حزمة shimmer لنتيجة أفضل)
+  Widget _buildShimmerEffect(ThemeData theme) {
+    return Center(
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: theme.colorScheme.primary.withOpacity(0.5),
+      ),
+    );
+  }
+
+  Widget _buildNoImage(ThemeData theme) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.image_not_supported_outlined, size: 40, color: theme.colorScheme.outline),
+          const SizedBox(height: 4),
+          Text('لا توجد صور', style: theme.textTheme.labelSmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget(ThemeData theme) {
+    return Container(
+      color: theme.colorScheme.errorContainer.withOpacity(0.2),
+      child: Icon(Icons.broken_image_outlined, color: theme.colorScheme.error),
     );
   }
 }

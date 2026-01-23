@@ -75,6 +75,7 @@ class PromoBanner extends StatelessWidget {
                       height: _buttonHeight,
                       child: ElevatedButton(
                         onPressed: () {
+                          
                           // TODO: Implement promo action
                         },
                         style: ElevatedButton.styleFrom(
