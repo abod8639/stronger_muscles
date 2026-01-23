@@ -86,6 +86,47 @@ class AddressModelAdapter extends TypeAdapter<AddressModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
+AddressModel _$AddressModelFromJson(Map<String, dynamic> json) => AddressModel(
+      id: _parseInt(json['id']),
+      userId: _parseIntNullable(json['user_id']),
+      label: json['label'] as String?,
+      fullName: json['full_name'] as String?,
+      phone: json['phone'] as String?,
+      street: json['street'] as String,
+      city: json['city'] as String,
+      state: json['state'] as String?,
+      postalCode: json['postal_code'] as String?,
+      country: json['country'] as String?,
+      isDefault: json['is_default'] as bool,
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
+    );
+
+Map<String, dynamic> _$AddressModelToJson(AddressModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.userId,
+      'label': instance.label,
+      'full_name': instance.fullName,
+      'phone': instance.phone,
+      'street': instance.street,
+      'city': instance.city,
+      'state': instance.state,
+      'postal_code': instance.postalCode,
+      'country': instance.country,
+      'is_default': instance.isDefault,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
+    };
+
 _$AddressModelImpl _$$AddressModelImplFromJson(Map<String, dynamic> json) =>
     _$AddressModelImpl(
       id: _parseInt(json['id']),

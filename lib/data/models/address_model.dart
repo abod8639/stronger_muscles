@@ -6,6 +6,7 @@ part 'address_model.g.dart';
 
 @freezed
 @HiveType(typeId: 4, adapterName: 'AddressModelAdapter')
+  @JsonSerializable()
 class AddressModel with _$AddressModel {
   const factory AddressModel({
     @HiveField(0) @JsonKey(fromJson: _parseInt) required int id,
@@ -28,6 +29,8 @@ class AddressModel with _$AddressModel {
   const AddressModel._();
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
+  
+  Map<String, dynamic> toJson() => _$AddressModelToJson(this);
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';
   String get shortAddress => '$city, $country';

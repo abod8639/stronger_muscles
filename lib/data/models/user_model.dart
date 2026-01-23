@@ -7,6 +7,8 @@ part 'user_model.g.dart';
 
 @freezed
 @HiveType(typeId: 7, adapterName: 'UserModelAdapter')
+@JsonSerializable()
+
 class UserModel with _$UserModel {
   // Hive dedicated constructor
   const UserModel._();
@@ -31,6 +33,8 @@ class UserModel with _$UserModel {
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
 int _parseInt(dynamic value) {

@@ -89,6 +89,50 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 // JsonSerializableGenerator
 // **************************************************************************
 
+UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+      id: _parseInt(json['id']),
+      email: json['email'] as String,
+      name: json['name'] as String,
+      photoUrl: json['photo_url'] as String?,
+      phone: json['phone'] as String?,
+      defaultAddressId: json['default_address_id'] as String?,
+      preferredLanguage: json['preferred_language'] as String?,
+      notificationsEnabled: _boolFromInt(json['notifications_enabled']),
+      isActive: _boolFromInt(json['is_active']),
+      createdAt: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      lastLogin: json['last_login'] == null
+          ? null
+          : DateTime.parse(json['last_login'] as String),
+      token: json['token'] as String?,
+      role: json['role'] as String?,
+      totalSpent: (json['total_spent'] as num?)?.toDouble(),
+      ordersCount: (json['orders_count'] as num?)?.toInt(),
+      addresses: (json['addresses'] as List<dynamic>?)
+          ?.map((e) => AddressModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
+      'id': instance.id,
+      'email': instance.email,
+      'name': instance.name,
+      'photo_url': instance.photoUrl,
+      'phone': instance.phone,
+      'default_address_id': instance.defaultAddressId,
+      'preferred_language': instance.preferredLanguage,
+      'notifications_enabled': instance.notificationsEnabled,
+      'is_active': instance.isActive,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'last_login': instance.lastLogin?.toIso8601String(),
+      'token': instance.token,
+      'role': instance.role,
+      'total_spent': instance.totalSpent,
+      'orders_count': instance.ordersCount,
+      'addresses': instance.addresses,
+    };
+
 _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
       id: _parseInt(json['id']),
