@@ -35,13 +35,14 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       updatedAt: fields[15] as DateTime?,
       items: (fields[16] as List?)?.cast<OrderItemModel>(),
       shippingAddress: fields[17] as String?,
+      phoneNumber: fields[18] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(18)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -77,7 +78,9 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       ..writeByte(16)
       ..write(obj.items)
       ..writeByte(17)
-      ..write(obj.shippingAddress);
+      ..write(obj.shippingAddress)
+      ..writeByte(18)
+      ..write(obj.phoneNumber);
   }
 
   @override
@@ -185,6 +188,7 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
           ?.map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       shippingAddress: json['shipping_address'] as String?,
+      phoneNumber: json['phone_number'] as String?,
     );
 
 Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
@@ -207,6 +211,7 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
       'updated_at': instance.updatedAt?.toIso8601String(),
       'order_items': instance.items,
       'shipping_address': instance.shippingAddress,
+      'phone_number': instance.phoneNumber,
     };
 
 _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
