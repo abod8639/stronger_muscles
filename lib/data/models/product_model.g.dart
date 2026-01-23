@@ -31,37 +31,38 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       servingSize: fields[11] as String?,
       servingsPerContainer: fields[12] as int?,
       isActive: fields[13] as bool,
-      sku: fields[14] as String?,
-      tags: (fields[15] as List).cast<String>(),
-      weight: fields[16] as double?,
-      size: (fields[17] as List?)?.cast<String>(),
-      nutritionFacts: (fields[18] as Map?)?.cast<String, dynamic>(),
-      featured: fields[19] as bool,
-      newArrival: fields[20] as bool,
-      bestSeller: fields[21] as bool,
-      totalSales: fields[22] as int,
-      viewsCount: fields[23] as int,
-      shippingWeight: fields[24] as double?,
-      dimensions: (fields[25] as Map?)?.cast<String, dynamic>(),
-      ingredients: (fields[26] as List).cast<String>(),
-      usageInstructions: fields[27] as String?,
-      warnings: (fields[28] as List).cast<String>(),
-      expiryDate: fields[29] as DateTime?,
-      manufacturer: fields[30] as String?,
-      countryOfOrigin: fields[31] as String?,
-      metaTitle: fields[32] as String?,
-      metaDescription: fields[33] as String?,
-      slug: fields[34] as String?,
-      createdAt: fields[35] as DateTime?,
-      updatedAt: fields[36] as DateTime?,
-      flavors: (fields[37] as List?)?.cast<String>(),
+      isBackgroundWhite: fields[14] as bool,
+      sku: fields[15] as String?,
+      tags: (fields[16] as List).cast<String>(),
+      weight: fields[17] as double?,
+      size: (fields[18] as List?)?.cast<String>(),
+      nutritionFacts: (fields[19] as Map?)?.cast<String, dynamic>(),
+      featured: fields[20] as bool,
+      newArrival: fields[21] as bool,
+      bestSeller: fields[22] as bool,
+      totalSales: fields[23] as int,
+      viewsCount: fields[24] as int,
+      shippingWeight: fields[25] as double?,
+      dimensions: (fields[26] as Map?)?.cast<String, dynamic>(),
+      ingredients: (fields[27] as List).cast<String>(),
+      usageInstructions: fields[28] as String?,
+      warnings: (fields[29] as List).cast<String>(),
+      expiryDate: fields[30] as DateTime?,
+      manufacturer: fields[31] as String?,
+      countryOfOrigin: fields[32] as String?,
+      metaTitle: fields[33] as String?,
+      metaDescription: fields[34] as String?,
+      slug: fields[35] as String?,
+      createdAt: fields[36] as DateTime?,
+      updatedAt: fields[37] as DateTime?,
+      flavors: (fields[38] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ProductModel obj) {
     writer
-      ..writeByte(38)
+      ..writeByte(39)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -91,52 +92,54 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ..writeByte(13)
       ..write(obj.isActive)
       ..writeByte(14)
-      ..write(obj.sku)
+      ..write(obj.isBackgroundWhite)
       ..writeByte(15)
-      ..write(obj.tags)
+      ..write(obj.sku)
       ..writeByte(16)
-      ..write(obj.weight)
+      ..write(obj.tags)
       ..writeByte(17)
-      ..write(obj.size)
+      ..write(obj.weight)
       ..writeByte(18)
-      ..write(obj.nutritionFacts)
+      ..write(obj.size)
       ..writeByte(19)
-      ..write(obj.featured)
+      ..write(obj.nutritionFacts)
       ..writeByte(20)
-      ..write(obj.newArrival)
+      ..write(obj.featured)
       ..writeByte(21)
-      ..write(obj.bestSeller)
+      ..write(obj.newArrival)
       ..writeByte(22)
-      ..write(obj.totalSales)
+      ..write(obj.bestSeller)
       ..writeByte(23)
-      ..write(obj.viewsCount)
+      ..write(obj.totalSales)
       ..writeByte(24)
-      ..write(obj.shippingWeight)
+      ..write(obj.viewsCount)
       ..writeByte(25)
-      ..write(obj.dimensions)
+      ..write(obj.shippingWeight)
       ..writeByte(26)
-      ..write(obj.ingredients)
+      ..write(obj.dimensions)
       ..writeByte(27)
-      ..write(obj.usageInstructions)
+      ..write(obj.ingredients)
       ..writeByte(28)
-      ..write(obj.warnings)
+      ..write(obj.usageInstructions)
       ..writeByte(29)
-      ..write(obj.expiryDate)
+      ..write(obj.warnings)
       ..writeByte(30)
-      ..write(obj.manufacturer)
+      ..write(obj.expiryDate)
       ..writeByte(31)
-      ..write(obj.countryOfOrigin)
+      ..write(obj.manufacturer)
       ..writeByte(32)
-      ..write(obj.metaTitle)
+      ..write(obj.countryOfOrigin)
       ..writeByte(33)
-      ..write(obj.metaDescription)
+      ..write(obj.metaTitle)
       ..writeByte(34)
-      ..write(obj.slug)
+      ..write(obj.metaDescription)
       ..writeByte(35)
-      ..write(obj.createdAt)
+      ..write(obj.slug)
       ..writeByte(36)
-      ..write(obj.updatedAt)
+      ..write(obj.createdAt)
       ..writeByte(37)
+      ..write(obj.updatedAt)
+      ..writeByte(38)
       ..write(obj.flavors);
   }
 
@@ -173,7 +176,8 @@ _$ProductModelImpl _$$ProductModelImplFromJson(Map<String, dynamic> json) =>
       brand: json['brand'] as String?,
       servingSize: json['servingSize'] as String?,
       servingsPerContainer: (json['servingsPerContainer'] as num?)?.toInt(),
-      isActive: json['isActive'] as bool? ?? true,
+      isActive: json['is_active'] as bool? ?? true,
+      isBackgroundWhite: json['is_background_white'] as bool? ?? false,
       sku: json['sku'] as String?,
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
@@ -234,7 +238,8 @@ Map<String, dynamic> _$$ProductModelImplToJson(_$ProductModelImpl instance) =>
       'brand': instance.brand,
       'servingSize': instance.servingSize,
       'servingsPerContainer': instance.servingsPerContainer,
-      'isActive': instance.isActive,
+      'is_active': instance.isActive,
+      'is_background_white': instance.isBackgroundWhite,
       'sku': instance.sku,
       'tags': instance.tags,
       'weight': instance.weight,

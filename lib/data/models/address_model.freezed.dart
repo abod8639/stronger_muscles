@@ -21,9 +21,10 @@ AddressModel _$AddressModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AddressModel {
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   int get id => throw _privateConstructorUsedError;
   @HiveField(1)
-  @JsonKey(name: 'user_id')
+  @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
   int? get userId => throw _privateConstructorUsedError;
   @HiveField(2)
   String? get label => throw _privateConstructorUsedError;
@@ -68,8 +69,10 @@ abstract class $AddressModelCopyWith<$Res> {
       _$AddressModelCopyWithImpl<$Res, AddressModel>;
   @useResult
   $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) int id,
+      @HiveField(1)
+      @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
+      int? userId,
       @HiveField(2) String? label,
       @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
       @HiveField(4) String? phone,
@@ -188,8 +191,10 @@ abstract class _$$AddressModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) int id,
+      @HiveField(1)
+      @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
+      int? userId,
       @HiveField(2) String? label,
       @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
       @HiveField(4) String? phone,
@@ -299,11 +304,12 @@ class __$$AddressModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-@HiveType(typeId: 4, adapterName: 'AddressModelAdapter')
 class _$AddressModelImpl extends _AddressModel {
   const _$AddressModelImpl(
-      {@HiveField(0) required this.id,
-      @HiveField(1) @JsonKey(name: 'user_id') this.userId,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) required this.id,
+      @HiveField(1)
+      @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
+      this.userId,
       @HiveField(2) this.label,
       @HiveField(3) @JsonKey(name: 'full_name') this.fullName,
       @HiveField(4) this.phone,
@@ -324,10 +330,11 @@ class _$AddressModelImpl extends _AddressModel {
 
   @override
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   final int id;
   @override
   @HiveField(1)
-  @JsonKey(name: 'user_id')
+  @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
   final int? userId;
   @override
   @HiveField(2)
@@ -442,8 +449,10 @@ class _$AddressModelImpl extends _AddressModel {
 
 abstract class _AddressModel extends AddressModel {
   const factory _AddressModel(
-      {@HiveField(0) required final int id,
-      @HiveField(1) @JsonKey(name: 'user_id') final int? userId,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) required final int id,
+      @HiveField(1)
+      @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
+      final int? userId,
       @HiveField(2) final String? label,
       @HiveField(3) @JsonKey(name: 'full_name') final String? fullName,
       @HiveField(4) final String? phone,
@@ -464,10 +473,11 @@ abstract class _AddressModel extends AddressModel {
 
   @override
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   int get id;
   @override
   @HiveField(1)
-  @JsonKey(name: 'user_id')
+  @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
   int? get userId;
   @override
   @HiveField(2)

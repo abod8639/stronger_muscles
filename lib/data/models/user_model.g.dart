@@ -23,7 +23,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       photoUrl: fields[3] as String?,
       phone: fields[4] as String?,
       defaultAddressId: fields[5] as String?,
-      preferredLanguage: fields[6] as String,
+      preferredLanguage: fields[6] as String?,
       notificationsEnabled: fields[7] as bool,
       isActive: fields[8] as bool,
       createdAt: fields[9] as DateTime?,
@@ -91,7 +91,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 
 _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
-      id: (json['id'] as num).toInt(),
+      id: _parseInt(json['id']),
       email: json['email'] as String,
       name: json['name'] as String,
       photoUrl: json['photo_url'] as String?,

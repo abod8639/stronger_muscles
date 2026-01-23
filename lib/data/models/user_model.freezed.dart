@@ -21,6 +21,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserModel {
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   int get id => throw _privateConstructorUsedError;
   @HiveField(1)
   String get email => throw _privateConstructorUsedError;
@@ -36,7 +37,7 @@ mixin _$UserModel {
   String? get defaultAddressId => throw _privateConstructorUsedError;
   @HiveField(6)
   @JsonKey(name: 'preferred_language')
-  String get preferredLanguage => throw _privateConstructorUsedError;
+  String? get preferredLanguage => throw _privateConstructorUsedError;
   @HiveField(7)
   @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
   bool get notificationsEnabled => throw _privateConstructorUsedError;
@@ -74,7 +75,7 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {@HiveField(0) int id,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) int id,
       @HiveField(1) String email,
       @HiveField(2) String name,
       @HiveField(3) @JsonKey(name: 'photo_url') String? photoUrl,
@@ -84,7 +85,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? defaultAddressId,
       @HiveField(6)
       @JsonKey(name: 'preferred_language')
-      String preferredLanguage,
+      String? preferredLanguage,
       @HiveField(7)
       @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       bool notificationsEnabled,
@@ -119,7 +120,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? photoUrl = freezed,
     Object? phone = freezed,
     Object? defaultAddressId = freezed,
-    Object? preferredLanguage = null,
+    Object? preferredLanguage = freezed,
     Object? notificationsEnabled = null,
     Object? isActive = null,
     Object? createdAt = freezed,
@@ -155,10 +156,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.defaultAddressId
           : defaultAddressId // ignore: cast_nullable_to_non_nullable
               as String?,
-      preferredLanguage: null == preferredLanguage
+      preferredLanguage: freezed == preferredLanguage
           ? _value.preferredLanguage
           : preferredLanguage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       notificationsEnabled: null == notificationsEnabled
           ? _value.notificationsEnabled
           : notificationsEnabled // ignore: cast_nullable_to_non_nullable
@@ -208,7 +209,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) int id,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) int id,
       @HiveField(1) String email,
       @HiveField(2) String name,
       @HiveField(3) @JsonKey(name: 'photo_url') String? photoUrl,
@@ -218,7 +219,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? defaultAddressId,
       @HiveField(6)
       @JsonKey(name: 'preferred_language')
-      String preferredLanguage,
+      String? preferredLanguage,
       @HiveField(7)
       @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       bool notificationsEnabled,
@@ -251,7 +252,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? photoUrl = freezed,
     Object? phone = freezed,
     Object? defaultAddressId = freezed,
-    Object? preferredLanguage = null,
+    Object? preferredLanguage = freezed,
     Object? notificationsEnabled = null,
     Object? isActive = null,
     Object? createdAt = freezed,
@@ -287,10 +288,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.defaultAddressId
           : defaultAddressId // ignore: cast_nullable_to_non_nullable
               as String?,
-      preferredLanguage: null == preferredLanguage
+      preferredLanguage: freezed == preferredLanguage
           ? _value.preferredLanguage
           : preferredLanguage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       notificationsEnabled: null == notificationsEnabled
           ? _value.notificationsEnabled
           : notificationsEnabled // ignore: cast_nullable_to_non_nullable
@@ -333,9 +334,9 @@ class __$$UserModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserModelImpl implements _UserModel {
+class _$UserModelImpl extends _UserModel {
   const _$UserModelImpl(
-      {@HiveField(0) required this.id,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) required this.id,
       @HiveField(1) required this.email,
       @HiveField(2) required this.name,
       @HiveField(3) @JsonKey(name: 'photo_url') this.photoUrl,
@@ -357,13 +358,15 @@ class _$UserModelImpl implements _UserModel {
       @HiveField(13) @JsonKey(name: 'total_spent') this.totalSpent,
       @HiveField(14) @JsonKey(name: 'orders_count') this.ordersCount,
       @HiveField(15) final List<AddressModel>? addresses})
-      : _addresses = addresses;
+      : _addresses = addresses,
+        super._();
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
 
   @override
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   final int id;
   @override
   @HiveField(1)
@@ -385,7 +388,7 @@ class _$UserModelImpl implements _UserModel {
   @override
   @HiveField(6)
   @JsonKey(name: 'preferred_language')
-  final String preferredLanguage;
+  final String? preferredLanguage;
   @override
   @HiveField(7)
   @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
@@ -500,9 +503,9 @@ class _$UserModelImpl implements _UserModel {
   }
 }
 
-abstract class _UserModel implements UserModel {
+abstract class _UserModel extends UserModel {
   const factory _UserModel(
-      {@HiveField(0) required final int id,
+      {@HiveField(0) @JsonKey(fromJson: _parseInt) required final int id,
       @HiveField(1) required final String email,
       @HiveField(2) required final String name,
       @HiveField(3) @JsonKey(name: 'photo_url') final String? photoUrl,
@@ -512,7 +515,7 @@ abstract class _UserModel implements UserModel {
       final String? defaultAddressId,
       @HiveField(6)
       @JsonKey(name: 'preferred_language')
-      final String preferredLanguage,
+      final String? preferredLanguage,
       @HiveField(7)
       @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
       final bool notificationsEnabled,
@@ -526,12 +529,14 @@ abstract class _UserModel implements UserModel {
       @HiveField(13) @JsonKey(name: 'total_spent') final double? totalSpent,
       @HiveField(14) @JsonKey(name: 'orders_count') final int? ordersCount,
       @HiveField(15) final List<AddressModel>? addresses}) = _$UserModelImpl;
+  const _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
 
   @override
   @HiveField(0)
+  @JsonKey(fromJson: _parseInt)
   int get id;
   @override
   @HiveField(1)
@@ -553,7 +558,7 @@ abstract class _UserModel implements UserModel {
   @override
   @HiveField(6)
   @JsonKey(name: 'preferred_language')
-  String get preferredLanguage;
+  String? get preferredLanguage;
   @override
   @HiveField(7)
   @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)

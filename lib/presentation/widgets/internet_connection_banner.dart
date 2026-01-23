@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
 
 class InternetConnectionBanner extends GetView<InternetConnectionController> {
-  const InternetConnectionBanner({super.key});
+    final String title;
+  const InternetConnectionBanner({
+    super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
             Center(
               child: Expanded(
                 child: Text(
-                  'No internet connection',
+                  title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,

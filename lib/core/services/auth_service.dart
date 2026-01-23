@@ -131,9 +131,9 @@ class AuthService extends GetxService {
           if (photoUrl != null) 'photo_url': photoUrl,
           if (addresses != null) 
             'addresses': addresses.map((e) {
-              final map = e.toJson();
-              map['id'] = map['id'].toString();
-              return map;
+              // final map = e.toJson();
+              // map['id'] = map['id'].toString();
+              // return map;
             }).toList(),
         },
       );

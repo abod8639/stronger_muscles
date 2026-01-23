@@ -36,7 +36,7 @@ class ImageIndicators extends StatelessWidget {
               decoration: BoxDecoration(
                 color: isActive
                     ? theme.colorScheme.primary
-                    : theme.colorScheme.surface.withAlpha(100),
+                    : theme.colorScheme.primary.withAlpha(100),
                 borderRadius: BorderRadius.circular(2),
               ),
             );

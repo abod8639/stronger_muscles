@@ -1,40 +1,43 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class InternetConnectionController extends GetxController {
   final RxBool isConnected = true.obs;
-  late InternetConnection _internetConnection;
+  
+  StreamSubscription? _subscription;
+  late final InternetConnection _internetConnection;
 
   @override
   void onInit() {
     super.onInit();
-    _initInternetConnection();
+    _internetConnection = InternetConnection();
+    _startMonitoring();
   }
 
-  void _initInternetConnection() {
-    _internetConnection = InternetConnection.createInstance(
+  void _startMonitoring() {
+    _checkInitialStatus();
 
-      // createDefaultInstance: true,
-      // useDefaultInstanceAsFallback: true,
-    );
-
-    // Listen to connection status changes
-    _internetConnection.onStatusChange.listen((status) {
-      bool connected = (status == InternetStatus.connected);
-      isConnected.value = connected;
+    _subscription = _internetConnection.onStatusChange.listen((status) {
+      switch (status) {
+        case InternetStatus.connected:
+          isConnected.value = true;
+          break;
+        case InternetStatus.disconnected:
+          isConnected.value = false;
+          break;
+      }
     });
-
-    // Check initial connection status
-    _checkConnection();
   }
 
-  Future<void> _checkConnection() async {
-    try {
-      bool result = await _internetConnection.hasInternetAccess;
-      isConnected.value = result;
-    } catch (e) {
-      isConnected.value = false;
-    }
+  Future<void> _checkInitialStatus() async {
+    bool hasAccess = await _internetConnection.hasInternetAccess;
+    isConnected.value = hasAccess;
   }
 
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
+  }
 }

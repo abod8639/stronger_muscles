@@ -11,9 +11,7 @@ import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 class AddressCard extends StatelessWidget {
   final AddressModel address;
 
-  const AddressCard({
-    required this.address, 
-    });
+  const AddressCard({ required this.address  });
 
 
   @override

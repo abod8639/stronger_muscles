@@ -6,17 +6,17 @@ part of 'address_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
+class AddressModelAdapter extends TypeAdapter<AddressModel> {
   @override
   final int typeId = 4;
 
   @override
-  _$AddressModelImpl read(BinaryReader reader) {
+  AddressModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return _$AddressModelImpl(
+    return AddressModel(
       id: fields[0] as int,
       userId: fields[1] as int?,
       label: fields[2] as String?,
@@ -36,7 +36,7 @@ class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
   }
 
   @override
-  void write(BinaryWriter writer, _$AddressModelImpl obj) {
+  void write(BinaryWriter writer, AddressModel obj) {
     writer
       ..writeByte(15)
       ..writeByte(0)
@@ -88,8 +88,8 @@ class AddressModelAdapter extends TypeAdapter<_$AddressModelImpl> {
 
 _$AddressModelImpl _$$AddressModelImplFromJson(Map<String, dynamic> json) =>
     _$AddressModelImpl(
-      id: (json['id'] as num).toInt(),
-      userId: (json['user_id'] as num?)?.toInt(),
+      id: _parseInt(json['id']),
+      userId: _parseIntNullable(json['user_id']),
       label: json['label'] as String?,
       fullName: json['full_name'] as String?,
       phone: json['phone'] as String?,

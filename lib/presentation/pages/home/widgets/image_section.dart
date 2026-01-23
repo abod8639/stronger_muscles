@@ -25,10 +25,9 @@ class ImageSection extends StatelessWidget {
       onTap: widget.onTap,
       child: Stack(
         children: [
-          // خلفية القسم والصور
           Container(
             width: double.maxFinite,
-            height: double.infinity, // تأكد من تحديد الارتفاع في الـ parent
+            height: double.infinity, 
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerLowest,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -42,43 +41,16 @@ class ImageSection extends StatelessWidget {
                       itemCount: images.length,
                       onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
                       itemBuilder: (context, index) {
-                        return _buildImage(images[index], theme);
+                        return _buildImage(images[index], theme, widget.isBackgroundWhite?? false );
                       },
                     ),
             ),
           ),
-
-          // مؤشر الصفحات (Dots Indicator)
-          if (images.length > 1)
-            Positioned(
-              bottom: 12,
-              left: 0,
-              right: 0,
-              child: Obx(() => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      images.length,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 3),
-                        height: 6,
-                        width: _selectedImageIndex.value == index ? 18 : 6,
-                        decoration: BoxDecoration(
-                          color: _selectedImageIndex.value == index
-                              ? theme.colorScheme.primary
-                              : theme.colorScheme.primary.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  )),
-            ),
             
-          // علامة "خصم" أو "جديد" اختيارية لزيادة الاحترافية
           if (widget.product.discountPrice != null)
              Positioned(
-               top: 10,
-               right: 10,
+               top: 12,
+               right: 15,
                child: Container(
                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                  decoration: BoxDecoration(
@@ -97,12 +69,12 @@ class ImageSection extends StatelessWidget {
   }
 
   // ويدجت عرض الصورة مع التحميل
-  Widget _buildImage(String url, ThemeData theme) {
+  Widget _buildImage(String url, ThemeData theme, bool isBackgroundWhite) {
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12), // حواف ناعمة للصورة نفسها
+        color: isBackgroundWhite ?  Colors.white.withOpacity(0.9) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12), 
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -116,7 +88,6 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  // تأثير التحميل الشيمر (يمكنك استخدام حزمة shimmer لنتيجة أفضل)
   Widget _buildShimmerEffect(ThemeData theme) {
     return Center(
       child: CircularProgressIndicator(

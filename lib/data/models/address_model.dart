@@ -5,11 +5,11 @@ part 'address_model.freezed.dart';
 part 'address_model.g.dart';
 
 @freezed
+@HiveType(typeId: 4, adapterName: 'AddressModelAdapter')
 class AddressModel with _$AddressModel {
-  @HiveType(typeId: 4, adapterName: 'AddressModelAdapter')
   const factory AddressModel({
-    @HiveField(0) required int id,
-    @HiveField(1) @JsonKey(name: 'user_id') int? userId,
+    @HiveField(0) @JsonKey(fromJson: _parseInt) required int id,
+    @HiveField(1) @JsonKey(name: 'user_id', fromJson: _parseIntNullable) int? userId,
     @HiveField(2) String? label,
     @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
     @HiveField(4) String? phone,
@@ -27,17 +27,22 @@ class AddressModel with _$AddressModel {
 
   const AddressModel._();
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) {
-    if (json['id'] is String) {
-      json['id'] = int.tryParse(json['id']) ?? 0;
-    }
-    if (json['user_id'] is String) {
-      json['user_id'] = int.tryParse(json['user_id']);
-    }
-    return _$AddressModelFromJson(json);
-  }
+  factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';
   String get shortAddress => '$city, $country';
   bool get hasCoordinates => latitude != null && longitude != null;
+}
+
+int _parseInt(dynamic value) {
+  if (value is int) return value;
+  if (value is String) return int.tryParse(value) ?? 0;
+  return 0;
+}
+
+int? _parseIntNullable(dynamic value) {
+  if (value == null) return null;
+  if (value is int) return value;
+  if (value is String) return int.tryParse(value);
+  return null;
 }
