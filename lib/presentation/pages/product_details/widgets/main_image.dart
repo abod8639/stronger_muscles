@@ -22,6 +22,7 @@ class MainImage extends StatefulWidget {
 class _MainImageState extends State<MainImage> {
   late final PageController _pageController;
   late final ProductDetailsController _controller;
+  late final Worker _imageWorker;
 
   @override
   void initState() {
@@ -32,7 +33,8 @@ class _MainImageState extends State<MainImage> {
     );
 
     // Listen to controller changes to animate PageView
-    ever(_controller.selectedImageIndex, (index) {
+    _imageWorker = ever(_controller.selectedImageIndex, (index) {
+      if (!mounted) return;
       if (_pageController.hasClients && _pageController.page?.round() != index) {
         _pageController.animateToPage(
           index,
@@ -45,6 +47,7 @@ class _MainImageState extends State<MainImage> {
 
   @override
   void dispose() {
+    _imageWorker.dispose();
     _pageController.dispose();
     super.dispose();
   }

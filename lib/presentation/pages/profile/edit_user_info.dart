@@ -18,6 +18,7 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
   late TextEditingController emailController;
   late TextEditingController phoneController;
   final formKey = GlobalKey<FormState>();
+  late Worker _userWorker;
 
   @override
   void initState() {
@@ -41,7 +42,8 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
     );
 
     // If data loads later, update controllers if they are still empty
-    ever(controller.currentUser, (user) {
+    _userWorker = ever(controller.currentUser, (user) {
+      if (!mounted) return;
       if (user != null) {
         if (nameController.text.isEmpty) nameController.text = user.name;
         if (emailController.text.isEmpty) emailController.text = user.email;
@@ -54,6 +56,7 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
 
   @override
   void dispose() {
+    _userWorker.dispose();
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();

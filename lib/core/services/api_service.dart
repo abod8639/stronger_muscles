@@ -17,6 +17,10 @@ class ApiService {
     final languageCode =
         Get.find<LanguageController>().currentLocale.value.languageCode;
 
+    if (includeAuth) {
+      print('🔑 Auth Token Present: ${token != null}');
+    }
+
     return {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
