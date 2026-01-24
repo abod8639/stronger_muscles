@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../core/services/auth_service.dart';
@@ -92,7 +93,24 @@ class AuthController extends GetxController {
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } catch (e) {
       print('❌ خطأ تسجيل الدخول: $e');
-      Get.snackbar('خطأ', e.toString());
+      
+      // Display user-friendly error message
+      String errorMessage = e.toString();
+      
+      // Clean up error message if it's too technical
+      if (errorMessage.contains('Exception:')) {
+        errorMessage = errorMessage.replaceAll('Exception:', '').trim();
+      }
+      
+      Get.snackbar(
+        'خطأ في تسجيل الدخول',
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.errorContainer,
+        colorText: Get.theme.colorScheme.onErrorContainer,
+        duration: const Duration(seconds: 4),
+        margin: const EdgeInsets.all(16),
+      );
     } finally {
       isLoading.value = false;
     }
@@ -122,7 +140,24 @@ class AuthController extends GetxController {
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } catch (e) {
       print('❌ خطأ إنشاء الحساب: $e');
-      Get.snackbar('خطأ', e.toString());
+      
+      // Display user-friendly error message
+      String errorMessage = e.toString();
+      
+      // Clean up error message if it's too technical
+      if (errorMessage.contains('Exception:')) {
+        errorMessage = errorMessage.replaceAll('Exception:', '').trim();
+      }
+      
+      Get.snackbar(
+        'خطأ في إنشاء الحساب',
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Get.theme.colorScheme.errorContainer,
+        colorText: Get.theme.colorScheme.onErrorContainer,
+        duration: const Duration(seconds: 4),
+        margin: const EdgeInsets.all(16),
+      );
     } finally {
       isLoading.value = false;
     }

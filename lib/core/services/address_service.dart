@@ -42,7 +42,7 @@ class AddressService extends GetxService {
       addressData.remove('updated_at');
 
       final response = await _apiService.post(
-        '/customer/addresses',
+        ApiConfig.addresses,
         data: addressData,
       );
 
@@ -70,7 +70,7 @@ class AddressService extends GetxService {
       addressData.remove('updated_at');
 
       final response = await _apiService.put(
-        '/customer/addresses/$id',
+        '${ApiConfig.addresses}/$id',
         data: addressData,
       );
 
@@ -90,7 +90,7 @@ class AddressService extends GetxService {
   /// Delete an address
   Future<void> deleteAddress(int id) async {
     try {
-      final response = await _apiService.delete('/customer/addresses/$id');
+      final response = await _apiService.delete('${ApiConfig.addresses}/$id');
       print('📍 Delete Address Response: ${response.body}');
     } on Failure catch (e) {
       print('❌ Delete Address API Error: ${e.message}');
@@ -104,7 +104,7 @@ class AddressService extends GetxService {
   /// Set an address as default
   Future<AddressModel> setDefaultAddress(int id) async {
     try {
-      final response = await _apiService.post('/customer/addresses/$id/set-default');
+      final response = await _apiService.post('${ApiConfig.addresses}/$id/set-default');
       print('📍 Set Default Address Response: ${response.body}');
 
       final body = jsonDecode(response.body);

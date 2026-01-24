@@ -8,32 +8,41 @@ import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 
 class ProfileController extends GetxController {
-  final AuthController _authController =Get.put(AuthController());
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthController _authController = Get.find<AuthController>();
   final OrderRepository _orderRepository = OrderRepository();
-  final AddressService _addressService = Get.put(AddressService());
+  final AddressService _addressService = Get.find<AddressService>();
 
-  final Rx<User?> currentUser = Rx<User?>(null);
   final RxList<OrderModel> orders = <OrderModel>[].obs;
   final RxList<AddressModel> addresses = <AddressModel>[].obs;
   final RxInt wishlistCount = 0.obs;
   
-  // Expose isLoading from AuthController
+  // Expose isLoading and currentUser from AuthController
   RxBool get isLoading => _authController.isLoading;
+  Rx<UserModel?> get currentUser => _authController.currentUser;
 
   @override
   void onInit() {
     super.onInit();
-    currentUser.value = _auth.currentUser;
-    _auth.authStateChanges().listen((event) {
-      currentUser.value = event;
-      if (event != null) {
+    
+    // Listen to currentUser changes
+    ever(_authController.currentUser, (UserModel? user) {
+      if (user != null) {
         _loadUserData();
+      } else {
+        _clearData();
       }
     });
-    if (currentUser.value != null) {
+
+    // Initial load if user is already logged in
+    if (_authController.currentUser.value != null) {
       _loadUserData();
     }
+  }
+
+  void _clearData() {
+    orders.clear();
+    addresses.clear();
+    wishlistCount.value = 0;
   }
 
   Future<void> _loadUserData() async {
