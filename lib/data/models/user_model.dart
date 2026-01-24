@@ -7,8 +7,6 @@ part 'user_model.g.dart';
 
 @freezed
 @HiveType(typeId: 7, adapterName: 'UserModelAdapter')
-@JsonSerializable()
-
 class UserModel with _$UserModel {
   // Hive dedicated constructor
   const UserModel._();
@@ -33,9 +31,6 @@ class UserModel with _$UserModel {
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
-  
-  @override
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
 int _parseInt(dynamic value) {
@@ -44,7 +39,6 @@ int _parseInt(dynamic value) {
   return 0;
 }
 
-// دالة مساعدة لتحويل القيم المنطقية القادمة من SQL (0 أو 1) إلى Boolean
 bool _boolFromInt(dynamic value) {
   if (value is bool) return value;
   if (value is int) return value == 1;

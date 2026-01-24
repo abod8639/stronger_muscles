@@ -1,6 +1,5 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -62,44 +61,42 @@ class AddressCard extends StatelessWidget {
   }
 
 Widget _buildMapPreview() {
-  // التأكد من وجود إحداثيات قبل رندر الخريطة لتجنب الانهيار
+  
   if (address.latitude == null || address.longitude == null) {
-    return _buildMapPlaceholder(); // ويدجت بديل في حال عدم وجود إحداثيات
+    return _buildMapPlaceholder(); 
   }
 
   final LatLng position = LatLng(address.latitude?? 1.0, address.longitude?? 1.0);
 
   return SizedBox(
-    height: 150, // زيادة الارتفاع قليلاً ليعطي رؤية أوضح للحي
+    height: 150, 
     width: double.infinity,
     child: Stack(
       children: [
-        // الخريطة مع إعدادات محسنة
         GoogleMap(
-          key: ValueKey('map_${address.id}'), // مفتاح فريد يساعد في إعادة بناء الخريطة بشكل صحيح
+          key: ValueKey('map_${address.id}'), 
           initialCameraPosition: CameraPosition(
             target: position,
             zoom: 15,
           ),
-          liteModeEnabled: true, // مهم جداً لسلاسة القوائم
+          liteModeEnabled: true, 
           zoomControlsEnabled: false,
           myLocationButtonEnabled: false,
           compassEnabled: false,
           mapToolbarEnabled: false,
           onMapCreated: (controller) {
-            // يمكن تطبيق ستايل الخريطة هنا (مثلاً الوضع الليلي)
           },
           markers: {
             Marker(
               markerId: MarkerId(address.id.toString()),
               position: position,
-              // استخدام أيقونة افتراضية واضحة
+              
               icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
             ),
           },
         ),
 
-        // 1. طبقة التدرج اللوني (Gradient Overlay) لدمج الخريطة مع الكارت
+        
         Positioned.fill(
           child: Container(
             decoration: BoxDecoration(
@@ -108,26 +105,26 @@ Widget _buildMapPreview() {
                 end: Alignment.bottomCenter,
                 stops: const [0.0, 0.7, 1.0],
                 colors: [
-                  Colors.black.withOpacity(0.1), // تعتيم خفيف في الأعلى
+                  Colors.black.withOpacity(0.1), 
                   // Colors.transparent,
-                  // isDark ? AppColors.surfaceDark : Colors.white, // دمج مع لون الكارت في الأسفل
+                  // isDark ? AppColors.surfaceDark : Colors.white, 
                 ],
               ),
             ),
           ),
         ),
 
-        // 2. طبقة الحماية الشفافة لمنع تعليق التمرير (Scrolling)
+        
         Positioned.fill(
           child: GestureDetector(
             onTap: () {
-              // اختياري: عند الضغط يفتح تطبيق الخرائط الخارجي
+              
             },
             child: Container(color: Colors.transparent),
           ),
         ),
         
-        // 3. مؤشر صغير (Location Pin Icon) في الزاوية يعطي طابعاً جمالياً
+        
         Positioned(
           top: 12,
           right: 12,
@@ -146,7 +143,7 @@ Widget _buildMapPreview() {
   );
 }
 
-// ويدجت بديل في حالة فشل التحميل أو نقص البيانات
+
 Widget _buildMapPlaceholder() {
   return SizedBox(
     height: 150,
