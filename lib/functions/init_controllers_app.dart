@@ -1,4 +1,7 @@
 import 'package:get/get.dart';
+import 'package:stronger_muscles/core/services/api_service.dart';
+import 'package:stronger_muscles/core/services/auth_service.dart';
+import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
@@ -14,6 +17,12 @@ import 'package:stronger_muscles/presentation/bindings/orders_controller.dart';
 
 BindingsBuilder<dynamic> initControllersApp() {
   return BindingsBuilder(() {
+    // Services
+    Get.put(ApiService());
+    Get.put(AuthService());
+    Get.put(AddressService());
+
+    // Controllers
     Get.lazyPut<AuthController>(() => AuthController());
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<CartController>(() => CartController());

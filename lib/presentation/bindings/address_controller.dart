@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 
 class AddressController extends GetxController {
-  final AddressService _addressService = Get.put(AddressService());
+  final AddressService _addressService = Get.find<AddressService>();
   final RxList<AddressModel> addresses = RxList<AddressModel>([]);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;

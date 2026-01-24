@@ -10,29 +10,32 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = Get.find<ProfileController>();
-    final user = controller.currentUser.value!;
     final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [AppColors.surfaceDark, AppColors.primary.withAlpha(10)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+    return Obx(() {
+      final user = controller.currentUser.value;
+      if (user == null) return const SizedBox.shrink();
+
+      return Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.surfaceDark : AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [AppColors.surfaceDark, AppColors.primary.withAlpha(10)],
           ),
-        ],
-      ),
-      child:  Row(
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -42,10 +45,10 @@ class ProfileHeader extends StatelessWidget {
               child: CircleAvatar(
                 radius: 35,
                 backgroundColor: AppColors.greyLight,
-                backgroundImage: user.photoURL != null
-                    ? NetworkImage(user.photoURL!)
+                backgroundImage: user.photoUrl != null && user.photoUrl!.isNotEmpty
+                    ? NetworkImage(user.photoUrl!)
                     : null,
-                child: user.photoURL == null
+                child: user.photoUrl == null || user.photoUrl!.isEmpty
                     ? const Icon(
                         Icons.person,
                         size: 35,
@@ -60,7 +63,7 @@ class ProfileHeader extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user.displayName ?? 'User',
+                    user.name,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isDark ? AppColors.white : AppColors.black,
@@ -68,7 +71,7 @@ class ProfileHeader extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    user.email ?? '',
+                    user.email,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: AppColors.grey,
                       fontWeight: FontWeight.bold,
@@ -80,7 +83,7 @@ class ProfileHeader extends StatelessWidget {
             ),
           ],
         ),
-      
-    );
+      );
+    });
   }
 }
