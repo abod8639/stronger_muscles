@@ -11,7 +11,7 @@ import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
 class AddressCard extends StatelessWidget {
   final AddressModel address;
 
-  const AddressCard({ required this.address  });
+  const AddressCard({super.key,  required this.address  });
 
 
   @override
@@ -148,7 +148,7 @@ Widget _buildMapPreview() {
 
 // ويدجت بديل في حالة فشل التحميل أو نقص البيانات
 Widget _buildMapPlaceholder() {
-  return Container(
+  return SizedBox(
     height: 150,
     width: double.infinity,
     // color: isDark ? Colors.white10 : Colors.grey[100],

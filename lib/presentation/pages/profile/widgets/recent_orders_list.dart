@@ -178,7 +178,7 @@ class _OrderCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${order.totalAmount.toStringAsFixed(2)}',
+                          order.totalAmount.toStringAsFixed(2),
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w900,
                             color: AppColors.primary,

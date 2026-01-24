@@ -30,6 +30,7 @@ class AddressModel with _$AddressModel {
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
   
+  @override
   Map<String, dynamic> toJson() => _$AddressModelToJson(this);
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';

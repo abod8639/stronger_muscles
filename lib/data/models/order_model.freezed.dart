@@ -69,6 +69,9 @@ mixin _$OrderModel {
   @HiveField(18)
   @JsonKey(name: 'phone_number')
   String? get phoneNumber => throw _privateConstructorUsedError;
+  @HiveField(19)
+  @JsonKey(name: 'user_name')
+  String? get userName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -103,7 +106,8 @@ abstract class $OrderModelCopyWith<$Res> {
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
       @HiveField(17) String? shippingAddress,
-      @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber});
+      @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
+      @HiveField(19) @JsonKey(name: 'user_name') String? userName});
 }
 
 /// @nodoc
@@ -138,6 +142,7 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
     Object? items = freezed,
     Object? shippingAddress = freezed,
     Object? phoneNumber = freezed,
+    Object? userName = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -216,6 +221,10 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -249,7 +258,8 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
       @HiveField(17) String? shippingAddress,
-      @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber});
+      @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
+      @HiveField(19) @JsonKey(name: 'user_name') String? userName});
 }
 
 /// @nodoc
@@ -282,6 +292,7 @@ class __$$OrderModelImplCopyWithImpl<$Res>
     Object? items = freezed,
     Object? shippingAddress = freezed,
     Object? phoneNumber = freezed,
+    Object? userName = freezed,
   }) {
     return _then(_$OrderModelImpl(
       id: null == id
@@ -360,6 +371,10 @@ class __$$OrderModelImplCopyWithImpl<$Res>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
+      userName: freezed == userName
+          ? _value.userName
+          : userName // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -394,7 +409,8 @@ class _$OrderModelImpl extends _OrderModel {
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
       @HiveField(17) this.shippingAddress,
-      @HiveField(18) @JsonKey(name: 'phone_number') this.phoneNumber})
+      @HiveField(18) @JsonKey(name: 'phone_number') this.phoneNumber,
+      @HiveField(19) @JsonKey(name: 'user_name') this.userName})
       : _items = items,
         super._();
 
@@ -479,10 +495,14 @@ class _$OrderModelImpl extends _OrderModel {
   @HiveField(18)
   @JsonKey(name: 'phone_number')
   final String? phoneNumber;
+  @override
+  @HiveField(19)
+  @JsonKey(name: 'user_name')
+  final String? userName;
 
   @override
   String toString() {
-    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, shippingAddressSnapshot: $shippingAddressSnapshot, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress, phoneNumber: $phoneNumber)';
+    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, shippingAddressSnapshot: $shippingAddressSnapshot, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress, phoneNumber: $phoneNumber, userName: $userName)';
   }
 
   @override
@@ -523,7 +543,9 @@ class _$OrderModelImpl extends _OrderModel {
             (identical(other.shippingAddress, shippingAddress) ||
                 other.shippingAddress == shippingAddress) &&
             (identical(other.phoneNumber, phoneNumber) ||
-                other.phoneNumber == phoneNumber));
+                other.phoneNumber == phoneNumber) &&
+            (identical(other.userName, userName) ||
+                other.userName == userName));
   }
 
   @JsonKey(ignore: true)
@@ -548,7 +570,8 @@ class _$OrderModelImpl extends _OrderModel {
         updatedAt,
         const DeepCollectionEquality().hash(_items),
         shippingAddress,
-        phoneNumber
+        phoneNumber,
+        userName
       ]);
 
   @JsonKey(ignore: true)
@@ -597,9 +620,10 @@ abstract class _OrderModel extends OrderModel {
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
       @HiveField(17) final String? shippingAddress,
-      @HiveField(18)
-      @JsonKey(name: 'phone_number')
-      final String? phoneNumber}) = _$OrderModelImpl;
+      @HiveField(18) @JsonKey(name: 'phone_number') final String? phoneNumber,
+      @HiveField(19)
+      @JsonKey(name: 'user_name')
+      final String? userName}) = _$OrderModelImpl;
   const _OrderModel._() : super._();
 
   factory _OrderModel.fromJson(Map<String, dynamic> json) =
@@ -673,6 +697,10 @@ abstract class _OrderModel extends OrderModel {
   @HiveField(18)
   @JsonKey(name: 'phone_number')
   String? get phoneNumber;
+  @override
+  @HiveField(19)
+  @JsonKey(name: 'user_name')
+  String? get userName;
   @override
   @JsonKey(ignore: true)
   _$$OrderModelImplCopyWith<_$OrderModelImpl> get copyWith =>

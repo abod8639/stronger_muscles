@@ -27,7 +27,7 @@ class OrderModel with _$OrderModel {
     @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
     @HiveField(17) String? shippingAddress,
     @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
-    @HiveField(19) @JsonKey(name: 'delivery_time') String? deliveryTime,
+    @HiveField(19) @JsonKey(name: 'user_name') String? userName,
   }) = _OrderModel;
 
   const OrderModel._();
