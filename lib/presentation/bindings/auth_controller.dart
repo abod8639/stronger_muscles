@@ -82,11 +82,7 @@ class AuthController extends GetxController {
 
       print('🔐 محاولة تسجيل الدخول: $email');
 
-      // 1. Firebase Login (Optional, based on requirement)
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      print('✅ نجح تسجيل الدخول في Firebase');
-
-      // 2. Backend API Login
+      // Backend API Login only (Firebase removed for email/password)
       final user = await _authService.login(email: email, password: password);
       print('✅ نجح تسجيل الدخول في Backend: ${user.email}');
 
@@ -94,11 +90,8 @@ class AuthController extends GetxController {
 
       Get.offAllNamed(AppRoutes.main);
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
-    } on FirebaseAuthException catch (e) {
-      print('❌ خطأ Firebase: ${e.code} - ${e.message}');
-      Get.snackbar('خطأ المصادقة', e.message ?? 'فشل تسجيل الدخول');
     } catch (e) {
-      print('❌ خطأ عام: $e');
+      print('❌ خطأ تسجيل الدخول: $e');
       Get.snackbar('خطأ', e.toString());
     } finally {
       isLoading.value = false;
@@ -115,14 +108,7 @@ class AuthController extends GetxController {
 
       print('📝 محاولة إنشاء حساب: $email');
 
-      // 1. Firebase Register
-      await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      print('✅ نجح إنشاء الحساب في Firebase');
-
-      // 2. Backend API Register
+      // Backend API Register only (Firebase removed for email/password)
       final user = await _authService.register(
         email: email,
         password: password,
@@ -134,11 +120,8 @@ class AuthController extends GetxController {
 
       Get.offAllNamed(AppRoutes.main);
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
-    } on FirebaseAuthException catch (e) {
-      print('❌ خطأ Firebase: ${e.code} - ${e.message}');
-      Get.snackbar('خطأ المصادقة', e.message ?? 'فشل إنشاء الحساب');
     } catch (e) {
-      print('❌ خطأ عام: $e');
+      print('❌ خطأ إنشاء الحساب: $e');
       Get.snackbar('خطأ', e.toString());
     } finally {
       isLoading.value = false;

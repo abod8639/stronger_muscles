@@ -121,23 +121,31 @@ class AddressController extends GetxController {
 
   Future<void> setDefaultAddress(int id) async {
     try {
-      // First, unset all default addresses in local state optimistically
-      final tempAddresses = addresses.map((e) => e.copyWith(isDefault: false)).toList();
-      addresses.assignAll(tempAddresses); 
+      isLoading.value = true;
       
-      final address = addresses.firstWhere((addr) => addr.id == id);
-      final updatedAddress = address.copyWith(isDefault: true);
+      // Call the dedicated set-default endpoint
+      final updatedAddress = await _addressService.setDefaultAddress(id);
       
-      // Call update
-      await updateAddress(id, updatedAddress);
+      // Update local state
+      final tempAddresses = addresses.map((e) {
+        if (e.id == id) {
+          return updatedAddress;
+        } else {
+          return e.copyWith(isDefault: false);
+        }
+      }).toList();
       
-      // Refetch to sync state correctly (safest)
-      await fetchAddresses();
-
+      addresses.assignAll(tempAddresses);
+      
       print('✅ تم تعيين العنوان الافتراضي');
+      Get.snackbar('نجح', 'تم تعيين العنوان الافتراضي بنجاح');
     } catch (e) {
       print('❌ خطأ في تعيين العنوان الافتراضي: $e');
       Get.snackbar('خطأ', 'فشل تعيين العنوان الافتراضي');
+      // Rollback - refetch from server
+      await fetchAddresses();
+    } finally {
+      isLoading.value = false;
     }
   }
 

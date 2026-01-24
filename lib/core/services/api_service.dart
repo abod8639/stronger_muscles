@@ -181,6 +181,29 @@ class ApiService {
     return Failure(message: errorDescription, type: failureType);
   }
 
+  Future<http.Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    bool includeAuth = true,
+  }) async {
+    try {
+      final uri = _buildUri(path, queryParameters: queryParameters);
+      print('🚀 Request: PUT $uri | Body: $data');
+      final response = await _client
+          .put(
+            uri,
+            headers: await _getHeaders(includeAuth: includeAuth),
+            body: jsonEncode(data),
+          )
+          .timeout(_timeout);
+
+      return _handleResponse(response, path);
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Future<http.Response> delete(String path) async {
     try {
       final uri = _buildUri(path);

@@ -1,124 +1,168 @@
+import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/config/api_config.dart';
+import 'package:stronger_muscles/core/services/api_service.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/core/services/auth_service.dart';
 
 class AddressService extends GetxService {
-  final AuthService _authService = Get.find<AuthService>();
+  final ApiService _apiService = Get.find<ApiService>();
 
-  // --- Address Management via AuthService ---
-
+  /// Get all addresses for the current user
   Future<List<AddressModel>> getAddresses() async {
     try {
-      final user = await _authService.getCurrentUser();
-      return List<AddressModel>.from(user?.addresses ?? []);
+      final response = await _apiService.get(ApiConfig.addresses );
+      print('📍 Get Addresses Response: ${response.body}');
+
+      final body = jsonDecode(response.body);
+      final List<dynamic> addressesJson = body['addresses'] ?? [];
+
+      return addressesJson
+          .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+    } on Failure catch (e) {
+      print('❌ Get Addresses API Error: ${e.message}');
+      throw e.message;
     } catch (e) {
-      print('Error fetching addresses: $e');
-      return [];
+      print('❌ Get Addresses Error: $e');
+      throw 'فشل تحميل العناوين: ${e.toString()}';
     }
   }
 
+  /// Create a new address
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
-      final user = await _authService.getCurrentUser();
-      if (user == null) throw Exception('يرجى تسجيل الدخول أولاً لإضافة عنوان');
+      final addressData = address.toJson();
+      // Remove id for new addresses
+      addressData.remove('id');
+      addressData.remove('user_id');
+      addressData.remove('created_at');
+      addressData.remove('updated_at');
 
-      // نأخذ نسخة جديدة وقابلة للتعديل تماماً من القائمة الحالية
-      final List<AddressModel> currentAddresses = List<AddressModel>.from(user.addresses ?? []);
-      
-      // نجهز العنوان الجديد مع معرف مؤقت
-      final newAddress = address.copyWith(
-        id: address.id == 0 ? DateTime.now().millisecondsSinceEpoch : address.id
+      final response = await _apiService.post(
+        '/customer/addresses',
+        data: addressData,
       );
-      
-      currentAddresses.add(newAddress);
 
-      // نرسل القائمة كاملة للتحديث
-      final updatedUser = await _authService.updateProfile(addresses: currentAddresses);
-      
-      // نعيد العنوان الأحدث من الرد
-      return updatedUser.addresses?.last ?? newAddress;
+      print('📍 Create Address Response: ${response.body}');
+
+      final body = jsonDecode(response.body);
+      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+    } on Failure catch (e) {
+      print('❌ Create Address API Error: ${e.message}');
+      throw e.message;
     } catch (e) {
-      print('❌ Error in createAddress: $e');
-      rethrow;
+      print('❌ Create Address Error: $e');
+      throw 'فشل إضافة العنوان: ${e.toString()}';
     }
   }
 
+  /// Update an existing address
   Future<AddressModel> updateAddress(int id, AddressModel address) async {
     try {
-      final user = await _authService.getCurrentUser();
-      if (user == null) throw Exception('User not found');
+      final addressData = address.toJson();
+      // Clean up fields that shouldn't be sent
+      addressData.remove('id');
+      addressData.remove('user_id');
+      addressData.remove('created_at');
+      addressData.remove('updated_at');
 
-      List<AddressModel> currentAddresses = List.from(user.addresses ?? []);
-      
-      final index = currentAddresses.indexWhere((a) => a.id == id);
-      if (index != -1) {
-        currentAddresses[index] = address;
-        final updatedUser = await _authService.updateProfile(addresses: currentAddresses);
-         return updatedUser.addresses?.firstWhere((a) => a.id == id, orElse: () => address) ?? address;
-      } else {
-        throw Exception('Address not found');
-      }
+      final response = await _apiService.put(
+        '/customer/addresses/$id',
+        data: addressData,
+      );
+
+      print('📍 Update Address Response: ${response.body}');
+
+      final body = jsonDecode(response.body);
+      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+    } on Failure catch (e) {
+      print('❌ Update Address API Error: ${e.message}');
+      throw e.message;
     } catch (e) {
-      print('Error updating address: $e');
-      rethrow;
+      print('❌ Update Address Error: $e');
+      throw 'فشل تحديث العنوان: ${e.toString()}';
     }
   }
 
+  /// Delete an address
   Future<void> deleteAddress(int id) async {
     try {
-      final user = await _authService.getCurrentUser();
-      if (user == null) throw Exception('User not found');
-
-      List<AddressModel> currentAddresses = List.from(user.addresses ?? []);
-      currentAddresses.removeWhere((a) => a.id == id);
-
-      await _authService.updateProfile(addresses: currentAddresses);
+      final response = await _apiService.delete('/customer/addresses/$id');
+      print('📍 Delete Address Response: ${response.body}');
+    } on Failure catch (e) {
+      print('❌ Delete Address API Error: ${e.message}');
+      throw e.message;
     } catch (e) {
-      print('Error deleting address: $e');
-      rethrow;
+      print('❌ Delete Address Error: $e');
+      throw 'فشل حذف العنوان: ${e.toString()}';
     }
   }
 
-  // --- Geolocation Methods ---
+  /// Set an address as default
+  Future<AddressModel> setDefaultAddress(int id) async {
+    try {
+      final response = await _apiService.post('/customer/addresses/$id/set-default');
+      print('📍 Set Default Address Response: ${response.body}');
 
+      final body = jsonDecode(response.body);
+      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+    } on Failure catch (e) {
+      print('❌ Set Default Address API Error: ${e.message}');
+      throw e.message;
+    } catch (e) {
+      print('❌ Set Default Address Error: $e');
+      throw 'فشل تعيين العنوان الافتراضي: ${e.toString()}';
+    }
+  }
+
+  /// Get current GPS position
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      throw 'خدمات الموقع معطلة. يرجى تفعيلها.';
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        throw 'تم رفض صلاحيات الموقع';
       }
     }
-    
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-    } 
 
-    return await Geolocator.getCurrentPosition();
+    if (permission == LocationPermission.deniedForever) {
+      throw 'صلاحيات الموقع مرفوضة بشكل دائم. يرجى تفعيلها من الإعدادات.';
+    }
+
+    return await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
   }
 
-  Future<Placemark?> getAddressFromCoordinates(double latitude, double longitude) async {
+  /// Get address from coordinates using geocoding
+  Future<Placemark?> getAddressFromCoordinates(
+    double latitude,
+    double longitude,
+  ) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude,
+        longitude,
+      );
+
       if (placemarks.isNotEmpty) {
         return placemarks.first;
       }
       return null;
     } catch (e) {
-      print('Error getting address from coordinates: $e');
+      print('❌ Geocoding Error: $e');
       return null;
     }
   }
-
 }

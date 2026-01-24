@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
 import '../../config/api_config.dart';
 import '../../data/models/user_model.dart';
 import '../../data/models/user_stats_model.dart';
@@ -119,7 +118,8 @@ class AuthService extends GetxService {
     String? email,
     String? phone,
     String? photoUrl,
-    List<AddressModel>? addresses,
+    String? preferredLanguage,
+    bool? notificationsEnabled,
   }) async {
     try {
       final response = await _apiService.post(
@@ -129,12 +129,8 @@ class AuthService extends GetxService {
           if (email != null) 'email': email,
           if (phone != null) 'phone': phone,
           if (photoUrl != null) 'photo_url': photoUrl,
-          if (addresses != null) 
-            'addresses': addresses.map((e) {
-              final map = e.toJson();
-              map['id'] = map['id'].toString(); // Backend expects string ID sometimes? Or we are sending updates.
-              return map;
-            }).toList(),
+          if (preferredLanguage != null) 'preferred_language': preferredLanguage,
+          if (notificationsEnabled != null) 'notifications_enabled': notificationsEnabled,
         },
       );
 

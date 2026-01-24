@@ -15,7 +15,7 @@ class ApiConfig {
   static const String logout = '/auth/logout';
   static const String testLogin = '/auth/test-login';
   static const String updateProfileRoute = '/auth/update-profile';
-
+  static const String addresses = '/customer/addresses';
   // Products (Public)
   static const String products = '/shop/products';
   // Categories (Public)
