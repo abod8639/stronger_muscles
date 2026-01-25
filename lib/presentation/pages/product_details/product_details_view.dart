@@ -63,7 +63,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     Obx(
                       () => ProductFlavorSelector(
                         product: product,
-                        initialFlavor: controller.selectedFlavor.value,
+                        selectedFlavor: controller.selectedFlavor.value,
                         onFlavorSelected: (selectedFlavor) {
                           controller.selectedFlavor.value = selectedFlavor;
                         },

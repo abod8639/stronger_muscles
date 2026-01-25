@@ -18,6 +18,7 @@ class MainImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProductDetailsController(product), tag: product.id);
+    // final controller = Get.find<ProductDetailsController>(tag: product.id);
     // استخدام Obx فقط عند الحاجة لتغيير الـ PageView برمجياً
     return SizedBox(
       height: 400,
@@ -29,16 +30,16 @@ class MainImage extends StatelessWidget {
   }
 
   Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
-    // PageController يمكن تعريفه داخل الـ Controller الخاص بـ GetX ليكون أكثر تنظيماً
     return PageView.builder(
+    
       controller: controller.pageController,
       itemCount: product.imageUrls.length,
       onPageChanged: controller.selectImage,
-      physics: const BouncingScrollPhysics(), // تجربة تصفح أنعم
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () => onImageTap?.call(index),
-          child: Hero( // إضافة Hero Animation لانتقال سلس لصفحة التفاصيل
+          child: Hero(
             tag: 'product_image_${product.id}_$index',
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 8.0),

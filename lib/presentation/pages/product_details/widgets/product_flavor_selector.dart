@@ -2,123 +2,84 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-class ProductFlavorSelector extends StatefulWidget {
+class ProductFlavorSelector extends StatelessWidget {
   final ProductModel product;
-  final String? initialFlavor;
+  final String selectedFlavor;
   final Function(String) onFlavorSelected;
 
   const ProductFlavorSelector({
     super.key,
     required this.product,
-    this.initialFlavor,
+    required this.selectedFlavor,
     required this.onFlavorSelected,
   });
 
-  @override
-  State<ProductFlavorSelector> createState() => _ProductFlavorSelectorState();
-}
-
-class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
-  String? _selectedFlavor;
-
   Color _getFlavorColor(String flavor) {
-    switch (flavor.toLowerCase()) {
-      case 'vanilla':
-        return const Color(0xFFF3E5AB); // Creamy yellow
-      case 'strawberry':
-        return Colors.pink.shade300;
-      case 'choco':
-        return Colors.brown.shade600;
-      case 'mango':
-        return Colors.orange.shade400;
-      case 'caramel':
-        return Colors.amber.shade800;
-      case 'coffee':
-        return Colors.brown.shade800;
-      case 'vanilla cream':
-        return const Color(0xFFFDF5E6); // Old Lace / Cream
-      case 'tot':
-        return Colors.purple.shade600;
-      case 'no flavor':
-        return Colors.grey.shade400;
-      default:
-        return Colors.grey.shade200;
-    }
+    final f = flavor.toLowerCase();
+    if (f.contains('vanilla')) return const Color(0xFFF3E5AB);
+    if (f.contains('straw')) return Colors.pink.shade300;
+    if (f.contains('choco')) return Colors.brown.shade600;
+    if (f.contains('mango')) return Colors.orange.shade400;
+    if (f.contains('caramel')) return Colors.amber.shade800;
+    if (f.contains('coffee')) return Colors.brown.shade800;
+    if (f.contains('tot')) return Colors.purple.shade600;
+    return Colors.grey.shade400;
   }
 
-  bool _isDarkColor(Color color) {
-    return color.computeLuminance() < 0.5;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedFlavor =
-        widget.initialFlavor ??
-        (widget.product.flavors?.isNotEmpty == true
-            ? widget.product.flavors!.first
-            : null);
-  }
-
-  @override
-  void didUpdateWidget(ProductFlavorSelector oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.initialFlavor != oldWidget.initialFlavor) {
-      _selectedFlavor = widget.initialFlavor;
-    }
-  }
+  bool _isDarkColor(Color color) => color.computeLuminance() < 0.7;
 
   @override
   Widget build(BuildContext context) {
-    final flavors = widget.product.flavors;
-    if (flavors == null || flavors.isEmpty) {
-      return const SizedBox.shrink();
-    }
+    final flavorsList = product.flavors ?? [];
+    
+    if (flavorsList.isEmpty) return const SizedBox.shrink();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          AppLocalizations.of(context)!.selectFlavor,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Text(
+            AppLocalizations.of(context)!.selectFlavor,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
-          children: flavors.map((flavor) {
-            final isSelected = _selectedFlavor == flavor;
+          spacing: 10.0,
+          runSpacing: 10.0,
+          children: flavorsList.map((flavor) {
+            final isSelected = selectedFlavor == flavor;
             final flavorColor = _getFlavorColor(flavor);
-            final textColor = isSelected
-                ? (_isDarkColor(flavorColor) ? Colors.white : Colors.black)
-                : (_isDarkColor(flavorColor) ? flavorColor : Colors.black87);
+            final bool isDark = _isDarkColor(flavorColor);
 
             return ChoiceChip(
-              backgroundColor: flavorColor.withOpacity(0.15),
+              elevation: isSelected ? 4 : 0,
+              pressElevation: 2,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               label: Text(flavor),
               selected: isSelected,
-              onSelected: (selected) {
-                if (selected) {
-                  setState(() {
-                    _selectedFlavor = flavor;
-                  });
-                  widget.onFlavorSelected(flavor);
-                }
+              onSelected: (bool selected) {
+                if (selected) onFlavorSelected(flavor);
               },
               selectedColor: flavorColor,
+              backgroundColor: flavorColor.withOpacity(0.1),
               labelStyle: TextStyle(
-                color: textColor,
+                color: isSelected 
+                    ? (isDark ? Colors.white : Colors.black) 
+                    : Colors.black87,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
               shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
-                  color: isSelected
-                      ? flavorColor
-                      : flavorColor.withOpacity(0.5),
+                  color: isSelected ? flavorColor : Colors.grey.shade300,
                   width: isSelected ? 2 : 1,
                 ),
-                borderRadius: BorderRadius.circular(8),
               ),
+              showCheckmark: false, 
             );
           }).toList(),
         ),

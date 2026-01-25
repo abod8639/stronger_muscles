@@ -28,8 +28,7 @@ class ImageListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ProductDetailsController>();
-
+final controller = Get.find<ProductDetailsController>(tag: product.id);
     // Don't show if there's only one image or no images
     if (product.imageUrls.length <= 1) {
       return const SizedBox.shrink();
