@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
-import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class SignInPage extends GetView<AuthController> {
   final VoidCallback? onSignUpTap;
@@ -116,7 +116,7 @@ class SignInPage extends GetView<AuthController> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     TextButton(
-                      onPressed: () => Get.to(() => const SignUpPage()),
+                      onPressed: () => Get.toNamed(AppRoutes.signUp),
                       child: Text(
                         AppLocalizations.of(context)!.signUp,
                         style: const TextStyle(fontWeight: FontWeight.bold),

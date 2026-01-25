@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_delete_button.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_details.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_image.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class WishlistItemCard extends StatelessWidget {
-  // Constants for consistent sizing and spacing
   static const double _borderRadius = 12.0;
   static const double _cardElevation = 2.0;
   static const double _horizontalPadding = 16.0;
@@ -24,7 +23,6 @@ class WishlistItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final wishlistController = Get.find<WishlistController>();
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -39,9 +37,9 @@ class WishlistItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
       child: InkWell(
-        onTap: () => Get.to(
-          () => ProductDetailsView(product: product),
-          transition: Transition.fadeIn,
+        onTap: () => Get.toNamed(
+          AppRoutes.productDetails,
+          arguments: product,
         ),
         borderRadius: BorderRadius.circular(_borderRadius),
         child: Padding(
@@ -49,16 +47,9 @@ class WishlistItemCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
-              // Product Image with Hero Animation
               buildProductImage(product),
-
               const SizedBox(width: _spacing),
-
-              // Product Details
               Expanded(child: buildProductDetails(product)),
-
-              // Delete Button
               buildDeleteButtonFromWishlist(product),
             ],
           ),

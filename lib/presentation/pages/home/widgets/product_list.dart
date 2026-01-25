@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 /// Grid view of products displayed on the home page
 class ProductList extends StatelessWidget {
@@ -113,9 +113,9 @@ class ProductList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             final product = controller.products[index];
             return GestureDetector(
-              onTap: () => Get.to(
-                () => ProductDetailsView(product: product),
-                transition: Transition.fadeIn,
+              onTap: () => Get.toNamed(
+                AppRoutes.productDetails,
+                arguments: product,
               ),
               child: ProductContainer(showName: true, product: product,isBackgroundWhite: false, ),
             );
@@ -126,43 +126,4 @@ class ProductList extends StatelessWidget {
   }
 }
 
-/// Legacy function for backward compatibility.
-///
-/// **Deprecated**: Use [ProductList] widget instead.
-@Deprecated('Use ProductList widget instead')
-Widget productList() {
-  final controller = Get.find<HomeController>();
-  return Builder(
-    builder: (context) {
-      return Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (controller.products.isEmpty) {
-          return const Center(child: Text('No products found.'));
-        }
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.65,
-              crossAxisSpacing: 5.0,
-              mainAxisSpacing: 10.0,
-            ),
-            itemCount: controller.products.length,
-            itemBuilder: (context, index) {
-              final product = controller.products[index];
-              return GestureDetector(
-                onTap: () => Get.to(() => ProductDetailsView(product: product)),
-                child: ProductContainer(showName: true, product: product),
-              );
-            },
-          ),
-        );
-      });
-    },
-  );
-}
+

@@ -1,5 +1,13 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/auth_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/home_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/cart_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/profile_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/wishlist_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/checkout_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/main_binding.dart';
+
 import 'package:stronger_muscles/presentation/pages/auth/auth_view.dart';
 import 'package:stronger_muscles/presentation/pages/auth/signin_page.dart';
 import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
@@ -33,54 +41,52 @@ class AppPages {
     GetPage(
       name: AppRoutes.main,
       page: () => const MainPage(),
+      binding: MainBinding(),
     ),
     GetPage(
       name: AppRoutes.auth,
       page: () => const AuthView(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.signIn,
-      page: () => SignInPage(
-        onSignUpTap: () => Get.offNamed(AppRoutes.signUp),
-      ),
-      binding: BindingsBuilder(() {
-    Get.lazyPut<AuthController>(() => AuthController());
-  }),
+      page: () => SignInPage(onSignUpTap: () => Get.offNamed(AppRoutes.signUp)),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.signUp,
-      page: () => SignUpPage(
-        onSignInTap: () => Get.offNamed(AppRoutes.signIn),
-
-      ),
-      // bindings: [Get.put(AuthController())],
-  ),
+      page: () => SignUpPage(onSignInTap: () => Get.offNamed(AppRoutes.signIn)),
+      binding: AuthBinding(),
+    ),
     GetPage(
       name: AppRoutes.home,
       page: () => const HomeView(),
+      binding: HomeBinding(),
     ),
     GetPage(
       name: AppRoutes.cart,
       page: () => const CartView(),
+      binding: CartBinding(),
     ),
     GetPage(
       name: AppRoutes.productDetails,
-      page: () {
-        // Expecting product to be passed as arguments
-        return ProductDetailsView(product: Get.arguments);
-      },
+      page: () => const ProductDetailsView(),
+      binding: ProductDetailsBinding(),
     ),
     GetPage(
       name: AppRoutes.wishlist,
       page: () => const WishlistView(),
+      binding: WishlistBinding(),
     ),
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfilePage(),
+      binding: ProfileBinding(),
     ),
     GetPage(
       name: AppRoutes.checkout,
       page: () => const CheckoutView(),
+      binding: CheckoutBinding(),
     ),
     GetPage(
       name: AppRoutes.orderSuccess,
@@ -89,6 +95,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.editUserInfo,
       page: () => const EditUserInfoView(),
+      binding: ProfileBinding(),
     ),
   ];
 }

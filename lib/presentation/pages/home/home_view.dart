@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final sectionsController = Get.put(CategoriesSectionsController());
+    final sectionsController = Get.find<CategoriesSectionsController>();
 
     return Scaffold(
       body: SafeArea(

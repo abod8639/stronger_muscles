@@ -7,13 +7,11 @@ import 'package:stronger_muscles/presentation/pages/profile/profile_page.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/wishlist_view.dart';
 import 'package:stronger_muscles/presentation/widgets/my_bottom_navigation_bar.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends GetView<MainController> {
   const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final controller = Get.put(MainController());
 
     final pages = <Widget>[
       const HomeView(),

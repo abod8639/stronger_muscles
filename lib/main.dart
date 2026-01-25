@@ -5,14 +5,14 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stronger_muscles/firebase_options.dart';
 import 'package:stronger_muscles/functions/hive_init.dart';
-import 'package:stronger_muscles/functions/init_controllers_app.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
+import 'package:stronger_muscles/presentation/bindings/initial_binding.dart';
 import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
+import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     final themeController = Get.put(ThemeController());
     final languageController = Get.put(LanguageController());
 
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeController.themeMode,
-        initialBinding: initControllersApp(),
+        initialBinding: InitialBinding(),
         initialRoute: AppRoutes.main,
         getPages: AppPages.routes,
         localizationsDelegates: const [

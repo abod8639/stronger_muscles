@@ -1,7 +1,6 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
@@ -17,170 +16,121 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/buil
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_usage_and_warnings.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_size_selector.dart';
 
-class ProductDetailsView extends StatefulWidget {
+class ProductDetailsView extends GetView<ProductDetailsController> {
   static const double _contentPadding = 16.0;
   static const double _sectionSpacing = 24.0;
   static const double _smallSpacing = 8.0;
   static const double _mediumSpacing = 16.0;
   static const double _bottomPadding = 32.0;
 
-  final ProductModel product;
-  final String? selectedFlavor;
-  final String? selectedSize;
-
-  const ProductDetailsView({
-    super.key,
-    required this.product,
-    this.selectedFlavor,
-    this.selectedSize,
-  });
-
-  @override
-  State<ProductDetailsView> createState() => _ProductDetailsViewState();
-}
-
-class _ProductDetailsViewState extends State<ProductDetailsView> {
-  late final ScrollController _imageScrollController;
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the ProductDetailsController with the product and initial selections
-    Get.put(ProductDetailsController(
-      widget.product,
-      initialFlavor: widget.selectedFlavor,
-      initialSize: widget.selectedSize,
-    ));
-    _imageScrollController = ScrollController();
-  }
-
-  @override
-  void dispose() {
-    _imageScrollController.dispose();
-    Get.delete<ProductDetailsController>();
-    super.dispose();
-  }
+  const ProductDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final product = Get.find<ProductDetailsController>().product;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.product.name), elevation: 0),
+      appBar: AppBar(title: Text(product.name), elevation: 0),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Main Product Image with Hero Animation
             MainImage(
-              product: widget.product,
+              product: product,
               onImageTap: (index) => _showImageViewer(context, index),
             ),
 
             // Product Details Content
             Padding(
-              padding: const EdgeInsets.all(ProductDetailsView._contentPadding),
+              padding: const EdgeInsets.all(_contentPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
-                  buildProductName(widget.product),
-                  const SizedBox(height: ProductDetailsView._smallSpacing),
+                   // Product Name
+                  buildProductName(product),
+                  const SizedBox(height: _smallSpacing),
 
-                  // Product Badges (Featured, New, Best Seller)
-                  buildProductBadges(widget.product, context),
-                  const SizedBox(height: ProductDetailsView._mediumSpacing),
+                  // Product Badges (Featured, New, Best Seller, Discount)
+                  buildProductBadges(product, context),
+                  const SizedBox(height: _mediumSpacing),
 
                   // Product Flavors
-                  if (widget.product.flavors != null &&
-                      widget.product.flavors!.isNotEmpty) ...[
+                  if (product.flavors != null && product.flavors!.isNotEmpty) ...[
                     Obx(() => ProductFlavorSelector(
-                          product: widget.product,
-                          initialFlavor: Get.find<ProductDetailsController>()
-                              .selectedFlavor
-                              .value,
+                          product: product,
+                          initialFlavor: controller.selectedFlavor.value,
                           onFlavorSelected: (selectedFlavor) {
-                            Get.find<ProductDetailsController>()
-                                    .selectedFlavor
-                                    .value =
-                                selectedFlavor;
+                            controller.selectedFlavor.value = selectedFlavor;
                           },
                         )),
-                    const SizedBox(height: ProductDetailsView._mediumSpacing),
+                    const SizedBox(height: _mediumSpacing),
                   ],
-                  // size
-                  if (widget.product.size != null &&
-                      widget.product.size!.isNotEmpty) ...[
+
+                  // Size Selector
+                  if (product.size != null && product.size!.isNotEmpty) ...[
                     Obx(() => ProductSizeSelector(
-                          product: widget.product,
-                          initialSize: Get.find<ProductDetailsController>()
-                              .selectedSize
-                              .value,
+                          product: product,
+                          initialSize: controller.selectedSize.value,
                           onSizeSelected: (selectedSize) {
-                            Get.find<ProductDetailsController>()
-                                    .selectedSize
-                                    .value =
-                                selectedSize;
+                            controller.selectedSize.value = selectedSize;
                           },
                         )),
-                    const SizedBox(height: ProductDetailsView._mediumSpacing),
+                    const SizedBox(height: _mediumSpacing),
                   ],
 
                   // Product Price
-                  buildProductPrice(widget.product),
-                  const SizedBox(height: ProductDetailsView._mediumSpacing),
+                  buildProductPrice(product),
+                  const SizedBox(height: _mediumSpacing),
 
                   // Image Thumbnails
-                  if (widget.product.imageUrls.length > 1)
+                  if (product.imageUrls.length > 1)
                     ImageListView(
-                      scrollController: _imageScrollController,
-                      product: widget.product,
+                      scrollController: controller.imageScrollController,
+                      product: product,
                     ),
 
-                  if (widget.product.imageUrls.length > 1)
-                    const SizedBox(height: ProductDetailsView._sectionSpacing),
+                  if (product.imageUrls.length > 1)
+                    const SizedBox(height: _sectionSpacing),
 
                   // Description Section
-                  buildDescriptionSection(widget.product),
-                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+                  buildDescriptionSection(product),
+                  const SizedBox(height: _sectionSpacing),
 
                   // Product Info (Brand, SKU, Weight, etc.)
-                  buildProductInfo(widget.product, isDark, context),
-                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+                  buildProductInfo(product, isDark, context),
+                  const SizedBox(height: _sectionSpacing),
 
                   // Ingredients
-                  buildIngredientsSection(widget.product, isDark),
-                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+                  buildIngredientsSection(product, isDark),
+                  const SizedBox(height: _sectionSpacing),
 
                   // Usage Instructions & Warnings
-                  buildUsageAndWarnings(widget.product, isDark),
-                  const SizedBox(height: ProductDetailsView._sectionSpacing),
+                  buildUsageAndWarnings(product, isDark),
+                  const SizedBox(height: _sectionSpacing),
 
                   // Reviews Section
-                  buildShowReviewsListSection(widget.product),
-                  const SizedBox(height: ProductDetailsView._bottomPadding),
+                  buildShowReviewsListSection(product),
+                  const SizedBox(height: _bottomPadding),
                 ],
               ),
             ),
           ],
         ),
       ),
-      bottomNavigationBar: BottomIconsRow(product: widget.product),
+      bottomNavigationBar: BottomIconsRow(product: product),
     );
   }
 
   /// Shows the image viewer with zoom capability
   void _showImageViewer(BuildContext context, int initialIndex) {
-    if (widget.product.imageUrls.isEmpty) return;
+    if (controller.product.imageUrls.isEmpty) return;
 
     showImageViewer(
       context,
-      NetworkImage(
-        widget.product.imageUrls[initialIndex],
-      ), //   widget.product.imageUrls,
-      // CachedNetworkImage (
-      //   imageUrl:  widget.product.imageUrls[initialIndex]) ,
+      NetworkImage(controller.product.imageUrls[initialIndex]),
       useSafeArea: true,
       swipeDismissible: true,
       doubleTapZoomable: true,

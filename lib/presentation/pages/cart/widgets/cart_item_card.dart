@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_details.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_image.dart';
 import 'package:stronger_muscles/presentation/widgets/build_quantity_controls.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends StatelessWidget {
-  // Constants for consistent sizing and spacing
   static const double _borderRadius = 12.0;
   static const double _cardElevation = 2.0;
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
   static const double _contentPadding = 12.0;
   static const double _spacing = 16.0;
-
 
   final CartItemModel item;
 
@@ -26,7 +23,6 @@ class CartItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
 
     return Card(
@@ -47,19 +43,12 @@ class CartItemCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Product Image with Hero Animation
-              buildProductCartImage(item ),
-
+              buildProductCartImage(item),
               const SizedBox(width: _spacing),
-
-              // Product Details
               Expanded(
                 child: buildProductCartDetails(item),
               ),
-
               const SizedBox(width: 8.0),
-
-              // Quantity Controls
               buildQuantityControls(item.product),
             ],
           ),
@@ -68,22 +57,14 @@ class CartItemCard extends StatelessWidget {
     );
   }
 
-  /// Returns the nested ProductModel
-  ProductModel _toProductModel() => item.product;
-
-  /// Navigates to product details page
   void _navigateToProductDetails() {
-    Get.to(
-      () => ProductDetailsView(
-        product: _toProductModel(),
-        selectedFlavor: item.selectedFlavor,
-        selectedSize: item.selectedSize,
-      ),
-      transition: Transition.fadeIn,
+    Get.toNamed(
+      AppRoutes.productDetails,
+      arguments: {
+        'product': item.product,
+        'selectedFlavor': item.selectedFlavor,
+        'selectedSize': item.selectedSize,
+      },
     );
   }
-
-
-
 }
-
