@@ -5,148 +5,97 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
-class MainImage extends StatefulWidget {
+class MainImage extends StatelessWidget {
   final ProductModel product;
   final Function(int)? onImageTap;
 
   const MainImage({
     super.key,
     required this.product,
-    this.onImageTap, // Callback for image tap
+    this.onImageTap,
   });
 
   @override
-  State<MainImage> createState() => _MainImageState();
-}
-
-class _MainImageState extends State<MainImage> {
-  late final PageController _pageController;
-  late final ProductDetailsController _controller;
-  late final Worker _imageWorker;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = Get.find<ProductDetailsController>();
-    _pageController = PageController(
-      initialPage: _controller.selectedImageIndex.value,
-    );
-
-    // Listen to controller changes to animate PageView
-    _imageWorker = ever(_controller.selectedImageIndex, (index) {
-      if (!mounted) return;
-      if (_pageController.hasClients &&
-          _pageController.page?.round() != index) {
-        _pageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _imageWorker.dispose();
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    print('DEBUG: MainImage - product.imageUrls: ${widget.product.imageUrls}');
-    print(
-      'DEBUG: MainImage - product.imageUrls.length: ${widget.product.imageUrls.length}',
-    );
-
-    // Handle empty image list
-    if (widget.product.imageUrls.isEmpty) {
-      return SizedBox(
-        height: 400,
-        width: double.infinity,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.image_not_supported_outlined,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context)!.noImagesAvailable,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
+    final controller = Get.put(ProductDetailsController(product), tag: product.id);
+    // استخدام Obx فقط عند الحاجة لتغيير الـ PageView برمجياً
     return SizedBox(
       height: 400,
       width: double.infinity,
-      child: PageView.builder(
-        controller: _pageController,
-        itemCount: widget.product.imageUrls.length,
-        onPageChanged: (index) {
-          _controller.selectImage(index);
-        },
+      child: product.imageUrls.isEmpty
+          ? _buildEmptyState(context)
+          : _buildImageSlider(context, controller),
+    );
+  }
 
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () => widget.onImageTap?.call(index),
+  Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
+    // PageController يمكن تعريفه داخل الـ Controller الخاص بـ GetX ليكون أكثر تنظيماً
+    return PageView.builder(
+      controller: controller.pageController,
+      itemCount: product.imageUrls.length,
+      onPageChanged: controller.selectImage,
+      physics: const BouncingScrollPhysics(), // تجربة تصفح أنعم
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => onImageTap?.call(index),
+          child: Hero( // إضافة Hero Animation لانتقال سلس لصفحة التفاصيل
+            tag: 'product_image_${product.id}_$index',
             child: Container(
-              color: widget.product.isBackgroundWhite
-                    ? Colors.white
-                    : Colors.transparent,
+              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              decoration: BoxDecoration(
+                color: product.isBackgroundWhite ? Colors.white : Colors.transparent,
+                borderRadius: BorderRadius.circular(16.0),
+              ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(16.0),
                 child: CachedNetworkImage(
-                  
-                  imageUrl: widget.product.imageUrls[index],
-                  placeholder: (context, url) =>
-                      const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image_outlined,
-                            size: 48,
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                          const SizedBox(height: 8),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(
-                              'فشل تحميل الصورة',
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.bodySmall
-                                  ?.copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                  imageUrl: product.imageUrls[index],
                   fit: BoxFit.contain,
+                  placeholder: (context, url) => _buildPlaceholder(),
+                  errorWidget: (context, url, error) => _buildErrorWidget(context),
                 ),
               ),
             ),
-          );
-        },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return const Center(
+      child: CircularProgressIndicator.adaptive(), // يتكيف مع شكل أندرويد أو iOS
+    );
+  }
+
+  Widget _buildErrorWidget(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.broken_image_outlined, 
+               size: 48, color: Theme.of(context).colorScheme.error),
+          const SizedBox(height: 8),
+          Text('فشل تحميل الصورة',
+              style: TextStyle(color: Theme.of(context).colorScheme.error)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.image_not_supported_outlined, size: 64, color: Colors.grey),
+          const SizedBox(height: 16),
+          Text(AppLocalizations.of(context)!.noImagesAvailable),
+        ],
       ),
     );
   }

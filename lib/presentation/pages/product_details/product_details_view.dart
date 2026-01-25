@@ -93,7 +93,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   // Image Thumbnails
                   if (product.imageUrls.length > 1)
                     ImageListView(
-                      scrollController: controller.imageScrollController,
+                      scrollController: controller.pageController,
                       product: product,
                     ),
 

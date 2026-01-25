@@ -7,31 +7,33 @@ class ProductDetailsController extends GetxController {
   final ProductModel product;
   final WishlistService _wishlistService = Get.find<WishlistService>();
 
-  // التفاعليات
+  // التفاعليات (Reactive States)
   final RxBool isInWishlist = false.obs;
   final RxInt selectedImageIndex = 0.obs;
   final RxString selectedFlavor = "".obs;
   final RxString selectedSize = "".obs;
 
-  final ScrollController imageScrollController = ScrollController();
+  // التحكم في العرض (UI Controllers)
+  late final PageController pageController;
 
   ProductDetailsController(
     this.product, {
     String? initialFlavor,
     String? initialSize,
   }) {
-    selectedFlavor.value =
-        initialFlavor ??
+    // تحديد القيم الابتدائية للنكهة والحجم
+    selectedFlavor.value = initialFlavor ?? 
         (product.flavors?.isNotEmpty == true ? product.flavors!.first : "");
 
-    selectedSize.value =
-        initialSize ??
+    selectedSize.value = initialSize ?? 
         (product.size?.isNotEmpty == true ? product.size!.first : "");
   }
 
   @override
   void onInit() {
     super.onInit();
+    // تهيئة PageController مع الصفحة المختارة ابتدائياً
+    pageController = PageController(initialPage: selectedImageIndex.value);
     _checkInitialWishlistStatus();
   }
 
@@ -39,6 +41,7 @@ class ProductDetailsController extends GetxController {
     isInWishlist.value = _wishlistService.isFavorite(product.id);
   }
 
+  // ميزة الـ Wishlist مع معالجة الأخطاء
   void toggleWishlist() {
     try {
       _wishlistService.toggleFavorite(product);
@@ -48,23 +51,52 @@ class ProductDetailsController extends GetxController {
     }
   }
 
-  void selectImage(int index) {
+  // تحسين: التزامن بين الـ PageView والـ Index
+void selectImage(int index) {
+    if (selectedImageIndex.value == index) return;
+    
     selectedImageIndex.value = index;
+    
+    // التحقق من وجود مستخدم واحد فقط متصل لتجنب AssertionError
+    if (pageController.hasClients) {
+      // التأكد من أن الـ Controller متصل بـ View واحد فقط قبل قراءة الخاصية .page
+      if (pageController.positions.length == 1) {
+        if (pageController.page?.round() != index) {
+          pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      } else {
+        // في حال وجود أكثر من View، نستخدم الـ jump أو الـ animate بدون فحص الـ page الحالي
+        pageController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    }
   }
+
+  void updateFlavor(String flavor) => selectedFlavor.value = flavor;
+  void updateSize(String size) => selectedSize.value = size;
 
   void _showErrorSnackbar(String title, String message) {
     Get.snackbar(
       title,
       message,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.redAccent.withValues(alpha: 0.8),
+      backgroundColor: Colors.redAccent.withOpacity(0.8),
       colorText: Colors.white,
+      margin: const EdgeInsets.all(15),
     );
   }
 
   @override
   void onClose() {
-    imageScrollController.dispose();
+    // إغلاق الـ Controller بشكل صحيح لمنع تسريب الذاكرة
+    pageController.dispose();
     super.onClose();
   }
 }
