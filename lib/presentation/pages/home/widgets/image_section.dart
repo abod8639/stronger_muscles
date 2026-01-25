@@ -50,7 +50,7 @@ class ImageSection extends StatelessWidget {
                         return _buildImage(
                           images[index],
                           theme,
-                          widget.isBackgroundWhite ?? false,
+                          widget.product.isBackgroundWhite ,
                         );
                       },
                     ),

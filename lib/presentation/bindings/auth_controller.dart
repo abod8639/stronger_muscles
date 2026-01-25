@@ -10,9 +10,7 @@ import '../../routes/routes.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final AuthService _authService = Get.put(
-    AuthService(),
-  ); // Ensure AuthService is initialized
+  final AuthService _authService = Get.put(AuthService()); // Ensure AuthService is initialized
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

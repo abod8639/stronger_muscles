@@ -16,14 +16,14 @@ class ProductContainer extends StatefulWidget {
     this.selectedImageIndex,
     this.onPageChanged,
     this.onTap,
-    this.isBackgroundWhite,
+    required this.isBackgroundWhite,
   });
 
   final void Function()? onTap;
   final ProductModel product;
   final bool? showName;
   final RxInt? selectedImageIndex;
-  final bool? isBackgroundWhite;
+  final bool isBackgroundWhite;
   final ValueChanged<int>? onPageChanged;
   @override
   State<ProductContainer> createState() => _ProductContainerState();
