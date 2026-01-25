@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 
 class ImageSection extends StatelessWidget {
@@ -95,6 +96,8 @@ class ImageSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: CachedNetworkImage(
+        cacheManager: CustomCacheManager.instance,
+
           imageUrl: url,
           fit: BoxFit.contain,
           placeholder: (context, url) => _buildShimmerEffect(theme),

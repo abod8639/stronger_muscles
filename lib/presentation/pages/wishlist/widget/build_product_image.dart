@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 
 /// Builds the product image with hero animation and error handling
 Widget buildProductImage(ProductModel product) {
@@ -18,6 +19,7 @@ Widget buildProductImage(ProductModel product) {
           borderRadius: BorderRadius.circular(imageBorderRadius),
           child: imageUrl.isNotEmpty
               ? CachedNetworkImage(
+                cacheManager: CustomCacheManager.instance,
                   imageUrl: imageUrl,
                   width: imageSize,
                   height: imageSize,
