@@ -104,42 +104,45 @@ class _MainImageState extends State<MainImage> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => widget.onImageTap?.call(index),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: CachedNetworkImage(
-                imageUrl: widget.product.imageUrls[index],
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) {
-                  print(
-                    'DEBUG: Error loading image from URL: ${widget.product.imageUrls[index]}, Error: $error',
-                  );
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.broken_image_outlined,
-                          size: 48,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        const SizedBox(height: 8),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            'فشل تحميل الصورة',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
+            child: Container(
+              color: widget.product.isBackgroundWhite
+                    ? Colors.white
+                    : Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.0),
+                child: CachedNetworkImage(
+                  
+                  imageUrl: widget.product.imageUrls[index],
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.broken_image_outlined,
+                            size: 48,
+                            color: Theme.of(context).colorScheme.error,
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                fit: BoxFit.contain,
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              'فشل تحميل الصورة',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           );
