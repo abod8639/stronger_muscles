@@ -32,22 +32,23 @@ class HomeController extends GetxController {
     isError.value = false;
     isConnectionError.value = false;
     errorMessage.value = '';
-    
+
     try {
       List<ProductModel> fetchedProducts;
-      
+
       // Use categoryId directly if provided by the controller.
       // Removed hardcoded fallback indices to ensure it's fully dynamic.
-      
-      fetchedProducts = await _productService.getProducts(categoryId: categoryId);
-      
+
+      fetchedProducts = await _productService.getProducts(
+        categoryId: categoryId,
+      );
+
       // Update the search controller with the new data
       searchController.setProducts(fetchedProducts);
-      
     } catch (e) {
       print('DEBUG: HomeController error: $e');
       isError.value = true;
-      
+
       if (e is Failure) {
         errorMessage.value = e.message;
         isConnectionError.value = e.isConnectionError;
@@ -63,19 +64,20 @@ class HomeController extends GetxController {
         backgroundColor: Colors.red.withOpacity(0.8),
         colorText: Colors.white,
         duration: const Duration(seconds: 5),
-        mainButton: isConnectionError.value 
-          ? TextButton(
-              onPressed: () => fetchProductsForSection(index), 
-              child: const Text('إعادة محاولة', style: TextStyle(color: Colors.white)))
-          : null,
+        mainButton: isConnectionError.value
+            ? TextButton(
+                onPressed: () => fetchProductsForSection(index),
+                child: const Text(
+                  'إعادة محاولة',
+                  style: TextStyle(color: Colors.white),
+                ),
+              )
+            : null,
       );
     } finally {
       isLoading.value = false;
     }
   }
-
-
-
 
   Future<void> refreshHome() async {
     String? categoryId;
@@ -88,8 +90,11 @@ class HomeController extends GetxController {
       }
     }
 
-    await fetchProductsForSection(selectedSectionIndex.value, categoryId: categoryId);
-    
+    await fetchProductsForSection(
+      selectedSectionIndex.value,
+      categoryId: categoryId,
+    );
+
     if (Get.isRegistered<CategoriesSectionsController>()) {
       await Get.find<CategoriesSectionsController>().fetchCategories();
     }

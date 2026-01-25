@@ -84,7 +84,11 @@ class _OrderCard extends StatelessWidget {
   final bool isDark;
   final bool isAr;
 
-  const _OrderCard({required this.order, required this.isDark, required this.isAr});
+  const _OrderCard({
+    required this.order,
+    required this.isDark,
+    required this.isAr,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +112,9 @@ class _OrderCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () { /* الانتقال لتفاصيل الطلب */ },
+          onTap: () {
+            /* الانتقال لتفاصيل الطلب */
+          },
           child: Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
@@ -122,8 +128,11 @@ class _OrderCard extends StatelessWidget {
                         color: AppColors.primary.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.shopping_bag_outlined, 
-                          size: 18, color: AppColors.primary),
+                      child: Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 18,
+                        color: AppColors.primary,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -131,15 +140,21 @@ class _OrderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isAr ? 'طلب #${order.id.toString().substring(0,6)}' : 'Order #${order.id.toString().substring(0,6)}',
+                            isAr
+                                ? 'طلب #${order.id.toString().substring(0, 6)}'
+                                : 'Order #${order.id.toString().substring(0, 6)}',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            DateFormat('MMM dd, yyyy • hh:mm a').format(order.orderDate),
-                            style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                            DateFormat(
+                              'MMM dd, yyyy • hh:mm a',
+                            ).format(order.orderDate),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -162,14 +177,20 @@ class _OrderCard extends StatelessWidget {
                         children: [
                           Text(
                             order.items?.first.productName ?? '',
-                            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           if ((order.items?.length ?? 0) > 1)
                             Text(
-                              isAr ? '+${order.items!.length - 1} منتجات أخرى' : '+${order.items!.length - 1} items more',
-                              style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary),
+                              isAr
+                                  ? '+${order.items!.length - 1} منتجات أخرى'
+                                  : '+${order.items!.length - 1} items more',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: AppColors.primary,
+                              ),
                             ),
                         ],
                       ),
@@ -186,7 +207,10 @@ class _OrderCard extends StatelessWidget {
                         ),
                         Text(
                           isAr ? 'ج.م' : 'EGP',
-                          style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.grey),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
@@ -210,7 +234,11 @@ class _OrderCard extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -232,7 +260,6 @@ class _OrderCard extends StatelessWidget {
     );
   }
 
-
   Map<String, dynamic> _getStatusData(String status, bool isAr) {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -246,26 +273,16 @@ class _OrderCard extends StatelessWidget {
           'color': AppColors.primary,
         };
       case 'shipped':
-        return {
-          'text': isAr ? 'تم الشحن' : 'Shipped',
-          'color': Colors.blue,
-        };
+        return {'text': isAr ? 'تم الشحن' : 'Shipped', 'color': Colors.blue};
       case 'delivered':
         return {
           'text': isAr ? 'تم التوصيل' : 'Delivered',
           'color': AppColors.success,
         };
       case 'cancelled':
-        return {
-          'text': isAr ? 'ملغي' : 'Cancelled',
-          'color': AppColors.error,
-        };
+        return {'text': isAr ? 'ملغي' : 'Cancelled', 'color': AppColors.error};
       default:
-        return {
-          'text': status.toUpperCase(),
-          'color': AppColors.greyDark,
-        };
+        return {'text': status.toUpperCase(), 'color': AppColors.greyDark};
     }
   }
 }
-

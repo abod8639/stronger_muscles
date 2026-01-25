@@ -14,10 +14,10 @@ class InitialBinding extends Bindings {
     Get.put(ApiService(), permanent: true);
     Get.put(AuthService(), permanent: true);
     Get.put(AddressService(), permanent: true);
-    
+
     // Async service initialization
     Get.putAsync(() => WishlistService().init(), permanent: true);
-    
+
     // Global Controllers
     Get.put(InternetConnectionController(), permanent: true);
     Get.put(LanguageController(), permanent: true);

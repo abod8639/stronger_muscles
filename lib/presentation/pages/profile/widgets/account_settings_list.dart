@@ -7,8 +7,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class AccountSettingsList extends StatelessWidget {
-
-  const AccountSettingsList({ super.key });
+  const AccountSettingsList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +50,21 @@ class AccountSettingsList extends StatelessWidget {
             isDark: isDark,
           ),
           _buildDivider(isDark),
-          Obx(() => _buildSettingItem(
-            icon: themeController.isDarkMode.value 
-                ? Icons.dark_mode_outlined 
-                : Icons.light_mode_outlined,
-            title: AppLocalizations.of(context)!.theme,
-            trailing: Switch(
-              value: themeController.isDarkMode.value,
-              onChanged: (val) => themeController.toggleTheme(),
-              activeThumbColor: AppColors.primary,
+          Obx(
+            () => _buildSettingItem(
+              icon: themeController.isDarkMode.value
+                  ? Icons.dark_mode_outlined
+                  : Icons.light_mode_outlined,
+              title: AppLocalizations.of(context)!.theme,
+              trailing: Switch(
+                value: themeController.isDarkMode.value,
+                onChanged: (val) => themeController.toggleTheme(),
+                activeThumbColor: AppColors.primary,
+              ),
+              onTap: () => themeController.toggleTheme(),
+              isDark: isDark,
             ),
-            onTap: () => themeController.toggleTheme(),
-            isDark: isDark,
-          )),
+          ),
           _buildDivider(isDark),
           _buildSettingItem(
             icon: Icons.notifications_outlined,
@@ -109,34 +110,36 @@ class AccountSettingsList extends StatelessWidget {
 
   void _showLanguageDialog(BuildContext context) {
     final languageController = Get.find<LanguageController>();
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(AppLocalizations.of(context)!.language),
-        content: Obx(() => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: Text(AppLocalizations.of(context)!.english),
-              value: 'en',
-              groupValue: languageController.currentLocale.value.languageCode,
-              onChanged: (value) {
-                languageController.changeLanguage(const Locale('en'));
-                Navigator.pop(context);
-              },
-            ),
-            RadioListTile<String>(
-              title: Text(AppLocalizations.of(context)!.arabic),
-              value: 'ar',
-              groupValue: languageController.currentLocale.value.languageCode,
-              onChanged: (value) {
-                languageController.changeLanguage(const Locale('ar'));
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        )),
+        content: Obx(
+          () => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: Text(AppLocalizations.of(context)!.english),
+                value: 'en',
+                groupValue: languageController.currentLocale.value.languageCode,
+                onChanged: (value) {
+                  languageController.changeLanguage(const Locale('en'));
+                  Navigator.pop(context);
+                },
+              ),
+              RadioListTile<String>(
+                title: Text(AppLocalizations.of(context)!.arabic),
+                value: 'ar',
+                groupValue: languageController.currentLocale.value.languageCode,
+                onChanged: (value) {
+                  languageController.changeLanguage(const Locale('ar'));
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -172,7 +175,8 @@ class AccountSettingsList extends StatelessWidget {
                   ),
                 ),
               ),
-              trailing ?? const Icon(Icons.chevron_right, color: AppColors.greyDark),
+              trailing ??
+                  const Icon(Icons.chevron_right, color: AppColors.greyDark),
             ],
           ),
         ),
@@ -185,7 +189,9 @@ class AccountSettingsList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Divider(
         height: 1,
-        color: isDark ? AppColors.greyDark.withOpacity(0.3) : AppColors.greyMedium.withOpacity(0.3),
+        color: isDark
+            ? AppColors.greyDark.withOpacity(0.3)
+            : AppColors.greyMedium.withOpacity(0.3),
       ),
     );
   }

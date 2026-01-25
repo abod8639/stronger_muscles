@@ -89,16 +89,16 @@ class _ProductContainerState extends State<ProductContainer> {
                 ImageSection(
                   // product: widget.product,
                   widget: widget,
-                  pageController: _pageController, 
-                  selectedImageIndex: _selectedImageIndex
-                  ),
+                  pageController: _pageController,
+                  selectedImageIndex: _selectedImageIndex,
+                ),
                 // Indicators
                 if (widget.showName != null && widget.showName == true)
                   if (widget.product.imageUrls.length > 1)
                     ImageIndicators(
-                      product: widget.product, 
-                      selectedImageIndex: _selectedImageIndex
-                      ),
+                      product: widget.product,
+                      selectedImageIndex: _selectedImageIndex,
+                    ),
               ],
             ),
           ),
@@ -118,27 +118,27 @@ class _ProductContainerState extends State<ProductContainer> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                 Wrap(
-          spacing: 8,
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Text(
-              'LE ${widget.product.effectivePrice.toStringAsFixed(2)}',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            if (widget.product.hasDiscount)
-              Text(
-                'LE ${widget.product.price.toStringAsFixed(2)}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.grey,
-                  decoration: TextDecoration.lineThrough,
-                ),
-              ),
-          ],
-        ),
+                        Wrap(
+                          spacing: 8,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            Text(
+                              'LE ${widget.product.effectivePrice.toStringAsFixed(2)}',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            if (widget.product.hasDiscount)
+                              Text(
+                                'LE ${widget.product.price.toStringAsFixed(2)}',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: Colors.grey,
+                                  decoration: TextDecoration.lineThrough,
+                                ),
+                              ),
+                          ],
+                        ),
                         if (widget.product.reviewCount > 0)
                           Row(
                             children: [

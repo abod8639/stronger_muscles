@@ -9,7 +9,9 @@ part 'address_model.g.dart';
 class AddressModel with _$AddressModel {
   const factory AddressModel({
     @HiveField(0) @JsonKey(fromJson: _parseInt) required int id,
-    @HiveField(1) @JsonKey(name: 'user_id', fromJson: _parseIntNullable) int? userId,
+    @HiveField(1)
+    @JsonKey(name: 'user_id', fromJson: _parseIntNullable)
+    int? userId,
     @HiveField(2) String? label,
     @HiveField(3) @JsonKey(name: 'full_name') String? fullName,
     @HiveField(4) String? phone,
@@ -27,7 +29,8 @@ class AddressModel with _$AddressModel {
 
   const AddressModel._();
 
-  factory AddressModel.fromJson(Map<String, dynamic> json) => _$AddressModelFromJson(json);
+  factory AddressModel.fromJson(Map<String, dynamic> json) =>
+      _$AddressModelFromJson(json);
 
   String get fullAddress => '$street, $city, $state $postalCode, $country';
   String get shortAddress => '$city, $country';

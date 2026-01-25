@@ -1,10 +1,4 @@
-
-enum FailureType {
-  network,
-  server,
-  auth,
-  unknown,
-}
+enum FailureType { network, server, auth, unknown }
 
 class Failure {
   final String message;

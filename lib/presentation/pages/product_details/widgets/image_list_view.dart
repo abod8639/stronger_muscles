@@ -52,7 +52,8 @@ class ImageListView extends StatelessWidget {
     return Builder(
       builder: (context) {
         return Semantics(
-          label: '${AppLocalizations.of(context)!.productImage} ${index + 1} of ${product.imageUrls.length}',
+          label:
+              '${AppLocalizations.of(context)!.productImage} ${index + 1} of ${product.imageUrls.length}',
           button: true,
           child: GestureDetector(
             onTap: () => controller.selectImage(index),
@@ -61,7 +62,9 @@ class ImageListView extends StatelessWidget {
               return AnimatedContainer(
                 duration: _animationDuration,
                 curve: Curves.easeInOut,
-                margin: const EdgeInsets.symmetric(horizontal: _horizontalMargin),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: _horizontalMargin,
+                ),
                 padding: const EdgeInsets.all(_padding),
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -87,7 +90,7 @@ class ImageListView extends StatelessWidget {
             }),
           ),
         );
-      }
+      },
     );
   }
 

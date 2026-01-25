@@ -16,10 +16,7 @@ class WishlistItemCard extends StatelessWidget {
 
   final ProductModel product;
 
-  const WishlistItemCard({
-    super.key,
-    required this.product,
-  });
+  const WishlistItemCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +34,7 @@ class WishlistItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
       child: InkWell(
-        onTap: () => Get.toNamed(
-          AppRoutes.productDetails,
-          arguments: product,
-        ),
+        onTap: () => Get.toNamed(AppRoutes.productDetails, arguments: product),
         borderRadius: BorderRadius.circular(_borderRadius),
         child: Padding(
           padding: const EdgeInsets.all(_contentPadding),

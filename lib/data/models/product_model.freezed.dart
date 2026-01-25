@@ -12,7 +12,8 @@ part of 'product_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ProductModel _$ProductModelFromJson(Map<String, dynamic> json) {
   return _ProductModel.fromJson(json);
@@ -59,8 +60,7 @@ mixin _$ProductModel {
   bool get isActive => throw _privateConstructorUsedError;
   @HiveField(14)
   @JsonKey(name: 'is_background_white')
-  bool get isBackgroundWhite =>
-      throw _privateConstructorUsedError; // Basic Info
+  bool get isBackgroundWhite => throw _privateConstructorUsedError; // Basic Info
   @HiveField(15)
   String? get sku => throw _privateConstructorUsedError;
   @HiveField(16)
@@ -92,8 +92,7 @@ mixin _$ProductModel {
   @JsonKey(name: 'shipping_weight')
   double? get shippingWeight => throw _privateConstructorUsedError;
   @HiveField(26)
-  Map<String, dynamic>? get dimensions =>
-      throw _privateConstructorUsedError; // Additional
+  Map<String, dynamic>? get dimensions => throw _privateConstructorUsedError; // Additional
   @HiveField(27)
   List<String> get ingredients => throw _privateConstructorUsedError;
   @HiveField(28)
@@ -134,59 +133,57 @@ mixin _$ProductModel {
 /// @nodoc
 abstract class $ProductModelCopyWith<$Res> {
   factory $ProductModelCopyWith(
-          ProductModel value, $Res Function(ProductModel) then) =
-      _$ProductModelCopyWithImpl<$Res, ProductModel>;
+    ProductModel value,
+    $Res Function(ProductModel) then,
+  ) = _$ProductModelCopyWithImpl<$Res, ProductModel>;
   @useResult
-  $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String name,
-      @HiveField(2) double price,
-      @HiveField(3) @JsonKey(name: 'discountPrice') double? discountPrice,
-      @HiveField(4) @JsonKey(name: 'imageUrls') List<String> imageUrls,
-      @HiveField(5) String description,
-      @HiveField(6) @JsonKey(name: 'categoryId') String? categoryId,
-      @HiveField(7) @JsonKey(name: 'stockQuantity') int stockQuantity,
-      @HiveField(8) @JsonKey(name: 'averageRating') double averageRating,
-      @HiveField(9) @JsonKey(name: 'reviewCount') int reviewCount,
-      @HiveField(10) String? brand,
-      @HiveField(11) @JsonKey(name: 'servingSize') String? servingSize,
-      @HiveField(12)
-      @JsonKey(name: 'servingsPerContainer')
-      int? servingsPerContainer,
-      @HiveField(13) @JsonKey(name: 'is_active') bool isActive,
-      @HiveField(14)
-      @JsonKey(name: 'is_background_white')
-      bool isBackgroundWhite,
-      @HiveField(15) String? sku,
-      @HiveField(16) List<String> tags,
-      @HiveField(17) double? weight,
-      @HiveField(18) @JsonKey(name: 'size') List<String>? size,
-      @HiveField(19)
-      @JsonKey(name: 'nutrition_facts')
-      Map<String, dynamic>? nutritionFacts,
-      @HiveField(20) bool featured,
-      @HiveField(21) @JsonKey(name: 'new_arrival') bool newArrival,
-      @HiveField(22) @JsonKey(name: 'best_seller') bool bestSeller,
-      @HiveField(23) @JsonKey(name: 'total_sales') int totalSales,
-      @HiveField(24) @JsonKey(name: 'views_count') int viewsCount,
-      @HiveField(25) @JsonKey(name: 'shipping_weight') double? shippingWeight,
-      @HiveField(26) Map<String, dynamic>? dimensions,
-      @HiveField(27) List<String> ingredients,
-      @HiveField(28)
-      @JsonKey(name: 'usage_instructions')
-      String? usageInstructions,
-      @HiveField(29) List<String> warnings,
-      @HiveField(30) @JsonKey(name: 'expiry_date') DateTime? expiryDate,
-      @HiveField(31) String? manufacturer,
-      @HiveField(32)
-      @JsonKey(name: 'country_of_origin')
-      String? countryOfOrigin,
-      @HiveField(33) @JsonKey(name: 'meta_title') String? metaTitle,
-      @HiveField(34) @JsonKey(name: 'meta_description') String? metaDescription,
-      @HiveField(35) String? slug,
-      @HiveField(36) DateTime? createdAt,
-      @HiveField(37) DateTime? updatedAt,
-      @HiveField(38) @JsonKey(name: 'flavors') List<String>? flavors});
+  $Res call({
+    @HiveField(0) String id,
+    @HiveField(1) String name,
+    @HiveField(2) double price,
+    @HiveField(3) @JsonKey(name: 'discountPrice') double? discountPrice,
+    @HiveField(4) @JsonKey(name: 'imageUrls') List<String> imageUrls,
+    @HiveField(5) String description,
+    @HiveField(6) @JsonKey(name: 'categoryId') String? categoryId,
+    @HiveField(7) @JsonKey(name: 'stockQuantity') int stockQuantity,
+    @HiveField(8) @JsonKey(name: 'averageRating') double averageRating,
+    @HiveField(9) @JsonKey(name: 'reviewCount') int reviewCount,
+    @HiveField(10) String? brand,
+    @HiveField(11) @JsonKey(name: 'servingSize') String? servingSize,
+    @HiveField(12)
+    @JsonKey(name: 'servingsPerContainer')
+    int? servingsPerContainer,
+    @HiveField(13) @JsonKey(name: 'is_active') bool isActive,
+    @HiveField(14) @JsonKey(name: 'is_background_white') bool isBackgroundWhite,
+    @HiveField(15) String? sku,
+    @HiveField(16) List<String> tags,
+    @HiveField(17) double? weight,
+    @HiveField(18) @JsonKey(name: 'size') List<String>? size,
+    @HiveField(19)
+    @JsonKey(name: 'nutrition_facts')
+    Map<String, dynamic>? nutritionFacts,
+    @HiveField(20) bool featured,
+    @HiveField(21) @JsonKey(name: 'new_arrival') bool newArrival,
+    @HiveField(22) @JsonKey(name: 'best_seller') bool bestSeller,
+    @HiveField(23) @JsonKey(name: 'total_sales') int totalSales,
+    @HiveField(24) @JsonKey(name: 'views_count') int viewsCount,
+    @HiveField(25) @JsonKey(name: 'shipping_weight') double? shippingWeight,
+    @HiveField(26) Map<String, dynamic>? dimensions,
+    @HiveField(27) List<String> ingredients,
+    @HiveField(28)
+    @JsonKey(name: 'usage_instructions')
+    String? usageInstructions,
+    @HiveField(29) List<String> warnings,
+    @HiveField(30) @JsonKey(name: 'expiry_date') DateTime? expiryDate,
+    @HiveField(31) String? manufacturer,
+    @HiveField(32) @JsonKey(name: 'country_of_origin') String? countryOfOrigin,
+    @HiveField(33) @JsonKey(name: 'meta_title') String? metaTitle,
+    @HiveField(34) @JsonKey(name: 'meta_description') String? metaDescription,
+    @HiveField(35) String? slug,
+    @HiveField(36) DateTime? createdAt,
+    @HiveField(37) DateTime? updatedAt,
+    @HiveField(38) @JsonKey(name: 'flavors') List<String>? flavors,
+  });
 }
 
 /// @nodoc
@@ -242,164 +239,167 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
     Object? updatedAt = freezed,
     Object? flavors = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double,
-      discountPrice: freezed == discountPrice
-          ? _value.discountPrice
-          : discountPrice // ignore: cast_nullable_to_non_nullable
-              as double?,
-      imageUrls: null == imageUrls
-          ? _value.imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryId: freezed == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stockQuantity: null == stockQuantity
-          ? _value.stockQuantity
-          : stockQuantity // ignore: cast_nullable_to_non_nullable
-              as int,
-      averageRating: null == averageRating
-          ? _value.averageRating
-          : averageRating // ignore: cast_nullable_to_non_nullable
-              as double,
-      reviewCount: null == reviewCount
-          ? _value.reviewCount
-          : reviewCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      brand: freezed == brand
-          ? _value.brand
-          : brand // ignore: cast_nullable_to_non_nullable
-              as String?,
-      servingSize: freezed == servingSize
-          ? _value.servingSize
-          : servingSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      servingsPerContainer: freezed == servingsPerContainer
-          ? _value.servingsPerContainer
-          : servingsPerContainer // ignore: cast_nullable_to_non_nullable
-              as int?,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isBackgroundWhite: null == isBackgroundWhite
-          ? _value.isBackgroundWhite
-          : isBackgroundWhite // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sku: freezed == sku
-          ? _value.sku
-          : sku // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      weight: freezed == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      size: freezed == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      nutritionFacts: freezed == nutritionFacts
-          ? _value.nutritionFacts
-          : nutritionFacts // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      featured: null == featured
-          ? _value.featured
-          : featured // ignore: cast_nullable_to_non_nullable
-              as bool,
-      newArrival: null == newArrival
-          ? _value.newArrival
-          : newArrival // ignore: cast_nullable_to_non_nullable
-              as bool,
-      bestSeller: null == bestSeller
-          ? _value.bestSeller
-          : bestSeller // ignore: cast_nullable_to_non_nullable
-              as bool,
-      totalSales: null == totalSales
-          ? _value.totalSales
-          : totalSales // ignore: cast_nullable_to_non_nullable
-              as int,
-      viewsCount: null == viewsCount
-          ? _value.viewsCount
-          : viewsCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      shippingWeight: freezed == shippingWeight
-          ? _value.shippingWeight
-          : shippingWeight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      dimensions: freezed == dimensions
-          ? _value.dimensions
-          : dimensions // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      ingredients: null == ingredients
-          ? _value.ingredients
-          : ingredients // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      usageInstructions: freezed == usageInstructions
-          ? _value.usageInstructions
-          : usageInstructions // ignore: cast_nullable_to_non_nullable
-              as String?,
-      warnings: null == warnings
-          ? _value.warnings
-          : warnings // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      expiryDate: freezed == expiryDate
-          ? _value.expiryDate
-          : expiryDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      manufacturer: freezed == manufacturer
-          ? _value.manufacturer
-          : manufacturer // ignore: cast_nullable_to_non_nullable
-              as String?,
-      countryOfOrigin: freezed == countryOfOrigin
-          ? _value.countryOfOrigin
-          : countryOfOrigin // ignore: cast_nullable_to_non_nullable
-              as String?,
-      metaTitle: freezed == metaTitle
-          ? _value.metaTitle
-          : metaTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      metaDescription: freezed == metaDescription
-          ? _value.metaDescription
-          : metaDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      flavors: freezed == flavors
-          ? _value.flavors
-          : flavors // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: null == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as String,
+            price: null == price
+                ? _value.price
+                : price // ignore: cast_nullable_to_non_nullable
+                      as double,
+            discountPrice: freezed == discountPrice
+                ? _value.discountPrice
+                : discountPrice // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            imageUrls: null == imageUrls
+                ? _value.imageUrls
+                : imageUrls // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            description: null == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String,
+            categoryId: freezed == categoryId
+                ? _value.categoryId
+                : categoryId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            stockQuantity: null == stockQuantity
+                ? _value.stockQuantity
+                : stockQuantity // ignore: cast_nullable_to_non_nullable
+                      as int,
+            averageRating: null == averageRating
+                ? _value.averageRating
+                : averageRating // ignore: cast_nullable_to_non_nullable
+                      as double,
+            reviewCount: null == reviewCount
+                ? _value.reviewCount
+                : reviewCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            brand: freezed == brand
+                ? _value.brand
+                : brand // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            servingSize: freezed == servingSize
+                ? _value.servingSize
+                : servingSize // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            servingsPerContainer: freezed == servingsPerContainer
+                ? _value.servingsPerContainer
+                : servingsPerContainer // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            isActive: null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            isBackgroundWhite: null == isBackgroundWhite
+                ? _value.isBackgroundWhite
+                : isBackgroundWhite // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            sku: freezed == sku
+                ? _value.sku
+                : sku // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            tags: null == tags
+                ? _value.tags
+                : tags // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            weight: freezed == weight
+                ? _value.weight
+                : weight // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            size: freezed == size
+                ? _value.size
+                : size // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+            nutritionFacts: freezed == nutritionFacts
+                ? _value.nutritionFacts
+                : nutritionFacts // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
+            featured: null == featured
+                ? _value.featured
+                : featured // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            newArrival: null == newArrival
+                ? _value.newArrival
+                : newArrival // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            bestSeller: null == bestSeller
+                ? _value.bestSeller
+                : bestSeller // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            totalSales: null == totalSales
+                ? _value.totalSales
+                : totalSales // ignore: cast_nullable_to_non_nullable
+                      as int,
+            viewsCount: null == viewsCount
+                ? _value.viewsCount
+                : viewsCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+            shippingWeight: freezed == shippingWeight
+                ? _value.shippingWeight
+                : shippingWeight // ignore: cast_nullable_to_non_nullable
+                      as double?,
+            dimensions: freezed == dimensions
+                ? _value.dimensions
+                : dimensions // ignore: cast_nullable_to_non_nullable
+                      as Map<String, dynamic>?,
+            ingredients: null == ingredients
+                ? _value.ingredients
+                : ingredients // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            usageInstructions: freezed == usageInstructions
+                ? _value.usageInstructions
+                : usageInstructions // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            warnings: null == warnings
+                ? _value.warnings
+                : warnings // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            expiryDate: freezed == expiryDate
+                ? _value.expiryDate
+                : expiryDate // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            manufacturer: freezed == manufacturer
+                ? _value.manufacturer
+                : manufacturer // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            countryOfOrigin: freezed == countryOfOrigin
+                ? _value.countryOfOrigin
+                : countryOfOrigin // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            metaTitle: freezed == metaTitle
+                ? _value.metaTitle
+                : metaTitle // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            metaDescription: freezed == metaDescription
+                ? _value.metaDescription
+                : metaDescription // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            slug: freezed == slug
+                ? _value.slug
+                : slug // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            flavors: freezed == flavors
+                ? _value.flavors
+                : flavors // ignore: cast_nullable_to_non_nullable
+                      as List<String>?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -407,60 +407,58 @@ class _$ProductModelCopyWithImpl<$Res, $Val extends ProductModel>
 abstract class _$$ProductModelImplCopyWith<$Res>
     implements $ProductModelCopyWith<$Res> {
   factory _$$ProductModelImplCopyWith(
-          _$ProductModelImpl value, $Res Function(_$ProductModelImpl) then) =
-      __$$ProductModelImplCopyWithImpl<$Res>;
+    _$ProductModelImpl value,
+    $Res Function(_$ProductModelImpl) then,
+  ) = __$$ProductModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) String name,
-      @HiveField(2) double price,
-      @HiveField(3) @JsonKey(name: 'discountPrice') double? discountPrice,
-      @HiveField(4) @JsonKey(name: 'imageUrls') List<String> imageUrls,
-      @HiveField(5) String description,
-      @HiveField(6) @JsonKey(name: 'categoryId') String? categoryId,
-      @HiveField(7) @JsonKey(name: 'stockQuantity') int stockQuantity,
-      @HiveField(8) @JsonKey(name: 'averageRating') double averageRating,
-      @HiveField(9) @JsonKey(name: 'reviewCount') int reviewCount,
-      @HiveField(10) String? brand,
-      @HiveField(11) @JsonKey(name: 'servingSize') String? servingSize,
-      @HiveField(12)
-      @JsonKey(name: 'servingsPerContainer')
-      int? servingsPerContainer,
-      @HiveField(13) @JsonKey(name: 'is_active') bool isActive,
-      @HiveField(14)
-      @JsonKey(name: 'is_background_white')
-      bool isBackgroundWhite,
-      @HiveField(15) String? sku,
-      @HiveField(16) List<String> tags,
-      @HiveField(17) double? weight,
-      @HiveField(18) @JsonKey(name: 'size') List<String>? size,
-      @HiveField(19)
-      @JsonKey(name: 'nutrition_facts')
-      Map<String, dynamic>? nutritionFacts,
-      @HiveField(20) bool featured,
-      @HiveField(21) @JsonKey(name: 'new_arrival') bool newArrival,
-      @HiveField(22) @JsonKey(name: 'best_seller') bool bestSeller,
-      @HiveField(23) @JsonKey(name: 'total_sales') int totalSales,
-      @HiveField(24) @JsonKey(name: 'views_count') int viewsCount,
-      @HiveField(25) @JsonKey(name: 'shipping_weight') double? shippingWeight,
-      @HiveField(26) Map<String, dynamic>? dimensions,
-      @HiveField(27) List<String> ingredients,
-      @HiveField(28)
-      @JsonKey(name: 'usage_instructions')
-      String? usageInstructions,
-      @HiveField(29) List<String> warnings,
-      @HiveField(30) @JsonKey(name: 'expiry_date') DateTime? expiryDate,
-      @HiveField(31) String? manufacturer,
-      @HiveField(32)
-      @JsonKey(name: 'country_of_origin')
-      String? countryOfOrigin,
-      @HiveField(33) @JsonKey(name: 'meta_title') String? metaTitle,
-      @HiveField(34) @JsonKey(name: 'meta_description') String? metaDescription,
-      @HiveField(35) String? slug,
-      @HiveField(36) DateTime? createdAt,
-      @HiveField(37) DateTime? updatedAt,
-      @HiveField(38) @JsonKey(name: 'flavors') List<String>? flavors});
+  $Res call({
+    @HiveField(0) String id,
+    @HiveField(1) String name,
+    @HiveField(2) double price,
+    @HiveField(3) @JsonKey(name: 'discountPrice') double? discountPrice,
+    @HiveField(4) @JsonKey(name: 'imageUrls') List<String> imageUrls,
+    @HiveField(5) String description,
+    @HiveField(6) @JsonKey(name: 'categoryId') String? categoryId,
+    @HiveField(7) @JsonKey(name: 'stockQuantity') int stockQuantity,
+    @HiveField(8) @JsonKey(name: 'averageRating') double averageRating,
+    @HiveField(9) @JsonKey(name: 'reviewCount') int reviewCount,
+    @HiveField(10) String? brand,
+    @HiveField(11) @JsonKey(name: 'servingSize') String? servingSize,
+    @HiveField(12)
+    @JsonKey(name: 'servingsPerContainer')
+    int? servingsPerContainer,
+    @HiveField(13) @JsonKey(name: 'is_active') bool isActive,
+    @HiveField(14) @JsonKey(name: 'is_background_white') bool isBackgroundWhite,
+    @HiveField(15) String? sku,
+    @HiveField(16) List<String> tags,
+    @HiveField(17) double? weight,
+    @HiveField(18) @JsonKey(name: 'size') List<String>? size,
+    @HiveField(19)
+    @JsonKey(name: 'nutrition_facts')
+    Map<String, dynamic>? nutritionFacts,
+    @HiveField(20) bool featured,
+    @HiveField(21) @JsonKey(name: 'new_arrival') bool newArrival,
+    @HiveField(22) @JsonKey(name: 'best_seller') bool bestSeller,
+    @HiveField(23) @JsonKey(name: 'total_sales') int totalSales,
+    @HiveField(24) @JsonKey(name: 'views_count') int viewsCount,
+    @HiveField(25) @JsonKey(name: 'shipping_weight') double? shippingWeight,
+    @HiveField(26) Map<String, dynamic>? dimensions,
+    @HiveField(27) List<String> ingredients,
+    @HiveField(28)
+    @JsonKey(name: 'usage_instructions')
+    String? usageInstructions,
+    @HiveField(29) List<String> warnings,
+    @HiveField(30) @JsonKey(name: 'expiry_date') DateTime? expiryDate,
+    @HiveField(31) String? manufacturer,
+    @HiveField(32) @JsonKey(name: 'country_of_origin') String? countryOfOrigin,
+    @HiveField(33) @JsonKey(name: 'meta_title') String? metaTitle,
+    @HiveField(34) @JsonKey(name: 'meta_description') String? metaDescription,
+    @HiveField(35) String? slug,
+    @HiveField(36) DateTime? createdAt,
+    @HiveField(37) DateTime? updatedAt,
+    @HiveField(38) @JsonKey(name: 'flavors') List<String>? flavors,
+  });
 }
 
 /// @nodoc
@@ -468,8 +466,9 @@ class __$$ProductModelImplCopyWithImpl<$Res>
     extends _$ProductModelCopyWithImpl<$Res, _$ProductModelImpl>
     implements _$$ProductModelImplCopyWith<$Res> {
   __$$ProductModelImplCopyWithImpl(
-      _$ProductModelImpl _value, $Res Function(_$ProductModelImpl) _then)
-      : super(_value, _then);
+    _$ProductModelImpl _value,
+    $Res Function(_$ProductModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -514,231 +513,231 @@ class __$$ProductModelImplCopyWithImpl<$Res>
     Object? updatedAt = freezed,
     Object? flavors = freezed,
   }) {
-    return _then(_$ProductModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double,
-      discountPrice: freezed == discountPrice
-          ? _value.discountPrice
-          : discountPrice // ignore: cast_nullable_to_non_nullable
-              as double?,
-      imageUrls: null == imageUrls
-          ? _value._imageUrls
-          : imageUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      categoryId: freezed == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      stockQuantity: null == stockQuantity
-          ? _value.stockQuantity
-          : stockQuantity // ignore: cast_nullable_to_non_nullable
-              as int,
-      averageRating: null == averageRating
-          ? _value.averageRating
-          : averageRating // ignore: cast_nullable_to_non_nullable
-              as double,
-      reviewCount: null == reviewCount
-          ? _value.reviewCount
-          : reviewCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      brand: freezed == brand
-          ? _value.brand
-          : brand // ignore: cast_nullable_to_non_nullable
-              as String?,
-      servingSize: freezed == servingSize
-          ? _value.servingSize
-          : servingSize // ignore: cast_nullable_to_non_nullable
-              as String?,
-      servingsPerContainer: freezed == servingsPerContainer
-          ? _value.servingsPerContainer
-          : servingsPerContainer // ignore: cast_nullable_to_non_nullable
-              as int?,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isBackgroundWhite: null == isBackgroundWhite
-          ? _value.isBackgroundWhite
-          : isBackgroundWhite // ignore: cast_nullable_to_non_nullable
-              as bool,
-      sku: freezed == sku
-          ? _value.sku
-          : sku // ignore: cast_nullable_to_non_nullable
-              as String?,
-      tags: null == tags
-          ? _value._tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      weight: freezed == weight
-          ? _value.weight
-          : weight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      size: freezed == size
-          ? _value._size
-          : size // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      nutritionFacts: freezed == nutritionFacts
-          ? _value._nutritionFacts
-          : nutritionFacts // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      featured: null == featured
-          ? _value.featured
-          : featured // ignore: cast_nullable_to_non_nullable
-              as bool,
-      newArrival: null == newArrival
-          ? _value.newArrival
-          : newArrival // ignore: cast_nullable_to_non_nullable
-              as bool,
-      bestSeller: null == bestSeller
-          ? _value.bestSeller
-          : bestSeller // ignore: cast_nullable_to_non_nullable
-              as bool,
-      totalSales: null == totalSales
-          ? _value.totalSales
-          : totalSales // ignore: cast_nullable_to_non_nullable
-              as int,
-      viewsCount: null == viewsCount
-          ? _value.viewsCount
-          : viewsCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      shippingWeight: freezed == shippingWeight
-          ? _value.shippingWeight
-          : shippingWeight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      dimensions: freezed == dimensions
-          ? _value._dimensions
-          : dimensions // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>?,
-      ingredients: null == ingredients
-          ? _value._ingredients
-          : ingredients // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      usageInstructions: freezed == usageInstructions
-          ? _value.usageInstructions
-          : usageInstructions // ignore: cast_nullable_to_non_nullable
-              as String?,
-      warnings: null == warnings
-          ? _value._warnings
-          : warnings // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      expiryDate: freezed == expiryDate
-          ? _value.expiryDate
-          : expiryDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      manufacturer: freezed == manufacturer
-          ? _value.manufacturer
-          : manufacturer // ignore: cast_nullable_to_non_nullable
-              as String?,
-      countryOfOrigin: freezed == countryOfOrigin
-          ? _value.countryOfOrigin
-          : countryOfOrigin // ignore: cast_nullable_to_non_nullable
-              as String?,
-      metaTitle: freezed == metaTitle
-          ? _value.metaTitle
-          : metaTitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      metaDescription: freezed == metaDescription
-          ? _value.metaDescription
-          : metaDescription // ignore: cast_nullable_to_non_nullable
-              as String?,
-      slug: freezed == slug
-          ? _value.slug
-          : slug // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      flavors: freezed == flavors
-          ? _value._flavors
-          : flavors // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ));
+    return _then(
+      _$ProductModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: null == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as String,
+        price: null == price
+            ? _value.price
+            : price // ignore: cast_nullable_to_non_nullable
+                  as double,
+        discountPrice: freezed == discountPrice
+            ? _value.discountPrice
+            : discountPrice // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        imageUrls: null == imageUrls
+            ? _value._imageUrls
+            : imageUrls // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        description: null == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String,
+        categoryId: freezed == categoryId
+            ? _value.categoryId
+            : categoryId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        stockQuantity: null == stockQuantity
+            ? _value.stockQuantity
+            : stockQuantity // ignore: cast_nullable_to_non_nullable
+                  as int,
+        averageRating: null == averageRating
+            ? _value.averageRating
+            : averageRating // ignore: cast_nullable_to_non_nullable
+                  as double,
+        reviewCount: null == reviewCount
+            ? _value.reviewCount
+            : reviewCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        brand: freezed == brand
+            ? _value.brand
+            : brand // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        servingSize: freezed == servingSize
+            ? _value.servingSize
+            : servingSize // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        servingsPerContainer: freezed == servingsPerContainer
+            ? _value.servingsPerContainer
+            : servingsPerContainer // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        isActive: null == isActive
+            ? _value.isActive
+            : isActive // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        isBackgroundWhite: null == isBackgroundWhite
+            ? _value.isBackgroundWhite
+            : isBackgroundWhite // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        sku: freezed == sku
+            ? _value.sku
+            : sku // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        tags: null == tags
+            ? _value._tags
+            : tags // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        weight: freezed == weight
+            ? _value.weight
+            : weight // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        size: freezed == size
+            ? _value._size
+            : size // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+        nutritionFacts: freezed == nutritionFacts
+            ? _value._nutritionFacts
+            : nutritionFacts // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
+        featured: null == featured
+            ? _value.featured
+            : featured // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        newArrival: null == newArrival
+            ? _value.newArrival
+            : newArrival // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        bestSeller: null == bestSeller
+            ? _value.bestSeller
+            : bestSeller // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        totalSales: null == totalSales
+            ? _value.totalSales
+            : totalSales // ignore: cast_nullable_to_non_nullable
+                  as int,
+        viewsCount: null == viewsCount
+            ? _value.viewsCount
+            : viewsCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+        shippingWeight: freezed == shippingWeight
+            ? _value.shippingWeight
+            : shippingWeight // ignore: cast_nullable_to_non_nullable
+                  as double?,
+        dimensions: freezed == dimensions
+            ? _value._dimensions
+            : dimensions // ignore: cast_nullable_to_non_nullable
+                  as Map<String, dynamic>?,
+        ingredients: null == ingredients
+            ? _value._ingredients
+            : ingredients // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        usageInstructions: freezed == usageInstructions
+            ? _value.usageInstructions
+            : usageInstructions // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        warnings: null == warnings
+            ? _value._warnings
+            : warnings // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        expiryDate: freezed == expiryDate
+            ? _value.expiryDate
+            : expiryDate // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        manufacturer: freezed == manufacturer
+            ? _value.manufacturer
+            : manufacturer // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        countryOfOrigin: freezed == countryOfOrigin
+            ? _value.countryOfOrigin
+            : countryOfOrigin // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        metaTitle: freezed == metaTitle
+            ? _value.metaTitle
+            : metaTitle // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        metaDescription: freezed == metaDescription
+            ? _value.metaDescription
+            : metaDescription // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        slug: freezed == slug
+            ? _value.slug
+            : slug // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        flavors: freezed == flavors
+            ? _value._flavors
+            : flavors // ignore: cast_nullable_to_non_nullable
+                  as List<String>?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ProductModelImpl extends _ProductModel {
-  const _$ProductModelImpl(
-      {@HiveField(0) required this.id,
-      @HiveField(1) required this.name,
-      @HiveField(2) required this.price,
-      @HiveField(3) @JsonKey(name: 'discountPrice') this.discountPrice,
-      @HiveField(4)
-      @JsonKey(name: 'imageUrls')
-      final List<String> imageUrls = const [],
-      @HiveField(5) this.description = '',
-      @HiveField(6) @JsonKey(name: 'categoryId') this.categoryId,
-      @HiveField(7) @JsonKey(name: 'stockQuantity') this.stockQuantity = 0,
-      @HiveField(8) @JsonKey(name: 'averageRating') this.averageRating = 0.0,
-      @HiveField(9) @JsonKey(name: 'reviewCount') this.reviewCount = 0,
-      @HiveField(10) this.brand,
-      @HiveField(11) @JsonKey(name: 'servingSize') this.servingSize,
-      @HiveField(12)
-      @JsonKey(name: 'servingsPerContainer')
-      this.servingsPerContainer,
-      @HiveField(13) @JsonKey(name: 'is_active') this.isActive = true,
-      @HiveField(14)
-      @JsonKey(name: 'is_background_white')
-      this.isBackgroundWhite = false,
-      @HiveField(15) this.sku,
-      @HiveField(16) final List<String> tags = const [],
-      @HiveField(17) this.weight,
-      @HiveField(18) @JsonKey(name: 'size') final List<String>? size = const [],
-      @HiveField(19)
-      @JsonKey(name: 'nutrition_facts')
-      final Map<String, dynamic>? nutritionFacts,
-      @HiveField(20) this.featured = false,
-      @HiveField(21) @JsonKey(name: 'new_arrival') this.newArrival = false,
-      @HiveField(22) @JsonKey(name: 'best_seller') this.bestSeller = false,
-      @HiveField(23) @JsonKey(name: 'total_sales') this.totalSales = 0,
-      @HiveField(24) @JsonKey(name: 'views_count') this.viewsCount = 0,
-      @HiveField(25) @JsonKey(name: 'shipping_weight') this.shippingWeight,
-      @HiveField(26) final Map<String, dynamic>? dimensions,
-      @HiveField(27) final List<String> ingredients = const [],
-      @HiveField(28)
-      @JsonKey(name: 'usage_instructions')
-      this.usageInstructions,
-      @HiveField(29) final List<String> warnings = const [],
-      @HiveField(30) @JsonKey(name: 'expiry_date') this.expiryDate,
-      @HiveField(31) this.manufacturer,
-      @HiveField(32) @JsonKey(name: 'country_of_origin') this.countryOfOrigin,
-      @HiveField(33) @JsonKey(name: 'meta_title') this.metaTitle,
-      @HiveField(34) @JsonKey(name: 'meta_description') this.metaDescription,
-      @HiveField(35) this.slug,
-      @HiveField(36) this.createdAt,
-      @HiveField(37) this.updatedAt,
-      @HiveField(38)
-      @JsonKey(name: 'flavors')
-      final List<String>? flavors = const []})
-      : _imageUrls = imageUrls,
-        _tags = tags,
-        _size = size,
-        _nutritionFacts = nutritionFacts,
-        _dimensions = dimensions,
-        _ingredients = ingredients,
-        _warnings = warnings,
-        _flavors = flavors,
-        super._();
+  const _$ProductModelImpl({
+    @HiveField(0) required this.id,
+    @HiveField(1) required this.name,
+    @HiveField(2) required this.price,
+    @HiveField(3) @JsonKey(name: 'discountPrice') this.discountPrice,
+    @HiveField(4)
+    @JsonKey(name: 'imageUrls')
+    final List<String> imageUrls = const [],
+    @HiveField(5) this.description = '',
+    @HiveField(6) @JsonKey(name: 'categoryId') this.categoryId,
+    @HiveField(7) @JsonKey(name: 'stockQuantity') this.stockQuantity = 0,
+    @HiveField(8) @JsonKey(name: 'averageRating') this.averageRating = 0.0,
+    @HiveField(9) @JsonKey(name: 'reviewCount') this.reviewCount = 0,
+    @HiveField(10) this.brand,
+    @HiveField(11) @JsonKey(name: 'servingSize') this.servingSize,
+    @HiveField(12)
+    @JsonKey(name: 'servingsPerContainer')
+    this.servingsPerContainer,
+    @HiveField(13) @JsonKey(name: 'is_active') this.isActive = true,
+    @HiveField(14)
+    @JsonKey(name: 'is_background_white')
+    this.isBackgroundWhite = false,
+    @HiveField(15) this.sku,
+    @HiveField(16) final List<String> tags = const [],
+    @HiveField(17) this.weight,
+    @HiveField(18) @JsonKey(name: 'size') final List<String>? size = const [],
+    @HiveField(19)
+    @JsonKey(name: 'nutrition_facts')
+    final Map<String, dynamic>? nutritionFacts,
+    @HiveField(20) this.featured = false,
+    @HiveField(21) @JsonKey(name: 'new_arrival') this.newArrival = false,
+    @HiveField(22) @JsonKey(name: 'best_seller') this.bestSeller = false,
+    @HiveField(23) @JsonKey(name: 'total_sales') this.totalSales = 0,
+    @HiveField(24) @JsonKey(name: 'views_count') this.viewsCount = 0,
+    @HiveField(25) @JsonKey(name: 'shipping_weight') this.shippingWeight,
+    @HiveField(26) final Map<String, dynamic>? dimensions,
+    @HiveField(27) final List<String> ingredients = const [],
+    @HiveField(28) @JsonKey(name: 'usage_instructions') this.usageInstructions,
+    @HiveField(29) final List<String> warnings = const [],
+    @HiveField(30) @JsonKey(name: 'expiry_date') this.expiryDate,
+    @HiveField(31) this.manufacturer,
+    @HiveField(32) @JsonKey(name: 'country_of_origin') this.countryOfOrigin,
+    @HiveField(33) @JsonKey(name: 'meta_title') this.metaTitle,
+    @HiveField(34) @JsonKey(name: 'meta_description') this.metaDescription,
+    @HiveField(35) this.slug,
+    @HiveField(36) this.createdAt,
+    @HiveField(37) this.updatedAt,
+    @HiveField(38)
+    @JsonKey(name: 'flavors')
+    final List<String>? flavors = const [],
+  }) : _imageUrls = imageUrls,
+       _tags = tags,
+       _size = size,
+       _nutritionFacts = nutritionFacts,
+       _dimensions = dimensions,
+       _ingredients = ingredients,
+       _warnings = warnings,
+       _flavors = flavors,
+       super._();
 
   factory _$ProductModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductModelImplFromJson(json);
@@ -805,7 +804,7 @@ class _$ProductModelImpl extends _ProductModel {
   @HiveField(14)
   @JsonKey(name: 'is_background_white')
   final bool isBackgroundWhite;
-// Basic Info
+  // Basic Info
   @override
   @HiveField(15)
   final String? sku;
@@ -834,9 +833,9 @@ class _$ProductModelImpl extends _ProductModel {
     return EqualUnmodifiableListView(value);
   }
 
-// Nutrition
+  // Nutrition
   final Map<String, dynamic>? _nutritionFacts;
-// Nutrition
+  // Nutrition
   @override
   @HiveField(19)
   @JsonKey(name: 'nutrition_facts')
@@ -848,7 +847,7 @@ class _$ProductModelImpl extends _ProductModel {
     return EqualUnmodifiableMapView(value);
   }
 
-// Marketing
+  // Marketing
   @override
   @JsonKey()
   @HiveField(20)
@@ -869,7 +868,7 @@ class _$ProductModelImpl extends _ProductModel {
   @HiveField(24)
   @JsonKey(name: 'views_count')
   final int viewsCount;
-// Shipping
+  // Shipping
   @override
   @HiveField(25)
   @JsonKey(name: 'shipping_weight')
@@ -885,9 +884,9 @@ class _$ProductModelImpl extends _ProductModel {
     return EqualUnmodifiableMapView(value);
   }
 
-// Additional
+  // Additional
   final List<String> _ingredients;
-// Additional
+  // Additional
   @override
   @JsonKey()
   @HiveField(27)
@@ -922,7 +921,7 @@ class _$ProductModelImpl extends _ProductModel {
   @HiveField(32)
   @JsonKey(name: 'country_of_origin')
   final String? countryOfOrigin;
-// SEO
+  // SEO
   @override
   @HiveField(33)
   @JsonKey(name: 'meta_title')
@@ -934,7 +933,7 @@ class _$ProductModelImpl extends _ProductModel {
   @override
   @HiveField(35)
   final String? slug;
-// Timestamps
+  // Timestamps
   @override
   @HiveField(36)
   final DateTime? createdAt;
@@ -968,8 +967,10 @@ class _$ProductModelImpl extends _ProductModel {
             (identical(other.price, price) || other.price == price) &&
             (identical(other.discountPrice, discountPrice) ||
                 other.discountPrice == discountPrice) &&
-            const DeepCollectionEquality()
-                .equals(other._imageUrls, _imageUrls) &&
+            const DeepCollectionEquality().equals(
+              other._imageUrls,
+              _imageUrls,
+            ) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.categoryId, categoryId) ||
@@ -993,8 +994,10 @@ class _$ProductModelImpl extends _ProductModel {
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.weight, weight) || other.weight == weight) &&
             const DeepCollectionEquality().equals(other._size, _size) &&
-            const DeepCollectionEquality()
-                .equals(other._nutritionFacts, _nutritionFacts) &&
+            const DeepCollectionEquality().equals(
+              other._nutritionFacts,
+              _nutritionFacts,
+            ) &&
             (identical(other.featured, featured) ||
                 other.featured == featured) &&
             (identical(other.newArrival, newArrival) ||
@@ -1007,10 +1010,14 @@ class _$ProductModelImpl extends _ProductModel {
                 other.viewsCount == viewsCount) &&
             (identical(other.shippingWeight, shippingWeight) ||
                 other.shippingWeight == shippingWeight) &&
-            const DeepCollectionEquality()
-                .equals(other._dimensions, _dimensions) &&
-            const DeepCollectionEquality()
-                .equals(other._ingredients, _ingredients) &&
+            const DeepCollectionEquality().equals(
+              other._dimensions,
+              _dimensions,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._ingredients,
+              _ingredients,
+            ) &&
             (identical(other.usageInstructions, usageInstructions) ||
                 other.usageInstructions == usageInstructions) &&
             const DeepCollectionEquality().equals(other._warnings, _warnings) &&
@@ -1035,47 +1042,47 @@ class _$ProductModelImpl extends _ProductModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
-        runtimeType,
-        id,
-        name,
-        price,
-        discountPrice,
-        const DeepCollectionEquality().hash(_imageUrls),
-        description,
-        categoryId,
-        stockQuantity,
-        averageRating,
-        reviewCount,
-        brand,
-        servingSize,
-        servingsPerContainer,
-        isActive,
-        isBackgroundWhite,
-        sku,
-        const DeepCollectionEquality().hash(_tags),
-        weight,
-        const DeepCollectionEquality().hash(_size),
-        const DeepCollectionEquality().hash(_nutritionFacts),
-        featured,
-        newArrival,
-        bestSeller,
-        totalSales,
-        viewsCount,
-        shippingWeight,
-        const DeepCollectionEquality().hash(_dimensions),
-        const DeepCollectionEquality().hash(_ingredients),
-        usageInstructions,
-        const DeepCollectionEquality().hash(_warnings),
-        expiryDate,
-        manufacturer,
-        countryOfOrigin,
-        metaTitle,
-        metaDescription,
-        slug,
-        createdAt,
-        updatedAt,
-        const DeepCollectionEquality().hash(_flavors)
-      ]);
+    runtimeType,
+    id,
+    name,
+    price,
+    discountPrice,
+    const DeepCollectionEquality().hash(_imageUrls),
+    description,
+    categoryId,
+    stockQuantity,
+    averageRating,
+    reviewCount,
+    brand,
+    servingSize,
+    servingsPerContainer,
+    isActive,
+    isBackgroundWhite,
+    sku,
+    const DeepCollectionEquality().hash(_tags),
+    weight,
+    const DeepCollectionEquality().hash(_size),
+    const DeepCollectionEquality().hash(_nutritionFacts),
+    featured,
+    newArrival,
+    bestSeller,
+    totalSales,
+    viewsCount,
+    shippingWeight,
+    const DeepCollectionEquality().hash(_dimensions),
+    const DeepCollectionEquality().hash(_ingredients),
+    usageInstructions,
+    const DeepCollectionEquality().hash(_warnings),
+    expiryDate,
+    manufacturer,
+    countryOfOrigin,
+    metaTitle,
+    metaDescription,
+    slug,
+    createdAt,
+    updatedAt,
+    const DeepCollectionEquality().hash(_flavors),
+  ]);
 
   @JsonKey(ignore: true)
   @override
@@ -1085,69 +1092,66 @@ class _$ProductModelImpl extends _ProductModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProductModelImplToJson(
-      this,
-    );
+    return _$$ProductModelImplToJson(this);
   }
 }
 
 abstract class _ProductModel extends ProductModel {
-  const factory _ProductModel(
-      {@HiveField(0) required final String id,
-      @HiveField(1) required final String name,
-      @HiveField(2) required final double price,
-      @HiveField(3) @JsonKey(name: 'discountPrice') final double? discountPrice,
-      @HiveField(4) @JsonKey(name: 'imageUrls') final List<String> imageUrls,
-      @HiveField(5) final String description,
-      @HiveField(6) @JsonKey(name: 'categoryId') final String? categoryId,
-      @HiveField(7) @JsonKey(name: 'stockQuantity') final int stockQuantity,
-      @HiveField(8) @JsonKey(name: 'averageRating') final double averageRating,
-      @HiveField(9) @JsonKey(name: 'reviewCount') final int reviewCount,
-      @HiveField(10) final String? brand,
-      @HiveField(11) @JsonKey(name: 'servingSize') final String? servingSize,
-      @HiveField(12)
-      @JsonKey(name: 'servingsPerContainer')
-      final int? servingsPerContainer,
-      @HiveField(13) @JsonKey(name: 'is_active') final bool isActive,
-      @HiveField(14)
-      @JsonKey(name: 'is_background_white')
-      final bool isBackgroundWhite,
-      @HiveField(15) final String? sku,
-      @HiveField(16) final List<String> tags,
-      @HiveField(17) final double? weight,
-      @HiveField(18) @JsonKey(name: 'size') final List<String>? size,
-      @HiveField(19)
-      @JsonKey(name: 'nutrition_facts')
-      final Map<String, dynamic>? nutritionFacts,
-      @HiveField(20) final bool featured,
-      @HiveField(21) @JsonKey(name: 'new_arrival') final bool newArrival,
-      @HiveField(22) @JsonKey(name: 'best_seller') final bool bestSeller,
-      @HiveField(23) @JsonKey(name: 'total_sales') final int totalSales,
-      @HiveField(24) @JsonKey(name: 'views_count') final int viewsCount,
-      @HiveField(25)
-      @JsonKey(name: 'shipping_weight')
-      final double? shippingWeight,
-      @HiveField(26) final Map<String, dynamic>? dimensions,
-      @HiveField(27) final List<String> ingredients,
-      @HiveField(28)
-      @JsonKey(name: 'usage_instructions')
-      final String? usageInstructions,
-      @HiveField(29) final List<String> warnings,
-      @HiveField(30) @JsonKey(name: 'expiry_date') final DateTime? expiryDate,
-      @HiveField(31) final String? manufacturer,
-      @HiveField(32)
-      @JsonKey(name: 'country_of_origin')
-      final String? countryOfOrigin,
-      @HiveField(33) @JsonKey(name: 'meta_title') final String? metaTitle,
-      @HiveField(34)
-      @JsonKey(name: 'meta_description')
-      final String? metaDescription,
-      @HiveField(35) final String? slug,
-      @HiveField(36) final DateTime? createdAt,
-      @HiveField(37) final DateTime? updatedAt,
-      @HiveField(38)
-      @JsonKey(name: 'flavors')
-      final List<String>? flavors}) = _$ProductModelImpl;
+  const factory _ProductModel({
+    @HiveField(0) required final String id,
+    @HiveField(1) required final String name,
+    @HiveField(2) required final double price,
+    @HiveField(3) @JsonKey(name: 'discountPrice') final double? discountPrice,
+    @HiveField(4) @JsonKey(name: 'imageUrls') final List<String> imageUrls,
+    @HiveField(5) final String description,
+    @HiveField(6) @JsonKey(name: 'categoryId') final String? categoryId,
+    @HiveField(7) @JsonKey(name: 'stockQuantity') final int stockQuantity,
+    @HiveField(8) @JsonKey(name: 'averageRating') final double averageRating,
+    @HiveField(9) @JsonKey(name: 'reviewCount') final int reviewCount,
+    @HiveField(10) final String? brand,
+    @HiveField(11) @JsonKey(name: 'servingSize') final String? servingSize,
+    @HiveField(12)
+    @JsonKey(name: 'servingsPerContainer')
+    final int? servingsPerContainer,
+    @HiveField(13) @JsonKey(name: 'is_active') final bool isActive,
+    @HiveField(14)
+    @JsonKey(name: 'is_background_white')
+    final bool isBackgroundWhite,
+    @HiveField(15) final String? sku,
+    @HiveField(16) final List<String> tags,
+    @HiveField(17) final double? weight,
+    @HiveField(18) @JsonKey(name: 'size') final List<String>? size,
+    @HiveField(19)
+    @JsonKey(name: 'nutrition_facts')
+    final Map<String, dynamic>? nutritionFacts,
+    @HiveField(20) final bool featured,
+    @HiveField(21) @JsonKey(name: 'new_arrival') final bool newArrival,
+    @HiveField(22) @JsonKey(name: 'best_seller') final bool bestSeller,
+    @HiveField(23) @JsonKey(name: 'total_sales') final int totalSales,
+    @HiveField(24) @JsonKey(name: 'views_count') final int viewsCount,
+    @HiveField(25)
+    @JsonKey(name: 'shipping_weight')
+    final double? shippingWeight,
+    @HiveField(26) final Map<String, dynamic>? dimensions,
+    @HiveField(27) final List<String> ingredients,
+    @HiveField(28)
+    @JsonKey(name: 'usage_instructions')
+    final String? usageInstructions,
+    @HiveField(29) final List<String> warnings,
+    @HiveField(30) @JsonKey(name: 'expiry_date') final DateTime? expiryDate,
+    @HiveField(31) final String? manufacturer,
+    @HiveField(32)
+    @JsonKey(name: 'country_of_origin')
+    final String? countryOfOrigin,
+    @HiveField(33) @JsonKey(name: 'meta_title') final String? metaTitle,
+    @HiveField(34)
+    @JsonKey(name: 'meta_description')
+    final String? metaDescription,
+    @HiveField(35) final String? slug,
+    @HiveField(36) final DateTime? createdAt,
+    @HiveField(37) final DateTime? updatedAt,
+    @HiveField(38) @JsonKey(name: 'flavors') final List<String>? flavors,
+  }) = _$ProductModelImpl;
   const _ProductModel._() : super._();
 
   factory _ProductModel.fromJson(Map<String, dynamic> json) =

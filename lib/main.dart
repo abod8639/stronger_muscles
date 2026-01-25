@@ -16,7 +16,7 @@ import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env"); 
+  await dotenv.load(fileName: ".env");
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -59,9 +59,7 @@ class MyApp extends StatelessWidget {
               bottom: 80,
               left: 0,
               right: 0,
-              child: InternetConnectionBanner(
-                title: "No internet connection",
-              ),
+              child: InternetConnectionBanner(title: "No internet connection"),
             ),
           ],
         ),

@@ -306,4 +306,3 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
     );
   }
 }
-

@@ -55,7 +55,9 @@ class SearchBar extends StatelessWidget {
                       child: TextField(
                         controller: controller.searchController.textController,
                         decoration: InputDecoration.collapsed(
-                          hintText: AppLocalizations.of(context)!.searchProducts,
+                          hintText: AppLocalizations.of(
+                            context,
+                          )!.searchProducts,
                         ),
                         onChanged: controller.searchController.onSearchChanged,
                         textInputAction: TextInputAction.search,
@@ -69,12 +71,16 @@ class SearchBar extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         );
                       }
-                      if (controller.searchController.searchQuery.value.isNotEmpty) {
+                      if (controller
+                          .searchController
+                          .searchQuery
+                          .value
+                          .isNotEmpty) {
                         return IconButton(
                           icon: const Icon(Icons.close, size: 20),
                           onPressed: () {
-                            // We need a way to clear the text field. 
-                            // Since we don't have a TextEditingController here, 
+                            // We need a way to clear the text field.
+                            // Since we don't have a TextEditingController here,
                             // we might need to add one or just rely on the user clearing it.
                             // However, it's better to add a controller to the ProductSearchController.
                             controller.searchController.clearSearch();

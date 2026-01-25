@@ -40,9 +40,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.white,
         textStyle: AppTextStyles.button,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
   );
@@ -84,9 +82,7 @@ class AppTheme {
         backgroundColor: AppColors.primaryDark,
         foregroundColor: AppColors.white,
         textStyle: AppTextStyles.button,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
   );

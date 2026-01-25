@@ -22,6 +22,8 @@ class WishlistService extends GetxService {
   }
 
   List<ProductModel> getWishlistItems() {
-    return _box.values.map((item) => ProductModel.fromJson(jsonDecode(item))).toList();
+    return _box.values
+        .map((item) => ProductModel.fromJson(jsonDecode(item)))
+        .toList();
   }
 }

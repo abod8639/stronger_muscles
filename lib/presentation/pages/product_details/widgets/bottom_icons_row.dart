@@ -21,10 +21,7 @@ class BottomIconsRow extends StatelessWidget {
 
   final ProductModel product;
 
-  const BottomIconsRow({
-    super.key,
-    required this.product,
-  });
+  const BottomIconsRow({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +40,15 @@ class BottomIconsRow extends StatelessWidget {
           children: [
             // Cart Action (Add to Cart or Quantity Controls)
             Expanded(
-              child: Obx(() => _buildCartAction(
-                    context,
-                    theme,
-                    cartController,
-                  )),
+              child: Obx(
+                () => _buildCartAction(context, theme, cartController),
+              ),
             ),
 
             const SizedBox(width: _spacing),
 
             // Wishlist Toggle Button
-            Obx(() => _buildWishlistButton(
-                  theme,
-                  productDetailsController,
-                )),
+            Obx(() => _buildWishlistButton(theme, productDetailsController)),
           ],
         ),
       ),
@@ -73,11 +65,17 @@ class BottomIconsRow extends StatelessWidget {
     final selectedFlavor = productDetailsController.selectedFlavor.value;
     final selectedSize = productDetailsController.selectedSize.value;
 
-    final isInCart = cartController.isInCart(product,
-        selectedFlavor: selectedFlavor, selectedSize: selectedSize);
+    final isInCart = cartController.isInCart(
+      product,
+      selectedFlavor: selectedFlavor,
+      selectedSize: selectedSize,
+    );
     final CartItemModel? item = isInCart
-        ? cartController.getCartItem(product,
-            selectedFlavor: selectedFlavor, selectedSize: selectedSize)
+        ? cartController.getCartItem(
+            product,
+            selectedFlavor: selectedFlavor,
+            selectedSize: selectedSize,
+          )
         : null;
 
     return isInCart && item != null
@@ -119,10 +117,13 @@ class BottomIconsRow extends StatelessWidget {
                   iconSize: _iconButtonSize,
                 ),
               ),
-        
+
               // Quantity Display
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8.0),
@@ -136,7 +137,7 @@ class BottomIconsRow extends StatelessWidget {
                   ),
                 ),
               ),
-        
+
               // Increase Button
               Semantics(
                 label: 'Increase quantity',
@@ -154,26 +155,20 @@ class BottomIconsRow extends StatelessWidget {
             ],
           ),
         );
-      }
+      },
     );
   }
 
   /// Builds the Add to Cart button
-  Widget buildAddToCartButton(
-    ThemeData theme,
-    CartController cartController,
-  ) {
+  Widget buildAddToCartButton(ThemeData theme, CartController cartController) {
     return Semantics(
-      
-      
       label: 'Add ${product.name} to cart',
       button: true,
       child: ElevatedButton.icon(
-        
         onPressed: () => _handleAddToCart(cartController),
         icon: const Icon(Icons.add_shopping_cart),
         label: const Text('Add to Cart'),
-        
+
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
@@ -213,7 +208,9 @@ class BottomIconsRow extends StatelessWidget {
         child: IconButton(
           icon: Icon(
             isInWishlist ? Icons.favorite : Icons.favorite_outline,
-            color: isInWishlist ? AppColors.primary : theme.colorScheme.onSurfaceVariant,
+            color: isInWishlist
+                ? AppColors.primary
+                : theme.colorScheme.onSurfaceVariant,
             size: _iconSize,
           ),
           onPressed: () => controller.toggleWishlist(),
@@ -232,104 +229,102 @@ class BottomIconsRow extends StatelessWidget {
       selectedSize: productDetailsController.selectedSize.value,
     );
   }
-
-
 }
 
 /// Legacy function for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [BottomIconsRow] widget instead.
 @Deprecated('Use BottomIconsRow widget instead')
 Widget bottomIconsRow(ProductModel product) {
   final cartController = Get.find<CartController>();
   final productDetailsController = Get.put(ProductDetailsController(product));
-  return Builder(builder: (context) {
-    final theme = Theme.of(context);
-    return BottomAppBar(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          children: [
-            
-            Obx(() {
-              final isInCart = cartController.isInCart(product);
-              final CartItemModel? item =
-                  isInCart ? cartController.getCartItem(product) : null;
+  return Builder(
+    builder: (context) {
+      final theme = Theme.of(context);
+      return BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Obx(() {
+                final isInCart = cartController.isInCart(product);
+                final CartItemModel? item = isInCart
+                    ? cartController.getCartItem(product)
+                    : null;
 
-              return Expanded(
-                child: isInCart
-                    ? Card(
-                        color: theme.colorScheme.surface.withAlpha(
-                          (255 * 0.1).round(),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.remove),
-                                onPressed: () =>
-                                    cartController.decreaseQuantity(item!),
-                              ),
-                              Text(
-                                item!.quantity.toString(),
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.add),
-                                onPressed: () =>
-                                    cartController.increaseQuantity(item),
-                              ),
-                            ],
+                return Expanded(
+                  child: isInCart
+                      ? Card(
+                          color: theme.colorScheme.surface.withAlpha(
+                            (255 * 0.1).round(),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.remove),
+                                  onPressed: () =>
+                                      cartController.decreaseQuantity(item!),
+                                ),
+                                Text(
+                                  item!.quantity.toString(),
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add),
+                                  onPressed: () =>
+                                      cartController.increaseQuantity(item),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () {
+                            cartController.addToCart(product);
+                            Get.snackbar(
+                              duration: const Duration(seconds: 1),
+                              AppLocalizations.of(context)!.addedToCart,
+                              '${product.name} ${AppLocalizations.of(context)!.addedToCart}',
+                            );
+                          },
+                          icon: const Icon(Icons.add_shopping_cart),
+                          label: Text(AppLocalizations.of(context)!.addToCart),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            foregroundColor: theme.colorScheme.onPrimary,
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      )
-                    : ElevatedButton.icon(
-                        onPressed: () {
-                          cartController.addToCart(product);
-                          Get.snackbar(
-                            duration: const Duration(seconds: 1),
-                            AppLocalizations.of(context)!.addedToCart,
-                            '${product.name} ${AppLocalizations.of(context)!.addedToCart}',
-                          );
-                        },
-                        icon: const Icon(Icons.add_shopping_cart),
-                        label: Text(AppLocalizations.of(context)!.addToCart),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: theme.colorScheme.onPrimary,
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          textStyle: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-              );
-            }),
+                );
+              }),
 
-            const SizedBox(width: 16.0),
+              const SizedBox(width: 16.0),
 
-            Obx(() {
-              return IconButton(
-                icon: Icon(
-                  productDetailsController.isInWishlist.value
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  color: productDetailsController.isInWishlist.value
-                      ? theme.colorScheme.primary
-                      : null,
-                  size: 32,
-                ),
-                onPressed: () => productDetailsController.toggleWishlist(),
-              );
-            }
-            
-            ),
-          ],
+              Obx(() {
+                return IconButton(
+                  icon: Icon(
+                    productDetailsController.isInWishlist.value
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: productDetailsController.isInWishlist.value
+                        ? theme.colorScheme.primary
+                        : null,
+                    size: 32,
+                  ),
+                  onPressed: () => productDetailsController.toggleWishlist(),
+                );
+              }),
+            ],
+          ),
         ),
-      ),
-    );
-  });
+      );
+    },
+  );
 }

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/review_model.dart';
@@ -7,10 +6,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 class ShowReviewsList extends StatelessWidget {
   final List<ReviewModel> reviews;
 
-  const ShowReviewsList({
-    super.key,
-    required this.reviews,
-  });
+  const ShowReviewsList({super.key, required this.reviews});
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +25,7 @@ class ShowReviewsList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              
-              Icon(
-                Icons.rate_review,
-                color: AppColors.primary,
-                size: 20,
-              ),
+              Icon(Icons.rate_review, color: AppColors.primary, size: 20),
 
               const SizedBox(width: 8),
 
@@ -78,17 +69,15 @@ class ShowReviewsList extends StatelessWidget {
             return _buildReviewCard(reviews[index]);
           },
         ),
-
       ],
     );
   }
 
   Widget _buildReviewCard(ReviewModel review) {
-
     return Builder(
       builder: (context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -97,12 +86,11 @@ class ShowReviewsList extends StatelessWidget {
               colors: isDark
                   ? [
                       theme.colorScheme.surfaceContainerHighest,
-                      theme.colorScheme.surfaceContainerHighest.withOpacity(0.8),
+                      theme.colorScheme.surfaceContainerHighest.withOpacity(
+                        0.8,
+                      ),
                     ]
-                  : [
-                      Colors.white,
-                      AppColors.primary.withOpacity(0.02),
-                    ],
+                  : [Colors.white, AppColors.primary.withOpacity(0.02)],
             ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
@@ -197,7 +185,7 @@ class ShowReviewsList extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 
@@ -218,11 +206,7 @@ class ShowReviewsList extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.star,
-                color: AppColors.primary,
-                size: 16,
-              ),
+              Icon(Icons.star, color: AppColors.primary, size: 16),
               const SizedBox(width: 4),
               Text(
                 rating.toStringAsFixed(1),
@@ -234,7 +218,7 @@ class ShowReviewsList extends StatelessWidget {
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -280,7 +264,7 @@ class ShowReviewsList extends StatelessWidget {
             ],
           ),
         );
-      }
+      },
     );
   }
 
@@ -309,6 +293,4 @@ class ShowReviewsList extends StatelessWidget {
       return '${years}y ago';
     }
   }
-
-
 }

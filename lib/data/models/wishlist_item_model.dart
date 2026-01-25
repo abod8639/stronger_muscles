@@ -53,14 +53,14 @@ class WishlistItemModel extends HiveObject {
 
   /// Convert WishlistItemModel to JSON
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'userId': userId,
-        'productId': productId,
-        'addedAt': addedAt.toIso8601String(),
-        'productName': productName,
-        'productPrice': productPrice,
-        'productImageUrl': productImageUrl,
-      };
+    'id': id,
+    'userId': userId,
+    'productId': productId,
+    'addedAt': addedAt.toIso8601String(),
+    'productName': productName,
+    'productPrice': productPrice,
+    'productImageUrl': productImageUrl,
+  };
 
   /// Create a copy with updated fields
   WishlistItemModel copyWith({

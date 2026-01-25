@@ -42,11 +42,11 @@ class ProfilePage extends StatelessWidget {
               return Column(
                 children: [
                   GestureDetector(
-        onTap: () {
-          Get.toNamed(AppRoutes.editUserInfo);
-        },
-        child:
-                  ProfileHeader(),),
+                    onTap: () {
+                      Get.toNamed(AppRoutes.editUserInfo);
+                    },
+                    child: ProfileHeader(),
+                  ),
                   const SizedBox(height: 16),
                   QuickActionsRow(),
                   const SizedBox(height: 24),
@@ -62,7 +62,6 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 32),
                 ],
               );
-              
             }),
           ),
         ],
@@ -70,9 +69,9 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar( ThemeData theme) {
+  Widget _buildAppBar(ThemeData theme) {
     final isDark = theme.brightness == Brightness.dark;
-    
+
     return Builder(
       builder: (context) {
         return SliverAppBar(
@@ -90,7 +89,7 @@ class ProfilePage extends StatelessWidget {
             centerTitle: true,
           ),
         );
-      }
+      },
     );
   }
 
@@ -115,7 +114,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }

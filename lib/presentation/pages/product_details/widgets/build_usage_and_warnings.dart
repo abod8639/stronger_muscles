@@ -4,11 +4,13 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
-  final hasUsage = product.usageInstructions != null && product.usageInstructions!.isNotEmpty;
+  final hasUsage =
+      product.usageInstructions != null &&
+      product.usageInstructions!.isNotEmpty;
   final hasWarnings = product.warnings.isNotEmpty;
-  
+
   if (!hasUsage && !hasWarnings) return const SizedBox.shrink();
-  
+
   return Builder(
     builder: (context) {
       return Column(
@@ -35,11 +37,7 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.info_outline,
-                    color: Colors.blue,
-                    size: 20,
-                  ),
+                  Icon(Icons.info_outline, color: Colors.blue, size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -56,7 +54,7 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
             ),
             const SizedBox(height: 16),
           ],
-          
+
           // Warnings
           if (hasWarnings) ...[
             Text(
@@ -103,6 +101,6 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
           ],
         ],
       );
-    }
+    },
   );
 }

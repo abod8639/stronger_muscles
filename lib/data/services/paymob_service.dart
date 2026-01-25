@@ -10,9 +10,7 @@ class PaymobService {
       final response = await _client.post(
         Uri.parse('${PaymobConstants.baseUrl}${PaymobConstants.authEndpoint}'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'api_key': PaymobConstants.apiKey,
-        }),
+        body: jsonEncode({'api_key': PaymobConstants.apiKey}),
       );
       final data = jsonDecode(response.body);
       return data['token'];
@@ -48,14 +46,16 @@ class PaymobService {
     required String authToken,
     required String amountCents,
     required int orderId,
-    String email = 'NA', 
-    String firstName = 'NA', 
-    String lastName = 'NA', 
-    String phone = 'NA', 
+    String email = 'NA',
+    String firstName = 'NA',
+    String lastName = 'NA',
+    String phone = 'NA',
   }) async {
     try {
       final response = await _client.post(
-        Uri.parse('${PaymobConstants.baseUrl}${PaymobConstants.paymentKeyEndpoint}'),
+        Uri.parse(
+          '${PaymobConstants.baseUrl}${PaymobConstants.paymentKeyEndpoint}',
+        ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'auth_token': authToken,
@@ -88,4 +88,3 @@ class PaymobService {
     }
   }
 }
-

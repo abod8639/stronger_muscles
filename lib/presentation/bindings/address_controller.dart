@@ -12,11 +12,14 @@ class AddressController extends GetxController {
   final RxBool isDefault = false.obs;
 
   // Controllers for the add address form
-  final Rx<TextEditingController> streetController = TextEditingController().obs;
+  final Rx<TextEditingController> streetController =
+      TextEditingController().obs;
   final Rx<TextEditingController> cityController = TextEditingController().obs;
   final Rx<TextEditingController> stateController = TextEditingController().obs;
-  final Rx<TextEditingController> postalCodeController = TextEditingController().obs;
-  final Rx<TextEditingController> countryController = TextEditingController().obs;
+  final Rx<TextEditingController> postalCodeController =
+      TextEditingController().obs;
+  final Rx<TextEditingController> countryController =
+      TextEditingController().obs;
 
   @override
   void onInit() {
@@ -38,10 +41,10 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      
+
       final fetchedAddresses = await _addressService.getAddresses();
       addresses.assignAll(fetchedAddresses);
-      
+
       print('✅ تم جلب ${addresses.length} عنوان');
     } catch (e) {
       errorMessage.value = e.toString();
@@ -56,14 +59,14 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      
+
       // نرسل الطلب للخادم
       await _addressService.createAddress(address);
-      
+
       // بدلاً من محاولة إضافة العنصر يدوياً للقائمة المحلية (والتي قد تكون Locked)
       // نقوم بإعادة جلب العناوين من السيرفر لضمان المزامنة الصحيحة 100%
       await fetchAddresses();
-      
+
       Get.back();
       Get.snackbar('نجح', 'تم إضافة العنوان بنجاح');
       clearForm();
@@ -80,14 +83,14 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      
+
       final updatedAddress = await _addressService.updateAddress(id, address);
-      
+
       final index = addresses.indexWhere((addr) => addr.id == id);
       if (index != -1) {
         addresses[index] = updatedAddress;
       }
-      
+
       Get.back(); // Close dialog/form
       Get.snackbar('نجح', 'تم تحديث العنوان بنجاح');
       print('✅ تم تحديث العنوان');
@@ -104,10 +107,10 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      
+
       await _addressService.deleteAddress(id);
       addresses.removeWhere((addr) => addr.id == id);
-      
+
       Get.snackbar('نجح', 'تم حذف العنوان بنجاح');
       print('✅ تم حذف العنوان');
     } catch (e) {
@@ -122,10 +125,10 @@ class AddressController extends GetxController {
   Future<void> setDefaultAddress(int id) async {
     try {
       isLoading.value = true;
-      
+
       // Call the dedicated set-default endpoint
       final updatedAddress = await _addressService.setDefaultAddress(id);
-      
+
       // Update local state
       final tempAddresses = addresses.map((e) {
         if (e.id == id) {
@@ -134,9 +137,9 @@ class AddressController extends GetxController {
           return e.copyWith(isDefault: false);
         }
       }).toList();
-      
+
       addresses.assignAll(tempAddresses);
-      
+
       print('✅ تم تعيين العنوان الافتراضي');
       Get.snackbar('نجح', 'تم تعيين العنوان الافتراضي بنجاح');
     } catch (e) {
@@ -161,10 +164,10 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       final position = await _addressService.getCurrentPosition();
-      
+
       final Placemark? place = await _addressService.getAddressFromCoordinates(
-        position.latitude, 
-        position.longitude
+        position.latitude,
+        position.longitude,
       );
 
       if (place != null) {
@@ -174,15 +177,17 @@ class AddressController extends GetxController {
         stateController.value.text = place.administrativeArea ?? '';
         postalCodeController.value.text = place.postalCode ?? '';
         countryController.value.text = place.country ?? '';
-        
+
         Get.snackbar('نجح', 'تم تحديد الموقع بنجاح');
       } else {
         Get.snackbar('تنبيه', 'لم يتم العثور على عنوان لهذا الموقع');
       }
-
     } catch (e) {
       print('Error getting location: $e');
-      Get.snackbar('خطأ', 'فشل تحديد الموقع: $e. تأكد من تفعيل خدمات الموقع وإعطاء الصلاحيات.');
+      Get.snackbar(
+        'خطأ',
+        'فشل تحديد الموقع: $e. تأكد من تفعيل خدمات الموقع وإعطاء الصلاحيات.',
+      );
     } finally {
       isLoading.value = false;
     }
@@ -209,6 +214,4 @@ class AddressController extends GetxController {
     }
     return null;
   }
-
-
 }

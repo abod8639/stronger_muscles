@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 
 class LanguageController extends GetxController {
   static const String _languageKey = 'app_language';
-  
+
   final Rx<Locale> currentLocale = const Locale('en').obs;
   late Box _settingsBox;
 
@@ -18,7 +18,7 @@ class LanguageController extends GetxController {
   /// Load saved language from storage or use device locale
   void loadSavedLanguage() {
     final savedLanguageCode = _settingsBox.get(_languageKey);
-    
+
     if (savedLanguageCode != null) {
       // Use saved language
       currentLocale.value = Locale(savedLanguageCode);
@@ -26,7 +26,8 @@ class LanguageController extends GetxController {
     } else {
       // First time launch - use device locale
       final deviceLocale = Get.deviceLocale;
-      if (deviceLocale != null && _isSupportedLocale(deviceLocale.languageCode)) {
+      if (deviceLocale != null &&
+          _isSupportedLocale(deviceLocale.languageCode)) {
         currentLocale.value = Locale(deviceLocale.languageCode);
         Get.updateLocale(currentLocale.value);
       } else {

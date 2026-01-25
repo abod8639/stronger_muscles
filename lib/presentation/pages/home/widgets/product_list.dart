@@ -44,7 +44,9 @@ class ProductList extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    controller.isConnectionError.value ? Icons.wifi_off_rounded : Icons.error_outline_rounded,
+                    controller.isConnectionError.value
+                        ? Icons.wifi_off_rounded
+                        : Icons.error_outline_rounded,
                     size: 64.0,
                     color: Colors.red.withOpacity(0.5),
                   ),
@@ -59,7 +61,9 @@ class ProductList extends StatelessWidget {
                   if (controller.isConnectionError.value) ...[
                     const SizedBox(height: 16.0),
                     ElevatedButton.icon(
-                      onPressed: () => controller.fetchProductsForSection(controller.selectedSectionIndex.value),
+                      onPressed: () => controller.fetchProductsForSection(
+                        controller.selectedSectionIndex.value,
+                      ),
                       icon: const Icon(Icons.refresh),
                       label: const Text('إعادة محاولة'),
                     ),
@@ -73,7 +77,6 @@ class ProductList extends StatelessWidget {
 
       // Empty state
       if (controller.products.isEmpty) {
-
         return SliverToBoxAdapter(
           child: Center(
             heightFactor: 3,
@@ -113,11 +116,13 @@ class ProductList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate((context, index) {
             final product = controller.products[index];
             return GestureDetector(
-              onTap: () => Get.toNamed(
-                AppRoutes.productDetails,
-                arguments: product,
+              onTap: () =>
+                  Get.toNamed(AppRoutes.productDetails, arguments: product),
+              child: ProductContainer(
+                showName: true,
+                product: product,
+                isBackgroundWhite: false,
               ),
-              child: ProductContainer(showName: true, product: product,isBackgroundWhite: false, ),
             );
           }, childCount: controller.products.length),
         ),
@@ -125,5 +130,3 @@ class ProductList extends StatelessWidget {
     });
   }
 }
-
-

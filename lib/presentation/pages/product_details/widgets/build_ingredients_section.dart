@@ -5,7 +5,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget buildIngredientsSection(ProductModel product, bool isDark) {
   if (product.ingredients.isEmpty) return const SizedBox.shrink();
-  
+
   return Builder(
     builder: (context) {
       return Column(
@@ -23,7 +23,9 @@ Widget buildIngredientsSection(ProductModel product, bool isDark) {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: isDark ? AppColors.surfaceDark : AppColors.greyLight.withOpacity(0.3),
+              color: isDark
+                  ? AppColors.surfaceDark
+                  : AppColors.greyLight.withOpacity(0.3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Wrap(
@@ -38,8 +40,8 @@ Widget buildIngredientsSection(ProductModel product, bool isDark) {
                       color: isDark ? AppColors.white : AppColors.black,
                     ),
                   ),
-                  backgroundColor: isDark 
-                      ? AppColors.backgroundDark 
+                  backgroundColor: isDark
+                      ? AppColors.backgroundDark
                       : AppColors.white,
                   side: BorderSide(
                     color: isDark ? AppColors.greyDark : AppColors.grey,
@@ -50,6 +52,6 @@ Widget buildIngredientsSection(ProductModel product, bool isDark) {
           ),
         ],
       );
-    }
+    },
   );
 }

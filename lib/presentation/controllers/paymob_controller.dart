@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/services/paymob_service.dart';
- 
+
 class PaymobController extends GetxController {
   final PaymobService _paymobService = PaymobService();
 
@@ -15,9 +15,7 @@ class PaymobController extends GetxController {
     String lastName = 'NA',
     String email = 'NA',
     String phone = 'NA',
-
   }) async {
-    
     isLoading.value = true;
     errorMessage.value = '';
 
@@ -48,8 +46,7 @@ class PaymobController extends GetxController {
       print("Paymob Payment Key: $paymentKey");
 
       // 4. Launch WebView (or emit state for UI to handle)
-       _launchPaymentWebView(paymentKey);
-
+      _launchPaymentWebView(paymentKey);
     } catch (e) {
       errorMessage.value = e.toString();
       print("Paymob Error: $e");
@@ -62,8 +59,8 @@ class PaymobController extends GetxController {
   void _launchPaymentWebView(String paymentKey) {
     final String url = paymentKey;
     print("Navigate to: $url");
-    
-    // For now, we will just print the URL. 
+
+    // For now, we will just print the URL.
     // In a real app, use url_launcher or navigate to a WebView page.
     // Example: Get.to(() => PaymentWebView(url: url));
   }

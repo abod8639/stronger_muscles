@@ -35,7 +35,8 @@ class _MainImageState extends State<MainImage> {
     // Listen to controller changes to animate PageView
     _imageWorker = ever(_controller.selectedImageIndex, (index) {
       if (!mounted) return;
-      if (_pageController.hasClients && _pageController.page?.round() != index) {
+      if (_pageController.hasClients &&
+          _pageController.page?.round() != index) {
         _pageController.animateToPage(
           index,
           duration: const Duration(milliseconds: 300),
@@ -55,8 +56,10 @@ class _MainImageState extends State<MainImage> {
   @override
   Widget build(BuildContext context) {
     print('DEBUG: MainImage - product.imageUrls: ${widget.product.imageUrls}');
-    print('DEBUG: MainImage - product.imageUrls.length: ${widget.product.imageUrls.length}');
-    
+    print(
+      'DEBUG: MainImage - product.imageUrls.length: ${widget.product.imageUrls.length}',
+    );
+
     // Handle empty image list
     if (widget.product.imageUrls.isEmpty) {
       return SizedBox(
@@ -92,13 +95,12 @@ class _MainImageState extends State<MainImage> {
       height: 400,
       width: double.infinity,
       child: PageView.builder(
-      
         controller: _pageController,
         itemCount: widget.product.imageUrls.length,
         onPageChanged: (index) {
           _controller.selectImage(index);
         },
-        
+
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () => widget.onImageTap?.call(index),
@@ -107,9 +109,11 @@ class _MainImageState extends State<MainImage> {
               child: CachedNetworkImage(
                 imageUrl: widget.product.imageUrls[index],
                 placeholder: (context, url) =>
-                const Center(child: CircularProgressIndicator()),
+                    const Center(child: CircularProgressIndicator()),
                 errorWidget: (context, url, error) {
-                  print('DEBUG: Error loading image from URL: ${widget.product.imageUrls[index]}, Error: $error');
+                  print(
+                    'DEBUG: Error loading image from URL: ${widget.product.imageUrls[index]}, Error: $error',
+                  );
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -125,9 +129,10 @@ class _MainImageState extends State<MainImage> {
                           child: Text(
                             'فشل تحميل الصورة',
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
                           ),
                         ),
                       ],

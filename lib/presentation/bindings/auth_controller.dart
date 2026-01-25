@@ -10,7 +10,9 @@ import '../../routes/routes.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final AuthService _authService = Get.put( AuthService()); // Ensure AuthService is initialized
+  final AuthService _authService = Get.put(
+    AuthService(),
+  ); // Ensure AuthService is initialized
 
   final RxString userId = ''.obs;
   final RxBool isLoading = false.obs;
@@ -50,8 +52,8 @@ class AuthController extends GetxController {
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
-        userId.value = userCredential.user!.uid;
-        // token.value = userCredential.user!.idToken!;
+      userId.value = userCredential.user!.uid;
+      // token.value = userCredential.user!.idToken!;
       // إرسال معلومات المستخدم إلى Backend
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;
@@ -73,7 +75,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   Future<void> signInWithEmail({
     required String email,
     required String password,
@@ -93,15 +94,15 @@ class AuthController extends GetxController {
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } catch (e) {
       print('❌ خطأ تسجيل الدخول: $e');
-      
+
       // Display user-friendly error message
       String errorMessage = e.toString();
-      
+
       // Clean up error message if it's too technical
       if (errorMessage.contains('Exception:')) {
         errorMessage = errorMessage.replaceAll('Exception:', '').trim();
       }
-      
+
       Get.snackbar(
         'خطأ في تسجيل الدخول',
         errorMessage,
@@ -140,15 +141,15 @@ class AuthController extends GetxController {
       print('✅ تم الانتقال إلى الصفحة الرئيسية');
     } catch (e) {
       print('❌ خطأ إنشاء الحساب: $e');
-      
+
       // Display user-friendly error message
       String errorMessage = e.toString();
-      
+
       // Clean up error message if it's too technical
       if (errorMessage.contains('Exception:')) {
         errorMessage = errorMessage.replaceAll('Exception:', '').trim();
       }
-      
+
       Get.snackbar(
         'خطأ في إنشاء الحساب',
         errorMessage,
@@ -202,5 +203,4 @@ class AuthController extends GetxController {
     currentUser.value = null;
     Get.offAllNamed('/login'); // Adjust route
   }
-
 }

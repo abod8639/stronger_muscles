@@ -34,7 +34,7 @@ class CartView extends GetView<CartController> {
   /// Builds the app bar with item count
   PreferredSizeWidget _buildAppBar(BuildContext context, ThemeData theme) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return AppBar(
       title: Obx(
         () => Text(

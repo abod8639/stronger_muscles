@@ -14,6 +14,3 @@ Widget buildDescriptionSection(ProductModel product) {
     reviews: const [],
   );
 }
-
-
-

@@ -12,12 +12,23 @@ class OrderModel with _$OrderModel {
     @HiveField(1) @JsonKey(name: 'user_id') required String userId,
     @HiveField(2) @JsonKey(name: 'order_date') required DateTime orderDate,
     @HiveField(3) @Default('pending') String status,
-    @HiveField(4) @JsonKey(name: 'payment_status') @Default('pending') String paymentStatus,
-    @HiveField(5) @JsonKey(name: 'payment_method') @Default('card') String paymentMethod,
+    @HiveField(4)
+    @JsonKey(name: 'payment_status')
+    @Default('pending')
+    String paymentStatus,
+    @HiveField(5)
+    @JsonKey(name: 'payment_method')
+    @Default('card')
+    String paymentMethod,
     @HiveField(6) @JsonKey(name: 'address_id') required String addressId,
-    @HiveField(7) @JsonKey(name: 'shipping_address_snapshot') String? shippingAddressSnapshot,
+    @HiveField(7)
+    @JsonKey(name: 'shipping_address_snapshot')
+    String? shippingAddressSnapshot,
     @HiveField(8) required double subtotal,
-    @HiveField(9) @JsonKey(name: 'shippingCost') @Default(0) double shippingCost,
+    @HiveField(9)
+    @JsonKey(name: 'shippingCost')
+    @Default(0)
+    double shippingCost,
     @HiveField(10) @Default(0) double discount,
     @HiveField(11) @JsonKey(name: 'total_amount') required double totalAmount,
     @HiveField(12) @JsonKey(name: 'tracking_number') String? trackingNumber,
@@ -32,8 +43,9 @@ class OrderModel with _$OrderModel {
 
   const OrderModel._();
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
-  
+  factory OrderModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderModelFromJson(json);
+
   bool get isPaid => paymentStatus == 'paid';
   bool get canBeCancelled => status == 'pending' || status == 'processing';
   bool get isCompleted => status == 'delivered';
@@ -52,9 +64,12 @@ class OrderItemModel with _$OrderItemModel {
     @HiveField(6) required double subtotal,
     @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
     @HiveField(8) DateTime? createdAt,
-    @HiveField(9) @JsonKey(name: 'selectedFlavor') String? selectedFlavor, // تم التعديل
+    @HiveField(9)
+    @JsonKey(name: 'selectedFlavor')
+    String? selectedFlavor, // تم التعديل
     @HiveField(10) @JsonKey(name: 'selectedSize') String? selectedSize,
   }) = _OrderItemModel;
 
-  factory OrderItemModel.fromJson(Map<String, dynamic> json) => _$OrderItemModelFromJson(json);
+  factory OrderItemModel.fromJson(Map<String, dynamic> json) =>
+      _$OrderItemModelFromJson(json);
 }

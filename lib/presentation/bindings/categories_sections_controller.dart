@@ -14,10 +14,7 @@ class CategoriesSectionsController extends GetxController {
   final RxBool isLoading = false.obs;
 
   final RxList<SelectionsModel> selections = <SelectionsModel>[
-    SelectionsModel(
-      id: "",
-      label: 'categoryHome',
-      icon: Icons.home )
+    SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
   ].obs;
 
   @override
@@ -60,21 +57,19 @@ class CategoriesSectionsController extends GetxController {
     }
 
     final List<SelectionsModel> list = [
-      SelectionsModel(
-        id: "",
-        label: 'categoryHome',
-        icon: Icons.home,
-      ),
+      SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
     ];
 
     for (var cat in categoryList) {
-      list.add(SelectionsModel(
-        id: cat.id,
-        label: cat.name,
-        icon: _getIconForCategory(cat.id),
-      ));
+      list.add(
+        SelectionsModel(
+          id: cat.id,
+          label: cat.name,
+          icon: _getIconForCategory(cat.id),
+        ),
+      );
     }
-    
+
     selections.assignAll(list);
 
     // Restore selection index based on the ID we had

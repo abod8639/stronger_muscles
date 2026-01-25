@@ -81,7 +81,6 @@ Widget buildShortcutItem(int index) {
                     maxLines: 1,
                   ),
                 ),
-                
               ],
             ),
           ),

@@ -6,7 +6,7 @@ import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_icon.dart';
 
 /// A custom bottom navigation bar widget for the main app navigation.
-/// 
+///
 /// This widget provides navigation between Home, Wishlist, Cart, and Profile screens.
 /// It uses GetX for state management and reactive updates.
 class MyBottomNavigationBar extends StatelessWidget {
@@ -32,14 +32,15 @@ class MyBottomNavigationBar extends StatelessWidget {
         onTap: controller.changeTabIndex,
         type: BottomNavigationBarType.fixed,
         elevation: _elevation,
-        backgroundColor: theme.bottomNavigationBarTheme.backgroundColor ??
+        backgroundColor:
+            theme.bottomNavigationBarTheme.backgroundColor ??
             theme.colorScheme.surface,
-        selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor ??
+        selectedItemColor:
+            theme.bottomNavigationBarTheme.selectedItemColor ??
             theme.colorScheme.primary,
         unselectedItemColor:
             theme.bottomNavigationBarTheme.unselectedItemColor ??
-                theme.colorScheme.onSurface
-                    .withValues(alpha: _unselectedOpacity),
+            theme.colorScheme.onSurface.withValues(alpha: _unselectedOpacity),
         selectedFontSize: _selectedFontSize,
         unselectedFontSize: _unselectedFontSize,
         showUnselectedLabels: true,
@@ -52,7 +53,9 @@ class MyBottomNavigationBar extends StatelessWidget {
 
   /// Builds the navigation items with dynamic icons based on selection state.
   List<BottomNavigationBarItem> _buildNavigationItems(
-      int currentIndex, CartController cartController) {
+    int currentIndex,
+    CartController cartController,
+  ) {
     return [
       BottomNavigationBarItem(
         icon: Icon(
@@ -102,7 +105,7 @@ class MyBottomNavigationBar extends StatelessWidget {
 }
 
 /// Legacy function for backward compatibility.
-/// 
+///
 /// **Deprecated**: Use [MyBottomNavigationBar] widget instead.
 @Deprecated('Use MyBottomNavigationBar widget instead')
 BottomNavigationBar myBottomNavigationBar(ThemeData theme) {
@@ -112,20 +115,27 @@ BottomNavigationBar myBottomNavigationBar(ThemeData theme) {
     currentIndex: controller.tabIndex.value,
     onTap: controller.changeTabIndex,
     type: BottomNavigationBarType.fixed,
-    backgroundColor: theme.bottomNavigationBarTheme.backgroundColor ??
+    backgroundColor:
+        theme.bottomNavigationBarTheme.backgroundColor ??
         theme.colorScheme.surface,
-    selectedItemColor: theme.bottomNavigationBarTheme.selectedItemColor ??
+    selectedItemColor:
+        theme.bottomNavigationBarTheme.selectedItemColor ??
         theme.colorScheme.primary,
-    unselectedItemColor: theme.bottomNavigationBarTheme.unselectedItemColor ??
+    unselectedItemColor:
+        theme.bottomNavigationBarTheme.unselectedItemColor ??
         theme.colorScheme.onSurface.withValues(alpha: 0.6),
     showUnselectedLabels: true,
-    items:  [
+    items: [
       const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-      const BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Wishlist'),
-      BottomNavigationBarItem(icon: cartIcon() , label: 'Cart'),
-      const BottomNavigationBarItem(icon: Icon(Icons.input_sharp), label: 'Profile'),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.favorite),
+        label: 'Wishlist',
+      ),
+      BottomNavigationBarItem(icon: cartIcon(), label: 'Cart'),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.input_sharp),
+        label: 'Profile',
+      ),
     ],
   );
 }
-
-

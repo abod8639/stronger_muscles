@@ -49,7 +49,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   // Product Name
+                  // Product Name
                   buildProductName(product),
                   const SizedBox(height: _smallSpacing),
 
@@ -58,26 +58,31 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   const SizedBox(height: _mediumSpacing),
 
                   // Product Flavors
-                  if (product.flavors != null && product.flavors!.isNotEmpty) ...[
-                    Obx(() => ProductFlavorSelector(
-                          product: product,
-                          initialFlavor: controller.selectedFlavor.value,
-                          onFlavorSelected: (selectedFlavor) {
-                            controller.selectedFlavor.value = selectedFlavor;
-                          },
-                        )),
+                  if (product.flavors != null &&
+                      product.flavors!.isNotEmpty) ...[
+                    Obx(
+                      () => ProductFlavorSelector(
+                        product: product,
+                        initialFlavor: controller.selectedFlavor.value,
+                        onFlavorSelected: (selectedFlavor) {
+                          controller.selectedFlavor.value = selectedFlavor;
+                        },
+                      ),
+                    ),
                     const SizedBox(height: _mediumSpacing),
                   ],
 
                   // Size Selector
                   if (product.size != null && product.size!.isNotEmpty) ...[
-                    Obx(() => ProductSizeSelector(
-                          product: product,
-                          initialSize: controller.selectedSize.value,
-                          onSizeSelected: (selectedSize) {
-                            controller.selectedSize.value = selectedSize;
-                          },
-                        )),
+                    Obx(
+                      () => ProductSizeSelector(
+                        product: product,
+                        initialSize: controller.selectedSize.value,
+                        onSizeSelected: (selectedSize) {
+                          controller.selectedSize.value = selectedSize;
+                        },
+                      ),
+                    ),
                     const SizedBox(height: _mediumSpacing),
                   ],
 

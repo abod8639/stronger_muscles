@@ -24,7 +24,7 @@ class StorageService {
   static Future<void> deleteToken() async {
     await _authBox.delete(_tokenKey);
   }
-  
+
   static bool get hasToken => getToken() != null;
 
   // Generic Storage
@@ -35,7 +35,7 @@ class StorageService {
   static dynamic getData(String key) {
     return _authBox.get(key);
   }
-  
+
   static Future<void> clearAll() async {
     await _authBox.clear();
   }

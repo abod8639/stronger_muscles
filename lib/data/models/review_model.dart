@@ -69,17 +69,17 @@ class ReviewModel extends HiveObject {
 
   /// Convert ReviewModel to JSON
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'productId': productId,
-        'userId': userId,
-        'userName': userName,
-        'userPhotoUrl': userPhotoUrl,
-        'comment': comment,
-        'rating': rating,
-        'isVerifiedPurchase': isVerifiedPurchase,
-        'createdAt': createdAt.toIso8601String(),
-        'updatedAt': updatedAt?.toIso8601String(),
-      };
+    'id': id,
+    'productId': productId,
+    'userId': userId,
+    'userName': userName,
+    'userPhotoUrl': userPhotoUrl,
+    'comment': comment,
+    'rating': rating,
+    'isVerifiedPurchase': isVerifiedPurchase,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt?.toIso8601String(),
+  };
 
   /// Create a copy with updated fields
   ReviewModel copyWith({

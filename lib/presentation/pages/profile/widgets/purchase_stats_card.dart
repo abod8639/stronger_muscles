@@ -4,9 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 
 class PurchaseStatsCard extends StatelessWidget {
-
-
-  const PurchaseStatsCard({ super.key });
+  const PurchaseStatsCard({super.key});
 
   @override
   Widget build(BuildContext context) {

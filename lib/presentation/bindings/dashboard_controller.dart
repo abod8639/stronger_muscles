@@ -20,10 +20,10 @@ class DashboardController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      
+
       final response = await _authService.getUsersStats();
       usersStats.value = response;
-      
+
       print('✅ تم جلب بيانات المستخدمين: ${response.totalUsers} مستخدم');
     } catch (e) {
       errorMessage.value = e.toString();

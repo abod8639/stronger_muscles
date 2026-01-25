@@ -32,25 +32,26 @@ class HomeView extends GetView<HomeController> {
                 slivers: [
                   // Search bar and filter button
                   const SearchBar(),
-                   
-            
+
                   // Category shortcuts row
                   const SliverToBoxAdapter(child: CategoriesShortcutsRow()),
-            
+
                   // Promo banner (only shown for "All" category)
                   Obx(
                     () => sectionsController.selectedIndex.value == 0
                         ? const SliverToBoxAdapter(child: PromoBanner())
                         : const SliverToBoxAdapter(child: SizedBox.shrink()),
                   ),
-            
+
                   // Section title
                   const SliverToBoxAdapter(child: SectionTitle()),
-            
+
                   // Product grid
                   const ProductList(),
-            
-                  const SliverToBoxAdapter(child: SizedBox(height: _bottomPadding)),
+
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: _bottomPadding),
+                  ),
                 ],
               ),
             ),

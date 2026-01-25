@@ -99,7 +99,9 @@ class CheckoutView extends GetView<CheckoutController> {
           return Column(
             children: [
               if (profileController.addresses.isEmpty)
-                const Text('No addresses found. Please add one in your profile.')
+                const Text(
+                  'No addresses found. Please add one in your profile.',
+                )
               else
                 Obx(
                   () => Column(
@@ -146,7 +148,7 @@ class CheckoutView extends GetView<CheckoutController> {
               ),
             ],
           );
-        }
+        },
       ),
       isActive: controller.currentStep.value >= 0,
       state: controller.currentStep.value > 0

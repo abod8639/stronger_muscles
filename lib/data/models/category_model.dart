@@ -52,15 +52,14 @@ class CategoryModel extends HiveObject {
 
   /// Convert CategoryModel to JSON
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'description': description,
-        'imageUrl': imageUrl,
-        'sortOrder': sortOrder,
-        'isActive': isActive,
-        'createdAt': createdAt.toIso8601String(),
-      };
-
+    'id': id,
+    'name': name,
+    'description': description,
+    'imageUrl': imageUrl,
+    'sortOrder': sortOrder,
+    'isActive': isActive,
+    'createdAt': createdAt.toIso8601String(),
+  };
 
   /// Create a copy with updated fields
   CategoryModel copyWith({

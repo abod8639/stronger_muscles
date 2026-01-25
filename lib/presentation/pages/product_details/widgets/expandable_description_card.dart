@@ -9,7 +9,7 @@ class ExpandableDescriptionCard extends StatefulWidget {
   final String description;
   final double? stars;
   final int? reviewCount;
-  final List<ReviewModel> reviews;  
+  final List<ReviewModel> reviews;
 
   const ExpandableDescriptionCard({
     super.key,
@@ -105,7 +105,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
             HeaderWithIconandTitle(),
 
             // Description content
-
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -161,11 +160,10 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                             children: [
                               Text(
                                 _isExpanded ? 'Read less' : 'Read more',
-                                style: theme.textTheme.bodyMedium
-                                    ?.copyWith(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               const SizedBox(width: 4),
                               RotationTransition(
@@ -183,18 +181,16 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                     ),
 
                   // Stars record
-                  StarsRecord(
-                    reviews: widget.reviews,
-                  ),
+                  StarsRecord(reviews: widget.reviews),
                 ],
               ),
             ),
-            
           ],
         ),
       ),
     );
   }
+
   bool shouldShowExpandButton() {
     final theme = Theme.of(context);
     final textPainter = TextPainter(
@@ -210,6 +206,4 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
     return textPainter.didExceedMaxLines;
   }
-
-
 }

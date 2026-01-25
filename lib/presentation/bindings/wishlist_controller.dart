@@ -66,7 +66,9 @@ class WishlistController extends GetxController {
         }
 
         // Fallback to repository lookup if we couldn't decode stored value
-        product ??= await _productRepository.getProductById(productId.toString());
+        product ??= await _productRepository.getProductById(
+          productId.toString(),
+        );
 
         if (product != null) {
           items.add(product);

@@ -9,7 +9,7 @@ class CartController extends GetxController {
   final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
   late Box<CartItemModel> cartBox;
 
-late TextEditingController notesController;
+  late TextEditingController notesController;
   @override
   void onInit() {
     super.onInit();
@@ -30,7 +30,11 @@ late TextEditingController notesController;
     }
   }
 
-  void addToCart(ProductModel product, {String? selectedFlavor, String? selectedSize}) {
+  void addToCart(
+    ProductModel product, {
+    String? selectedFlavor,
+    String? selectedSize,
+  }) {
     try {
       final existingItemIndex = cartItems.indexWhere(
         (item) =>
@@ -62,7 +66,6 @@ late TextEditingController notesController;
     }
   }
 
- 
   void removeFromCart(CartItemModel item) {
     try {
       final index = cartItems.indexOf(item);
@@ -105,23 +108,36 @@ late TextEditingController notesController;
     }
   }
 
-  bool isInCart(ProductModel product, {String? selectedFlavor, String? selectedSize}) {
-    return cartItems.any((item) =>
-        item.product.id == product.id &&
-        item.selectedFlavor == selectedFlavor &&
-        item.selectedSize == selectedSize);
+  bool isInCart(
+    ProductModel product, {
+    String? selectedFlavor,
+    String? selectedSize,
+  }) {
+    return cartItems.any(
+      (item) =>
+          item.product.id == product.id &&
+          item.selectedFlavor == selectedFlavor &&
+          item.selectedSize == selectedSize,
+    );
   }
 
-  CartItemModel? getCartItem(ProductModel product,
-      {String? selectedFlavor, String? selectedSize}) {
-    return cartItems.firstWhereOrNull((item) =>
-        item.product.id == product.id &&
-        item.selectedFlavor == selectedFlavor &&
-        item.selectedSize == selectedSize);
+  CartItemModel? getCartItem(
+    ProductModel product, {
+    String? selectedFlavor,
+    String? selectedSize,
+  }) {
+    return cartItems.firstWhereOrNull(
+      (item) =>
+          item.product.id == product.id &&
+          item.selectedFlavor == selectedFlavor &&
+          item.selectedSize == selectedSize,
+    );
   }
 
   double get totalPrice => cartItems.fold(
-      0, (sum, item) => sum + (item.product.effectivePrice * item.quantity));
+    0,
+    (sum, item) => sum + (item.product.effectivePrice * item.quantity),
+  );
 
   void clearCart() {
     try {

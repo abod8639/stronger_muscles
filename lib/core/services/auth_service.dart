@@ -10,7 +10,6 @@ import 'storage_service.dart';
 class AuthService extends GetxService {
   final ApiService _apiService = Get.put(ApiService());
 
-  
   Future<UserModel> register({
     required String email,
     required String password,
@@ -18,19 +17,17 @@ class AuthService extends GetxService {
   }) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.register, 
+        ApiConfig.register,
         includeAuth: false,
-        data: {
-          'email': email,
-          'password': password,
-          'name': name,
-        },
+        data: {'email': email, 'password': password, 'name': name},
       );
-      
+
       print('📝 Register Response: ${response.body}');
-      
+
       final body = jsonDecode(response.body);
-      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(
+        body['user'] ?? body['data'] ?? body,
+      );
       final String? token = body['token']?.toString();
 
       if (token != null) {
@@ -38,7 +35,7 @@ class AuthService extends GetxService {
         await StorageService.saveToken(token);
         print('✅ Token saved successfully');
       }
-      
+
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Register API Error: ${e.message}');
@@ -57,21 +54,26 @@ class AuthService extends GetxService {
       final response = await _apiService.post(
         ApiConfig.login,
         includeAuth: false,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       print('🔐 Login Response: ${response.body}');
-      
+
       final body = jsonDecode(response.body);
-      
-      if (body['status'] == 'error' || (body['status'] == 'success' && body['user'] == null && body['token'] == null)) {
-         throw Failure(message: body['message'] ?? 'فشل تسجيل الدخول', type: FailureType.auth);
+
+      if (body['status'] == 'error' ||
+          (body['status'] == 'success' &&
+              body['user'] == null &&
+              body['token'] == null)) {
+        throw Failure(
+          message: body['message'] ?? 'فشل تسجيل الدخول',
+          type: FailureType.auth,
+        );
       }
 
-      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(
+        body['user'] ?? body['data'] ?? body,
+      );
       final String? token = body['token']?.toString();
 
       if (token != null) {
@@ -79,7 +81,7 @@ class AuthService extends GetxService {
         await StorageService.saveToken(token);
         print('✅ Token saved successfully');
       }
-    
+
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Login API Error: ${e.message}');
@@ -97,15 +99,17 @@ class AuthService extends GetxService {
 
       final response = await _apiService.get(ApiConfig.customerProfile);
       print('👤 Get Current User Response: ${response.body}');
-      
+
       final body = jsonDecode(response.body);
-      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
-      
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(
+        body['user'] ?? body['data'] ?? body,
+      );
+
       // Inject existing token into the model if not present in response
       if (userMap['token'] == null) {
         userMap['token'] = token;
       }
-      
+
       return UserModel.fromJson(userMap);
     } catch (e) {
       print('❌ Get Current User Error: $e');
@@ -129,22 +133,26 @@ class AuthService extends GetxService {
           if (email != null) 'email': email,
           if (phone != null) 'phone': phone,
           if (photoUrl != null) 'photo_url': photoUrl,
-          if (preferredLanguage != null) 'preferred_language': preferredLanguage,
-          if (notificationsEnabled != null) 'notifications_enabled': notificationsEnabled,
+          if (preferredLanguage != null)
+            'preferred_language': preferredLanguage,
+          if (notificationsEnabled != null)
+            'notifications_enabled': notificationsEnabled,
         },
       );
 
       print('📝 Update Profile Response: ${response.body}');
-      
+
       final body = jsonDecode(response.body);
-      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
-      
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(
+        body['user'] ?? body['data'] ?? body,
+      );
+
       // Keep existing token
       final token = StorageService.getToken();
       if (token != null && userMap['token'] == null) {
         userMap['token'] = token;
       }
-      
+
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
       print('❌ Update Profile API Error: ${e.message}');
@@ -155,7 +163,6 @@ class AuthService extends GetxService {
     }
   }
 
-
   Future<UserModel> googleSignIn({
     required String email,
     required String name,
@@ -165,17 +172,15 @@ class AuthService extends GetxService {
       final response = await _apiService.post(
         ApiConfig.googleSignIn,
         includeAuth: false,
-        data: {
-          'email': email,
-          'name': name,
-          'photo_url': photoUrl,
-        },
+        data: {'email': email, 'name': name, 'photo_url': photoUrl},
       );
 
       print('🔐 Google SignIn Response: ${response.body}');
-      
+
       final body = jsonDecode(response.body);
-      final Map<String, dynamic> userMap = Map<String, dynamic>.from(body['user'] ?? body['data'] ?? body);
+      final Map<String, dynamic> userMap = Map<String, dynamic>.from(
+        body['user'] ?? body['data'] ?? body,
+      );
       final String? token = (body['token'] ?? body['access_token'])?.toString();
 
       if (token != null) {
@@ -223,6 +228,4 @@ class AuthService extends GetxService {
       rethrow;
     }
   }
-
-
 }

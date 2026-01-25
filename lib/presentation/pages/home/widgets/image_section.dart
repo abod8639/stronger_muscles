@@ -27,42 +27,56 @@ class ImageSection extends StatelessWidget {
         children: [
           Container(
             width: double.maxFinite,
-            height: double.infinity, 
+            height: double.infinity,
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerLowest,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16.0),
+              ),
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16.0)),
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(16.0),
+              ),
               child: images.isEmpty
                   ? _buildNoImage(theme)
                   : PageView.builder(
                       controller: _pageController,
                       itemCount: images.length,
-                      onPageChanged: widget.onPageChanged ?? (index) => _selectedImageIndex.value = index,
+                      onPageChanged:
+                          widget.onPageChanged ??
+                          (index) => _selectedImageIndex.value = index,
                       itemBuilder: (context, index) {
-                        return _buildImage(images[index], theme, widget.isBackgroundWhite?? false );
+                        return _buildImage(
+                          images[index],
+                          theme,
+                          widget.isBackgroundWhite ?? false,
+                        );
                       },
                     ),
             ),
           ),
-            
+
           if (widget.product.discountPrice != null)
-             Positioned(
-               top: 12,
-               right: 15,
-               child: Container(
-                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                 decoration: BoxDecoration(
-                   color: Colors.redAccent,
-                   borderRadius: BorderRadius.circular(8),
-                 ),
-                 child: const Text(
-                   'خصم',
-                   style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-                 ),
-               ),
-             ),
+            Positioned(
+              top: 12,
+              right: 15,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'خصم',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -73,8 +87,10 @@ class ImageSection extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: isBackgroundWhite ?  Colors.white.withOpacity(0.9) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12), 
+        color: isBackgroundWhite
+            ? Colors.white.withOpacity(0.9)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -102,7 +118,11 @@ class ImageSection extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.image_not_supported_outlined, size: 40, color: theme.colorScheme.outline),
+          Icon(
+            Icons.image_not_supported_outlined,
+            size: 40,
+            color: theme.colorScheme.outline,
+          ),
           const SizedBox(height: 4),
           Text('لا توجد صور', style: theme.textTheme.labelSmall),
         ],

@@ -15,7 +15,8 @@ class ThemeController extends GetxController {
     isDarkMode.value = _box.get(_key, defaultValue: false);
   }
 
-  ThemeMode get themeMode => isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get themeMode =>
+      isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
 
   void toggleTheme() {
     isDarkMode.value = !isDarkMode.value;

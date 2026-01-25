@@ -28,12 +28,12 @@ class ProductRepository {
     await Future.delayed(const Duration(milliseconds: delay));
     return dummyProducts.where((p) => p.categoryId == categoryId).toList();
   }
-//   Future<List<ProductModel>> getProducts({int page = 1, int pageSize = 20}) async {
-//   final query = _firestore.collection('products')
-//     .limit(pageSize)
-//     .startAfterDocument(lastDocument);
-//   // ...
-// }
+  //   Future<List<ProductModel>> getProducts({int page = 1, int pageSize = 20}) async {
+  //   final query = _firestore.collection('products')
+  //     .limit(pageSize)
+  //     .startAfterDocument(lastDocument);
+  //   // ...
+  // }
 
   Future<List<ProductModel>> getProteinProducts() async {
     return getProductsByCategory('protein');
@@ -83,9 +83,7 @@ class ProductRepository {
   }
 }
 
-
 // Dummy product data with new structure
 final List<ProductModel> dummyProducts = [
   // Protein Products
-
 ];

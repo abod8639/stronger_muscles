@@ -93,7 +93,8 @@ class CheckoutController extends GetxController {
                 selectedSize: item.selectedSize,
                 createdAt: DateTime.now(),
               ),
-            ).toList(),
+            )
+            .toList(),
       );
 
       await _orderRepository.createOrder(order);

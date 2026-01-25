@@ -1,10 +1,8 @@
-
 class ApiConfig {
-
   static String get baseUrl {
     // استخدم 10.0.2.2 إذا كنت تستخدم محاكي أندرويد (Android Emulator)
     // استخدم IP جهازك (مثل 192.168.1.17) إذا كنت تستخدم جوال حقيقي
-    const String pcIp = '192.168.1.17'; 
+    const String pcIp = '192.168.1.17';
     return 'http://$pcIp:8080/api/v1';
   }
 
@@ -20,13 +18,12 @@ class ApiConfig {
   static const String products = '/shop/products';
   // Categories (Public)
   static const String categories = '/shop/categories';
-  
+
   // Customer (Protected)
   static const String customerProfile = '/customer/profile';
   static const String cart = '/customer/cart';
   static const String orders = '/customer/orders';
-  
 
   // Legacy/Deprecated - Keep for compatibility until services are updated
-  static const String usersStats = '/customer/profile'; 
+  static const String usersStats = '/customer/profile';
 }

@@ -18,9 +18,18 @@ class UserModel with _$UserModel {
     @HiveField(3) @JsonKey(name: 'photo_url') String? photoUrl,
     @HiveField(4) String? phone,
     @HiveField(5) @JsonKey(name: 'default_address_id') String? defaultAddressId,
-    @HiveField(6) @JsonKey(name: 'preferred_language') @Default('ar') String? preferredLanguage,
-    @HiveField(7) @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt) @Default(true) bool notificationsEnabled,
-    @HiveField(8) @JsonKey(name: 'is_active', fromJson: _boolFromInt) @Default(true) bool isActive,
+    @HiveField(6)
+    @JsonKey(name: 'preferred_language')
+    @Default('ar')
+    String? preferredLanguage,
+    @HiveField(7)
+    @JsonKey(name: 'notifications_enabled', fromJson: _boolFromInt)
+    @Default(true)
+    bool notificationsEnabled,
+    @HiveField(8)
+    @JsonKey(name: 'is_active', fromJson: _boolFromInt)
+    @Default(true)
+    bool isActive,
     @HiveField(9) @JsonKey(name: 'created_at') DateTime? createdAt,
     @HiveField(10) @JsonKey(name: 'last_login') DateTime? lastLogin,
     @HiveField(11) String? token,
@@ -30,7 +39,8 @@ class UserModel with _$UserModel {
     @HiveField(15) List<AddressModel>? addresses,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 }
 
 int _parseInt(dynamic value) {

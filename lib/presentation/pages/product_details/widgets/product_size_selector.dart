@@ -24,8 +24,11 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedSize = widget.initialSize ?? 
-        (widget.product.size?.isNotEmpty == true ? widget.product.size!.first : null);
+    _selectedSize =
+        widget.initialSize ??
+        (widget.product.size?.isNotEmpty == true
+            ? widget.product.size!.first
+            : null);
   }
 
   @override
@@ -79,7 +82,9 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
               ),
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: isSelected ? primaryColor : primaryColor.withOpacity(0.3),
+                  color: isSelected
+                      ? primaryColor
+                      : primaryColor.withOpacity(0.3),
                   width: isSelected ? 2 : 1,
                 ),
                 borderRadius: BorderRadius.circular(8),

@@ -53,8 +53,11 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedFlavor = widget.initialFlavor ?? 
-        (widget.product.flavors?.isNotEmpty == true ? widget.product.flavors!.first : null);
+    _selectedFlavor =
+        widget.initialFlavor ??
+        (widget.product.flavors?.isNotEmpty == true
+            ? widget.product.flavors!.first
+            : null);
   }
 
   @override
@@ -109,7 +112,9 @@ class _ProductFlavorSelectorState extends State<ProductFlavorSelector> {
               ),
               shape: RoundedRectangleBorder(
                 side: BorderSide(
-                  color: isSelected ? flavorColor : flavorColor.withOpacity(0.5),
+                  color: isSelected
+                      ? flavorColor
+                      : flavorColor.withOpacity(0.5),
                   width: isSelected ? 2 : 1,
                 ),
                 borderRadius: BorderRadius.circular(8),

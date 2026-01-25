@@ -16,10 +16,7 @@ class CartItemCard extends StatelessWidget {
 
   final CartItemModel item;
 
-  const CartItemCard({
-    super.key,
-    required this.item,
-  });
+  const CartItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +42,7 @@ class CartItemCard extends StatelessWidget {
             children: [
               buildProductCartImage(item),
               const SizedBox(width: _spacing),
-              Expanded(
-                child: buildProductCartDetails(item),
-              ),
+              Expanded(child: buildProductCartDetails(item)),
               const SizedBox(width: 8.0),
               buildQuantityControls(item.product),
             ],

@@ -149,7 +149,7 @@ class ApiService {
           }
         }
       } catch (_) {}
-      
+
       print(
         '❌ Validation Error (422): $errorDescription | Body: ${response.body}',
       );
@@ -213,5 +213,4 @@ class ApiService {
       throw _handleError(e);
     }
   }
-
 }

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
 
 class NetworkUtils {
-  
   static Future<void> runIfConnected(
     Future<void> Function() action, {
     String message = "يرجى التحقق من اتصالك بالإنترنت للمتابعة",

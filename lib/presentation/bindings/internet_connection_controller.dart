@@ -4,7 +4,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 
 class InternetConnectionController extends GetxController {
   final RxBool isConnected = true.obs;
-  
+
   StreamSubscription? _subscription;
   late final InternetConnection _internetConnection;
 

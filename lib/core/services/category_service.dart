@@ -42,20 +42,26 @@ class CategoryService extends GetxService {
       final response = await _apiService.get(ApiConfig.categories);
 
       print('DEBUG: Categories Response status: ${response.statusCode}');
-      
+
       final dynamic decodedData = jsonDecode(response.body);
       List<CategoryModel> categoriesResult = [];
 
       if (decodedData is List) {
-        categoriesResult = decodedData.map((json) => CategoryModel.fromJson(json)).toList();
+        categoriesResult = decodedData
+            .map((json) => CategoryModel.fromJson(json))
+            .toList();
       } else if (decodedData is Map) {
         final dynamic data = decodedData['data'];
         if (data is List) {
-          categoriesResult = data.map((json) => CategoryModel.fromJson(json)).toList();
+          categoriesResult = data
+              .map((json) => CategoryModel.fromJson(json))
+              .toList();
         } else if (decodedData['status'] == 'success' && data != null) {
           // Some APIs wrap success responses differently
           if (data is List) {
-            categoriesResult = data.map((json) => CategoryModel.fromJson(json)).toList();
+            categoriesResult = data
+                .map((json) => CategoryModel.fromJson(json))
+                .toList();
           }
         }
       }

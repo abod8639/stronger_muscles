@@ -237,17 +237,17 @@ _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$OrderItemModelImplToJson(
-        _$OrderItemModelImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'order_id': instance.orderId,
-      'product_id': instance.productId,
-      'product_name': instance.productName,
-      'unit_price': instance.unitPrice,
-      'quantity': instance.quantity,
-      'subtotal': instance.subtotal,
-      'image_url': instance.imageUrl,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'selectedFlavor': instance.selectedFlavor,
-      'selectedSize': instance.selectedSize,
-    };
+  _$OrderItemModelImpl instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'order_id': instance.orderId,
+  'product_id': instance.productId,
+  'product_name': instance.productName,
+  'unit_price': instance.unitPrice,
+  'quantity': instance.quantity,
+  'subtotal': instance.subtotal,
+  'image_url': instance.imageUrl,
+  'created_at': instance.createdAt?.toIso8601String(),
+  'selectedFlavor': instance.selectedFlavor,
+  'selectedSize': instance.selectedSize,
+};

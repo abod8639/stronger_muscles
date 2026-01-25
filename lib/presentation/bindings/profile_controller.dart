@@ -15,7 +15,7 @@ class ProfileController extends GetxController {
   final RxList<OrderModel> orders = <OrderModel>[].obs;
   final RxList<AddressModel> addresses = <AddressModel>[].obs;
   final RxInt wishlistCount = 0.obs;
-  
+
   // Expose isLoading and currentUser from AuthController
   RxBool get isLoading => _authController.isLoading;
   Rx<UserModel?> get currentUser => _authController.currentUser;
@@ -23,7 +23,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    
+
     // Listen to currentUser changes
     ever(_authController.currentUser, (UserModel? user) {
       if (user != null) {
@@ -84,8 +84,10 @@ class ProfileController extends GetxController {
 
   // Statistics
   int get totalOrders => orders.length;
-  double get totalSpent => orders.fold(0, (sum, order) => sum + order.totalAmount);
-  int get deliveredOrders => orders.where((o) => o.status == 'delivered').length;
+  double get totalSpent =>
+      orders.fold(0, (sum, order) => sum + order.totalAmount);
+  int get deliveredOrders =>
+      orders.where((o) => o.status == 'delivered').length;
 
   Future<void> signOut() async {
     await _authController.signOut();

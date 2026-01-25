@@ -11,10 +11,9 @@ Widget buildProductBadges(ProductModel product, BuildContext context) {
 
   // Discount Badge
   if (product.hasDiscount) {
-    badges.add(_buildBadge(
-      '${product.discountPercentage.toInt()}% OFF',
-      Colors.red,
-    ));
+    badges.add(
+      _buildBadge('${product.discountPercentage.toInt()}% OFF', Colors.red),
+    );
   }
 
   // New Arrival
@@ -39,11 +38,7 @@ Widget buildProductBadges(ProductModel product, BuildContext context) {
 
   if (badges.isEmpty) return const SizedBox.shrink();
 
-  return Wrap(
-    spacing: 8,
-    runSpacing: 8,
-    children: badges,
-  );
+  return Wrap(spacing: 8, runSpacing: 8, children: badges);
 }
 
 Widget _buildBadge(String label, Color color) {

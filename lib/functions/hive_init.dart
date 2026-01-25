@@ -7,7 +7,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/models/user_model.dart';
 
 Future<void> hiveInit() async {
-    // Register Adapters
+  // Register Adapters
   Hive.registerAdapter(CartItemModelAdapter());
   Hive.registerAdapter(OrderModelAdapter());
   Hive.registerAdapter(OrderItemModelAdapter());
@@ -15,7 +15,7 @@ Future<void> hiveInit() async {
   Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(ProductModelAdapter());
   Hive.registerAdapter(CategoryModelAdapter());
-  
+
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');
   await Hive.openBox<String>('wishlist');
@@ -23,5 +23,4 @@ Future<void> hiveInit() async {
   await Hive.openBox<CategoryModel>('categories');
   await Hive.openBox('settings'); // For theme and language settings
   await Hive.openBox('auth_box'); // Open the box for auth tokens
-  
 }

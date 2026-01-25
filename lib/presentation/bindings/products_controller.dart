@@ -14,7 +14,7 @@ class ProductsController extends GetxController {
   void onInit() {
     super.onInit();
     _loadLocalData(); // اعرض البيانات القديمة فوراً
-    fetchProducts();  // حاول التحديث من السيرفر
+    fetchProducts(); // حاول التحديث من السيرفر
   }
 
   // تحميل سريع من الذاكرة المحلية
@@ -24,7 +24,11 @@ class ProductsController extends GetxController {
     }
   }
 
-  Future<void> fetchProducts({String? categoryId, String? query, bool refresh = false}) async {
+  Future<void> fetchProducts({
+    String? categoryId,
+    String? query,
+    bool refresh = false,
+  }) async {
     try {
       if (products.isEmpty) isLoading.value = true;
 
@@ -32,12 +36,15 @@ class ProductsController extends GetxController {
         categoryId: categoryId,
         query: query,
       );
-      
+
       products.assignAll(fetchedProducts);
     } catch (e) {
       // إذا فشل الإنترنت، ستظل البيانات المحلية معروضة
       if (products.isEmpty) {
-        Get.snackbar('تنبيه', 'لا يوجد اتصال بالإنترنت والبيانات المحلية فارغة');
+        Get.snackbar(
+          'تنبيه',
+          'لا يوجد اتصال بالإنترنت والبيانات المحلية فارغة',
+        );
       }
     } finally {
       isLoading.value = false;

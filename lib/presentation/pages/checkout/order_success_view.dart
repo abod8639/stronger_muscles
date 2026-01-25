@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class OrderSuccessView extends StatelessWidget {
@@ -9,8 +8,6 @@ class OrderSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(ProductDetailsController());
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -46,7 +43,10 @@ class OrderSuccessView extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

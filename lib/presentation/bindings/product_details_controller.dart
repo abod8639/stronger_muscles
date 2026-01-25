@@ -12,14 +12,20 @@ class ProductDetailsController extends GetxController {
   final RxInt selectedImageIndex = 0.obs;
   final RxString selectedFlavor = "".obs;
   final RxString selectedSize = "".obs;
-  
+
   final ScrollController imageScrollController = ScrollController();
 
-  ProductDetailsController(this.product, {String? initialFlavor, String? initialSize}) {
-    selectedFlavor.value = initialFlavor ?? 
+  ProductDetailsController(
+    this.product, {
+    String? initialFlavor,
+    String? initialSize,
+  }) {
+    selectedFlavor.value =
+        initialFlavor ??
         (product.flavors?.isNotEmpty == true ? product.flavors!.first : "");
-        
-    selectedSize.value = initialSize ?? 
+
+    selectedSize.value =
+        initialSize ??
         (product.size?.isNotEmpty == true ? product.size!.first : "");
   }
 

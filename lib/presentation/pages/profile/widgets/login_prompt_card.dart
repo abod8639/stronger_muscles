@@ -80,12 +80,9 @@ class LoginPromptCard extends StatelessWidget {
             onPressed: () async {
               await controller.signInWithGoogle();
             },
-            icon: const Icon(Icons.g_mobiledata_outlined,
-            size: 35,
-            ),
+            icon: const Icon(Icons.g_mobiledata_outlined, size: 35),
             label: const Text('Sign in with Google'),
             style: ElevatedButton.styleFrom(
-              
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),

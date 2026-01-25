@@ -34,8 +34,9 @@ class _AddressFormState extends State<AddressForm> {
     _streetController = TextEditingController(text: widget.address?.street);
     _cityController = TextEditingController(text: widget.address?.city);
     _stateController = TextEditingController(text: widget.address?.state);
-    _postalCodeController =
-        TextEditingController(text: widget.address?.postalCode);
+    _postalCodeController = TextEditingController(
+      text: widget.address?.postalCode,
+    );
     _countryController = TextEditingController(text: widget.address?.country);
     _label = widget.address?.label ?? 'Home';
   }
@@ -241,9 +242,7 @@ class _AddressFormState extends State<AddressForm> {
       validator: validator,
       decoration: InputDecoration(
         labelText: labelText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -266,8 +265,8 @@ class _AddressFormState extends State<AddressForm> {
         color: isSelected
             ? AppColors.white
             : isDark
-                ? AppColors.white
-                : AppColors.black,
+            ? AppColors.white
+            : AppColors.black,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),

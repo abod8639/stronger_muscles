@@ -35,9 +35,7 @@ class SavedAddressesList extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final address = controller.addresses[index];
-                return AddressCard(
-                  address: address,
-                );
+                return AddressCard(address: address);
               },
             ),
         ],

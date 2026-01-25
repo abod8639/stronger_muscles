@@ -1,12 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 
 class TitleAndDescription extends StatelessWidget {
-  const TitleAndDescription({
-    super.key,
-    required this.product,
-  });
+  const TitleAndDescription({super.key, required this.product});
 
   final ProductModel product;
 
@@ -30,8 +26,7 @@ class TitleAndDescription extends StatelessWidget {
         Text(
           product.description,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant
-                .withValues(alpha: 0.5),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             height: 1.2,
           ),
           maxLines: 2,

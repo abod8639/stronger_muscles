@@ -3,9 +3,8 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
 
 class InternetConnectionBanner extends GetView<InternetConnectionController> {
-    final String title;
-  const InternetConnectionBanner({
-    super.key, required this.title});
+  final String title;
+  const InternetConnectionBanner({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +22,16 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Center(
-              child: const Icon(
-                Icons.wifi_off,
-                color: Colors.white,
-                size: 24,
-              ),
+              child: const Icon(Icons.wifi_off, color: Colors.white, size: 24),
             ),
             Center(
               child: Expanded(
                 child: Text(
                   title,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

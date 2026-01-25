@@ -12,7 +12,6 @@ class MainPage extends GetView<MainController> {
 
   @override
   Widget build(BuildContext context) {
-
     final pages = <Widget>[
       const HomeView(),
       const WishlistView(),
@@ -23,16 +22,14 @@ class MainPage extends GetView<MainController> {
     return Scaffold(
       body: Column(
         children: [
-          
           Expanded(
-            child: Obx(() => IndexedStack(
-                  index: controller.tabIndex.value,
-                  children: pages,
-                )),
+            child: Obx(
+              () => IndexedStack(
+                index: controller.tabIndex.value,
+                children: pages,
+              ),
+            ),
           ),
-          // Obx(() => internetController.isConnected.value 
-              // ? const SizedBox.shrink() 
-              // : const InternetConnectionBanner()),
         ],
       ),
       bottomNavigationBar: MyBottomNavigationBar(),

@@ -88,10 +88,7 @@ class AppPages {
       page: () => const CheckoutView(),
       binding: CheckoutBinding(),
     ),
-    GetPage(
-      name: AppRoutes.orderSuccess,
-      page: () => const OrderSuccessView(),
-    ),
+    GetPage(name: AppRoutes.orderSuccess, page: () => const OrderSuccessView()),
     GetPage(
       name: AppRoutes.editUserInfo,
       page: () => const EditUserInfoView(),

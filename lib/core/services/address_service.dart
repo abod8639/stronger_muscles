@@ -13,7 +13,7 @@ class AddressService extends GetxService {
   /// Get all addresses for the current user
   Future<List<AddressModel>> getAddresses() async {
     try {
-      final response = await _apiService.get(ApiConfig.addresses );
+      final response = await _apiService.get(ApiConfig.addresses);
       print('📍 Get Addresses Response: ${response.body}');
 
       final body = jsonDecode(response.body);
@@ -104,7 +104,9 @@ class AddressService extends GetxService {
   /// Set an address as default
   Future<AddressModel> setDefaultAddress(int id) async {
     try {
-      final response = await _apiService.post('${ApiConfig.addresses}/$id/set-default');
+      final response = await _apiService.post(
+        '${ApiConfig.addresses}/$id/set-default',
+      );
       print('📍 Set Default Address Response: ${response.body}');
 
       final body = jsonDecode(response.body);

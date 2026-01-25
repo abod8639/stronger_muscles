@@ -16,23 +16,23 @@ class CategoriesShortcutsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final sectionsController = Get.find<CategoriesSectionsController>();
 
-    return Obx(() => Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _horizontalPadding,
-        vertical: _verticalPadding,
-      ),
-      child: SizedBox(
-        height: _rowHeight,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          physics: const BouncingScrollPhysics(),
-          itemCount: sectionsController.selections.length,
-          separatorBuilder: (_, index) => const SizedBox(width: _spacing),
-          itemBuilder: (context, index) => buildShortcutItem(index),
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: _horizontalPadding,
+          vertical: _verticalPadding,
+        ),
+        child: SizedBox(
+          height: _rowHeight,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
+            itemCount: sectionsController.selections.length,
+            separatorBuilder: (_, index) => const SizedBox(width: _spacing),
+            itemBuilder: (context, index) => buildShortcutItem(index),
+          ),
         ),
       ),
-    ));
+    );
   }
 }
-
-

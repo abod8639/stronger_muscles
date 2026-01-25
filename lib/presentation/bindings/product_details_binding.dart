@@ -6,14 +6,16 @@ class ProductDetailsBinding extends Bindings {
   @override
   void dependencies() {
     final args = Get.arguments;
-    
+
     if (args is ProductModel) {
-      Get.lazyPut<ProductDetailsController>(() => ProductDetailsController(args));
+      Get.lazyPut<ProductDetailsController>(
+        () => ProductDetailsController(args),
+      );
     } else if (args is Map<String, dynamic>) {
       final product = args['product'] as ProductModel;
       final flavor = args['selectedFlavor'] as String?;
       final size = args['selectedSize'] as String?;
-      
+
       Get.lazyPut<ProductDetailsController>(
         () => ProductDetailsController(
           product,

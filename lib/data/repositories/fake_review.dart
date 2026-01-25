@@ -118,28 +118,34 @@ class FakeReviews {
   }
 
   /// Get a subset of reviews for testing
-  static List<ReviewModel> getTopReviews({int count = 5, String productId = 'default'}) {
+  static List<ReviewModel> getTopReviews({
+    int count = 5,
+    String productId = 'default',
+  }) {
     final allReviews = getFakeReviews(productId: productId);
     return allReviews.take(count).toList();
   }
 
   /// Get reviews filtered by minimum rating
-  static List<ReviewModel> getReviewsByRating(double minRating, {String productId = 'default'}) {
-    return getFakeReviews(productId: productId)
-        .where((review) => review.rating >= minRating)
-        .toList();
+  static List<ReviewModel> getReviewsByRating(
+    double minRating, {
+    String productId = 'default',
+  }) {
+    return getFakeReviews(
+      productId: productId,
+    ).where((review) => review.rating >= minRating).toList();
   }
 
   /// Calculate average rating
   static double getAverageRating({String productId = 'default'}) {
     final reviews = getFakeReviews(productId: productId);
     if (reviews.isEmpty) return 0.0;
-    
+
     final totalRating = reviews.fold<double>(
       0.0,
       (sum, review) => sum + review.rating,
     );
-    
+
     return totalRating / reviews.length;
   }
 }

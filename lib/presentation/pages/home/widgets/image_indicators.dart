@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
@@ -28,9 +27,7 @@ class ImageIndicators extends StatelessWidget {
             final isActive = _selectedImageIndex.value == index;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(
-                horizontal: 2.0,
-              ),
+              margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4.0,
               width: isActive ? 16.0 : 4.0,
               decoration: BoxDecoration(
@@ -46,4 +43,3 @@ class ImageIndicators extends StatelessWidget {
     );
   }
 }
-

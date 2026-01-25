@@ -4,12 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
 
 class QuickActionsRow extends StatelessWidget {
-
-
-  const QuickActionsRow({
-    super.key,
-
-  });
+  const QuickActionsRow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +24,15 @@ class QuickActionsRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: Obx(() => _buildQuickActionCard(
-              icon: Icons.favorite_outline,
-              label: 'Wishlist',
-              value: controller.wishlistCount.value.toString(),
-              color: AppColors.error,
-              onTap: () => Get.toNamed('/wishlist'),
-            )),
+            child: Obx(
+              () => _buildQuickActionCard(
+                icon: Icons.favorite_outline,
+                label: 'Wishlist',
+                value: controller.wishlistCount.value.toString(),
+                color: AppColors.error,
+                onTap: () => Get.toNamed('/wishlist'),
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -59,11 +56,10 @@ class QuickActionsRow extends StatelessWidget {
     required Color color,
     required VoidCallback onTap,
   }) {
-    
     return Builder(
       builder: (context) {
         final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+        final isDark = theme.brightness == Brightness.dark;
         return InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(12),
@@ -104,7 +100,7 @@ class QuickActionsRow extends StatelessWidget {
             ),
           ),
         );
-      }
+      },
     );
   }
 }
