@@ -14,8 +14,7 @@ class SignUpPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
     final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+
     final confirmPasswordController = TextEditingController();
 
     return Scaffold(
@@ -31,8 +30,8 @@ class SignUpPage extends GetView<AuthController> {
               children: [
                 inputFields(
                   nameController,
-                  emailController,
-                  passwordController,
+                  controller.emailController,
+                  controller.passwordController,
                   confirmPasswordController,
                 ),
 
@@ -43,8 +42,8 @@ class SignUpPage extends GetView<AuthController> {
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               controller.signUpWithEmail(
-                                emailController.text.trim(),
-                                passwordController.text,
+                                controller.emailController.text.trim(),
+                                controller.passwordController.text,
                                 nameController.text.trim(),
                               );
                             }

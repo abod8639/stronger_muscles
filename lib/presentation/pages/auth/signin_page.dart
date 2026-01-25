@@ -14,8 +14,6 @@ class SignInPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
@@ -28,7 +26,7 @@ class SignInPage extends GetView<AuthController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                inputFields(emailController, passwordController),
+                inputFields(controller.emailController, controller.passwordController),
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
@@ -54,8 +52,8 @@ class SignInPage extends GetView<AuthController> {
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               controller.signInWithEmail(
-                                email: emailController.text.trim(),
-                                password: passwordController.text,
+                                email: controller.emailController.text.trim(),
+                                password: controller.passwordController.text,
                               );
                             }
                           },

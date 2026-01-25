@@ -14,6 +14,9 @@ class AuthController extends GetxController {
     AuthService(),
   ); // Ensure AuthService is initialized
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   final RxString userId = ''.obs;
   final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
@@ -26,6 +29,15 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     _checkCurrentUser();
+    emailController.clear();
+    passwordController.clear();
+  }
+
+  @override
+  void onClose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.onClose();
   }
 
   Future<void> _checkCurrentUser() async {

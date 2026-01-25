@@ -12,12 +12,11 @@ import 'package:stronger_muscles/presentation/pages/profile/widgets/account_sett
 import 'package:stronger_muscles/presentation/pages/profile/widgets/login_prompt_card.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.put(ProfileController());
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -27,14 +26,14 @@ class ProfilePage extends StatelessWidget {
           _buildAppBar(theme),
           SliverToBoxAdapter(
             child: Obx(() {
-              if (profileController.isLoading.value) {
+              if (controller.isLoading.value) {
                 return const SizedBox(
                   height: 400,
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
 
-              if (profileController.currentUser.value == null) {
+              if (controller.currentUser.value == null) {
                 return LoginPromptCard();
               }
               // orders
@@ -58,7 +57,7 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 24),
                   AccountSettingsList(),
                   const SizedBox(height: 24),
-                  _buildSignOutButton(profileController),
+                  _buildSignOutButton(controller),
                   const SizedBox(height: 32),
                 ],
               );
