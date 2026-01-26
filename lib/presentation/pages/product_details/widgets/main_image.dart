@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_controller.dart';
 
@@ -50,6 +51,7 @@ class MainImage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager.instance,
                   imageUrl: product.imageUrls[index],
                   fit: BoxFit.contain,
                   placeholder: (context, url) => _buildPlaceholder(),

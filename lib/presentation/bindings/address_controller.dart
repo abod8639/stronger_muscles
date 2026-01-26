@@ -12,14 +12,13 @@ class AddressController extends GetxController {
   final RxBool isDefault = false.obs;
 
   // Controllers for the add address form
-  final Rx<TextEditingController> streetController =
-      TextEditingController().obs;
+  final Rx<TextEditingController> streetController = TextEditingController().obs;
   final Rx<TextEditingController> cityController = TextEditingController().obs;
   final Rx<TextEditingController> stateController = TextEditingController().obs;
-  final Rx<TextEditingController> postalCodeController =
-      TextEditingController().obs;
-  final Rx<TextEditingController> countryController =
-      TextEditingController().obs;
+  final Rx<TextEditingController> postalCodeController = TextEditingController().obs;
+  final Rx<TextEditingController> countryController = TextEditingController().obs;
+  final Rx<TextEditingController> fullNameController = TextEditingController().obs;
+  final Rx<TextEditingController> phoneNumberController = TextEditingController().obs;
 
   @override
   void onInit() {
@@ -34,6 +33,8 @@ class AddressController extends GetxController {
     stateController.value.dispose();
     postalCodeController.value.dispose();
     countryController.value.dispose();
+    fullNameController.value.dispose();
+    phoneNumberController.value.dispose();
     super.onClose();
   }
 
@@ -172,6 +173,8 @@ class AddressController extends GetxController {
 
       if (place != null) {
         // Fill the observable controllers
+        fullNameController.value.text = place.name ?? '';
+        // phoneNumberController.value.text = place.phone ?? '';
         streetController.value.text = place.street ?? '';
         cityController.value.text = place.locality ?? '';
         stateController.value.text = place.administrativeArea ?? '';
@@ -199,6 +202,8 @@ class AddressController extends GetxController {
     stateController.value.clear();
     postalCodeController.value.clear();
     countryController.value.clear();
+    fullNameController.value.clear();
+    phoneNumberController.value.clear();
   }
 
   String? validateStreet(String? value) {

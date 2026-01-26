@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart';
@@ -244,6 +245,7 @@ class CheckoutView extends GetView<CheckoutController> {
               final item = cartController.cartItems[index];
               return ListTile(
                 leading: CachedNetworkImage(
+                cacheManager: CustomCacheManager.instance,
                   imageUrl: item.product.imageUrls.first,
                   width: 40,
                   height: 40,
