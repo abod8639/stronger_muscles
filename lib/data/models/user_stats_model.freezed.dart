@@ -12,8 +12,7 @@ part of 'user_stats_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 UserStats _$UserStatsFromJson(Map<String, dynamic> json) {
   return _UserStats.fromJson(json);
@@ -42,14 +41,13 @@ abstract class $UserStatsCopyWith<$Res> {
   factory $UserStatsCopyWith(UserStats value, $Res Function(UserStats) then) =
       _$UserStatsCopyWithImpl<$Res, UserStats>;
   @useResult
-  $Res call({
-    int id,
-    String name,
-    @JsonKey(name: 'photo_url') String? photoUrl,
-    @JsonKey(name: 'has_ordered') bool hasOrdered,
-    @JsonKey(name: 'orders_count') int ordersCount,
-    List<OrderModel> orders,
-  });
+  $Res call(
+      {int id,
+      String name,
+      @JsonKey(name: 'photo_url') String? photoUrl,
+      @JsonKey(name: 'has_ordered') bool hasOrdered,
+      @JsonKey(name: 'orders_count') int ordersCount,
+      List<OrderModel> orders});
 }
 
 /// @nodoc
@@ -72,35 +70,32 @@ class _$UserStatsCopyWithImpl<$Res, $Val extends UserStats>
     Object? ordersCount = null,
     Object? orders = null,
   }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as int,
-            name: null == name
-                ? _value.name
-                : name // ignore: cast_nullable_to_non_nullable
-                      as String,
-            photoUrl: freezed == photoUrl
-                ? _value.photoUrl
-                : photoUrl // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            hasOrdered: null == hasOrdered
-                ? _value.hasOrdered
-                : hasOrdered // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            ordersCount: null == ordersCount
-                ? _value.ordersCount
-                : ordersCount // ignore: cast_nullable_to_non_nullable
-                      as int,
-            orders: null == orders
-                ? _value.orders
-                : orders // ignore: cast_nullable_to_non_nullable
-                      as List<OrderModel>,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      photoUrl: freezed == photoUrl
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hasOrdered: null == hasOrdered
+          ? _value.hasOrdered
+          : hasOrdered // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ordersCount: null == ordersCount
+          ? _value.ordersCount
+          : ordersCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      orders: null == orders
+          ? _value.orders
+          : orders // ignore: cast_nullable_to_non_nullable
+              as List<OrderModel>,
+    ) as $Val);
   }
 }
 
@@ -108,19 +103,17 @@ class _$UserStatsCopyWithImpl<$Res, $Val extends UserStats>
 abstract class _$$UserStatsImplCopyWith<$Res>
     implements $UserStatsCopyWith<$Res> {
   factory _$$UserStatsImplCopyWith(
-    _$UserStatsImpl value,
-    $Res Function(_$UserStatsImpl) then,
-  ) = __$$UserStatsImplCopyWithImpl<$Res>;
+          _$UserStatsImpl value, $Res Function(_$UserStatsImpl) then) =
+      __$$UserStatsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    int id,
-    String name,
-    @JsonKey(name: 'photo_url') String? photoUrl,
-    @JsonKey(name: 'has_ordered') bool hasOrdered,
-    @JsonKey(name: 'orders_count') int ordersCount,
-    List<OrderModel> orders,
-  });
+  $Res call(
+      {int id,
+      String name,
+      @JsonKey(name: 'photo_url') String? photoUrl,
+      @JsonKey(name: 'has_ordered') bool hasOrdered,
+      @JsonKey(name: 'orders_count') int ordersCount,
+      List<OrderModel> orders});
 }
 
 /// @nodoc
@@ -128,9 +121,8 @@ class __$$UserStatsImplCopyWithImpl<$Res>
     extends _$UserStatsCopyWithImpl<$Res, _$UserStatsImpl>
     implements _$$UserStatsImplCopyWith<$Res> {
   __$$UserStatsImplCopyWithImpl(
-    _$UserStatsImpl _value,
-    $Res Function(_$UserStatsImpl) _then,
-  ) : super(_value, _then);
+      _$UserStatsImpl _value, $Res Function(_$UserStatsImpl) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -142,48 +134,46 @@ class __$$UserStatsImplCopyWithImpl<$Res>
     Object? ordersCount = null,
     Object? orders = null,
   }) {
-    return _then(
-      _$UserStatsImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as int,
-        name: null == name
-            ? _value.name
-            : name // ignore: cast_nullable_to_non_nullable
-                  as String,
-        photoUrl: freezed == photoUrl
-            ? _value.photoUrl
-            : photoUrl // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        hasOrdered: null == hasOrdered
-            ? _value.hasOrdered
-            : hasOrdered // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        ordersCount: null == ordersCount
-            ? _value.ordersCount
-            : ordersCount // ignore: cast_nullable_to_non_nullable
-                  as int,
-        orders: null == orders
-            ? _value._orders
-            : orders // ignore: cast_nullable_to_non_nullable
-                  as List<OrderModel>,
-      ),
-    );
+    return _then(_$UserStatsImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      photoUrl: freezed == photoUrl
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      hasOrdered: null == hasOrdered
+          ? _value.hasOrdered
+          : hasOrdered // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ordersCount: null == ordersCount
+          ? _value.ordersCount
+          : ordersCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      orders: null == orders
+          ? _value._orders
+          : orders // ignore: cast_nullable_to_non_nullable
+              as List<OrderModel>,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UserStatsImpl implements _UserStats {
-  const _$UserStatsImpl({
-    required this.id,
-    required this.name,
-    @JsonKey(name: 'photo_url') this.photoUrl,
-    @JsonKey(name: 'has_ordered') required this.hasOrdered,
-    @JsonKey(name: 'orders_count') required this.ordersCount,
-    required final List<OrderModel> orders,
-  }) : _orders = orders;
+  const _$UserStatsImpl(
+      {required this.id,
+      required this.name,
+      @JsonKey(name: 'photo_url') this.photoUrl,
+      @JsonKey(name: 'has_ordered') required this.hasOrdered,
+      @JsonKey(name: 'orders_count') required this.ordersCount,
+      required final List<OrderModel> orders})
+      : _orders = orders;
 
   factory _$UserStatsImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserStatsImplFromJson(json);
@@ -232,15 +222,8 @@ class _$UserStatsImpl implements _UserStats {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    name,
-    photoUrl,
-    hasOrdered,
-    ordersCount,
-    const DeepCollectionEquality().hash(_orders),
-  );
+  int get hashCode => Object.hash(runtimeType, id, name, photoUrl, hasOrdered,
+      ordersCount, const DeepCollectionEquality().hash(_orders));
 
   @JsonKey(ignore: true)
   @override
@@ -250,19 +233,20 @@ class _$UserStatsImpl implements _UserStats {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserStatsImplToJson(this);
+    return _$$UserStatsImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _UserStats implements UserStats {
-  const factory _UserStats({
-    required final int id,
-    required final String name,
-    @JsonKey(name: 'photo_url') final String? photoUrl,
-    @JsonKey(name: 'has_ordered') required final bool hasOrdered,
-    @JsonKey(name: 'orders_count') required final int ordersCount,
-    required final List<OrderModel> orders,
-  }) = _$UserStatsImpl;
+  const factory _UserStats(
+      {required final int id,
+      required final String name,
+      @JsonKey(name: 'photo_url') final String? photoUrl,
+      @JsonKey(name: 'has_ordered') required final bool hasOrdered,
+      @JsonKey(name: 'orders_count') required final int ordersCount,
+      required final List<OrderModel> orders}) = _$UserStatsImpl;
 
   factory _UserStats.fromJson(Map<String, dynamic> json) =
       _$UserStatsImpl.fromJson;
@@ -307,14 +291,11 @@ mixin _$UsersStatsResponse {
 /// @nodoc
 abstract class $UsersStatsResponseCopyWith<$Res> {
   factory $UsersStatsResponseCopyWith(
-    UsersStatsResponse value,
-    $Res Function(UsersStatsResponse) then,
-  ) = _$UsersStatsResponseCopyWithImpl<$Res, UsersStatsResponse>;
+          UsersStatsResponse value, $Res Function(UsersStatsResponse) then) =
+      _$UsersStatsResponseCopyWithImpl<$Res, UsersStatsResponse>;
   @useResult
-  $Res call({
-    @JsonKey(name: 'total_users') int totalUsers,
-    List<UserStats> users,
-  });
+  $Res call(
+      {@JsonKey(name: 'total_users') int totalUsers, List<UserStats> users});
 }
 
 /// @nodoc
@@ -329,72 +310,69 @@ class _$UsersStatsResponseCopyWithImpl<$Res, $Val extends UsersStatsResponse>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? totalUsers = null, Object? users = null}) {
-    return _then(
-      _value.copyWith(
-            totalUsers: null == totalUsers
-                ? _value.totalUsers
-                : totalUsers // ignore: cast_nullable_to_non_nullable
-                      as int,
-            users: null == users
-                ? _value.users
-                : users // ignore: cast_nullable_to_non_nullable
-                      as List<UserStats>,
-          )
-          as $Val,
-    );
+  $Res call({
+    Object? totalUsers = null,
+    Object? users = null,
+  }) {
+    return _then(_value.copyWith(
+      totalUsers: null == totalUsers
+          ? _value.totalUsers
+          : totalUsers // ignore: cast_nullable_to_non_nullable
+              as int,
+      users: null == users
+          ? _value.users
+          : users // ignore: cast_nullable_to_non_nullable
+              as List<UserStats>,
+    ) as $Val);
   }
 }
 
 /// @nodoc
 abstract class _$$UsersStatsResponseImplCopyWith<$Res>
     implements $UsersStatsResponseCopyWith<$Res> {
-  factory _$$UsersStatsResponseImplCopyWith(
-    _$UsersStatsResponseImpl value,
-    $Res Function(_$UsersStatsResponseImpl) then,
-  ) = __$$UsersStatsResponseImplCopyWithImpl<$Res>;
+  factory _$$UsersStatsResponseImplCopyWith(_$UsersStatsResponseImpl value,
+          $Res Function(_$UsersStatsResponseImpl) then) =
+      __$$UsersStatsResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    @JsonKey(name: 'total_users') int totalUsers,
-    List<UserStats> users,
-  });
+  $Res call(
+      {@JsonKey(name: 'total_users') int totalUsers, List<UserStats> users});
 }
 
 /// @nodoc
 class __$$UsersStatsResponseImplCopyWithImpl<$Res>
     extends _$UsersStatsResponseCopyWithImpl<$Res, _$UsersStatsResponseImpl>
     implements _$$UsersStatsResponseImplCopyWith<$Res> {
-  __$$UsersStatsResponseImplCopyWithImpl(
-    _$UsersStatsResponseImpl _value,
-    $Res Function(_$UsersStatsResponseImpl) _then,
-  ) : super(_value, _then);
+  __$$UsersStatsResponseImplCopyWithImpl(_$UsersStatsResponseImpl _value,
+      $Res Function(_$UsersStatsResponseImpl) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? totalUsers = null, Object? users = null}) {
-    return _then(
-      _$UsersStatsResponseImpl(
-        totalUsers: null == totalUsers
-            ? _value.totalUsers
-            : totalUsers // ignore: cast_nullable_to_non_nullable
-                  as int,
-        users: null == users
-            ? _value._users
-            : users // ignore: cast_nullable_to_non_nullable
-                  as List<UserStats>,
-      ),
-    );
+  $Res call({
+    Object? totalUsers = null,
+    Object? users = null,
+  }) {
+    return _then(_$UsersStatsResponseImpl(
+      totalUsers: null == totalUsers
+          ? _value.totalUsers
+          : totalUsers // ignore: cast_nullable_to_non_nullable
+              as int,
+      users: null == users
+          ? _value._users
+          : users // ignore: cast_nullable_to_non_nullable
+              as List<UserStats>,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UsersStatsResponseImpl implements _UsersStatsResponse {
-  const _$UsersStatsResponseImpl({
-    @JsonKey(name: 'total_users') required this.totalUsers,
-    required final List<UserStats> users,
-  }) : _users = users;
+  const _$UsersStatsResponseImpl(
+      {@JsonKey(name: 'total_users') required this.totalUsers,
+      required final List<UserStats> users})
+      : _users = users;
 
   factory _$UsersStatsResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsersStatsResponseImplFromJson(json);
@@ -428,31 +406,27 @@ class _$UsersStatsResponseImpl implements _UsersStatsResponse {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-    runtimeType,
-    totalUsers,
-    const DeepCollectionEquality().hash(_users),
-  );
+      runtimeType, totalUsers, const DeepCollectionEquality().hash(_users));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$UsersStatsResponseImplCopyWith<_$UsersStatsResponseImpl> get copyWith =>
       __$$UsersStatsResponseImplCopyWithImpl<_$UsersStatsResponseImpl>(
-        this,
-        _$identity,
-      );
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UsersStatsResponseImplToJson(this);
+    return _$$UsersStatsResponseImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _UsersStatsResponse implements UsersStatsResponse {
-  const factory _UsersStatsResponse({
-    @JsonKey(name: 'total_users') required final int totalUsers,
-    required final List<UserStats> users,
-  }) = _$UsersStatsResponseImpl;
+  const factory _UsersStatsResponse(
+      {@JsonKey(name: 'total_users') required final int totalUsers,
+      required final List<UserStats> users}) = _$UsersStatsResponseImpl;
 
   factory _UsersStatsResponse.fromJson(Map<String, dynamic> json) =
       _$UsersStatsResponseImpl.fromJson;

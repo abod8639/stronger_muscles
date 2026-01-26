@@ -29,17 +29,17 @@ Map<String, dynamic> _$$UserStatsImplToJson(_$UserStatsImpl instance) =>
     };
 
 _$UsersStatsResponseImpl _$$UsersStatsResponseImplFromJson(
-  Map<String, dynamic> json,
-) => _$UsersStatsResponseImpl(
-  totalUsers: (json['total_users'] as num).toInt(),
-  users: (json['users'] as List<dynamic>)
-      .map((e) => UserStats.fromJson(e as Map<String, dynamic>))
-      .toList(),
-);
+        Map<String, dynamic> json) =>
+    _$UsersStatsResponseImpl(
+      totalUsers: (json['total_users'] as num).toInt(),
+      users: (json['users'] as List<dynamic>)
+          .map((e) => UserStats.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$$UsersStatsResponseImplToJson(
-  _$UsersStatsResponseImpl instance,
-) => <String, dynamic>{
-  'total_users': instance.totalUsers,
-  'users': instance.users,
-};
+        _$UsersStatsResponseImpl instance) =>
+    <String, dynamic>{
+      'total_users': instance.totalUsers,
+      'users': instance.users,
+    };

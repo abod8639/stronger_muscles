@@ -7,9 +7,14 @@ class WishlistService extends GetxService {
   final RxList<ProductModel> items = <ProductModel>[].obs;
   late Box<String> _box;
 
-  Future<WishlistService> init() async {
-    _box = await Hive.openBox<String>('wishlist');
+  @override
+  void onInit() {
+    super.onInit();
+    _box = Hive.box<String>('wishlist');
     _loadItems();
+  }
+
+  Future<WishlistService> init() async {
     return this;
   }
 
