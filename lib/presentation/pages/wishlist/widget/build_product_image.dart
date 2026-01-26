@@ -4,7 +4,6 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 
-/// Builds the product image with hero animation and error handling
 Widget buildProductImage(ProductModel product) {
   const double imageSize = 100.0;
   const double imageBorderRadius = 8.0;

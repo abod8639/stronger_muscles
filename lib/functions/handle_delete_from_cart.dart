@@ -4,10 +4,11 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
 
-final controller = Get.find<CartController>();
+// No global controller here
 
 /// Handles the decrease quantity action
 void handleDecrease(BuildContext context, ProductModel item) {
+  final controller = Get.find<CartController>();
   final cartItem = controller.getCartItem(item);
   if (cartItem != null && cartItem.quantity > 1) {
     controller.decreaseQuantity(cartItem);
@@ -19,6 +20,7 @@ void handleDecrease(BuildContext context, ProductModel item) {
 
 /// Shows a confirmation dialog before removing the item from cart
 void showRemoveConfirmation(BuildContext context, ProductModel item) {
+  final controller = Get.find<CartController>();
   // Immediately remove the item from the cart
   controller.decreaseQuantity(controller.getCartItem(item)!);
 

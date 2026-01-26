@@ -14,14 +14,13 @@ const double _checkoutButtonFontSize = 18.0;
 
 const double _checkoutButtonRadius = 12.0;
 
-final controller = Get.find<CartController>();
-
 Widget checkoutButton() {
+  final controller = Get.find<CartController>();
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
 
-      return Semantics(
+      return Obx(() => Semantics(
         label: AppLocalizations.of(context)!.proceedToCheckout,
         button: true,
         child: ElevatedButton(
@@ -50,7 +49,7 @@ Widget checkoutButton() {
             ),
           ),
         ),
-      );
+      ));
     },
   );
 }

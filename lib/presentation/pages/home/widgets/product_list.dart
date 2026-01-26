@@ -15,11 +15,10 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<HomeController>();
+    final controller = Get.put(HomeController());
     final theme = Theme.of(context);
 
     return Obx(() {
-      // Loading state (initial or section change)
       if (controller.isLoading.value) {
         return const SliverToBoxAdapter(
           child: Center(heightFactor: 3, child: CircularProgressIndicator()),

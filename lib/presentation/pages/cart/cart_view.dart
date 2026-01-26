@@ -7,7 +7,7 @@ import 'package:stronger_muscles/presentation/pages/cart/widgets/build_cart_cont
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class CartView extends GetView<CartController> {
-  // Constants for styling
+  
   static const double _emptyIconSize = 96.0;
   static const double _emptyIconSpacing = 16.0;
   static const double _emptyTextSpacing = 8.0;
@@ -19,6 +19,7 @@ class CartView extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
+    // final controller = Get.put(CartController());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: _buildAppBar(context, theme),
@@ -31,7 +32,6 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  /// Builds the app bar with item count
   PreferredSizeWidget _buildAppBar(BuildContext context, ThemeData theme) {
     final l10n = AppLocalizations.of(context)!;
 

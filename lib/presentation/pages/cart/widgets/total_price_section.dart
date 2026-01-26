@@ -12,9 +12,8 @@ const double _itemCountFontSize = 12.0;
 
 const double _smallSpacing = 4.0;
 
-final controller = Get.find<CartController>();
-
 Widget totalPriceSection() {
+  final controller = Get.find<CartController>();
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
