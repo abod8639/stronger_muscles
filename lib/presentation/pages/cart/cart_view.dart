@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
+import 'package:stronger_muscles/controllers/cart_controller.dart';
+import 'package:stronger_muscles/controllers/main_controller.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/build_cart_content.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class CartView extends GetView<CartController> {
-  
+
   static const double _emptyIconSize = 96.0;
   static const double _emptyIconSpacing = 16.0;
   static const double _emptyTextSpacing = 8.0;

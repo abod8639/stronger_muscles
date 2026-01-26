@@ -3,9 +3,9 @@ import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/services/auth_service.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
-import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
+import 'package:stronger_muscles/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/controllers/language_controller.dart';
+import 'package:stronger_muscles/controllers/theme_controller.dart';
 
 class InitialBinding extends Bindings {
   @override

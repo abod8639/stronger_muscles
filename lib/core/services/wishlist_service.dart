@@ -39,4 +39,4 @@ class WishlistService extends GetxService {
 
   List<ProductModel> getWishlistItems() => items.toList();
 }
-}
+

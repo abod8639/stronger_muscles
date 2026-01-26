@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
+import 'package:stronger_muscles/controllers/checkout_controller.dart';
+import 'package:stronger_muscles/controllers/address_controller.dart';
 
 class CheckoutBinding extends Bindings {
   @override

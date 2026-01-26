@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/signin_page.dart';
 import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
 

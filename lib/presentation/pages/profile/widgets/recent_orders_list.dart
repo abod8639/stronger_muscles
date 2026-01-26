@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/controllers/profile_controller.dart';
 
 class RecentOrdersList extends StatelessWidget {
   const RecentOrdersList({super.key});

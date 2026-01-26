@@ -11,8 +11,8 @@ import 'package:stronger_muscles/presentation/widgets/internet_connection_banner
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/bindings/language_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/theme_controller.dart';
+import 'package:stronger_muscles/controllers/language_controller.dart';
+import 'package:stronger_muscles/controllers/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

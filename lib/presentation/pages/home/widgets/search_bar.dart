@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
+import 'package:stronger_muscles/controllers/home_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Custom search bar widget with filter button for the home page

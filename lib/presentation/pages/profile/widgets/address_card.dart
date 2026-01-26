@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
-import 'package:stronger_muscles/presentation/bindings/address_controller.dart';
+import 'package:stronger_muscles/controllers/address_controller.dart';
 
 class AddressCard extends StatelessWidget {
   final AddressModel address;

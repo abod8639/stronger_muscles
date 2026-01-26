@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
-import 'package:stronger_muscles/presentation/bindings/home_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/categories_sections_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/search_controller.dart';
+import 'package:stronger_muscles/controllers/home_controller.dart';
+import 'package:stronger_muscles/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/controllers/search_controller.dart';
 
 class HomeBinding extends Bindings {
   @override

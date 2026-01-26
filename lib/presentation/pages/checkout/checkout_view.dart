@@ -5,9 +5,9 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
-import 'package:stronger_muscles/presentation/bindings/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/controllers/checkout_controller.dart';
+import 'package:stronger_muscles/controllers/profile_controller.dart';
+import 'package:stronger_muscles/controllers/cart_controller.dart';
 
 class CheckoutView extends GetView<CheckoutController> {
   const CheckoutView({super.key});

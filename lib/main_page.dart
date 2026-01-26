@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/main_controller.dart';
+import 'package:stronger_muscles/controllers/main_controller.dart';
 import 'package:stronger_muscles/presentation/pages/cart/cart_view.dart';
 import 'package:stronger_muscles/presentation/pages/home/home_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/profile_page.dart';

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
+import 'package:stronger_muscles/controllers/auth_controller.dart';
 
 class AuthBinding extends Bindings {
   @override

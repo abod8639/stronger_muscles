@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/double_tap_prevention.dart';
 import 'package:stronger_muscles/functions/handle_delete_from_cart.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
+import 'package:stronger_muscles/controllers/cart_controller.dart';
 
 const double _quantityFontSize = 16.0;
 const double _iconSize = 28.0;

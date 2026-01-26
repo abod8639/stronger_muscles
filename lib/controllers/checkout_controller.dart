@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
-import 'package:stronger_muscles/presentation/bindings/auth_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_controller.dart';
-import 'package:stronger_muscles/presentation/bindings/profile_controller.dart';
+import 'package:stronger_muscles/controllers/auth_controller.dart';
+import 'package:stronger_muscles/controllers/cart_controller.dart';
+import 'package:stronger_muscles/controllers/profile_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CheckoutController extends GetxController {

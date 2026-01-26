@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/categories_sections_controller.dart';
+import 'package:stronger_muscles/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _iconSize = 56.0;

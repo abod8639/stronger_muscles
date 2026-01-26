@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/bindings/internet_connection_controller.dart';
+import 'package:stronger_muscles/controllers/internet_connection_controller.dart';
 
 class NetworkUtils {
   static Future<void> runIfConnected(
