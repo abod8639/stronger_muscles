@@ -144,7 +144,6 @@ class AddressCard extends StatelessWidget {
     return SizedBox(
       height: 150,
       width: double.infinity,
-      // color: isDark ? Colors.white10 : Colors.grey[100],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -244,7 +243,7 @@ class AddressCard extends StatelessWidget {
         if (!address.isDefault)
           Expanded(
             child: TextButton(
-              onPressed: () => controller.setDefaultAddress(address.id),
+              onPressed: () => controller. setDefaultAddress(address.id),
               child: const Text('Set Default', style: TextStyle(fontSize: 13)),
             ),
           ),
@@ -275,7 +274,7 @@ class AddressCard extends StatelessWidget {
           TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
             onPressed: () {
-              controller.deleteAddress(address.id);
+              controller. deleteAddress(address.id);
               Get.back();
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),

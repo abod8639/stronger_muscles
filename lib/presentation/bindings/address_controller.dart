@@ -1,24 +1,24 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 
 class AddressController extends GetxController {
   final AddressService _addressService = Get.find<AddressService>();
-  final RxList<AddressModel> addresses = RxList<AddressModel>([]);
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
-  final RxBool isDefault = false.obs;
+  
+  // States
+  final addresses = <AddressModel>[].obs;
+  final isLoading = false.obs;
+  final selectedLabel = 'Home'.obs;
 
-  // Controllers for the add address form
-  final Rx<TextEditingController> streetController = TextEditingController().obs;
-  final Rx<TextEditingController> cityController = TextEditingController().obs;
-  final Rx<TextEditingController> stateController = TextEditingController().obs;
-  final Rx<TextEditingController> postalCodeController = TextEditingController().obs;
-  final Rx<TextEditingController> countryController = TextEditingController().obs;
-  final Rx<TextEditingController> fullNameController = TextEditingController().obs;
-  final Rx<TextEditingController> phoneNumberController = TextEditingController().obs;
+  // توحيد المتحكمات في مكان واحد
+  final fullNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final streetController = TextEditingController();
+  final cityController = TextEditingController();
+  final stateController = TextEditingController();
+  final postalCodeController = TextEditingController();
+  final countryController = TextEditingController();
 
   @override
   void onInit() {
@@ -28,96 +28,29 @@ class AddressController extends GetxController {
 
   @override
   void onClose() {
-    streetController.value.dispose();
-    cityController.value.dispose();
-    stateController.value.dispose();
-    postalCodeController.value.dispose();
-    countryController.value.dispose();
-    fullNameController.value.dispose();
-    phoneNumberController.value.dispose();
+    // التخلص من المتحكمات بشكل صحيح
+    for (var controller in [
+      fullNameController, phoneController, streetController,
+      cityController, stateController, postalCodeController, countryController
+    ]) {
+      controller.dispose();
+    }
     super.onClose();
   }
 
-  Future<void> fetchAddresses() async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final fetchedAddresses = await _addressService.getAddresses();
-      addresses.assignAll(fetchedAddresses);
-
-      print('✅ تم جلب ${addresses.length} عنوان');
-    } catch (e) {
-      errorMessage.value = e.toString();
-      print('❌ خطأ في جلب العناوين: $e');
-      // Get.snackbar('خطأ', 'فشل تحميل العناوين: $e');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> addAddress(AddressModel address) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      // نرسل الطلب للخادم
-      await _addressService.createAddress(address);
-
-      // بدلاً من محاولة إضافة العنصر يدوياً للقائمة المحلية (والتي قد تكون Locked)
-      // نقوم بإعادة جلب العناوين من السيرفر لضمان المزامنة الصحيحة 100%
-      await fetchAddresses();
-
-      Get.back();
-      Get.snackbar('نجح', 'تم إضافة العنوان بنجاح');
-      clearForm();
-    } catch (e) {
-      errorMessage.value = e.toString();
-      print('❌ خطأ في إضافة العنوان: $e');
-      Get.snackbar('خطأ', 'فشل إضافة العنوان. تأكد من صحة البيانات.');
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  Future<void> updateAddress(int id, AddressModel address) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final updatedAddress = await _addressService.updateAddress(id, address);
-
-      final index = addresses.indexWhere((addr) => addr.id == id);
-      if (index != -1) {
-        addresses[index] = updatedAddress;
-      }
-
-      Get.back(); // Close dialog/form
-      Get.snackbar('نجح', 'تم تحديث العنوان بنجاح');
-      print('✅ تم تحديث العنوان');
-    } catch (e) {
-      errorMessage.value = e.toString();
-      print('❌ خطأ في تحديث العنوان: $e');
-      Get.snackbar('خطأ', 'فشل تحديث العنوان');
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
   Future<void> deleteAddress(int id) async {
     try {
       isLoading.value = true;
-      errorMessage.value = '';
-
       await _addressService.deleteAddress(id);
+      
+      // تحديث القائمة محلياً فوراً لتحسين استجابة الواجهة
       addresses.removeWhere((addr) => addr.id == id);
-
-      Get.snackbar('نجح', 'تم حذف العنوان بنجاح');
-      print('✅ تم حذف العنوان');
+      
+      Get.snackbar('نجح', 'تم حذف العنوان بنجاح', 
+          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      errorMessage.value = e.toString();
-      print('❌ خطأ في حذف العنوان: $e');
-      Get.snackbar('خطأ', 'فشل حذف العنوان');
+      _showError('فشل الحذف', e);
     } finally {
       isLoading.value = false;
     }
@@ -126,38 +59,89 @@ class AddressController extends GetxController {
   Future<void> setDefaultAddress(int id) async {
     try {
       isLoading.value = true;
-
-      // Call the dedicated set-default endpoint
+      
       final updatedAddress = await _addressService.setDefaultAddress(id);
 
-      // Update local state
-      final tempAddresses = addresses.map((e) {
-        if (e.id == id) {
-          return updatedAddress;
+
+      addresses.assignAll(addresses.map((addr) {
+        if (addr.id == id) {
+          return updatedAddress; 
         } else {
-          return e.copyWith(isDefault: false);
+          return addr.copyWith(isDefault: false); 
         }
-      }).toList();
+      }).toList());
 
-      addresses.assignAll(tempAddresses);
-
-      print('✅ تم تعيين العنوان الافتراضي');
-      Get.snackbar('نجح', 'تم تعيين العنوان الافتراضي بنجاح');
+      Get.snackbar('نجح', 'تم تعيين العنوان كافتراضي', 
+          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      print('❌ خطأ في تعيين العنوان الافتراضي: $e');
-      Get.snackbar('خطأ', 'فشل تعيين العنوان الافتراضي');
-      // Rollback - refetch from server
+      _showError('فشل التعيين كافتراضي', e);
       await fetchAddresses();
     } finally {
       isLoading.value = false;
     }
   }
 
-  AddressModel? get defaultAddress {
+  AddressModel? get defaultAddress => 
+      addresses.firstWhereOrNull((addr) => addr.isDefault) ?? 
+      (addresses.isNotEmpty ? addresses.first : null);
+
+  void fillForm(AddressModel? address) {
+    if (address == null) {
+      clearForm();
+      selectedLabel.value = 'Home';
+      return;
+    }
+    fullNameController.text = address.fullName??'';
+    phoneController.text = address.phone??'';
+    streetController.text = address.street;
+    cityController.text = address.city;
+    stateController.text = address.state??'';
+    postalCodeController.text = address.postalCode??'';
+    countryController.text = address.country??'';
+    selectedLabel.value = address.label??'Home';
+  }
+
+  Future<void> fetchAddresses() async {
     try {
-      return addresses.firstWhere((addr) => addr.isDefault);
+      isLoading.value = true;
+      final fetched = await _addressService.getAddresses();
+      addresses.assignAll(fetched);
     } catch (e) {
-      return addresses.isNotEmpty ? addresses.first : null;
+      _showError('خطأ في جلب البيانات', e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> saveAddress(int? id) async {
+    final model = AddressModel(
+      id: id ?? 0,
+      fullName: fullNameController.text,
+      phone: phoneController.text,
+      street: streetController.text,
+      city: cityController.text,
+      state: stateController.text,
+      postalCode: postalCodeController.text,
+      country: countryController.text,
+      label: selectedLabel.value,
+      isDefault: false,
+    );
+
+    try {
+      isLoading.value = true;
+      if (id == null) {
+        await _addressService.createAddress(model);
+      } else {
+        await _addressService.updateAddress(id, model);
+      }
+      await fetchAddresses();
+      Get.back();
+      Get.snackbar('نجح', 'تم حفظ العنوان بنجاح');
+      clearForm();
+    } catch (e) {
+      _showError('خطأ في الحفظ', e);
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -165,58 +149,33 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       final position = await _addressService.getCurrentPosition();
-
-      final Placemark? place = await _addressService.getAddressFromCoordinates(
-        position.latitude,
-        position.longitude,
+      final place = await _addressService.getAddressFromCoordinates(
+        position.latitude, position.longitude,
       );
 
       if (place != null) {
-        // Fill the observable controllers
-        fullNameController.value.text = place.name ?? '';
-        // phoneNumberController.value.text = place.phone ?? '';
-        streetController.value.text = place.street ?? '';
-        cityController.value.text = place.locality ?? '';
-        stateController.value.text = place.administrativeArea ?? '';
-        postalCodeController.value.text = place.postalCode ?? '';
-        countryController.value.text = place.country ?? '';
-
-        Get.snackbar('نجح', 'تم تحديد الموقع بنجاح');
-      } else {
-        Get.snackbar('تنبيه', 'لم يتم العثور على عنوان لهذا الموقع');
+        streetController.text = place.street ?? '';
+        cityController.text = place.locality ?? '';
+        stateController.text = place.administrativeArea ?? '';
+        postalCodeController.text = place.postalCode ?? '';
+        countryController.text = place.country ?? '';
+        Get.snackbar('نجح', 'تم تحديد موقعك الحالي');
       }
     } catch (e) {
-      print('Error getting location: $e');
-      Get.snackbar(
-        'خطأ',
-        'فشل تحديد الموقع: $e. تأكد من تفعيل خدمات الموقع وإعطاء الصلاحيات.',
-      );
+      _showError('فشل تحديد الموقع', e);
     } finally {
       isLoading.value = false;
     }
   }
 
   void clearForm() {
-    streetController.value.clear();
-    cityController.value.clear();
-    stateController.value.clear();
-    postalCodeController.value.clear();
-    countryController.value.clear();
-    fullNameController.value.clear();
-    phoneNumberController.value.clear();
+    [fullNameController, phoneController, streetController, cityController, 
+     stateController, postalCodeController, countryController].forEach((c) => c.clear());
   }
 
-  String? validateStreet(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'الرجاء إدخال الشارع';
-    }
-    return null;
-  }
-
-  String? validateCity(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'الرجاء إدخال المدينة';
-    }
-    return null;
+  void _showError(String title, dynamic e) {
+    Get.snackbar(title, e.toString(), 
+      snackPosition: SnackPosition.BOTTOM, 
+      backgroundColor: Colors.red.withOpacity(0.1));
   }
 }
