@@ -6,7 +6,7 @@ class ThemeController extends GetxController {
   final _box = Hive.box('settings');
   final _key = 'isDarkMode';
 
-  RxBool isDarkMode = false.obs;
+  RxBool isDarkMode = true.obs;
 
   @override
   void onInit() {
