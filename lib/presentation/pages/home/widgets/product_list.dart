@@ -15,7 +15,7 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
+    final controller = Get.find<HomeController>();
     final theme = Theme.of(context);
 
     return Obx(() {
@@ -112,18 +112,23 @@ class ProductList extends StatelessWidget {
             crossAxisSpacing: _crossAxisSpacing,
             mainAxisSpacing: _mainAxisSpacing,
           ),
-          delegate: SliverChildBuilderDelegate((context, index) {
-            final product = controller.products[index];
-            return GestureDetector(
-              onTap: () =>
-                  Get.toNamed(AppRoutes.productDetails, arguments: product),
-              child: ProductContainer(
-                showName: true,
-                product: product,
-                isBackgroundWhite: false,
-              ),
-            );
-          }, childCount: controller.products.length),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final product = controller.products[index];
+              return GestureDetector(
+                onTap: () =>
+                    Get.toNamed(AppRoutes.productDetails, arguments: product),
+                child: ProductContainer(
+                  showName: true,
+                  product: product,
+                  isBackgroundWhite: false,
+                ),
+              );
+            },
+            childCount: controller.products.length,
+            addAutomaticKeepAlives: false,
+            addRepaintBoundaries: true,
+          ),
         ),
       );
     });

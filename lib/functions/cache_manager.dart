@@ -13,4 +13,7 @@ class CustomCacheManager {
       // fileSystem: FileSystem(),
     ),
   );
+  static void clearCache() async {
+    await instance.emptyCache();
+  }
 }

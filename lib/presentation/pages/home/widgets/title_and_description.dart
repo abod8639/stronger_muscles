@@ -21,6 +21,7 @@ class TitleAndDescription extends StatelessWidget {
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
+          semanticsLabel: product.name,
         ),
         const SizedBox(height: 4.0),
         Text(

@@ -99,4 +99,6 @@ class HomeController extends GetxController {
       await Get.find<CategoriesSectionsController>().fetchCategories();
     }
   }
+
+  
 }

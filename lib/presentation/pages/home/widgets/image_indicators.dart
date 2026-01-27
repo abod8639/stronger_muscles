@@ -21,12 +21,13 @@ class ImageIndicators extends StatelessWidget {
       right: 0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: List.generate(
           product.imageUrls.length,
           (index) => Obx(() {
             final isActive = _selectedImageIndex.value == index;
             return AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
               height: 4.0,
               width: isActive ? 16.0 : 4.0,
@@ -34,7 +35,7 @@ class ImageIndicators extends StatelessWidget {
                 color: isActive
                     ? theme.colorScheme.primary
                     : theme.colorScheme.primary.withAlpha(100),
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(2.0),
               ),
             );
           }),

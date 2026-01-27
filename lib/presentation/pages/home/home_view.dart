@@ -24,11 +24,11 @@ class HomeView extends GetView<HomeController> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
-              onRefresh: () async {
-                await controller.refreshHome();
-              },
+              onRefresh: () => controller.refreshHome(),
               child: CustomScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 slivers: [
                   // Search bar and filter button
                   const SearchBar(),

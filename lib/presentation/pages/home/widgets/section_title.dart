@@ -21,11 +21,13 @@ class SectionTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            AppLocalizations.of(context)!.mostPopularOffers,
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context)!.mostPopularOffers,
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.onSurface,
+              ),
             ),
           ),
           TextButton(
@@ -38,32 +40,4 @@ class SectionTitle extends StatelessWidget {
       ),
     );
   }
-}
-
-/// Legacy function for backward compatibility.
-///
-/// **Deprecated**: Use [SectionTitle] widget instead.
-@Deprecated('Use SectionTitle widget instead')
-Padding sectionTitle() {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-    child: Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Most popular offer',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            TextButton(onPressed: () {}, child: const Text('See all')),
-          ],
-        );
-      },
-    ),
-  );
 }

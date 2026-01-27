@@ -29,10 +29,14 @@ class ProductContainer extends StatefulWidget {
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
-class _ProductContainerState extends State<ProductContainer> {
+class _ProductContainerState extends State<ProductContainer>
+    with AutomaticKeepAliveClientMixin {
   late final RxInt _selectedImageIndex;
   late final PageController _pageController;
   StreamSubscription<int>? _subscription;
+  
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -63,6 +67,7 @@ class _ProductContainerState extends State<ProductContainer> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
 
     return Container(

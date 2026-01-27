@@ -42,6 +42,7 @@ class ImageSection extends StatelessWidget {
               child: images.isEmpty
                   ? _buildNoImage(theme)
                   : PageView.builder(
+                      allowImplicitScrolling: false,
                       controller: _pageController,
                       itemCount: images.length,
                       onPageChanged:
@@ -51,7 +52,7 @@ class ImageSection extends StatelessWidget {
                         return _buildImage(
                           images[index],
                           theme,
-                          widget.product.isBackgroundWhite ,
+                          widget.product.isBackgroundWhite,
                         );
                       },
                     ),
@@ -96,12 +97,13 @@ class ImageSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: CachedNetworkImage(
-        cacheManager: CustomCacheManager.instance,
-
+          cacheManager: CustomCacheManager.instance,
           imageUrl: url,
           fit: BoxFit.contain,
           placeholder: (context, url) => _buildShimmerEffect(theme),
           errorWidget: (context, url, error) => _buildErrorWidget(theme),
+          memCacheWidth: 400,
+          memCacheHeight: 400,
         ),
       ),
     );

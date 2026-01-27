@@ -50,4 +50,6 @@ class ProductsController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  
 }

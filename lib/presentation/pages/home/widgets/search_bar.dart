@@ -14,6 +14,7 @@ class SearchBar extends StatelessWidget {
   static const double _spacing = 12.0;
   static const double _innerPadding = 12.0;
   static const double _iconSpacing = 8.0;
+  // static const Duration _debounceDelay = Duration(milliseconds: 300);
 
   const SearchBar({super.key});
 
@@ -79,10 +80,6 @@ class SearchBar extends StatelessWidget {
                         return IconButton(
                           icon: const Icon(Icons.close, size: 20),
                           onPressed: () {
-                            // We need a way to clear the text field.
-                            // Since we don't have a TextEditingController here,
-                            // we might need to add one or just rely on the user clearing it.
-                            // However, it's better to add a controller to the ProductSearchController.
                             controller.searchController.clearSearch();
                           },
                         );
