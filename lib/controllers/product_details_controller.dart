@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 
 class ProductDetailsController extends GetxController {
   final ProductModel product;
@@ -35,6 +37,7 @@ class ProductDetailsController extends GetxController {
     // تهيئة PageController مع الصفحة المختارة ابتدائياً
     pageController = PageController(initialPage: selectedImageIndex.value);
     _checkInitialWishlistStatus();
+    _precacheAllImages();
   }
 
   void _checkInitialWishlistStatus() {
@@ -98,5 +101,16 @@ void selectImage(int index) {
     // إغلاق الـ Controller بشكل صحيح لمنع تسريب الذاكرة
     pageController.dispose();
     super.onClose();
+  }
+  void _precacheAllImages() {
+    for (var url in product.imageUrls) {
+      precacheImage(
+        CachedNetworkImageProvider(
+          url,
+          cacheManager: CustomCacheManager.instance,
+        ),
+        Get.context!,
+      );
+    }
   }
 }

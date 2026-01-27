@@ -10,7 +10,7 @@ import 'package:stronger_muscles/controllers/theme_controller.dart';
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    // Persistent Services
+    // Persistent Services~
     Get.put(ApiService(), permanent: true);
     Get.put(AuthService(), permanent: true);
     Get.put(AddressService(), permanent: true);

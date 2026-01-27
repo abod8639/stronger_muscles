@@ -32,7 +32,7 @@ class MainImage extends StatelessWidget {
 
   Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
     return PageView.builder(
-    
+      allowImplicitScrolling: true,
       controller: controller.pageController,
       itemCount: product.imageUrls.length,
       onPageChanged: controller.selectImage,
