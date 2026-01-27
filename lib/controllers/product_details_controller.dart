@@ -5,6 +5,9 @@ import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 
+const int _imageAnimationDurationMs = 300;
+const String _updateFailedErrorMsg = 'Update failed';
+
 class ProductDetailsController extends GetxController {
   final ProductModel product;
   final WishlistService _wishlistService = Get.find<WishlistService>();
@@ -50,12 +53,12 @@ class ProductDetailsController extends GetxController {
       _wishlistService.toggleFavorite(product);
       isInWishlist.toggle();
     } catch (e) {
-      _showErrorSnackbar('Update failed', e.toString());
+      _showErrorSnackbar(_updateFailedErrorMsg, e.toString());
     }
   }
 
   // تحسين: التزامن بين الـ PageView والـ Index
-void selectImage(int index) {
+  void selectImage(int index) {
     if (selectedImageIndex.value == index) return;
     
     selectedImageIndex.value = index;
@@ -67,7 +70,7 @@ void selectImage(int index) {
         if (pageController.page?.round() != index) {
           pageController.animateToPage(
             index,
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: _imageAnimationDurationMs),
             curve: Curves.easeInOut,
           );
         }
@@ -75,7 +78,7 @@ void selectImage(int index) {
         // في حال وجود أكثر من View، نستخدم الـ jump أو الـ animate بدون فحص الـ page الحالي
         pageController.animateToPage(
           index,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: _imageAnimationDurationMs),
           curve: Curves.easeInOut,
         );
       }
@@ -102,6 +105,7 @@ void selectImage(int index) {
     pageController.dispose();
     super.onClose();
   }
+
   void _precacheAllImages() {
     for (var url in product.imageUrls) {
       precacheImage(

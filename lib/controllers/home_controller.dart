@@ -4,12 +4,17 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
 import 'package:stronger_muscles/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/controllers/search_controller.dart';
-
 import 'package:stronger_muscles/core/errors/failures.dart';
 
+const String _connectionErrorMsg = 'خطأ في الاتصال';
+const String _errorMsg = 'خطأ';
+const String _retryButtonLabel = 'إعادة محاولة';
+const int _snackbarDurationSeconds = 5;
+const SnackPosition _snackbarPosition = SnackPosition.BOTTOM;
+
 class HomeController extends GetxController {
-  final ProductService _productService = Get.put(ProductService());
-  final searchController = Get.put(ProductSearchController());
+  final ProductService _productService = Get.find<ProductService>();
+  final searchController = Get.find<ProductSearchController>();
 
   // Expose filtered products for the UI
   RxList<ProductModel> get products => searchController.filteredProducts;
@@ -34,19 +39,14 @@ class HomeController extends GetxController {
     errorMessage.value = '';
 
     try {
-      List<ProductModel> fetchedProducts;
-
-      // Use categoryId directly if provided by the controller.
-      // Removed hardcoded fallback indices to ensure it's fully dynamic.
-
-      fetchedProducts = await _productService.getProducts(
+      final fetchedProducts = await _productService.getProducts(
         categoryId: categoryId,
       );
 
       // Update the search controller with the new data
       searchController.setProducts(fetchedProducts);
     } catch (e) {
-      print('DEBUG: HomeController error: $e');
+      print('❌ Home: Error fetching products: $e');
       isError.value = true;
 
       if (e is Failure) {
@@ -58,17 +58,17 @@ class HomeController extends GetxController {
       }
 
       Get.snackbar(
-        isConnectionError.value ? 'خطأ في الاتصال' : 'خطأ',
+        isConnectionError.value ? _connectionErrorMsg : _errorMsg,
         errorMessage.value,
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: _snackbarPosition,
         backgroundColor: Colors.red.withOpacity(0.8),
         colorText: Colors.white,
-        duration: const Duration(seconds: 5),
+        duration: const Duration(seconds: _snackbarDurationSeconds),
         mainButton: isConnectionError.value
             ? TextButton(
                 onPressed: () => fetchProductsForSection(index),
                 child: const Text(
-                  'إعادة محاولة',
+                  _retryButtonLabel,
                   style: TextStyle(color: Colors.white),
                 ),
               )

@@ -3,13 +3,25 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:flutter/material.dart';
 
+const String _defaultLabel = 'Home';
+const String _successDeleteMsg = 'تم حذف العنوان بنجاح';
+const String _errorDeleteMsg = 'فشل الحذف';
+const String _successDefaultMsg = 'تم تعيين العنوان كافتراضي';
+const String _errorDefaultMsg = 'فشل التعيين كافتراضي';
+const String _errorFetchMsg = 'خطأ في جلب البيانات';
+const String _successSaveMsg = 'تم حفظ العنوان بنجاح';
+const String _errorSaveMsg = 'خطأ في الحفظ';
+const String _successLocationMsg = 'تم تحديد موقعك الحالي';
+const String _errorLocationMsg = 'فشل تحديد الموقع';
+const String _successTitle = 'نجح';
+
 class AddressController extends GetxController {
   final AddressService _addressService = Get.find<AddressService>();
   
   // States
   final addresses = <AddressModel>[].obs;
   final isLoading = false.obs;
-  final selectedLabel = 'Home'.obs;
+  final selectedLabel = _defaultLabel.obs;
 
   // توحيد المتحكمات في مكان واحد
   final fullNameController = TextEditingController();
@@ -47,10 +59,10 @@ class AddressController extends GetxController {
       // تحديث القائمة محلياً فوراً لتحسين استجابة الواجهة
       addresses.removeWhere((addr) => addr.id == id);
       
-      Get.snackbar('نجح', 'تم حذف العنوان بنجاح', 
+      Get.snackbar(_successTitle, _successDeleteMsg, 
           snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      _showError('فشل الحذف', e);
+      _showError(_errorDeleteMsg, e);
     } finally {
       isLoading.value = false;
     }
@@ -62,7 +74,6 @@ class AddressController extends GetxController {
       
       final updatedAddress = await _addressService.setDefaultAddress(id);
 
-
       addresses.assignAll(addresses.map((addr) {
         if (addr.id == id) {
           return updatedAddress; 
@@ -71,10 +82,10 @@ class AddressController extends GetxController {
         }
       }).toList());
 
-      Get.snackbar('نجح', 'تم تعيين العنوان كافتراضي', 
+      Get.snackbar(_successTitle, _successDefaultMsg, 
           snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      _showError('فشل التعيين كافتراضي', e);
+      _showError(_errorDefaultMsg, e);
       await fetchAddresses();
     } finally {
       isLoading.value = false;
@@ -88,7 +99,7 @@ class AddressController extends GetxController {
   void fillForm(AddressModel? address) {
     if (address == null) {
       clearForm();
-      selectedLabel.value = 'Home';
+      selectedLabel.value = _defaultLabel;
       return;
     }
     fullNameController.text = address.fullName??'';
@@ -98,7 +109,7 @@ class AddressController extends GetxController {
     stateController.text = address.state??'';
     postalCodeController.text = address.postalCode??'';
     countryController.text = address.country??'';
-    selectedLabel.value = address.label??'Home';
+    selectedLabel.value = address.label??_defaultLabel;
   }
 
   Future<void> fetchAddresses() async {
@@ -107,7 +118,7 @@ class AddressController extends GetxController {
       final fetched = await _addressService.getAddresses();
       addresses.assignAll(fetched);
     } catch (e) {
-      _showError('خطأ في جلب البيانات', e);
+      _showError(_errorFetchMsg, e);
     } finally {
       isLoading.value = false;
     }
@@ -136,10 +147,10 @@ class AddressController extends GetxController {
       }
       await fetchAddresses();
       Get.back();
-      Get.snackbar('نجح', 'تم حفظ العنوان بنجاح');
+      Get.snackbar(_successTitle, _successSaveMsg);
       clearForm();
     } catch (e) {
-      _showError('خطأ في الحفظ', e);
+      _showError(_errorSaveMsg, e);
     } finally {
       isLoading.value = false;
     }
@@ -159,10 +170,10 @@ class AddressController extends GetxController {
         stateController.text = place.administrativeArea ?? '';
         postalCodeController.text = place.postalCode ?? '';
         countryController.text = place.country ?? '';
-        Get.snackbar('نجح', 'تم تحديد موقعك الحالي');
+        Get.snackbar(_successTitle, _successLocationMsg);
       }
     } catch (e) {
-      _showError('فشل تحديد الموقع', e);
+      _showError(_errorLocationMsg, e);
     } finally {
       isLoading.value = false;
     }

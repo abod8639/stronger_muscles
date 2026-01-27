@@ -6,6 +6,10 @@ import 'package:stronger_muscles/core/services/product_service.dart';
 import 'dart:math' as math;
 import 'dart:async';
 
+const int _debounceDelayMs = 500;
+const double _defaultMinPrice = 0.0;
+const double _defaultMaxPrice = 1000.0;
+
 class ProductSearchController extends GetxController {
   final ProductService _productService = Get.find<ProductService>();
   final TextEditingController textController = TextEditingController();
@@ -18,13 +22,13 @@ class ProductSearchController extends GetxController {
 
   // States
   final searchQuery = ''.obs;
-  final filterMinPrice = 0.0.obs;
-  final filterMaxPrice = 1000.0.obs;
+  final filterMinPrice = _defaultMinPrice.obs;
+  final filterMaxPrice = _defaultMaxPrice.obs;
   final isLoadingRemote = false.obs;
 
   // Computed bounds based on data
-  final dataMinPrice = 0.0.obs;
-  final dataMaxPrice = 1000.0.obs;
+  final dataMinPrice = _defaultMinPrice.obs;
+  final dataMaxPrice = _defaultMaxPrice.obs;
 
   // Output (filtered list to be displayed)
   final filteredProducts = <ProductModel>[].obs;
@@ -39,7 +43,7 @@ class ProductSearchController extends GetxController {
     debounce(
       searchQuery,
       (query) => _onDebouncedSearch(query),
-      time: const Duration(milliseconds: 500),
+      time: const Duration(milliseconds: _debounceDelayMs),
     );
 
     // For price filters, we can apply locally immediately
@@ -63,8 +67,8 @@ class ProductSearchController extends GetxController {
     final source = searchQuery.value.isEmpty ? _localProducts : _remoteProducts;
 
     if (source.isEmpty) {
-      dataMinPrice.value = 0.0;
-      dataMaxPrice.value = 1000.0;
+      dataMinPrice.value = _defaultMinPrice;
+      dataMaxPrice.value = _defaultMaxPrice;
     } else {
       double min = source.first.price;
       double max = source.first.price;

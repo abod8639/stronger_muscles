@@ -4,13 +4,19 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../core/services/auth_service.dart';
 import '../data/models/user_model.dart';
-
 import '../routes/routes.dart';
+
+const String _googleWebClientId =
+    '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
+const String _defaultUserId = '0';
+const Duration _snackbarDuration = Duration(seconds: 5);
+const String _errorGoogleSignIn = 'خطأ في تسجيل الدخول عبر Google';
+const String _errorCheckUser = 'خطأ في التحقق من بيانات المستخدم';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final AuthService _authService = Get.put(AuthService()); // Ensure AuthService is initialized
+  final AuthService _authService = Get.find<AuthService>();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -19,9 +25,6 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
   final RxString token = ''.obs;
-
-  static const String webClientId =
-      '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
 
   @override
   void onInit() {
@@ -39,31 +42,43 @@ class AuthController extends GetxController {
   }
 
   Future<void> _checkCurrentUser() async {
-    final user = await _authService.getCurrentUser();
-    if (user != null) {
-      currentUser.value = user;
+    try {
+      final user = await _authService.getCurrentUser();
+      if (user != null) {
+        currentUser.value = user;
+      }
+    } catch (e) {
+      print('❌ Auth: Error checking current user: $e');
+      Get.snackbar(
+        'خطأ',
+        _errorCheckUser,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: _snackbarDuration,
+      );
     }
   }
 
   Future<User?> signInWithGoogle() async {
     try {
       isLoading.value = true;
-      await _googleSignIn.initialize(serverClientId: webClientId);
+      await _googleSignIn.initialize(serverClientId: _googleWebClientId);
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
-      // if (googleUser == null) return null;
+      if (googleUser == null) {
+        isLoading.value = false;
+        return null;
+      }
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
-        // accessToken: null,
       );
 
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
       userId.value = userCredential.user!.uid;
-      // token.value = userCredential.user!.idToken!;
+
       // إرسال معلومات المستخدم إلى Backend
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;
@@ -73,7 +88,7 @@ class AuthController extends GetxController {
           photoUrl: firebaseUser.photoURL,
         );
         currentUser.value = user;
-        Get.offAllNamed(AppRoutes.main); // انتقل إلى الصفحة الرئيسية
+        Get.offAllNamed(AppRoutes.main);
       }
 
       return userCredential.user;

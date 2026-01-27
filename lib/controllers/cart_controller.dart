@@ -5,11 +5,17 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/controllers/auth_controller.dart';
 
+const String _cartBoxName = 'cart';
+const String _cartErrorMsg = 'Failed to load cart items';
+const String _addErrorMsg = 'Failed to add to cart';
+const String _removeErrorMsg = 'Failed to remove from cart';
+
 class CartController extends GetxController {
   final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
   late Box<CartItemModel> cartBox;
 
   late TextEditingController notesController;
+
   @override
   void onInit() {
     super.onInit();
@@ -17,16 +23,23 @@ class CartController extends GetxController {
     notesController = TextEditingController();
   }
 
+  @override
+  void onClose() {
+    notesController.dispose();
+    super.onClose();
+  }
+
   Future<void> _initBox() async {
     try {
-      if (!Hive.isBoxOpen('cart')) {
-        cartBox = await Hive.openBox<CartItemModel>('cart');
+      if (!Hive.isBoxOpen(_cartBoxName)) {
+        cartBox = await Hive.openBox<CartItemModel>(_cartBoxName);
       } else {
-        cartBox = Hive.box<CartItemModel>('cart');
+        cartBox = Hive.box<CartItemModel>(_cartBoxName);
       }
       cartItems.assignAll(cartBox.values.toList());
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load cart items: $e');
+      print('❌ Cart: Error loading cart items: $e');
+      Get.snackbar('Error', _cartErrorMsg);
     }
   }
 
@@ -62,7 +75,8 @@ class CartController extends GetxController {
         cartItems.add(newItem);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add to cart: $e');
+      print('❌ Cart: Error adding to cart: $e');
+      Get.snackbar('Error', _addErrorMsg);
     }
   }
 
@@ -74,7 +88,8 @@ class CartController extends GetxController {
         cartItems.removeAt(index);
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to remove from cart: $e');
+      print('❌ Cart: Error removing from cart: $e');
+      Get.snackbar('Error', _removeErrorMsg);
     }
   }
 
