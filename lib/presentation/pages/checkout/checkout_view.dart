@@ -9,19 +9,30 @@ import 'package:stronger_muscles/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/controllers/profile_controller.dart';
 import 'package:stronger_muscles/controllers/cart_controller.dart';
 
+const String _checkoutTitle = 'Checkout';
+const String _addressStepTitle = 'Address';
+const String _paymentStepTitle = 'Payment';
+const String _reviewStepTitle = 'Review';
+const String _nextButtonText = 'Next';
+const String _placeOrderButtonText = 'Place Order';
+const String _backButtonText = 'Back';
+const double _controlsPadding = 20.0;
+const double _controlsSpacing = 12.0;
+const double _controlsVerticalPadding = 12.0;
+
 class CheckoutView extends GetView<CheckoutController> {
   const CheckoutView({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Ensure controller is initialized
-    Get.put(CheckoutController());
+    Get.find<CheckoutController>();
 
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Checkout', style: TextStyle(color: AppColors.white)),
+        title: const Text(_checkoutTitle, style: TextStyle(color: AppColors.white)),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
@@ -45,7 +56,7 @@ class CheckoutView extends GetView<CheckoutController> {
           onStepCancel: controller.previousStep,
           controlsBuilder: (context, details) {
             return Padding(
-              padding: const EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: _controlsPadding),
               child: Row(
                 children: [
                   Expanded(
@@ -54,25 +65,25 @@ class CheckoutView extends GetView<CheckoutController> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        padding: const EdgeInsets.symmetric(vertical: _controlsVerticalPadding),
                       ),
                       child: Text(
                         controller.currentStep.value == 2
-                            ? 'Place Order'
-                            : 'Next',
+                            ? _placeOrderButtonText
+                            : _nextButtonText,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
                   if (controller.currentStep.value > 0) ...[
-                    const SizedBox(width: 12),
+                    const SizedBox(width: _controlsSpacing),
                     Expanded(
                       child: OutlinedButton(
                         onPressed: details.onStepCancel,
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          padding: const EdgeInsets.symmetric(vertical: _controlsVerticalPadding),
                         ),
-                        child: const Text('Back'),
+                        child: const Text(_backButtonText),
                       ),
                     ),
                   ],
@@ -94,7 +105,7 @@ class CheckoutView extends GetView<CheckoutController> {
     final profileController = Get.find<ProfileController>();
 
     return Step(
-      title: const Text('Address'),
+      title: const Text(_addressStepTitle),
       content: Builder(
         builder: (context) {
           return Column(
@@ -160,7 +171,7 @@ class CheckoutView extends GetView<CheckoutController> {
 
   Step _buildPaymentStep(ThemeData theme) {
     return Step(
-      title: const Text('Payment'),
+      title: const Text(_paymentStepTitle),
       content: Column(
         children: [
           _buildPaymentOption(
@@ -231,7 +242,7 @@ class CheckoutView extends GetView<CheckoutController> {
     final cartController = Get.find<CartController>();
 
     return Step(
-      title: const Text('Review'),
+      title: const Text(_reviewStepTitle),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -240,24 +251,27 @@ class CheckoutView extends GetView<CheckoutController> {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
+            addRepaintBoundaries: true,
             itemCount: cartController.cartItems.length,
             itemBuilder: (context, index) {
               final item = cartController.cartItems[index];
               return ListTile(
                 leading: CachedNetworkImage(
-                cacheManager: CustomCacheManager.instance,
+                  cacheManager: CustomCacheManager.instance,
                   imageUrl: item.product.imageUrls.first,
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
+                  memCacheWidth: 50,
+                  memCacheHeight: 50,
                   errorWidget: (_, __, ___) => const Icon(Icons.image),
                 ),
                 title: Text(item.product.name),
                 subtitle: Text(
-                  '${item.quantity} x \$${item.product.effectivePrice}',
+                  '${item.quantity} x LE ${item.product.effectivePrice}',
                 ),
                 trailing: Text(
-                  '\$${(item.product.effectivePrice * item.quantity).toStringAsFixed(2)}',
+                  'LE ${(item.product.effectivePrice * item.quantity).toStringAsFixed(2)}',
                 ),
               );
             },
@@ -271,7 +285,7 @@ class CheckoutView extends GetView<CheckoutController> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '\$${cartController.totalPrice.toStringAsFixed(2)}',
+                'LE ${cartController.totalPrice.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
