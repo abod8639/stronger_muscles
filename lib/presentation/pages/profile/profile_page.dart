@@ -12,6 +12,14 @@ import 'package:stronger_muscles/presentation/pages/profile/widgets/account_sett
 import 'package:stronger_muscles/presentation/pages/profile/widgets/login_prompt_card.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+const double _appBarExpandedHeight = 100.0;
+const double _contentVerticalSpacing = 16.0;
+const double _sectionSpacing = 24.0;
+const double _bottomSpacing = 32.0;
+const double _signOutButtonHorizontalPadding = 32.0;
+const double _signOutButtonVerticalPadding = 14.0;
+const double _signOutButtonBorderRadius = 12.0;
+
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
 
@@ -44,21 +52,21 @@ class ProfilePage extends GetView<ProfileController> {
                     onTap: () {
                       Get.toNamed(AppRoutes.editUserInfo);
                     },
-                    child: ProfileHeader(),
+                    child: const ProfileHeader(),
                   ),
-                  const SizedBox(height: 16),
-                  QuickActionsRow(),
-                  const SizedBox(height: 24),
-                  PurchaseStatsCard(),
-                  const SizedBox(height: 24),
-                  RecentOrdersList(),
-                  const SizedBox(height: 24),
-                  SavedAddressesList(),
-                  const SizedBox(height: 24),
-                  AccountSettingsList(),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: _contentVerticalSpacing),
+                  const QuickActionsRow(),
+                  const SizedBox(height: _sectionSpacing),
+                  const PurchaseStatsCard(),
+                  const SizedBox(height: _sectionSpacing),
+                  const RecentOrdersList(),
+                  const SizedBox(height: _sectionSpacing),
+                  const SavedAddressesList(),
+                  const SizedBox(height: _sectionSpacing),
+                  const AccountSettingsList(),
+                  const SizedBox(height: _sectionSpacing),
                   _buildSignOutButton(controller),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: _bottomSpacing),
                 ],
               );
             }),
@@ -71,24 +79,24 @@ class ProfilePage extends GetView<ProfileController> {
   Widget _buildAppBar(ThemeData theme) {
     final isDark = theme.brightness == Brightness.dark;
 
-    return Builder(
-      builder: (context) {
-        return SliverAppBar(
-          expandedHeight: 100,
-          pinned: true,
-          backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text(
+    return SliverAppBar(
+      expandedHeight: _appBarExpandedHeight,
+      pinned: true,
+      backgroundColor: isDark ? AppColors.surfaceDark : AppColors.primary,
+      flexibleSpace: FlexibleSpaceBar(
+        title: Builder(
+          builder: (context) {
+            return Text(
               AppLocalizations.of(context)!.myAccount,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.white,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            centerTitle: true,
-          ),
-        );
-      },
+            );
+          },
+        ),
+        centerTitle: true,
+      ),
     );
   }
 
@@ -106,9 +114,12 @@ class ProfilePage extends GetView<ProfileController> {
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.error,
               side: const BorderSide(color: AppColors.error, width: 1.5),
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              padding: const EdgeInsets.symmetric(
+                horizontal: _signOutButtonHorizontalPadding,
+                vertical: _signOutButtonVerticalPadding,
+              ),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(_signOutButtonBorderRadius),
               ),
             ),
           ),

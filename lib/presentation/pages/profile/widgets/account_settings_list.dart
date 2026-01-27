@@ -6,6 +6,13 @@ import 'package:stronger_muscles/controllers/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+const double _containerMarginHorizontal = 16.0;
+const double _containerBorderRadius = 16.0;
+const double _containerPadding = 20.0;
+const double _shadowOpacity = 0.05;
+const double _shadowBlurRadius = 10.0;
+const double _shadowOffsetY = 4.0;
+
 class AccountSettingsList extends StatelessWidget {
   const AccountSettingsList({super.key});
 
@@ -16,15 +23,15 @@ class AccountSettingsList extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.symmetric(horizontal: _containerMarginHorizontal),
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(_containerBorderRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: AppColors.black.withOpacity(_shadowOpacity),
+            blurRadius: _shadowBlurRadius,
+            offset: const Offset(0, _shadowOffsetY),
           ),
         ],
       ),
@@ -32,7 +39,7 @@ class AccountSettingsList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(_containerPadding),
             child: Text(
               AppLocalizations.of(context)!.accountSettings,
               style: theme.textTheme.titleLarge?.copyWith(

@@ -5,13 +5,23 @@ import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/controllers/address_controller.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/address_card.dart';
 
+const double _headerPaddingLeft = 16.0;
+const double _headerPaddingRight = 8.0;
+const double _headerPaddingVertical = 8.0;
+const double _addButtonPaddingHorizontal = 12.0;
+const double _addButtonPaddingVertical = 8.0;
+const double _addButtonIconSize = 20.0;
+const double _listItemSpacing = 16.0;
+// const double _loadingHeight = 32.0;
+// const double _emptyStateIconSize = 64.0;
+
 class SavedAddressesList extends StatelessWidget {
   const SavedAddressesList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = Get.put(AddressController());
+    final controller = Get.find<AddressController>();
     final isDark = theme.brightness == Brightness.dark;
 
     return Obx(() {
@@ -20,8 +30,8 @@ class SavedAddressesList extends StatelessWidget {
         children: [
           _buildHeader(context, theme, isDark),
           if (controller.isLoading.isTrue && controller.addresses.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(32.0),
+            Padding(
+              padding: const EdgeInsets.all(32.0),
               child: Center(child: CircularProgressIndicator()),
             )
           else if (controller.addresses.isEmpty)
@@ -30,9 +40,10 @@ class SavedAddressesList extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              addRepaintBoundaries: true,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               itemCount: controller.addresses.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
               itemBuilder: (context, index) {
                 final address = controller.addresses[index];
                 return AddressCard(address: address);
@@ -45,7 +56,12 @@ class SavedAddressesList extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context, ThemeData theme, bool isDark) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+      padding: const EdgeInsets.fromLTRB(
+        _headerPaddingLeft,
+        _headerPaddingVertical,
+        _headerPaddingRight,
+        _headerPaddingVertical,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -66,10 +82,13 @@ class SavedAddressesList extends StatelessWidget {
                 width: 1.5,
               ),
               backgroundColor: AppColors.primary.withOpacity(0.05),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              shape: StadiumBorder(), // شكل كبسولة احترافي
+              padding: const EdgeInsets.symmetric(
+                horizontal: _addButtonPaddingHorizontal,
+                vertical: _addButtonPaddingVertical,
+              ),
+              shape: const StadiumBorder(), // شكل كبسولة احترافي
             ),
-            icon: const Icon(Icons.add_rounded, size: 20),
+            icon: const Icon(Icons.add_rounded, size: _addButtonIconSize),
             label: const Text(
               'Add New',
               style: TextStyle(fontWeight: FontWeight.w700),

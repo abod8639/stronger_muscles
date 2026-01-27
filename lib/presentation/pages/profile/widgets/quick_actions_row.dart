@@ -3,6 +3,17 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/controllers/profile_controller.dart';
 
+const double _rowSpacing = 12.0;
+const double _cardPadding = 16.0;
+const double _cardBorderRadius = 12.0;
+const double _iconSize = 28.0;
+const double _valueFont = 20.0;
+const double _labelFont = 12.0;
+const double _labelSpacing = 8.0;
+const double _valueSpacing = 4.0;
+const double _shadowOpacity = 0.05;
+const double _shadowBlurRadius = 8.0;
+
 class QuickActionsRow extends StatelessWidget {
   const QuickActionsRow({super.key});
 
@@ -22,7 +33,7 @@ class QuickActionsRow extends StatelessWidget {
               onTap: () {},
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: _rowSpacing),
           Expanded(
             child: Obx(
               () => _buildQuickActionCard(
@@ -34,7 +45,7 @@ class QuickActionsRow extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: _rowSpacing),
           Expanded(
             child: _buildQuickActionCard(
               icon: Icons.location_on_outlined,
@@ -62,37 +73,37 @@ class QuickActionsRow extends StatelessWidget {
         final isDark = theme.brightness == Brightness.dark;
         return InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(_cardBorderRadius),
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(_cardPadding),
             decoration: BoxDecoration(
               color: isDark ? AppColors.surfaceDark : AppColors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(_cardBorderRadius),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.black.withOpacity(0.05),
-                  blurRadius: 8,
+                  color: AppColors.black.withOpacity(_shadowOpacity),
+                  blurRadius: _shadowBlurRadius,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
             child: Column(
               children: [
-                Icon(icon, color: color, size: 28),
-                const SizedBox(height: 8),
+                Icon(icon, color: color, size: _iconSize),
+                const SizedBox(height: _labelSpacing),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: _valueFont,
                     fontWeight: FontWeight.bold,
                     color: color,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: _valueSpacing),
                 Text(
                   label,
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: _labelFont,
                     color: AppColors.greyDark,
                   ),
                 ),

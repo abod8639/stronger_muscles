@@ -5,6 +5,13 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/controllers/profile_controller.dart';
 
+const int _maxOrdersDisplay = 5;
+const double _headerIndicatorWidth = 4.0;
+const double _headerIndicatorHeight = 20.0;
+const double _headerIndicatorBorderRadius = 10.0;
+const double _headerSpacing = 8.0;
+const double _listItemSpacing = 12.0;
+
 class RecentOrdersList extends StatelessWidget {
   const RecentOrdersList({super.key});
 
@@ -26,9 +33,10 @@ class RecentOrdersList extends StatelessWidget {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
+            addRepaintBoundaries: true,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: controller.orders.take(5).length,
-            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemCount: controller.orders.take(_maxOrdersDisplay).length,
+            separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
             itemBuilder: (context, index) {
               return _OrderCard(
                 order: controller.orders[index],
@@ -51,14 +59,14 @@ class RecentOrdersList extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 4,
-                height: 20,
+                width: _headerIndicatorWidth,
+                height: _headerIndicatorHeight,
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(_headerIndicatorBorderRadius),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: _headerSpacing),
               Text(
                 isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
                 style: theme.textTheme.titleLarge?.copyWith(

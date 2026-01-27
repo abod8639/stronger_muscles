@@ -3,6 +3,19 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/controllers/profile_controller.dart';
 
+const double _profileImageRadius = 35.0;
+const double _profileImageBorderWidth = 2.0;
+const double _profileIconSize = 35.0;
+const double _imageSpacing = 16.0;
+const double _containerMargin = 16.0;
+const double _containerPadding = 20.0;
+const double _containerBorderRadius = 16.0;
+// const double _containerElevation = 0.0;
+// const double _nameFontSize = 18.0;
+const double _emailSpacing = 4.0;
+const double _shadowOpacity = 0.05;
+const double _shadowBlurRadius = 10.0;
+
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
@@ -17,11 +30,11 @@ class ProfileHeader extends StatelessWidget {
       if (user == null) return const SizedBox.shrink();
 
       return Container(
-        margin: const EdgeInsets.all(16),
-        padding: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(_containerMargin),
+        padding: const EdgeInsets.all(_containerPadding),
         decoration: BoxDecoration(
           color: isDark ? AppColors.surfaceDark : AppColors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(_containerBorderRadius),
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
@@ -29,8 +42,8 @@ class ProfileHeader extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.05),
-              blurRadius: 10,
+              color: AppColors.black.withOpacity(_shadowOpacity),
+              blurRadius: _shadowBlurRadius,
               offset: const Offset(0, 4),
             ),
           ],
@@ -40,10 +53,10 @@ class ProfileHeader extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primary, width: 2),
+                border: Border.all(color: AppColors.primary, width: _profileImageBorderWidth),
               ),
               child: CircleAvatar(
-                radius: 35,
+                radius: _profileImageRadius,
                 backgroundColor: AppColors.greyLight,
                 backgroundImage:
                     user.photoUrl != null && user.photoUrl!.isNotEmpty
@@ -52,13 +65,13 @@ class ProfileHeader extends StatelessWidget {
                 child: user.photoUrl == null || user.photoUrl!.isEmpty
                     ? const Icon(
                         Icons.person,
-                        size: 35,
+                        size: _profileIconSize,
                         color: AppColors.greyDark,
                       )
                     : null,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: _imageSpacing),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,8 +82,9 @@ class ProfileHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       color: isDark ? AppColors.white : AppColors.black,
                     ),
+                    semanticsLabel: user.name,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: _emailSpacing),
                   Text(
                     user.email,
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -78,6 +92,7 @@ class ProfileHeader extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    semanticsLabel: user.email,
                   ),
                 ],
               ),

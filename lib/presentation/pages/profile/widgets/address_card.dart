@@ -6,6 +6,23 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/controllers/address_controller.dart';
 
+const double _containerBorderRadius = 20.0;
+const double _containerClipRadius = 20.0;
+const double _containerPadding = 16.0;
+const double _mapHeight = 150.0;
+const double _mapZoom = 15.0;
+const double _mapIconSize = 16.0;
+const double _cardTopRowSpacing = 12.0;
+const double _cardDetailsSpacing = 4.0;
+const double _dividerHeight = 24.0;
+// const double _labelIconSize = 8.0;
+// const double _defaultBadgeRadius = 20.0;
+const double _shadowBlurRadius = 20.0;
+const double _shadowOffsetY = 10.0;
+const double _shadowOpacity = 0.06;
+const double _defaultShadowOpacity = 0.3;
+const double _adapterTextLineHeight = 1.4;
+
 class AddressCard extends StatelessWidget {
   final AddressModel address;
 
@@ -19,20 +36,20 @@ class AddressCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(_containerBorderRadius),
         border: address.isDefault
             ? Border.all(color: AppColors.primary.withOpacity(0.5), width: 1.5)
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(isDark ? _defaultShadowOpacity : _shadowOpacity),
+            blurRadius: _shadowBlurRadius,
+            offset: const Offset(0, _shadowOffsetY),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(_containerClipRadius),
         child: Column(
           children: [
             // قسم الخريطة المصغر
@@ -40,14 +57,14 @@ class AddressCard extends StatelessWidget {
             _buildMapPreview(),
 
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(_containerPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildCardTopRow(context),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: _cardTopRowSpacing),
                   _buildAddressDetails(theme),
-                  const Divider(height: 24, thickness: 0.5),
+                  const Divider(height: _dividerHeight, thickness: 0.5),
                   _buildActionButtons(context),
                 ],
               ),
@@ -69,13 +86,13 @@ class AddressCard extends StatelessWidget {
     );
 
     return SizedBox(
-      height: 150,
+      height: _mapHeight,
       width: double.infinity,
       child: Stack(
         children: [
           GoogleMap(
             key: ValueKey('map_${address.id}'),
-            initialCameraPosition: CameraPosition(target: position, zoom: 15),
+            initialCameraPosition: CameraPosition(target: position, zoom: _mapZoom),
             liteModeEnabled: true,
             zoomControlsEnabled: false,
             myLocationButtonEnabled: false,
@@ -86,7 +103,6 @@ class AddressCard extends StatelessWidget {
               Marker(
                 markerId: MarkerId(address.id.toString()),
                 position: position,
-
                 icon: BitmapDescriptor.defaultMarkerWithHue(
                   BitmapDescriptor.hueAzure,
                 ),
@@ -103,8 +119,6 @@ class AddressCard extends StatelessWidget {
                   stops: const [0.0, 0.7, 1.0],
                   colors: [
                     Colors.black.withOpacity(0.1),
-                    // Colors.transparent,
-                    // isDark ? AppColors.surfaceDark : Colors.white,
                   ],
                 ),
               ),
@@ -123,14 +137,14 @@ class AddressCard extends StatelessWidget {
             right: 12,
             child: Container(
               padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.9),
+              decoration: const BoxDecoration(
+                color: Colors.white,
                 shape: BoxShape.circle,
                 boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
               ),
               child: Icon(
                 Icons.map_outlined,
-                size: 16,
+                size: _mapIconSize,
                 color: AppColors.primary,
               ),
             ),
@@ -212,7 +226,7 @@ class AddressCard extends StatelessWidget {
           address.fullName ?? '',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: _cardDetailsSpacing),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -224,7 +238,7 @@ class AddressCard extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 13,
-                  height: 1.4,
+                  height: _adapterTextLineHeight,
                 ),
               ),
             ),
@@ -235,21 +249,21 @@ class AddressCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    final controller = Get.put(AddressController());
+    final controller = Get.find<AddressController>();
 
     return Row(
       children: [
-        Expanded(child: SizedBox.shrink()),
+        const Expanded(child: SizedBox.shrink()),
         if (!address.isDefault)
           Expanded(
             child: TextButton(
-              onPressed: () => controller. setDefaultAddress(address.id),
+              onPressed: () => controller.setDefaultAddress(address.id),
               child: const Text('Set Default', style: TextStyle(fontSize: 13)),
             ),
           ),
         IconButton(
           onPressed: () => showAddressForm(context, address: address),
-          icon: Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
+          icon: const Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
         ),
         IconButton(
           onPressed: () => _confirmDelete(context),
@@ -264,7 +278,7 @@ class AddressCard extends StatelessWidget {
   }
 
   void _confirmDelete(BuildContext context) {
-    final controller = Get.put(AddressController());
+    final controller = Get.find<AddressController>();
 
     Get.dialog(
       AlertDialog(
@@ -274,7 +288,7 @@ class AddressCard extends StatelessWidget {
           TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
           TextButton(
             onPressed: () {
-              controller. deleteAddress(address.id);
+              controller.deleteAddress(address.id);
               Get.back();
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),

@@ -84,7 +84,6 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  // ويدجت عرض الصورة مع التحميل
   Widget _buildImage(String url, ThemeData theme, bool isBackgroundWhite) {
     return Container(
       margin: const EdgeInsets.all(8.0),
