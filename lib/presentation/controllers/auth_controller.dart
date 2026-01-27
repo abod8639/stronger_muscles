@@ -25,6 +25,7 @@ class AuthController extends GetxController {
   final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
   final RxString token = ''.obs;
+  final RxBool isLoggedIn = false.obs;
 
   @override
   void onInit() {
@@ -46,6 +47,7 @@ class AuthController extends GetxController {
       final user = await _authService.getCurrentUser();
       if (user != null) {
         currentUser.value = user;
+        isLoggedIn.value = true;
       }
     } catch (e) {
       print('❌ Auth: Error checking current user: $e');
@@ -215,12 +217,14 @@ class AuthController extends GetxController {
     await _googleSignIn.signOut();
     await _authService.logout();
     currentUser.value = null;
+    isLoggedIn.value = false;
     Get.offAllNamed('/login'); // Adjust route
   }
 
   Future<void> deleteUser() async {
     await _authService.deleteUser();
     currentUser.value = null;
+    isLoggedIn.value = false;
     Get.offAllNamed('/login'); // Adjust route
   }
 }

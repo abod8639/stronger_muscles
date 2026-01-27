@@ -180,8 +180,10 @@ class AddressController extends GetxController {
   }
 
   void clearForm() {
-    [fullNameController, phoneController, streetController, cityController, 
-     stateController, postalCodeController, countryController].forEach((c) => c.clear());
+    for (var c in [fullNameController, phoneController, streetController, cityController, 
+     stateController, postalCodeController, countryController]) {
+      c.clear();
+    }
   }
 
   void _showError(String title, dynamic e) {

@@ -69,7 +69,7 @@ class MainImage extends StatelessWidget {
 
   Widget _buildPlaceholder() {
     return const Center(
-      child: CircularProgressIndicator.adaptive(), // يتكيف مع شكل أندرويد أو iOS
+      child: CircularProgressIndicator.adaptive(), 
     );
   }
 
@@ -91,7 +91,7 @@ class MainImage extends StatelessWidget {
   Widget _buildEmptyState(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
