@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/controllers/product_details_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 
 class ProductDetailsBinding extends Bindings {
   @override

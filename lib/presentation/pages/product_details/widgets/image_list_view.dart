@@ -5,7 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/controllers/product_details_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 
 /// Horizontal scrollable list of product image thumbnails
 class ImageListView extends StatelessWidget {

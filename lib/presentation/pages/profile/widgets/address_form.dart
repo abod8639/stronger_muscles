@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/controllers/address_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
 
 class AddressForm extends StatelessWidget {
   final AddressModel? address;

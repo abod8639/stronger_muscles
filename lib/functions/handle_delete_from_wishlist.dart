@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/controllers/wishlist_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
 
 // No global controller here
 

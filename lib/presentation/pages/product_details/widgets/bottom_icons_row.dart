@@ -4,8 +4,8 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/controllers/cart_controller.dart';
-import 'package:stronger_muscles/controllers/product_details_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 
 /// Bottom action bar for product details page with cart and wishlist actions
 class BottomIconsRow extends StatelessWidget {

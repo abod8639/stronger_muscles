@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import '../core/services/auth_service.dart';
-import '../data/models/user_stats_model.dart';
+import '../../core/services/auth_service.dart';
+import '../../data/models/user_stats_model.dart';
 
 class DashboardController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();

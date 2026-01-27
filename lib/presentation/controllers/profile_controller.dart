@@ -5,7 +5,7 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
-import 'package:stronger_muscles/controllers/auth_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 
 class ProfileController extends GetxController {
   final AuthController _authController = Get.put(AuthController());

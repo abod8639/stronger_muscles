@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import '../core/services/auth_service.dart';
-import '../data/models/user_model.dart';
-import '../routes/routes.dart';
+import '../../core/services/auth_service.dart';
+import '../../data/models/user_model.dart';
+import '../../routes/routes.dart';
 
 const String _googleWebClientId =
     '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
-const String _defaultUserId = '0';
+// const String _defaultUserId = '0';
 const Duration _snackbarDuration = Duration(seconds: 5);
 const String _errorGoogleSignIn = 'خطأ في تسجيل الدخول عبر Google';
 const String _errorCheckUser = 'خطأ في التحقق من بيانات المستخدم';
@@ -64,10 +64,6 @@ class AuthController extends GetxController {
       await _googleSignIn.initialize(serverClientId: _googleWebClientId);
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
-      if (googleUser == null) {
-        isLoading.value = false;
-        return null;
-      }
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
@@ -79,7 +75,6 @@ class AuthController extends GetxController {
       );
       userId.value = userCredential.user!.uid;
 
-      // إرسال معلومات المستخدم إلى Backend
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;
         final user = await _authService.googleSignIn(
@@ -93,7 +88,7 @@ class AuthController extends GetxController {
 
       return userCredential.user;
     } catch (e) {
-      Get.snackbar('خطأ', 'فشل تسجيل الدخول عبر Google: ${e.toString()}');
+      Get.snackbar('خطأ', '$_errorGoogleSignIn ${e.toString()}');
       return null;
     } finally {
       isLoading.value = false;

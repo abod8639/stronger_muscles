@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/handle_checkout.dart';
 import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/controllers/cart_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 
 const double _checkoutButtonPadding = 32.0;
 const double _checkoutButtonVerticalPadding = 16.0;

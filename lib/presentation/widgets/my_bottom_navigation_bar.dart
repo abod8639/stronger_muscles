@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/controllers/cart_controller.dart';
-import 'package:stronger_muscles/controllers/main_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/presentation/widgets/cart_icon.dart';
 
 /// A custom bottom navigation bar widget for the main app navigation.

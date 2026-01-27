@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
-import 'package:stronger_muscles/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/controllers/search_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 
 const String _connectionErrorMsg = 'خطأ في الاتصال';

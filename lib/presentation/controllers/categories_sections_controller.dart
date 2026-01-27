@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/category_service.dart';
 import 'package:stronger_muscles/data/models/category_model.dart';
 import 'package:stronger_muscles/data/models/selection_model.dart';
-import 'package:stronger_muscles/controllers/home_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 
 class CategoriesSectionsController extends GetxController {
   final HomeController _homeController = Get.put(HomeController());

@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
-import 'package:stronger_muscles/controllers/main_controller.dart';
-import 'package:stronger_muscles/controllers/home_controller.dart';
-import 'package:stronger_muscles/controllers/cart_controller.dart';
-import 'package:stronger_muscles/controllers/wishlist_controller.dart';
-import 'package:stronger_muscles/controllers/profile_controller.dart';
-import 'package:stronger_muscles/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/controllers/search_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
 
 class MainBinding extends Bindings {
   @override

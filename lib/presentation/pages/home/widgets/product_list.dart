@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/controllers/home_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/routes/routes.dart';
