@@ -31,7 +31,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
   late Animation<double> _iconRotation;
 
   static const int _collapsedMaxLines = 4;
-  static const Duration _animationDuration = Duration(milliseconds: 300);
+  static const Duration _animationDuration = Duration(milliseconds: 250);
 
   @override
   void initState() {

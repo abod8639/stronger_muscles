@@ -65,6 +65,7 @@ class ShowReviewsList extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: reviews.length,
           separatorBuilder: (context, index) => const SizedBox(height: 12),
+          addRepaintBoundaries: true,
           itemBuilder: (context, index) {
             return _buildReviewCard(reviews[index]);
           },

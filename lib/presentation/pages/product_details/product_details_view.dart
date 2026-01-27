@@ -32,19 +32,26 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final product = Get.find<ProductDetailsController>().product;
 
     return Scaffold(
-      appBar: AppBar(title: Text(product.name), elevation: 0),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Main Product Image with Hero Animation
-            MainImage(
+      appBar: AppBar(
+        title: Text(product.name),
+        elevation: 0,
+      ),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: [
+          // Main Product Image with Hero Animation
+          SliverToBoxAdapter(
+            child: MainImage(
               product: product,
               onImageTap: (index) => _showImageViewer(context, index),
             ),
+          ),
 
-            // Product Details Content
-            Padding(
+          // Product Details Content
+          SliverToBoxAdapter(
+            child: Padding(
               padding: const EdgeInsets.all(_contentPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,8 +129,8 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       bottomNavigationBar: BottomIconsRow(product: product),
     );

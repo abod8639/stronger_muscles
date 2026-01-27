@@ -19,7 +19,7 @@ class ProductSizeSelector extends StatefulWidget {
 }
 
 class _ProductSizeSelectorState extends State<ProductSizeSelector> {
-  String? _selectedSize;
+  late String? _selectedSize;
 
   @override
   void initState() {
@@ -60,7 +60,8 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: sizes.map((size) {
+          children: List.generate(sizes.length, (index) {
+            final size = sizes[index];
             final isSelected = _selectedSize == size;
 
             return ChoiceChip(
@@ -90,7 +91,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
                 borderRadius: BorderRadius.circular(8),
               ),
             );
-          }).toList(),
+          }),
         ),
       ],
     );

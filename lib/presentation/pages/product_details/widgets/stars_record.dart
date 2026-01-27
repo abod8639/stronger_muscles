@@ -18,35 +18,11 @@ class StarsRecord extends StatelessWidget {
     return totalRating / reviews.length;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    // Use calculated average rating from reviews
-    final averageRating = _calculateAverageRating();
-    final actualReviewCount = reviews.length;
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        children: [
-          ..._buildStarRating(averageRating),
-          const SizedBox(width: 8),
-          Text(
-            '${averageRating.toStringAsFixed(1)} ($actualReviewCount reviews)',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   List<Icon> _buildStarRating(double stars) {
     final fullStars = stars.floor();
     final hasHalfStar = (stars - fullStars) >= 0.5;
 
-    List<Icon> starIcons = [];
+    final starIcons = <Icon>[];
 
     // Add full stars
     starIcons.addAll(
@@ -78,5 +54,29 @@ class StarsRecord extends StatelessWidget {
     );
 
     return starIcons;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    // Use calculated average rating from reviews
+    final averageRating = _calculateAverageRating();
+    final actualReviewCount = reviews.length;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: Row(
+        children: [
+          ..._buildStarRating(averageRating),
+          const SizedBox(width: 8),
+          Text(
+            '${averageRating.toStringAsFixed(1)} ($actualReviewCount reviews)',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

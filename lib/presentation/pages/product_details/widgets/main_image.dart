@@ -18,9 +18,9 @@ class MainImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductDetailsController(product), tag: product.id);
-    // final controller = Get.find<ProductDetailsController>(tag: product.id);
-    // استخدام Obx فقط عند الحاجة لتغيير الـ PageView برمجياً
+    final controller = Get.put(ProductDetailsController(product,
+          initialFlavor: "",
+          initialSize: "",    ) ,tag: product.id );
     return SizedBox(
       height: 400,
       width: double.infinity,
@@ -32,7 +32,7 @@ class MainImage extends StatelessWidget {
 
   Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
     return PageView.builder(
-      allowImplicitScrolling: true,
+      allowImplicitScrolling: false,
       controller: controller.pageController,
       itemCount: product.imageUrls.length,
       onPageChanged: controller.selectImage,
@@ -56,6 +56,8 @@ class MainImage extends StatelessWidget {
                   fit: BoxFit.contain,
                   placeholder: (context, url) => _buildPlaceholder(),
                   errorWidget: (context, url, error) => _buildErrorWidget(context),
+                  memCacheWidth: 500,
+                  memCacheHeight: 500,
                 ),
               ),
             ),

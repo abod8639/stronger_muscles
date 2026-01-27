@@ -29,7 +29,10 @@ class ImageListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-final controller = Get.find<ProductDetailsController>(tag: product.id);
+    // final controller = Get.find<ProductDetailsController>(tag: product.id);
+    final controller = Get.put(ProductDetailsController(product,
+          initialFlavor: "",
+          initialSize: "",    ) ,tag: product.id );
     // Don't show if there's only one image or no images
     if (product.imageUrls.length <= 1) {
       return const SizedBox.shrink();
@@ -42,6 +45,7 @@ final controller = Get.find<ProductDetailsController>(tag: product.id);
         scrollDirection: Axis.horizontal,
         itemCount: product.imageUrls.length,
         physics: const BouncingScrollPhysics(),
+        addRepaintBoundaries: true,
         itemBuilder: (context, index) => _buildThumbnail(controller, index),
       ),
     );
@@ -107,6 +111,8 @@ final controller = Get.find<ProductDetailsController>(tag: product.id);
           fit: BoxFit.cover,
           width: _thumbnailSize,
           height: _thumbnailSize,
+          memCacheWidth: 100,
+          memCacheHeight: 100,
           placeholder: (context, url) => Container(
             width: _thumbnailSize,
             height: _thumbnailSize,
