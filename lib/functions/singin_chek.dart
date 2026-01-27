@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 
 class SigninChek {
+
 
   static void runIfConnected(
     Future<void> Function() action, {
@@ -16,5 +18,24 @@ class SigninChek {
     }
   }
 
-  
+ // show dialog if not connected
+  static void showDialogIfNotConnected({
+    String message = "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
+  }) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('خطأ في الاتصال'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text('حسنا'),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
