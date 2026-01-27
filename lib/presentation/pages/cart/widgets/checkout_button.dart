@@ -7,11 +7,8 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/controllers/cart_controller.dart';
 
 const double _checkoutButtonPadding = 32.0;
-
 const double _checkoutButtonVerticalPadding = 16.0;
-
 const double _checkoutButtonFontSize = 18.0;
-
 const double _checkoutButtonRadius = 12.0;
 
 Widget checkoutButton() {

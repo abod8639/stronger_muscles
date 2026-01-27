@@ -99,7 +99,7 @@ class ImageSection extends StatelessWidget {
         child: CachedNetworkImage(
           cacheManager: CustomCacheManager.instance,
           imageUrl: url,
-          fit: BoxFit.contain,
+          fit: BoxFit.fitHeight,
           placeholder: (context, url) => _buildShimmerEffect(theme),
           errorWidget: (context, url, error) => _buildErrorWidget(theme),
           memCacheWidth: 400,

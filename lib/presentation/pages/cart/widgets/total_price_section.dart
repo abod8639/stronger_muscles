@@ -5,11 +5,8 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/controllers/cart_controller.dart';
 
 const double _totalLabelFontSize = 14.0;
-
 const double _totalPriceFontSize = 24.0;
-
 const double _itemCountFontSize = 12.0;
-
 const double _smallSpacing = 4.0;
 
 Widget totalPriceSection() {

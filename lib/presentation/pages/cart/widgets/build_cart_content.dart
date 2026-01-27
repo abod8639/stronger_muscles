@@ -20,6 +20,7 @@ Widget buildCartContent() {
             child: ListView.builder(
               itemCount: controller.cartItems.length,
               physics: const BouncingScrollPhysics(),
+              addRepaintBoundaries: true,
               itemBuilder: (context, index) {
                 final item = controller.cartItems[index];
                 return CartItemCard(item: item);

@@ -39,6 +39,7 @@ Widget buildProductCartDetails(CartItemModel item) {
             ),
             maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
+            semanticsLabel: item.product.name,
           ),
 
           // Selected Flavor
