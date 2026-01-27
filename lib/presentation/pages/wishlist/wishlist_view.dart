@@ -10,7 +10,7 @@ class WishlistView extends GetView<WishlistController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(WishlistController());
+    final controller = Get.find<WishlistController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -22,36 +22,47 @@ class WishlistView extends GetView<WishlistController> {
       ),
       body: Obx(() {
         if (controller.wishlistItems.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.favorite_border,
-                  size: 80,
-                  color: AppColors.grey,
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  AppLocalizations.of(context)!.yourWishlistIsEmpty,
-                  style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
-                ),
-                Text(
-                  AppLocalizations.of(context)!.startAddingFavorites,
-                  style: const TextStyle(fontSize: 16.0, color: AppColors.grey),
-                ),
-              ],
-            ),
-          );
+          return const _EmptyWishlistState();
         }
         return ListView.builder(
           itemCount: controller.wishlistItems.length,
+          physics: const BouncingScrollPhysics(),
+          addRepaintBoundaries: true,
           itemBuilder: (context, index) {
             final product = controller.wishlistItems[index];
             return WishlistItemCard(product: product);
           },
         );
       }),
+    );
+  }
+}
+
+class _EmptyWishlistState extends StatelessWidget {
+  const _EmptyWishlistState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.favorite_border,
+            size: 80,
+            color: AppColors.grey,
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            AppLocalizations.of(context)!.yourWishlistIsEmpty,
+            style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
+          ),
+          Text(
+            AppLocalizations.of(context)!.startAddingFavorites,
+            style: const TextStyle(fontSize: 16.0, color: AppColors.grey),
+          ),
+        ],
+      ),
     );
   }
 }

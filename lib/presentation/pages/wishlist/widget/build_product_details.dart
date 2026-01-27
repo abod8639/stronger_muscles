@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 
-const double titleFontSize = 18.0;
-const double priceFontSize = 16.0;
-const int maxTitleLines = 2;
+const double _titleFontSize = 18.0;
+const double _priceFontSize = 16.0;
+const int _maxTitleLines = 2;
+
 Widget buildProductDetails(ProductModel product) {
   return Builder(
     builder: (context) {
@@ -17,24 +18,34 @@ Widget buildProductDetails(ProductModel product) {
           Text(
             product.name,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: titleFontSize,
+              fontSize: _titleFontSize,
               fontWeight: FontWeight.bold,
               color: theme.colorScheme.onSurface,
             ),
-            maxLines: maxTitleLines,
+            maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
+            semanticsLabel: product.name,
           ),
           const SizedBox(height: 8.0),
 
           // Product Price
           Text(
-            '\$${product.price.toStringAsFixed(2)}',
+            'LE ${product.effectivePrice.toStringAsFixed(2)}',
             style: theme.textTheme.titleSmall?.copyWith(
-              fontSize: priceFontSize,
+              fontSize: _priceFontSize,
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
             ),
           ),
+          // Original price if on discount
+          if (product.hasDiscount)
+            Text(
+              'LE ${product.price.toStringAsFixed(2)}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: Colors.grey,
+                decoration: TextDecoration.lineThrough,
+              ),
+            ),
         ],
       );
     },

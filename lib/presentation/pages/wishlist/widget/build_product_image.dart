@@ -4,63 +4,58 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 
-Widget buildProductImage(ProductModel product) {
-  const double imageSize = 100.0;
-  const double imageBorderRadius = 8.0;
+const double _imageSize = 100.0;
+const double _imageBorderRadius = 8.0;
 
+Widget buildProductImage(ProductModel product) {
   final imageUrl = product.imageUrls.isNotEmpty ? product.imageUrls.first : '';
 
-  return Builder(
-    builder: (context) {
-      return Hero(
-        tag: 'wishlist_product_${product.id}',
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(imageBorderRadius),
-          child: imageUrl.isNotEmpty
-              ? CachedNetworkImage(
-                cacheManager: CustomCacheManager.instance,
-                  imageUrl: imageUrl,
-                  width: imageSize,
-                  height: imageSize,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    width: imageSize,
-                    height: imageSize,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                        strokeWidth: 2.0,
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    width: imageSize,
-                    height: imageSize,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainerHighest,
-                    child: const Icon(
-                      Icons.image_not_supported_outlined,
-                      color: AppColors.primary,
-                      size: 40.0,
-                    ),
-                  ),
-                )
-              : Container(
-                  width: imageSize,
-                  height: imageSize,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  child: const Icon(
-                    Icons.image_not_supported_outlined,
-                    color: AppColors.primary,
-                    size: 40.0,
-                  ),
-                ),
-        ),
-      );
-    },
+  return Hero(
+    tag: 'wishlist_product_${product.id}',
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(_imageBorderRadius),
+      child: imageUrl.isNotEmpty
+          ? CachedNetworkImage(
+              cacheManager: CustomCacheManager.instance,
+              imageUrl: imageUrl,
+              width: _imageSize,
+              height: _imageSize,
+              fit: BoxFit.cover,
+              memCacheWidth: 120,
+              memCacheHeight: 120,
+              placeholder: (context, url) => _buildPlaceholder(context),
+              errorWidget: (context, url, error) => _buildErrorWidget(context),
+            )
+          : _buildErrorWidget(null),
+    ),
+  );
+}
+
+Widget _buildPlaceholder(BuildContext context) {
+  return Container(
+    width: _imageSize,
+    height: _imageSize,
+    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+    child: const Center(
+      child: CircularProgressIndicator(
+        color: AppColors.primary,
+        strokeWidth: 2.0,
+      ),
+    ),
+  );
+}
+
+Widget _buildErrorWidget(BuildContext? context) {
+  return Container(
+    width: _imageSize,
+    height: _imageSize,
+    color: context != null
+        ? Theme.of(context).colorScheme.surfaceContainerHighest
+        : Colors.grey.shade200,
+    child: const Icon(
+      Icons.image_not_supported_outlined,
+      color: AppColors.primary,
+      size: 40.0,
+    ),
   );
 }
