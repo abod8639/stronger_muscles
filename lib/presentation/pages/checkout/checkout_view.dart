@@ -92,16 +92,17 @@ class CheckoutView extends GetView<CheckoutController> {
             );
           },
           steps: [
-            _buildAddressStep(theme),
-            _buildPaymentStep(theme),
-            _buildReviewStep(theme),
+            buildAddressStep(),
+            buildPaymentStep(theme),
+            buildReviewStep(theme),
           ],
         );
       }),
     );
   }
-
-  Step _buildAddressStep(ThemeData theme) {
+}
+  Step buildAddressStep() {
+    final checkoutController = Get.find<CheckoutController>();
     final profileController = Get.find<ProfileController>();
 
     return Step(
@@ -119,7 +120,7 @@ class CheckoutView extends GetView<CheckoutController> {
                   () => Column(
                     children: profileController.addresses.map((address) {
                       final isSelected =
-                          controller.selectedAddress.value?.id == address.id;
+                          checkoutController.selectedAddress.value?.id == address.id;
                       return Card(
                         elevation: isSelected ? 2 : 0,
                         color: isSelected
@@ -135,8 +136,8 @@ class CheckoutView extends GetView<CheckoutController> {
                         ),
                         child: RadioListTile(
                           value: address,
-                          groupValue: controller.selectedAddress.value,
-                          onChanged: (value) => controller.setAddress(value!),
+                          groupValue: checkoutController.selectedAddress.value,
+                          onChanged: (value) => checkoutController.setAddress(value!),
                           title: Text(
                             address.label ?? "error",
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -162,25 +163,25 @@ class CheckoutView extends GetView<CheckoutController> {
           );
         },
       ),
-      isActive: controller.currentStep.value >= 0,
-      state: controller.currentStep.value > 0
+      isActive: checkoutController.currentStep.value >= 0,
+      state: checkoutController.currentStep.value > 0
           ? StepState.complete
           : StepState.editing,
     );
   }
 
-  Step _buildPaymentStep(ThemeData theme) {
+  Step buildPaymentStep(ThemeData theme) {
     return Step(
       title: const Text(_paymentStepTitle),
       content: Column(
         children: [
-          _buildPaymentOption(
+          buildPaymentOption(
             value: 'cod',
             title: 'Cash on Delivery',
             icon: Icons.money,
           ),
           const SizedBox(height: 8),
-          _buildPaymentOption(
+          buildPaymentOption(
             value: 'card',
             title: 'Credit Card',
             icon: Icons.credit_card,
@@ -196,7 +197,7 @@ class CheckoutView extends GetView<CheckoutController> {
     );
   }
 
-  Widget _buildPaymentOption({
+  Widget buildPaymentOption({
     required String value,
     required String title,
     required IconData icon,
@@ -238,7 +239,7 @@ class CheckoutView extends GetView<CheckoutController> {
     });
   }
 
-  Step _buildReviewStep(ThemeData theme) {
+  Step buildReviewStep(ThemeData theme) {
     final cartController = Get.find<CartController>();
 
     return Step(
@@ -331,4 +332,4 @@ class CheckoutView extends GetView<CheckoutController> {
       state: StepState.editing,
     );
   }
-}
+
