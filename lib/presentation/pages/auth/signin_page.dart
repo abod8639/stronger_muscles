@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -26,7 +27,10 @@ class SignInPage extends GetView<AuthController> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                inputFields(controller.emailController, controller.passwordController),
+                inputFields(
+                  controller.emailController,
+                  controller.passwordController,
+                ),
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
@@ -50,12 +54,14 @@ class SignInPage extends GetView<AuthController> {
                       ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              controller.signInWithEmail(
-                                email: controller.emailController.text.trim(),
-                                password: controller.passwordController.text,
-                              );
-                            }
+                            AppGuard.runSafe(() async {
+                              if (formKey.currentState!.validate()) {
+                                controller.signInWithEmail(
+                                  email: controller.emailController.text.trim(),
+                                  password: controller.passwordController.text,
+                                );
+                              }
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
