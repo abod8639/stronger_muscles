@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/handle_checkout.dart';
-import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 
 const double _checkoutButtonPadding = 32.0;
 const double _checkoutButtonVerticalPadding = 16.0;
@@ -20,7 +17,7 @@ Widget checkoutButton() {
           label: AppLocalizations.of(context)!.proceedToCheckout,
           button: true,
           child: ElevatedButton(
-            onPressed: ()=> _handleCheckout(),
+            onPressed: ()=> handleCheckout(),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
@@ -50,12 +47,3 @@ Widget checkoutButton() {
   );
 }
 
-Future<void> _handleCheckout() async {
-  final controller = Get.find<CartController>();
-  if (controller.cartItems.isEmpty) {
-    return;
-  }
-  return  AppGuard.runSafe(
-    () async => handleCheckout()
-    );
-}

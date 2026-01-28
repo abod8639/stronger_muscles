@@ -13,7 +13,6 @@ const String _googleButtonLabel = 'Sign in with Google';
 const double _containerMargin = 16.0;
 const double _containerPadding = 32.0;
 const double _containerBorderRadius = 20.0;
-// const double _containerElevation = 0.0;
 const double _iconBackgroundSize = 20.0;
 const double _iconSize = 60.0;
 const double _titleIconSpacing = 24.0;
@@ -127,7 +126,7 @@ class LoginPromptCard extends StatelessWidget {
 }
 
 Future<void> _handleLogin() async {
-  return AuthGuard.runIfConnectedAndAuthenticated(
+  return AppGuard.runSafe(
     () async => Get.to(
       () => const AuthView()
     )
