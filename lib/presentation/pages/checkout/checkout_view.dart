@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/app_guard.dart';
-import 'package:stronger_muscles/functions/build_payment_step.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_payment_step.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/build_address_step.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/build_review_step.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_address_step.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_review_step.dart';
 
 const String _checkoutTitle = 'Checkout';
 const String _addressStepTitle = 'Address';
@@ -23,7 +23,6 @@ class CheckoutView extends GetView<CheckoutController> {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure controller is initialized
     Get.find<CheckoutController>();
 
 

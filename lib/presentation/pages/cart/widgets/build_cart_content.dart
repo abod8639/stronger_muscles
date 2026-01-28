@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/build_checkout_section.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_checkout_section.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/cart_item_card.dart';
 
 const double _listTopSpacing = 10.0;
