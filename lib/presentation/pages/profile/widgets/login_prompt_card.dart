@@ -97,8 +97,9 @@ class LoginPromptCard extends StatelessWidget {
           const SizedBox(height: _buttonsSpacing),
           ElevatedButton.icon(
             onPressed: () async {
-              
-              await controller.signInWithGoogle();
+              AppGuard.runSafeInternet(
+                () async => await controller.signInWithGoogle()
+              );
             },
             icon: const Icon(Icons.g_mobiledata_outlined, size: _googleIconSize),
             label: const Text(_googleButtonLabel),
