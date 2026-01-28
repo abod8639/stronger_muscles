@@ -57,7 +57,7 @@ Future<void> _handleCheckout() async {
     return;
   }
   return  NetworkUtils.runIfConnected(
-    () async => SigninChek.runIfConnected(
+    () async => AuthGuard.runIfAuthenticated(
     () async => handleCheckout()
     ),
   );
