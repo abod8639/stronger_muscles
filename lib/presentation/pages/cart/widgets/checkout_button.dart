@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/handle_checkout.dart';
-import 'package:stronger_muscles/functions/network_chek.dart';
-import 'package:stronger_muscles/functions/singin_chek.dart';
+import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 
@@ -56,9 +55,7 @@ Future<void> _handleCheckout() async {
   if (controller.cartItems.isEmpty) {
     return;
   }
-  return  NetworkUtils.runIfConnected(
-    () async => AuthGuard.runIfAuthenticated(
+  return  AppGuard.runSafe(
     () async => handleCheckout()
-    ),
-  );
+    );
 }
