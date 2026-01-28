@@ -97,5 +97,24 @@ class AppGuard {
   }
 
 
+  static Future<void> runSafeAuth(
+    Future<void> Function() action, {
+    bool requireAuth = true,
+  }) async {
+    if (requireAuth) {
+      final isLoggedIn = Get.find<AuthController>().isLoggedIn.value;
+      if (!isLoggedIn) {
+        _showError(
+          title: "تنبيه",
+          message: "يرجى تسجيل الدخول للمتابعة",
+          icon: Icons.lock_person_rounded,
+          isCritical: false, // عرض Snackbar
+        );
+        Get.toNamed('/login');
+        return;
+      }
+    }
 
+    await action();
+  }
 }
