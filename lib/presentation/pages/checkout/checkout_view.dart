@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
-import 'package:stronger_muscles/functions/network_chek.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
@@ -45,7 +45,7 @@ class CheckoutView extends GetView<CheckoutController> {
           type: StepperType.horizontal,
           currentStep: controller.currentStep.value,
           onStepContinue: () {
-            NetworkUtils.runIfConnected(() async {
+            AppGuard.runSafe(() async {
               if (controller.currentStep.value == 2) {
                 await controller.placeOrder();
               } else {
