@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -40,13 +41,15 @@ class SignUpPage extends GetView<AuthController> {
                       ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              controller.signUpWithEmail(
-                                controller.emailController.text.trim(),
-                                controller.passwordController.text,
-                                nameController.text.trim(),
-                              );
-                            }
+                            AppGuard.runSafe(() async {
+                              if (formKey.currentState!.validate()) {
+                                controller.signUpWithEmail(
+                                  controller.emailController.text.trim(),
+                                  controller.passwordController.text,
+                                  nameController.text.trim(),
+                                );
+                              }
+                            });
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
