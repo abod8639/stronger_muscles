@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/app_guard.dart';
+import 'package:stronger_muscles/functions/build_payment_step.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/build_address_step.dart';
+import 'package:stronger_muscles/presentation/pages/cart/widgets/build_review_step.dart';
 
 const String _checkoutTitle = 'Checkout';
 const String _addressStepTitle = 'Address';
@@ -92,111 +95,15 @@ class CheckoutView extends GetView<CheckoutController> {
             );
           },
           steps: [
-            buildAddressStep(),
-            buildPaymentStep(theme),
-            buildReviewStep(theme),
+            buildAddressStep(_addressStepTitle),
+            buildPaymentStep(_paymentStepTitle),
+            buildReviewStep(_reviewStepTitle),
           ],
         );
       }),
     );
   }
 }
-  Step buildAddressStep() {
-    final checkoutController = Get.find<CheckoutController>();
-    final profileController = Get.find<ProfileController>();
-
-    return Step(
-      title: const Text(_addressStepTitle),
-      content: Builder(
-        builder: (context) {
-          return Column(
-            children: [
-              if (profileController.addresses.isEmpty)
-                const Text(
-                  'No addresses found. Please add one in your profile.',
-                )
-              else
-                Obx(
-                  () => Column(
-                    children: profileController.addresses.map((address) {
-                      final isSelected =
-                          checkoutController.selectedAddress.value?.id == address.id;
-                      return Card(
-                        elevation: isSelected ? 2 : 0,
-                        color: isSelected
-                            ? AppColors.primary.withOpacity(0.05)
-                            : null,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.grey.shade300,
-                          ),
-                        ),
-                        child: RadioListTile(
-                          value: address,
-                          groupValue: checkoutController.selectedAddress.value,
-                          onChanged: (value) => checkoutController.setAddress(value!),
-                          title: Text(
-                            address.label ?? "error",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(address.fullAddress),
-                          activeColor: AppColors.primary,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              TextButton.icon(
-                onPressed: () {
-                  // Navigate to add address (placeholder for now)
-                  showAddressForm(context);
-                  // Get.snackbar('Info', 'Add address feature coming soon');
-                },
-                icon: const Icon(Icons.add),
-                label: const Text('Add New Address'),
-              ),
-            ],
-          );
-        },
-      ),
-      isActive: checkoutController.currentStep.value >= 0,
-      state: checkoutController.currentStep.value > 0
-          ? StepState.complete
-          : StepState.editing,
-    );
-  }
-
-  Step buildPaymentStep(ThemeData theme) {
-    return Step(
-      title: const Text(_paymentStepTitle),
-      content: Column(
-        children: [
-          buildPaymentOption(
-            value: 'cod',
-            title: 'Cash on Delivery',
-            icon: Icons.money,
-          ),
-          const SizedBox(height: 8),
-          buildPaymentOption(
-            value: 'card',
-            title: 'Credit Card',
-            icon: Icons.credit_card,
-            subtitle: 'Coming soon',
-            enabled: false,
-          ),
-        ],
-      ),
-      isActive: controller.currentStep.value >= 1,
-      state: controller.currentStep.value > 1
-          ? StepState.complete
-          : StepState.editing,
-    );
-  }
-
   Widget buildPaymentOption({
     required String value,
     required String title,
@@ -238,98 +145,3 @@ class CheckoutView extends GetView<CheckoutController> {
       );
     });
   }
-
-  Step buildReviewStep(ThemeData theme) {
-    final cartController = Get.find<CartController>();
-
-    return Step(
-      title: const Text(_reviewStepTitle),
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Order Summary', style: theme.textTheme.titleMedium),
-          const SizedBox(height: 8),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            addRepaintBoundaries: true,
-            itemCount: cartController.cartItems.length,
-            itemBuilder: (context, index) {
-              final item = cartController.cartItems[index];
-              return ListTile(
-                leading: CachedNetworkImage(
-                  cacheManager: CustomCacheManager.instance,
-                  imageUrl: item.product.imageUrls.first,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                  memCacheWidth: 50,
-                  memCacheHeight: 50,
-                  errorWidget: (_, __, ___) => const Icon(Icons.image),
-                ),
-                title: Text(item.product.name),
-                subtitle: Text(
-                  '${item.quantity} x LE ${item.product.effectivePrice}',
-                ),
-                trailing: Text(
-                  'LE ${(item.product.effectivePrice * item.quantity).toStringAsFixed(2)}',
-                ),
-              );
-            },
-          ),
-          const Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Total Amount',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'LE ${cartController.totalPrice.toStringAsFixed(2)}',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: AppColors.primary,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          if (controller.selectedAddress.value != null) ...[
-            const Text(
-              'Shipping To:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(controller.selectedAddress.value!.fullAddress),
-          ],
-          const SizedBox(height: 8),
-          const Text(
-            'Payment Method:',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(
-            controller.selectedPaymentMethod.value == 'cod'
-                ? 'Cash on Delivery'
-                : 'Credit Card',
-          ),
-          const SizedBox(height: 8),
-          // notes
-          const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
-
-          const SizedBox(height: 8),
-
-          TextField(
-            controller: cartController.notesController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'Enter any additional notes',
-            ),
-          ),
-        ],
-      ),
-      isActive: controller.currentStep.value >= 2,
-      state: StepState.editing,
-    );
-  }
-
