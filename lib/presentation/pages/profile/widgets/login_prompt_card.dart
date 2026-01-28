@@ -126,7 +126,7 @@ class LoginPromptCard extends StatelessWidget {
 }
 
 Future<void> _handleLogin() async {
-  return AppGuard.runSafe(
+  return AppGuard.runSafeInternet(
     () async => Get.to(
       () => const AuthView()
     )
