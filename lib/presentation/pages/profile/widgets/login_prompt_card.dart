@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/functions/singin_chek.dart';
 import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/presentation/pages/auth/auth_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
@@ -80,7 +81,7 @@ class LoginPromptCard extends StatelessWidget {
           ),
           const SizedBox(height: _buttonsSpacing),
           ElevatedButton.icon(
-            onPressed: () => Get.to(() => const AuthView()),
+            onPressed: () => _handleLogin(),
             icon: const Icon(Icons.login),
             label: const Text(_loginButtonLabel),
             style: ElevatedButton.styleFrom(
@@ -122,4 +123,12 @@ class LoginPromptCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _handleLogin() async {
+  return SigninChek.runIfConnected(
+    () async => Get.to(
+      () => const AuthView()
+    )
+  );
 }

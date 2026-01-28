@@ -17,8 +17,7 @@ Widget checkoutButton() {
     builder: (context) {
       final theme = Theme.of(context);
 
-      return Obx(
-        () => Semantics(
+      return  Semantics(
           label: AppLocalizations.of(context)!.proceedToCheckout,
           button: true,
           child: ElevatedButton(
@@ -46,7 +45,7 @@ Widget checkoutButton() {
               ),
             ),
           ),
-        ),
+        
       );
     },
   );
