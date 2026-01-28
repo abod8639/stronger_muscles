@@ -1,14 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/functions/build_payment_step.dart';
-import 'package:stronger_muscles/functions/cache_manager.dart';
-import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/build_address_step.dart';
 import 'package:stronger_muscles/presentation/pages/cart/widgets/build_review_step.dart';
 
@@ -31,7 +26,6 @@ class CheckoutView extends GetView<CheckoutController> {
     // Ensure controller is initialized
     Get.find<CheckoutController>();
 
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -104,44 +98,3 @@ class CheckoutView extends GetView<CheckoutController> {
     );
   }
 }
-  Widget buildPaymentOption({
-    required String value,
-    required String title,
-    required IconData icon,
-    String? subtitle,
-    bool enabled = true,
-  }) {
-    return Obx(() {
-      final isSelected = controller.selectedPaymentMethod.value == value;
-      return Card(
-        elevation: isSelected ? 2 : 0,
-        color: isSelected ? AppColors.primary.withOpacity(0.05) : null,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(
-            color: isSelected ? AppColors.primary : Colors.grey.shade300,
-          ),
-        ),
-        child: RadioListTile(
-          value: value,
-          groupValue: controller.selectedPaymentMethod.value,
-          onChanged: enabled
-              ? (val) => controller.setPaymentMethod(val.toString())
-              : null,
-          title: Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: enabled ? null : Colors.grey,
-            ),
-          ),
-          subtitle: subtitle != null ? Text(subtitle) : null,
-          secondary: Icon(
-            icon,
-            color: enabled ? AppColors.primary : Colors.grey,
-          ),
-          activeColor: AppColors.primary,
-        ),
-      );
-    });
-  }

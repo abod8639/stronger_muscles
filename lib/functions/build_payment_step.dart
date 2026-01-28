@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/checkout_view.dart';
+import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_payment_option.dart';
 
 Step buildPaymentStep(String title) {
     final controller = Get.find<CheckoutController>();
