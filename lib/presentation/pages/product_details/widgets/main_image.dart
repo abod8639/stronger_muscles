@@ -32,8 +32,8 @@ class MainImage extends StatelessWidget {
 
   BorderRadiusGeometry _getBorderRadius() {
     return BorderRadius.only (
-      bottomLeft: Radius.circular(16.0),
-      bottomRight: Radius.circular(16.0),
+      // bottomLeft: Radius.circular(16.0),
+      // bottomRight: Radius.circular(16.0),
       //  topLeft: Radius.circular(16.0),
       //  topRight: Radius.circular(16.0),
     );
@@ -58,11 +58,12 @@ class MainImage extends StatelessWidget {
                 borderRadius: _getBorderRadius()
               ),
               child: ClipRRect(
+                
                 borderRadius: _getBorderRadius(),
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
                   imageUrl: product.imageUrls[index],
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fitWidth,
                   placeholder: (context, url) => _buildPlaceholder(),
                   errorWidget: (context, url, error) => _buildErrorWidget(context),
                   memCacheWidth: 500,

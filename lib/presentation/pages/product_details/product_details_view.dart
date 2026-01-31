@@ -51,6 +51,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
           // Product Details Content
           SliverToBoxAdapter(
+
             child: Padding(
               padding: const EdgeInsets.all(_contentPadding),
               child: Column(
@@ -131,9 +132,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     if (controller.product.imageUrls.isEmpty) return;
 
     showImageViewer(
-    context ,
+     context ,
      CachedNetworkImage(
-    cacheManager: CustomCacheManager.instance,
+     cacheManager: CustomCacheManager.instance,
      imageUrl:  controller.product.imageUrls[initialIndex]
      ),
       useSafeArea: true,
