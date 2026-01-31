@@ -3,6 +3,7 @@ import 'package:stronger_muscles/presentation/bindings/auth_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/home_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/order_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/order_details_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_binding.dart';
@@ -15,6 +16,7 @@ import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
 import 'package:stronger_muscles/presentation/pages/cart/cart_view.dart';
 import 'package:stronger_muscles/presentation/pages/home/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/order_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/order_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/edit_user_info.dart';
@@ -37,6 +39,7 @@ class AppRoutes {
   static const String orderSuccess = '/order_success';
   static const String editUserInfo = '/edit_user_info';
   static const String orderView = '/order_view';
+  static const String orderDetails = '/order_details';
 }
 
 class AppPages {
@@ -102,6 +105,11 @@ class AppPages {
       name: AppRoutes.orderView,
       page: () => const OrderView(),
       binding: OrderBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.orderDetails,
+      page: () => const OrderDetailsView(),
+      binding: OrderDetailsBinding(),
     ),
   ];
 }

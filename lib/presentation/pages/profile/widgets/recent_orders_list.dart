@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/order_card.dart';
 
 const int _maxOrdersDisplay = 5;
@@ -19,7 +17,7 @@ class RecentOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = Get.find<ProfileController>();
+    final controller = Get.find<OrdersController>();
     final isDark = theme.brightness == Brightness.dark;
     final isAr = Get.locale?.languageCode == 'ar';
 
@@ -78,7 +76,7 @@ class RecentOrdersList extends StatelessWidget {
             ],
           ),
           TextButton(
-            onPressed: () => Get.toNamed('/orders'), // مثال للتنقل
+            onPressed: () => Get.toNamed('/order_view'), // مثال للتنقل
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             child: Text(isAr ? 'عرض الكل' : 'View All'),
           ),

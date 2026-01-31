@@ -8,11 +8,13 @@ class OrderCard extends StatelessWidget {
   final OrderModel order;
   final bool isDark;
   final bool isAr;
+  final Function()? onTap;
 
   const OrderCard({
     required this.order,
     required this.isDark,
     required this.isAr,
+     this.onTap,
   });
 
   @override
@@ -37,9 +39,7 @@ class OrderCard extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
-          onTap: () {
-            /* الانتقال لتفاصيل الطلب */
-          },
+          onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(14),
             child: Column(
