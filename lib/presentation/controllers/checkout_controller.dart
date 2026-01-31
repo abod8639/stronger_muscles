@@ -59,7 +59,10 @@ class CheckoutController extends GetxController {
     isProcessing.value = true;
 
     try {
-      final orderId = 'ORD-${DateTime.now().millisecondsSinceEpoch}';
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final orderId = 'ORD-$timestamp';
+      int itemIndex = 0;
+
       final order = OrderModel(
         id: orderId,
         userId: _authController.currentUser.value?.id.toString() ?? '0',
@@ -78,23 +81,22 @@ class CheckoutController extends GetxController {
         paymentMethod: '',
         paymentStatus: '',
         updatedAt: DateTime.now(),
-        items: _cartController.cartItems
-            .map(
-              (item) => OrderItemModel(
-                id: 'item-${DateTime.now().millisecondsSinceEpoch}-${item.product.id}',
-                orderId: orderId,
-                productId: item.product.id,
-                productName: item.product.name,
-                unitPrice: item.product.effectivePrice,
-                quantity: item.quantity,
-                subtotal: item.product.effectivePrice * item.quantity,
-                imageUrl: item.product.imageUrls.first,
-                selectedFlavor: item.selectedFlavor,
-                selectedSize: item.selectedSize,
-                createdAt: DateTime.now(),
-              ),
-            )
-            .toList(),
+        items: _cartController.cartItems.map((item) {
+          itemIndex++;
+          return OrderItemModel(
+            id: 'item-$timestamp-$itemIndex-${item.product.id}',
+            orderId: orderId,
+            productId: item.product.id,
+            productName: item.product.name,
+            unitPrice: item.product.effectivePrice,
+            quantity: item.quantity,
+            subtotal: item.product.effectivePrice * item.quantity,
+            imageUrl: item.product.imageUrls.first,
+            selectedFlavor: item.selectedFlavor,
+            selectedSize: item.selectedSize,
+            createdAt: DateTime.now(),
+          );
+        }).toList(),
       );
 
       await _orderRepository.createOrder(order);

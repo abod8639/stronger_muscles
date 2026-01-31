@@ -108,7 +108,7 @@ class ImageListView extends StatelessWidget {
         return CachedNetworkImage(
           cacheManager: CustomCacheManager.instance,
           imageUrl: imageUrl,
-          fit: BoxFit.cover,
+          fit: BoxFit.cover ,
           width: _thumbnailSize,
           height: _thumbnailSize,
           memCacheWidth: 100,
