@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/bindings/auth_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/home_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/cart_binding.dart';
+import 'package:stronger_muscles/presentation/bindings/order_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/profile_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_binding.dart';
@@ -14,6 +15,7 @@ import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
 import 'package:stronger_muscles/presentation/pages/cart/cart_view.dart';
 import 'package:stronger_muscles/presentation/pages/home/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/order_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/edit_user_info.dart';
 import 'package:stronger_muscles/presentation/pages/profile/profile_page.dart';
@@ -34,6 +36,7 @@ class AppRoutes {
   static const String checkout = '/checkout';
   static const String orderSuccess = '/order_success';
   static const String editUserInfo = '/edit_user_info';
+  static const String orderView = '/order_view';
 }
 
 class AppPages {
@@ -89,10 +92,16 @@ class AppPages {
       binding: CheckoutBinding(),
     ),
     GetPage(name: AppRoutes.orderSuccess, page: () => const OrderSuccessView()),
+  
     GetPage(
       name: AppRoutes.editUserInfo,
       page: () => const EditUserInfoView(),
       binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.orderView,
+      page: () => const OrderView(),
+      binding: OrderBinding(),
     ),
   ];
 }
