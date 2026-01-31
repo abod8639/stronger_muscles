@@ -30,6 +30,15 @@ class MainImage extends StatelessWidget {
     );
   }
 
+  BorderRadiusGeometry _getBorderRadius() {
+    return BorderRadius.only (
+      bottomLeft: Radius.circular(16.0),
+      bottomRight: Radius.circular(16.0),
+      //  topLeft: Radius.circular(16.0),
+      //  topRight: Radius.circular(16.0),
+    );
+  }
+
   Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
     return PageView.builder(
       allowImplicitScrolling: false,
@@ -43,13 +52,13 @@ class MainImage extends StatelessWidget {
           child: Hero(
             tag: 'product_image_${product.id}_$index',
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
+              margin: const EdgeInsets.symmetric(horizontal: 0.0),
               decoration: BoxDecoration(
                 color: product.isBackgroundWhite ? Colors.white : Colors.transparent,
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: _getBorderRadius()
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: _getBorderRadius(),
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
                   imageUrl: product.imageUrls[index],
