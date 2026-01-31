@@ -54,7 +54,7 @@ class SignInPage extends GetView<AuthController> {
                       ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: () {
-                            AppGuard.runSafe(() async {
+                            AppGuard.runSafeInternet(() async {
                               if (formKey.currentState!.validate()) {
                                 controller.signInWithEmail(
                                   email: controller.emailController.text.trim(),
