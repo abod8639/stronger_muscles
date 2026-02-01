@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_info_item.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_price_row.dart';
 
 class OrderDetailsView extends StatelessWidget {
@@ -80,13 +81,11 @@ class OrderDetailsView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       buildInfoItem(
-                        theme,
                         icon: Icons.calendar_today_outlined,
                         label: isAr ? 'تاريخ الطلب' : 'Date',
                         value: DateFormat('dd MMM yyyy').format(order.orderDate),
                       ),
                       buildInfoItem(
-                        theme,
                         icon: Icons.access_time,
                         label: isAr ? 'الوقت' : 'Time',
                         value: DateFormat('hh:mm a').format(order.orderDate),
@@ -209,6 +208,8 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 }
+
+
   Widget buildSection(bool isDark, {required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -227,21 +228,6 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 
-  Widget buildInfoItem(ThemeData theme, {required IconData icon, required String label, required String value}) {
-    return Row(
-      children: [
-        Icon(icon, size: 16, color: Colors.grey),
-        const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey, fontSize: 10)),
-            Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
-          ],
-        ),
-      ],
-    );
-  }
 
   Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr, ThemeData theme) {
     return Container(
