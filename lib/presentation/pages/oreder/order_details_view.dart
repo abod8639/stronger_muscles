@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 
 class OrderDetailsView extends StatelessWidget {
@@ -70,6 +73,7 @@ class OrderDetailsView extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -92,6 +96,8 @@ class OrderDetailsView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            _buildStatusTracker(isDark, isAr, theme),
+            // const SizedBox(height: 16),
 
             // Order Items
             Column(
@@ -135,8 +141,35 @@ class OrderDetailsView extends StatelessWidget {
                     _buildRowInfo(isAr ? 'رقم الهاتف' : 'Phone', order.phoneNumber!, theme),
                     const SizedBox(height: 8),
                   ],
-                  if (order.shippingAddress != null)
-                    _buildRowInfo(isAr ? 'العنوان' : 'Address', order.shippingAddress!, theme),
+
+                  Builder(
+                    builder: (context) {
+                      String addressText = order.shippingAddress ?? '';
+
+                      if (order.shippingAddressSnapshot != null) {
+                        try {
+                          final dynamic decoded =
+                              jsonDecode(order.shippingAddressSnapshot!);
+                          if (decoded is Map<String, dynamic>) {
+                            final address = AddressModel.fromJson(decoded);
+                            addressText = address.fullAddress;
+                          }
+                        } catch (e) {
+                          // Fallback to existing string
+                        }
+                      }
+                      
+                      if (addressText.isNotEmpty) {
+                        return _buildRowInfo(
+                          isAr ? 'العنوان' : 'Address',
+                          addressText,
+                          theme,
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+          
                 ],
               ),
             ),
@@ -169,39 +202,6 @@ class OrderDetailsView extends StatelessWidget {
               ),
             ),
             
-            // Actions (Optional - e.g. Cancel Order)
-            if (order.status.toLowerCase() == 'pending') ...[
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.error.withValues(alpha: 0.1),
-                    foregroundColor: AppColors.error,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    Get.defaultDialog(
-                      title: isAr ? 'إلغاء الطلب' : 'Cancel Order',
-                      middleText: isAr 
-                        ? 'هل أنت متأكد من أنك تريد إلغاء هذا الطلب؟' 
-                        : 'Are you sure you want to cancel this order?',
-                      textConfirm: isAr ? 'نعم' : 'Yes',
-                      textCancel: isAr ? 'لا' : 'No',
-                      confirmTextColor: Colors.white,
-                      onConfirm: () {
-                        // TODO: Implement cancel order in controller
-                        Get.back();
-                      },
-                    );
-                  },
-                  child: Text(isAr ? 'إلغاء الطلب' : 'Cancel Order'),
-                ),
-              ),
-            ],
-            const SizedBox(height: 32),
           ],
         ),
       ),
@@ -389,5 +389,134 @@ class OrderDetailsView extends StatelessWidget {
       default:
         return {'text': status.toUpperCase(), 'color': AppColors.greyDark};
     }
+  }
+
+  Widget _buildStatusTracker(bool isDark, bool isAr, ThemeData theme) {
+    if (order.status.toLowerCase() == 'cancelled') {
+      return _buildSection(
+        isDark,
+        child: Row(
+          children: [
+            const Icon(Icons.cancel, color: AppColors.error),
+            const SizedBox(width: 12),
+            Text(
+              isAr ? 'تم إلغاء الطلب' : 'Order Cancelled',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: AppColors.error,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final steps = [
+      {'label': isAr ? 'طلب' : 'Order', 'status': 'pending'},
+      {'label': isAr ? 'تجهيزات' : 'Process', 'status': 'processing'},
+      {'label': isAr ? 'شحن' : 'Shipped', 'status': 'shipped'},
+      {'label': isAr ? 'توصيل' : 'Delivery', 'status': 'delivered'},
+    ];
+
+    final currentStatus = order.status.toLowerCase();
+    int activeIndex = steps.indexWhere((s) => s['status'] == currentStatus);
+    
+    // Mapping complex statuses if any
+    if (activeIndex == -1) {
+      if (currentStatus == 'pending') {
+        activeIndex = 0;
+      } else if (currentStatus == 'processing') {
+        activeIndex = 1;
+      } else if (currentStatus == 'shipped') {
+        activeIndex = 2;
+      } else if (currentStatus == 'delivered') {
+        activeIndex = 3;
+      } else {
+        activeIndex = 0;
+      }
+    }
+
+    return _buildSection(
+      isDark,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            isAr ? 'تتبع حالة الطلب' : 'Order Tracking',
+            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              for (int i = 0; i < steps.length; i++) ...[
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          // Line before
+                          Expanded(
+                            child: Container(
+                              height: 2,
+                              color: i == 0
+                                  ? Colors.transparent
+                                  : (i <= activeIndex ? AppColors.primary : Colors.grey[300]),
+                            ),
+                          ),
+                          // Dot
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: i <= activeIndex ? AppColors.primary : Colors.grey[100],
+                              border: Border.all(
+                                color: i <= activeIndex ? AppColors.primary : Colors.grey[300]!,
+                                width: 2,
+                              ),
+                            ),
+                            child: Center(
+                              child: i < activeIndex
+                                  ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                  : Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: i == activeIndex ? Colors.white : Colors.grey[400],
+                                      ),
+                                    ),
+                            ),
+                          ),
+                          // Line after
+                          Expanded(
+                            child: Container(
+                              height: 2,
+                              color: i == steps.length - 1
+                                  ? Colors.transparent
+                                  : (i < activeIndex ? AppColors.primary : Colors.grey[300]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        steps[i]['label']!,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: i <= activeIndex ? AppColors.primary : Colors.grey,
+                          fontWeight: i == activeIndex ? FontWeight.bold : FontWeight.normal,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ]
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -18,7 +18,7 @@ class OrderView extends StatelessWidget {
           return const Center(
             child: Text('No orders found'),
           );
-          
+
         }
         return ListView.builder(
           itemCount: controller.orders.length,
@@ -29,7 +29,7 @@ class OrderView extends StatelessWidget {
                 onTap: () => Get.to(OrderDetailsView(order: controller.orders[index])),
                 order: controller.orders[index],
                 isDark: true,
-                isAr: true,
+                isAr: false,
               ),
             );
           },

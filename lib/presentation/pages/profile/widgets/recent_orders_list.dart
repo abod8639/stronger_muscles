@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/order_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/order_card.dart';
 
 const int _maxOrdersDisplay = 5;
@@ -38,6 +39,7 @@ class RecentOrdersList extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
             itemBuilder: (context, index) {
               return OrderCard(
+                onTap: () => Get.to(OrderDetailsView(order: controller.orders[index])),
                 order: controller.orders[index],
                 isDark: isDark,
                 isAr: isAr,
