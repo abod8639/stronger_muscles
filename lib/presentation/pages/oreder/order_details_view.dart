@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_price_row.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final OrderModel order;
@@ -34,7 +35,7 @@ class OrderDetailsView extends StatelessWidget {
         child: Column(
           children: [
             // Order Status Card
-            _buildSection(
+            buildSection(
               isDark,
               child: Column(
                 children: [
@@ -78,13 +79,13 @@ class OrderDetailsView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildInfoItem(
+                      buildInfoItem(
                         theme,
                         icon: Icons.calendar_today_outlined,
                         label: isAr ? 'تاريخ الطلب' : 'Date',
                         value: DateFormat('dd MMM yyyy').format(order.orderDate),
                       ),
-                      _buildInfoItem(
+                      buildInfoItem(
                         theme,
                         icon: Icons.access_time,
                         label: isAr ? 'الوقت' : 'Time',
@@ -96,7 +97,7 @@ class OrderDetailsView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            _buildStatusTracker(isDark, isAr, theme),
+            buildStatusTracker(isDark, isAr,  order ),
             // const SizedBox(height: 16),
 
             // Order Items
@@ -111,13 +112,13 @@ class OrderDetailsView extends StatelessWidget {
                   ),
                 ),
                 if (order.items != null && order.items!.isNotEmpty)
-                  ...order.items!.map((item) => _buildOrderItem(item, isDark, isAr, theme)),
+                  ...order.items!.map((item) => buildOrderItem(item, isDark, isAr, theme)),
               ],
             ),
             const SizedBox(height: 16),
 
             // Shipping Info
-            _buildSection(
+            buildSection(
               isDark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,11 +135,11 @@ class OrderDetailsView extends StatelessWidget {
                   ),
                   const Divider(height: 24),
                   if (order.userName != null) ...[
-                    _buildRowInfo(isAr ? 'المستلم' : 'Receiver', order.userName!, theme),
+                    buildRowInfo(isAr ? 'المستلم' : 'Receiver', order.userName!, theme),
                     const SizedBox(height: 8),
                   ],
                   if (order.phoneNumber != null) ...[
-                    _buildRowInfo(isAr ? 'رقم الهاتف' : 'Phone', order.phoneNumber!, theme),
+                    buildRowInfo(isAr ? 'رقم الهاتف' : 'Phone', order.phoneNumber!, theme),
                     const SizedBox(height: 8),
                   ],
 
@@ -160,7 +161,7 @@ class OrderDetailsView extends StatelessWidget {
                       }
                       
                       if (addressText.isNotEmpty) {
-                        return _buildRowInfo(
+                        return buildRowInfo(
                           isAr ? 'العنوان' : 'Address',
                           addressText,
                           theme,
@@ -176,7 +177,7 @@ class OrderDetailsView extends StatelessWidget {
             const SizedBox(height: 16),
 
             // Payment Summary
-            _buildSection(
+            buildSection(
               isDark,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,12 +193,12 @@ class OrderDetailsView extends StatelessWidget {
                     ],
                   ),
                   const Divider(height: 24),
-                  _buildPriceRow(isAr ? 'المجموع الفرعي' : 'Subtotal', order.subtotal, theme, isAr),
-                  _buildPriceRow(isAr ? 'الشحن' : 'Shipping', order.shippingCost, theme, isAr),
+                  buildPriceRow(isAr ? 'المجموع الفرعي' : 'Subtotal', order.subtotal,  isAr),
+                  buildPriceRow(isAr ? 'الشحن' : 'Shipping', order.shippingCost,  isAr),
                   if (order.discount > 0)
-                    _buildPriceRow(isAr ? 'الخصم' : 'Discount', -order.discount, theme, isAr, isDiscount: true),
+                    buildPriceRow(isAr ? 'الخصم' : 'Discount', -order.discount,  isAr, isDiscount: true),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Divider()),
-                  _buildPriceRow(isAr ? 'الإجمالي' : 'Total', order.totalAmount, theme, isAr, isTotal: true),
+                  buildPriceRow(isAr ? 'الإجمالي' : 'Total', order.totalAmount,  isAr, isTotal: true),
                 ],
               ),
             ),
@@ -207,8 +208,8 @@ class OrderDetailsView extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildSection(bool isDark, {required Widget child}) {
+}
+  Widget buildSection(bool isDark, {required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -226,7 +227,7 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoItem(ThemeData theme, {required IconData icon, required String label, required String value}) {
+  Widget buildInfoItem(ThemeData theme, {required IconData icon, required String label, required String value}) {
     return Row(
       children: [
         Icon(icon, size: 16, color: Colors.grey),
@@ -242,7 +243,7 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderItem(OrderItemModel item, bool isDark, bool isAr, ThemeData theme) {
+  Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr, ThemeData theme) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -317,7 +318,7 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 
-  Widget _buildRowInfo(String label, String value, ThemeData theme) {
+  Widget buildRowInfo(String label, String value, ThemeData theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,34 +338,6 @@ class OrderDetailsView extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildPriceRow(String label, double amount, ThemeData theme, bool isAr, {bool isTotal = false, bool isDiscount = false}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: isTotal ? null : Colors.grey,
-              fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
-              fontSize: isTotal ? 16 : 14,
-            ),
-          ),
-          Text(
-            '${amount.toStringAsFixed(2)} ${isAr ? "ج.م" : "EGP"}',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: isDiscount ? AppColors.success : (isTotal ? AppColors.primary : null),
-              fontWeight: isTotal ? FontWeight.w900 : FontWeight.w600,
-              fontSize: isTotal ? 18 : 14,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Map<String, dynamic> _getStatusData(String status, bool isAr) {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -391,23 +364,28 @@ class OrderDetailsView extends StatelessWidget {
     }
   }
 
-  Widget _buildStatusTracker(bool isDark, bool isAr, ThemeData theme) {
+  Widget buildStatusTracker(bool isDark, bool isAr,  OrderModel order) {
     if (order.status.toLowerCase() == 'cancelled') {
-      return _buildSection(
-        isDark,
-        child: Row(
-          children: [
-            const Icon(Icons.cancel, color: AppColors.error),
-            const SizedBox(width: 12),
-            Text(
-              isAr ? 'تم إلغاء الطلب' : 'Order Cancelled',
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: AppColors.error,
-                fontWeight: FontWeight.bold,
-              ),
+      return Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          return buildSection(
+            isDark,
+            child: Row(
+              children: [
+                const Icon(Icons.cancel, color: AppColors.error),
+                const SizedBox(width: 12),
+                Text(
+                  isAr ? 'تم إلغاء الطلب' : 'Order Cancelled',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: AppColors.error,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
       );
     }
 
@@ -436,87 +414,92 @@ class OrderDetailsView extends StatelessWidget {
       }
     }
 
-    return _buildSection(
+    return buildSection(
       isDark,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            isAr ? 'تتبع حالة الطلب' : 'Order Tracking',
-            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          Row(
+      child: Builder(
+        builder: (context) {
+          final theme = Theme.of(context);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (int i = 0; i < steps.length; i++) ...[
-                Expanded(
-                  child: Column(
-                    children: [
-                      Row(
+              Text(
+                isAr ? 'تتبع حالة الطلب' : 'Order Tracking',
+                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  for (int i = 0; i < steps.length; i++) ...[
+                    Expanded(
+                      child: Column(
                         children: [
-                          // Line before
-                          Expanded(
-                            child: Container(
-                              height: 2,
-                              color: i == 0
-                                  ? Colors.transparent
-                                  : (i <= activeIndex ? AppColors.primary : Colors.grey[300]),
-                            ),
-                          ),
-                          // Dot
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: i <= activeIndex ? AppColors.primary : Colors.grey[100],
-                              border: Border.all(
-                                color: i <= activeIndex ? AppColors.primary : Colors.grey[300]!,
-                                width: 2,
+                          Row(
+                            children: [
+                              // Line before
+                              Expanded(
+                                child: Container(
+                                  height: 2,
+                                  color: i == 0
+                                      ? Colors.transparent
+                                      : (i <= activeIndex ? AppColors.primary : Colors.grey[300]),
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: i < activeIndex
-                                  ? const Icon(Icons.check, size: 14, color: Colors.white)
-                                  : Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: i == activeIndex ? Colors.white : Colors.grey[400],
-                                      ),
-                                    ),
-                            ),
+                              // Dot
+                              Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: i <= activeIndex ? AppColors.primary : Colors.grey[100],
+                                  border: Border.all(
+                                    color: i <= activeIndex ? AppColors.primary : Colors.grey[300]!,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: i < activeIndex
+                                      ? const Icon(Icons.check, size: 14, color: Colors.white)
+                                      : Container(
+                                          width: 8,
+                                          height: 8,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: i == activeIndex ? Colors.white : Colors.grey[400],
+                                          ),
+                                        ),
+                                ),
+                              ),
+                              // Line after
+                              Expanded(
+                                child: Container(
+                                  height: 2,
+                                  color: i == steps.length - 1
+                                      ? Colors.transparent
+                                      : (i < activeIndex ? AppColors.primary : Colors.grey[300]),
+                                ),
+                              ),
+                            ],
                           ),
-                          // Line after
-                          Expanded(
-                            child: Container(
-                              height: 2,
-                              color: i == steps.length - 1
-                                  ? Colors.transparent
-                                  : (i < activeIndex ? AppColors.primary : Colors.grey[300]),
+                          const SizedBox(height: 8),
+                          Text(
+                            steps[i]['label']!,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: i <= activeIndex ? AppColors.primary : Colors.grey,
+                              fontWeight: i == activeIndex ? FontWeight.bold : FontWeight.normal,
+                              fontSize: 10,
                             ),
+                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        steps[i]['label']!,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: i <= activeIndex ? AppColors.primary : Colors.grey,
-                          fontWeight: i == activeIndex ? FontWeight.bold : FontWeight.normal,
-                          fontSize: 10,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ]
+                    ),
+                  ]
+                ],
+              ),
             ],
-          ),
-        ],
+          );
+        }
       ),
     );
   }
-}
+
