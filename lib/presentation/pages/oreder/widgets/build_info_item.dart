@@ -1,7 +1,7 @@
 
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-Widget buildInfoItem( {required IconData icon, required String label, required String value}) {
+Widget buildInfoItem({required IconData icon, required String label, required String value}) {
     return Builder(
       builder: (context) {
         final theme = Theme.of(context);

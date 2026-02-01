@@ -8,6 +8,7 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_info_item.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_price_row.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_row_info.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final OrderModel order;
@@ -134,11 +135,11 @@ class OrderDetailsView extends StatelessWidget {
                   ),
                   const Divider(height: 24),
                   if (order.userName != null) ...[
-                    buildRowInfo(isAr ? 'المستلم' : 'Receiver', order.userName!, theme),
+                    buildRowInfo(isAr ? 'المستلم' : 'Receiver', order.userName!),
                     const SizedBox(height: 8),
                   ],
                   if (order.phoneNumber != null) ...[
-                    buildRowInfo(isAr ? 'رقم الهاتف' : 'Phone', order.phoneNumber!, theme),
+                    buildRowInfo(isAr ? 'رقم الهاتف' : 'Phone', order.phoneNumber!),
                     const SizedBox(height: 8),
                   ],
 
@@ -163,7 +164,6 @@ class OrderDetailsView extends StatelessWidget {
                         return buildRowInfo(
                           isAr ? 'العنوان' : 'Address',
                           addressText,
-                          theme,
                         );
                       }
                       return const SizedBox.shrink();
@@ -304,26 +304,6 @@ class OrderDetailsView extends StatelessWidget {
     );
   }
 
-  Widget buildRowInfo(String label, String value, ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            value,
-            textAlign: TextAlign.end,
-            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
-          ),
-        ),
-      ],
-    );
-  }
   Map<String, dynamic> _getStatusData(String status, bool isAr) {
     switch (status.toLowerCase()) {
       case 'pending':
