@@ -1,7 +1,7 @@
 class ApiConfig {
   static String get baseUrl {
     const String port = '8080';
-    const String ip = '192.168.1.43';
+    const String ip = '192.168.1.17';
     // const String pcIp = 'localhost';
 
     // استخدم 10.0.2.2 إذا كنت تستخدم محاكي أندرويد (Android Emulator)

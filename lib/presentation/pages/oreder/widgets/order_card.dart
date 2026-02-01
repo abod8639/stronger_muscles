@@ -10,7 +10,7 @@ class OrderCard extends StatelessWidget {
   final bool isAr;
   final Function()? onTap;
 
-  const OrderCard({
+  const OrderCard({super.key, 
     required this.order,
     required this.isDark,
     required this.isAr,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/order_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/order_card.dart';
 
 class OrderView extends StatelessWidget {
@@ -13,9 +14,11 @@ class OrderView extends StatelessWidget {
       appBar: AppBar(),
       body: Obx(() {
         if (controller.orders.isEmpty) {
+
           return const Center(
             child: Text('No orders found'),
           );
+          
         }
         return ListView.builder(
           itemCount: controller.orders.length,
@@ -23,7 +26,7 @@ class OrderView extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: OrderCard(
-                
+                onTap: () => Get.to(OrderDetailsView(order: controller.orders[index])),
                 order: controller.orders[index],
                 isDark: true,
                 isAr: true,

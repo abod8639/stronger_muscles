@@ -106,10 +106,10 @@ class AppPages {
       page: () => const OrderView(),
       binding: OrderBinding(),
     ),
-    GetPage(
-      name: AppRoutes.orderDetails,
-      page: () => const OrderDetailsView(),
-      binding: OrderDetailsBinding(),
-    ),
+    // GetPage(
+    //   name: AppRoutes.orderDetails,
+    //   page: () => const OrderDetailsView(),
+    //   binding: OrderDetailsBinding(),
+    // ),
   ];
 }

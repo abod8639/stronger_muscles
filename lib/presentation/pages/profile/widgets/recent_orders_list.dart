@@ -76,7 +76,7 @@ class RecentOrdersList extends StatelessWidget {
             ],
           ),
           TextButton(
-            onPressed: () => Get.toNamed('/order_view'), // مثال للتنقل
+            onPressed: () => Get.toNamed('/order_view'), 
             style: TextButton.styleFrom(foregroundColor: AppColors.primary),
             child: Text(isAr ? 'عرض الكل' : 'View All'),
           ),
