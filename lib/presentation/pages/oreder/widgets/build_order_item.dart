@@ -1,7 +1,9 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 
 Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
     return Builder(
@@ -33,7 +35,11 @@ Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: item.imageUrl != null
-                      ? Image.network(item.imageUrl!, fit: BoxFit.cover)
+                      ? CachedNetworkImage(
+                        cacheManager: CustomCacheManager.instance,
+                        imageUrl: item.imageUrl!,
+                        fit: BoxFit.cover,
+                      )
                       : Icon(Icons.inventory_2_outlined, color: Colors.grey[400]),
                 ),
               ),
