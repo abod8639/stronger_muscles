@@ -6,10 +6,8 @@ import 'package:stronger_muscles/data/repositories/category_repository.dart'; //
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 
 class CategoriesSectionsController extends GetxController {
-  // الاعتماد على الـ find بدلاً من الـ put لضمان Singleton من الـ Bindings
   final HomeController _homeController = Get.find<HomeController>();
-  final CategoryRepository _categoryRepository = Get.put(CategoryRepository());
-  // final CategoryRepository _categoryRepository = Get.find<CategoryRepository>();
+  final CategoryRepository _categoryRepository = Get.find<CategoryRepository>();
 
   final RxInt selectedIndex = 0.obs;
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;

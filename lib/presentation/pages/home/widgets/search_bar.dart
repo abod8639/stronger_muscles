@@ -84,7 +84,7 @@ class SearchBar extends StatelessWidget {
                         return IconButton(
                           icon: const Icon(Icons.close, size: 20),
                           onPressed: () {
-                            searchController..clearSearch();
+                            searchController.clearSearch();
                           },
                         );
                       }

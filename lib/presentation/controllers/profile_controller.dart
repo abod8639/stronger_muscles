@@ -8,9 +8,9 @@ import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
 
 class ProfileController extends GetxController {
-  final AuthController _authController = Get.put(AuthController());
-  final AddressService _addressService = Get.put(AddressService());
-  final OrdersController _ordersController = Get.put(OrdersController());
+  final AuthController _authController =     Get.find<AuthController>();
+  final AddressService _addressService =     Get.find<AddressService>();
+  final OrdersController _ordersController = Get.find<OrdersController>();
 
   RxList<OrderModel> get orders => _ordersController.orders;
 

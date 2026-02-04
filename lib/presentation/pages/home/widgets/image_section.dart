@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
+import 'package:stronger_muscles/presentation/components/product_container.dart';
 
 class ImageSection extends StatelessWidget {
+
   const ImageSection({
     super.key,
     required this.widget,
@@ -140,4 +141,5 @@ class ImageSection extends StatelessWidget {
       child: Icon(Icons.broken_image_outlined, color: theme.colorScheme.error),
     );
   }
+
 }

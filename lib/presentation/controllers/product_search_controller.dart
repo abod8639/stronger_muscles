@@ -132,4 +132,5 @@ class ProductSearchController extends GetxController {
 
     filteredProducts.assignAll(filtered);
   }
+
 }
