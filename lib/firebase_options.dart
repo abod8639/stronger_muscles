@@ -58,6 +58,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'stronger-muscles.firebasestorage.app',
     measurementId: 'G-G6PN6F0QS5',
   );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCQKwgdNCKk1I6cUMkgytutTYiptQL1qAc',
     appId: '1:1610448649:android:883e915ac856b991fa9dd8',
@@ -65,4 +66,5 @@ class DefaultFirebaseOptions {
     projectId: 'stronger-muscles',
     storageBucket: 'stronger-muscles.firebasestorage.app',
   );
+  
 }

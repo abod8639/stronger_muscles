@@ -18,6 +18,7 @@ class ProductFlavorSelector extends StatelessWidget {
   });
 
   Color _getFlavorColor(String flavor) {
+
     final f = flavor.toLowerCase();
     if (f.contains('vanilla')) return const Color(0xFFF3E5AB);
     if (f.contains('straw')) return Colors.pink.shade300;
@@ -29,11 +30,14 @@ class ProductFlavorSelector extends StatelessWidget {
     if (f.contains('banana')) return Colors.yellow.shade600;
     if (f.contains('cookies')) return Colors.grey.shade400;
     if (f.contains('cola')) return Colors.brown.shade600;
+    if (f.contains('black')) return Colors.grey.shade700;
     return Colors.grey.shade400;
+
   }
 
   @override
   Widget build(BuildContext context) {
+    // final isDark = Theme.of(context).brightness == Brightness.dark;
     final flavorsList = product.flavors ?? [];
     if (flavorsList.isEmpty) return const SizedBox.shrink();
 
@@ -83,15 +87,16 @@ class ProductFlavorSelector extends StatelessWidget {
                             0.75,
                             1.0,
                           ],
+
                           colors: [
                             flavorColor,
                             flavorColor,
-                            flavorColor.withOpacity(0.4),
-                            flavorColor.withOpacity(0.4),
+                            flavorColor.withValues(alpha: 0.4),
+                            flavorColor.withValues(alpha: 0.4),
                             flavorColor,
                             flavorColor,
-                            flavorColor.withOpacity(0.4),
-                            flavorColor.withOpacity(0.4),
+                            flavorColor.withValues(alpha: 0.4),
+                            flavorColor.withValues(alpha: 0.4),
                           ],
                           tileMode: TileMode.repeated,
                         ),
@@ -101,7 +106,7 @@ class ProductFlavorSelector extends StatelessWidget {
                 child: Text(
                   flavor,
                   style: TextStyle(
-                    color: isSelected ? Colors.black : Colors.white,
+                    color:    isSelected ? Colors.black : Colors.white,
                     fontSize:isSelected? 18:16,
                     fontWeight: isSelected
                         ? FontWeight.bold
@@ -112,6 +117,7 @@ class ProductFlavorSelector extends StatelessWidget {
             );
           }).toList(),
         ),
+
       ],
     );
   }

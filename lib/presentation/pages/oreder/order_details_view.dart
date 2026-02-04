@@ -28,6 +28,12 @@ class OrderDetailsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            color: AppColors.primary,
+            Icons.arrow_back),
+          onPressed: () => Get.back(),
+        ),
         title: Text(isAr ? 'تفاصيل الطلب' : 'Order Details'),
         centerTitle: true,
         elevation: 0,

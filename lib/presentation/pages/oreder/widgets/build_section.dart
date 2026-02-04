@@ -1,5 +1,4 @@
-
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 Widget buildSection(bool isDark, {required Widget child}) {
     return Container(
@@ -9,7 +8,7 @@ Widget buildSection(bool isDark, {required Widget child}) {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.3),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
