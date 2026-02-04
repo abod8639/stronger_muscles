@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_product_image.dart';
+import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_status_badge.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderModel order;
@@ -84,7 +86,7 @@ class OrderCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    _buildStatusBadge(statusData['text'], statusColor),
+                    buildStatusBadge(statusData['text'], statusColor),
                   ],
                 ),
                 const Padding(
@@ -94,7 +96,7 @@ class OrderCard extends StatelessWidget {
                 // الجزء السفلي: الصورة والسعر
                 Row(
                   children: [
-                    _buildProductImage(order.items?.first.imageUrl),
+                    buildProductImage(order.items?.first.imageUrl),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -149,42 +151,6 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(String text, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: color.withOpacity(0.2)),
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: color,
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProductImage(String? url) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.grey[100],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: url != null
-            ? Image.network(url, fit: BoxFit.cover)
-            : Icon(Icons.inventory_2_outlined, color: Colors.grey[400]),
-      ),
-    );
-  }
-
   Map<String, dynamic> _getStatusData(String status, bool isAr) {
     switch (status.toLowerCase()) {
       case 'pending':
@@ -210,4 +176,6 @@ class OrderCard extends StatelessWidget {
         return {'text': status.toUpperCase(), 'color': AppColors.greyDark};
     }
   }
+
+
 }
