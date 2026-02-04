@@ -22,7 +22,6 @@ class CategoriesSectionsController extends GetxController {
     super.onInit();
     _loadCachedData();
     fetchCategories();
-    // Listen to changes in homeController's selected index
     ever<int>(_homeController.selectedSectionIndex, (index) {
       selectedIndex.value = index;
     });
@@ -50,7 +49,6 @@ class CategoriesSectionsController extends GetxController {
   }
 
   void _updateSelections(List<CategoryModel> categoryList) {
-    // Store current selected ID to restore it later
     String? currentSelectedId;
     if (selectedIndex.value >= 0 && selectedIndex.value < selections.length) {
       currentSelectedId = selections[selectedIndex.value].id;
@@ -120,4 +118,5 @@ class CategoriesSectionsController extends GetxController {
       _homeController.fetchProductsForSection(index, categoryId: categoryId);
     }
   }
+
 }

@@ -43,7 +43,6 @@ class HomeController extends GetxController {
         categoryId: categoryId,
       );
 
-      // Update the search controller with the new data
       searchController.setProducts(fetchedProducts);
     } catch (e) {
       print('❌ Home: Error fetching products: $e');

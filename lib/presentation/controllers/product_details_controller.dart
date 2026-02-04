@@ -37,7 +37,6 @@ class ProductDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // تهيئة PageController مع الصفحة المختارة ابتدائياً
     pageController = PageController(initialPage: selectedImageIndex.value);
     _checkInitialWishlistStatus();
     _precacheAllImages();
@@ -47,7 +46,6 @@ class ProductDetailsController extends GetxController {
     isInWishlist.value = _wishlistService.isFavorite(product.id);
   }
 
-  // ميزة الـ Wishlist مع معالجة الأخطاء
   void toggleWishlist() {
     try {
       _wishlistService.toggleFavorite(product);
@@ -57,15 +55,12 @@ class ProductDetailsController extends GetxController {
     }
   }
 
-  // تحسين: التزامن بين الـ PageView والـ Index
   void selectImage(int index) {
     if (selectedImageIndex.value == index) return;
     
     selectedImageIndex.value = index;
     
-    // التحقق من وجود مستخدم واحد فقط متصل لتجنب AssertionError
     if (pageController.hasClients) {
-      // التأكد من أن الـ Controller متصل بـ View واحد فقط قبل قراءة الخاصية .page
       if (pageController.positions.length == 1) {
         if (pageController.page?.round() != index) {
           pageController.animateToPage(
@@ -86,6 +81,7 @@ class ProductDetailsController extends GetxController {
   }
 
   void updateFlavor(String flavor) => selectedFlavor.value = flavor;
+ 
   void updateSize(String size) => selectedSize.value = size;
 
   void _showErrorSnackbar(String title, String message) {
@@ -101,7 +97,6 @@ class ProductDetailsController extends GetxController {
 
   @override
   void onClose() {
-    // إغلاق الـ Controller بشكل صحيح لمنع تسريب الذاكرة
     pageController.dispose();
     super.onClose();
   }
@@ -117,4 +112,5 @@ class ProductDetailsController extends GetxController {
       );
     }
   }
+
 }

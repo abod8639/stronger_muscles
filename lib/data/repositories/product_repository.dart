@@ -1,89 +1,95 @@
+import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/core/services/product_service.dart';
 import '../../data/models/product_model.dart';
 import '../../data/models/category_model.dart';
-import 'package:collection/collection.dart';
 
 class ProductRepository {
-  // This is a dummy repository to simulate fetching product details.
-  // In a real application, this would interact with a backend API or database.
+  final ProductService _apiService = Get.find<ProductService>();
+  final Box<ProductModel> _box = Hive.box<ProductModel>('products');
 
-  static const int delay = 100;
-
-  Future<ProductModel?> getProductById(String id) async {
-    // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: delay));
-
-    return dummyProducts.firstWhereOrNull((product) => product.id == id);
+  List<ProductModel> getCachedProducts() {
+    return _box.values.toList();
   }
 
   Future<List<ProductModel>> getAllProducts() async {
-    await Future.delayed(const Duration(milliseconds: delay));
-    return dummyProducts;
-  }
-  //   Future<List<ProductModel>> getAllProducts() async {
-  //   final snapshot = await _firestore.collection('products').get();
-  //   return snapshot.docs.map((doc) => ProductModel.fromJson(doc.data())).toList();
-  // }ProductRepository
+    try {
+      final products = await _apiService.getProducts(); // استدعاء الـ API
 
-  Future<List<ProductModel>> getProductsByCategory(String categoryId) async {
-    await Future.delayed(const Duration(milliseconds: delay));
-    return dummyProducts.where((p) => p.categoryId == categoryId).toList();
-  }
-  //   Future<List<ProductModel>> getProducts({int page = 1, int pageSize = 20}) async {
-  //   final query = _firestore.collection('products')
-  //     .limit(pageSize)
-  //     .startAfterDocument(lastDocument);
-  //   // ...
-  // }
-
-  Future<List<ProductModel>> getProteinProducts() async {
-    return getProductsByCategory('protein');
+      // تحديث الكاش: نستخدم putAll لتحسين الأداء (Single Transaction)
+      if (products.isNotEmpty) {
+        await _box.clear();
+        final productMap = {for (var p in products) p.id: p};
+        await _box.putAll(productMap);
+      }
+      
+      return products;
+    } on Failure catch (e) {
+      // إذا حدث خطأ شبكة، نعود للكاش كخيار احتياطي (Fallback)
+      if (e.type == FailureType.network && _box.isNotEmpty) {
+        return _box.values.toList();
+      }
+      rethrow;
+    }
   }
 
-  Future<List<ProductModel>> getCreatineProducts() async {
-    return getProductsByCategory('creatine');
+  Future<ProductModel> getProductById(String id) async {
+  if (_box.containsKey(id)) {
+    print('DEBUG: Product $id found in cache');
+    return _box.get(id)!;
   }
-
-  Future<List<ProductModel>> getAminoProducts() async {
-    return getProductsByCategory('amino');
-  }
-
-  Future<List<ProductModel>> getBCAAProducts() async {
-    return getProductsByCategory('bcaa');
-  }
-
-  Future<List<ProductModel>> getPreWorkoutProducts() async {
-    return getProductsByCategory('preworkout');
-  }
-
-  Future<List<ProductModel>> getMassGainerProducts() async {
-    return getProductsByCategory('massgainer');
-  }
-
-  Future<List<CategoryModel>> getAllCategories() async {
-    await Future.delayed(const Duration(milliseconds: delay));
-    return PredefinedCategories.categories;
-  }
-
-  Future<List<ProductModel>> searchProducts(String query) async {
-    await Future.delayed(const Duration(milliseconds: delay));
-    final lowerQuery = query.toLowerCase();
-    return dummyProducts.where((p) {
-      return p.name.toLowerCase().contains(lowerQuery) ||
-          p.description.toLowerCase().contains(lowerQuery) ||
-          (p.brand?.toLowerCase().contains(lowerQuery) ?? false);
-    }).toList();
-  }
-
-  Future<List<ProductModel>> getFeaturedProducts() async {
-    await Future.delayed(const Duration(milliseconds: delay));
-    // Return top rated products
-    final sorted = [...dummyProducts];
-    sorted.sort((a, b) => b.averageRating.compareTo(a.averageRating));
-    return sorted.take(6).toList();
+  try {
+    final product = await _apiService.getProductDetails(id);
+    
+    await _box.put(id, product);
+    
+    return product;
+  } on Failure {
+    if (_box.containsKey(id)) {
+      return _box.get(id)!;
+    }
+    rethrow;
   }
 }
 
-// Dummy product data with new structure
-final List<ProductModel> dummyProducts = [
-  // Protein Products
-];
+  Future<List<ProductModel>> getProductsByCategory(String categoryId) async {
+    try {
+      return await _apiService.getProducts(categoryId: categoryId);
+    } on Failure catch (e) {
+      if (e.type == FailureType.network) {
+        return _box.values.where((p) => p.categoryId == categoryId).toList();
+      }
+      rethrow;
+    }
+  }
+
+  Future<List<ProductModel>> searchProducts(String query) async {
+    try {
+      return await _apiService.getProducts(query: query);
+    } on Failure catch (e) {
+      if (e.type == FailureType.network) {
+        return _box.values
+            .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      }
+      rethrow;
+    }
+  }
+
+
+  Future<List<ProductModel>> getFeaturedProducts() async {
+    final all = await getAllProducts();
+    all.sort((a, b) => b.averageRating.compareTo(a.averageRating));
+    return all.take(6).toList();
+  }
+
+  Future<List<CategoryModel>> getAllCategories() async {
+    return PredefinedCategories.categories;
+  }
+
+  Future<List<ProductModel>> getProteinProducts() => getProductsByCategory('protein');
+  Future<List<ProductModel>> getCreatineProducts() => getProductsByCategory('creatine');
+  Future<List<ProductModel>> getAminoProducts() => getProductsByCategory('amino');
+  Future<List<ProductModel>> getBCAAProducts() => getProductsByCategory('bcaa');
+}
