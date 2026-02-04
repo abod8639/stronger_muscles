@@ -40,7 +40,7 @@ class ImageSection extends StatelessWidget {
                 top: Radius.circular(16.0),
               ),
               child: images.isEmpty
-                  ? _buildNoImage(theme)
+                  ? buildNoImage(theme)
                   : PageView.builder(
                       allowImplicitScrolling: false,
                       controller: _pageController,
@@ -49,7 +49,7 @@ class ImageSection extends StatelessWidget {
                           widget.onPageChanged ??
                           (index) => _selectedImageIndex.value = index,
                       itemBuilder: (context, index) {
-                        return _buildImage(
+                        return buildImage(
                           images[index],
                           theme,
                           widget.product.isBackgroundWhite,
@@ -84,7 +84,7 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  Widget _buildImage(String url, ThemeData theme, bool isBackgroundWhite) {
+  Widget buildImage(String url, ThemeData theme, bool isBackgroundWhite) {
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -99,8 +99,8 @@ class ImageSection extends StatelessWidget {
           cacheManager: CustomCacheManager.instance,
           imageUrl: url,
           fit: BoxFit.fitHeight,
-          placeholder: (context, url) => _buildShimmerEffect(theme),
-          errorWidget: (context, url, error) => _buildErrorWidget(theme),
+          placeholder: (context, url) => buildShimmerEffect(theme),
+          errorWidget: (context, url, error) => buildErrorWidget(theme),
           memCacheWidth: 400,
           memCacheHeight: 400,
         ),
@@ -108,7 +108,7 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmerEffect(ThemeData theme) {
+  Widget buildShimmerEffect(ThemeData theme) {
     return Center(
       child: CircularProgressIndicator(
         strokeWidth: 2,
@@ -117,7 +117,7 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  Widget _buildNoImage(ThemeData theme) {
+  Widget buildNoImage(ThemeData theme) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +134,7 @@ class ImageSection extends StatelessWidget {
     );
   }
 
-  Widget _buildErrorWidget(ThemeData theme) {
+  Widget buildErrorWidget(ThemeData theme) {
     return Container(
       color: theme.colorScheme.errorContainer.withOpacity(0.2),
       child: Icon(Icons.broken_image_outlined, color: theme.colorScheme.error),
