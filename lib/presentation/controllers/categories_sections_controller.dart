@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/core/services/category_service.dart';
 import 'package:stronger_muscles/data/models/category_model.dart';
 import 'package:stronger_muscles/data/models/selection_model.dart';
+import 'package:stronger_muscles/data/repositories/category_repository.dart'; // استخدم الـ Repository
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 
 class CategoriesSectionsController extends GetxController {
-  final HomeController _homeController = Get.put(HomeController());
-  final CategoryService _categoryService = Get.put(CategoryService());
+  // الاعتماد على الـ find بدلاً من الـ put لضمان Singleton من الـ Bindings
+  final HomeController _homeController = Get.find<HomeController>();
+  final CategoryRepository _categoryRepository = Get.find<CategoryRepository>();
 
   final RxInt selectedIndex = 0.obs;
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;
   final RxBool isLoading = false.obs;
 
+  // قائمة الاختيارات التي تظهر في الـ UI
   final RxList<SelectionsModel> selections = <SelectionsModel>[
     SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
   ].obs;
@@ -20,103 +22,99 @@ class CategoriesSectionsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _loadCachedData();
-    fetchCategories();
+    _initialize();
+    
+    // مراقبة التغيير في الـ HomeController لمزامنة الـ UI
     ever<int>(_homeController.selectedSectionIndex, (index) {
-      selectedIndex.value = index;
+      if (selectedIndex.value != index) {
+        selectedIndex.value = index;
+      }
     });
   }
 
-  Future<void> _loadCachedData() async {
-    final cachedCategories = await _categoryService.getCachedCategories();
-    if (cachedCategories.isNotEmpty) {
-      categories.assignAll(cachedCategories);
-      _updateSelections(cachedCategories);
+  Future<void> _initialize() async {
+    // 1. تحميل الكاش فوراً
+    final cached = _categoryRepository.getCachedCategories();
+    if (cached.isNotEmpty) {
+      categories.assignAll(cached);
+      _updateSelections(cached);
     }
+
+    // 2. جلب الجديد من السيرفر
+    await fetchCategories();
   }
 
   Future<void> fetchCategories() async {
     try {
-      isLoading.value = categories.isEmpty;
-      final fetchedCategories = await _categoryService.getCategories();
-      categories.assignAll(fetchedCategories);
-      _updateSelections(fetchedCategories);
+      // إظهار التحميل فقط إذا كان الكاش فارغاً
+      if (categories.isEmpty) isLoading.value = true;
+      
+      final fetched = await _categoryRepository.getAllCategories();
+      categories.assignAll(fetched);
+      _updateSelections(fetched);
     } catch (e) {
-      print('Error fetching categories: $e');
+      print('DEBUG: Error in CategoriesSectionsController: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
   void _updateSelections(List<CategoryModel> categoryList) {
-    String? currentSelectedId;
-    if (selectedIndex.value >= 0 && selectedIndex.value < selections.length) {
-      currentSelectedId = selections[selectedIndex.value].id;
+    // حفظ المعرف المختار حالياً قبل التحديث
+    String? currentId;
+    if (selectedIndex.value < selections.length) {
+      currentId = selections[selectedIndex.value].id;
     }
 
-    final List<SelectionsModel> list = [
+    // بناء القائمة الجديدة
+    final List<SelectionsModel> newList = [
       SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
+      ...categoryList.map((cat) => SelectionsModel(
+            id: cat.id,
+            label: cat.name,
+            icon: _getIconForCategory(cat.id),
+          )),
     ];
 
-    for (var cat in categoryList) {
-      list.add(
-        SelectionsModel(
-          id: cat.id,
-          label: cat.name,
-          icon: _getIconForCategory(cat.id),
-        ),
-      );
-    }
+    selections.assignAll(newList);
 
-    selections.assignAll(list);
-
-    // Restore selection index based on the ID we had
-    if (currentSelectedId != null) {
-      final newIndex = selections.indexWhere((s) => s.id == currentSelectedId);
+    // إعادة ضبط الـ index بناءً على الـ ID المحفوظ
+    if (currentId != null) {
+      final newIndex = selections.indexWhere((s) => s.id == currentId);
       if (newIndex != -1) {
         selectedIndex.value = newIndex;
         _homeController.selectedSectionIndex.value = newIndex;
-      } else {
-        // Fallback to Home if previously selected category is gone
-        selectedIndex.value = 0;
-        _homeController.selectedSectionIndex.value = 0;
       }
-    }
-  }
-
-  IconData _getIconForCategory(String id) {
-    switch (id) {
-      case 'cat-creatine':
-        return Icons.local_fire_department_outlined;
-      case 'cat-protein':
-        return Icons.fitness_center;
-      case 'cat-amino':
-        return Icons.local_drink;
-      case 'cat-vitamins':
-        return Icons.medication;
-      case 'cat-preworkout':
-        return Icons.flash_on;
-      case 'cat-recovery':
-        return Icons.healing;
-      case 'cat-fatburner':
-        return Icons.local_fire_department;
-      case 'cat-health':
-        return Icons.favorite;
-      case 'cat-mass-gainer':
-        return Icons.monitor_weight_outlined;
-      case 'cat-carb':
-        return Icons.bakery_dining_outlined;
-      default:
-        return Icons.category;
     }
   }
 
   void updateIndex(int index) {
     if (index >= 0 && index < selections.length) {
+      selectedIndex.value = index;
       final selectedId = selections[index].id;
-      final categoryId = selectedId.isEmpty ? null : selectedId;
-      _homeController.fetchProductsForSection(index, categoryId: categoryId);
+      
+      // إرسال الأمر للـ HomeController لجلب المنتجات بناءً على القسم المختار
+      _homeController.fetchProductsForSection(
+        index, 
+        categoryId: selectedId.isEmpty ? null : selectedId,
+      );
     }
   }
 
+  IconData _getIconForCategory(String id) {
+    // نستخدم الـ Map بدلاً من Switch ليكون الكود أنظف وقابل للتوسع
+    final icons = {
+      'cat-creatine': Icons.local_fire_department_outlined,
+      'cat-protein': Icons.fitness_center,
+      'cat-amino': Icons.local_drink,
+      'cat-vitamins': Icons.medication,
+      'cat-preworkout': Icons.flash_on,
+      'cat-recovery': Icons.healing,
+      'cat-fatburner': Icons.local_fire_department,
+      'cat-health': Icons.favorite,
+      'cat-mass-gainer': Icons.monitor_weight_outlined,
+      'cat-carb': Icons.bakery_dining_outlined,
+    };
+    return icons[id] ?? Icons.category;
+  }
 }
