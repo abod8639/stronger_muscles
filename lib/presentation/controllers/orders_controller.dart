@@ -3,7 +3,8 @@ import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
 
 class OrdersController extends GetxController {
-  final OrderRepository _orderRepository = Get.find<OrderRepository>();
+  final OrderRepository _orderRepository = Get.put(OrderRepository());
+  // final OrderRepository _orderRepository = Get.find<OrderRepository>();
 
   final RxList<OrderModel> orders = <OrderModel>[].obs;
   final RxBool isLoading = false.obs;
@@ -20,10 +21,8 @@ class OrdersController extends GetxController {
     await fetchOrders();
   }
 
-  /// جلب الطلبات من المستودع
   Future<void> fetchOrders() async {
     try {
-      // إظهار التحميل فقط إذا كانت القائمة فارغة لتحسين تجربة المستخدم
       if (orders.isEmpty) isLoading.value = true;
       errorMessage.value = '';
 
@@ -37,7 +36,6 @@ class OrdersController extends GetxController {
     }
   }
 
-  /// تحديث الطلبات (مثلاً عند استخدام RefreshIndicator)
   Future<void> refreshOrders() async {
     await fetchOrders();
   }
@@ -50,12 +48,10 @@ class OrdersController extends GetxController {
   List<OrderModel> get processingOrders => _filterByStatus('processing');
   List<OrderModel> get cancelledOrders => _filterByStatus('cancelled');
 
-  // دالة مساعدة خاصة للفلترة لتقليل تكرار الكود (DRY)
   List<OrderModel> _filterByStatus(String status) {
     return orders.where((o) => o.status.toLowerCase() == status).toList();
   }
 
-  /// تنظيف البيانات (عند تسجيل الخروج مثلاً)
   void clearData() {
     orders.clear();
     errorMessage.value = '';

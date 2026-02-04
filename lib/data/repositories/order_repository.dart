@@ -15,7 +15,6 @@ class OrderRepository {
         data: order.toJson()
       );
 
-      // التأكد من نجاح العملية (Laravel 201 Created)
       if (response.statusCode != 201 && response.statusCode != 200) {
         throw Failure(message: "فشل في تسجيل الطلب بالسيرفر");
       }
@@ -27,14 +26,11 @@ class OrderRepository {
     }
   }
 
-  /// جلب طلبات المستخدم مع معالجة الـ Parsing بشكل سليم
   Future<List<OrderModel>> getUserOrders() async {
     try {
       final response = await _apiService.get(ApiConfig.orders);
       final body = jsonDecode(response.body);
 
-      // تصحيح الخطأ: يجب تحويل List<dynamic> إلى List<OrderModel>
-      // مع مراعاة تغليف Laravel (API Resources)
       List<dynamic> data = [];
       
       if (body is Map && body.containsKey('data')) {
@@ -48,7 +44,6 @@ class OrderRepository {
       
     } catch (e) {
       print("❌ Error in OrderRepository (getUserOrders): $e");
-      // يفضل هنا رمي Failure مخصص ليفهمه الـ Controller
       throw Failure(
         message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً",
         originalError: e

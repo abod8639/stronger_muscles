@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
 
 class PriceFilterSlider extends StatefulWidget {
   const PriceFilterSlider({super.key});
@@ -12,6 +13,7 @@ class PriceFilterSlider extends StatefulWidget {
 
 class PriceFilterSliderState extends State<PriceFilterSlider> {
   final controller = Get.find<HomeController>();
+  final searchController = Get.find<ProductSearchController>();
 
   late RangeValues _currentRangeValues;
 
@@ -19,15 +21,15 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
   void initState() {
     super.initState();
     _currentRangeValues = RangeValues(
-      controller.searchController.filterMinPrice.value,
-      controller.searchController.filterMaxPrice.value,
+      searchController.filterMinPrice.value,
+      searchController.filterMaxPrice.value,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final minData = controller.searchController.dataMinPrice.value;
-    final maxData = controller.searchController.dataMaxPrice.value;
+    final minData = searchController.dataMinPrice.value;
+    final maxData = searchController.dataMaxPrice.value;
 
     return Column(
       children: [
@@ -58,7 +60,7 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
           width: double.infinity,
           child: FilledButton(
             onPressed: () {
-              controller.searchController.applyPriceFilter(
+              searchController.applyPriceFilter(
                 _currentRangeValues.start,
                 _currentRangeValues.end,
               );
@@ -76,7 +78,6 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
   /// **Deprecated**: Use [SearchBar] widget instead.
   @Deprecated('Use SearchBar widget instead')
   Padding searchBar() {
-    final controller = Get.find<HomeController>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Builder(
@@ -105,7 +106,7 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
                             hintText: 'Search',
                           ),
                           onChanged:
-                              controller.searchController.onSearchChanged,
+                              searchController.onSearchChanged,
                         ),
                       ),
                     ],

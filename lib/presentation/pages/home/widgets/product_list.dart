@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/routes/routes.dart';
@@ -16,6 +17,8 @@ class ProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<HomeController>();
+    final searchController = Get.find<ProductSearchController>();
+
     final theme = Theme.of(context);
 
     return Obx(() {
@@ -26,7 +29,7 @@ class ProductList extends StatelessWidget {
       }
 
       // Remote search loading state
-      if (controller.searchController.isLoadingRemote.value) {
+      if (searchController.isLoadingRemote.value) {
         return const SliverToBoxAdapter(
           child: Center(heightFactor: 3, child: CircularProgressIndicator()),
         );

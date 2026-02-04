@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/price_filter_slider.dart';
 
 /// Custom search bar widget with filter button for the home page
@@ -23,6 +24,8 @@ class SearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = Get.find<HomeController>();
+    final searchController = Get.find<ProductSearchController>();
+
 
     return SliverAppBar(
       floating: true,
@@ -55,33 +58,33 @@ class SearchBar extends StatelessWidget {
                     const SizedBox(width: _iconSpacing),
                     Expanded(
                       child: TextField(
-                        controller: controller.searchController.textController,
+                        controller: searchController.textController,
                         decoration: InputDecoration.collapsed(
                           hintText: AppLocalizations.of(
                             context,
                           )!.searchProducts,
                         ),
-                        onChanged: controller.searchController.onSearchChanged,
+                        onChanged: searchController.onSearchChanged,
                         textInputAction: TextInputAction.search,
                       ),
                     ),
                     Obx(() {
-                      if (controller.searchController.isLoadingRemote.value) {
+                      if (searchController.isLoadingRemote.value) {
                         return const SizedBox(
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         );
                       }
-                      if (controller
-                          .searchController
+                      if (
+                          searchController
                           .searchQuery
                           .value
                           .isNotEmpty) {
                         return IconButton(
                           icon: const Icon(Icons.close, size: 20),
                           onPressed: () {
-                            controller.searchController.clearSearch();
+                            searchController..clearSearch();
                           },
                         );
                       }
@@ -111,7 +114,7 @@ class SearchBar extends StatelessWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   onPressed: () {
-                    _showFilterBottomSheet(context, controller);
+                    _showFilterBottomSheet(context, controller, searchController);
                   },
                   tooltip: AppLocalizations.of(context)!.filter,
                 ),
@@ -123,7 +126,7 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  void _showFilterBottomSheet(BuildContext context, HomeController controller) {
+  void _showFilterBottomSheet(BuildContext context, HomeController controller, ProductSearchController searchController) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -169,8 +172,8 @@ class SearchBar extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Obx(() {
-                    final min = controller.searchController.dataMinPrice.value;
-                    final max = controller.searchController.dataMaxPrice.value;
+                    final min = searchController.dataMinPrice.value;
+                    final max = searchController.dataMaxPrice.value;
 
                     // Ensure valid range
                     if (min >= max) {
