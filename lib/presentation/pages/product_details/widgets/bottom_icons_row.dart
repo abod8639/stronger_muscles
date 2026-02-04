@@ -7,18 +7,16 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 
-/// Bottom action bar for product details page with cart and wishlist actions
-class BottomIconsRow extends StatelessWidget {
-  // Constants for styling
-  static const double _horizontalPadding = 16.0;
-  static const double _verticalPadding = 8.0;
-  static const double _iconSize = 32.0;
-  static const double _buttonVerticalPadding = 10.0;
-  static const double _buttonFontSize = 16.0;
-  static const double _quantityFontSize = 18.0;
-  static const double _spacing = 16.0;
-  static const double _iconButtonSize = 40.0;
+// Constants
+const double _horizontalPadding = 16.0;
+const double _verticalPadding = 8.0;
+const double _buttonVerticalPadding = 12.0;
+const double _buttonFontSize = 16.0;
+const double _quantityFontSize = 18.0;
+const double _spacing = 12.0;
+const double _iconButtonSize = 32.0;
 
+class BottomIconsRow extends StatelessWidget {
   final ProductModel product;
 
   const BottomIconsRow({super.key, required this.product});
@@ -26,11 +24,13 @@ class BottomIconsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cartController = Get.put(CartController());
-    final productDetailsController = Get.find<ProductDetailsController>();
+    final cartController = Get.find<CartController>();
+    final detailsController = Get.find<ProductDetailsController>();
+    final l10n = AppLocalizations.of(context)!;
 
     return BottomAppBar(
-      elevation: 8.0,
+      elevation: 10.0,
+      height: 85, // تحديد ارتفاع مناسب
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: _horizontalPadding,
@@ -38,195 +38,129 @@ class BottomIconsRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Cart Action (Add to Cart or Quantity Controls)
+            // Cart Action Area
             Expanded(
-              child: Obx(
-                () => _buildCartAction(context, theme, cartController),
-              ),
+              child: Obx(() {
+                final selectedFlavor = detailsController.selectedFlavor.value;
+                final selectedSize = detailsController.selectedSize.value;
+
+                final item = cartController.getCartItem(
+                  product,
+                  selectedFlavor: selectedFlavor,
+                  selectedSize: selectedSize,
+                );
+
+                return item != null
+                    ? _buildQuantityControls(context, theme, cartController, item)
+                    : _buildAddToCartButton(context, detailsController, cartController, l10n);
+              }),
             ),
 
             const SizedBox(width: _spacing),
 
-            // Wishlist Toggle Button
-            Obx(() => _buildWishlistButton(theme, productDetailsController)),
+            // Wishlist Button
+            Obx(() => _buildWishlistButton(theme, detailsController)),
           ],
         ),
       ),
     );
   }
 
-  /// Builds the cart action widget (either Add to Cart button or quantity controls)
-  Widget _buildCartAction(
+  /// زر إضافة للسلة
+  Widget _buildAddToCartButton(
     BuildContext context,
-    ThemeData theme,
+    ProductDetailsController detailsController,
     CartController cartController,
+    AppLocalizations l10n,
   ) {
-    final productDetailsController = Get.find<ProductDetailsController>();
-    final selectedFlavor = productDetailsController.selectedFlavor.value;
-    final selectedSize = productDetailsController.selectedSize.value;
-
-    final isInCart = cartController.isInCart(
-      product,
-      selectedFlavor: selectedFlavor,
-      selectedSize: selectedSize,
+    return ElevatedButton.icon(
+      onPressed: () {
+        cartController.addToCart(
+          product,
+          selectedFlavor: detailsController.selectedFlavor.value,
+          selectedSize: detailsController.selectedSize.value,
+        );
+      },
+      icon: const Icon(Icons.add_shopping_cart, size: 20),
+      label: Text(l10n.addToCart),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
+        textStyle: const TextStyle(
+          fontSize: _buttonFontSize,
+          fontWeight: FontWeight.bold,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      ),
     );
-    final CartItemModel? item = isInCart
-        ? cartController.getCartItem(
-            product,
-            selectedFlavor: selectedFlavor,
-            selectedSize: selectedSize,
-          )
-        : null;
-
-    return isInCart && item != null
-        ? _buildQuantityControls(theme, cartController, item)
-        : buildAddToCartButton(theme, cartController);
   }
 
-  /// Builds the quantity control widget for items already in cart
+  /// متحكم الكمية (عندما يكون المنتج في السلة)
   Widget _buildQuantityControls(
+    BuildContext context,
     ThemeData theme,
     CartController cartController,
     CartItemModel item,
   ) {
-    return Builder(
-      builder: (context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(8.0),
+    final l10n = AppLocalizations.of(context)!;
+    
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IconButton(
+            icon: Icon(
+              item.quantity > 1 ? Icons.remove_circle_outline : Icons.delete_outline_rounded,
+              color: item.quantity > 1 ? AppColors.primary : Colors.redAccent,
+            ),
+            onPressed: () => cartController.decreaseQuantity(item),
+            iconSize: _iconButtonSize,
+            tooltip: item.quantity > 1 ? l10n.decreaseQuantity : l10n.removeFromCart,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Decrease Button
-              Semantics(
-                label: item.quantity > 1
-                    ? AppLocalizations.of(context)!.decreaseQuantity
-                    : AppLocalizations.of(context)!.removeFromCart,
-                button: true,
-                child: IconButton(
-                  icon: Icon(
-                    item.quantity > 1
-                        ? Icons.remove_circle_outline
-                        : Icons.delete_outline_rounded,
-                    color: AppColors.primary,
-                  ),
-                  onPressed: () => cartController.decreaseQuantity(item),
-                  tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
-                  iconSize: _iconButtonSize,
-                ),
-              ),
-
-              // Quantity Display
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  item.quantity.toString(),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontSize: _quantityFontSize,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-
-              // Increase Button
-              Semantics(
-                label: 'Increase quantity',
-                button: true,
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    color: AppColors.primary,
-                  ),
-                  onPressed: () => cartController.increaseQuantity(item),
-                  tooltip: 'Increase',
-                  iconSize: _iconButtonSize,
-                ),
-              ),
-            ],
+          Text(
+            item.quantity.toString(),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontSize: _quantityFontSize,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
           ),
-        );
-      },
-    );
-  }
-
-  /// Builds the Add to Cart button
-  Widget buildAddToCartButton(ThemeData theme, CartController cartController) {
-    return Semantics(
-      label: 'Add ${product.name} to cart',
-      button: true,
-      child: ElevatedButton.icon(
-        onPressed: () => _handleAddToCart(cartController),
-        icon: const Icon(Icons.add_shopping_cart),
-        label: const Text('Add to Cart'),
-
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
-          textStyle: const TextStyle(
-            fontSize: _buttonFontSize,
-            fontWeight: FontWeight.bold,
+          IconButton(
+            icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+            onPressed: () => cartController.increaseQuantity(item),
+            iconSize: _iconButtonSize,
+            // tooltip: l10n.increaseQuantity,
           ),
-          elevation: 2.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-        ),
+        ],
       ),
     );
   }
 
-  /// Builds the wishlist toggle button
-  Widget _buildWishlistButton(
-    ThemeData theme,
-    ProductDetailsController controller,
-  ) {
+  /// زر المفضلة
+  Widget _buildWishlistButton(ThemeData theme, ProductDetailsController controller) {
     final isInWishlist = controller.isInWishlist.value;
 
-    return Semantics(
-      label: isInWishlist
-          ? 'Remove ${product.name} from wishlist'
-          : 'Add ${product.name} to wishlist',
-      button: true,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isInWishlist
-              ? AppColors.primary.withOpacity(0.1)
-              : theme.colorScheme.surfaceContainerHighest.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: IconButton(
-          icon: Icon(
-            isInWishlist ? Icons.favorite : Icons.favorite_outline,
-            color: isInWishlist
-                ? AppColors.primary
-                : theme.colorScheme.onSurfaceVariant,
-            size: _iconSize,
-          ),
-          onPressed: () => controller.toggleWishlist(),
-          tooltip: isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist',
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: isInWishlist
+            ? AppColors.primary.withOpacity(0.1)
+            : theme.colorScheme.surfaceVariant.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(12.0),
       ),
-    );
-  }
-
-  /// Handles adding product to cart with feedback
-  void _handleAddToCart(CartController cartController) {
-    final productDetailsController = Get.find<ProductDetailsController>();
-    cartController.addToCart(
-      product,
-      selectedFlavor: productDetailsController.selectedFlavor.value,
-      selectedSize: productDetailsController.selectedSize.value,
+      child: IconButton(
+        icon: Icon(
+          isInWishlist ? Icons.favorite : Icons.favorite_outline,
+          color: isInWishlist ? AppColors.primary : theme.colorScheme.onSurfaceVariant,
+          size: 28,
+        ),
+        onPressed: () => controller.toggleWishlist(),
+      ),
     );
   }
 }

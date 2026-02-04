@@ -1,5 +1,7 @@
 
-  import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 
 Widget buildProductImage(String? url) {
     return Container(
@@ -12,7 +14,12 @@ Widget buildProductImage(String? url) {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: url != null
-            ? Image.network(url, fit: BoxFit.cover)
+            ? 
+            CachedNetworkImage(
+              cacheManager: CustomCacheManager.instance ,
+              imageUrl: url,
+              fit: BoxFit.cover,
+            )
             : Icon(Icons.inventory_2_outlined, color: Colors.grey[400]),
       ),
     );

@@ -19,7 +19,6 @@ class CartView extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(CartController());
     final theme = Theme.of(context);
     return Scaffold(
       appBar: _buildAppBar(context, theme),
@@ -52,7 +51,6 @@ class CartView extends GetView<CartController> {
 
   /// Builds the empty cart state
   Widget _buildEmptyState(BuildContext context, ThemeData theme) {
-    // جلب MainController فقط عند الحاجة (داخل حالة السلة الفارغة)
     final mainController = Get.find<MainController>();
     final l10n = AppLocalizations.of(context)!;
 
@@ -88,7 +86,6 @@ class CartView extends GetView<CartController> {
             const SizedBox(height: 32.0),
             ElevatedButton.icon(
               onPressed: () {
-                // الانتقال إلى التبويب الأول (الرئيسية)
                 mainController.tabIndex.value = 0;
               },
               icon: const Icon(Icons.shopping_bag_outlined),

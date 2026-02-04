@@ -21,7 +21,7 @@ class InitialBinding extends Bindings {
 
     // Async service initialization
     Get.putAsync(() => WishlistService().init(), permanent: true);
-    Get.putAsync(() async => CategoryService(), permanent: true);
+    Get.putAsync(() async => CategoryService() , permanent: true);
 
    // Repositories 
     Get.put(CategoryRepository(), permanent: true);
