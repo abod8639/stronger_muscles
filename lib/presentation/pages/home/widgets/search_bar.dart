@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/price_filter_slider.dart';
 
 /// Custom search bar widget with filter button for the home page
@@ -197,4 +197,5 @@ class SearchBar extends StatelessWidget {
       },
     );
   }
+
 }

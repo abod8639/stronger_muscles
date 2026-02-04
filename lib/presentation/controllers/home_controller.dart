@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/data/repositories/product_repository.dart'; // استخدام الـ Repository
+import 'package:stronger_muscles/core/services/product_service.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 
-// الثوابت التنظيمية
-const String _connectionErrorMsg = 'خطأ في الاتصال';
-const String _errorMsg = 'خطأ';
-const String _retryButtonLabel = 'إعادة محاولة';
-const int _snackbarDurationSeconds = 5;
-const SnackPosition _snackbarPosition = SnackPosition.BOTTOM;
-
 class HomeController extends GetxController {
-  // الاعتماد على الـ Repository بدلاً من الـ Service
-  final ProductRepository _productRepository = Get.find<ProductRepository>();
-  final _searchController = Get.find<ProductSearchController>();
+  final ProductService _productService = Get.find<ProductService>();
+  final searchController = Get.find<ProductSearchController>();
 
-  // ربط المنتجات بالـ SearchController لعرض النتائج المفلترة
-  RxList get products => _searchController.filteredProducts;
+  // Expose filtered products for the UI
+  RxList<ProductModel> get products => searchController.filteredProducts;
 
+  // UI state
   final isLoading = false.obs;
   final isError = false.obs;
   final errorMessage = ''.obs;
@@ -30,87 +23,92 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // التحميل الأولي للمنتجات (يعرض الكاش أولاً بفضل الـ Repository)
-    _loadInitialProducts();
+    fetchProductsForSection(selectedSectionIndex.value);
   }
 
-  Future<void> _loadInitialProducts() async {
-    // عرض بيانات الكاش فوراً لسرعة الاستجابة
-    _searchController.setProducts(_productRepository.getCachedProducts());
-    // ثم تحديث البيانات من السيرفر
-    await fetchProductsForSection(selectedSectionIndex.value);
-  }
-
+  /// Fetches products for a specific section (tab) index.
+  /// Optionally accepts a [categoryId] for targeted filtering.
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
-    
-    // إظهار التحميل فقط إذا لم تكن هناك بيانات كاش معروضة
-    if (products.isEmpty) isLoading.value = true;
-    
-    isError.value = false;
-    isConnectionError.value = false;
-    errorMessage.value = '';
+    _resetState();
+    isLoading.value = true;
 
     try {
-      final fetchedProducts = await _productRepository.getProductById(
-
-        categoryId ?? ""
+      final fetchedProducts = await _productService.getProducts(
+        categoryId: categoryId,
       );
-
-      _searchController.setProducts(fetchedProducts as List<ProductModel>);
+      searchController.setProducts(fetchedProducts);
     } catch (e) {
-      _handleFetchError(e, index);
+      _handleError(e, retryAction: () => fetchProductsForSection(index, categoryId: categoryId));
     } finally {
       isLoading.value = false;
     }
   }
 
-  /// وظيفة تحديث الصفحة (Pull to refresh)
+  /// Refreshes the current state of the home screen, including categories and products.
   Future<void> refreshHome() async {
     String? categoryId;
     
     if (Get.isRegistered<CategoriesSectionsController>()) {
-      final sectionsCtrl = Get.find<CategoriesSectionsController>();
-      final idx = selectedSectionIndex.value;
+      final sectionsController = Get.find<CategoriesSectionsController>();
+      final index = selectedSectionIndex.value;
       
-      if (idx >= 0 && idx < sectionsCtrl.selections.length) {
-        final id = sectionsCtrl.selections[idx].id;
+      if (index >= 0 && index < sectionsController.selections.length) {
+        final id = sectionsController.selections[index].id;
         categoryId = id.isEmpty ? null : id;
       }
-      // تحديث التصنيفات أيضاً
-      await sectionsCtrl.fetchCategories();
+      
+      // Refresh categories in parallel with fetching products
+      await Future.wait([
+        fetchProductsForSection(index, categoryId: categoryId),
+        sectionsController.fetchCategories(),
+      ]);
+    } else {
+      await fetchProductsForSection(selectedSectionIndex.value);
     }
-
-    await fetchProductsForSection(selectedSectionIndex.value, categoryId: categoryId);
   }
 
-  void _handleFetchError(dynamic e, int index) {
-    print('❌ Home: Error fetching products: $e');
+  void _resetState() {
+    isError.value = false;
+    isConnectionError.value = false;
+    errorMessage.value = '';
+  }
+
+  void _handleError(dynamic e, {VoidCallback? retryAction}) {
+    debugPrint('❌ HomeController Error: $e');
     isError.value = true;
 
     if (e is Failure) {
       errorMessage.value = e.message;
-      isConnectionError.value = e.type == FailureType.network;
+      isConnectionError.value = e.isConnectionError;
     } else {
       errorMessage.value = e.toString();
+      isConnectionError.value = false;
     }
 
-    // إظهار تنبيه فقط في حالة عدم وجود بيانات سابقة (Fallback)
-    if (products.isEmpty) {
-      Get.snackbar(
-        isConnectionError.value ? _connectionErrorMsg : _errorMsg,
-        errorMessage.value,
-        snackPosition: _snackbarPosition,
-        backgroundColor: Colors.red.withOpacity(0.8),
-        colorText: Colors.white,
-        duration: const Duration(seconds: _snackbarDurationSeconds),
-        mainButton: isConnectionError.value
-            ? TextButton(
-                onPressed: () => fetchProductsForSection(index),
-                child: const Text(_retryButtonLabel, style: TextStyle(color: Colors.white)),
-              )
-            : null,
-      );
-    }
+    _showErrorSnackbar(retryAction);
+  }
+
+  void _showErrorSnackbar(VoidCallback? retryAction) {
+    Get.snackbar(
+      isConnectionError.value ? 'خطأ في الاتصال' : 'خطأ',
+      errorMessage.value,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.red.withAlpha(200),
+      colorText: Colors.white,
+      duration: const Duration(seconds: 5),
+      mainButton: isConnectionError.value && retryAction != null
+          ? TextButton(
+              onPressed: () {
+                if (Get.isSnackbarOpen) Get.back();
+                retryAction();
+              },
+              child: const Text(
+                'إعادة محاولة',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            )
+          : null,
+    );
   }
 }

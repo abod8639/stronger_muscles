@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
+import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/pages/home/widgets/search_bar.dart';
@@ -24,7 +25,8 @@ class HomeView extends GetView<HomeController> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
-              onRefresh: () => controller.refreshHome(),
+              onRefresh: () => 
+           AppGuard.runSafeInternet(()=> controller.refreshHome()),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),

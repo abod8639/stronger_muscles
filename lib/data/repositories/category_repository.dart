@@ -6,7 +6,8 @@ import '../../data/models/category_model.dart';
 
 
 class CategoryRepository {
-  final CategoryService _service = Get.find<CategoryService>();
+  final CategoryService _service = Get.put(CategoryService());
+  // final CategoryService _service = Get.find<CategoryService>();
   final Box<CategoryModel> _box = Hive.box<CategoryModel>('categories');
 
   /// جلب البيانات المحلية (Offline-First)

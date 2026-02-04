@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/search_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 
 class PriceFilterSlider extends StatefulWidget {
   const PriceFilterSlider({super.key});
