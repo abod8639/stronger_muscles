@@ -13,7 +13,7 @@ Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
           margin: const EdgeInsets.only(bottom: 12),
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF252525) : Colors.white,
+            color: isDark ?  AppColors.surfaceDark : Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(

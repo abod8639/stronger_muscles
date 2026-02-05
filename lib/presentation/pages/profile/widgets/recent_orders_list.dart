@@ -5,11 +5,8 @@ import 'package:stronger_muscles/presentation/controllers/orders_controller.dart
 import 'package:stronger_muscles/presentation/pages/oreder/order_details_view.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/order_card.dart';
 
-const int _maxOrdersDisplay = 5;
-const double _headerIndicatorWidth = 4.0;
-const double _headerIndicatorHeight = 20.0;
-const double _headerIndicatorBorderRadius = 10.0;
-const double _headerSpacing = 8.0;
+const int _maxOrdersToDisplay = 3;
+const double _horizontalPadding = 16.0;
 const double _listItemSpacing = 12.0;
 
 class RecentOrdersList extends StatelessWidget {
@@ -23,65 +20,102 @@ class RecentOrdersList extends StatelessWidget {
     final isAr = Get.locale?.languageCode == 'ar';
 
     return Obx(() {
-      if (controller.orders.isEmpty) return const SizedBox.shrink();
+      final recentOrders = controller.orders.take(_maxOrdersToDisplay).toList();
+      
+      if (recentOrders.isEmpty) return const SizedBox.shrink();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(theme, isDark, isAr),
-          const SizedBox(height: 8),
+          _buildHeader(context, theme, isAr),
+          const SizedBox(height: 4),
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            addRepaintBoundaries: true,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            itemCount: controller.orders.take(_maxOrdersDisplay).length,
+            padding: const EdgeInsets.symmetric(
+              horizontal: _horizontalPadding, 
+              vertical: 8
+            ),
+            itemCount: recentOrders.length,
             separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
             itemBuilder: (context, index) {
+              final order = recentOrders[index];
               return OrderCard(
-                onTap: () => Get.to(OrderDetailsView(order: controller.orders[index])),
-                order: controller.orders[index],
+                onTap: () => Get.to(() => OrderDetailsView(order: order)),
+                order: order,
                 isDark: isDark,
                 isAr: isAr,
               );
             },
           ),
+          const SizedBox(height: 8),
         ],
       );
     });
   }
 
-  Widget _buildHeader(ThemeData theme, bool isDark, bool isAr) {
+  Widget _buildHeader(BuildContext context, ThemeData theme, bool isAr) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+
           Row(
             children: [
+
               Container(
-                width: _headerIndicatorWidth,
-                height: _headerIndicatorHeight,
+                width: 3,
+                height: 18,
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(_headerIndicatorBorderRadius),
+                  borderRadius: BorderRadius.circular(4),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.3),
+                      blurRadius: 4,
+                      offset: const Offset(1, 0),
+                    )
+                  ],
                 ),
               ),
-              const SizedBox(width: _headerSpacing),
+           
+              const SizedBox(width: 10),
+            
               Text(
                 isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 18,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
                 ),
               ),
             ],
           ),
+          
+          // زر عرض الكل بتصميم أبسط
           TextButton(
-            onPressed: () => Get.toNamed('/order_view'), 
-            style: TextButton.styleFrom(foregroundColor: AppColors.primary),
-            child: Text(isAr ? 'عرض الكل' : 'View All'),
+            onPressed: () => Get.toNamed('/order_view'),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColors.primary,
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+              visualDensity: VisualDensity.compact,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(isAr ? 'عرض الكل' : 'View All'),
+                const SizedBox(width: 4),
+                Icon(
+                  isAr ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios, 
+                  size: 10,
+                ),
+              ],
+            ),
           ),
+
         ],
       ),
     );

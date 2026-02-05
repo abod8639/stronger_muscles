@@ -21,17 +21,14 @@ class InternetConnectionBanner extends GetView<InternetConnectionController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: const Icon(Icons.wifi_off, color: Colors.white, size: 24),
-            ),
-            Center(
-              child: Expanded(
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+            const Icon(Icons.wifi_off, color: Colors.white, size: 24),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
