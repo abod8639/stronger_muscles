@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/repositories/product_repository.dart';
@@ -74,12 +75,15 @@ class ProductsController extends GetxController {
 
   void _handleError(dynamic e) {
     if (products.isEmpty) {
-      Get.snackbar(
-        'عذراً',
-        'فشل تحديث البيانات، تأكد من اتصالك بالإنترنت',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 3),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (Get.isSnackbarOpen) return;
+        Get.snackbar(
+          'عذراً',
+          'فشل تحديث البيانات، تأكد من اتصالك بالإنترنت',
+          snackPosition: SnackPosition.BOTTOM,
+          duration: const Duration(seconds: 3),
+        );
+      });
     }
     print("DEBUG: Error in ProductsController: $e");
   }

@@ -106,25 +106,28 @@ class HomeController extends GetxController {
   }
 
   void _showErrorSnackbar(VoidCallback? retryAction) {
-    Get.snackbar(
-      isConnectionError.value ? 'خطأ في الاتصال' : 'خطأ',
-      errorMessage.value,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red.withAlpha(200),
-      colorText: Colors.white,
-      duration: const Duration(seconds: 5),
-      mainButton: isConnectionError.value && retryAction != null
-          ? TextButton(
-              onPressed: () {
-                if (Get.isSnackbarOpen) Get.back();
-                retryAction();
-              },
-              child: const Text(
-                'إعادة محاولة',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            )
-          : null,
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.isSnackbarOpen) return;
+      Get.snackbar(
+        isConnectionError.value ? 'خطأ في الاتصال' : 'خطأ',
+        errorMessage.value,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withAlpha(200),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 5),
+        mainButton: isConnectionError.value && retryAction != null
+            ? TextButton(
+                onPressed: () {
+                  if (Get.isSnackbarOpen) Get.back();
+                  retryAction();
+                },
+                child: const Text(
+                  'إعادة محاولة',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+              )
+            : null,
+      );
+    });
   }
 }

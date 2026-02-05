@@ -185,8 +185,14 @@ class AddressController extends GetxController {
   }
 
   void _showError(String title, dynamic e) {
-    Get.snackbar(title, e.toString(), 
-      snackPosition: SnackPosition.BOTTOM, 
-      backgroundColor: Colors.red.withOpacity(0.1));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.isSnackbarOpen) return;
+      Get.snackbar(
+        title, 
+        e.toString(), 
+        snackPosition: SnackPosition.BOTTOM, 
+        backgroundColor: Colors.red.withOpacity(0.1),
+      );
+    });
   }
 }
