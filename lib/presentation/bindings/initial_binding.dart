@@ -3,8 +3,10 @@ import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/services/auth_service.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:stronger_muscles/core/services/category_service.dart';
+import 'package:stronger_muscles/core/services/product_service.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/repositories/category_repository.dart';
+import 'package:stronger_muscles/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/language_controller.dart';
@@ -18,13 +20,15 @@ class InitialBinding extends Bindings {
     Get.put(ApiService(), permanent: true);
     Get.put(AuthService(), permanent: true);
     Get.put(AddressService(), permanent: true);
+    Get.put(ProductService(), permanent: true);
 
     // Async service initialization
     Get.putAsync(() => WishlistService().init(), permanent: true);
     Get.putAsync(() async => CategoryService() , permanent: true);
 
-   // Repositories 
+    // Repositories 
     Get.put(CategoryRepository(), permanent: true);
+    Get.put(ProductRepository(), permanent: true);
 
 
     // Global Controllers

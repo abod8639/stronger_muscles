@@ -133,10 +133,8 @@ class AuthService extends GetxService {
           if (email != null) 'email': email,
           if (phone != null) 'phone': phone,
           if (photoUrl != null) 'photo_url': photoUrl,
-          if (preferredLanguage != null)
-            'preferred_language': preferredLanguage,
-          if (notificationsEnabled != null)
-            'notifications_enabled': notificationsEnabled,
+          if (preferredLanguage != null) 'preferred_language': preferredLanguage,
+          if (notificationsEnabled != null) 'notifications_enabled': notificationsEnabled,
         },
       );
 

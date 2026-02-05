@@ -22,7 +22,21 @@ class ProductsController extends GetxController {
   }
 
   Future<void> fetchProducts({String? categoryId, String? query}) async {
+    // Prevent concurrent loads
+    if (isLoading.value) return;
+
     try {
+      // Offline-first: if filtering by category, show what we have in cache first
+      if (query == null && categoryId != null && categoryId.isNotEmpty) {
+        final cached = _repository.getCachedProducts()
+            .where((p) => p.categoryId == categoryId)
+            .toList();
+        if (cached.isNotEmpty) {
+          products.assignAll(cached);
+        }
+      }
+
+      // Show loading only if we have no data at all
       if (products.isEmpty) isLoading.value = true;
 
       List<ProductModel> result;
@@ -32,7 +46,7 @@ class ProductsController extends GetxController {
       } else if (categoryId != null && categoryId.isNotEmpty) {
         result = await _repository.getProductsByCategory(categoryId);
       } else {
-        result = await _repository.getAllProducts();
+        result = await _repository.getProducts();
       }
 
       products.assignAll(result);

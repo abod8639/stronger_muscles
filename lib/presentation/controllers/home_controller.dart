@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/core/services/product_service.dart';
+import 'package:stronger_muscles/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 
 class HomeController extends GetxController {
-  final ProductService _productService = Get.find<ProductService>();
+  final ProductRepository _productRepository = Get.find<ProductRepository>();
   final searchController = Get.find<ProductSearchController>();
 
   // Expose filtered products for the UI
@@ -23,7 +23,18 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchProductsForSection(selectedSectionIndex.value);
+    _loadInitialData();
+  }
+
+  Future<void> _loadInitialData() async {
+    // 1. Show cached products immediately
+    final cachedProducts = _productRepository.getCachedProducts();
+    if (cachedProducts.isNotEmpty) {
+      searchController.setProducts(cachedProducts);
+    }
+    
+    // 2. Fetch fresh data
+    await fetchProductsForSection(selectedSectionIndex.value);
   }
 
   /// Fetches products for a specific section (tab) index.
@@ -31,10 +42,15 @@ class HomeController extends GetxController {
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
     _resetState();
-    isLoading.value = true;
+    
+    // Only show loading if we don't have cached data
+    if (searchController.filteredProducts.isEmpty) {
+    // if (searchController.products.isEmpty) {
+      isLoading.value = true;
+    }
 
     try {
-      final fetchedProducts = await _productService.getProducts(
+      final fetchedProducts = await _productRepository.getProducts(
         categoryId: categoryId,
       );
       searchController.setProducts(fetchedProducts);

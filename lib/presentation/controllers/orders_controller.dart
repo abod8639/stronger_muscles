@@ -13,22 +13,27 @@ class OrdersController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    // Do not call fetchOrders here if it's already being handled by ProfileController 
+    // or if we want to wait for the user to visit the page.
+    // However, since it's permanent and used in Profile, we can load it here but with a check.
     _loadInitialOrders();
   }
 
-  /// التهيئة الأولى (يمكنك إضافة منطق الكاش هنا أيضاً إذا كان الـ Repository يدعمه)
   Future<void> _loadInitialOrders() async {
-    await fetchOrders();
+    if (orders.isEmpty) {
+      await fetchOrders();
+    }
   }
 
   Future<void> fetchOrders() async {
+    if (isLoading.value) return; // Prevent concurrent calls
+    
     try {
-      if (orders.isEmpty) isLoading.value = true;
+      isLoading.value = true;
       errorMessage.value = '';
 
       final fetchedOrders = await _orderRepository.getUserOrders();
       orders.assignAll(fetchedOrders);
-      
     } catch (e) {
       errorMessage.value = _handleError(e);
     } finally {
