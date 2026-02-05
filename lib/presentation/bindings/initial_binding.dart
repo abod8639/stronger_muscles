@@ -7,6 +7,8 @@ import 'package:stronger_muscles/core/services/product_service.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/repositories/category_repository.dart';
 import 'package:stronger_muscles/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/data/repositories/address_repository.dart';
+import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/language_controller.dart';
@@ -29,6 +31,8 @@ class InitialBinding extends Bindings {
     // Repositories 
     Get.put(CategoryRepository(), permanent: true);
     Get.put(ProductRepository(), permanent: true);
+    Get.put(AddressRepository(), permanent: true);
+    Get.put(AddressController(), permanent: true);
 
 
     // Global Controllers

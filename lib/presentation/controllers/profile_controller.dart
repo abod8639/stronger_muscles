@@ -3,18 +3,18 @@ import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/user_model.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/core/services/address_service.dart';
+import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
 
 class ProfileController extends GetxController {
   final AuthController _authController =     Get.find<AuthController>();
-  final AddressService _addressService =     Get.find<AddressService>();
   final OrdersController _ordersController = Get.find<OrdersController>();
+  final AddressController _addressController = Get.find<AddressController>();
 
   RxList<OrderModel> get orders => _ordersController.orders;
+  RxList<AddressModel> get addresses => _addressController.addresses;
 
-  final RxList<AddressModel> addresses = <AddressModel>[].obs;
   final RxInt wishlistCount = 0.obs;
 
   RxBool get isLoading => _authController.isLoading;
@@ -24,40 +24,37 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
 
+    // Load initial data if logged in
+    if (_authController.currentUser.value != null) {
+      _loadUserData();
+    }
+
+    // Listen for future changes
     ever(_authController.currentUser, (UserModel? user) {
       if (user != null) {
-        _loadUserData();
+        // Only load if data is empty to avoid redundant switches
+        if (addresses.isEmpty) {
+          _loadUserData();
+        }
       } else {
         _clearData();
       }
     });
-
-    // Initial load if user is already logged in
-    if (_authController.currentUser.value != null) {
-      _loadUserData();
-    }
   }
 
   void _clearData() {
     _ordersController.clearData();
-    addresses.clear();
+    _addressController.addresses.clear();
     wishlistCount.value = 0;
   }
 
   Future<void> _loadUserData() async {
-    await _ordersController.fetchOrders();
-    await loadAddresses();
-    await _loadWishlistCount();
-  }
-
-  Future<void> loadAddresses() async {
-    try {
-      final fetchedAddresses = await _addressService.getAddresses();
-      addresses.assignAll(fetchedAddresses);
-      print('✅ Profile: Loaded ${addresses.length} addresses');
-    } catch (e) {
-      print('❌ Profile: Error loading addresses: $e');
-    }
+    // Run these in parallel to save time
+    await Future.wait([
+      _ordersController.fetchOrders(),
+      _addressController.fetchAddresses(),
+      _loadWishlistCount(),
+    ]);
   }
 
   Future<void> _loadWishlistCount() async {

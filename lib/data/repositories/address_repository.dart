@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
@@ -8,22 +9,21 @@ class AddressRepository {
   final AddressService _service = Get.find<AddressService>();
   final Box<AddressModel> _box = Hive.box<AddressModel>('addresses');
   
-  bool _isFetching = false;
+  Completer<List<AddressModel>>? _fetchCompleter;
 
   /// Get cached addresses
   List<AddressModel> getCachedAddresses() => _box.values.toList();
 
   /// Fetch and cache addresses
   Future<List<AddressModel>> getAddresses() async {
-    if (_isFetching) {
-      // If already fetching, wait a bit or return cache to avoid redundant calls
-      // For simplicity in this case, we just return cache if it's not empty, 
-      // or wait for the other call. But here we'll just prevent duplicate active calls.
-      return getCachedAddresses();
+    // If a request is already in progress, wait for it
+    if (_fetchCompleter != null) {
+      return _fetchCompleter!.future;
     }
 
+    _fetchCompleter = Completer<List<AddressModel>>();
+
     try {
-      _isFetching = true;
       final addresses = await _service.getAddresses();
       
       // Update cache
@@ -32,14 +32,22 @@ class AddressRepository {
         await _box.put(address.id, address);
       }
       
+      _fetchCompleter!.complete(addresses);
       return addresses;
     } on Failure catch (e) {
+      // On failure, if we have cache, return it
       if (e.type == FailureType.network && _box.isNotEmpty) {
-        return _box.values.toList();
+        final cached = getCachedAddresses();
+        _fetchCompleter!.complete(cached);
+        return cached;
       }
+      _fetchCompleter!.completeError(e);
+      rethrow;
+    } catch (e) {
+      _fetchCompleter!.completeError(e);
       rethrow;
     } finally {
-      _isFetching = false;
+      _fetchCompleter = null;
     }
   }
 

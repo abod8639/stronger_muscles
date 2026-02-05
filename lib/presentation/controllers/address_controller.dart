@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/data/repositories/address_repository.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ const String _errorLocationMsg = 'فشل تحديد الموقع';
 const String _successTitle = 'نجح';
 
 class AddressController extends GetxController {
+  final AddressRepository _repository = Get.find<AddressRepository>();
   final AddressService _addressService = Get.find<AddressService>();
   
   // States
@@ -35,7 +37,15 @@ class AddressController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchAddresses();
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    // 1. Load from cache immediately
+    addresses.assignAll(_repository.getCachedAddresses());
+    
+    // 2. Fetch fresh data if needed or always fetch once
+    await fetchAddresses();
   }
 
   @override
@@ -54,13 +64,9 @@ class AddressController extends GetxController {
   Future<void> deleteAddress(int id) async {
     try {
       isLoading.value = true;
-      await _addressService.deleteAddress(id);
-      
-      // تحديث القائمة محلياً فوراً لتحسين استجابة الواجهة
+      await _repository.deleteAddress(id);
       addresses.removeWhere((addr) => addr.id == id);
-      
-      Get.snackbar(_successTitle, _successDeleteMsg, 
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(_successTitle, _successDeleteMsg, snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       _showError(_errorDeleteMsg, e);
     } finally {
@@ -71,22 +77,12 @@ class AddressController extends GetxController {
   Future<void> setDefaultAddress(int id) async {
     try {
       isLoading.value = true;
-      
-      final updatedAddress = await _addressService.setDefaultAddress(id);
-
-      addresses.assignAll(addresses.map((addr) {
-        if (addr.id == id) {
-          return updatedAddress; 
-        } else {
-          return addr.copyWith(isDefault: false); 
-        }
-      }).toList());
-
-      Get.snackbar(_successTitle, _successDefaultMsg, 
-          snackPosition: SnackPosition.BOTTOM);
+      await _repository.setDefaultAddress(id);
+      // Wait for fetch to sync all items or update manually
+      await fetchAddresses();
+      Get.snackbar(_successTitle, _successDefaultMsg, snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       _showError(_errorDefaultMsg, e);
-      await fetchAddresses();
     } finally {
       isLoading.value = false;
     }
@@ -113,9 +109,11 @@ class AddressController extends GetxController {
   }
 
   Future<void> fetchAddresses() async {
+    if (isLoading.value) return; // Prevent concurrent calls
+
     try {
       isLoading.value = true;
-      final fetched = await _addressService.getAddresses();
+      final fetched = await _repository.getAddresses();
       addresses.assignAll(fetched);
     } catch (e) {
       _showError(_errorFetchMsg, e);
@@ -141,9 +139,9 @@ class AddressController extends GetxController {
     try {
       isLoading.value = true;
       if (id == null) {
-        await _addressService.createAddress(model);
+        await _repository.createAddress(model);
       } else {
-        await _addressService.updateAddress(id, model);
+        await _repository.updateAddress(id, model);
       }
       await fetchAddresses();
       Get.back();
