@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/core/services/product_service.dart';
 import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
@@ -14,7 +13,6 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => MainController());
 
     // Dependencies for Home Tab
-    Get.lazyPut(() => ProductService());
     Get.lazyPut(() => ProductSearchController());
     Get.lazyPut(() => HomeController());
     Get.lazyPut(() => CategoriesSectionsController());

@@ -30,7 +30,6 @@ class HomeController extends BaseController {
     await fetchProductsForSection(selectedSectionIndex.value);
   }
 
-  /// Fetches products for a specific section (tab) index.
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
     resetState();

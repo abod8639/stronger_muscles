@@ -32,20 +32,17 @@ class CategoriesSectionsController extends GetxController {
   }
 
   Future<void> _initialize() async {
-    // 1. تحميل الكاش فوراً
     final cached = _categoryRepository.getCachedCategories();
     if (cached.isNotEmpty) {
       categories.assignAll(cached);
       _updateSelections(cached);
     }
 
-    // 2. جلب الجديد من السيرفر
     await fetchCategories();
   }
 
   Future<void> fetchCategories() async {
     try {
-      // إظهار التحميل فقط إذا كان الكاش فارغاً
       if (categories.isEmpty) isLoading.value = true;
       
       final fetched = await _categoryRepository.getAllCategories();
@@ -59,13 +56,11 @@ class CategoriesSectionsController extends GetxController {
   }
 
   void _updateSelections(List<CategoryModel> categoryList) {
-    // حفظ المعرف المختار حالياً قبل التحديث
     String? currentId;
     if (selectedIndex.value < selections.length) {
       currentId = selections[selectedIndex.value].id;
     }
 
-    // بناء القائمة الجديدة
     final List<SelectionsModel> newList = [
       SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
       ...categoryList.map((cat) => SelectionsModel(
@@ -92,7 +87,6 @@ class CategoriesSectionsController extends GetxController {
       selectedIndex.value = index;
       final selectedId = selections[index].id;
       
-      // إرسال الأمر للـ HomeController لجلب المنتجات بناءً على القسم المختار
       _homeController.fetchProductsForSection(
         index, 
         categoryId: selectedId.isEmpty ? null : selectedId,

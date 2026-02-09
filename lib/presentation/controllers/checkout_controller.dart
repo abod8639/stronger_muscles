@@ -21,7 +21,6 @@ class CheckoutController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Pre-select default address if available
     if (_profileController.addresses.isNotEmpty) {
       selectedAddress.value = _profileController.addresses.firstWhere(
         (addr) => addr.isDefault,

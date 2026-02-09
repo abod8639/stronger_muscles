@@ -20,7 +20,6 @@ class LanguageController extends GetxController {
     loadSavedLanguage();
   }
 
-  /// Load saved language from storage or use device locale
   void loadSavedLanguage() {
     final savedLanguageCode = _settingsBox.get(_languageStorageKey);
 

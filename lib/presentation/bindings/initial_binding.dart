@@ -14,6 +14,7 @@ import 'package:stronger_muscles/presentation/controllers/internet_connection_co
 import 'package:stronger_muscles/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';
+import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
 
 class InitialBinding extends Bindings {
   @override
@@ -24,9 +25,9 @@ class InitialBinding extends Bindings {
     Get.put(AddressService(), permanent: true);
     Get.put(ProductService(), permanent: true);
 
-    // Async service initialization
-    Get.putAsync(() => WishlistService().init(), permanent: true);
-    Get.putAsync(() async => CategoryService(), permanent: true);
+    // Services
+    Get.put(WishlistService(), permanent: true);
+    Get.put(CategoryService(), permanent: true);
 
     // Repositories
     Get.put(CategoryRepository(), permanent: true);
@@ -42,5 +43,6 @@ class InitialBinding extends Bindings {
     // Controllers
     Get.put(AuthController(), permanent: true);
     Get.put(OrdersController(), permanent: true);
+    Get.put(WishlistController(), permanent: true);
   }
 }

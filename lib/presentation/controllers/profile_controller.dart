@@ -49,7 +49,6 @@ class ProfileController extends GetxController {
   }
 
   Future<void> _loadUserData() async {
-    // Run these in parallel to save time
     await Future.wait([
       _ordersController.fetchOrders(),
       _addressController.fetchAddresses(),
