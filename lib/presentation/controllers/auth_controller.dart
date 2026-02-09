@@ -5,15 +5,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../core/services/auth_service.dart';
 import '../../data/models/user_model.dart';
 import '../../routes/routes.dart';
+import 'base_controller.dart';
 
 const String _googleWebClientId =
     '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';
-// const String _defaultUserId = '0';
-const Duration _snackbarDuration = Duration(seconds: 5);
 const String _errorGoogleSignIn = 'خطأ في تسجيل الدخول عبر Google';
 const String _errorCheckUser = 'خطأ في التحقق من بيانات المستخدم';
 
-class AuthController extends GetxController {
+class AuthController extends BaseController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   final AuthService _authService = Get.find<AuthService>();
@@ -22,7 +21,6 @@ class AuthController extends GetxController {
   final passwordController = TextEditingController();
 
   final RxString userId = ''.obs;
-  final RxBool isLoading = false.obs;
   final Rx<UserModel?> currentUser = Rx<UserModel?>(null);
   final RxString token = ''.obs;
   final RxBool isLoggedIn = false.obs;
@@ -46,28 +44,28 @@ class AuthController extends GetxController {
     try {
       final user = await _authService.getCurrentUser();
       if (user != null) {
-        currentUser.value = user;
-        isLoggedIn.value = true;
+        _onAuthSuccess(user);
       }
     } catch (e) {
-      print('❌ Auth: Error checking current user: $e');
-      Get.snackbar(
-        'خطأ',
-        _errorCheckUser,
-        snackPosition: SnackPosition.BOTTOM,
-        duration: _snackbarDuration,
-      );
+      handleError(e, message: _errorCheckUser);
     }
+  }
+
+  void _onAuthSuccess(UserModel user) {
+    currentUser.value = user;
+    isLoggedIn.value = true;
+    userId.value = user.id.toString();
+    Get.offAllNamed(AppRoutes.main);
   }
 
   Future<User?> signInWithGoogle() async {
     try {
-      isLoading.value = true;
+      setLoading(true);
       await _googleSignIn.initialize(serverClientId: _googleWebClientId);
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
 
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
@@ -75,7 +73,6 @@ class AuthController extends GetxController {
       final UserCredential userCredential = await _auth.signInWithCredential(
         credential,
       );
-      userId.value = userCredential.user!.uid;
 
       if (userCredential.user != null) {
         final firebaseUser = userCredential.user!;
@@ -84,16 +81,15 @@ class AuthController extends GetxController {
           name: firebaseUser.displayName ?? googleUser.displayName ?? 'User',
           photoUrl: firebaseUser.photoURL,
         );
-        currentUser.value = user;
-        Get.offAllNamed(AppRoutes.main);
+        _onAuthSuccess(user);
       }
 
       return userCredential.user;
     } catch (e) {
-      Get.snackbar('خطأ', '$_errorGoogleSignIn ${e.toString()}');
+      handleError(e, message: _errorGoogleSignIn);
       return null;
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -102,40 +98,19 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     try {
-      isLoading.value = true;
+      setLoading(true);
+      resetState();
 
-      print('🔐 محاولة تسجيل الدخول: $email');
+      debugPrint('🔐 محاولة تسجيل الدخول: $email');
 
-      // Backend API Login only (Firebase removed for email/password)
       final user = await _authService.login(email: email, password: password);
-      print('✅ نجح تسجيل الدخول في Backend: ${user.email}');
+      debugPrint('✅ نجح تسجيل الدخول في Backend: ${user.email}');
 
-      currentUser.value = user;
-
-      Get.offAllNamed(AppRoutes.main);
-      print('✅ تم الانتقال إلى الصفحة الرئيسية');
+      _onAuthSuccess(user);
     } catch (e) {
-      print('❌ خطأ تسجيل الدخول: $e');
-
-      // Display user-friendly error message
-      String errorMessage = e.toString();
-
-      // Clean up error message if it's too technical
-      if (errorMessage.contains('Exception:')) {
-        errorMessage = errorMessage.replaceAll('Exception:', '').trim();
-      }
-
-      Get.snackbar(
-        'خطأ في تسجيل الدخول',
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.colorScheme.errorContainer,
-        colorText: Get.theme.colorScheme.onErrorContainer,
-        duration: const Duration(seconds: 4),
-        margin: const EdgeInsets.all(16),
-      );
+      handleError(e, title: 'خطأ في تسجيل الدخول');
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -145,44 +120,23 @@ class AuthController extends GetxController {
     String name,
   ) async {
     try {
-      isLoading.value = true;
+      setLoading(true);
+      resetState();
 
-      print('📝 محاولة إنشاء حساب: $email');
+      debugPrint('📝 محاولة إنشاء حساب: $email');
 
-      // Backend API Register only (Firebase removed for email/password)
       final user = await _authService.register(
         email: email,
         password: password,
         name: name,
       );
-      print('✅ نجح إنشاء الحساب في Backend: ${user.email}');
+      debugPrint('✅ نجح إنشاء الحساب في Backend: ${user.email}');
 
-      currentUser.value = user;
-
-      Get.offAllNamed(AppRoutes.main);
-      print('✅ تم الانتقال إلى الصفحة الرئيسية');
+      _onAuthSuccess(user);
     } catch (e) {
-      print('❌ خطأ إنشاء الحساب: $e');
-
-      // Display user-friendly error message
-      String errorMessage = e.toString();
-
-      // Clean up error message if it's too technical
-      if (errorMessage.contains('Exception:')) {
-        errorMessage = errorMessage.replaceAll('Exception:', '').trim();
-      }
-
-      Get.snackbar(
-        'خطأ في إنشاء الحساب',
-        errorMessage,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Get.theme.colorScheme.errorContainer,
-        colorText: Get.theme.colorScheme.onErrorContainer,
-        duration: const Duration(seconds: 4),
-        margin: const EdgeInsets.all(16),
-      );
+      handleError(e, title: 'خطأ في إنشاء الحساب');
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -193,7 +147,7 @@ class AuthController extends GetxController {
     String? photoUrl,
   }) async {
     try {
-      isLoading.value = true;
+      setLoading(true);
 
       final updatedUser = await _authService.updateProfile(
         name: name,
@@ -203,28 +157,35 @@ class AuthController extends GetxController {
       );
 
       currentUser.value = updatedUser;
-      print('✅ تم تحديث بيانات المستخدم');
+      showSuccessSnackbar(title: 'نجاح', message: 'تم تحديث بيانات المستخدم');
     } catch (e) {
-      print('❌ خطأ في تحديث البيانات: $e');
+      handleError(e, title: 'خطأ في تحديث البيانات');
       rethrow;
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
-    await _googleSignIn.signOut();
-    await _authService.logout();
-    currentUser.value = null;
-    isLoggedIn.value = false;
-    Get.offAllNamed('/login'); // Adjust route
+    try {
+      await _auth.signOut();
+      await _googleSignIn.signOut();
+      await _authService.logout();
+      currentUser.value = null;
+      isLoggedIn.value = false;
+      userId.value = '';
+      Get.offAllNamed('/login'); // Adjust route
+    } catch (e) {
+      handleError(e, message: 'فشل تسجيل الخروج');
+    }
   }
 
   Future<void> deleteUser() async {
-    await _authService.deleteUser();
-    currentUser.value = null;
-    isLoggedIn.value = false;
-    Get.offAllNamed('/login'); // Adjust route
+    try {
+      await _authService.deleteUser();
+      await signOut();
+    } catch (e) {
+      handleError(e, message: 'فشل حذف الحساب');
+    }
   }
 }

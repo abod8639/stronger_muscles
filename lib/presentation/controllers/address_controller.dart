@@ -3,6 +3,8 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/repositories/address_repository.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/services/storage_service.dart';
+import 'base_controller.dart';
 
 const String _defaultLabel = 'Home';
 const String _successDeleteMsg = 'تم حذف العنوان بنجاح';
@@ -16,16 +18,14 @@ const String _successLocationMsg = 'تم تحديد موقعك الحالي';
 const String _errorLocationMsg = 'فشل تحديد الموقع';
 const String _successTitle = 'نجح';
 
-class AddressController extends GetxController {
+class AddressController extends BaseController {
   final AddressRepository _repository = Get.find<AddressRepository>();
   final AddressService _addressService = Get.find<AddressService>();
   
   // States
   final addresses = <AddressModel>[].obs;
-  final isLoading = false.obs;
   final selectedLabel = _defaultLabel.obs;
 
-  // توحيد المتحكمات في مكان واحد
   final fullNameController = TextEditingController();
   final phoneController = TextEditingController();
   final streetController = TextEditingController();
@@ -41,16 +41,14 @@ class AddressController extends GetxController {
   }
 
   Future<void> _initialize() async {
-    // 1. Load from cache immediately
     addresses.assignAll(_repository.getCachedAddresses());
-    
-    // 2. Fetch fresh data if needed or always fetch once
-    await fetchAddresses();
+    if (StorageService.hasToken) {
+      await fetchAddresses();
+    }
   }
 
   @override
   void onClose() {
-    // التخلص من المتحكمات بشكل صحيح
     for (var controller in [
       fullNameController, phoneController, streetController,
       cityController, stateController, postalCodeController, countryController
@@ -60,31 +58,29 @@ class AddressController extends GetxController {
     super.onClose();
   }
 
-
   Future<void> deleteAddress(int id) async {
     try {
-      isLoading.value = true;
+      setLoading(true);
       await _repository.deleteAddress(id);
       addresses.removeWhere((addr) => addr.id == id);
-      Get.snackbar(_successTitle, _successDeleteMsg, snackPosition: SnackPosition.BOTTOM);
+      showSuccessSnackbar(title: _successTitle, message: _successDeleteMsg);
     } catch (e) {
-      _showError(_errorDeleteMsg, e);
+      handleError(e, title: _errorDeleteMsg);
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
   Future<void> setDefaultAddress(int id) async {
     try {
-      isLoading.value = true;
+      setLoading(true);
       await _repository.setDefaultAddress(id);
-      // Wait for fetch to sync all items or update manually
       await fetchAddresses();
-      Get.snackbar(_successTitle, _successDefaultMsg, snackPosition: SnackPosition.BOTTOM);
+      showSuccessSnackbar(title: _successTitle, message: _successDefaultMsg);
     } catch (e) {
-      _showError(_errorDefaultMsg, e);
+      handleError(e, title: _errorDefaultMsg);
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -109,16 +105,16 @@ class AddressController extends GetxController {
   }
 
   Future<void> fetchAddresses() async {
-    if (isLoading.value) return; // Prevent concurrent calls
+    if (isLoading.value) return;
 
     try {
-      isLoading.value = true;
+      setLoading(true);
       final fetched = await _repository.getAddresses();
       addresses.assignAll(fetched);
     } catch (e) {
-      _showError(_errorFetchMsg, e);
+      handleError(e, title: _errorFetchMsg);
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -137,7 +133,7 @@ class AddressController extends GetxController {
     );
 
     try {
-      isLoading.value = true;
+      setLoading(true);
       if (id == null) {
         await _repository.createAddress(model);
       } else {
@@ -145,18 +141,18 @@ class AddressController extends GetxController {
       }
       await fetchAddresses();
       Get.back();
-      Get.snackbar(_successTitle, _successSaveMsg);
+      showSuccessSnackbar(title: _successTitle, message: _successSaveMsg);
       clearForm();
     } catch (e) {
-      _showError(_errorSaveMsg, e);
+      handleError(e, title: _errorSaveMsg);
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
   Future<void> getCurrentLocation() async {
     try {
-      isLoading.value = true;
+      setLoading(true);
       final position = await _addressService.getCurrentPosition();
       final place = await _addressService.getAddressFromCoordinates(
         position.latitude, position.longitude,
@@ -168,12 +164,12 @@ class AddressController extends GetxController {
         stateController.text = place.administrativeArea ?? '';
         postalCodeController.text = place.postalCode ?? '';
         countryController.text = place.country ?? '';
-        Get.snackbar(_successTitle, _successLocationMsg);
+        showSuccessSnackbar(title: _successTitle, message: _successLocationMsg);
       }
     } catch (e) {
-      _showError(_errorLocationMsg, e);
+      handleError(e, title: _errorLocationMsg);
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -182,17 +178,5 @@ class AddressController extends GetxController {
      stateController, postalCodeController, countryController]) {
       c.clear();
     }
-  }
-
-  void _showError(String title, dynamic e) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Get.isSnackbarOpen) return;
-      Get.snackbar(
-        title, 
-        e.toString(), 
-        snackPosition: SnackPosition.BOTTOM, 
-        backgroundColor: Colors.red.withOpacity(0.1),
-      );
-    });
   }
 }

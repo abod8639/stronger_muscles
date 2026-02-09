@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/presentation/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 /// Grid view of products displayed on the home page
@@ -29,7 +29,7 @@ class ProductList extends StatelessWidget {
       }
 
       // Remote search loading state
-      if (searchController.isLoadingRemote.value) {
+      if (searchController.isLoading.value) {
         return const SliverToBoxAdapter(
           child: Center(heightFactor: 3, child: CircularProgressIndicator()),
         );

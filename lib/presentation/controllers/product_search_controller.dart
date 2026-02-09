@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
 import 'dart:math' as math;
+import 'base_controller.dart';
 
-class ProductSearchController extends GetxController {
+class ProductSearchController extends BaseController {
   final ProductService _productService = Get.find<ProductService>();
   final TextEditingController textController = TextEditingController();
 
@@ -16,7 +17,6 @@ class ProductSearchController extends GetxController {
   final searchQuery = ''.obs;
   final filterMinPrice = 0.0.obs;
   final filterMaxPrice = 1000.0.obs;
-  final isLoadingRemote = false.obs;
 
   // Track the range of prices in the current data set
   final dataMinPrice = 0.0.obs;
@@ -33,9 +33,6 @@ class ProductSearchController extends GetxController {
       time: const Duration(milliseconds: 500),
     );
 
-    // Apply filters whenever the search query or price range changes
-    // searchQuery is already handled by debounce above which calls _handleSearch
-    // _handleSearch eventually calls _applyFilters
     everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
   }
 
@@ -84,16 +81,17 @@ class ProductSearchController extends GetxController {
       return;
     }
 
-    isLoadingRemote.value = true;
     try {
+      setLoading(true);
+      resetState();
       final results = await _productService.getProducts(query: query);
       _remoteProducts.assignAll(results);
       _updateDataBounds();
       _applyFilters();
     } catch (e) {
-      debugPrint('Search Error: $e');
+      handleError(e, title: 'خطأ في البحث');
     } finally {
-      isLoadingRemote.value = false;
+      setLoading(false);
     }
   }
 
@@ -132,5 +130,4 @@ class ProductSearchController extends GetxController {
 
     filteredProducts.assignAll(filtered);
   }
-
 }

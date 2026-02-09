@@ -26,14 +26,13 @@ class InitialBinding extends Bindings {
 
     // Async service initialization
     Get.putAsync(() => WishlistService().init(), permanent: true);
-    Get.putAsync(() async => CategoryService() , permanent: true);
+    Get.putAsync(() async => CategoryService(), permanent: true);
 
-    // Repositories 
+    // Repositories
     Get.put(CategoryRepository(), permanent: true);
     Get.put(ProductRepository(), permanent: true);
     Get.put(AddressRepository(), permanent: true);
     Get.put(AddressController(), permanent: true);
-
 
     // Global Controllers
     Get.put(InternetConnectionController(), permanent: true);
@@ -43,6 +42,5 @@ class InitialBinding extends Bindings {
     // Controllers
     Get.put(AuthController(), permanent: true);
     Get.put(OrdersController(), permanent: true);
-    
   }
 }

@@ -65,7 +65,7 @@ class SearchBar extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (controller.isLoadingRemote.value) {
+            if (controller.isLoading.value) {
               return const SizedBox(
                 width: 20, height: 20,
                 child: CircularProgressIndicator(strokeWidth: 2),

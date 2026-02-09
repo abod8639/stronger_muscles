@@ -1,43 +1,39 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
+import 'package:stronger_muscles/core/services/storage_service.dart';
+import 'base_controller.dart';
 
-class OrdersController extends GetxController {
+class OrdersController extends BaseController {
   final OrderRepository _orderRepository = Get.put(OrderRepository());
-  // final OrderRepository _orderRepository = Get.find<OrderRepository>();
 
   final RxList<OrderModel> orders = <OrderModel>[].obs;
-  final RxBool isLoading = false.obs;
-  final RxString errorMessage = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    // Do not call fetchOrders here if it's already being handled by ProfileController 
-    // or if we want to wait for the user to visit the page.
-    // However, since it's permanent and used in Profile, we can load it here but with a check.
     _loadInitialOrders();
   }
 
   Future<void> _loadInitialOrders() async {
-    if (orders.isEmpty) {
+    if (orders.isEmpty && StorageService.hasToken) {
       await fetchOrders();
     }
   }
 
   Future<void> fetchOrders() async {
-    if (isLoading.value) return; // Prevent concurrent calls
+    if (isLoading.value) return;
     
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
+      setLoading(true);
+      resetState();
 
       final fetchedOrders = await _orderRepository.getUserOrders();
       orders.assignAll(fetchedOrders);
     } catch (e) {
-      errorMessage.value = _handleError(e);
+      handleError(e, message: _handleErrorMessage(e));
     } finally {
-      isLoading.value = false;
+      setLoading(false);
     }
   }
 
@@ -45,9 +41,6 @@ class OrdersController extends GetxController {
     await fetchOrders();
   }
 
-  // --- Computed Properties (Getters) ---
-  // ملاحظة: GetX سيقوم بتحديث الـ UI تلقائياً عند استخدام هذه الـ Getters داخل Obx
-  
   List<OrderModel> get deliveredOrders => _filterByStatus('delivered');
   List<OrderModel> get pendingOrders => _filterByStatus('pending');
   List<OrderModel> get processingOrders => _filterByStatus('processing');
@@ -59,14 +52,13 @@ class OrdersController extends GetxController {
 
   void clearData() {
     orders.clear();
-    errorMessage.value = '';
-    isLoading.value = false;
+    resetState();
   }
 
-  String _handleError(dynamic e) {
-    print('❌ Error in OrdersController: $e');
-    return e.toString().contains('network') 
-        ? 'تأكد من اتصالك بالإنترنت' 
-        : 'حدث خطأ أثناء تحميل الطلبات';
+  String _handleErrorMessage(dynamic e) {
+    if (e.toString().contains('network')) {
+      return 'تأكد من اتصالك بالإنترنت';
+    }
+    return 'حدث خطأ أثناء تحميل الطلبات';
   }
 }
