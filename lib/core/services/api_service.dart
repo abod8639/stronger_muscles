@@ -42,8 +42,12 @@ class ApiService {
 
     return baseUrl.replace(
       pathSegments: combinedSegments,
-      queryParameters: queryParameters?.map(
-        (k, v) => MapEntry(k, v.toString()),
+      queryParameters: queryParameters
+          ?.entries
+          .where((e) => e.value != null)
+          .fold<Map<String, String>>(
+        {},
+        (map, e) => map..[e.key] = e.value.toString(),
       ),
     );
   }

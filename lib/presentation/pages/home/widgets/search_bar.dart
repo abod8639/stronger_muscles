@@ -30,12 +30,11 @@ class SearchBar extends StatelessWidget {
       titleSpacing: _horizontalPadding,
       title: Row(
         children: [
-          // حقل البحث المحسن
           Expanded(
             child: _buildSearchField(theme, searchController, l10n),
           ),
           const SizedBox(width: _spacing),
-          // زر الفلترة
+
           _buildFilterButton(context, theme, searchController, l10n),
         ],
       ),
@@ -128,15 +127,20 @@ class SearchBar extends StatelessWidget {
                   l10n.filterProducts,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
+
                 const SizedBox(height: 32),
+
                 Text(
                   'Price Range', // TODO: Localize
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                 ),
+
                 const SizedBox(height: 16),
-                const PriceFilterSlider(), // الـ Slider الآن مسؤول عن حالته داخلياً
+
+                const PriceFilterSlider(), 
+
                 const SizedBox(height: 32),
-                // زر تطبيق الفلترة (اختياري حسب منطقك)
+                
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -148,6 +152,7 @@ class SearchBar extends StatelessWidget {
                     child: const Text('Apply Filter'),
                   ),
                 ),
+                
               ],
             ),
           );

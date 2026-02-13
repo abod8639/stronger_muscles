@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-/// Section title widget with "See all" button
 class SectionTitle extends StatelessWidget {
-  // Constants for styling
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
 

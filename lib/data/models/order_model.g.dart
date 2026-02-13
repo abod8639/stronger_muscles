@@ -24,7 +24,6 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       paymentStatus: fields[4] as String,
       paymentMethod: fields[5] as String,
       addressId: fields[6] as String,
-      shippingAddressSnapshot: fields[7] as String?,
       subtotal: fields[8] as double,
       shippingCost: fields[9] as double,
       discount: fields[10] as double,
@@ -34,7 +33,7 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       createdAt: fields[14] as DateTime?,
       updatedAt: fields[15] as DateTime?,
       items: (fields[16] as List?)?.cast<OrderItemModel>(),
-      shippingAddress: fields[17] as String?,
+      shippingAddress: fields[17] as AddressModel?,
       phoneNumber: fields[18] as String?,
       userName: fields[19] as String?,
     );
@@ -43,7 +42,7 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(20)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -58,8 +57,6 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       ..write(obj.paymentMethod)
       ..writeByte(6)
       ..write(obj.addressId)
-      ..writeByte(7)
-      ..write(obj.shippingAddressSnapshot)
       ..writeByte(8)
       ..write(obj.subtotal)
       ..writeByte(9)
@@ -174,7 +171,6 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       paymentStatus: json['payment_status'] as String? ?? 'pending',
       paymentMethod: json['payment_method'] as String? ?? 'card',
       addressId: json['address_id'] as String,
-      shippingAddressSnapshot: json['shipping_address_snapshot'] as String?,
       subtotal: (json['subtotal'] as num).toDouble(),
       shippingCost: (json['shippingCost'] as num?)?.toDouble() ?? 0,
       discount: (json['discount'] as num?)?.toDouble() ?? 0,
@@ -190,7 +186,10 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       items: (json['order_items'] as List<dynamic>?)
           ?.map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
           .toList(),
-      shippingAddress: json['shipping_address'] as String?,
+      shippingAddress: json['shipping_address'] == null
+          ? null
+          : AddressModel.fromJson(
+              json['shipping_address'] as Map<String, dynamic>),
       phoneNumber: json['phone_number'] as String?,
       userName: json['user_name'] as String?,
     );
@@ -204,7 +203,6 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
       'payment_status': instance.paymentStatus,
       'payment_method': instance.paymentMethod,
       'address_id': instance.addressId,
-      'shipping_address_snapshot': instance.shippingAddressSnapshot,
       'subtotal': instance.subtotal,
       'shippingCost': instance.shippingCost,
       'discount': instance.discount,

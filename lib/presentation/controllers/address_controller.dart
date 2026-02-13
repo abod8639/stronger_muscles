@@ -47,16 +47,6 @@ class AddressController extends BaseController {
     }
   }
 
-  @override
-  void onClose() {
-    for (var controller in [
-      fullNameController, phoneController, streetController,
-      cityController, stateController, postalCodeController, countryController
-    ]) {
-      controller.dispose();
-    }
-    super.onClose();
-  }
 
   Future<void> deleteAddress(int id) async {
     try {

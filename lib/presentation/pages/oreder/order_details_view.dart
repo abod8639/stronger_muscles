@@ -1,10 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_info_item.dart';
 import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_order_item.dart';
@@ -151,32 +149,11 @@ class OrderDetailsView extends StatelessWidget {
                     const SizedBox(height: 8),
                   ],
 
-                  Builder(
-                    builder: (context) {
-                      String addressText = order.shippingAddress ?? '';
-
-                      if (order.shippingAddressSnapshot != null) {
-                        try {
-                          final dynamic decoded =
-                              jsonDecode(order.shippingAddressSnapshot!);
-                          if (decoded is Map<String, dynamic>) {
-                            final address = AddressModel.fromJson(decoded);
-                            addressText = address.fullAddress;
-                          }
-                        } catch (e) {
-                          // Fallback to existing string
-                        }
-                      }
-                      
-                      if (addressText.isNotEmpty) {
-                        return buildRowInfo(
-                          isAr ? 'العنوان' : 'Address',
-                          addressText,
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                  if (order.shippingAddress != null)
+                    buildRowInfo(
+                      isAr ? 'العنوان' : 'Address',
+                      order.shippingAddress!.fullAddress,
+                    ),
           
                 ],
               ),

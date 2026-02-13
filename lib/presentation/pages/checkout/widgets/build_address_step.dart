@@ -24,8 +24,8 @@ Step buildAddressStep(String title) {
                 Obx(
                   () => Column(
                     children: profileController.addresses.map((address) {
-                      final isSelected =
-                          checkoutController.selectedAddress.value?.id == address.id;
+                      final bool isSelected =
+                          checkoutController.selectedAddress.value == address.id;
                       return Card(
                         elevation: isSelected ? 2 : 0,
                         color: isSelected

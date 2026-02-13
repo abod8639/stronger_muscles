@@ -33,12 +33,6 @@ class AuthController extends BaseController {
     passwordController.clear();
   }
 
-  @override
-  void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
 
   Future<void> _checkCurrentUser() async {
     try {
@@ -65,7 +59,7 @@ class AuthController extends BaseController {
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
 
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );

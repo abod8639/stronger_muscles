@@ -11,7 +11,7 @@ Future<void> handleCheckout() async {
     return;
   }
   return  AppGuard.runSafe(
-    () async =>   Get.toNamed(AppRoutes.checkout)
+    () async => Get.toNamed(AppRoutes.checkout)
 
     );
 }

@@ -9,10 +9,10 @@ import 'package:stronger_muscles/routes/routes.dart';
 
 class CheckoutController extends GetxController {
   final AuthController _authController = Get.find<AuthController>();
+  // final AddressController _addressController = Get.find<AddressController>();
   final CartController _cartController = Get.find<CartController>();
   final ProfileController _profileController = Get.find<ProfileController>();
   final OrderRepository _orderRepository = OrderRepository();
-
   final RxInt currentStep = 0.obs;
   final Rx<AddressModel?> selectedAddress = Rx<AddressModel?>(null);
   final RxString selectedPaymentMethod = 'cod'.obs; // 'cod' or 'card'
@@ -74,11 +74,11 @@ class CheckoutController extends GetxController {
         discount: 0,
         shippingCost: 50,
         notes: 'not${_cartController.notesController.text}',
-        shippingAddressSnapshot: '',
-        shippingAddress: selectedAddress.value!.street,
-        trackingNumber: '',
-        paymentMethod: '',
-        paymentStatus: '',
+        shippingAddress: selectedAddress.value,
+        // shippingAddress: selectedAddress.value!.street,
+        trackingNumber: '', // TODO: add tracking number 
+        paymentMethod: selectedPaymentMethod.value,  
+        paymentStatus: 'pending', // TODO: add payment status 
         updatedAt: DateTime.now(),
         items: _cartController.cartItems.map((item) {
           itemIndex++;
@@ -97,6 +97,7 @@ class CheckoutController extends GetxController {
           );
         }).toList(),
       );
+      
 
       await _orderRepository.createOrder(order);
       _cartController.clearCart();

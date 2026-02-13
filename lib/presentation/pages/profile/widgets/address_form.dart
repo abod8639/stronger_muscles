@@ -3,14 +3,23 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
 
-class AddressForm extends StatelessWidget {
+class AddressForm extends StatefulWidget {
   final AddressModel? address;
-  final _formKey = GlobalKey<FormState>();
-  final _controller = Get.find<AddressController>();
+  const AddressForm({super.key, this.address});
 
-  AddressForm({super.key, this.address}) {
-    // ملء البيانات فور استدعاء الـ Widget
-    _controller.fillForm(address);
+  @override
+  State<AddressForm> createState() => _AddressFormState();
+}
+
+class _AddressFormState extends State<AddressForm> {
+  final _formKey = GlobalKey<FormState>();
+  final AddressController _controller = Get.find<AddressController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // ملء البيانات فوراً وبشكل منفرد عند البدء لضمان عدم تصفير الحقول عند الـ Rebuild
+    _controller.fillForm(widget.address);
   }
 
   @override
@@ -23,7 +32,7 @@ class AddressForm extends StatelessWidget {
         key: _formKey,
         child: Column(
           children: [
-            Text(address == null ? 'أضف عنواناً جديداً' : 'تعديل العنوان',
+            Text(widget.address == null ? 'أضف عنواناً جديداً' : 'تعديل العنوان',
                 style: theme.textTheme.headlineSmall),
             const SizedBox(height: 20),
 
@@ -101,12 +110,12 @@ class AddressForm extends StatelessWidget {
       child: ElevatedButton(
         onPressed: _controller.isLoading.value ? null : () {
           if (_formKey.currentState!.validate()) {
-            _controller.saveAddress(address?.id);
+            _controller.saveAddress(widget.address?.id);
           }
         },
         child: _controller.isLoading.value 
           ? const CircularProgressIndicator() 
-          : Text(address == null ? 'حفظ' : 'تحديث'),
+          : Text(widget.address == null ? 'حفظ' : 'تحديث'),
       ),
     ));
   }

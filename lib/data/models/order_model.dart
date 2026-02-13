@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/data/models/address_model.dart';
 
 part 'order_model.freezed.dart';
 part 'order_model.g.dart';
@@ -21,9 +22,6 @@ class OrderModel with _$OrderModel {
     @Default('card')
     String paymentMethod,
     @HiveField(6) @JsonKey(name: 'address_id') required String addressId,
-    @HiveField(7)
-    @JsonKey(name: 'shipping_address_snapshot')
-    String? shippingAddressSnapshot,
     @HiveField(8) required double subtotal,
     @HiveField(9)
     @JsonKey(name: 'shippingCost')
@@ -36,7 +34,7 @@ class OrderModel with _$OrderModel {
     @HiveField(14) DateTime? createdAt,
     @HiveField(15) DateTime? updatedAt,
     @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-    @HiveField(17) String? shippingAddress,
+    @HiveField(17) @JsonKey(name: 'shipping_address') AddressModel? shippingAddress,
     @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
     @HiveField(19) @JsonKey(name: 'user_name') String? userName,
   }) = _OrderModel;

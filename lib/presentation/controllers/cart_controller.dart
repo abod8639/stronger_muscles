@@ -17,6 +17,8 @@ class CartController extends BaseController {
 
   late TextEditingController notesController;
   final AuthController _authController = Get.find<AuthController>();
+ 
+  // String API_KEY = "AIzaSyCV4A9UiZ6GDNfwdFuN_njmIBWXHk2Qb6U"
 
   @override
   void onInit() {
@@ -27,7 +29,7 @@ class CartController extends BaseController {
 
   @override
   void onClose() {
-    notesController.dispose();
+    // notesController.dispose();
     super.onClose();
   }
 

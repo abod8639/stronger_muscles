@@ -39,9 +39,6 @@ mixin _$OrderModel {
   @HiveField(6)
   @JsonKey(name: 'address_id')
   String get addressId => throw _privateConstructorUsedError;
-  @HiveField(7)
-  @JsonKey(name: 'shipping_address_snapshot')
-  String? get shippingAddressSnapshot => throw _privateConstructorUsedError;
   @HiveField(8)
   double get subtotal => throw _privateConstructorUsedError;
   @HiveField(9)
@@ -65,7 +62,8 @@ mixin _$OrderModel {
   @JsonKey(name: 'order_items')
   List<OrderItemModel>? get items => throw _privateConstructorUsedError;
   @HiveField(17)
-  String? get shippingAddress => throw _privateConstructorUsedError;
+  @JsonKey(name: 'shipping_address')
+  AddressModel? get shippingAddress => throw _privateConstructorUsedError;
   @HiveField(18)
   @JsonKey(name: 'phone_number')
   String? get phoneNumber => throw _privateConstructorUsedError;
@@ -93,9 +91,6 @@ abstract class $OrderModelCopyWith<$Res> {
       @HiveField(4) @JsonKey(name: 'payment_status') String paymentStatus,
       @HiveField(5) @JsonKey(name: 'payment_method') String paymentMethod,
       @HiveField(6) @JsonKey(name: 'address_id') String addressId,
-      @HiveField(7)
-      @JsonKey(name: 'shipping_address_snapshot')
-      String? shippingAddressSnapshot,
       @HiveField(8) double subtotal,
       @HiveField(9) @JsonKey(name: 'shippingCost') double shippingCost,
       @HiveField(10) double discount,
@@ -105,9 +100,13 @@ abstract class $OrderModelCopyWith<$Res> {
       @HiveField(14) DateTime? createdAt,
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-      @HiveField(17) String? shippingAddress,
+      @HiveField(17)
+      @JsonKey(name: 'shipping_address')
+      AddressModel? shippingAddress,
       @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
       @HiveField(19) @JsonKey(name: 'user_name') String? userName});
+
+  $AddressModelCopyWith<$Res>? get shippingAddress;
 }
 
 /// @nodoc
@@ -130,7 +129,6 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
     Object? paymentStatus = null,
     Object? paymentMethod = null,
     Object? addressId = null,
-    Object? shippingAddressSnapshot = freezed,
     Object? subtotal = null,
     Object? shippingCost = null,
     Object? discount = null,
@@ -173,10 +171,6 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           ? _value.addressId
           : addressId // ignore: cast_nullable_to_non_nullable
               as String,
-      shippingAddressSnapshot: freezed == shippingAddressSnapshot
-          ? _value.shippingAddressSnapshot
-          : shippingAddressSnapshot // ignore: cast_nullable_to_non_nullable
-              as String?,
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
@@ -216,7 +210,7 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
       shippingAddress: freezed == shippingAddress
           ? _value.shippingAddress
           : shippingAddress // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as AddressModel?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -226,6 +220,18 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           : userName // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AddressModelCopyWith<$Res>? get shippingAddress {
+    if (_value.shippingAddress == null) {
+      return null;
+    }
+
+    return $AddressModelCopyWith<$Res>(_value.shippingAddress!, (value) {
+      return _then(_value.copyWith(shippingAddress: value) as $Val);
+    });
   }
 }
 
@@ -245,9 +251,6 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @HiveField(4) @JsonKey(name: 'payment_status') String paymentStatus,
       @HiveField(5) @JsonKey(name: 'payment_method') String paymentMethod,
       @HiveField(6) @JsonKey(name: 'address_id') String addressId,
-      @HiveField(7)
-      @JsonKey(name: 'shipping_address_snapshot')
-      String? shippingAddressSnapshot,
       @HiveField(8) double subtotal,
       @HiveField(9) @JsonKey(name: 'shippingCost') double shippingCost,
       @HiveField(10) double discount,
@@ -257,9 +260,14 @@ abstract class _$$OrderModelImplCopyWith<$Res>
       @HiveField(14) DateTime? createdAt,
       @HiveField(15) DateTime? updatedAt,
       @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-      @HiveField(17) String? shippingAddress,
+      @HiveField(17)
+      @JsonKey(name: 'shipping_address')
+      AddressModel? shippingAddress,
       @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
       @HiveField(19) @JsonKey(name: 'user_name') String? userName});
+
+  @override
+  $AddressModelCopyWith<$Res>? get shippingAddress;
 }
 
 /// @nodoc
@@ -280,7 +288,6 @@ class __$$OrderModelImplCopyWithImpl<$Res>
     Object? paymentStatus = null,
     Object? paymentMethod = null,
     Object? addressId = null,
-    Object? shippingAddressSnapshot = freezed,
     Object? subtotal = null,
     Object? shippingCost = null,
     Object? discount = null,
@@ -323,10 +330,6 @@ class __$$OrderModelImplCopyWithImpl<$Res>
           ? _value.addressId
           : addressId // ignore: cast_nullable_to_non_nullable
               as String,
-      shippingAddressSnapshot: freezed == shippingAddressSnapshot
-          ? _value.shippingAddressSnapshot
-          : shippingAddressSnapshot // ignore: cast_nullable_to_non_nullable
-              as String?,
       subtotal: null == subtotal
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
@@ -366,7 +369,7 @@ class __$$OrderModelImplCopyWithImpl<$Res>
       shippingAddress: freezed == shippingAddress
           ? _value.shippingAddress
           : shippingAddress // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as AddressModel?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -394,9 +397,6 @@ class _$OrderModelImpl extends _OrderModel {
       @JsonKey(name: 'payment_method')
       this.paymentMethod = 'card',
       @HiveField(6) @JsonKey(name: 'address_id') required this.addressId,
-      @HiveField(7)
-      @JsonKey(name: 'shipping_address_snapshot')
-      this.shippingAddressSnapshot,
       @HiveField(8) required this.subtotal,
       @HiveField(9) @JsonKey(name: 'shippingCost') this.shippingCost = 0,
       @HiveField(10) this.discount = 0,
@@ -408,7 +408,7 @@ class _$OrderModelImpl extends _OrderModel {
       @HiveField(16)
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
-      @HiveField(17) this.shippingAddress,
+      @HiveField(17) @JsonKey(name: 'shipping_address') this.shippingAddress,
       @HiveField(18) @JsonKey(name: 'phone_number') this.phoneNumber,
       @HiveField(19) @JsonKey(name: 'user_name') this.userName})
       : _items = items,
@@ -444,10 +444,6 @@ class _$OrderModelImpl extends _OrderModel {
   @HiveField(6)
   @JsonKey(name: 'address_id')
   final String addressId;
-  @override
-  @HiveField(7)
-  @JsonKey(name: 'shipping_address_snapshot')
-  final String? shippingAddressSnapshot;
   @override
   @HiveField(8)
   final double subtotal;
@@ -490,7 +486,8 @@ class _$OrderModelImpl extends _OrderModel {
 
   @override
   @HiveField(17)
-  final String? shippingAddress;
+  @JsonKey(name: 'shipping_address')
+  final AddressModel? shippingAddress;
   @override
   @HiveField(18)
   @JsonKey(name: 'phone_number')
@@ -502,7 +499,7 @@ class _$OrderModelImpl extends _OrderModel {
 
   @override
   String toString() {
-    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, shippingAddressSnapshot: $shippingAddressSnapshot, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress, phoneNumber: $phoneNumber, userName: $userName)';
+    return 'OrderModel(id: $id, userId: $userId, orderDate: $orderDate, status: $status, paymentStatus: $paymentStatus, paymentMethod: $paymentMethod, addressId: $addressId, subtotal: $subtotal, shippingCost: $shippingCost, discount: $discount, totalAmount: $totalAmount, trackingNumber: $trackingNumber, notes: $notes, createdAt: $createdAt, updatedAt: $updatedAt, items: $items, shippingAddress: $shippingAddress, phoneNumber: $phoneNumber, userName: $userName)';
   }
 
   @override
@@ -521,9 +518,6 @@ class _$OrderModelImpl extends _OrderModel {
                 other.paymentMethod == paymentMethod) &&
             (identical(other.addressId, addressId) ||
                 other.addressId == addressId) &&
-            (identical(
-                    other.shippingAddressSnapshot, shippingAddressSnapshot) ||
-                other.shippingAddressSnapshot == shippingAddressSnapshot) &&
             (identical(other.subtotal, subtotal) ||
                 other.subtotal == subtotal) &&
             (identical(other.shippingCost, shippingCost) ||
@@ -559,7 +553,6 @@ class _$OrderModelImpl extends _OrderModel {
         paymentStatus,
         paymentMethod,
         addressId,
-        shippingAddressSnapshot,
         subtotal,
         shippingCost,
         discount,
@@ -601,9 +594,6 @@ abstract class _OrderModel extends OrderModel {
       @HiveField(6)
       @JsonKey(name: 'address_id')
       required final String addressId,
-      @HiveField(7)
-      @JsonKey(name: 'shipping_address_snapshot')
-      final String? shippingAddressSnapshot,
       @HiveField(8) required final double subtotal,
       @HiveField(9) @JsonKey(name: 'shippingCost') final double shippingCost,
       @HiveField(10) final double discount,
@@ -619,7 +609,9 @@ abstract class _OrderModel extends OrderModel {
       @HiveField(16)
       @JsonKey(name: 'order_items')
       final List<OrderItemModel>? items,
-      @HiveField(17) final String? shippingAddress,
+      @HiveField(17)
+      @JsonKey(name: 'shipping_address')
+      final AddressModel? shippingAddress,
       @HiveField(18) @JsonKey(name: 'phone_number') final String? phoneNumber,
       @HiveField(19)
       @JsonKey(name: 'user_name')
@@ -656,10 +648,6 @@ abstract class _OrderModel extends OrderModel {
   @JsonKey(name: 'address_id')
   String get addressId;
   @override
-  @HiveField(7)
-  @JsonKey(name: 'shipping_address_snapshot')
-  String? get shippingAddressSnapshot;
-  @override
   @HiveField(8)
   double get subtotal;
   @override
@@ -692,7 +680,8 @@ abstract class _OrderModel extends OrderModel {
   List<OrderItemModel>? get items;
   @override
   @HiveField(17)
-  String? get shippingAddress;
+  @JsonKey(name: 'shipping_address')
+  AddressModel? get shippingAddress;
   @override
   @HiveField(18)
   @JsonKey(name: 'phone_number')

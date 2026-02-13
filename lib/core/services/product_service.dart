@@ -18,8 +18,8 @@ class ProductService extends GetxService {
       final response = await _apiService.get(
         ApiConfig.products,
         queryParameters: {
-          if (categoryId != null) 'category': categoryId,
-          if (query != null) 'search': query,
+          'category': categoryId,
+          'search': query,
           'page': page.toString(),
           'limit': limit.toString(),
         },
@@ -32,24 +32,22 @@ class ProductService extends GetxService {
     }
   }
 
-// داخل ProductService
 Future<ProductModel> getProductDetails(String id) async {
   try {
+
     final response = await _apiService.get('${ApiConfig.products}/$id');
     final decodedData = jsonDecode(response.body);
     
-    // منطق الـ Parsing القوي الخاص بك
     final productData = (decodedData is Map && decodedData['data'] != null)
         ? decodedData['data']
         : decodedData;
 
     return ProductModel.fromJson(productData);
   } catch (e) {
-    rethrow; // نترك الـ Repository يتعامل مع الـ Failure
+    rethrow; 
   }
 }
 
-  // منطق الـ Parsing الخاص بك تم تنظيفه هنا
   List<ProductModel> _parseProductsList(dynamic decodedData) {
     List<dynamic> list = [];
     if (decodedData is List) {

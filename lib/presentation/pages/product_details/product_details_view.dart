@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
@@ -136,18 +138,21 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     );
   }
 
-  /// Shows the image viewer with zoom capability
+
+
   void _showImageViewer(BuildContext context, int initialIndex) {
     if (controller.product.imageUrls.isEmpty) return;
 
     MultiImageProvider multiImageProvider =
         MultiImageProvider(
           controller.product.imageUrls.map(
-            (url) => NetworkImage(url)).toList());
+            (url) => CachedNetworkImageProvider(
+              cacheManager: CustomCacheManager.instance,
+              
+              url)).toList());
     showImageViewerPager(
       context,
       multiImageProvider,
-      
       useSafeArea: true,
       swipeDismissible: true,
       doubleTapZoomable: true,

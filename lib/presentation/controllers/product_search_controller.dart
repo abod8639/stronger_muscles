@@ -36,11 +36,6 @@ class ProductSearchController extends BaseController {
     everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
   }
 
-  @override
-  void onClose() {
-    textController.dispose();
-    super.onClose();
-  }
 
   /// Sets the base products (e.g., from a category) and updates price bounds
   void setProducts(List<ProductModel> products) {
