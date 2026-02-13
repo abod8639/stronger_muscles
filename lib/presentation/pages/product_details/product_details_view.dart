@@ -143,13 +143,16 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   void _showImageViewer(BuildContext context, int initialIndex) {
     if (controller.product.imageUrls.isEmpty) return;
 
-    MultiImageProvider multiImageProvider =
-        MultiImageProvider(
-          controller.product.imageUrls.map(
-            (url) => CachedNetworkImageProvider(
-              cacheManager: CustomCacheManager.instance,
+    MultiImageProvider multiImageProvider = MultiImageProvider(
+      controller.product.imageUrls
+          .map((url) => CachedNetworkImageProvider(
+                url,
+                cacheManager: CustomCacheManager.instance,
+              ))
+          .toList(),
+      initialIndex: initialIndex,
+    );
               
-              url)).toList());
     showImageViewerPager(
       context,
       multiImageProvider,
