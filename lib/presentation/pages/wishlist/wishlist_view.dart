@@ -47,11 +47,7 @@ class _EmptyWishlistState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.favorite_border,
-            size: 80,
-            color: AppColors.grey,
-          ),
+          const Icon(Icons.favorite_border, size: 80, color: AppColors.grey),
           const SizedBox(height: 16.0),
           Text(
             AppLocalizations.of(context)!.yourWishlistIsEmpty,

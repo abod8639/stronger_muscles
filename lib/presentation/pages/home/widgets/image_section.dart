@@ -5,7 +5,6 @@ import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/components/product_container.dart';
 
 class ImageSection extends StatelessWidget {
-
   const ImageSection({
     super.key,
     required this.widget,
@@ -141,5 +140,4 @@ class ImageSection extends StatelessWidget {
       child: Icon(Icons.broken_image_outlined, color: theme.colorScheme.error),
     );
   }
-
 }

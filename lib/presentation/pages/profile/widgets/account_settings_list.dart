@@ -23,7 +23,9 @@ class AccountSettingsList extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: _containerMarginHorizontal),
+      margin: const EdgeInsets.symmetric(
+        horizontal: _containerMarginHorizontal,
+      ),
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(_containerBorderRadius),

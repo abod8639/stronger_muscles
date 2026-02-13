@@ -7,7 +7,7 @@ class ProductsController extends BaseController {
   final ProductRepository _repository = Get.find<ProductRepository>();
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
-  final RxString selectedCategoryId = ''.obs; 
+  final RxString selectedCategoryId = ''.obs;
 
   @override
   void onInit() {
@@ -25,7 +25,8 @@ class ProductsController extends BaseController {
 
     try {
       if (query == null && categoryId != null && categoryId.isNotEmpty) {
-        final cached = _repository.getCachedProducts()
+        final cached = _repository
+            .getCachedProducts()
             .where((p) => p.categoryId == categoryId)
             .toList();
         if (cached.isNotEmpty) {
@@ -48,9 +49,10 @@ class ProductsController extends BaseController {
       products.assignAll(result);
       resetState();
     } catch (e) {
-      handleError(e, 
+      handleError(
+        e,
         message: 'فشل تحديث البيانات، تأكد من اتصالك بالإنترنت',
-        retryAction: () => fetchProducts(categoryId: categoryId, query: query)
+        retryAction: () => fetchProducts(categoryId: categoryId, query: query),
       );
     } finally {
       setLoading(false);
@@ -58,13 +60,13 @@ class ProductsController extends BaseController {
   }
 
   Future<void> refreshProducts() async {
-    selectedCategoryId.value = ''; 
+    selectedCategoryId.value = '';
     await fetchProducts();
   }
 
   void filterByCategory(String categoryId) {
     if (selectedCategoryId.value == categoryId) {
-      selectedCategoryId.value = ''; 
+      selectedCategoryId.value = '';
       fetchProducts();
     } else {
       selectedCategoryId.value = categoryId;

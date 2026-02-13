@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -12,11 +11,12 @@ class OrderCard extends StatelessWidget {
   final bool isAr;
   final Function()? onTap;
 
-  const OrderCard({super.key, 
+  const OrderCard({
+    super.key,
     required this.order,
     required this.isDark,
     required this.isAr,
-     this.onTap,
+    this.onTap,
   });
 
   @override
@@ -176,6 +176,4 @@ class OrderCard extends StatelessWidget {
         return {'text': status.toUpperCase(), 'color': AppColors.greyDark};
     }
   }
-
-
 }

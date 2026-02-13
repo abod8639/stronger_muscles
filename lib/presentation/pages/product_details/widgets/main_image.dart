@@ -10,17 +10,14 @@ class MainImage extends StatelessWidget {
   final ProductModel product;
   final Function(int)? onImageTap;
 
-  const MainImage({
-    super.key,
-    required this.product,
-    this.onImageTap,
-  });
+  const MainImage({super.key, required this.product, this.onImageTap});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductDetailsController(product,
-          initialFlavor: "",
-          initialSize: "",    ) ,tag: product.id );
+    final controller = Get.put(
+      ProductDetailsController(product, initialFlavor: "", initialSize: ""),
+      tag: product.id,
+    );
     return SizedBox(
       height: 400,
       width: double.infinity,
@@ -31,7 +28,7 @@ class MainImage extends StatelessWidget {
   }
 
   BorderRadiusGeometry _getBorderRadius() {
-    return BorderRadius.only (
+    return BorderRadius.only(
       // bottomLeft: Radius.circular(16.0),
       // bottomRight: Radius.circular(16.0),
       //  topLeft: Radius.circular(16.0),
@@ -39,7 +36,10 @@ class MainImage extends StatelessWidget {
     );
   }
 
-  Widget _buildImageSlider(BuildContext context, ProductDetailsController controller) {
+  Widget _buildImageSlider(
+    BuildContext context,
+    ProductDetailsController controller,
+  ) {
     return PageView.builder(
       allowImplicitScrolling: false,
       controller: controller.pageController,
@@ -54,18 +54,20 @@ class MainImage extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 0.0),
               decoration: BoxDecoration(
-                color: product.isBackgroundWhite ? Colors.white : Colors.transparent,
-                borderRadius: _getBorderRadius()
+                color: product.isBackgroundWhite
+                    ? Colors.white
+                    : Colors.transparent,
+                borderRadius: _getBorderRadius(),
               ),
               child: ClipRRect(
-                
                 borderRadius: _getBorderRadius(),
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
                   imageUrl: product.imageUrls[index],
                   fit: BoxFit.fitWidth,
                   placeholder: (context, url) => _buildPlaceholder(),
-                  errorWidget: (context, url, error) => _buildErrorWidget(context),
+                  errorWidget: (context, url, error) =>
+                      _buildErrorWidget(context),
                   memCacheWidth: 500,
                   memCacheHeight: 500,
                 ),
@@ -78,9 +80,7 @@ class MainImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(), 
-    );
+    return const Center(child: CircularProgressIndicator.adaptive());
   }
 
   Widget _buildErrorWidget(BuildContext context) {
@@ -88,11 +88,16 @@ class MainImage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.broken_image_outlined, 
-               size: 48, color: Theme.of(context).colorScheme.error),
+          Icon(
+            Icons.broken_image_outlined,
+            size: 48,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(height: 8),
-          Text('فشل تحميل الصورة',
-              style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          Text(
+            'فشل تحميل الصورة',
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
         ],
       ),
     );
@@ -101,13 +106,19 @@ class MainImage extends StatelessWidget {
   Widget _buildEmptyState(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.image_not_supported_outlined, size: 64, color: Colors.grey),
+          const Icon(
+            Icons.image_not_supported_outlined,
+            size: 64,
+            color: Colors.grey,
+          ),
           const SizedBox(height: 16),
           Text(AppLocalizations.of(context)!.noImagesAvailable),
         ],

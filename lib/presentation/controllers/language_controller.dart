@@ -56,7 +56,9 @@ class LanguageController extends GetxController {
 
   /// Get current language name
   String get currentLanguageName {
-    return currentLocale.value.languageCode == _arabicCode ? _arabicLabel : _englishLabel;
+    return currentLocale.value.languageCode == _arabicCode
+        ? _arabicLabel
+        : _englishLabel;
   }
 
   /// Check if current language is Arabic

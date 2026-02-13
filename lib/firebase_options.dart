@@ -66,5 +66,4 @@ class DefaultFirebaseOptions {
     projectId: 'stronger-muscles',
     storageBucket: 'stronger-muscles.firebasestorage.app',
   );
-  
 }

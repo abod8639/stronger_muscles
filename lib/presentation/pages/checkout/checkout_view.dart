@@ -25,10 +25,12 @@ class CheckoutView extends GetView<CheckoutController> {
   Widget build(BuildContext context) {
     Get.find<CheckoutController>();
 
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(_checkoutTitle, style: TextStyle(color: AppColors.white)),
+        title: const Text(
+          _checkoutTitle,
+          style: TextStyle(color: AppColors.white),
+        ),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
@@ -61,7 +63,9 @@ class CheckoutView extends GetView<CheckoutController> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: _controlsVerticalPadding),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: _controlsVerticalPadding,
+                        ),
                       ),
                       child: Text(
                         controller.currentStep.value == 2
@@ -77,7 +81,9 @@ class CheckoutView extends GetView<CheckoutController> {
                       child: OutlinedButton(
                         onPressed: details.onStepCancel,
                         style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: _controlsVerticalPadding),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: _controlsVerticalPadding,
+                          ),
                         ),
                         child: const Text(_backButtonText),
                       ),

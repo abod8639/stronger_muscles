@@ -11,14 +11,14 @@ class OrderRepository {
   Future<void> createOrder(OrderModel order) async {
     try {
       final response = await _apiService.post(
-        ApiConfig.orders, 
-        data: order.toJson()
+        ApiConfig.orders,
+        data: order.toJson(),
       );
 
       if (response.statusCode != 201 && response.statusCode != 200) {
         throw Failure(message: "فشل في تسجيل الطلب بالسيرفر");
       }
-      
+
       print("✅ Order placed successfully on server.");
     } catch (e) {
       print("❌ Error in OrderRepository (createOrder): $e");
@@ -32,7 +32,7 @@ class OrderRepository {
       final body = jsonDecode(response.body);
 
       List<dynamic> data = [];
-      
+
       if (body is Map && body.containsKey('data')) {
         data = body['data'];
       } else if (body is List) {
@@ -41,12 +41,11 @@ class OrderRepository {
 
       // تحويل البيانات باستخدام الـ Model
       return data.map((json) => OrderModel.fromJson(json)).toList();
-      
     } catch (e) {
       print("❌ Error in OrderRepository (getUserOrders): $e");
       throw Failure(
         message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً",
-        originalError: e
+        originalError: e,
       );
     }
   }

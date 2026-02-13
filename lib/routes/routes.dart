@@ -93,11 +93,11 @@ class AppPages {
       binding: CheckoutBinding(),
     ),
     GetPage(
-      name: AppRoutes.orderSuccess, 
+      name: AppRoutes.orderSuccess,
       page: () => const OrderSuccessView(),
       binding: OrderBinding(),
-      ),
-  
+    ),
+
     GetPage(
       name: AppRoutes.editUserInfo,
       page: () => const EditUserInfoView(),

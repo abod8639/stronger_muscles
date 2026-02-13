@@ -21,7 +21,7 @@ class RecentOrdersList extends StatelessWidget {
 
     return Obx(() {
       final recentOrders = controller.orders.take(_maxOrdersToDisplay).toList();
-      
+
       if (recentOrders.isEmpty) return const SizedBox.shrink();
 
       return Column(
@@ -33,11 +33,12 @@ class RecentOrdersList extends StatelessWidget {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(
-              horizontal: _horizontalPadding, 
-              vertical: 8
+              horizontal: _horizontalPadding,
+              vertical: 8,
             ),
             itemCount: recentOrders.length,
-            separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: _listItemSpacing),
             itemBuilder: (context, index) {
               final order = recentOrders[index];
               return OrderCard(
@@ -60,10 +61,8 @@ class RecentOrdersList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-
           Row(
             children: [
-
               Container(
                 width: 3,
                 height: 18,
@@ -75,13 +74,13 @@ class RecentOrdersList extends StatelessWidget {
                       color: AppColors.primary.withOpacity(0.3),
                       blurRadius: 4,
                       offset: const Offset(1, 0),
-                    )
+                    ),
                   ],
                 ),
               ),
-           
+
               const SizedBox(width: 10),
-            
+
               Text(
                 isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -91,7 +90,7 @@ class RecentOrdersList extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // زر عرض الكل بتصميم أبسط
           TextButton(
             onPressed: () => Get.toNamed('/order_view'),
@@ -109,13 +108,12 @@ class RecentOrdersList extends StatelessWidget {
                 Text(isAr ? 'عرض الكل' : 'View All'),
                 const SizedBox(width: 4),
                 Icon(
-                  isAr ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios, 
+                  isAr ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
                   size: 10,
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

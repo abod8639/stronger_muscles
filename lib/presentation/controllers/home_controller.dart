@@ -26,7 +26,7 @@ class HomeController extends BaseController {
     if (cachedProducts.isNotEmpty) {
       searchController.setProducts(cachedProducts);
     }
-    
+
     await fetchProductsForSection(selectedSectionIndex.value);
   }
 
@@ -34,7 +34,7 @@ class HomeController extends BaseController {
     selectedSectionIndex.value = index;
     resetState();
     isConnectionError.value = false;
-    
+
     if (searchController.filteredProducts.isEmpty) {
       setLoading(true);
     }
@@ -47,8 +47,10 @@ class HomeController extends BaseController {
       resetState();
     } catch (e) {
       isConnectionError.value = e is Failure && e.isConnectionError;
-      handleError(e, 
-        retryAction: () => fetchProductsForSection(index, categoryId: categoryId)
+      handleError(
+        e,
+        retryAction: () =>
+            fetchProductsForSection(index, categoryId: categoryId),
       );
     } finally {
       setLoading(false);
@@ -57,16 +59,16 @@ class HomeController extends BaseController {
 
   Future<void> refreshHome() async {
     String? categoryId;
-    
+
     if (Get.isRegistered<CategoriesSectionsController>()) {
       final sectionsController = Get.find<CategoriesSectionsController>();
       final index = selectedSectionIndex.value;
-      
+
       if (index >= 0 && index < sectionsController.selections.length) {
         final id = sectionsController.selections[index].id;
         categoryId = id.isEmpty ? null : id;
       }
-      
+
       await Future.wait([
         fetchProductsForSection(index, categoryId: categoryId),
         sectionsController.fetchCategories(),

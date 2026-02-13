@@ -5,6 +5,7 @@ import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_check
 import 'package:stronger_muscles/presentation/pages/cart/widgets/cart_item_card.dart';
 
 const double _listTopSpacing = 10.0;
+
 /// Builds the cart content with items and checkout section
 Widget buildCartContent() {
   final controller = Get.find<CartController>();

@@ -51,8 +51,18 @@ class BottomIconsRow extends StatelessWidget {
                 );
 
                 return item != null
-                    ? _buildQuantityControls(context, theme, cartController, item)
-                    : _buildAddToCartButton(context, detailsController, cartController, l10n);
+                    ? _buildQuantityControls(
+                        context,
+                        theme,
+                        cartController,
+                        item,
+                      )
+                    : _buildAddToCartButton(
+                        context,
+                        detailsController,
+                        cartController,
+                        l10n,
+                      );
               }),
             ),
 
@@ -91,7 +101,9 @@ class BottomIconsRow extends StatelessWidget {
           fontSize: _buttonFontSize,
           fontWeight: FontWeight.bold,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
       ),
     );
   }
@@ -104,7 +116,7 @@ class BottomIconsRow extends StatelessWidget {
     CartItemModel item,
   ) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
@@ -116,12 +128,16 @@ class BottomIconsRow extends StatelessWidget {
         children: [
           IconButton(
             icon: Icon(
-              item.quantity > 1 ? Icons.remove_circle_outline : Icons.delete_outline_rounded,
+              item.quantity > 1
+                  ? Icons.remove_circle_outline
+                  : Icons.delete_outline_rounded,
               color: item.quantity > 1 ? AppColors.primary : Colors.redAccent,
             ),
             onPressed: () => cartController.decreaseQuantity(item),
             iconSize: _iconButtonSize,
-            tooltip: item.quantity > 1 ? l10n.decreaseQuantity : l10n.removeFromCart,
+            tooltip: item.quantity > 1
+                ? l10n.decreaseQuantity
+                : l10n.removeFromCart,
           ),
           Text(
             item.quantity.toString(),
@@ -132,7 +148,10 @@ class BottomIconsRow extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.add_circle_outline, color: AppColors.primary),
+            icon: const Icon(
+              Icons.add_circle_outline,
+              color: AppColors.primary,
+            ),
             onPressed: () => cartController.increaseQuantity(item),
             iconSize: _iconButtonSize,
             // tooltip: l10n.increaseQuantity,
@@ -143,7 +162,10 @@ class BottomIconsRow extends StatelessWidget {
   }
 
   /// زر المفضلة
-  Widget _buildWishlistButton(ThemeData theme, ProductDetailsController controller) {
+  Widget _buildWishlistButton(
+    ThemeData theme,
+    ProductDetailsController controller,
+  ) {
     final isInWishlist = controller.isInWishlist.value;
 
     return Container(
@@ -156,7 +178,9 @@ class BottomIconsRow extends StatelessWidget {
       child: IconButton(
         icon: Icon(
           isInWishlist ? Icons.favorite : Icons.favorite_outline,
-          color: isInWishlist ? AppColors.primary : theme.colorScheme.onSurfaceVariant,
+          color: isInWishlist
+              ? AppColors.primary
+              : theme.colorScheme.onSurfaceVariant,
           size: 28,
         ),
         onPressed: () => controller.toggleWishlist(),

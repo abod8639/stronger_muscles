@@ -4,20 +4,20 @@ import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
 
 class AppGuard {
-
   static Future<void> runSafe(
     Future<void> Function() action, {
     bool requireAuth = true,
     bool requireInternet = true,
   }) async {
     if (requireInternet) {
-      final isOnline = Get.find<InternetConnectionController>().isConnected.value;
+      final isOnline =
+          Get.find<InternetConnectionController>().isConnected.value;
       if (!isOnline) {
         _showError(
           title: "لا يوجد اتصال",
           message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
-          isCritical: true, 
+          isCritical: true,
         );
         return;
       }
@@ -49,7 +49,9 @@ class AppGuard {
     if (isCritical) {
       Get.dialog(
         AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Row(
             children: [
               Icon(icon, color: Colors.redAccent),
@@ -81,13 +83,14 @@ class AppGuard {
     bool requireInternet = true,
   }) async {
     if (requireInternet) {
-      final isOnline = Get.find<InternetConnectionController>().isConnected.value;
+      final isOnline =
+          Get.find<InternetConnectionController>().isConnected.value;
       if (!isOnline) {
         _showError(
           title: "لا يوجد اتصال",
           message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
-          isCritical: true, 
+          isCritical: true,
         );
         return;
       }
@@ -95,7 +98,6 @@ class AppGuard {
 
     await action();
   }
-
 
   static Future<void> runSafeAuth(
     Future<void> Function() action, {

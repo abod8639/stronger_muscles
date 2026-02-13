@@ -10,7 +10,7 @@ class CategoryService extends GetxService {
   Future<List<CategoryModel>> fetchCategoriesFromApi() async {
     final response = await _apiService.get(ApiConfig.categories);
     final dynamic decodedData = jsonDecode(response.body);
-    
+
     return _parseCategories(decodedData);
   }
 

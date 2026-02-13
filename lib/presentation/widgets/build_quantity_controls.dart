@@ -8,6 +8,7 @@ import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 
 const double _quantityFontSize = 16.0;
 const double _iconSize = 28.0;
+
 /// Builds the quantity control buttons
 Widget buildQuantityControls(ProductModel product) {
   final controller = Get.find<CartController>();

@@ -33,7 +33,6 @@ class AuthController extends BaseController {
     passwordController.clear();
   }
 
-
   Future<void> _checkCurrentUser() async {
     try {
       final user = await _authService.getCurrentUser();
@@ -57,7 +56,6 @@ class AuthController extends BaseController {
       setLoading(true);
       await _googleSignIn.initialize(serverClientId: _googleWebClientId);
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(

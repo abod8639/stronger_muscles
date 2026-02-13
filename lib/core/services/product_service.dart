@@ -32,21 +32,20 @@ class ProductService extends GetxService {
     }
   }
 
-Future<ProductModel> getProductDetails(String id) async {
-  try {
+  Future<ProductModel> getProductDetails(String id) async {
+    try {
+      final response = await _apiService.get('${ApiConfig.products}/$id');
+      final decodedData = jsonDecode(response.body);
 
-    final response = await _apiService.get('${ApiConfig.products}/$id');
-    final decodedData = jsonDecode(response.body);
-    
-    final productData = (decodedData is Map && decodedData['data'] != null)
-        ? decodedData['data']
-        : decodedData;
+      final productData = (decodedData is Map && decodedData['data'] != null)
+          ? decodedData['data']
+          : decodedData;
 
-    return ProductModel.fromJson(productData);
-  } catch (e) {
-    rethrow; 
+      return ProductModel.fromJson(productData);
+    } catch (e) {
+      rethrow;
+    }
   }
-}
 
   List<ProductModel> _parseProductsList(dynamic decodedData) {
     List<dynamic> list = [];
@@ -65,8 +64,10 @@ Future<ProductModel> getProductDetails(String id) async {
 
   Failure _handleError(dynamic e, String defaultMsg) {
     if (e is Failure) return e;
-    return Failure(message: defaultMsg, type: FailureType.unknown, originalError: e);
+    return Failure(
+      message: defaultMsg,
+      type: FailureType.unknown,
+      originalError: e,
+    );
   }
-
-
 }

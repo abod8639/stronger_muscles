@@ -27,10 +27,12 @@ class ProductDetailsController extends GetxController {
     String? initialSize,
   }) {
     // تحديد القيم الابتدائية للنكهة والحجم
-    selectedFlavor.value = initialFlavor ?? 
+    selectedFlavor.value =
+        initialFlavor ??
         (product.flavors?.isNotEmpty == true ? product.flavors!.first : "");
 
-    selectedSize.value = initialSize ?? 
+    selectedSize.value =
+        initialSize ??
         (product.size?.isNotEmpty == true ? product.size!.first : "");
   }
 
@@ -57,9 +59,9 @@ class ProductDetailsController extends GetxController {
 
   void selectImage(int index) {
     if (selectedImageIndex.value == index) return;
-    
+
     selectedImageIndex.value = index;
-    
+
     if (pageController.hasClients) {
       if (pageController.positions.length == 1) {
         if (pageController.page?.round() != index) {
@@ -81,7 +83,7 @@ class ProductDetailsController extends GetxController {
   }
 
   void updateFlavor(String flavor) => selectedFlavor.value = flavor;
- 
+
   void updateSize(String size) => selectedSize.value = size;
 
   void _showErrorSnackbar(String title, String message) {
@@ -112,5 +114,4 @@ class ProductDetailsController extends GetxController {
       );
     }
   }
-
 }

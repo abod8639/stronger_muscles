@@ -22,151 +22,162 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "about": MessageLookupByLibrary.simpleMessage("حول التطبيق"),
-        "accountSettings": MessageLookupByLibrary.simpleMessage("إعدادات"),
-        "addNew": MessageLookupByLibrary.simpleMessage("إضافة جديد"),
-        "addNewAddress":
-            MessageLookupByLibrary.simpleMessage("إضافة عنوان جديد"),
-        "addProductsToGetStarted":
-            MessageLookupByLibrary.simpleMessage("أضف منتجات للبدء"),
-        "addToCart": MessageLookupByLibrary.simpleMessage("أضف إلى السلة"),
-        "addedToCart":
-            MessageLookupByLibrary.simpleMessage("تم إضافة المنتج إلى السلة"),
-        "address": MessageLookupByLibrary.simpleMessage("العنوان"),
-        "alreadyHaveAccount":
-            MessageLookupByLibrary.simpleMessage("لديك حساب بالفعل؟ "),
-        "appTitle": MessageLookupByLibrary.simpleMessage("عضلات أقوى"),
-        "arabic": MessageLookupByLibrary.simpleMessage("العربية"),
-        "back": MessageLookupByLibrary.simpleMessage("رجوع"),
-        "beTheFirstToReviewThisProduct":
-            MessageLookupByLibrary.simpleMessage("كن أول من يقيم هذا المنتج"),
-        "bestSeller": MessageLookupByLibrary.simpleMessage("الأكثر مبيعاً"),
-        "brand": MessageLookupByLibrary.simpleMessage("العلامة التجارية"),
-        "cart": MessageLookupByLibrary.simpleMessage("السلة"),
-        "categoryAmino": MessageLookupByLibrary.simpleMessage("أمينو"),
-        "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
-        "categoryCarb": MessageLookupByLibrary.simpleMessage("كربوهيدرات"),
-        "categoryCreatine": MessageLookupByLibrary.simpleMessage("كرياتين"),
-        "categoryFatBurner": MessageLookupByLibrary.simpleMessage("حرق الدهون"),
-        "categoryHealth": MessageLookupByLibrary.simpleMessage("الصحة العامة"),
-        "categoryHome": MessageLookupByLibrary.simpleMessage("الرئيسية"),
-        "categoryMassGainer":
-            MessageLookupByLibrary.simpleMessage("زيادة الوزن"),
-        "categoryPreWorkout":
-            MessageLookupByLibrary.simpleMessage("مكملات الطاقة"),
-        "categoryProtein": MessageLookupByLibrary.simpleMessage("بروتين"),
-        "categoryRecovery": MessageLookupByLibrary.simpleMessage("التعافي"),
-        "categoryVitamins": MessageLookupByLibrary.simpleMessage("فيتامينات"),
-        "checkout": MessageLookupByLibrary.simpleMessage("الدفع"),
-        "confirmPassword":
-            MessageLookupByLibrary.simpleMessage("تأكيد كلمة المرور"),
-        "confirmYourPassword":
-            MessageLookupByLibrary.simpleMessage("يرجى تأكيد كلمة المرور"),
-        "continueShopping":
-            MessageLookupByLibrary.simpleMessage("متابعة التسوق"),
-        "countryOfOrigin": MessageLookupByLibrary.simpleMessage("بلد المنشأ"),
-        "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
-        "customerReviews":
-            MessageLookupByLibrary.simpleMessage("تقييم العملاء"),
-        "decreaseQuantity": MessageLookupByLibrary.simpleMessage("العدد"),
-        "dontHaveAccount":
-            MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
-        "editProfile":
-            MessageLookupByLibrary.simpleMessage("تعديل الملف الشخصي"),
-        "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
-        "english": MessageLookupByLibrary.simpleMessage("الإنجليزية"),
-        "enterEmail": MessageLookupByLibrary.simpleMessage(
-            "يرجى إدخال البريد الإلكتروني"),
-        "enterName":
-            MessageLookupByLibrary.simpleMessage("يرجى إدخال اسمك الكامل"),
-        "enterPassword":
-            MessageLookupByLibrary.simpleMessage("يرجى إدخال كلمة المرور"),
-        "featured": MessageLookupByLibrary.simpleMessage("مميز"),
-        "filter": MessageLookupByLibrary.simpleMessage("تصفية"),
-        "filterProducts":
-            MessageLookupByLibrary.simpleMessage("تصفية المنتجات"),
-        "flavor": MessageLookupByLibrary.simpleMessage("النكهة"),
-        "forgotPassword":
-            MessageLookupByLibrary.simpleMessage("هل نسيت كلمة المرور؟"),
-        "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
-            "نسيت كلمة المرور لم يتم تنفيذها بعد"),
-        "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
-        "getDiscount": MessageLookupByLibrary.simpleMessage(
-            "احصل على خصم 20% على جميع المنتجات"),
-        "helpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),
-        "ingredients": MessageLookupByLibrary.simpleMessage("المكونات"),
-        "item": MessageLookupByLibrary.simpleMessage("منتج"),
-        "items": MessageLookupByLibrary.simpleMessage("منتجات"),
-        "language": MessageLookupByLibrary.simpleMessage("اللغة"),
-        "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
-        "manufacturer": MessageLookupByLibrary.simpleMessage("الشركة المصنعة"),
-        "mostPopularOffers":
-            MessageLookupByLibrary.simpleMessage("العروض الأكثر شعبية"),
-        "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
-        "newArrival": MessageLookupByLibrary.simpleMessage("جديد"),
-        "noAddressesFound": MessageLookupByLibrary.simpleMessage(
-            "لم يتم العثور على عناوين. يرجى إضافة واحد في ملفك الشخصي."),
-        "noImagesAvailable":
-            MessageLookupByLibrary.simpleMessage("لا توجد صور متاحة"),
-        "noProductsFound":
-            MessageLookupByLibrary.simpleMessage("لم يتم العثور على منتجات."),
-        "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
-        "or": MessageLookupByLibrary.simpleMessage("أو"),
-        "orderSummary": MessageLookupByLibrary.simpleMessage("ملخص الطلب"),
-        "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
-        "passwordLength": MessageLookupByLibrary.simpleMessage(
-            "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل"),
-        "passwordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("كلمات المرور غير متطابقة"),
-        "payment": MessageLookupByLibrary.simpleMessage("الدفع"),
-        "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع:"),
-        "proceedToCheckout":
-            MessageLookupByLibrary.simpleMessage("المتابعة للدفع"),
-        "productDescription":
-            MessageLookupByLibrary.simpleMessage("وصف المنتج"),
-        "productImage": MessageLookupByLibrary.simpleMessage("صورة المنتج"),
-        "productInfo": MessageLookupByLibrary.simpleMessage("معلومات المنتج"),
-        "removeFromCart":
-            MessageLookupByLibrary.simpleMessage("إزالة من السلة"),
-        "review": MessageLookupByLibrary.simpleMessage("المراجعة"),
-        "searchProducts":
-            MessageLookupByLibrary.simpleMessage("البحث عن المنتجات..."),
-        "seeAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
-        "selectFlavor": MessageLookupByLibrary.simpleMessage("اختر النكهة"),
-        "servingSize": MessageLookupByLibrary.simpleMessage("حجم الحصة"),
-        "servingsPerContainer":
-            MessageLookupByLibrary.simpleMessage("عدد الحصص"),
-        "shippingTo": MessageLookupByLibrary.simpleMessage("الشحن إلى:"),
-        "shopNow": MessageLookupByLibrary.simpleMessage("تسوق الآن"),
-        "signInToContinue":
-            MessageLookupByLibrary.simpleMessage("تسجيل الدخول للمتابعة"),
-        "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
-            "تسجيل الدخول باستخدام Google"),
-        "signOut": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
-        "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
-        "signUpToGetStarted":
-            MessageLookupByLibrary.simpleMessage("سجل الآن للبدء"),
-        "size": MessageLookupByLibrary.simpleMessage("الحجم"),
-        "sku": MessageLookupByLibrary.simpleMessage("رمز المنتج"),
-        "specialOffer": MessageLookupByLibrary.simpleMessage("عرض خاص!"),
-        "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
-            "ابدأ بإضافة منتجاتك المفضلة!"),
-        "startShopping": MessageLookupByLibrary.simpleMessage("ابدأ التسوق"),
-        "theme": MessageLookupByLibrary.simpleMessage("المظهر"),
-        "total": MessageLookupByLibrary.simpleMessage("الإجمالي"),
-        "totalAmount": MessageLookupByLibrary.simpleMessage("المبلغ الإجمالي"),
-        "usageInstructions":
-            MessageLookupByLibrary.simpleMessage("طريقة الاستخدام"),
-        "validEmail": MessageLookupByLibrary.simpleMessage(
-            "يرجى إدخال بريد إلكتروني صالح"),
-        "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
-        "warnings": MessageLookupByLibrary.simpleMessage("تحذيرات"),
-        "weight": MessageLookupByLibrary.simpleMessage("الوزن"),
-        "welcomeBack": MessageLookupByLibrary.simpleMessage("مرحبًا بعودتك!"),
-        "wishlist": MessageLookupByLibrary.simpleMessage("المفضلة"),
-        "yourCartIsEmpty":
-            MessageLookupByLibrary.simpleMessage("سلة التسوق فارغة"),
-        "yourWishlistIsEmpty":
-            MessageLookupByLibrary.simpleMessage("قائمة المفضلة فارغة.")
-      };
+    "about": MessageLookupByLibrary.simpleMessage("حول التطبيق"),
+    "accountSettings": MessageLookupByLibrary.simpleMessage("إعدادات"),
+    "addNew": MessageLookupByLibrary.simpleMessage("إضافة جديد"),
+    "addNewAddress": MessageLookupByLibrary.simpleMessage("إضافة عنوان جديد"),
+    "addProductsToGetStarted": MessageLookupByLibrary.simpleMessage(
+      "أضف منتجات للبدء",
+    ),
+    "addToCart": MessageLookupByLibrary.simpleMessage("أضف إلى السلة"),
+    "addedToCart": MessageLookupByLibrary.simpleMessage(
+      "تم إضافة المنتج إلى السلة",
+    ),
+    "address": MessageLookupByLibrary.simpleMessage("العنوان"),
+    "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
+      "لديك حساب بالفعل؟ ",
+    ),
+    "appTitle": MessageLookupByLibrary.simpleMessage("عضلات أقوى"),
+    "arabic": MessageLookupByLibrary.simpleMessage("العربية"),
+    "back": MessageLookupByLibrary.simpleMessage("رجوع"),
+    "beTheFirstToReviewThisProduct": MessageLookupByLibrary.simpleMessage(
+      "كن أول من يقيم هذا المنتج",
+    ),
+    "bestSeller": MessageLookupByLibrary.simpleMessage("الأكثر مبيعاً"),
+    "brand": MessageLookupByLibrary.simpleMessage("العلامة التجارية"),
+    "cart": MessageLookupByLibrary.simpleMessage("السلة"),
+    "categoryAmino": MessageLookupByLibrary.simpleMessage("أمينو"),
+    "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
+    "categoryCarb": MessageLookupByLibrary.simpleMessage("كربوهيدرات"),
+    "categoryCreatine": MessageLookupByLibrary.simpleMessage("كرياتين"),
+    "categoryFatBurner": MessageLookupByLibrary.simpleMessage("حرق الدهون"),
+    "categoryHealth": MessageLookupByLibrary.simpleMessage("الصحة العامة"),
+    "categoryHome": MessageLookupByLibrary.simpleMessage("الرئيسية"),
+    "categoryMassGainer": MessageLookupByLibrary.simpleMessage("زيادة الوزن"),
+    "categoryPreWorkout": MessageLookupByLibrary.simpleMessage("مكملات الطاقة"),
+    "categoryProtein": MessageLookupByLibrary.simpleMessage("بروتين"),
+    "categoryRecovery": MessageLookupByLibrary.simpleMessage("التعافي"),
+    "categoryVitamins": MessageLookupByLibrary.simpleMessage("فيتامينات"),
+    "checkout": MessageLookupByLibrary.simpleMessage("الدفع"),
+    "confirmPassword": MessageLookupByLibrary.simpleMessage(
+      "تأكيد كلمة المرور",
+    ),
+    "confirmYourPassword": MessageLookupByLibrary.simpleMessage(
+      "يرجى تأكيد كلمة المرور",
+    ),
+    "continueShopping": MessageLookupByLibrary.simpleMessage("متابعة التسوق"),
+    "countryOfOrigin": MessageLookupByLibrary.simpleMessage("بلد المنشأ"),
+    "createAccount": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "customerReviews": MessageLookupByLibrary.simpleMessage("تقييم العملاء"),
+    "decreaseQuantity": MessageLookupByLibrary.simpleMessage("العدد"),
+    "dontHaveAccount": MessageLookupByLibrary.simpleMessage("ليس لديك حساب؟ "),
+    "editProfile": MessageLookupByLibrary.simpleMessage("تعديل الملف الشخصي"),
+    "email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+    "english": MessageLookupByLibrary.simpleMessage("الإنجليزية"),
+    "enterEmail": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال البريد الإلكتروني",
+    ),
+    "enterName": MessageLookupByLibrary.simpleMessage("يرجى إدخال اسمك الكامل"),
+    "enterPassword": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال كلمة المرور",
+    ),
+    "featured": MessageLookupByLibrary.simpleMessage("مميز"),
+    "filter": MessageLookupByLibrary.simpleMessage("تصفية"),
+    "filterProducts": MessageLookupByLibrary.simpleMessage("تصفية المنتجات"),
+    "flavor": MessageLookupByLibrary.simpleMessage("النكهة"),
+    "forgotPassword": MessageLookupByLibrary.simpleMessage(
+      "هل نسيت كلمة المرور؟",
+    ),
+    "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
+      "نسيت كلمة المرور لم يتم تنفيذها بعد",
+    ),
+    "fullName": MessageLookupByLibrary.simpleMessage("الاسم الكامل"),
+    "getDiscount": MessageLookupByLibrary.simpleMessage(
+      "احصل على خصم 20% على جميع المنتجات",
+    ),
+    "helpSupport": MessageLookupByLibrary.simpleMessage("المساعدة والدعم"),
+    "ingredients": MessageLookupByLibrary.simpleMessage("المكونات"),
+    "item": MessageLookupByLibrary.simpleMessage("منتج"),
+    "items": MessageLookupByLibrary.simpleMessage("منتجات"),
+    "language": MessageLookupByLibrary.simpleMessage("اللغة"),
+    "login": MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "manufacturer": MessageLookupByLibrary.simpleMessage("الشركة المصنعة"),
+    "mostPopularOffers": MessageLookupByLibrary.simpleMessage(
+      "العروض الأكثر شعبية",
+    ),
+    "myAccount": MessageLookupByLibrary.simpleMessage("حسابي"),
+    "newArrival": MessageLookupByLibrary.simpleMessage("جديد"),
+    "noAddressesFound": MessageLookupByLibrary.simpleMessage(
+      "لم يتم العثور على عناوين. يرجى إضافة واحد في ملفك الشخصي.",
+    ),
+    "noImagesAvailable": MessageLookupByLibrary.simpleMessage(
+      "لا توجد صور متاحة",
+    ),
+    "noProductsFound": MessageLookupByLibrary.simpleMessage(
+      "لم يتم العثور على منتجات.",
+    ),
+    "notifications": MessageLookupByLibrary.simpleMessage("الإشعارات"),
+    "or": MessageLookupByLibrary.simpleMessage("أو"),
+    "orderSummary": MessageLookupByLibrary.simpleMessage("ملخص الطلب"),
+    "password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
+    "passwordLength": MessageLookupByLibrary.simpleMessage(
+      "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+    ),
+    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+      "كلمات المرور غير متطابقة",
+    ),
+    "payment": MessageLookupByLibrary.simpleMessage("الدفع"),
+    "paymentMethod": MessageLookupByLibrary.simpleMessage("طريقة الدفع:"),
+    "proceedToCheckout": MessageLookupByLibrary.simpleMessage("المتابعة للدفع"),
+    "productDescription": MessageLookupByLibrary.simpleMessage("وصف المنتج"),
+    "productImage": MessageLookupByLibrary.simpleMessage("صورة المنتج"),
+    "productInfo": MessageLookupByLibrary.simpleMessage("معلومات المنتج"),
+    "removeFromCart": MessageLookupByLibrary.simpleMessage("إزالة من السلة"),
+    "review": MessageLookupByLibrary.simpleMessage("المراجعة"),
+    "searchProducts": MessageLookupByLibrary.simpleMessage(
+      "البحث عن المنتجات...",
+    ),
+    "seeAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+    "selectFlavor": MessageLookupByLibrary.simpleMessage("اختر النكهة"),
+    "servingSize": MessageLookupByLibrary.simpleMessage("حجم الحصة"),
+    "servingsPerContainer": MessageLookupByLibrary.simpleMessage("عدد الحصص"),
+    "shippingTo": MessageLookupByLibrary.simpleMessage("الشحن إلى:"),
+    "shopNow": MessageLookupByLibrary.simpleMessage("تسوق الآن"),
+    "signInToContinue": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الدخول للمتابعة",
+    ),
+    "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
+      "تسجيل الدخول باستخدام Google",
+    ),
+    "signOut": MessageLookupByLibrary.simpleMessage("تسجيل الخروج"),
+    "signUp": MessageLookupByLibrary.simpleMessage("إنشاء حساب"),
+    "signUpToGetStarted": MessageLookupByLibrary.simpleMessage(
+      "سجل الآن للبدء",
+    ),
+    "size": MessageLookupByLibrary.simpleMessage("الحجم"),
+    "sku": MessageLookupByLibrary.simpleMessage("رمز المنتج"),
+    "specialOffer": MessageLookupByLibrary.simpleMessage("عرض خاص!"),
+    "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
+      "ابدأ بإضافة منتجاتك المفضلة!",
+    ),
+    "startShopping": MessageLookupByLibrary.simpleMessage("ابدأ التسوق"),
+    "theme": MessageLookupByLibrary.simpleMessage("المظهر"),
+    "total": MessageLookupByLibrary.simpleMessage("الإجمالي"),
+    "totalAmount": MessageLookupByLibrary.simpleMessage("المبلغ الإجمالي"),
+    "usageInstructions": MessageLookupByLibrary.simpleMessage(
+      "طريقة الاستخدام",
+    ),
+    "validEmail": MessageLookupByLibrary.simpleMessage(
+      "يرجى إدخال بريد إلكتروني صالح",
+    ),
+    "viewAll": MessageLookupByLibrary.simpleMessage("عرض الكل"),
+    "warnings": MessageLookupByLibrary.simpleMessage("تحذيرات"),
+    "weight": MessageLookupByLibrary.simpleMessage("الوزن"),
+    "welcomeBack": MessageLookupByLibrary.simpleMessage("مرحبًا بعودتك!"),
+    "wishlist": MessageLookupByLibrary.simpleMessage("المفضلة"),
+    "yourCartIsEmpty": MessageLookupByLibrary.simpleMessage("سلة التسوق فارغة"),
+    "yourWishlistIsEmpty": MessageLookupByLibrary.simpleMessage(
+      "قائمة المفضلة فارغة.",
+    ),
+  };
 }

@@ -4,7 +4,8 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const String _successTitle = 'Order Placed Successfully!';
-const String _successMessage = 'Thank you for your purchase. Your order has been placed and is being processed.';
+const String _successMessage =
+    'Thank you for your purchase. Your order has been placed and is being processed.';
 const String _continueButtonText = 'Continue Shopping';
 const double _iconSize = 100.0;
 const double _headlineSpacing = 24.0;

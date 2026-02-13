@@ -19,14 +19,19 @@ class WishlistService extends GetxService {
   }
 
   void _loadItems() {
-    items.assignAll(_box.values.map((item) {
-      try {
-        return ProductModel.fromJson(jsonDecode(item));
-      } catch (e) {
-        // Fallback or handle error
-        return null;
-      }
-    }).whereType<ProductModel>().toList());
+    items.assignAll(
+      _box.values
+          .map((item) {
+            try {
+              return ProductModel.fromJson(jsonDecode(item));
+            } catch (e) {
+              // Fallback or handle error
+              return null;
+            }
+          })
+          .whereType<ProductModel>()
+          .toList(),
+    );
   }
 
   bool isFavorite(String productId) => _box.containsKey(productId);
@@ -44,4 +49,3 @@ class WishlistService extends GetxService {
 
   List<ProductModel> getWishlistItems() => items.toList();
 }
-

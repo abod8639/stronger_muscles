@@ -25,8 +25,8 @@ class HomeView extends GetView<HomeController> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
-              onRefresh: () => 
-           AppGuard.runSafeInternet(()=> controller.refreshHome()),
+              onRefresh: () =>
+                  AppGuard.runSafeInternet(() => controller.refreshHome()),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),

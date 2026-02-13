@@ -189,7 +189,8 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       shippingAddress: json['shipping_address'] == null
           ? null
           : AddressModel.fromJson(
-              json['shipping_address'] as Map<String, dynamic>),
+              json['shipping_address'] as Map<String, dynamic>,
+            ),
       phoneNumber: json['phone_number'] as String?,
       userName: json['user_name'] as String?,
     );
@@ -235,17 +236,17 @@ _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$OrderItemModelImplToJson(
-        _$OrderItemModelImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'order_id': instance.orderId,
-      'product_id': instance.productId,
-      'product_name': instance.productName,
-      'unit_price': instance.unitPrice,
-      'quantity': instance.quantity,
-      'subtotal': instance.subtotal,
-      'image_url': instance.imageUrl,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'selectedFlavor': instance.selectedFlavor,
-      'selectedSize': instance.selectedSize,
-    };
+  _$OrderItemModelImpl instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'order_id': instance.orderId,
+  'product_id': instance.productId,
+  'product_name': instance.productName,
+  'unit_price': instance.unitPrice,
+  'quantity': instance.quantity,
+  'subtotal': instance.subtotal,
+  'image_url': instance.imageUrl,
+  'created_at': instance.createdAt?.toIso8601String(),
+  'selectedFlavor': instance.selectedFlavor,
+  'selectedSize': instance.selectedSize,
+};

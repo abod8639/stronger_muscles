@@ -43,7 +43,8 @@ class SavedAddressesList extends StatelessWidget {
               addRepaintBoundaries: true,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               itemCount: controller.addresses.length,
-              separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: _listItemSpacing),
               itemBuilder: (context, index) {
                 final address = controller.addresses[index];
                 return AddressCard(address: address);

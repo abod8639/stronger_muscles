@@ -8,9 +8,7 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/bott
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_description_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_name.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_show_reviews_list_section.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/main_image.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_badges.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_info.dart';
@@ -34,10 +32,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final product = Get.find<ProductDetailsController>().product;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product.name),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: Text(product.name), elevation: 0),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
@@ -95,17 +90,6 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                     const SizedBox(height: _mediumSpacing),
                   ],
 
-                  // Product Price
-                  buildProductPrice(product),
-                  const SizedBox(height: _mediumSpacing),
-
-                  // Image Thumbnails
-                  if (product.imageUrls.length > 1)
-                    ImageListView(
-                      scrollController: controller.pageController,
-                      product: product,
-                    ),
-
                   if (product.imageUrls.length > 1)
                     const SizedBox(height: _sectionSpacing),
 
@@ -138,21 +122,21 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     );
   }
 
-
-
   void _showImageViewer(BuildContext context, int initialIndex) {
     if (controller.product.imageUrls.isEmpty) return;
 
     MultiImageProvider multiImageProvider = MultiImageProvider(
       controller.product.imageUrls
-          .map((url) => CachedNetworkImageProvider(
-                url,
-                cacheManager: CustomCacheManager.instance,
-              ))
+          .map(
+            (url) => CachedNetworkImageProvider(
+              url,
+              cacheManager: CustomCacheManager.instance,
+            ),
+          )
           .toList(),
       initialIndex: initialIndex,
     );
-              
+
     showImageViewerPager(
       context,
       multiImageProvider,
@@ -163,6 +147,5 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       closeButtonColor: Theme.of(context).primaryColor,
     );
-
   }
 }

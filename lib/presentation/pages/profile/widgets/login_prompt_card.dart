@@ -7,7 +7,8 @@ import 'package:stronger_muscles/presentation/pages/auth/auth_view.dart';
 import 'package:stronger_muscles/presentation/pages/profile/widgets/account_settings_list.dart';
 
 const String _loginTitle = 'Sign in to Your Account';
-const String _loginMessage = 'Track orders, manage addresses, and enjoy a personalized shopping experience';
+const String _loginMessage =
+    'Track orders, manage addresses, and enjoy a personalized shopping experience';
 const String _loginButtonLabel = 'Login / Register';
 const String _googleButtonLabel = 'Sign in with Google';
 const double _containerMargin = 16.0;
@@ -98,10 +99,13 @@ class LoginPromptCard extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: () async {
               AppGuard.runSafeInternet(
-                () async => await controller.signInWithGoogle()
+                () async => await controller.signInWithGoogle(),
               );
             },
-            icon: const Icon(Icons.g_mobiledata_outlined, size: _googleIconSize),
+            icon: const Icon(
+              Icons.g_mobiledata_outlined,
+              size: _googleIconSize,
+            ),
             label: const Text(_googleButtonLabel),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
@@ -127,9 +131,5 @@ class LoginPromptCard extends StatelessWidget {
 }
 
 Future<void> _handleLogin() async {
-  return AppGuard.runSafeInternet(
-    () async => Get.to(
-      () => const AuthView()
-    )
-  );
+  return AppGuard.runSafeInternet(() async => Get.to(() => const AuthView()));
 }

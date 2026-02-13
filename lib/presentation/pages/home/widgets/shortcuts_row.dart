@@ -10,7 +10,7 @@ class CategoriesShortcutsRow extends StatelessWidget {
   static const double _verticalPadding = 8.0;
   static const double _rowHeight = 90.0;
   static const double _spacing = 5.0;
-  
+
   const CategoriesShortcutsRow({super.key});
 
   @override

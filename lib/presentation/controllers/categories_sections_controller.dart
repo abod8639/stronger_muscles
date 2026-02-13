@@ -22,7 +22,7 @@ class CategoriesSectionsController extends GetxController {
   void onInit() {
     super.onInit();
     _initialize();
-    
+
     // مراقبة التغيير في الـ HomeController لمزامنة الـ UI
     ever<int>(_homeController.selectedSectionIndex, (index) {
       if (selectedIndex.value != index) {
@@ -44,7 +44,7 @@ class CategoriesSectionsController extends GetxController {
   Future<void> fetchCategories() async {
     try {
       if (categories.isEmpty) isLoading.value = true;
-      
+
       final fetched = await _categoryRepository.getAllCategories();
       categories.assignAll(fetched);
       _updateSelections(fetched);
@@ -63,11 +63,13 @@ class CategoriesSectionsController extends GetxController {
 
     final List<SelectionsModel> newList = [
       SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
-      ...categoryList.map((cat) => SelectionsModel(
-            id: cat.id,
-            label: cat.name,
-            icon: _getIconForCategory(cat.id),
-          )),
+      ...categoryList.map(
+        (cat) => SelectionsModel(
+          id: cat.id,
+          label: cat.name,
+          icon: _getIconForCategory(cat.id),
+        ),
+      ),
     ];
 
     selections.assignAll(newList);
@@ -86,9 +88,9 @@ class CategoriesSectionsController extends GetxController {
     if (index >= 0 && index < selections.length) {
       selectedIndex.value = index;
       final selectedId = selections[index].id;
-      
+
       _homeController.fetchProductsForSection(
-        index, 
+        index,
         categoryId: selectedId.isEmpty ? null : selectedId,
       );
     }

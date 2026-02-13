@@ -15,14 +15,14 @@ class ProductRepository {
   Future<List<ProductModel>> getProducts({String? categoryId}) async {
     try {
       final products = await _service.getProducts(categoryId: categoryId);
-      
+
       // We only cache the "main" product list (no category filter) or all of them.
       // Usually better to cache the latest results or specific categories.
       // For simplicity, we can cache all items by their ID.
       for (var product in products) {
         await _box.put(product.id, product);
       }
-      
+
       return products;
     } on Failure catch (e) {
       if (e.type == FailureType.network && _box.isNotEmpty) {

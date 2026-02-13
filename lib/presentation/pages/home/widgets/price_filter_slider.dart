@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
@@ -105,8 +104,7 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
                           decoration: const InputDecoration.collapsed(
                             hintText: 'Search',
                           ),
-                          onChanged:
-                              searchController.onSearchChanged,
+                          onChanged: searchController.onSearchChanged,
                         ),
                       ),
                     ],

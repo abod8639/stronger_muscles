@@ -23,7 +23,7 @@ class OrdersController extends BaseController {
 
   Future<void> fetchOrders() async {
     if (isLoading.value) return;
-    
+
     try {
       setLoading(true);
       resetState();

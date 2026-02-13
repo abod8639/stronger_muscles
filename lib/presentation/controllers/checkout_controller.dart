@@ -76,9 +76,9 @@ class CheckoutController extends GetxController {
         notes: 'not${_cartController.notesController.text}',
         shippingAddress: selectedAddress.value,
         // shippingAddress: selectedAddress.value!.street,
-        trackingNumber: '', // TODO: add tracking number 
-        paymentMethod: selectedPaymentMethod.value,  
-        paymentStatus: 'pending', // TODO: add payment status 
+        trackingNumber: '', // TODO: add tracking number
+        paymentMethod: selectedPaymentMethod.value,
+        paymentStatus: 'pending', // TODO: add payment status
         updatedAt: DateTime.now(),
         items: _cartController.cartItems.map((item) {
           itemIndex++;
@@ -97,7 +97,6 @@ class CheckoutController extends GetxController {
           );
         }).toList(),
       );
-      
 
       await _orderRepository.createOrder(order);
       _cartController.clearCart();

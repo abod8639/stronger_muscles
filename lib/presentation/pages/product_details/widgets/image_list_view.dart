@@ -30,9 +30,10 @@ class ImageListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final controller = Get.find<ProductDetailsController>(tag: product.id);
-    final controller = Get.put(ProductDetailsController(product,
-          initialFlavor: "",
-          initialSize: "",    ) ,tag: product.id );
+    final controller = Get.put(
+      ProductDetailsController(product, initialFlavor: "", initialSize: ""),
+      tag: product.id,
+    );
     // Don't show if there's only one image or no images
     if (product.imageUrls.length <= 1) {
       return const SizedBox.shrink();
@@ -108,7 +109,7 @@ class ImageListView extends StatelessWidget {
         return CachedNetworkImage(
           cacheManager: CustomCacheManager.instance,
           imageUrl: imageUrl,
-          fit: BoxFit.cover ,
+          fit: BoxFit.cover,
           width: _thumbnailSize,
           height: _thumbnailSize,
           memCacheWidth: 100,

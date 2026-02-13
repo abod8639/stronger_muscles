@@ -42,7 +42,9 @@ class AddressCard extends StatelessWidget {
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? _defaultShadowOpacity : _shadowOpacity),
+            color: Colors.black.withOpacity(
+              isDark ? _defaultShadowOpacity : _shadowOpacity,
+            ),
             blurRadius: _shadowBlurRadius,
             offset: const Offset(0, _shadowOffsetY),
           ),
@@ -92,7 +94,10 @@ class AddressCard extends StatelessWidget {
         children: [
           GoogleMap(
             key: ValueKey('map_${address.id}'),
-            initialCameraPosition: CameraPosition(target: position, zoom: _mapZoom),
+            initialCameraPosition: CameraPosition(
+              target: position,
+              zoom: _mapZoom,
+            ),
             liteModeEnabled: true,
             zoomControlsEnabled: false,
             myLocationButtonEnabled: false,
@@ -117,9 +122,7 @@ class AddressCard extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   stops: const [0.0, 0.7, 1.0],
-                  colors: [
-                    Colors.black.withOpacity(0.1),
-                  ],
+                  colors: [Colors.black.withOpacity(0.1)],
                 ),
               ),
             ),
@@ -263,7 +266,11 @@ class AddressCard extends StatelessWidget {
           ),
         IconButton(
           onPressed: () => showAddressForm(context, address: address),
-          icon: const Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
+          icon: const Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: Colors.blueGrey,
+          ),
         ),
         IconButton(
           onPressed: () => _confirmDelete(context),

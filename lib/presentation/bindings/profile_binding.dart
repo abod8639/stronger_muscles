@@ -11,7 +11,5 @@ class ProfileBinding extends Bindings {
     Get.lazyPut<ProfileController>(() => ProfileController());
     Get.lazyPut<AddressService>(() => AddressService());
     Get.lazyPut<AuthController>(() => AuthController());
-
-
   }
 }

@@ -13,7 +13,12 @@ abstract class BaseController extends GetxController {
   }
 
   /// Handles errors by setting error state and showing a snackbar.
-  void handleError(dynamic e, {String? title, String? message, VoidCallback? retryAction}) {
+  void handleError(
+    dynamic e, {
+    String? title,
+    String? message,
+    VoidCallback? retryAction,
+  }) {
     debugPrint('❌ ${runtimeType.toString()} Error: $e');
     isError.value = true;
     errorMessage.value = message ?? e.toString();
@@ -55,7 +60,10 @@ abstract class BaseController extends GetxController {
               },
               child: const Text(
                 'إعادة محاولة',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             )
           : null,
@@ -63,10 +71,7 @@ abstract class BaseController extends GetxController {
   }
 
   /// Shows a success snackbar.
-  void showSuccessSnackbar({
-    required String title,
-    required String message,
-  }) {
+  void showSuccessSnackbar({required String title, required String message}) {
     Get.snackbar(
       title,
       message,

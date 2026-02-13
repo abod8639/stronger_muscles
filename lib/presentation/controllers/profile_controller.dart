@@ -8,7 +8,7 @@ import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
 
 class ProfileController extends GetxController {
-  final AuthController _authController =     Get.find<AuthController>();
+  final AuthController _authController = Get.find<AuthController>();
   final OrdersController _ordersController = Get.find<OrdersController>();
   final AddressController _addressController = Get.find<AddressController>();
 

@@ -30,9 +30,7 @@ class SearchBar extends StatelessWidget {
       titleSpacing: _horizontalPadding,
       title: Row(
         children: [
-          Expanded(
-            child: _buildSearchField(theme, searchController, l10n),
-          ),
+          Expanded(child: _buildSearchField(theme, searchController, l10n)),
           const SizedBox(width: _spacing),
 
           _buildFilterButton(context, theme, searchController, l10n),
@@ -41,7 +39,11 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  Widget _buildSearchField(ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
+  Widget _buildSearchField(
+    ThemeData theme,
+    ProductSearchController controller,
+    AppLocalizations l10n,
+  ) {
     return Container(
       height: _searchBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -66,7 +68,8 @@ class SearchBar extends StatelessWidget {
           Obx(() {
             if (controller.isLoading.value) {
               return const SizedBox(
-                width: 20, height: 20,
+                width: 20,
+                height: 20,
                 child: CircularProgressIndicator(strokeWidth: 2),
               );
             }
@@ -85,7 +88,12 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  Widget _buildFilterButton(BuildContext context, ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
+  Widget _buildFilterButton(
+    BuildContext context,
+    ThemeData theme,
+    ProductSearchController controller,
+    AppLocalizations l10n,
+  ) {
     return Container(
       width: _iconButtonSize,
       height: _iconButtonSize,
@@ -101,7 +109,11 @@ class SearchBar extends StatelessWidget {
     );
   }
 
-  void _showFilterBottomSheet(BuildContext context, ProductSearchController searchController, AppLocalizations l10n) {
+  void _showFilterBottomSheet(
+    BuildContext context,
+    ProductSearchController searchController,
+    AppLocalizations l10n,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -125,34 +137,39 @@ class SearchBar extends StatelessWidget {
                 const SizedBox(height: 24),
                 Text(
                   l10n.filterProducts,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 const SizedBox(height: 32),
 
                 Text(
                   'Price Range', // TODO: Localize
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 const SizedBox(height: 16),
 
-                const PriceFilterSlider(), 
+                const PriceFilterSlider(),
 
                 const SizedBox(height: 32),
-                
+
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () => Get.back(),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: const Text('Apply Filter'),
                   ),
                 ),
-                
               ],
             ),
           );
@@ -163,7 +180,8 @@ class SearchBar extends StatelessWidget {
 
   Widget _buildHandle(BuildContext context) {
     return Container(
-      width: 40, height: 4,
+      width: 40,
+      height: 4,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.outlineVariant,
         borderRadius: BorderRadius.circular(2),

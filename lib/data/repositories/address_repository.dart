@@ -8,7 +8,7 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 class AddressRepository {
   final AddressService _service = Get.find<AddressService>();
   final Box<AddressModel> _box = Hive.box<AddressModel>('addresses');
-  
+
   Completer<List<AddressModel>>? _fetchCompleter;
 
   /// Get cached addresses
@@ -25,13 +25,13 @@ class AddressRepository {
 
     try {
       final addresses = await _service.getAddresses();
-      
+
       // Update cache
       await _box.clear();
       for (var address in addresses) {
         await _box.put(address.id, address);
       }
-      
+
       _fetchCompleter!.complete(addresses);
       return addresses;
     } on Failure catch (e) {
@@ -70,7 +70,7 @@ class AddressRepository {
 
   Future<AddressModel> setDefaultAddress(int id) async {
     final updatedAddress = await _service.setDefaultAddress(id);
-    
+
     // Update all local items to reflect the new default
     final all = _box.values.toList();
     for (var addr in all) {
@@ -80,7 +80,7 @@ class AddressRepository {
         await _box.put(addr.id, addr.copyWith(isDefault: false));
       }
     }
-    
+
     return updatedAddress;
   }
 }

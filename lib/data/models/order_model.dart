@@ -34,7 +34,9 @@ class OrderModel with _$OrderModel {
     @HiveField(14) DateTime? createdAt,
     @HiveField(15) DateTime? updatedAt,
     @HiveField(16) @JsonKey(name: 'order_items') List<OrderItemModel>? items,
-    @HiveField(17) @JsonKey(name: 'shipping_address') AddressModel? shippingAddress,
+    @HiveField(17)
+    @JsonKey(name: 'shipping_address')
+    AddressModel? shippingAddress,
     @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
     @HiveField(19) @JsonKey(name: 'user_name') String? userName,
   }) = _OrderModel;

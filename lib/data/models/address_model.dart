@@ -32,9 +32,13 @@ class AddressModel with _$AddressModel {
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
 
-  String get fullAddress => [street, city, state, postalCode, country]
-      .where((e) => e != null && e.isNotEmpty)
-      .join(', ');
+  String get fullAddress => [
+    street,
+    city,
+    state,
+    postalCode,
+    country,
+  ].where((e) => e != null && e.isNotEmpty).join(', ');
   String get shortAddress => '$city, $country';
   bool get hasCoordinates => latitude != null && longitude != null;
 }

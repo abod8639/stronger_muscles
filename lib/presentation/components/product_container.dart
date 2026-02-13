@@ -34,7 +34,7 @@ class _ProductContainerState extends State<ProductContainer>
   late final RxInt _selectedImageIndex;
   late final PageController _pageController;
   StreamSubscription<int>? _subscription;
-  
+
   @override
   bool get wantKeepAlive => true;
 

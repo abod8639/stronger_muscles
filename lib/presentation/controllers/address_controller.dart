@@ -21,7 +21,7 @@ const String _successTitle = 'نجح';
 class AddressController extends BaseController {
   final AddressRepository _repository = Get.find<AddressRepository>();
   final AddressService _addressService = Get.find<AddressService>();
-  
+
   // States
   final addresses = <AddressModel>[].obs;
   final selectedLabel = _defaultLabel.obs;
@@ -46,7 +46,6 @@ class AddressController extends BaseController {
       await fetchAddresses();
     }
   }
-
 
   Future<void> deleteAddress(int id) async {
     try {
@@ -74,8 +73,8 @@ class AddressController extends BaseController {
     }
   }
 
-  AddressModel? get defaultAddress => 
-      addresses.firstWhereOrNull((addr) => addr.isDefault) ?? 
+  AddressModel? get defaultAddress =>
+      addresses.firstWhereOrNull((addr) => addr.isDefault) ??
       (addresses.isNotEmpty ? addresses.first : null);
 
   void fillForm(AddressModel? address) {
@@ -84,14 +83,14 @@ class AddressController extends BaseController {
       selectedLabel.value = _defaultLabel;
       return;
     }
-    fullNameController.text = address.fullName??'';
-    phoneController.text = address.phone??'';
+    fullNameController.text = address.fullName ?? '';
+    phoneController.text = address.phone ?? '';
     streetController.text = address.street;
     cityController.text = address.city;
-    stateController.text = address.state??'';
-    postalCodeController.text = address.postalCode??'';
-    countryController.text = address.country??'';
-    selectedLabel.value = address.label??_defaultLabel;
+    stateController.text = address.state ?? '';
+    postalCodeController.text = address.postalCode ?? '';
+    countryController.text = address.country ?? '';
+    selectedLabel.value = address.label ?? _defaultLabel;
   }
 
   Future<void> fetchAddresses() async {
@@ -145,7 +144,8 @@ class AddressController extends BaseController {
       setLoading(true);
       final position = await _addressService.getCurrentPosition();
       final place = await _addressService.getAddressFromCoordinates(
-        position.latitude, position.longitude,
+        position.latitude,
+        position.longitude,
       );
 
       if (place != null) {
@@ -164,8 +164,15 @@ class AddressController extends BaseController {
   }
 
   void clearForm() {
-    for (var c in [fullNameController, phoneController, streetController, cityController, 
-     stateController, postalCodeController, countryController]) {
+    for (var c in [
+      fullNameController,
+      phoneController,
+      streetController,
+      cityController,
+      stateController,
+      postalCodeController,
+      countryController,
+    ]) {
       c.clear();
     }
   }
