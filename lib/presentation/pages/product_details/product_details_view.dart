@@ -58,8 +58,9 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   // Product Name
                   buildProductName(product),
                   const SizedBox(height: _smallSpacing),
-
-               
+                  
+                  buildProductPrice(product),
+                  const SizedBox(height: _smallSpacing),
 
                   // Product Badges (Featured, New, Best Seller, Discount)
                   buildProductBadges(product, context),
