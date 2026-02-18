@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/image_list_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_description_section.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_name.dart';
@@ -57,8 +59,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   buildProductName(product),
                   const SizedBox(height: _smallSpacing),
 
+               
+
                   // Product Badges (Featured, New, Best Seller, Discount)
                   buildProductBadges(product, context),
+                  const SizedBox(height: _mediumSpacing),
+
+                  ImageListView(product: product),
                   const SizedBox(height: _mediumSpacing),
 
                   // Product Flavors

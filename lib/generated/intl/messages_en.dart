@@ -22,174 +22,152 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-    "about": MessageLookupByLibrary.simpleMessage("About"),
-    "accountSettings": MessageLookupByLibrary.simpleMessage("Settings"),
-    "addNew": MessageLookupByLibrary.simpleMessage("Add New"),
-    "addNewAddress": MessageLookupByLibrary.simpleMessage("Add New Address"),
-    "addProductsToGetStarted": MessageLookupByLibrary.simpleMessage(
-      "Add products to get started",
-    ),
-    "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
-    "addedToCart": MessageLookupByLibrary.simpleMessage("Added to Cart"),
-    "address": MessageLookupByLibrary.simpleMessage("Address"),
-    "alreadyHaveAccount": MessageLookupByLibrary.simpleMessage(
-      "Already have an account? ",
-    ),
-    "appTitle": MessageLookupByLibrary.simpleMessage("Stronger Muscles"),
-    "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
-    "back": MessageLookupByLibrary.simpleMessage("Back"),
-    "beTheFirstToReviewThisProduct": MessageLookupByLibrary.simpleMessage(
-      "Be the first to review this product",
-    ),
-    "bestSeller": MessageLookupByLibrary.simpleMessage("Best Seller"),
-    "brand": MessageLookupByLibrary.simpleMessage("Brand"),
-    "cart": MessageLookupByLibrary.simpleMessage("Cart"),
-    "categoryAmino": MessageLookupByLibrary.simpleMessage("Amino"),
-    "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
-    "categoryCarb": MessageLookupByLibrary.simpleMessage("Carbs"),
-    "categoryCreatine": MessageLookupByLibrary.simpleMessage("Creatine"),
-    "categoryFatBurner": MessageLookupByLibrary.simpleMessage("Fat Burner"),
-    "categoryHealth": MessageLookupByLibrary.simpleMessage("Health"),
-    "categoryHome": MessageLookupByLibrary.simpleMessage("Home"),
-    "categoryMassGainer": MessageLookupByLibrary.simpleMessage("Mass Gainer"),
-    "categoryPreWorkout": MessageLookupByLibrary.simpleMessage("Pre-workout"),
-    "categoryProtein": MessageLookupByLibrary.simpleMessage("Protein"),
-    "categoryRecovery": MessageLookupByLibrary.simpleMessage("Recovery"),
-    "categoryVitamins": MessageLookupByLibrary.simpleMessage("Vitamins"),
-    "checkout": MessageLookupByLibrary.simpleMessage("Checkout"),
-    "confirmPassword": MessageLookupByLibrary.simpleMessage("Confirm Password"),
-    "confirmYourPassword": MessageLookupByLibrary.simpleMessage(
-      "Please confirm your password",
-    ),
-    "continueShopping": MessageLookupByLibrary.simpleMessage(
-      "Continue Shopping",
-    ),
-    "countryOfOrigin": MessageLookupByLibrary.simpleMessage(
-      "Country of Origin",
-    ),
-    "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
-    "customerReviews": MessageLookupByLibrary.simpleMessage("Customer Reviews"),
-    "decreaseQuantity": MessageLookupByLibrary.simpleMessage(
-      "Decrease Quantity",
-    ),
-    "dontHaveAccount": MessageLookupByLibrary.simpleMessage(
-      "Don\'t have an account? ",
-    ),
-    "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
-    "email": MessageLookupByLibrary.simpleMessage("Email"),
-    "english": MessageLookupByLibrary.simpleMessage("English"),
-    "enterEmail": MessageLookupByLibrary.simpleMessage(
-      "Please enter your email",
-    ),
-    "enterName": MessageLookupByLibrary.simpleMessage(
-      "Please enter your full name",
-    ),
-    "enterPassword": MessageLookupByLibrary.simpleMessage(
-      "Please enter your password",
-    ),
-    "featured": MessageLookupByLibrary.simpleMessage("Featured"),
-    "filter": MessageLookupByLibrary.simpleMessage("Filter"),
-    "filterProducts": MessageLookupByLibrary.simpleMessage("Filter products"),
-    "flavor": MessageLookupByLibrary.simpleMessage("Flavor"),
-    "forgotPassword": MessageLookupByLibrary.simpleMessage("Forgot Password?"),
-    "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
-      "Forgot password not implemented yet",
-    ),
-    "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
-    "getDiscount": MessageLookupByLibrary.simpleMessage(
-      "Get 20% off on all products",
-    ),
-    "helpSupport": MessageLookupByLibrary.simpleMessage("Help & Support"),
-    "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
-    "item": MessageLookupByLibrary.simpleMessage("item"),
-    "items": MessageLookupByLibrary.simpleMessage("items"),
-    "language": MessageLookupByLibrary.simpleMessage("Language"),
-    "login": MessageLookupByLibrary.simpleMessage("Login"),
-    "manufacturer": MessageLookupByLibrary.simpleMessage("Manufacturer"),
-    "mostPopularOffers": MessageLookupByLibrary.simpleMessage(
-      "Most Popular Offers",
-    ),
-    "myAccount": MessageLookupByLibrary.simpleMessage("My Account"),
-    "newArrival": MessageLookupByLibrary.simpleMessage("New Arrival"),
-    "noAddressesFound": MessageLookupByLibrary.simpleMessage(
-      "No addresses found. Please add one in your profile.",
-    ),
-    "noImagesAvailable": MessageLookupByLibrary.simpleMessage(
-      "No images available",
-    ),
-    "noProductsFound": MessageLookupByLibrary.simpleMessage(
-      "No products found.",
-    ),
-    "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
-    "or": MessageLookupByLibrary.simpleMessage("OR"),
-    "orderSummary": MessageLookupByLibrary.simpleMessage("Order Summary"),
-    "password": MessageLookupByLibrary.simpleMessage("Password"),
-    "passwordLength": MessageLookupByLibrary.simpleMessage(
-      "Password must be at least 6 characters",
-    ),
-    "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
-      "Passwords do not match",
-    ),
-    "payment": MessageLookupByLibrary.simpleMessage("Payment"),
-    "paymentMethod": MessageLookupByLibrary.simpleMessage("Payment Method:"),
-    "proceedToCheckout": MessageLookupByLibrary.simpleMessage(
-      "Proceed to checkout",
-    ),
-    "productDescription": MessageLookupByLibrary.simpleMessage(
-      "Product Description",
-    ),
-    "productImage": MessageLookupByLibrary.simpleMessage("Product Image"),
-    "productInfo": MessageLookupByLibrary.simpleMessage("Product Info"),
-    "removeFromCart": MessageLookupByLibrary.simpleMessage("Remove from Cart"),
-    "review": MessageLookupByLibrary.simpleMessage("Review"),
-    "searchProducts": MessageLookupByLibrary.simpleMessage(
-      "Search products...",
-    ),
-    "seeAll": MessageLookupByLibrary.simpleMessage("See all"),
-    "selectFlavor": MessageLookupByLibrary.simpleMessage("Select Flavor"),
-    "servingSize": MessageLookupByLibrary.simpleMessage("Serving Size"),
-    "servingsPerContainer": MessageLookupByLibrary.simpleMessage(
-      "Servings Per Container",
-    ),
-    "shippingTo": MessageLookupByLibrary.simpleMessage("Shipping To:"),
-    "shopNow": MessageLookupByLibrary.simpleMessage("Shop Now"),
-    "signInToContinue": MessageLookupByLibrary.simpleMessage(
-      "Sign in to continue",
-    ),
-    "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
-      "Sign in with Google",
-    ),
-    "signOut": MessageLookupByLibrary.simpleMessage("Sign Out"),
-    "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
-    "signUpToGetStarted": MessageLookupByLibrary.simpleMessage(
-      "Sign up to get started",
-    ),
-    "size": MessageLookupByLibrary.simpleMessage("Size"),
-    "sku": MessageLookupByLibrary.simpleMessage("SKU"),
-    "specialOffer": MessageLookupByLibrary.simpleMessage("Special Offer!"),
-    "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
-      "Start adding your favorite products!",
-    ),
-    "startShopping": MessageLookupByLibrary.simpleMessage("Start Shopping"),
-    "theme": MessageLookupByLibrary.simpleMessage("Theme"),
-    "total": MessageLookupByLibrary.simpleMessage("Total"),
-    "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
-    "usageInstructions": MessageLookupByLibrary.simpleMessage(
-      "Usage Instructions",
-    ),
-    "validEmail": MessageLookupByLibrary.simpleMessage(
-      "Please enter a valid email",
-    ),
-    "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
-    "warnings": MessageLookupByLibrary.simpleMessage("Warnings"),
-    "weight": MessageLookupByLibrary.simpleMessage("Weight"),
-    "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back!"),
-    "wishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
-    "yourCartIsEmpty": MessageLookupByLibrary.simpleMessage(
-      "Your cart is empty",
-    ),
-    "yourWishlistIsEmpty": MessageLookupByLibrary.simpleMessage(
-      "Your wishlist is empty.",
-    ),
-  };
+        "about": MessageLookupByLibrary.simpleMessage("About"),
+        "accountSettings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "addNew": MessageLookupByLibrary.simpleMessage("Add New"),
+        "addNewAddress":
+            MessageLookupByLibrary.simpleMessage("Add New Address"),
+        "addProductsToGetStarted":
+            MessageLookupByLibrary.simpleMessage("Add products to get started"),
+        "addToCart": MessageLookupByLibrary.simpleMessage("Add to Cart"),
+        "addedToCart": MessageLookupByLibrary.simpleMessage("Added to Cart"),
+        "address": MessageLookupByLibrary.simpleMessage("Address"),
+        "alreadyHaveAccount":
+            MessageLookupByLibrary.simpleMessage("Already have an account? "),
+        "appTitle": MessageLookupByLibrary.simpleMessage("Stronger Muscles"),
+        "arabic": MessageLookupByLibrary.simpleMessage("Arabic"),
+        "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "beTheFirstToReviewThisProduct": MessageLookupByLibrary.simpleMessage(
+            "Be the first to review this product"),
+        "bestSeller": MessageLookupByLibrary.simpleMessage("Best Seller"),
+        "brand": MessageLookupByLibrary.simpleMessage("Brand"),
+        "cart": MessageLookupByLibrary.simpleMessage("Cart"),
+        "categoryAmino": MessageLookupByLibrary.simpleMessage("Amino"),
+        "categoryBCAA": MessageLookupByLibrary.simpleMessage("BCAA"),
+        "categoryCarb": MessageLookupByLibrary.simpleMessage("Carbs"),
+        "categoryCreatine": MessageLookupByLibrary.simpleMessage("Creatine"),
+        "categoryFatBurner": MessageLookupByLibrary.simpleMessage("Fat Burner"),
+        "categoryHealth": MessageLookupByLibrary.simpleMessage("Health"),
+        "categoryHome": MessageLookupByLibrary.simpleMessage("Home"),
+        "categoryMassGainer":
+            MessageLookupByLibrary.simpleMessage("Mass Gainer"),
+        "categoryPreWorkout":
+            MessageLookupByLibrary.simpleMessage("Pre-workout"),
+        "categoryProtein": MessageLookupByLibrary.simpleMessage("Protein"),
+        "categoryRecovery": MessageLookupByLibrary.simpleMessage("Recovery"),
+        "categoryVitamins": MessageLookupByLibrary.simpleMessage("Vitamins"),
+        "checkout": MessageLookupByLibrary.simpleMessage("Checkout"),
+        "confirmPassword":
+            MessageLookupByLibrary.simpleMessage("Confirm Password"),
+        "confirmYourPassword": MessageLookupByLibrary.simpleMessage(
+            "Please confirm your password"),
+        "continueShopping":
+            MessageLookupByLibrary.simpleMessage("Continue Shopping"),
+        "countryOfOrigin":
+            MessageLookupByLibrary.simpleMessage("Country of Origin"),
+        "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
+        "customerReviews":
+            MessageLookupByLibrary.simpleMessage("Customer Reviews"),
+        "decreaseQuantity":
+            MessageLookupByLibrary.simpleMessage("Decrease Quantity"),
+        "dontHaveAccount":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account? "),
+        "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "english": MessageLookupByLibrary.simpleMessage("English"),
+        "enterEmail":
+            MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "enterName":
+            MessageLookupByLibrary.simpleMessage("Please enter your full name"),
+        "enterPassword":
+            MessageLookupByLibrary.simpleMessage("Please enter your password"),
+        "featured": MessageLookupByLibrary.simpleMessage("Featured"),
+        "filter": MessageLookupByLibrary.simpleMessage("Filter"),
+        "filterProducts":
+            MessageLookupByLibrary.simpleMessage("Filter products"),
+        "flavor": MessageLookupByLibrary.simpleMessage("Flavor"),
+        "forgotPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot Password?"),
+        "forgotPasswordNotImplemented": MessageLookupByLibrary.simpleMessage(
+            "Forgot password not implemented yet"),
+        "fullName": MessageLookupByLibrary.simpleMessage("Full Name"),
+        "getDiscount":
+            MessageLookupByLibrary.simpleMessage("Get 20% off on all products"),
+        "helpSupport": MessageLookupByLibrary.simpleMessage("Help & Support"),
+        "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
+        "item": MessageLookupByLibrary.simpleMessage("item"),
+        "items": MessageLookupByLibrary.simpleMessage("items"),
+        "language": MessageLookupByLibrary.simpleMessage("Language"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "manufacturer": MessageLookupByLibrary.simpleMessage("Manufacturer"),
+        "mostPopularOffers":
+            MessageLookupByLibrary.simpleMessage("Most Popular Offers"),
+        "myAccount": MessageLookupByLibrary.simpleMessage("My Account"),
+        "newArrival": MessageLookupByLibrary.simpleMessage("New Arrival"),
+        "noAddressesFound": MessageLookupByLibrary.simpleMessage(
+            "No addresses found. Please add one in your profile."),
+        "noImagesAvailable":
+            MessageLookupByLibrary.simpleMessage("No images available"),
+        "noProductsFound":
+            MessageLookupByLibrary.simpleMessage("No products found."),
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "or": MessageLookupByLibrary.simpleMessage("OR"),
+        "orderSummary": MessageLookupByLibrary.simpleMessage("Order Summary"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "passwordLength": MessageLookupByLibrary.simpleMessage(
+            "Password must be at least 6 characters"),
+        "passwordsDoNotMatch":
+            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
+        "payment": MessageLookupByLibrary.simpleMessage("Payment"),
+        "paymentMethod":
+            MessageLookupByLibrary.simpleMessage("Payment Method:"),
+        "proceedToCheckout":
+            MessageLookupByLibrary.simpleMessage("Proceed to checkout"),
+        "productDescription":
+            MessageLookupByLibrary.simpleMessage("Product Description"),
+        "productImage": MessageLookupByLibrary.simpleMessage("Product Image"),
+        "productInfo": MessageLookupByLibrary.simpleMessage("Product Info"),
+        "removeFromCart":
+            MessageLookupByLibrary.simpleMessage("Remove from Cart"),
+        "review": MessageLookupByLibrary.simpleMessage("Review"),
+        "searchProducts":
+            MessageLookupByLibrary.simpleMessage("Search products..."),
+        "seeAll": MessageLookupByLibrary.simpleMessage("See all"),
+        "selectFlavor": MessageLookupByLibrary.simpleMessage("Select Flavor"),
+        "servingSize": MessageLookupByLibrary.simpleMessage("Serving Size"),
+        "servingsPerContainer":
+            MessageLookupByLibrary.simpleMessage("Servings Per Container"),
+        "shippingTo": MessageLookupByLibrary.simpleMessage("Shipping To:"),
+        "shopNow": MessageLookupByLibrary.simpleMessage("Shop Now"),
+        "signInToContinue":
+            MessageLookupByLibrary.simpleMessage("Sign in to continue"),
+        "signInWithGoogle":
+            MessageLookupByLibrary.simpleMessage("Sign in with Google"),
+        "signOut": MessageLookupByLibrary.simpleMessage("Sign Out"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
+        "signUpToGetStarted":
+            MessageLookupByLibrary.simpleMessage("Sign up to get started"),
+        "size": MessageLookupByLibrary.simpleMessage("Size"),
+        "sku": MessageLookupByLibrary.simpleMessage("SKU"),
+        "specialOffer": MessageLookupByLibrary.simpleMessage("Special Offer!"),
+        "startAddingFavorites": MessageLookupByLibrary.simpleMessage(
+            "Start adding your favorite products!"),
+        "startShopping": MessageLookupByLibrary.simpleMessage("Start Shopping"),
+        "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+        "total": MessageLookupByLibrary.simpleMessage("Total"),
+        "totalAmount": MessageLookupByLibrary.simpleMessage("Total Amount"),
+        "usageInstructions":
+            MessageLookupByLibrary.simpleMessage("Usage Instructions"),
+        "validEmail":
+            MessageLookupByLibrary.simpleMessage("Please enter a valid email"),
+        "viewAll": MessageLookupByLibrary.simpleMessage("View All"),
+        "warnings": MessageLookupByLibrary.simpleMessage("Warnings"),
+        "weight": MessageLookupByLibrary.simpleMessage("Weight"),
+        "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome Back!"),
+        "wishlist": MessageLookupByLibrary.simpleMessage("Wishlist"),
+        "yourCartIsEmpty":
+            MessageLookupByLibrary.simpleMessage("Your cart is empty"),
+        "yourWishlistIsEmpty":
+            MessageLookupByLibrary.simpleMessage("Your wishlist is empty.")
+      };
 }

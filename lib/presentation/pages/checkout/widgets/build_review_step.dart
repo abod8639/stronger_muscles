@@ -36,7 +36,7 @@ Step buildReviewStep(String title) {
                     fit: BoxFit.cover,
                     memCacheWidth: 50,
                     memCacheHeight: 50,
-                    errorWidget: (_, __, ___) => const Icon(Icons.image),
+                    errorWidget: (_, _, _) => const Icon(Icons.image),
                   ),
                   title: Text(item.product.name),
                   subtitle: Text(
