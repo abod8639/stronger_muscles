@@ -10,7 +10,7 @@ Widget buildDeleteButtonFromWishlist(ProductModel product) {
   return Builder(
     builder: (context) {
       return Semantics(
-        label: 'Remove ${product.name} from wishlist',
+        label: 'Remove ${product.getLocalizedName(locale: 'en')} from wishlist',
         button: true,
         child: IconButton(
           icon: const Icon(

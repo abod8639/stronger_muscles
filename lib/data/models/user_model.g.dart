@@ -101,9 +101,8 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       notificationsEnabled: json['notifications_enabled'] == null
           ? true
           : _boolFromInt(json['notifications_enabled']),
-      isActive: json['is_active'] == null
-          ? true
-          : _boolFromInt(json['is_active']),
+      isActive:
+          json['is_active'] == null ? true : _boolFromInt(json['is_active']),
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),

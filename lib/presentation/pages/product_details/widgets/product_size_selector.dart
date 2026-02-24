@@ -24,11 +24,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
   @override
   void initState() {
     super.initState();
-    _selectedSize =
-        widget.initialSize ??
-        (widget.product.size?.isNotEmpty == true
-            ? widget.product.size!.first
-            : null);
+    _selectedSize = widget.initialSize;
   }
 
   @override
@@ -41,8 +37,11 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
 
   @override
   Widget build(BuildContext context) {
-    final sizes = widget.product.size;
-    if (sizes == null || sizes.isEmpty) {
+    // Priority for productSizes, fallback to size
+    final productSizes = widget.product.productSizes;
+    final legacySizes = widget.product.size;
+
+    if (productSizes.isEmpty && legacySizes.isEmpty) {
       return const SizedBox.shrink();
     }
 
@@ -60,40 +59,43 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: List.generate(sizes.length, (index) {
-            final size = sizes[index];
-            final isSelected = _selectedSize == size;
-
-            return ChoiceChip(
-              backgroundColor: primaryColor.withOpacity(0.05),
-              label: Text(size),
-              selected: isSelected,
-              onSelected: (selected) {
-                if (selected) {
-                  setState(() {
-                    _selectedSize = size;
-                  });
-                  widget.onSizeSelected(size);
-                }
-              },
-              selectedColor: primaryColor,
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.white : primaryColor,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: isSelected
-                      ? primaryColor
-                      : primaryColor.withOpacity(0.3),
-                  width: isSelected ? 2 : 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            );
-          }),
+          children: productSizes.isNotEmpty 
+            ? productSizes.map((ps) => _buildChip(ps.size, primaryColor)).toList()
+            : legacySizes.map((s) => _buildChip(s, primaryColor)).toList(),
         ),
       ],
+    );
+  }
+
+  Widget _buildChip(String size, Color primaryColor) {
+    final isSelected = _selectedSize == size;
+
+    return ChoiceChip(
+      backgroundColor: primaryColor.withOpacity(0.05),
+      label: Text(size),
+      selected: isSelected,
+      onSelected: (selected) {
+        if (selected) {
+          setState(() {
+            _selectedSize = size;
+          });
+          widget.onSizeSelected(size);
+        }
+      },
+      selectedColor: primaryColor,
+      labelStyle: TextStyle(
+        color: isSelected ? Colors.white : primaryColor,
+        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      ),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: isSelected
+              ? primaryColor
+              : primaryColor.withOpacity(0.3),
+          width: isSelected ? 2 : 1,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
     );
   }
 }

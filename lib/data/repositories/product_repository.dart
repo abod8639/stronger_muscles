@@ -62,7 +62,7 @@ class ProductRepository {
     } on Failure catch (e) {
       if (e.type == FailureType.network) {
         return _box.values
-            .where((p) => p.name.toLowerCase().contains(query.toLowerCase()))
+            .where((p) => p.getLocalizedName(locale: 'en').toLowerCase().contains(query.toLowerCase()))
             .toList();
       }
       rethrow;

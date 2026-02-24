@@ -32,7 +32,7 @@ Widget buildQuantityControls(ProductModel product) {
             children: [
               // Increase Button
               Semantics(
-                label: 'Increase quantity of ${item.product.name}',
+                label: 'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
                 button: true,
                 child: IconButton(
                   icon: const Icon(
@@ -74,8 +74,8 @@ Widget buildQuantityControls(ProductModel product) {
               // Decrease Button
               Semantics(
                 label: item.quantity > 1
-                    ? 'Decrease quantity of ${item.product.name}'
-                    : 'Remove ${item.product.name} from cart',
+                    ? 'Decrease quantity of ${item.product.getLocalizedName(locale: 'en')}'
+                    : 'Remove ${item.product.getLocalizedName(locale: 'en')} from cart',
                 button: true,
                 child: IconButton(
                   icon: Icon(

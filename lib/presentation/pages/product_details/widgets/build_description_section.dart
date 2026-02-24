@@ -4,13 +4,20 @@ import 'package:stronger_muscles/presentation/pages/product_details/widgets/expa
 
 /// Builds the enhanced description section with expandable functionality
 Widget buildDescriptionSection(ProductModel product) {
-  if (product.description.isEmpty) {
-    return const SizedBox.shrink();
-  }
+  return Builder(
+    builder: (context) {
+      final locale = Localizations.localeOf(context).languageCode;
+      final description = product.getLocalizedDescription(locale: locale);
+      
+      if (description.isEmpty) {
+        return const SizedBox.shrink();
+      }
 
-  return ExpandableDescriptionCard(
-    description: product.description,
-    // Reviews are now fetched separately from a ReviewRepository
-    reviews: const [],
+      return ExpandableDescriptionCard(
+        description: description,
+        // Reviews are now fetched separately from a ReviewRepository
+        reviews: const [],
+      );
+    },
   );
 }

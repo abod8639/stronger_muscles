@@ -86,11 +86,13 @@ class CheckoutController extends GetxController {
             id: 'item-$timestamp-$itemIndex-${item.product.id}',
             orderId: orderId,
             productId: item.product.id,
-            productName: item.product.name,
+            productName: item.product.getLocalizedName(locale: 'en'),
             unitPrice: item.product.effectivePrice,
             quantity: item.quantity,
             subtotal: item.product.effectivePrice * item.quantity,
-            imageUrl: item.product.imageUrls.first,
+            imageUrl: item.product.imageUrls.isNotEmpty 
+                ? item.product.imageUrls.first.medium 
+                : '',
             selectedFlavor: item.selectedFlavor,
             selectedSize: item.selectedSize,
             createdAt: DateTime.now(),

@@ -30,7 +30,9 @@ Step buildReviewStep(String title) {
                 return ListTile(
                   leading: CachedNetworkImage(
                     cacheManager: CustomCacheManager.instance,
-                    imageUrl: item.product.imageUrls.first,
+                    imageUrl: item.product.imageUrls.isNotEmpty
+                        ? item.product.imageUrls.first.thumbnail
+                        : '',
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,
@@ -38,7 +40,7 @@ Step buildReviewStep(String title) {
                     memCacheHeight: 50,
                     errorWidget: (_, _, _) => const Icon(Icons.image),
                   ),
-                  title: Text(item.product.name),
+                  title: Text(item.product.getLocalizedName(locale: 'en')),
                   subtitle: Text(
                     '${item.quantity} x LE ${item.product.effectivePrice}',
                   ),

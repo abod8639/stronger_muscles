@@ -1,0 +1,204 @@
+Analyzing stronger_muscles...                                   
+
+   info • Don't invoke 'print' in production code • lib/controllers/paymob_controller.dart:25:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/controllers/paymob_controller.dart:34:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/controllers/paymob_controller.dart:46:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/controllers/paymob_controller.dart:52:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/controllers/paymob_controller.dart:61:5 • avoid_print
+  error • Target of URI doesn't exist: 'package:geolocator/geolocator.dart' • lib/core/services/address_service.dart:7:8 • uri_does_not_exist
+  error • Target of URI doesn't exist: 'package:geocoding/geocoding.dart' • lib/core/services/address_service.dart:8:8 • uri_does_not_exist
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:17:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:26:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:29:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:49:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:54:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:57:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:77:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:82:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:85:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:94:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:96:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:99:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:110:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:115:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:118:7 • avoid_print
+  error • The name 'Position' isn't a type, so it can't be used as a type argument • lib/core/services/address_service.dart:124:10 • non_type_as_type_argument
+  error • Undefined class 'LocationPermission' • lib/core/services/address_service.dart:126:5 • undefined_class
+  error • Undefined name 'Geolocator' • lib/core/services/address_service.dart:128:28 • undefined_identifier
+  error • Undefined name 'Geolocator' • lib/core/services/address_service.dart:133:24 • undefined_identifier
+  error • Undefined name 'LocationPermission' • lib/core/services/address_service.dart:134:23 • undefined_identifier
+  error • Undefined name 'Geolocator' • lib/core/services/address_service.dart:135:26 • undefined_identifier
+  error • Undefined name 'LocationPermission' • lib/core/services/address_service.dart:136:25 • undefined_identifier
+  error • Undefined name 'LocationPermission' • lib/core/services/address_service.dart:141:23 • undefined_identifier
+  error • Undefined name 'Geolocator' • lib/core/services/address_service.dart:145:18 • undefined_identifier
+  error • Undefined name 'LocationAccuracy' • lib/core/services/address_service.dart:146:24 • undefined_identifier
+  error • The name 'Placemark' isn't a type, so it can't be used as a type argument • lib/core/services/address_service.dart:151:10 • non_type_as_type_argument
+  error • The name 'Placemark' isn't a type, so it can't be used as a type argument • lib/core/services/address_service.dart:156:12 • non_type_as_type_argument
+  error • The method 'placemarkFromCoordinates' isn't defined for the type 'AddressService' • lib/core/services/address_service.dart:156:42 • undefined_method
+   info • Don't invoke 'print' in production code • lib/core/services/address_service.dart:166:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:21:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:63:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:82:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:133:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:156:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:161:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/api_service.dart:195:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:25:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:36:9 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:41:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:44:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:60:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:82:9 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:87:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:90:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:101:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:115:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:141:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:156:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:159:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:176:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:187:9 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:192:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:195:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/core/services/auth_service.dart:204:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/data/repositories/order_repository.dart:22:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/data/repositories/order_repository.dart:24:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/data/repositories/order_repository.dart:45:7 • avoid_print
+  error • Target of URI doesn't exist: 'package:firebase_core/firebase_core.dart' • lib/firebase_options.dart:3:8 • uri_does_not_exist
+  error • Const variables must be initialized with a constant value • lib/firebase_options.dart:52:38 • const_initialized_with_non_constant_value
+  error • The method 'FirebaseOptions' isn't defined for the type 'DefaultFirebaseOptions' • lib/firebase_options.dart:52:38 • undefined_method
+  error • Const variables must be initialized with a constant value • lib/firebase_options.dart:62:42 • const_initialized_with_non_constant_value
+  error • The method 'FirebaseOptions' isn't defined for the type 'DefaultFirebaseOptions' • lib/firebase_options.dart:62:42 • undefined_method
+   info • The imported package 'flutter_cache_manager' isn't a dependency of the importing package • lib/functions/cache_manager.dart:1:8 • depend_on_referenced_packages
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/functions/update_profile.dart:23:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/functions/update_profile.dart:30:35 • deprecated_member_use
+  error • Target of URI doesn't exist: 'package:firebase_core/firebase_core.dart' • lib/main.dart:1:8 • uri_does_not_exist
+  error • Undefined name 'Firebase' • lib/main.dart:20:7 • undefined_identifier
+  error • Undefined name 'Firebase' • lib/main.dart:21:11 • undefined_identifier
+  error • Target of URI doesn't exist: 'package:firebase_auth/firebase_auth.dart' • lib/presentation/controllers/auth_controller.dart:1:8 • uri_does_not_exist
+  error • Target of URI doesn't exist: 'package:google_sign_in/google_sign_in.dart' • lib/presentation/controllers/auth_controller.dart:4:8 • uri_does_not_exist
+  error • Undefined class 'FirebaseAuth' • lib/presentation/controllers/auth_controller.dart:16:9 • undefined_class
+  error • Undefined name 'FirebaseAuth' • lib/presentation/controllers/auth_controller.dart:16:30 • undefined_identifier
+  error • Undefined class 'GoogleSignIn' • lib/presentation/controllers/auth_controller.dart:17:9 • undefined_class
+  error • Undefined name 'GoogleSignIn' • lib/presentation/controllers/auth_controller.dart:17:38 • undefined_identifier
+  error • The name 'User' isn't a type, so it can't be used as a type argument • lib/presentation/controllers/auth_controller.dart:54:10 • non_type_as_type_argument
+  error • Undefined class 'GoogleSignInAccount' • lib/presentation/controllers/auth_controller.dart:58:13 • undefined_class
+  error • Undefined class 'GoogleSignInAuthentication' • lib/presentation/controllers/auth_controller.dart:60:13 • undefined_class
+  error • Undefined class 'AuthCredential' • lib/presentation/controllers/auth_controller.dart:61:13 • undefined_class
+  error • Undefined name 'GoogleAuthProvider' • lib/presentation/controllers/auth_controller.dart:61:41 • undefined_identifier
+  error • Undefined class 'UserCredential' • lib/presentation/controllers/auth_controller.dart:65:13 • undefined_class
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/controllers/base_controller.dart:51:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/controllers/base_controller.dart:79:37 • deprecated_member_use
+   info • Don't invoke 'print' in production code • lib/presentation/controllers/categories_sections_controller.dart:52:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/presentation/controllers/checkout_controller.dart:108:7 • avoid_print
+  error • The name 'ProductSize' isn't a type, so it can't be used as a type argument • lib/presentation/controllers/product_details_controller.dart:19:12 • non_type_as_type_argument
+  error • The name 'ProductSize' isn't a type, so it can't be used as a type argument • lib/presentation/controllers/product_details_controller.dart:19:50 • non_type_as_type_argument
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/controllers/product_details_controller.dart:129:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/auth/widgets/auth_text_field.dart:40:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/auth/widgets/auth_text_field.dart:47:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/cart/cart_view.dart:65:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/cart/cart_view.dart:82:59 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/cart/widgets/total_price_section.dart:40:48 • deprecated_member_use
+   info • The type of the right operand ('int') isn't a subtype or a supertype of the left operand ('AddressModel?') • lib/presentation/pages/checkout/widgets/build_address_step.dart:25:66 • unrelated_type_equality_checks
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/checkout/widgets/build_address_step.dart:29:47 • deprecated_member_use
+   info • 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/checkout/widgets/build_address_step.dart:41:25 • deprecated_member_use
+   info • 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/checkout/widgets/build_address_step.dart:42:25 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/checkout/widgets/build_checkout_section.dart:23:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/checkout/widgets/build_payment_option.dart:18:45 • deprecated_member_use
+   info • 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/checkout/widgets/build_payment_option.dart:27:9 • deprecated_member_use
+   info • 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/checkout/widgets/build_payment_option.dart:28:9 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/build_shortcut_item.dart:46:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/build_shortcut_item.dart:47:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/image_section.dart:92:28 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/image_section.dart:115:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/image_section.dart:139:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/product_list.dart:53:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/home/widgets/promo_banner.dart:104:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/oreder/widgets/build_status_badge.dart:7:20 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/oreder/widgets/build_status_badge.dart:9:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/oreder/widgets/order_card.dart:34:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/oreder/widgets/order_card.dart:55:50 • deprecated_member_use
+  error • Target of URI doesn't exist: 'package:easy_image_viewer/easy_image_viewer.dart' • lib/presentation/pages/product_details/product_details_view.dart:2:8 • uri_does_not_exist
+  error • Undefined class 'MultiImageProvider' • lib/presentation/pages/product_details/product_details_view.dart:141:5 • undefined_class
+  error • The method 'MultiImageProvider' isn't defined for the type 'ProductDetailsView' • lib/presentation/pages/product_details/product_details_view.dart:141:45 • undefined_method
+  error • The method 'showImageViewerPager' isn't defined for the type 'ProductDetailsView' • lib/presentation/pages/product_details/product_details_view.dart:153:5 • undefined_method
+  error • The getter 'selectedSize' isn't defined for the type 'ProductDetailsController' • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:45:56 • undefined_getter
+  error • The getter 'selectedSize' isn't defined for the type 'ProductDetailsController' • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:91:43 • undefined_getter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:122:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:124:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:174:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/bottom_icons_row.dart:175:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_ingredients_section.dart:28:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_product_info.dart:105:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_usage_and_warnings.dart:33:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_usage_and_warnings.dart:35:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_usage_and_warnings.dart:74:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/build_usage_and_warnings.dart:76:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:78:45 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:82:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:87:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:92:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:151:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/expandable_description_card.dart:154:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/header_with_icon_and_title.dart:17:31 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/header_with_icon_and_title.dart:18:31 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/header_with_icon_and_title.dart:23:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/header_with_icon_and_title.dart:33:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/image_list_view.dart:83:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/main_image.dart:112:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_flavor_selector.dart:95:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_flavor_selector.dart:98:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_flavor_selector.dart:103:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_flavor_selector.dart:106:39 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_size_selector.dart:74:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/product_size_selector.dart:94:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:45:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:90:65 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:94:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:98:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:103:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:125:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:131:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:200:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:203:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:234:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:237:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:248:59 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/product_details/widgets/show_reviews_list.dart:262:61 • deprecated_member_use
+  error • Target of URI doesn't exist: 'package:firebase_auth/firebase_auth.dart' • lib/presentation/pages/profile/edit_user_info.dart:1:8 • uri_does_not_exist
+  error • Undefined name 'FirebaseAuth' • lib/presentation/pages/profile/edit_user_info.dart:27:26 • undefined_identifier
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/edit_user_info.dart:102:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/account_settings_list.dart:34:36 • deprecated_member_use
+   info • 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/profile/widgets/account_settings_list.dart:134:17 • deprecated_member_use
+   info • 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/profile/widgets/account_settings_list.dart:135:17 • deprecated_member_use
+   info • 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/profile/widgets/account_settings_list.dart:143:17 • deprecated_member_use
+   info • 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre • lib/presentation/pages/profile/widgets/account_settings_list.dart:144:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/account_settings_list.dart:202:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/account_settings_list.dart:203:36 • deprecated_member_use
+  error • Target of URI doesn't exist: 'package:google_maps_flutter/google_maps_flutter.dart' • lib/presentation/pages/profile/widgets/address_card.dart:3:8 • uri_does_not_exist
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/address_card.dart:41:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/address_card.dart:45:33 • deprecated_member_use
+  error • Undefined class 'LatLng' • lib/presentation/pages/profile/widgets/address_card.dart:85:11 • undefined_class
+  error • The method 'LatLng' isn't defined for the type 'AddressCard' • lib/presentation/pages/profile/widgets/address_card.dart:85:29 • undefined_method
+  error • The method 'GoogleMap' isn't defined for the type 'AddressCard' • lib/presentation/pages/profile/widgets/address_card.dart:95:11 • undefined_method
+  error • The method 'CameraPosition' isn't defined for the type 'AddressCard' • lib/presentation/pages/profile/widgets/address_card.dart:97:36 • undefined_method
+  error • The method 'Marker' isn't defined for the type 'AddressCard' • lib/presentation/pages/profile/widgets/address_card.dart:108:15 • undefined_method
+  error • The method 'MarkerId' isn't defined for the type 'AddressCard' • lib/presentation/pages/profile/widgets/address_card.dart:109:27 • undefined_method
+  error • Undefined name 'BitmapDescriptor' • lib/presentation/pages/profile/widgets/address_card.dart:111:23 • undefined_identifier
+  error • Undefined name 'BitmapDescriptor' • lib/presentation/pages/profile/widgets/address_card.dart:112:19 • undefined_identifier
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/address_card.dart:125:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/address_card.dart:188:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/address_card.dart:209:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/login_prompt_card.dart:45:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/login_prompt_card.dart:56:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/profile_header.dart:45:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/purchase_stats_card.dart:40:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/purchase_stats_card.dart:57:38 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/purchase_stats_card.dart:88:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/quick_actions_row.dart:84:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/recent_orders_list.dart:74:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/saved_addresses_list.dart:82:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/pages/profile/widgets/saved_addresses_list.dart:85:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/widgets/build_quantity_controls.dart:27:62 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/presentation/widgets/build_quantity_controls.dart:61:44 • deprecated_member_use
+

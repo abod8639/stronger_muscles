@@ -47,6 +47,7 @@ class MainImage extends StatelessWidget {
       onPageChanged: controller.selectImage,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
+        final imageUrl = product.imageUrls[index];
         return GestureDetector(
           onTap: () => onImageTap?.call(index),
           child: Hero(
@@ -63,7 +64,7 @@ class MainImage extends StatelessWidget {
                 borderRadius: _getBorderRadius(),
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
-                  imageUrl: product.imageUrls[index],
+                  imageUrl: imageUrl.medium,
                   fit: BoxFit.fitWidth,
                   placeholder: (context, url) => _buildPlaceholder(),
                   errorWidget: (context, url, error) =>

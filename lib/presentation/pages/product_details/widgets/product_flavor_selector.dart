@@ -34,7 +34,7 @@ class ProductFlavorSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flavorsList = product.flavors ?? [];
+    final flavorsList = product.flavors;
     if (flavorsList.isEmpty) return const SizedBox.shrink();
 
     return Column(

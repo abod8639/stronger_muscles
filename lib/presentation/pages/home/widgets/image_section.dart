@@ -50,7 +50,7 @@ class ImageSection extends StatelessWidget {
                           (index) => _selectedImageIndex.value = index,
                       itemBuilder: (context, index) {
                         return buildImage(
-                          images[index],
+                          images[index].medium,
                           theme,
                           widget.product.isBackgroundWhite,
                         );

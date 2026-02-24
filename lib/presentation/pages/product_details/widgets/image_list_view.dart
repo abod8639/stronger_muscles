@@ -101,14 +101,14 @@ class ImageListView extends StatelessWidget {
 
   /// Builds the thumbnail image with error handling
   Widget _buildThumbnailImage(int index) {
-    final imageUrl = product.imageUrls[index];
+    final imageUrlModel = product.imageUrls[index];
 
     return Builder(
       builder: (context) {
         final theme = Theme.of(context);
         return CachedNetworkImage(
           cacheManager: CustomCacheManager.instance,
-          imageUrl: imageUrl,
+          imageUrl: imageUrlModel.thumbnail,
           fit: BoxFit.cover,
           width: _thumbnailSize,
           height: _thumbnailSize,

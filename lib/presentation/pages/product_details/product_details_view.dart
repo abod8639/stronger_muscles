@@ -32,9 +32,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final product = Get.find<ProductDetailsController>().product;
+    final locale = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
-      appBar: AppBar(title: Text(product.name), elevation: 0),
+      appBar: AppBar(title: Text(product.getLocalizedName(locale: locale)), elevation: 0),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
@@ -55,11 +56,17 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  
                   // Product Name
                   buildProductName(product),
                   const SizedBox(height: _smallSpacing),
                   
-                  buildProductPrice(product),
+                  Obx(() => buildProductPrice(
+                    product, 
+                    alternateEffectivePrice: controller.displayEffectivePrice,
+                    alternateOriginalPrice: controller.displayPrice,
+                    alternateHasDiscount: controller.displayHasDiscount,
+                  )),
                   const SizedBox(height: _smallSpacing),
 
                   // Product Badges (Featured, New, Best Seller, Discount)
@@ -70,8 +77,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   const SizedBox(height: _mediumSpacing),
 
                   // Product Flavors
-                  if (product.flavors != null &&
-                      product.flavors!.isNotEmpty) ...[
+                  if (product.flavors.isNotEmpty) ...[
                     Obx(
                       () => ProductFlavorSelector(
                         product: product,
@@ -85,13 +91,13 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   ],
 
                   // Size Selector
-                  if (product.size != null && product.size!.isNotEmpty) ...[
+                  if (product.productSizes.isNotEmpty) ...[
                     Obx(
                       () => ProductSizeSelector(
                         product: product,
-                        initialSize: controller.selectedSize.value,
+                        initialSize: controller.selectedSizeObject.value?.size,
                         onSizeSelected: (selectedSize) {
-                          controller.selectedSize.value = selectedSize;
+                          controller.updateSize(selectedSize);
                         },
                       ),
                     ),
@@ -137,7 +143,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
       controller.product.imageUrls
           .map(
             (url) => CachedNetworkImageProvider(
-              url,
+              url.original,
               cacheManager: CustomCacheManager.instance,
             ),
           )

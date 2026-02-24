@@ -31,7 +31,7 @@ Widget buildProductCartDetails(CartItemModel item) {
 
           // Product Name
           Text(
-            item.product.name,
+            item.product.getLocalizedName(locale: 'en'),
             style: theme.textTheme.titleMedium?.copyWith(
               fontSize: _titleFontSize,
               fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ Widget buildProductCartDetails(CartItemModel item) {
             ),
             maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
-            semanticsLabel: item.product.name,
+            semanticsLabel: item.product.getLocalizedName(locale: 'en'),
           ),
 
           // Selected Flavor

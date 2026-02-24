@@ -42,7 +42,7 @@ class BottomIconsRow extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 final selectedFlavor = detailsController.selectedFlavor.value;
-                final selectedSize = detailsController.selectedSize.value;
+                final selectedSize = detailsController.selectedSizeObject.value?.size;
 
                 final item = cartController.getCartItem(
                   product,
@@ -88,7 +88,7 @@ class BottomIconsRow extends StatelessWidget {
         cartController.addToCart(
           product,
           selectedFlavor: detailsController.selectedFlavor.value,
-          selectedSize: detailsController.selectedSize.value,
+          selectedSize: detailsController.selectedSizeObject.value?.size,
         );
       },
       icon: const Icon(Icons.add_shopping_cart, size: 20),

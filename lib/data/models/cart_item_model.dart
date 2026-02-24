@@ -25,5 +25,5 @@ class CartItemModel with _$CartItemModel {
 
   double get subtotal => product.effectivePrice * quantity;
   String? get primaryImageUrl =>
-      product.imageUrls.isNotEmpty ? product.imageUrls.first : null;
+      product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : null;
 }

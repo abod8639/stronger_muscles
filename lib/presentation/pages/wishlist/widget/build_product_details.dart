@@ -10,13 +10,15 @@ Widget buildProductDetails(ProductModel product) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
+      final locale = Localizations.localeOf(context).languageCode;
+      final productName = product.getLocalizedName(locale: locale);
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           // Product Name
           Text(
-            product.name,
+            productName,
             style: theme.textTheme.titleMedium?.copyWith(
               fontSize: _titleFontSize,
               fontWeight: FontWeight.bold,
@@ -24,7 +26,7 @@ Widget buildProductDetails(ProductModel product) {
             ),
             maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
-            semanticsLabel: product.name,
+            semanticsLabel: productName,
           ),
           const SizedBox(height: 8.0),
 

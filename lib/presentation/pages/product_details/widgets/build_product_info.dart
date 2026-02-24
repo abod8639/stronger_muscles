@@ -40,15 +40,13 @@ Widget buildProductInfo(
   }
 
   // Servings Per Container
-  if (product.servingsPerContainer != null) {
-    infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.servingsPerContainer,
-        '${product.servingsPerContainer}',
-        isDark,
-      ),
-    );
-  }
+  infoItems.add(
+    _buildInfoRow(
+      AppLocalizations.of(context)!.servingsPerContainer,
+      '${product.servingsPerContainer}',
+      isDark,
+    ),
+  );
 
   // Weight
   if (product.weight != null) {

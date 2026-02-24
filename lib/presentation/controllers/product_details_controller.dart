@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/data/models/product_size_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 
 const int _imageAnimationDurationMs = 300;
@@ -16,7 +17,7 @@ class ProductDetailsController extends GetxController {
   final RxBool isInWishlist = false.obs;
   final RxInt selectedImageIndex = 0.obs;
   final RxString selectedFlavor = "".obs;
-  final RxString selectedSize = "".obs;
+  final Rx<ProductSize?> selectedSizeObject = Rx<ProductSize?>(null);
 
   // التحكم في العرض (UI Controllers)
   late final PageController pageController;
@@ -29,11 +30,18 @@ class ProductDetailsController extends GetxController {
     // تحديد القيم الابتدائية للنكهة والحجم
     selectedFlavor.value =
         initialFlavor ??
-        (product.flavors?.isNotEmpty == true ? product.flavors!.first : "");
+        (product.flavors.isNotEmpty == true ? product.flavors.first : "");
 
-    selectedSize.value =
-        initialSize ??
-        (product.size?.isNotEmpty == true ? product.size!.first : "");
+    // Priority for productSizes list over legacy size strings
+    if (product.productSizes.isNotEmpty) {
+      if (initialSize != null) {
+        selectedSizeObject.value = product.productSizes.firstWhere(
+            (s) => s.size == initialSize,
+            orElse: () => product.productSizes.first);
+      } else {
+        selectedSizeObject.value = product.productSizes.first;
+      }
+    }
   }
 
   @override
@@ -84,7 +92,35 @@ class ProductDetailsController extends GetxController {
 
   void updateFlavor(String flavor) => selectedFlavor.value = flavor;
 
-  void updateSize(String size) => selectedSize.value = size;
+  void updateSize(String sizeName) {
+    if (product.productSizes.isNotEmpty) {
+      selectedSizeObject.value = product.productSizes.firstWhere(
+        (s) => s.size == sizeName,
+        orElse: () => selectedSizeObject.value!,
+      );
+    }
+  }
+
+  double get displayPrice {
+    if (selectedSizeObject.value != null) {
+      return selectedSizeObject.value!.price;
+    }
+    return product.price;
+  }
+
+  double get displayEffectivePrice {
+    if (selectedSizeObject.value != null) {
+      return selectedSizeObject.value!.effectivePrice;
+    }
+    return product.effectivePrice;
+  }
+
+  bool get displayHasDiscount {
+    if (selectedSizeObject.value != null) {
+      return selectedSizeObject.value!.hasDiscount;
+    }
+    return product.hasDiscount;
+  }
 
   void _showErrorSnackbar(String title, String message) {
     Get.snackbar(
@@ -104,10 +140,10 @@ class ProductDetailsController extends GetxController {
   }
 
   void _precacheAllImages() {
-    for (var url in product.imageUrls) {
+    for (var imageUrl in product.imageUrls) {
       precacheImage(
         CachedNetworkImageProvider(
-          url,
+          imageUrl.medium,
           cacheManager: CustomCacheManager.instance,
         ),
         Get.context!,

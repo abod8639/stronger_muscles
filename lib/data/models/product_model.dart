@@ -1,5 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/data/models/localized_string_model.dart';
+import 'package:stronger_muscles/data/models/image_url_model.dart';
+import 'package:stronger_muscles/data/models/product_category_model.dart';
+import 'package:stronger_muscles/data/models/product_size_model.dart';
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';
@@ -9,79 +13,73 @@ part 'product_model.g.dart';
 class ProductModel with _$ProductModel {
   const factory ProductModel({
     @HiveField(0) required String id,
-    @HiveField(1) required String name,
-    @HiveField(2) required double price,
-    @HiveField(3) @JsonKey(name: 'discountPrice') double? discountPrice,
-    @HiveField(4)
+    @HiveField(1) LocalizedString? name,
+    @HiveField(2) LocalizedString? description,
+    @HiveField(3) String? brand,
+    @HiveField(4) ProductCategory? category,
+    @HiveField(5)
     @JsonKey(name: 'imageUrls')
     @Default([])
-    List<String> imageUrls,
-    @HiveField(5) @Default('') String description,
-    @HiveField(6) @JsonKey(name: 'categoryId') String? categoryId,
-    @HiveField(7) @JsonKey(name: 'stockQuantity') @Default(0) int stockQuantity,
-    @HiveField(8)
-    @JsonKey(name: 'averageRating')
+    List<ImageUrl> imageUrls,
+    @HiveField(6)
+    @JsonKey(name: 'has_variants')
+    @Default(false)
+    bool hasVariants,
+    @HiveField(7) @Default(0) double price,
+    @HiveField(8) @JsonKey(name: 'discount_price') double? discountPrice,
+    @HiveField(9) @JsonKey(name: 'stock_quantity') @Default(0) int stockQuantity,
+    @HiveField(10)
+    @JsonKey(name: 'average_rating')
     @Default(0.0)
     double averageRating,
-    @HiveField(9) @JsonKey(name: 'reviewCount') @Default(0) int reviewCount,
-    @HiveField(10) String? brand,
-    @HiveField(11) @JsonKey(name: 'servingSize') String? servingSize,
-    @HiveField(12)
-    @JsonKey(name: 'servingsPerContainer')
-    int? servingsPerContainer,
-    @HiveField(13) @JsonKey(name: 'is_active') @Default(true) bool isActive,
+    @HiveField(11) @JsonKey(name: 'review_count') @Default(0) int reviewCount,
+    @HiveField(12) @JsonKey(name: 'serving_size') String? servingSize,
+    @HiveField(13)
+    @JsonKey(name: 'servings_per_container')
+    @Default(0)
+    int servingsPerContainer,
     @HiveField(14)
+    @JsonKey(name: 'nutrition_facts')
+    Map<String, dynamic>? nutritionFacts,
+    @HiveField(15)
+    @JsonKey(name: 'flavors')
+    @Default([])
+    List<String> flavors,
+    @HiveField(16)
+    @JsonKey(name: 'product_sizes')
+    @Default([])
+    List<ProductSize> productSizes,
+    @HiveField(17)
+    @JsonKey(name: 'size')
+    @Default([])
+    List<String> size,
+    @HiveField(18) @Default([]) List<String> tags,
+    @HiveField(19) double? weight,
+    @HiveField(20) @JsonKey(name: 'is_active') @Default(true) bool isActive,
+    @HiveField(21)
     @JsonKey(name: 'is_background_white')
     @Default(false)
     bool isBackgroundWhite,
-
-    // Basic Info
-    @HiveField(15) String? sku,
-    @HiveField(16) @Default([]) List<String> tags,
-    @HiveField(17) double? weight,
-    @HiveField(18) @JsonKey(name: 'size') @Default([]) List<String>? size,
-
-    // Nutrition
-    @HiveField(19)
-    @JsonKey(name: 'nutrition_facts')
-    Map<String, dynamic>? nutritionFacts,
-
-    // Marketing
-    @HiveField(20) @Default(false) bool featured,
-    @HiveField(21)
+    @HiveField(22) @Default(false) bool featured,
+    @HiveField(23)
     @JsonKey(name: 'new_arrival')
     @Default(false)
     bool newArrival,
-    @HiveField(22)
+    @HiveField(24)
     @JsonKey(name: 'best_seller')
     @Default(false)
     bool bestSeller,
-    @HiveField(23) @JsonKey(name: 'total_sales') @Default(0) int totalSales,
-    @HiveField(24) @JsonKey(name: 'views_count') @Default(0) int viewsCount,
-
-    // Shipping
-    @HiveField(25) @JsonKey(name: 'shipping_weight') double? shippingWeight,
-    @HiveField(26) Map<String, dynamic>? dimensions,
-
-    // Additional
-    @HiveField(27) @Default([]) List<String> ingredients,
-    @HiveField(28)
-    @JsonKey(name: 'usage_instructions')
-    String? usageInstructions,
-    @HiveField(29) @Default([]) List<String> warnings,
-    @HiveField(30) @JsonKey(name: 'expiry_date') DateTime? expiryDate,
-    @HiveField(31) String? manufacturer,
-    @HiveField(32) @JsonKey(name: 'country_of_origin') String? countryOfOrigin,
-
-    // SEO
-    @HiveField(33) @JsonKey(name: 'meta_title') String? metaTitle,
-    @HiveField(34) @JsonKey(name: 'meta_description') String? metaDescription,
-    @HiveField(35) String? slug,
-
-    // Timestamps
-    @HiveField(36) DateTime? createdAt,
-    @HiveField(37) DateTime? updatedAt,
-    @HiveField(38) @JsonKey(name: 'flavors') @Default([]) List<String>? flavors,
+    @HiveField(25) String? sku,
+    @HiveField(26) @JsonKey(name: 'total_sales') @Default(0) int totalSales,
+    @HiveField(27) @JsonKey(name: 'created_at') DateTime? createdAt,
+    @HiveField(28) @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    
+    // Additional fields for product details
+    @HiveField(29) @Default([]) List<String> ingredients,
+    @HiveField(30) String? manufacturer,
+    @HiveField(31) @JsonKey(name: 'country_of_origin') String? countryOfOrigin,
+    @HiveField(32) @JsonKey(name: 'usage_instructions') String? usageInstructions,
+    @HiveField(33) @Default([]) List<String> warnings,
   }) = _ProductModel;
 
   const ProductModel._(); // Needed for custom getters
@@ -89,11 +87,45 @@ class ProductModel with _$ProductModel {
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
 
+  /// Get the product name in the specified locale
+  String getLocalizedName({String locale = 'en'}) {
+    return name?.getValue(locale: locale) ?? '';
+  }
+
+  /// Get the product description in the specified locale
+  String getLocalizedDescription({String locale = 'en'}) {
+    return description?.getValue(locale: locale) ?? '';
+  }
+
+  /// Get the primary image URL
+  String? get primaryImageUrl => imageUrls.isNotEmpty ? imageUrls.first.medium : null;
+
+  /// Get the primary thumbnail URL
+  String? get primaryThumbnailUrl =>
+      imageUrls.isNotEmpty ? imageUrls.first.thumbnail : null;
+
+  /// Get the effective price (discount price if available, else regular price)
   double get effectivePrice => discountPrice ?? price;
+
+  /// Check if product has a discount
   bool get hasDiscount => discountPrice != null && discountPrice! < price;
 
+  /// Calculate discount percentage
   double get discountPercentage {
     if (!hasDiscount) return 0;
     return ((price - discountPrice!) / price * 100).roundToDouble();
   }
+
+  /// Get category ID
+  String? get categoryId => category?.id;
+
+  /// Check if product is in stock
+  bool get isInStock => stockQuantity > 0;
+
+  /// Get default size (first size in the list)
+  String? get defaultSize => size.isNotEmpty ? size.first : null;
+
+  /// Get first product size
+  ProductSize? get firstProductSize =>
+      productSizes.isNotEmpty ? productSizes.first : null;
 }

@@ -9,23 +9,24 @@ class TitleAndDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context).languageCode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          product.name,
+          product.getLocalizedName(locale: locale),
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,
             height: 1.2,
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          semanticsLabel: product.name,
+          semanticsLabel: product.getLocalizedName(locale: locale),
         ),
         const SizedBox(height: 4.0),
         Text(
-          product.description,
+          product.getLocalizedDescription(locale: locale),
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
             height: 1.2,
