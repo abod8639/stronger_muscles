@@ -128,4 +128,18 @@ class ProductModel with _$ProductModel {
   /// Get first product size
   ProductSize? get firstProductSize =>
       productSizes.isNotEmpty ? productSizes.first : null;
+
+  /// Get the base price, fallback to first size if 0
+  double get basePrice {
+    if (price > 0) return price;
+    if (productSizes.isNotEmpty) return productSizes.first.price;
+    return 0;
+  }
+
+  /// Get the base effective price, fallback to first size if 0
+  double get baseEffectivePrice {
+    if (effectivePrice > 0) return effectivePrice;
+    if (productSizes.isNotEmpty) return productSizes.first.effectivePrice;
+    return 0;
+  }
 }

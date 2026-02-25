@@ -8,6 +8,7 @@ class ProductsController extends BaseController {
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxString selectedCategoryId = ''.obs;
+  final RxString selectedProductId = ''.obs;
 
   @override
   void onInit() {
@@ -73,4 +74,18 @@ class ProductsController extends BaseController {
       fetchProducts(categoryId: categoryId);
     }
   }
+
+  String price() {
+    final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
+    if (product == null) return "0.00";
+    return product.baseEffectivePrice.toStringAsFixed(2);
+  }
+
+  String discountPrice() {
+    final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
+    if (product == null) return "0.00";
+    return product.basePrice.toStringAsFixed(2);
+  }
+
+  
 }
