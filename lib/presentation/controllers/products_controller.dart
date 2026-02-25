@@ -78,13 +78,13 @@ class ProductsController extends BaseController {
   String price() {
     final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
     if (product == null) return "0.00";
-    return product.baseEffectivePrice.toStringAsFixed(2);
+    return product.formattedEffectivePrice;
   }
 
   String discountPrice() {
     final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
     if (product == null) return "0.00";
-    return product.basePrice.toStringAsFixed(2);
+    return product.formattedPrice;
   }
 
   

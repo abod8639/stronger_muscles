@@ -101,26 +101,14 @@ class ProductDetailsController extends GetxController {
     }
   }
 
-  double get displayPrice {
-    if (selectedSizeObject.value != null) {
-      return selectedSizeObject.value!.price;
-    }
-    return product.price;
-  }
+  double get displayPrice =>
+      product.getPriceForSize(selectedSizeObject.value?.size);
 
-  double get displayEffectivePrice {
-    if (selectedSizeObject.value != null) {
-      return selectedSizeObject.value!.effectivePrice;
-    }
-    return product.effectivePrice;
-  }
+  double get displayEffectivePrice =>
+      product.getEffectivePriceForSize(selectedSizeObject.value?.size);
 
-  bool get displayHasDiscount {
-    if (selectedSizeObject.value != null) {
-      return selectedSizeObject.value!.hasDiscount;
-    }
-    return product.hasDiscount;
-  }
+  bool get displayHasDiscount =>
+      product.hasDiscountForSize(selectedSizeObject.value?.size);
 
   void _showErrorSnackbar(String title, String message) {
     Get.snackbar(

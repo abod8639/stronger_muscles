@@ -23,7 +23,7 @@ class CartItemModel with _$CartItemModel {
   factory CartItemModel.fromJson(Map<String, dynamic> json) =>
       _$CartItemModelFromJson(json);
 
-  double get subtotal => product.effectivePrice * quantity;
+  double get subtotal => product.getEffectivePriceForSize(selectedSize) * quantity;
   String? get primaryImageUrl =>
       product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : null;
 }

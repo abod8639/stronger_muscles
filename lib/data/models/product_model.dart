@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get/get_navigation/src/root/parse_route.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/data/models/localized_string_model.dart';
 import 'package:stronger_muscles/data/models/image_url_model.dart';
@@ -115,6 +116,31 @@ class ProductModel with _$ProductModel {
     if (!hasDiscount) return 0;
     return ((price - discountPrice!) / price * 100).roundToDouble();
   }
+
+  /// Get specific price for a size, fallback to base price
+  double getPriceForSize(String? sizeName) {
+    if (sizeName == null || productSizes.isEmpty) return basePrice;
+    final sizeObj = productSizes.firstWhereOrNull((s) => s.size == sizeName);
+    return sizeObj?.price ?? basePrice;
+  }
+
+  /// Get specific effective price for a size, fallback to base effective price
+  double getEffectivePriceForSize(String? sizeName) {
+    if (sizeName == null || productSizes.isEmpty) return baseEffectivePrice;
+    final sizeObj = productSizes.firstWhereOrNull((s) => s.size == sizeName);
+    return sizeObj?.effectivePrice ?? baseEffectivePrice;
+  }
+
+  /// Check if a specific size has a discount
+  bool hasDiscountForSize(String? sizeName) {
+    if (sizeName == null || productSizes.isEmpty) return hasDiscount;
+    final sizeObj = productSizes.firstWhereOrNull((s) => s.size == sizeName);
+    return sizeObj?.hasDiscount ?? hasDiscount;
+  }
+
+  /// Formatted price strings
+  String get formattedPrice => basePrice.toStringAsFixed(2);
+  String get formattedEffectivePrice => baseEffectivePrice.toStringAsFixed(2);
 
   /// Get category ID
   String? get categoryId => category?.id;
