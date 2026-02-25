@@ -1,85 +1,39 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/data/models/localized_string_model.dart';
 
+part 'category_model.freezed.dart';
 part 'category_model.g.dart';
 
-@HiveType(typeId: 6)
-class CategoryModel extends HiveObject {
-  @HiveField(0)
-  final String id;
+@freezed
+@HiveType(typeId: 6, adapterName: 'CategoryModelAdapter')
+class CategoryModel with _$CategoryModel {
+  const factory CategoryModel({
+    @HiveField(0) required String id,
+    @HiveField(1) LocalizedString? name,
+    @HiveField(2) LocalizedString? description,
+    @HiveField(3) String? imageUrl,
+    @HiveField(4) @Default(0) int sortOrder,
+    @HiveField(5) @Default(true) bool isActive,
+    @HiveField(6) DateTime? createdAt,
+    @HiveField(7) String? icon,
+    @HiveField(8) String? parentId,
+    @HiveField(9) @Default([]) List<CategoryModel> children,
+  }) = _CategoryModel;
 
-  @HiveField(1)
-  final String name;
+  const CategoryModel._();
 
-  @HiveField(2)
-  final String? description;
+  factory CategoryModel.fromJson(Map<String, dynamic> json) =>
+      _$CategoryModelFromJson(json);
 
-  @HiveField(3)
-  final String? imageUrl;
-
-  @HiveField(4)
-  final int sortOrder;
-
-  @HiveField(5)
-  final bool isActive;
-
-  @HiveField(6)
-  final DateTime createdAt;
-
-  CategoryModel({
-    required this.id,
-    required this.name,
-    this.description,
-    this.imageUrl,
-    this.sortOrder = 0,
-    this.isActive = true,
-    DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
-
-  /// Factory constructor to create CategoryModel from JSON
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'],
-      imageUrl: json['imageUrl'],
-      sortOrder: json['sortOrder'] ?? 0,
-      isActive: json['isActive'] == 1 || json['isActive'] == true,
-      createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
-          : DateTime.now(),
-    );
+  /// Get the category name in the specified locale
+  String getLocalizedName({String locale = 'en'}) {
+    return name?.getValue(locale: locale) ?? '';
   }
 
-  /// Convert CategoryModel to JSON
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'description': description,
-    'imageUrl': imageUrl,
-    'sortOrder': sortOrder,
-    'isActive': isActive,
-    'createdAt': createdAt.toIso8601String(),
-  };
-
-  /// Create a copy with updated fields
-  CategoryModel copyWith({
-    String? id,
-    String? name,
-    String? description,
-    String? imageUrl,
-    int? sortOrder,
-    bool? isActive,
-    DateTime? createdAt,
-  }) {
-    return CategoryModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      imageUrl: imageUrl ?? this.imageUrl,
-      sortOrder: sortOrder ?? this.sortOrder,
-      isActive: isActive ?? this.isActive,
-      createdAt: createdAt ?? this.createdAt,
-    );
+  /// Get the category description in the specified locale
+  String getLocalizedDescription({String locale = 'en'}) {
+    return description?.getValue(locale: locale) ?? '';
   }
 }
 
@@ -88,44 +42,44 @@ class PredefinedCategories {
   static final List<CategoryModel> categories = [
     CategoryModel(
       id: 'protein',
-      name: 'Protein',
-      description: 'Protein powders and supplements',
+      name: const LocalizedString(ar: 'بروتين', en: 'Protein'),
+      description: const LocalizedString(ar: 'مكملات البروتين', en: 'Protein powders and supplements'),
       sortOrder: 1,
     ),
     CategoryModel(
       id: 'creatine',
-      name: 'Creatine',
-      description: 'Creatine supplements',
+      name: const LocalizedString(ar: 'كرياتين', en: 'Creatine'),
+      description: const LocalizedString(ar: 'مكملات الكرياتين', en: 'Creatine supplements'),
       sortOrder: 2,
     ),
     CategoryModel(
       id: 'amino',
-      name: 'Amino Acids',
-      description: 'Amino acid supplements',
+      name: const LocalizedString(ar: 'أمينو', en: 'Amino Acids'),
+      description: const LocalizedString(ar: 'مكملات الأحماض الأمينية', en: 'Amino acid supplements'),
       sortOrder: 3,
     ),
     CategoryModel(
       id: 'bcaa',
-      name: 'BCAA',
-      description: 'Branched-chain amino acids',
+      name: const LocalizedString(ar: 'BCAA', en: 'BCAA'),
+      description: const LocalizedString(ar: 'أحماض أمينية متشعبة', en: 'Branched-chain amino acids'),
       sortOrder: 4,
     ),
     CategoryModel(
       id: 'preworkout',
-      name: 'Pre-Workout',
-      description: 'Pre-workout supplements',
+      name: const LocalizedString(ar: 'قبل التمرين', en: 'Pre-Workout'),
+      description: const LocalizedString(ar: 'مكملات قبل التمرين', en: 'Pre-workout supplements'),
       sortOrder: 5,
     ),
     CategoryModel(
       id: 'massgainer',
-      name: 'Mass Gainer',
-      description: 'Mass gainer supplements',
+      name: const LocalizedString(ar: 'زيادة الوزن', en: 'Mass Gainer'),
+      description: const LocalizedString(ar: 'مكملات زيادة الوزن', en: 'Mass gainer supplements'),
       sortOrder: 6,
     ),
     CategoryModel(
       id: 'accessories',
-      name: 'Accessories',
-      description: 'Shakers, bags, and accessories',
+      name: const LocalizedString(ar: 'إكسسوارات', en: 'Accessories'),
+      description: const LocalizedString(ar: 'شيكرات وحقائب وإكسسوارات', en: 'Shakers, bags, and accessories'),
       sortOrder: 7,
     ),
   ];

@@ -66,7 +66,7 @@ class CategoriesSectionsController extends GetxController {
       ...categoryList.map(
         (cat) => SelectionsModel(
           id: cat.id,
-          label: cat.name,
+          label: cat.getLocalizedName(locale: Get.locale?.languageCode ?? 'en'),
           icon: _getIconForCategory(cat.id),
         ),
       ),

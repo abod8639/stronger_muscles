@@ -22,10 +22,10 @@ LocalizedString _$LocalizedStringFromJson(Map<String, dynamic> json) {
 mixin _$LocalizedString {
   @HiveField(0)
   @JsonKey(name: 'ar')
-  String get ar => throw _privateConstructorUsedError;
+  String? get ar => throw _privateConstructorUsedError;
   @HiveField(1)
   @JsonKey(name: 'en')
-  String get en => throw _privateConstructorUsedError;
+  String? get en => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,8 +40,8 @@ abstract class $LocalizedStringCopyWith<$Res> {
       _$LocalizedStringCopyWithImpl<$Res, LocalizedString>;
   @useResult
   $Res call(
-      {@HiveField(0) @JsonKey(name: 'ar') String ar,
-      @HiveField(1) @JsonKey(name: 'en') String en});
+      {@HiveField(0) @JsonKey(name: 'ar') String? ar,
+      @HiveField(1) @JsonKey(name: 'en') String? en});
 }
 
 /// @nodoc
@@ -57,18 +57,18 @@ class _$LocalizedStringCopyWithImpl<$Res, $Val extends LocalizedString>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? ar = null,
-    Object? en = null,
+    Object? ar = freezed,
+    Object? en = freezed,
   }) {
     return _then(_value.copyWith(
-      ar: null == ar
+      ar: freezed == ar
           ? _value.ar
           : ar // ignore: cast_nullable_to_non_nullable
-              as String,
-      en: null == en
+              as String?,
+      en: freezed == en
           ? _value.en
           : en // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -82,8 +82,8 @@ abstract class _$$LocalizedStringImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@HiveField(0) @JsonKey(name: 'ar') String ar,
-      @HiveField(1) @JsonKey(name: 'en') String en});
+      {@HiveField(0) @JsonKey(name: 'ar') String? ar,
+      @HiveField(1) @JsonKey(name: 'en') String? en});
 }
 
 /// @nodoc
@@ -97,18 +97,18 @@ class __$$LocalizedStringImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? ar = null,
-    Object? en = null,
+    Object? ar = freezed,
+    Object? en = freezed,
   }) {
     return _then(_$LocalizedStringImpl(
-      ar: null == ar
+      ar: freezed == ar
           ? _value.ar
           : ar // ignore: cast_nullable_to_non_nullable
-              as String,
-      en: null == en
+              as String?,
+      en: freezed == en
           ? _value.en
           : en // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -117,8 +117,8 @@ class __$$LocalizedStringImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$LocalizedStringImpl extends _LocalizedString {
   const _$LocalizedStringImpl(
-      {@HiveField(0) @JsonKey(name: 'ar') required this.ar,
-      @HiveField(1) @JsonKey(name: 'en') required this.en})
+      {@HiveField(0) @JsonKey(name: 'ar') this.ar,
+      @HiveField(1) @JsonKey(name: 'en') this.en})
       : super._();
 
   factory _$LocalizedStringImpl.fromJson(Map<String, dynamic> json) =>
@@ -127,11 +127,11 @@ class _$LocalizedStringImpl extends _LocalizedString {
   @override
   @HiveField(0)
   @JsonKey(name: 'ar')
-  final String ar;
+  final String? ar;
   @override
   @HiveField(1)
   @JsonKey(name: 'en')
-  final String en;
+  final String? en;
 
   @override
   String toString() {
@@ -168,8 +168,8 @@ class _$LocalizedStringImpl extends _LocalizedString {
 
 abstract class _LocalizedString extends LocalizedString {
   const factory _LocalizedString(
-          {@HiveField(0) @JsonKey(name: 'ar') required final String ar,
-          @HiveField(1) @JsonKey(name: 'en') required final String en}) =
+          {@HiveField(0) @JsonKey(name: 'ar') final String? ar,
+          @HiveField(1) @JsonKey(name: 'en') final String? en}) =
       _$LocalizedStringImpl;
   const _LocalizedString._() : super._();
 
@@ -179,11 +179,11 @@ abstract class _LocalizedString extends LocalizedString {
   @override
   @HiveField(0)
   @JsonKey(name: 'ar')
-  String get ar;
+  String? get ar;
   @override
   @HiveField(1)
   @JsonKey(name: 'en')
-  String get en;
+  String? get en;
   @override
   @JsonKey(ignore: true)
   _$$LocalizedStringImplCopyWith<_$LocalizedStringImpl> get copyWith =>
