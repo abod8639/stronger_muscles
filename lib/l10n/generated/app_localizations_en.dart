@@ -331,4 +331,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get flavor => 'Flavor';
+
+  @override
+  String get contactUs => 'Contact Us';
+
+  @override
+  String get priceOnRequest => 'Price on Request';
+
+  @override
+  String get category => 'Category';
 }

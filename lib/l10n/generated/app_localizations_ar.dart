@@ -330,4 +330,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get flavor => 'النكهة';
+
+  @override
+  String get contactUs => 'اتصل بنا';
+
+  @override
+  String get priceOnRequest => 'السعر عند الطلب';
+
+  @override
+  String get category => 'التصنيف';
 }

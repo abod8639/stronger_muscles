@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Builds the product price text
 Widget buildProductPrice(
@@ -15,6 +16,16 @@ Widget buildProductPrice(
       final effectivePrice = alternateEffectivePrice ?? product.effectivePrice;
       final originalPrice = alternateOriginalPrice ?? product.price;
       final hasDiscount = alternateHasDiscount ?? product.hasDiscount;
+
+      if (effectivePrice <= 0) {
+        return Text(
+          AppLocalizations.of(context)!.priceOnRequest,
+          style: theme.textTheme.headlineSmall?.copyWith(
+            color: AppColors.primary,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }
 
       return Wrap(
         spacing: 8,

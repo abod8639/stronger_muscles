@@ -739,6 +739,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Flavor'**
   String get flavor;
+
+  /// No description provided for @contactUs.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get contactUs;
+
+  /// No description provided for @priceOnRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Price on Request'**
+  String get priceOnRequest;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
 }
 
 class _AppLocalizationsDelegate

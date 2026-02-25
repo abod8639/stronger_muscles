@@ -83,18 +83,22 @@ class BottomIconsRow extends StatelessWidget {
     CartController cartController,
     AppLocalizations l10n,
   ) {
+    final isPriceZero = detailsController.displayEffectivePrice <= 0;
+
     return ElevatedButton.icon(
-      onPressed: () {
-        cartController.addToCart(
-          product,
-          selectedFlavor: detailsController.selectedFlavor.value,
-          selectedSize: detailsController.selectedSizeObject.value?.size,
-        );
-      },
-      icon: const Icon(Icons.add_shopping_cart, size: 20),
-      label: Text(l10n.addToCart),
+      onPressed: isPriceZero 
+        ? null 
+        : () {
+            cartController.addToCart(
+              product,
+              selectedFlavor: detailsController.selectedFlavor.value,
+              selectedSize: detailsController.selectedSizeObject.value?.size,
+            );
+          },
+      icon: Icon(isPriceZero ? Icons.mail_outline : Icons.add_shopping_cart, size: 20),
+      label: Text(isPriceZero ? l10n.contactUs : l10n.addToCart),
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: isPriceZero ? Colors.grey : AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
         textStyle: const TextStyle(

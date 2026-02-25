@@ -25,7 +25,7 @@ mixin _$ProductCategory {
   String get id => throw _privateConstructorUsedError;
   @HiveField(1)
   @JsonKey(name: 'name')
-  String? get name => throw _privateConstructorUsedError;
+  LocalizedString? get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +41,9 @@ abstract class $ProductCategoryCopyWith<$Res> {
   @useResult
   $Res call(
       {@HiveField(0) @JsonKey(name: 'id') String id,
-      @HiveField(1) @JsonKey(name: 'name') String? name});
+      @HiveField(1) @JsonKey(name: 'name') LocalizedString? name});
+
+  $LocalizedStringCopyWith<$Res>? get name;
 }
 
 /// @nodoc
@@ -68,8 +70,20 @@ class _$ProductCategoryCopyWithImpl<$Res, $Val extends ProductCategory>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as LocalizedString?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LocalizedStringCopyWith<$Res>? get name {
+    if (_value.name == null) {
+      return null;
+    }
+
+    return $LocalizedStringCopyWith<$Res>(_value.name!, (value) {
+      return _then(_value.copyWith(name: value) as $Val);
+    });
   }
 }
 
@@ -83,7 +97,10 @@ abstract class _$$ProductCategoryImplCopyWith<$Res>
   @useResult
   $Res call(
       {@HiveField(0) @JsonKey(name: 'id') String id,
-      @HiveField(1) @JsonKey(name: 'name') String? name});
+      @HiveField(1) @JsonKey(name: 'name') LocalizedString? name});
+
+  @override
+  $LocalizedStringCopyWith<$Res>? get name;
 }
 
 /// @nodoc
@@ -108,7 +125,7 @@ class __$$ProductCategoryImplCopyWithImpl<$Res>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as LocalizedString?,
     ));
   }
 }
@@ -131,7 +148,7 @@ class _$ProductCategoryImpl extends _ProductCategory {
   @override
   @HiveField(1)
   @JsonKey(name: 'name')
-  final String? name;
+  final LocalizedString? name;
 
   @override
   String toString() {
@@ -169,7 +186,7 @@ class _$ProductCategoryImpl extends _ProductCategory {
 abstract class _ProductCategory extends ProductCategory {
   const factory _ProductCategory(
           {@HiveField(0) @JsonKey(name: 'id') required final String id,
-          @HiveField(1) @JsonKey(name: 'name') final String? name}) =
+          @HiveField(1) @JsonKey(name: 'name') final LocalizedString? name}) =
       _$ProductCategoryImpl;
   const _ProductCategory._() : super._();
 
@@ -183,7 +200,7 @@ abstract class _ProductCategory extends ProductCategory {
   @override
   @HiveField(1)
   @JsonKey(name: 'name')
-  String? get name;
+  LocalizedString? get name;
   @override
   @JsonKey(ignore: true)
   _$$ProductCategoryImplCopyWith<_$ProductCategoryImpl> get copyWith =>

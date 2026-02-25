@@ -11,11 +11,23 @@ Widget buildProductInfo(
   final infoItems = <Widget>[];
 
   // Brand
-  if (product.brand != null) {
+  if (product.brand != null && product.brand!.isNotEmpty) {
     infoItems.add(
       _buildInfoRow(
         AppLocalizations.of(context)!.brand,
         product.brand!,
+        isDark,
+      ),
+    );
+  }
+
+  // Category
+  if (product.category != null && product.category!.name != null) {
+    final locale = Localizations.localeOf(context).languageCode;
+    infoItems.add(
+      _buildInfoRow(
+        AppLocalizations.of(context)!.category,
+        product.category!.getLocalizedName(locale: locale),
         isDark,
       ),
     );

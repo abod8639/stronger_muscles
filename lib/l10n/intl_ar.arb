@@ -106,5 +106,8 @@
   "addedToCart": "تم إضافة المنتج إلى السلة",
   "removeFromCart": "إزالة من السلة",
   "decreaseQuantity": "العدد",
-  "flavor": "النكهة"
+  "flavor": "النكهة",
+  "contactUs": "اتصل بنا",
+  "priceOnRequest": "السعر عند الطلب",
+  "category": "التصنيف"
 }

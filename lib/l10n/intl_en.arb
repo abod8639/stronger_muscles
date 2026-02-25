@@ -106,5 +106,8 @@
   "addedToCart": "Added to Cart",
   "decreaseQuantity": "Decrease Quantity",
   "removeFromCart": "Remove from Cart",
-  "flavor": "Flavor"
+  "flavor": "Flavor",
+  "contactUs": "Contact Us",
+  "priceOnRequest": "Price on Request",
+  "category": "Category"
 }
