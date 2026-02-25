@@ -168,4 +168,7 @@ class ProductModel with _$ProductModel {
     if (productSizes.isNotEmpty) return productSizes.first.effectivePrice;
     return 0;
   }
+
+  /// Check if the base price has a discount
+  bool get baseHasDiscount => baseEffectivePrice < basePrice && basePrice > 0;
 }

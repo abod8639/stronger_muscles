@@ -128,15 +128,15 @@ class _ProductContainerState extends State<ProductContainer>
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              'LE ${widget.product.effectivePrice.toStringAsFixed(2)}',
+                              'LE ${widget.product.formattedEffectivePrice}',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (widget.product.hasDiscount)
+                            if (widget.product.baseHasDiscount)
                               Text(
-                                'LE ${widget.product.price.toStringAsFixed(2)}',
+                                'LE ${widget.product.formattedPrice}',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: Colors.grey,
                                   decoration: TextDecoration.lineThrough,

@@ -13,9 +13,9 @@ Widget buildProductPrice(
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
-      final effectivePrice = alternateEffectivePrice ?? product.effectivePrice;
-      final originalPrice = alternateOriginalPrice ?? product.price;
-      final hasDiscount = alternateHasDiscount ?? product.hasDiscount;
+      final effectivePrice = alternateEffectivePrice ?? product.baseEffectivePrice;
+      final originalPrice = alternateOriginalPrice ?? product.basePrice;
+      final hasDiscount = alternateHasDiscount ?? product.baseHasDiscount;
 
       if (effectivePrice <= 0) {
         return Text(
