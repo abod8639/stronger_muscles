@@ -18,8 +18,8 @@ class ProductFlavorSelector extends StatelessWidget {
   Color _getFlavorColor(String flavor) {
     final f = flavor.toLowerCase();
     if (f.contains('vanilla')) return const Color(0xFFF3E5AB);
-    if (f.contains('straw')) return Colors.pinkAccent;
-    if (f.contains('choco')) return Colors.brown.shade700;
+    if (f.contains('strawberry')) return Colors.pinkAccent;
+    if (f.contains('chocolate')) return Colors.brown.shade700;
     if (f.contains('mango')) return Colors.orangeAccent;
     if (f.contains('caramel')) return Colors.amber.shade800;
     if (f.contains('cookies')) return Colors.grey.shade600;
@@ -29,6 +29,7 @@ class ProductFlavorSelector extends StatelessWidget {
     if (f.contains('coffee')) return Colors.brown.shade700;
     if (f.contains('mint')) return Colors.green.shade800;
     if (f.contains('cola')) return Colors.brown.shade900;
+    if (f.contains('watermelon')) return Colors.pink.shade900;
     return Colors.blueGrey;
   }
 
@@ -65,7 +66,7 @@ class ProductFlavorSelector extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
                 width: 120,
-                height: 60,
+                height: 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
@@ -92,18 +93,18 @@ class ProductFlavorSelector extends StatelessWidget {
                       isSelected ? baseColor : baseColor,
                       isSelected ? baseColor : baseColor,
                       isSelected
-                          ? baseColor.withOpacity(0.8)
+                          ? baseColor.withValues(alpha: .8)
                           : Colors.grey.shade400,
                       isSelected
-                          ? baseColor.withOpacity(0.8)
+                          ? baseColor.withValues(alpha: .8)
                           : Colors.grey.shade400,
                       isSelected ? baseColor : AppColors.grey,
                       isSelected ? baseColor : AppColors.grey,
                       isSelected
-                          ? baseColor.withOpacity(0.8)
+                          ? baseColor.withValues(alpha: .8)
                           : Colors.grey.shade400,
                       isSelected
-                          ? baseColor.withOpacity(0.8)
+                          ? baseColor.withValues(alpha: .8)
                           : Colors.grey.shade400,
                       isSelected ? baseColor : AppColors.grey,
                       isSelected ? baseColor : AppColors.grey,

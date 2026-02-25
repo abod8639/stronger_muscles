@@ -58,53 +58,21 @@ class CheckoutController extends GetxController {
     isProcessing.value = true;
 
     try {
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-      final orderId = 'ORD-$timestamp';
-      int itemIndex = 0;
-
-      const shippingCost = 50.0;
-      final subtotal = _cartController.totalPrice;
-
-      final order = OrderModel(
-        id: orderId,
-        userId: _authController.currentUser.value?.id.toString() ?? '0',
-        orderDate: DateTime.now(),
-        status: 'pending',
-        addressId: selectedAddress.value!.id.toString(),
-        subtotal: subtotal,
-        totalAmount: subtotal + shippingCost,
-        createdAt: DateTime.now(),
-        discount: 0,
-        shippingCost: shippingCost,
-        notes: _cartController.notesController.text,
-        shippingAddress: selectedAddress.value,
-        // shippingAddress: selectedAddress.value!.street,
-        trackingNumber: '', // TODO: add tracking number
-        paymentMethod: selectedPaymentMethod.value,
-        paymentStatus: 'pending', // TODO: add payment status
-        updatedAt: DateTime.now(),
-        items: _cartController.cartItems.map((item) {
-          itemIndex++;
-          return OrderItemModel(
-            id: 'item-$timestamp-$itemIndex-${item.product.id}',
-            orderId: orderId,
-            productId: item.product.id,
-            productName: item.product.getLocalizedName(locale: 'en'),
-            unitPrice: item.product.getEffectivePriceForSize(item.selectedSize),
-            quantity: item.quantity,
-            subtotal: item.product.getEffectivePriceForSize(item.selectedSize) *
-                item.quantity,
-            imageUrl: item.product.imageUrls.isNotEmpty 
-                ? item.product.imageUrls.first.medium 
-                : '',
-            selectedFlavor: item.selectedFlavor,
-            selectedSize: item.selectedSize,
-            createdAt: DateTime.now(),
-          );
+      final payload = {
+        "address_id": selectedAddress.value!.id,
+        "payment_method": selectedPaymentMethod.value,
+        "notes": _cartController.notesController.text,
+        "items": _cartController.cartItems.map((item) {
+          return {
+            "product_id": item.product.id,
+            "quantity": item.quantity,
+            "flavor": item.selectedFlavor,
+            "size": item.selectedSize,
+          };
         }).toList(),
-      );
+      };
 
-      await _orderRepository.createOrder(order);
+      await _orderRepository.createOrder(payload);
       _cartController.clearCart();
       Get.offNamed(AppRoutes.orderSuccess);
     } catch (e) {

@@ -86,6 +86,5 @@ class ProductsController extends BaseController {
     if (product == null) return "0.00";
     return product.formattedPrice;
   }
-
   
 }

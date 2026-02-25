@@ -8,11 +8,11 @@ import '../../data/models/order_model.dart';
 class OrderRepository {
   final ApiService _apiService = Get.find<ApiService>();
 
-  Future<void> createOrder(OrderModel order) async {
+  Future<void> createOrder(Map<String, dynamic> payload) async {
     try {
       final response = await _apiService.post(
         ApiConfig.orders,
-        data: order.toJson(),
+        data: payload,
       );
 
       if (response.statusCode != 201 && response.statusCode != 200) {
