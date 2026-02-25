@@ -71,13 +71,29 @@ Widget buildProductCartDetails(CartItemModel item) {
           const SizedBox(height: 8.0),
 
           // Product Price
-          Text(
-            '\$${item.product.effectivePrice.toStringAsFixed(2)}',
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontSize: _priceFontSize,
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '\$${item.product.baseEffectivePrice.toStringAsFixed(2)}',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontSize: _priceFontSize,
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              // const SizedBox(width: 4.0),
+              Text(
+                '\$${item.product.basePrice.toStringAsFixed(2)}',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontSize: _priceFontSize,
+                  color: AppColors.grey,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.lineThrough,
+                ),
+              ),
+              SizedBox(width: 5),
+            ],
           ),
 
           const SizedBox(height: 4.0),
