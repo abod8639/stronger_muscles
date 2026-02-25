@@ -44,28 +44,18 @@ Widget buildProductCartDetails(CartItemModel item) {
 
           // Selected Flavor
           if (item.selectedFlavor != null && item.selectedFlavor!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(
-                '${AppLocalizations.of(context)!.flavor}: ${item.selectedFlavor}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
+            selectedValue(
+              title: AppLocalizations.of(context)!.flavor, 
+              value: item.selectedFlavor!, 
+              item: item,
               ),
-            ),
 
           // Selected Size
           if (item.selectedSize != null && item.selectedSize!.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0),
-              child: Text(
-                '${AppLocalizations.of(context)!.size}: ${item.selectedSize}',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+            selectedValue(
+            title:  AppLocalizations.of(context)!.size,
+            value: item.selectedSize!,
+            item: item,
             ),
 
           const SizedBox(height: 8.0),
@@ -74,6 +64,7 @@ Widget buildProductCartDetails(CartItemModel item) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              
               Text(
                 '\$${item.product.baseEffectivePrice.toStringAsFixed(2)}',
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -108,6 +99,44 @@ Widget buildProductCartDetails(CartItemModel item) {
               ),
             ),
         ],
+      );
+    },
+  );
+}
+
+Builder selectedValue({
+  required String title,
+  required String value,
+  required CartItemModel item,
+  Color? color,
+  
+}) {
+  return Builder(
+    builder: (context) {
+      final theme = Theme.of(context);
+      return Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: Row(
+          children: [
+            Text(
+              "$title: ",
+              // '${AppLocalizations.of(context)!.flavor}: ',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: AppColors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+
+            Text(
+              value,
+              // '${item.selectedFlavor}',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color:color ?? AppColors.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       );
     },
   );
