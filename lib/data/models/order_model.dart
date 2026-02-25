@@ -8,6 +8,7 @@ part 'order_model.g.dart';
 @freezed
 @HiveType(typeId: 2, adapterName: 'OrderModelAdapter')
 class OrderModel with _$OrderModel {
+  @JsonSerializable(explicitToJson: true)
   const factory OrderModel({
     @HiveField(0) required String id,
     @HiveField(1) @JsonKey(name: 'user_id') required String userId,
@@ -19,7 +20,7 @@ class OrderModel with _$OrderModel {
     String paymentStatus,
     @HiveField(5)
     @JsonKey(name: 'payment_method')
-    @Default('card')
+    @Default('cash')
     String paymentMethod,
     @HiveField(6) @JsonKey(name: 'address_id') required String addressId,
     @HiveField(8) required double subtotal,
@@ -54,6 +55,7 @@ class OrderModel with _$OrderModel {
 @freezed
 @HiveType(typeId: 3, adapterName: 'OrderItemModelAdapter')
 class OrderItemModel with _$OrderItemModel {
+  @JsonSerializable(explicitToJson: true)
   const factory OrderItemModel({
     @HiveField(0) required String id, // can be empty for new items
     @HiveField(1) @JsonKey(name: 'order_id') required String orderId,
@@ -65,9 +67,11 @@ class OrderItemModel with _$OrderItemModel {
     @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
     @HiveField(8) DateTime? createdAt,
     @HiveField(9)
-    @JsonKey(name: 'selectedFlavor')
+    @JsonKey(name: 'selected_flavor', includeIfNull: false)
     String? selectedFlavor, // تم التعديل
-    @HiveField(10) @JsonKey(name: 'selectedSize') String? selectedSize,
+    @HiveField(10)
+    @JsonKey(name: 'selected_size', includeIfNull: false)
+    String? selectedSize,
   }) = _OrderItemModel;
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) =>

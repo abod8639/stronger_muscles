@@ -20,14 +20,14 @@ Future<void> updateProfile(
     Get.snackbar(
       'نجح',
       'تم تحديث بياناتك بنجاح',
-      backgroundColor: AppColors.primary.withOpacity(0.8),
+      backgroundColor: AppColors.primary.withValues(alpha: .8),
       colorText: AppColors.white,
     );
   } catch (e) {
     Get.snackbar(
       'خطأ',
       'فشل تحديث البيانات: ${e.toString()}',
-      backgroundColor: Colors.red.withOpacity(0.8),
+      backgroundColor: Colors.red.withValues(alpha: .8),
       colorText: AppColors.white,
     );
   }

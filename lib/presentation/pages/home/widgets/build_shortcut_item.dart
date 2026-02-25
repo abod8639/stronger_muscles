@@ -57,6 +57,16 @@ Widget buildShortcutItem(int index) {
                         ? theme.colorScheme.primary
                         : theme.colorScheme.onSurfaceVariant,
                     size: _iconInnerSize,
+                    shadows: [
+                      BoxShadow(
+                        color: isSelected
+                            ? theme.scaffoldBackgroundColor
+                            : theme.colorScheme.primary.withOpacity(0.1),
+                        blurRadius: isSelected ? 6 : 3,
+                        offset: const Offset(2, 3),
+                        blurStyle: BlurStyle.outer,
+                      ),
+                    ],
                   ),
                 ),
 

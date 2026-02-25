@@ -99,16 +99,16 @@ class CategoriesSectionsController extends GetxController {
   IconData _getIconForCategory(String id) {
     // نستخدم الـ Map بدلاً من Switch ليكون الكود أنظف وقابل للتوسع
     final icons = {
-      'cat-creatine': Icons.local_fire_department_outlined,
-      'cat-protein': Icons.fitness_center,
-      'cat-amino': Icons.local_drink,
-      'cat-vitamins': Icons.medication,
-      'cat-preworkout': Icons.flash_on,
-      'cat-recovery': Icons.healing,
-      'cat-fatburner': Icons.local_fire_department,
-      'cat-health': Icons.favorite,
-      'cat-mass-gainer': Icons.monitor_weight_outlined,
-      'cat-carb': Icons.bakery_dining_outlined,
+      'creatine': Icons.local_fire_department_outlined,
+      'protein': Icons.fitness_center,
+      'amino': Icons.local_drink,
+      'vitamins': Icons.medication,
+      'preworkout': Icons.flash_on,
+      'recovery': Icons.healing,
+      'fatburner': Icons.local_fire_department,
+      'health': Icons.favorite,
+      'mass-gainers': Icons.man_3_sharp,
+      'carb': Icons.bakery_dining_outlined,
     };
     return icons[id] ?? Icons.category;
   }

@@ -169,7 +169,7 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       orderDate: DateTime.parse(json['order_date'] as String),
       status: json['status'] as String? ?? 'pending',
       paymentStatus: json['payment_status'] as String? ?? 'pending',
-      paymentMethod: json['payment_method'] as String? ?? 'card',
+      paymentMethod: json['payment_method'] as String? ?? 'cash',
       addressId: json['address_id'] as String,
       subtotal: (json['subtotal'] as num).toDouble(),
       shippingCost: (json['shippingCost'] as num?)?.toDouble() ?? 0,
@@ -211,8 +211,8 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
       'notes': instance.notes,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
-      'order_items': instance.items,
-      'shipping_address': instance.shippingAddress,
+      'order_items': instance.items?.map((e) => e.toJson()).toList(),
+      'shipping_address': instance.shippingAddress?.toJson(),
       'phone_number': instance.phoneNumber,
       'user_name': instance.userName,
     };
@@ -230,22 +230,31 @@ _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      selectedFlavor: json['selectedFlavor'] as String?,
-      selectedSize: json['selectedSize'] as String?,
+      selectedFlavor: json['selected_flavor'] as String?,
+      selectedSize: json['selected_size'] as String?,
     );
 
 Map<String, dynamic> _$$OrderItemModelImplToJson(
-        _$OrderItemModelImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'order_id': instance.orderId,
-      'product_id': instance.productId,
-      'product_name': instance.productName,
-      'unit_price': instance.unitPrice,
-      'quantity': instance.quantity,
-      'subtotal': instance.subtotal,
-      'image_url': instance.imageUrl,
-      'created_at': instance.createdAt?.toIso8601String(),
-      'selectedFlavor': instance.selectedFlavor,
-      'selectedSize': instance.selectedSize,
-    };
+    _$OrderItemModelImpl instance) {
+  final val = <String, dynamic>{
+    'id': instance.id,
+    'order_id': instance.orderId,
+    'product_id': instance.productId,
+    'product_name': instance.productName,
+    'unit_price': instance.unitPrice,
+    'quantity': instance.quantity,
+    'subtotal': instance.subtotal,
+    'image_url': instance.imageUrl,
+    'created_at': instance.createdAt?.toIso8601String(),
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('selected_flavor', instance.selectedFlavor);
+  writeNotNull('selected_size', instance.selectedSize);
+  return val;
+}

@@ -10,7 +10,7 @@ Step buildPaymentStep(String title) {
     content: Column(
       children: [
         buildPaymentOption(
-          value: 'cod',
+          value: 'cash',
           title: 'Cash on Delivery',
           icon: Icons.money,
         ),

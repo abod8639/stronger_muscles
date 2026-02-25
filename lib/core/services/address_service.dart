@@ -143,8 +143,11 @@ class AddressService extends GetxService {
     }
 
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
+      locationSettings: AndroidSettings(
+        accuracy: LocationAccuracy.high,     
+      ),
     );
+
   }
 
   /// Get address from coordinates using geocoding

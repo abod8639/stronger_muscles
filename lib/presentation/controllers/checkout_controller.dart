@@ -15,7 +15,7 @@ class CheckoutController extends GetxController {
   final OrderRepository _orderRepository = OrderRepository();
   final RxInt currentStep = 0.obs;
   final Rx<AddressModel?> selectedAddress = Rx<AddressModel?>(null);
-  final RxString selectedPaymentMethod = 'cod'.obs; // 'cod' or 'card'
+  final RxString selectedPaymentMethod = 'cash'.obs; // 'cash' or 'card'
   final RxBool isProcessing = false.obs;
 
   @override
@@ -62,18 +62,21 @@ class CheckoutController extends GetxController {
       final orderId = 'ORD-$timestamp';
       int itemIndex = 0;
 
+      const shippingCost = 50.0;
+      final subtotal = _cartController.totalPrice;
+
       final order = OrderModel(
         id: orderId,
         userId: _authController.currentUser.value?.id.toString() ?? '0',
         orderDate: DateTime.now(),
         status: 'pending',
         addressId: selectedAddress.value!.id.toString(),
-        subtotal: _cartController.totalPrice,
-        totalAmount: _cartController.totalPrice,
+        subtotal: subtotal,
+        totalAmount: subtotal + shippingCost,
         createdAt: DateTime.now(),
         discount: 0,
-        shippingCost: 50,
-        notes: 'not${_cartController.notesController.text}',
+        shippingCost: shippingCost,
+        notes: _cartController.notesController.text,
         shippingAddress: selectedAddress.value,
         // shippingAddress: selectedAddress.value!.street,
         trackingNumber: '', // TODO: add tracking number
@@ -87,9 +90,10 @@ class CheckoutController extends GetxController {
             orderId: orderId,
             productId: item.product.id,
             productName: item.product.getLocalizedName(locale: 'en'),
-            unitPrice: item.product.effectivePrice,
+            unitPrice: item.product.getEffectivePriceForSize(item.selectedSize),
             quantity: item.quantity,
-            subtotal: item.product.effectivePrice * item.quantity,
+            subtotal: item.product.getEffectivePriceForSize(item.selectedSize) *
+                item.quantity,
             imageUrl: item.product.imageUrls.isNotEmpty 
                 ? item.product.imageUrls.first.medium 
                 : '',

@@ -82,7 +82,7 @@ Step buildReviewStep(String title) {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              checkoutController.selectedPaymentMethod.value == 'cod'
+              checkoutController.selectedPaymentMethod.value == 'cash'
                   ? 'Cash on Delivery'
                   : 'Credit Card',
             ),

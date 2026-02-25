@@ -383,7 +383,8 @@ class __$$OrderModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$OrderModelImpl extends _OrderModel {
   const _$OrderModelImpl(
       {@HiveField(0) required this.id,
@@ -395,7 +396,7 @@ class _$OrderModelImpl extends _OrderModel {
       this.paymentStatus = 'pending',
       @HiveField(5)
       @JsonKey(name: 'payment_method')
-      this.paymentMethod = 'card',
+      this.paymentMethod = 'cash',
       @HiveField(6) @JsonKey(name: 'address_id') required this.addressId,
       @HiveField(8) required this.subtotal,
       @HiveField(9) @JsonKey(name: 'shippingCost') this.shippingCost = 0,
@@ -727,11 +728,11 @@ mixin _$OrderItemModel {
   @HiveField(8)
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @HiveField(9)
-  @JsonKey(name: 'selectedFlavor')
+  @JsonKey(name: 'selected_flavor', includeIfNull: false)
   String? get selectedFlavor =>
       throw _privateConstructorUsedError; // تم التعديل
   @HiveField(10)
-  @JsonKey(name: 'selectedSize')
+  @JsonKey(name: 'selected_size', includeIfNull: false)
   String? get selectedSize => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -756,8 +757,12 @@ abstract class $OrderItemModelCopyWith<$Res> {
       @HiveField(6) double subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
       @HiveField(8) DateTime? createdAt,
-      @HiveField(9) @JsonKey(name: 'selectedFlavor') String? selectedFlavor,
-      @HiveField(10) @JsonKey(name: 'selectedSize') String? selectedSize});
+      @HiveField(9)
+      @JsonKey(name: 'selected_flavor', includeIfNull: false)
+      String? selectedFlavor,
+      @HiveField(10)
+      @JsonKey(name: 'selected_size', includeIfNull: false)
+      String? selectedSize});
 }
 
 /// @nodoc
@@ -852,8 +857,12 @@ abstract class _$$OrderItemModelImplCopyWith<$Res>
       @HiveField(6) double subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') String? imageUrl,
       @HiveField(8) DateTime? createdAt,
-      @HiveField(9) @JsonKey(name: 'selectedFlavor') String? selectedFlavor,
-      @HiveField(10) @JsonKey(name: 'selectedSize') String? selectedSize});
+      @HiveField(9)
+      @JsonKey(name: 'selected_flavor', includeIfNull: false)
+      String? selectedFlavor,
+      @HiveField(10)
+      @JsonKey(name: 'selected_size', includeIfNull: false)
+      String? selectedSize});
 }
 
 /// @nodoc
@@ -929,7 +938,8 @@ class __$$OrderItemModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$OrderItemModelImpl implements _OrderItemModel {
   const _$OrderItemModelImpl(
       {@HiveField(0) required this.id,
@@ -941,8 +951,12 @@ class _$OrderItemModelImpl implements _OrderItemModel {
       @HiveField(6) required this.subtotal,
       @HiveField(7) @JsonKey(name: 'image_url') this.imageUrl,
       @HiveField(8) this.createdAt,
-      @HiveField(9) @JsonKey(name: 'selectedFlavor') this.selectedFlavor,
-      @HiveField(10) @JsonKey(name: 'selectedSize') this.selectedSize});
+      @HiveField(9)
+      @JsonKey(name: 'selected_flavor', includeIfNull: false)
+      this.selectedFlavor,
+      @HiveField(10)
+      @JsonKey(name: 'selected_size', includeIfNull: false)
+      this.selectedSize});
 
   factory _$OrderItemModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrderItemModelImplFromJson(json);
@@ -982,12 +996,12 @@ class _$OrderItemModelImpl implements _OrderItemModel {
   final DateTime? createdAt;
   @override
   @HiveField(9)
-  @JsonKey(name: 'selectedFlavor')
+  @JsonKey(name: 'selected_flavor', includeIfNull: false)
   final String? selectedFlavor;
 // تم التعديل
   @override
   @HiveField(10)
-  @JsonKey(name: 'selectedSize')
+  @JsonKey(name: 'selected_size', includeIfNull: false)
   final String? selectedSize;
 
   @override
@@ -1071,10 +1085,10 @@ abstract class _OrderItemModel implements OrderItemModel {
       @HiveField(7) @JsonKey(name: 'image_url') final String? imageUrl,
       @HiveField(8) final DateTime? createdAt,
       @HiveField(9)
-      @JsonKey(name: 'selectedFlavor')
+      @JsonKey(name: 'selected_flavor', includeIfNull: false)
       final String? selectedFlavor,
       @HiveField(10)
-      @JsonKey(name: 'selectedSize')
+      @JsonKey(name: 'selected_size', includeIfNull: false)
       final String? selectedSize}) = _$OrderItemModelImpl;
 
   factory _OrderItemModel.fromJson(Map<String, dynamic> json) =
@@ -1114,11 +1128,11 @@ abstract class _OrderItemModel implements OrderItemModel {
   DateTime? get createdAt;
   @override
   @HiveField(9)
-  @JsonKey(name: 'selectedFlavor')
+  @JsonKey(name: 'selected_flavor', includeIfNull: false)
   String? get selectedFlavor;
   @override // تم التعديل
   @HiveField(10)
-  @JsonKey(name: 'selectedSize')
+  @JsonKey(name: 'selected_size', includeIfNull: false)
   String? get selectedSize;
   @override
   @JsonKey(ignore: true)
