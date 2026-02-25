@@ -31,7 +31,7 @@ Widget buildProductCartDetails(CartItemModel item) {
 
           // Product Name
           Text(
-            item.product.getLocalizedName(locale: 'en'),
+            item.product.getLocalizedName(locale: AppLocalizations.of(context)!.localeName ),
             style: theme.textTheme.titleMedium?.copyWith(
               fontSize: _titleFontSize,
               fontWeight: FontWeight.bold,
@@ -39,7 +39,7 @@ Widget buildProductCartDetails(CartItemModel item) {
             ),
             maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
-            semanticsLabel: item.product.getLocalizedName(locale: 'en'),
+            semanticsLabel: item.product.getLocalizedName(locale: AppLocalizations.of(context)!.localeName ),
           ),
 
           // Selected Flavor
@@ -64,7 +64,7 @@ Widget buildProductCartDetails(CartItemModel item) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
+
               Text(
                 '\$${item.product.baseEffectivePrice.toStringAsFixed(2)}',
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -73,7 +73,7 @@ Widget buildProductCartDetails(CartItemModel item) {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              // const SizedBox(width: 4.0),
+
               Text(
                 '\$${item.product.basePrice.toStringAsFixed(2)}',
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -103,6 +103,9 @@ Widget buildProductCartDetails(CartItemModel item) {
     },
   );
 }
+
+
+
 
 Builder selectedValue({
   required String title,
