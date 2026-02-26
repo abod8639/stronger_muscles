@@ -103,7 +103,6 @@ class AddressService extends GetxService {
     );
   }
 
-  // --- Location Services (لا تتغير لأنها لا تعتمد على HTTP) ---
 
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -112,8 +111,9 @@ class AddressService extends GetxService {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied)
+      if (permission == LocationPermission.denied) {
         throw 'تم رفض صلاحيات الموقع';
+      }
     }
 
     if (permission == LocationPermission.deniedForever) {
