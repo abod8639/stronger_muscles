@@ -28,12 +28,10 @@ class ProductsController extends BaseController {
     if (isLoading.value) return;
 
     try {
-      // 1. إظهار الـ Loading فقط إذا كانت القائمة فارغة (لتجنب الوميض المزعج)
       if (products.isEmpty) setLoading(true);
 
       List<ProductModel> result;
 
-      // 2. توجيه الطلب للمستودع (Repository)
       if (query != null && query.isNotEmpty) {
         result = await _repository.searchProducts(query);
       } else if (categoryId != null && categoryId.isNotEmpty) {

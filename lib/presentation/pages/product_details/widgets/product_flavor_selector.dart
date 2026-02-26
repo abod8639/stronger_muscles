@@ -176,19 +176,10 @@ class ProductFlavorSelector extends StatelessWidget {
 }
 
 
-
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:stronger_muscles/core/constants/app_colors.dart';
 // import 'package:stronger_muscles/data/models/product_model.dart';
-
-// class FlavorsModel {
-//   final String name;
-//   final Color color;
-//   final String? image;
-
-//   FlavorsModel({required this.name, required this.color, this.image});
-// }
 
 // class ProductFlavorSelector extends StatelessWidget {
 //   final ProductModel product;
@@ -202,82 +193,26 @@ class ProductFlavorSelector extends StatelessWidget {
 //     required this.onFlavorSelected,
 //   });
 
-
+//   Color _getFlavorColor(String flavor) {
+//     final f = flavor.toLowerCase();
+//     if (f.contains('vanilla')) return const Color(0xFFF3E5AB);
+//     if (f.contains('strawberry')) return Colors.pinkAccent;
+//     if (f.contains('chocolate')) return Colors.brown.shade700;
+//     if (f.contains('mango')) return Colors.orangeAccent;
+//     if (f.contains('caramel')) return Colors.amber.shade800;
+//     if (f.contains('cookies')) return Colors.grey.shade600;
+//     if (f.contains('banana')) return Colors.yellow.shade800;
+//     if (f.contains('berry')) return Colors.red.shade800;
+//     if (f.contains('peanut')) return Colors.orange.shade800;
+//     if (f.contains('coffee')) return Colors.brown.shade700;
+//     if (f.contains('mint')) return Colors.green.shade800;
+//     if (f.contains('cola')) return Colors.brown.shade900;
+//     if (f.contains('watermelon')) return Colors.pink.shade900;
+//     return Colors.blueGrey;
+//   }
 
 //   @override
 //   Widget build(BuildContext context) {
-//     List<FlavorsModel> flivorsList = [
-//       FlavorsModel(
-//         name: "Vanilla", 
-//         color: Colors.yellow,
-//         image: "https://i.pinimg.com/1200x/34/05/1d/34051d682f6f93788f27d6d28280f2ff.jpg"
-//         ),
-//       FlavorsModel(
-//         name: "Chocolate", 
-//         color: Colors.brown,
-//         image: "https://i.pinimg.com/736x/54/cc/0e/54cc0e7213b33cb9c1ee2451bb19d9a3.jpg"
-//         ),
-//       FlavorsModel(
-//         name: "Strawberry", 
-//         color: Colors.pink,
-//         image: "https://i.pinimg.com/736x/49/7c/ec/497cecf2e260f0a9f35d6336b74c3d80.jpg"
-//         ),
-//       FlavorsModel(
-//         name: "Mango", 
-//         color: Colors.orange,
-//         image:"https://i.pinimg.com/736x/b8/4e/68/b84e6829e22824e4a244f6b9e72398bf.jpg"
-//         ),
-//       FlavorsModel(
-//         name: "Caramel", 
-//         color: Colors.amber,
-//         image:"https://i.pinimg.com/736x/e9/87/ae/e987aef33d3b7dbc41486a947ef65c25.jpg"),
-//       FlavorsModel(
-//         name: "Cookies", 
-//         color: Colors.grey,
-//         image:"https://i.pinimg.com/736x/20/52/60/20526056fc1041a1e8781c6a4282eba2.jpg"),
-//       FlavorsModel(
-//         name: "Banana", 
-//         color: Colors.yellow,
-//         image:"https://i.pinimg.com/736x/41/45/53/41455324a095edc6a07ac57d67e6bdb7.jpg"),
-//       FlavorsModel(
-//         name: "Berry", 
-//         color: Colors.red,
-//         image:"https://i.pinimg.com/736x/af/f0/58/aff058e3c5aa245feb1221ddedf876eb.jpg"),
-//       FlavorsModel(
-//         name: "Peanut", 
-//         color: Colors.orange,
-//         image:"https://i.pinimg.com/736x/6c/67/a4/6c67a495ebbf4db11d3e9ae3d40692b6.jpg"),
-//       FlavorsModel(
-//         name: "Coffee", 
-//         color: Colors.brown),
-//       FlavorsModel(
-//         name: "Cola", 
-//         color: Colors.brown,
-//         image:"https://i.pinimg.com/736x/5e/03/98/5e0398fa88c4c64210c5143433afe9b2.jpg"),
-//       FlavorsModel(
-//         name: "Watermelon", 
-//         color: Colors.pink,
-//         image:"https://i.pinimg.com/736x/00/6e/de/006edeee57d453cef689c246f2dbd14c.jpg"),
-
-//     ];
-
-//       Color _getFlavorColor(String flavor) {
-//     final f = flavor.toLowerCase();
-//     if (f.contains(flivorsList[0].name)) return const Color(0xFFF3E5AB);
-//     if (f.contains(flivorsList[1].name)) return Colors.pinkAccent;
-//     if (f.contains(flivorsList[2].name)) return Colors.brown.shade700;
-//     if (f.contains(flivorsList[3].name)) return Colors.orangeAccent;
-//     if (f.contains(flivorsList[4].name)) return Colors.amber.shade800;
-//     if (f.contains(flivorsList[5].name)) return Colors.grey.shade600;
-//     if (f.contains(flivorsList[6].name)) return Colors.yellow.shade800;
-//     if (f.contains(flivorsList[7].name)) return Colors.red.shade800;
-//     if (f.contains(flivorsList[8].name)) return Colors.orange.shade800;
-//     if (f.contains(flivorsList[9].name)) return Colors.brown.shade700;
-//     if (f.contains(flivorsList[10].name)) return Colors.green.shade800;
-//     if (f.contains(flivorsList[11].name)) return Colors.brown.shade900;
-
-//     return Colors.blueGrey;
-//   }
 //     final flavorsList = product.flavors;
 //     if (flavorsList.isEmpty) return const SizedBox.shrink();
 
@@ -311,10 +246,6 @@ class ProductFlavorSelector extends StatelessWidget {
 //                 width: 120,
 //                 height: 50,
 //                 decoration: BoxDecoration(
-//                   image: DecorationImage(
-//                     image: NetworkImage(flivorsList.image!),
-//                     fit: BoxFit.cover,
-//                   ),
 //                   borderRadius: BorderRadius.circular(8),
 //                   border: Border.all(
 //                     color: isSelected ? baseColor : AppColors.greyMedium,

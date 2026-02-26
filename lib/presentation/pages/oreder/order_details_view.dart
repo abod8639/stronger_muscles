@@ -100,12 +100,12 @@ class OrderDetailsView extends StatelessWidget {
                         label: isAr ? 'تاريخ الطلب' : 'Date',
                         value: DateFormat(
                           'dd MMM yyyy',
-                        ).format(order.orderDate),
+                        ).format(order.orderDate!),
                       ),
                       buildInfoItem(
                         icon: Icons.access_time,
                         label: isAr ? 'الوقت' : 'Time',
-                        value: DateFormat('hh:mm a').format(order.orderDate),
+                        value: DateFormat('hh:mm a').format(order.orderDate!),
                       ),
                     ],
                   ),

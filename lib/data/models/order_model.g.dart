@@ -19,7 +19,7 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
     return OrderModel(
       id: fields[0] as String,
       userId: fields[1] as String,
-      orderDate: fields[2] as DateTime,
+      orderDate: fields[2] as DateTime?,
       status: fields[3] as String,
       paymentStatus: fields[4] as String,
       paymentMethod: fields[5] as String,
@@ -166,7 +166,9 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
     _$OrderModelImpl(
       id: json['id'] as String,
       userId: json['user_id'] as String,
-      orderDate: DateTime.parse(json['order_date'] as String),
+      orderDate: json['order_date'] == null
+          ? null
+          : DateTime.parse(json['order_date'] as String),
       status: json['status'] as String? ?? 'pending',
       paymentStatus: json['payment_status'] as String? ?? 'pending',
       paymentMethod: json['payment_method'] as String? ?? 'cash',
@@ -198,7 +200,7 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'user_id': instance.userId,
-      'order_date': instance.orderDate.toIso8601String(),
+      'order_date': instance.orderDate?.toIso8601String(),
       'status': instance.status,
       'payment_status': instance.paymentStatus,
       'payment_method': instance.paymentMethod,

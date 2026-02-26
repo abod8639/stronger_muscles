@@ -27,7 +27,7 @@ mixin _$OrderModel {
   String get userId => throw _privateConstructorUsedError;
   @HiveField(2)
   @JsonKey(name: 'order_date')
-  DateTime get orderDate => throw _privateConstructorUsedError;
+  DateTime? get orderDate => throw _privateConstructorUsedError;
   @HiveField(3)
   String get status => throw _privateConstructorUsedError;
   @HiveField(4)
@@ -86,7 +86,7 @@ abstract class $OrderModelCopyWith<$Res> {
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) @JsonKey(name: 'user_id') String userId,
-      @HiveField(2) @JsonKey(name: 'order_date') DateTime orderDate,
+      @HiveField(2) @JsonKey(name: 'order_date') DateTime? orderDate,
       @HiveField(3) String status,
       @HiveField(4) @JsonKey(name: 'payment_status') String paymentStatus,
       @HiveField(5) @JsonKey(name: 'payment_method') String paymentMethod,
@@ -124,7 +124,7 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
   $Res call({
     Object? id = null,
     Object? userId = null,
-    Object? orderDate = null,
+    Object? orderDate = freezed,
     Object? status = null,
     Object? paymentStatus = null,
     Object? paymentMethod = null,
@@ -151,10 +151,10 @@ class _$OrderModelCopyWithImpl<$Res, $Val extends OrderModel>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      orderDate: null == orderDate
+      orderDate: freezed == orderDate
           ? _value.orderDate
           : orderDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -246,7 +246,7 @@ abstract class _$$OrderModelImplCopyWith<$Res>
   $Res call(
       {@HiveField(0) String id,
       @HiveField(1) @JsonKey(name: 'user_id') String userId,
-      @HiveField(2) @JsonKey(name: 'order_date') DateTime orderDate,
+      @HiveField(2) @JsonKey(name: 'order_date') DateTime? orderDate,
       @HiveField(3) String status,
       @HiveField(4) @JsonKey(name: 'payment_status') String paymentStatus,
       @HiveField(5) @JsonKey(name: 'payment_method') String paymentMethod,
@@ -283,7 +283,7 @@ class __$$OrderModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? userId = null,
-    Object? orderDate = null,
+    Object? orderDate = freezed,
     Object? status = null,
     Object? paymentStatus = null,
     Object? paymentMethod = null,
@@ -310,10 +310,10 @@ class __$$OrderModelImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      orderDate: null == orderDate
+      orderDate: freezed == orderDate
           ? _value.orderDate
           : orderDate // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -389,7 +389,7 @@ class _$OrderModelImpl extends _OrderModel {
   const _$OrderModelImpl(
       {@HiveField(0) required this.id,
       @HiveField(1) @JsonKey(name: 'user_id') required this.userId,
-      @HiveField(2) @JsonKey(name: 'order_date') required this.orderDate,
+      @HiveField(2) @JsonKey(name: 'order_date') this.orderDate,
       @HiveField(3) this.status = 'pending',
       @HiveField(4)
       @JsonKey(name: 'payment_status')
@@ -428,7 +428,7 @@ class _$OrderModelImpl extends _OrderModel {
   @override
   @HiveField(2)
   @JsonKey(name: 'order_date')
-  final DateTime orderDate;
+  final DateTime? orderDate;
   @override
   @JsonKey()
   @HiveField(3)
@@ -586,9 +586,7 @@ abstract class _OrderModel extends OrderModel {
   const factory _OrderModel(
       {@HiveField(0) required final String id,
       @HiveField(1) @JsonKey(name: 'user_id') required final String userId,
-      @HiveField(2)
-      @JsonKey(name: 'order_date')
-      required final DateTime orderDate,
+      @HiveField(2) @JsonKey(name: 'order_date') final DateTime? orderDate,
       @HiveField(3) final String status,
       @HiveField(4) @JsonKey(name: 'payment_status') final String paymentStatus,
       @HiveField(5) @JsonKey(name: 'payment_method') final String paymentMethod,
@@ -632,7 +630,7 @@ abstract class _OrderModel extends OrderModel {
   @override
   @HiveField(2)
   @JsonKey(name: 'order_date')
-  DateTime get orderDate;
+  DateTime? get orderDate;
   @override
   @HiveField(3)
   String get status;

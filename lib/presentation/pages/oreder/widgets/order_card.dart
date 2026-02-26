@@ -78,7 +78,7 @@ class OrderCard extends StatelessWidget {
                           Text(
                             DateFormat(
                               'MMM dd, yyyy • hh:mm a',
-                            ).format(order.orderDate),
+                            ).format(order.orderDate!),
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.grey,
                             ),

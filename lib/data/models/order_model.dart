@@ -12,7 +12,7 @@ class OrderModel with _$OrderModel {
   const factory OrderModel({
     @HiveField(0) required String id,
     @HiveField(1) @JsonKey(name: 'user_id') required String userId,
-    @HiveField(2) @JsonKey(name: 'order_date') required DateTime orderDate,
+    @HiveField(2) @JsonKey(name: 'order_date') DateTime? orderDate,
     @HiveField(3) @Default('pending') String status,
     @HiveField(4)
     @JsonKey(name: 'payment_status')
