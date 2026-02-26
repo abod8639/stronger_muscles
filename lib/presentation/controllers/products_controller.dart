@@ -17,42 +17,42 @@ class ProductsController extends BaseController {
   }
 
   Future<void> _initializeData() async {
+    // تحميل البيانات من الكاش فوراً لتحسين تجربة المستخدم (Zero Wait UI)
     products.assignAll(_repository.getCachedProducts());
+    // جلب البيانات من السيرفر في الخلفية لتحديث القائمة
     await fetchProducts();
   }
 
   Future<void> fetchProducts({String? categoryId, String? query}) async {
+    // منع الطلبات المتعددة في نفس الوقت
     if (isLoading.value) return;
 
     try {
-      if (query == null && categoryId != null && categoryId.isNotEmpty) {
-        final cached = _repository
-            .getCachedProducts()
-            .where((p) => p.categoryId == categoryId)
-            .toList();
-        if (cached.isNotEmpty) {
-          products.assignAll(cached);
-        }
-      }
-
+      // 1. إظهار الـ Loading فقط إذا كانت القائمة فارغة (لتجنب الوميض المزعج)
       if (products.isEmpty) setLoading(true);
 
       List<ProductModel> result;
 
+      // 2. توجيه الطلب للمستودع (Repository)
       if (query != null && query.isNotEmpty) {
         result = await _repository.searchProducts(query);
       } else if (categoryId != null && categoryId.isNotEmpty) {
-        result = await _repository.getProductsByCategory(categoryId);
+        // هنا نستخدم repository.getProducts الذي يدعم الفلترة
+        result = await _repository.getProducts(categoryId: categoryId);
       } else {
         result = await _repository.getProducts();
       }
 
+      // 3. تحديث الواجهة بالنتائج الجديدة
       products.assignAll(result);
+      
+      // مسح حالة الخطأ في حال نجاح الطلب
       resetState();
     } catch (e) {
+      // الـ handleError في الـ BaseController سيتولى إظهار الـ SnackBar أو الـ Dialog
       handleError(
         e,
-        message: 'فشل تحديث البيانات، تأكد من اتصالك بالإنترنت',
+        message: 'تعذر تحديث المنتجات حالياً',
         retryAction: () => fetchProducts(categoryId: categoryId, query: query),
       );
     } finally {
@@ -62,6 +62,7 @@ class ProductsController extends BaseController {
 
   Future<void> refreshProducts() async {
     selectedCategoryId.value = '';
+    // مسح الكاش قد يكون مفيداً عند السحب لأسفل (Pull to refresh)
     await fetchProducts();
   }
 
@@ -75,16 +76,15 @@ class ProductsController extends BaseController {
     }
   }
 
-  String price() {
-    final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
-    if (product == null) return "0.00";
-    return product.formattedEffectivePrice;
+  // تحويل الدوال إلى Getters لتحسين الأداء في Widget Tree
+  ProductModel? get selectedProduct => 
+      products.firstWhereOrNull((p) => p.id == selectedProductId.value);
+
+  String get price {
+    return selectedProduct?.formattedEffectivePrice ?? "0.00";
   }
 
-  String discountPrice() {
-    final product = products.firstWhereOrNull((p) => p.id == selectedProductId.value);
-    if (product == null) return "0.00";
-    return product.formattedPrice;
+  String get discountPrice {
+    return selectedProduct?.formattedPrice ?? "0.00";
   }
-  
 }
