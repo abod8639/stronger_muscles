@@ -43,6 +43,7 @@ class ProductFlavorSelector extends StatelessWidget {
         Text(
           "CHOOSE YOUR FLAVOR",
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.2,
             fontStyle: FontStyle.italic,
