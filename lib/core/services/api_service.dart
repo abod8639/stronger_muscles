@@ -1,219 +1,192 @@
-import 'dart:convert';
-import 'dart:async'; // Required for TimeoutException
-import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
+import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' as getx;
 import '../../presentation/controllers/language_controller.dart';
 import '../../config/api_config.dart';
 import 'storage_service.dart';
 import '../errors/failures.dart';
 
 class ApiService {
-  // Initialize the client
-  final http.Client _client = http.Client();
+  late final Dio _dio;
   final Duration _timeout = const Duration(seconds: 15);
 
-  Future<Map<String, String>> _getHeaders({bool includeAuth = true}) async {
-    final token = includeAuth ? StorageService.getToken() : null;
-    final languageCode =
-        Get.find<LanguageController>().currentLocale.value.languageCode;
-
-    if (includeAuth) {
-      print('🔑 Auth Token Present: ${token != null}');
-    }
-
-    return {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Accept-Language': languageCode,
-      if (token != null) 'Authorization': 'Bearer $token',
-    };
-  }
-
-  Uri _buildUri(String path, {Map<String, dynamic>? queryParameters}) {
-    if (path.startsWith('http')) {
-      return Uri.parse(path).replace(queryParameters: queryParameters);
-    }
-
-    final baseUrl = Uri.parse(ApiConfig.baseUrl);
-
-    // Using pathSegments is safer than manual string concatenation
-    List<String> combinedSegments = List.from(baseUrl.pathSegments);
-    combinedSegments.addAll(path.split('/').where((s) => s.isNotEmpty));
-
-    return baseUrl.replace(
-      pathSegments: combinedSegments,
-      queryParameters: queryParameters?.entries
-          .where((e) => e.value != null)
-          .fold<Map<String, String>>(
-            {},
-            (map, e) => map..[e.key] = e.value.toString(),
-          ),
+  ApiService() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConfig.baseUrl,
+        connectTimeout: _timeout,
+        receiveTimeout: _timeout,
+        responseType: ResponseType.json,
+      ),
     );
+
+    // إضافة Interceptor للتعامل مع الـ Headers والـ Logging تلقائياً
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final token = StorageService.getToken();
+        final languageCode = getx.Get.find<LanguageController>().currentLocale.value.languageCode;
+
+        options.headers['Content-Type'] = 'application/json';
+        options.headers['Accept'] = 'application/json';
+        options.headers['Accept-Language'] = languageCode;
+
+        if (token != null && !options.headers.containsKey('Authorization')) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+
+        print('🚀 Request: ${options.method} ${options.uri}');
+        if (options.data != null) print('📦 Body: ${options.data}');
+        
+        return handler.next(options);
+      },
+      onResponse: (response, handler) {
+        return handler.next(response);
+      },
+      onError: (DioException e, handler) {
+        return handler.next(e);
+      },
+    ));
   }
 
-  // --- HTTP Methods ---
+  // --- Methods ---
 
-  Future<http.Response> get(
+  Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     bool includeAuth = true,
   }) async {
     try {
-      final uri = _buildUri(path, queryParameters: queryParameters);
-      print('🚀 Request: GET $uri');
-      final response = await _client
-          .get(uri, headers: await _getHeaders(includeAuth: includeAuth))
-          .timeout(_timeout);
-
-      return _handleResponse(response, path);
+      final response = await _dio.get(
+        path,
+        queryParameters: queryParameters,
+        options: Options(headers: {'includeAuth': includeAuth}),
+      );
+      return response;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     } catch (e) {
-      throw _handleError(e);
+      throw _handleGeneralError(e);
     }
   }
 
-  Future<http.Response> post(
+  Future<Response> post(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    bool includeAuth = true,
   }) async {
     try {
-      final uri = _buildUri(path, queryParameters: queryParameters);
-      print('🚀 Request: POST $uri | Body: $data');
-      final response = await _client
-          .post(
-            uri,
-            headers: await _getHeaders(includeAuth: includeAuth),
-            body: jsonEncode(data),
-          )
-          .timeout(_timeout);
-
-      return _handleResponse(response, path);
+      final response = await _dio.post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     } catch (e) {
-      throw _handleError(e);
+      throw _handleGeneralError(e);
+    }
+  }
+
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await _dio.put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    } catch (e) {
+      throw _handleGeneralError(e);
+    }
+  }
+
+  Future<Response> delete(String path) async {
+    try {
+      final response = await _dio.delete(path);
+      return response;
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    } catch (e) {
+      throw _handleGeneralError(e);
     }
   }
 
   // --- Error Handling ---
 
-  http.Response _handleResponse(http.Response response, String path) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return response;
-    } else {
-      throw _handleHttpError(response, path);
-    }
-  }
-
-  Failure _handleHttpError(http.Response response, String path) {
-    String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
-    FailureType failureType = FailureType.server;
-
-    // فحص أخطاء الطلب واستخراج الرسالة إن وجدت
-    String? serverMessage;
-    try {
-      final dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
-      if (body is Map) {
-        serverMessage = body['message'] ?? body['error'];
-      }
-    } catch (_) {}
-
-    // فحص أخطاء الصلاحيات
-    if (response.statusCode == 401 || response.statusCode == 403) {
-      failureType = FailureType.auth;
-
-      if (path.contains('login')) {
-        errorDescription =
-            serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-      } else {
-        errorDescription =
-            serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
-        StorageService.deleteToken();
-      }
-
-      print(
-        '⚠️ Auth Error (${response.statusCode}): $errorDescription | Path: $path | Body: ${response.body}',
-      );
-    } else if (response.statusCode == 422) {
-      // Validation Errors
-      try {
-        final dynamic body = jsonDecode(utf8.decode(response.bodyBytes));
-        if (body is Map && body['errors'] != null) {
-          final Map<String, dynamic> errors = body['errors'];
-          final List<String> allErrors = [];
-          errors.forEach((key, value) {
-            if (value is List) {
-              allErrors.addAll(value.map((e) => e.toString()));
-            } else {
-              allErrors.add(value.toString());
-            }
-          });
-          if (allErrors.isNotEmpty) {
-            errorDescription = allErrors.join('\n');
-          }
-        }
-      } catch (_) {}
-
-      print(
-        '❌ Validation Error (422): $errorDescription | Body: ${response.body}',
-      );
-    } else {
-      errorDescription = serverMessage ?? errorDescription;
-      print(
-        '❌ API Error (${response.statusCode}): $errorDescription | Body: ${response.body}',
-      );
-    }
-
-    return Failure(message: errorDescription, type: failureType);
-  }
-
-  dynamic _handleError(dynamic error) {
-    if (error is Failure) return error;
-
+  Failure _handleDioError(DioException e) {
     String errorDescription = "حدث خطأ غير متوقع";
     FailureType failureType = FailureType.unknown;
 
-    if (error is http.ClientException ||
-        error.toString().contains('SocketException')) {
-      errorDescription = "تعذر الوصول إلى الخادم. تأكد من الاتصال بالشبكة";
-      failureType = FailureType.network;
-    } else if (error is TimeoutException) {
-      errorDescription = "انتهت مهلة الاتصال بالخادم";
-      failureType = FailureType.network;
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
+        errorDescription = "انتهت مهلة الاتصال بالخادم";
+        failureType = FailureType.network;
+        break;
+      case DioExceptionType.badResponse:
+        return _handleHttpError(e.response!);
+      case DioExceptionType.cancel:
+        errorDescription = "تم إلغاء الطلب";
+        break;
+      case DioExceptionType.connectionError:
+        errorDescription = "تعذر الوصول إلى الخادم. تأكد من الاتصال بالشبكة";
+        failureType = FailureType.network;
+        break;
+      default:
+        errorDescription = "خطأ في الاتصال بالشبكة";
+        failureType = FailureType.network;
     }
 
     return Failure(message: errorDescription, type: failureType);
   }
 
-  Future<http.Response> put(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    bool includeAuth = true,
-  }) async {
-    try {
-      final uri = _buildUri(path, queryParameters: queryParameters);
-      print('🚀 Request: PUT $uri | Body: $data');
-      final response = await _client
-          .put(
-            uri,
-            headers: await _getHeaders(includeAuth: includeAuth),
-            body: jsonEncode(data),
-          )
-          .timeout(_timeout);
+  Failure _handleHttpError(Response response) {
+    String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
+    FailureType failureType = FailureType.server;
 
-      return _handleResponse(response, path);
-    } catch (e) {
-      throw _handleError(e);
+    final dynamic data = response.data;
+    String? serverMessage = data is Map ? (data['message'] ?? data['error']) : null;
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      failureType = FailureType.auth;
+      // التحقق من المسار إذا لزم الأمر عبر response.requestOptions.path
+      if (response.requestOptions.path.contains('login')) {
+        errorDescription = serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+      } else {
+        errorDescription = serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
+        StorageService.deleteToken();
+      }
+    } else if (response.statusCode == 422) {
+      if (data is Map && data['errors'] != null) {
+        final Map<String, dynamic> errors = data['errors'];
+        final List<String> allErrors = [];
+        errors.forEach((key, value) {
+          if (value is List) {
+            allErrors.addAll(value.map((e) => e.toString()));
+          } else {
+            allErrors.add(value.toString());
+          }
+        });
+        errorDescription = allErrors.isNotEmpty ? allErrors.join('\n') : "بيانات المدخلات غير صالحة";
+      }
+    } else {
+      errorDescription = serverMessage ?? errorDescription;
     }
+
+    print('❌ API Error (${response.statusCode}): $errorDescription');
+    return Failure(message: errorDescription, type: failureType);
   }
 
-  Future<http.Response> delete(String path) async {
-    try {
-      final uri = _buildUri(path);
-      final response = await _client.delete(uri, headers: await _getHeaders());
-      return _handleResponse(response, path);
-    } catch (e) {
-      throw _handleError(e);
-    }
+  Failure _handleGeneralError(dynamic error) {
+    if (error is Failure) return error;
+    return Failure(message: "حدث خطأ غير متوقع", type: FailureType.unknown);
   }
 }

@@ -57,7 +57,7 @@ class ProductFlavorSelector extends StatelessWidget {
     "berry": FlavorsModel(
         name: "Berry",
         color: Colors.red.shade800,
-        image: "https://i.pinimg.com/736x/af/f0/58/aff058e3c5aa245feb1221ddedf876eb.jpg"),
+        image: "https://i.pinimg.com/736x/33/69/52/33695284fb75b948cf641777a13d9aa5.jpg"),
     "peanut": FlavorsModel(
         name: "Peanut",
         color: Colors.orange.shade800,
@@ -73,6 +73,10 @@ class ProductFlavorSelector extends StatelessWidget {
     "watermelon": FlavorsModel(
         name: "Watermelon",
         color: Colors.pink,
+        image: "https://i.pinimg.com/736x/00/6e/de/006edeee57d453cef689c246f2dbd14c.jpg"),
+    "lemon": FlavorsModel(
+        name: "Lemon",
+        color: Colors.yellow,
         image: "https://i.pinimg.com/736x/00/6e/de/006edeee57d453cef689c246f2dbd14c.jpg"),
   };
 
