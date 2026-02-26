@@ -112,7 +112,18 @@ Widget buildProductInfo(
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  blurStyle: BlurStyle.outer,
+                  color: isDark
+                      ? AppColors.greyLight.withOpacity(0.3)
+                      : AppColors.surfaceDark.withOpacity(0.3),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
               color: isDark
+
                   ? AppColors.surfaceDark
                   : AppColors.greyLight.withOpacity(0.3),
               borderRadius: BorderRadius.circular(12),

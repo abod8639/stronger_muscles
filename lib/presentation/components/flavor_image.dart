@@ -7,7 +7,6 @@ class FlavorsModel {
   final String name;
   final Color color;
   final String image;
-
   FlavorsModel({required this.name, required this.color, required this.image});
 }
 
@@ -98,10 +97,13 @@ class FlavorImage extends StatelessWidget {
     required this.isSelected,
     required this.baseColor,
     required this.details,
+
     this.width,
     this.height,
+    this.shadow,
   });
 
+  final bool? shadow;
   final bool isSelected;
   final Color baseColor;
   final FlavorsModel details;
@@ -135,12 +137,14 @@ class FlavorImage extends StatelessWidget {
             cacheManager: CustomCacheManager.instance,
           ),
           fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            isSelected
-                ? Colors.black.withValues(alpha: .2)
-                : Colors.black.withValues(alpha: .5),
-            BlendMode.darken,
-          ),
+          colorFilter: shadow == true
+              ? ColorFilter.mode(
+                  isSelected
+                      ? Colors.black.withValues(alpha: .2)
+                      : Colors.black.withValues(alpha: .5),
+                  BlendMode.darken,
+                )
+              : null,
         ),
       ),
       child: Center(

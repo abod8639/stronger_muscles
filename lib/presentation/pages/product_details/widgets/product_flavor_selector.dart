@@ -64,6 +64,7 @@ class ProductFlavorSelector extends StatelessWidget {
                 onFlavorSelected(flavor);
               },
               child: FlavorImage(
+                shadow: true,
                 isSelected: isSelected,
                 baseColor: baseColor,
                 details: details,

@@ -61,6 +61,7 @@ Widget buildProductCartDetails(CartItemModel item) {
                 const Spacer(),
 
                 FlavorImage(
+                  shadow: false,
                   width: 90,
                   height: 30,
                   isSelected: false,
