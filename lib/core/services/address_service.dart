@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/config/api_config.dart';
@@ -14,90 +13,71 @@ class AddressService extends GetxService {
   Future<List<AddressModel>> getAddresses() async {
     try {
       final response = await _apiService.get(ApiConfig.addresses);
-      print('📍 Get Addresses Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
-      final List<dynamic> addressesJson = body['addresses'] ?? [];
+      
+      // Dio يحول الاستجابة تلقائياً إلى Map
+      final data = response.data;
+      final List<dynamic> addressesJson = data['addresses'] ?? [];
 
       return addressesJson
           .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
           .toList();
     } on Failure catch (e) {
-      print('❌ Get Addresses API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Get Addresses Error: $e');
-      throw 'فشل تحميل العناوين: ${e.toString()}';
+      throw 'فشل تحميل العناوين';
     }
   }
 
   /// Create a new address
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
-      final addressData = address.toJson();
-      // Remove id for new addresses
-      addressData.remove('id');
-      addressData.remove('user_id');
-      addressData.remove('created_at');
-      addressData.remove('updated_at');
+      final Map<String, dynamic> addressData = address.toJson();
+      
+      // تنظيف الحقول التي لا يجب إرسالها للسيرفر عند الإنشاء
+      _cleanAddressData(addressData);
 
       final response = await _apiService.post(
         ApiConfig.addresses,
         data: addressData,
       );
 
-      print('📍 Create Address Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
-      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+      final data = response.data;
+      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
-      print('❌ Create Address API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Create Address Error: $e');
-      throw 'فشل إضافة العنوان: ${e.toString()}';
+      throw 'فشل إضافة العنوان';
     }
   }
 
   /// Update an existing address
   Future<AddressModel> updateAddress(int id, AddressModel address) async {
     try {
-      final addressData = address.toJson();
-      // Clean up fields that shouldn't be sent
-      addressData.remove('id');
-      addressData.remove('user_id');
-      addressData.remove('created_at');
-      addressData.remove('updated_at');
+      final Map<String, dynamic> addressData = address.toJson();
+      _cleanAddressData(addressData);
 
       final response = await _apiService.put(
         '${ApiConfig.addresses}/$id',
         data: addressData,
       );
 
-      print('📍 Update Address Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
-      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+      final data = response.data;
+      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
-      print('❌ Update Address API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Update Address Error: $e');
-      throw 'فشل تحديث العنوان: ${e.toString()}';
+      throw 'فشل تحديث العنوان';
     }
   }
 
   /// Delete an address
   Future<void> deleteAddress(int id) async {
     try {
-      final response = await _apiService.delete('${ApiConfig.addresses}/$id');
-      print('📍 Delete Address Response: ${response.body}');
+      await _apiService.delete('${ApiConfig.addresses}/$id');
     } on Failure catch (e) {
-      print('❌ Delete Address API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Delete Address Error: $e');
-      throw 'فشل حذف العنوان: ${e.toString()}';
+      throw 'فشل حذف العنوان';
     }
   }
 
@@ -107,66 +87,49 @@ class AddressService extends GetxService {
       final response = await _apiService.post(
         '${ApiConfig.addresses}/$id/set-default',
       );
-      print('📍 Set Default Address Response: ${response.body}');
 
-      final body = jsonDecode(response.body);
-      return AddressModel.fromJson(body['address'] as Map<String, dynamic>);
+      final data = response.data;
+      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
-      print('❌ Set Default Address API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Set Default Address Error: $e');
-      throw 'فشل تعيين العنوان الافتراضي: ${e.toString()}';
+      throw 'فشل تعيين العنوان الافتراضي';
     }
   }
 
-  /// Get current GPS position
+  /// Helper to remove unnecessary fields before sending to API
+  void _cleanAddressData(Map<String, dynamic> data) {
+    data.removeWhere((key, value) => 
+      ['id', 'user_id', 'created_at', 'updated_at'].contains(key)
+    );
+  }
+
+  // --- Location Services (لا تتغير لأنها لا تعتمد على HTTP) ---
+
   Future<Position> getCurrentPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) throw 'خدمات الموقع معطلة. يرجى تفعيلها.';
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw 'خدمات الموقع معطلة. يرجى تفعيلها.';
-    }
-
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw 'تم رفض صلاحيات الموقع';
-      }
+      if (permission == LocationPermission.denied) throw 'تم رفض صلاحيات الموقع';
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw 'صلاحيات الموقع مرفوضة بشكل دائم. يرجى تفعيلها من الإعدادات.';
+      throw 'صلاحيات الموقع مرفوضة بشكل دائم.';
     }
 
     return await Geolocator.getCurrentPosition(
-      locationSettings: AndroidSettings(
-        accuracy: LocationAccuracy.high,     
-      ),
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
-
   }
 
-  /// Get address from coordinates using geocoding
-  Future<Placemark?> getAddressFromCoordinates(
-    double latitude,
-    double longitude,
-  ) async {
+  Future<Placemark?> getAddressFromCoordinates(double lat, double lng) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        latitude,
-        longitude,
-      );
-
-      if (placemarks.isNotEmpty) {
-        return placemarks.first;
-      }
-      return null;
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      return placemarks.isNotEmpty ? placemarks.first : null;
     } catch (e) {
-      print('❌ Geocoding Error: $e');
       return null;
     }
   }
