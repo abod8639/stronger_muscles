@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import '../../config/api_config.dart';
@@ -18,15 +17,15 @@ class ProductService extends GetxService {
       final response = await _apiService.get(
         ApiConfig.products,
         queryParameters: {
-          'category': categoryId,
-          'search': query,
-          'page': page.toString(),
-          'limit': limit.toString(),
+          if (categoryId != null) 'category': categoryId,
+          if (query != null) 'search': query,
+          'page': page, // Dio يتعامل مع int تلقائياً
+          'limit': limit,
         },
       );
 
-      final decodedData = jsonDecode(response.body);
-      return _parseProductsList(decodedData);
+      // استخدام response.data مباشرة
+      return _parseProductsList(response.data);
     } catch (e) {
       throw _handleError(e, "حدث خطأ عند جلب المنتجات");
     }
@@ -35,30 +34,36 @@ class ProductService extends GetxService {
   Future<ProductModel> getProductDetails(String id) async {
     try {
       final response = await _apiService.get('${ApiConfig.products}/$id');
-      final decodedData = jsonDecode(response.body);
+      final data = response.data;
 
-      final productData = (decodedData is Map && decodedData['data'] != null)
-          ? decodedData['data']
-          : decodedData;
+      // فحص البيانات المستلمة من Laravel Resource
+      final productData = (data is Map && data['data'] != null)
+          ? data['data']
+          : data;
 
       return ProductModel.fromJson(productData);
     } catch (e) {
+      // الـ ApiService يرمي Failure بالفعل، لذا rethrow كافية
       rethrow;
     }
   }
 
-  List<ProductModel> _parseProductsList(dynamic decodedData) {
+  List<ProductModel> _parseProductsList(dynamic data) {
     List<dynamic> list = [];
-    if (decodedData is List) {
-      list = decodedData;
-    } else if (decodedData is Map) {
-      final data = decodedData['data'];
-      if (data is List) {
-        list = data;
-      } else if (data is Map && data['data'] is List) {
-        list = data['data'];
+    
+    if (data is List) {
+      list = data;
+    } else if (data is Map) {
+      // التعامل مع Pagination الخاص بـ Laravel (data wrap)
+      final rawData = data['data'];
+      if (rawData is List) {
+        list = rawData;
+      } else if (rawData is Map && rawData['data'] is List) {
+        // في حالة وجود nested pagination
+        list = rawData['data'];
       }
     }
+    
     return list.map((json) => ProductModel.fromJson(json)).toList();
   }
 
@@ -67,7 +72,6 @@ class ProductService extends GetxService {
     return Failure(
       message: defaultMsg,
       type: FailureType.unknown,
-      originalError: e,
     );
   }
 }
