@@ -140,7 +140,7 @@ Builder selectedValue({
               "$title: ",
               // '${AppLocalizations.of(context)!.flavor}: ',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.white,
+                color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,
               ),
             ),
