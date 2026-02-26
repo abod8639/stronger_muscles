@@ -1,14 +1,11 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
-import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CheckoutController extends GetxController {
-  final AuthController _authController = Get.find<AuthController>();
   // final AddressController _addressController = Get.find<AddressController>();
   final CartController _cartController = Get.find<CartController>();
   final ProfileController _profileController = Get.find<ProfileController>();
@@ -66,8 +63,8 @@ class CheckoutController extends GetxController {
           return {
             "product_id": item.product.id,
             "quantity": item.quantity,
-            "flavor": item.selectedFlavor,
-            "size": item.selectedSize,
+            "selected_flavor": item.selectedFlavor,
+            "selected_size": item.selectedSize,
           };
         }).toList(),
       };
