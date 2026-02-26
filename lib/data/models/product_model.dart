@@ -106,7 +106,6 @@ class ProductModel with _$ProductModel {
       imageUrls.isNotEmpty ? imageUrls.first.thumbnail : null;
 
   /// Get the effective price (discount price if available, else regular price)
-  double get effectivePrice => discountPrice ?? price;
 
   /// Check if product has a discount
   bool get hasDiscount => discountPrice != null && discountPrice! < price;
@@ -164,7 +163,6 @@ class ProductModel with _$ProductModel {
 
   /// Get the base effective price, fallback to first size if 0
   double get baseEffectivePrice {
-    if (effectivePrice > 0) return effectivePrice;
     if (productSizes.isNotEmpty) return productSizes.first.effectivePrice;
     return 0;
   }

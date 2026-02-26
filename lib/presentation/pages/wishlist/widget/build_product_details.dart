@@ -32,7 +32,7 @@ Widget buildProductDetails(ProductModel product) {
 
           // Product Price
           Text(
-            'LE ${product.effectivePrice.toStringAsFixed(2)}',
+            'LE ${product.baseEffectivePrice.toStringAsFixed(2)}',
             style: theme.textTheme.titleSmall?.copyWith(
               fontSize: _priceFontSize,
               color: AppColors.primary,
