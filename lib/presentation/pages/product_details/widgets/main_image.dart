@@ -65,7 +65,7 @@ class MainImage extends StatelessWidget {
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
                   imageUrl: imageUrl.medium,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.contain,
                   placeholder: (context, url) => _buildPlaceholder(),
                   errorWidget: (context, url, error) =>
                       _buildErrorWidget(context),
