@@ -27,51 +27,63 @@ class ProfilePage extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    // Trigger lazy loading for user data
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.currentUser.value != null &&
+          controller.orders.isEmpty &&
+          !controller.isLoading.value) {
+        controller.loadUserData();
+      }
+    });
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      body: CustomScrollView(
-        slivers: [
-          _buildAppBar(theme),
-          SliverToBoxAdapter(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const SizedBox(
-                  height: 400,
-                  child: Center(child: CircularProgressIndicator()),
+      body: RefreshIndicator(
+        onRefresh: () => controller.loadUserData(),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            _buildAppBar(theme),
+            SliverToBoxAdapter(
+              child: Obx(() {
+                if (controller.isLoading.value && controller.orders.isEmpty) {
+                  return const SizedBox(
+                    height: 400,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+  
+                if (controller.currentUser.value == null) {
+                  return LoginPromptCard();
+                }
+  
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.editUserInfo);
+                      },
+                      child: const ProfileHeader(),
+                    ),
+                    const SizedBox(height: _contentVerticalSpacing),
+                    const QuickActionsRow(),
+                    const SizedBox(height: _sectionSpacing),
+                    const PurchaseStatsCard(),
+                    const SizedBox(height: _sectionSpacing),
+                    const RecentOrdersList(),
+                    const SizedBox(height: _sectionSpacing),
+                    const SavedAddressesList(),
+                    const SizedBox(height: _sectionSpacing),
+                    const AccountSettingsList(),
+                    const SizedBox(height: _sectionSpacing),
+                    _buildSignOutButton(controller),
+                    const SizedBox(height: _bottomSpacing),
+                  ],
                 );
-              }
-
-              if (controller.currentUser.value == null) {
-                return LoginPromptCard();
-              }
-              // orders
-
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.editUserInfo);
-                    },
-                    child: const ProfileHeader(),
-                  ),
-                  const SizedBox(height: _contentVerticalSpacing),
-                  const QuickActionsRow(),
-                  const SizedBox(height: _sectionSpacing),
-                  const PurchaseStatsCard(),
-                  const SizedBox(height: _sectionSpacing),
-                  const RecentOrdersList(),
-                  const SizedBox(height: _sectionSpacing),
-                  const SavedAddressesList(),
-                  const SizedBox(height: _sectionSpacing),
-                  const AccountSettingsList(),
-                  const SizedBox(height: _sectionSpacing),
-                  _buildSignOutButton(controller),
-                  const SizedBox(height: _bottomSpacing),
-                ],
-              );
-            }),
-          ),
-        ],
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

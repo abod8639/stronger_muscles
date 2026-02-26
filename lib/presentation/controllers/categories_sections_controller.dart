@@ -38,7 +38,22 @@ class CategoriesSectionsController extends GetxController {
       _updateSelections(cached);
     }
 
+    if (categories.isNotEmpty) {
+      _fetchCategoriesInBackground();
+      return;
+    }
+
     await fetchCategories();
+  }
+
+  Future<void> _fetchCategoriesInBackground() async {
+    try {
+      final fetched = await _categoryRepository.getAllCategories();
+      categories.assignAll(fetched);
+      _updateSelections(fetched);
+    } catch (e) {
+      debugPrint('Background categories fetch error: $e');
+    }
   }
 
   Future<void> fetchCategories() async {

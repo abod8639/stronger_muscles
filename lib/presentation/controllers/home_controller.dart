@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/repositories/product_repository.dart';
@@ -30,14 +31,33 @@ class HomeController extends BaseController {
     await fetchProductsForSection(selectedSectionIndex.value);
   }
 
+  Future<void> _fetchProductsInBackground(
+    int index, {
+    String? categoryId,
+  }) async {
+    try {
+      final fetchedProducts = await _productRepository.getProducts(
+        categoryId: categoryId,
+      );
+      searchController.setProducts(fetchedProducts);
+      } catch (e) {
+        debugPrint('Background fetch error: $e');
+      }
+    }
+
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
     resetState();
     isConnectionError.value = false;
 
-    if (searchController.filteredProducts.isEmpty) {
-      setLoading(true);
+    if (searchController.filteredProducts.isNotEmpty) {
+      // Data already available (from cache or previous session), skip the loading state
+      // We can still fetch in the background to update, but don't block the UI
+      _fetchProductsInBackground(index, categoryId: categoryId);
+      return;
     }
+
+    setLoading(true);
 
     try {
       final fetchedProducts = await _productRepository.getProducts(
@@ -76,5 +96,6 @@ class HomeController extends BaseController {
     } else {
       await fetchProductsForSection(selectedSectionIndex.value);
     }
+
   }
 }

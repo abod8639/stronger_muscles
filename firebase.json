@@ -1,1 +1,22 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"stronger-muscles","appId":"1:1610448649:android:883e915ac856b991fa9dd8","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"stronger-muscles","configurations":{"android":"1:1610448649:android:883e915ac856b991fa9dd8","web":"1:1610448649:web:455e7b0560aefeb7fa9dd8"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "stronger-muscles",
+                    "appId": "1:1610448649:android:883e915ac856b991fa9dd8",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "stronger-muscles",
+                    "configurations": {
+                        "android": "1:1610448649:android:883e915ac856b991fa9dd8",
+                        "web": "1:1610448649:web:455e7b0560aefeb7fa9dd8"
+                    }
+                }
+            }
+        }
+    }
+}

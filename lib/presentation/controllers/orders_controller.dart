@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/repositories/order_repository.dart';
-import 'package:stronger_muscles/core/services/storage_service.dart';
 import 'base_controller.dart';
 
 class OrdersController extends BaseController {
@@ -9,17 +8,10 @@ class OrdersController extends BaseController {
 
   final RxList<OrderModel> orders = <OrderModel>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _loadInitialOrders();
-  }
 
-  Future<void> _loadInitialOrders() async {
-    if (orders.isEmpty && StorageService.hasToken) {
-      await fetchOrders();
-    }
-  }
+  // Future<void> _loadInitialOrders() async {
+  //   // Lazy loading: orders will be fetched when needed (e.g., when Profile or Orders view is opened)
+  // }
 
   Future<void> fetchOrders() async {
     if (isLoading.value) return;

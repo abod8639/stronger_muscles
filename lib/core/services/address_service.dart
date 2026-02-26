@@ -14,7 +14,6 @@ class AddressService extends GetxService {
     try {
       final response = await _apiService.get(ApiConfig.addresses);
       
-      // Dio يحول الاستجابة تلقائياً إلى Map
       final data = response.data;
       final List<dynamic> addressesJson = data['addresses'] ?? [];
 
@@ -33,7 +32,6 @@ class AddressService extends GetxService {
     try {
       final Map<String, dynamic> addressData = address.toJson();
       
-      // تنظيف الحقول التي لا يجب إرسالها للسيرفر عند الإنشاء
       _cleanAddressData(addressData);
 
       final response = await _apiService.post(

@@ -44,42 +44,46 @@ abstract class BaseController extends GetxController {
   }) {
     if (Get.isSnackbarOpen) return;
 
-    Get.snackbar(
-      title,
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.red.withOpacity(0.8),
-      colorText: Colors.white,
-      duration: const Duration(seconds: 5),
-      margin: const EdgeInsets.all(16),
-      mainButton: retryAction != null
-          ? TextButton(
-              onPressed: () {
-                if (Get.isSnackbarOpen) Get.back();
-                retryAction();
-              },
-              child: const Text(
-                'إعادة محاولة',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+    Future.microtask(() {
+      Get.snackbar(
+        title,
+        message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 5),
+        margin: const EdgeInsets.all(16),
+        mainButton: retryAction != null
+            ? TextButton(
+                onPressed: () {
+                  if (Get.isSnackbarOpen) Get.back();
+                  retryAction();
+                },
+                child: const Text(
+                  'إعادة محاولة',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            )
-          : null,
-    );
+              )
+            : null,
+      );
+    });
   }
 
   /// Shows a success snackbar.
   void showSuccessSnackbar({required String title, required String message}) {
-    Get.snackbar(
-      title,
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green.withOpacity(0.8),
-      colorText: Colors.white,
-      duration: const Duration(seconds: 3),
-      margin: const EdgeInsets.all(16),
-    );
+    Future.microtask(() {
+      Get.snackbar(
+        title,
+        message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withValues(alpha: .8),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        margin: const EdgeInsets.all(16),
+      );
+    });
   }
 }

@@ -17,8 +17,8 @@ class ProductService extends GetxService {
       final response = await _apiService.get(
         ApiConfig.products,
         queryParameters: {
-          if (categoryId != null) 'category': categoryId,
-          if (query != null) 'search': query,
+          'category': ?categoryId,
+          'search': ?query,
           'page': page, // Dio يتعامل مع int تلقائياً
           'limit': limit,
         },

@@ -113,12 +113,12 @@ class AuthService extends GetxService {
       final response = await _apiService.post(
         ApiConfig.updateProfileRoute,
         data: {
-          if (name != null) 'name': name,
-          if (email != null) 'email': email,
-          if (phone != null) 'phone': phone,
-          if (photoUrl != null) 'photoUrl': photoUrl,
-          if (preferredLanguage != null) 'preferredLanguage': preferredLanguage,
-          if (notificationsEnabled != null) 'notificationsEnabled': notificationsEnabled,
+          'name': ?name,
+          'email': ?email,
+          'phone': ?phone,
+          'photoUrl': ?photoUrl,
+          'preferredLanguage': ?preferredLanguage,
+          'notificationsEnabled': ?notificationsEnabled,
         },
       );
 

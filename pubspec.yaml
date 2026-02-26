@@ -38,6 +38,7 @@ dependencies:
   geocoding: ^4.0.0
   flutter_markdown: ^0.7.7+1
   dio: ^5.9.1
+  # flutter_riverpod: ^2.6.1
  
 dev_dependencies:
   flutter_test:

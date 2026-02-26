@@ -3,7 +3,6 @@ import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/data/repositories/address_repository.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/services/storage_service.dart';
 import 'base_controller.dart';
 
 const String _defaultLabel = 'Home';
@@ -42,9 +41,7 @@ class AddressController extends BaseController {
 
   Future<void> _initialize() async {
     addresses.assignAll(_repository.getCachedAddresses());
-    if (StorageService.hasToken) {
-      await fetchAddresses();
-    }
+    // Lazy loading: addresses will be fetched when needed (e.g., when Profile or Checkout view is opened)
   }
 
   Future<void> deleteAddress(int id) async {

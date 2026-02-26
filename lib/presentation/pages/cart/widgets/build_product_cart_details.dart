@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/presentation/components/flavor_image.dart';
+import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
 
 const double _titleFontSize = 18.0;
 
@@ -44,11 +46,23 @@ Widget buildProductCartDetails(CartItemModel item) {
 
           // Selected Flavor
           if (item.selectedFlavor != null && item.selectedFlavor!.isNotEmpty)
-            selectedValue(
-              title: AppLocalizations.of(context)!.flavor, 
-              value: item.selectedFlavor!, 
-              item: item,
-              ),
+            Row(
+              children: [
+                selectedValue(
+                  title: AppLocalizations.of(context)!.flavor, 
+                  value: item.selectedFlavor!, 
+                  item: item,
+                  ),
+                  SizedBox(width: 45),
+              FlavorImage(
+              width: 80,
+              height: 30,
+              isSelected: false,
+              baseColor: AppColors.primary,
+              details: getFlavorDetails(item.selectedFlavor!),
+            )
+              ],
+            ),
 
           // Selected Size
           if (item.selectedSize != null && item.selectedSize!.isNotEmpty)
@@ -106,7 +120,6 @@ Widget buildProductCartDetails(CartItemModel item) {
 
 
 
-
 Builder selectedValue({
   required String title,
   required String value,
@@ -139,6 +152,7 @@ Builder selectedValue({
                 fontWeight: FontWeight.w600,
               ),
             ),
+
           ],
         ),
       );

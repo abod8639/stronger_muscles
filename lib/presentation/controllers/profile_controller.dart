@@ -24,19 +24,9 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
 
-    // Load initial data if logged in
-    if (_authController.currentUser.value != null) {
-      _loadUserData();
-    }
-
-    // Listen for future changes
+    // Listen for future changes (e.g. login/logout)
     ever(_authController.currentUser, (UserModel? user) {
-      if (user != null) {
-        // Only load if data is empty to avoid redundant switches
-        if (addresses.isEmpty) {
-          _loadUserData();
-        }
-      } else {
+      if (user == null) {
         _clearData();
       }
     });
@@ -48,7 +38,10 @@ class ProfileController extends GetxController {
     wishlistCount.value = 0;
   }
 
-  Future<void> _loadUserData() async {
+  Future<void> loadUserData() async {
+    // Only fetch if authenticated
+    if (_authController.currentUser.value == null) return;
+
     await Future.wait([
       _ordersController.fetchOrders(),
       _addressController.fetchAddresses(),
