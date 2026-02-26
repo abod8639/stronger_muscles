@@ -42,7 +42,7 @@ Step buildReviewStep(String title) {
                   ),
                   title: Text(item.product.getLocalizedName(locale: 'en')),
                   subtitle: Text(
-                    '${item.quantity} x LE ${item.product.baseEffectivePrice }',
+                    '${item.quantity} x LE ${item.product.baseEffectivePrice}',
                   ),
                   trailing: Text(
                     'LE ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}',

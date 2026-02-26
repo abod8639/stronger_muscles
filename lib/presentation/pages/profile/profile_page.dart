@@ -52,11 +52,11 @@ class ProfilePage extends GetView<ProfileController> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
-  
+
                 if (controller.currentUser.value == null) {
                   return LoginPromptCard();
                 }
-  
+
                 return Column(
                   children: [
                     GestureDetector(

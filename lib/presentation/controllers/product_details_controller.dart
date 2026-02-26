@@ -36,8 +36,9 @@ class ProductDetailsController extends GetxController {
     if (product.productSizes.isNotEmpty) {
       if (initialSize != null) {
         selectedSizeObject.value = product.productSizes.firstWhere(
-            (s) => s.size == initialSize,
-            orElse: () => product.productSizes.first);
+          (s) => s.size == initialSize,
+          orElse: () => product.productSizes.first,
+        );
       } else {
         selectedSizeObject.value = product.productSizes.first;
       }

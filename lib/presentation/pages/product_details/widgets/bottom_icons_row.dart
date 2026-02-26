@@ -42,7 +42,8 @@ class BottomIconsRow extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 final selectedFlavor = detailsController.selectedFlavor.value;
-                final selectedSize = detailsController.selectedSizeObject.value?.size;
+                final selectedSize =
+                    detailsController.selectedSizeObject.value?.size;
 
                 final item = cartController.getCartItem(
                   product,
@@ -86,16 +87,19 @@ class BottomIconsRow extends StatelessWidget {
     final isPriceZero = detailsController.displayEffectivePrice <= 0;
 
     return ElevatedButton.icon(
-      onPressed: isPriceZero 
-        ? null 
-        : () {
-            cartController.addToCart(
-              product,
-              selectedFlavor: detailsController.selectedFlavor.value,
-              selectedSize: detailsController.selectedSizeObject.value?.size,
-            );
-          },
-      icon: Icon(isPriceZero ? Icons.mail_outline : Icons.add_shopping_cart, size: 20),
+      onPressed: isPriceZero
+          ? null
+          : () {
+              cartController.addToCart(
+                product,
+                selectedFlavor: detailsController.selectedFlavor.value,
+                selectedSize: detailsController.selectedSizeObject.value?.size,
+              );
+            },
+      icon: Icon(
+        isPriceZero ? Icons.mail_outline : Icons.add_shopping_cart,
+        size: 20,
+      ),
       label: Text(isPriceZero ? l10n.contactUs : l10n.addToCart),
       style: ElevatedButton.styleFrom(
         backgroundColor: isPriceZero ? Colors.grey : AppColors.primary,

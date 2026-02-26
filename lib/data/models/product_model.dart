@@ -28,7 +28,10 @@ class ProductModel with _$ProductModel {
     bool hasVariants,
     @HiveField(7) @Default(0) double price,
     @HiveField(8) @JsonKey(name: 'discount_price') double? discountPrice,
-    @HiveField(9) @JsonKey(name: 'stock_quantity') @Default(0) int stockQuantity,
+    @HiveField(9)
+    @JsonKey(name: 'stock_quantity')
+    @Default(0)
+    int stockQuantity,
     @HiveField(10)
     @JsonKey(name: 'average_rating')
     @Default(0.0)
@@ -42,18 +45,12 @@ class ProductModel with _$ProductModel {
     @HiveField(14)
     @JsonKey(name: 'nutrition_facts')
     Map<String, dynamic>? nutritionFacts,
-    @HiveField(15)
-    @JsonKey(name: 'flavors')
-    @Default([])
-    List<String> flavors,
+    @HiveField(15) @JsonKey(name: 'flavors') @Default([]) List<String> flavors,
     @HiveField(16)
     @JsonKey(name: 'product_sizes')
     @Default([])
     List<ProductSize> productSizes,
-    @HiveField(17)
-    @JsonKey(name: 'size')
-    @Default([])
-    List<String> size,
+    @HiveField(17) @JsonKey(name: 'size') @Default([]) List<String> size,
     @HiveField(18) @Default([]) List<String> tags,
     @HiveField(19) double? weight,
     @HiveField(20) @JsonKey(name: 'is_active') @Default(true) bool isActive,
@@ -74,12 +71,14 @@ class ProductModel with _$ProductModel {
     @HiveField(26) @JsonKey(name: 'total_sales') @Default(0) int totalSales,
     @HiveField(27) @JsonKey(name: 'created_at') DateTime? createdAt,
     @HiveField(28) @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    
+
     // Additional fields for product details
     @HiveField(29) @Default([]) List<String> ingredients,
     @HiveField(30) String? manufacturer,
     @HiveField(31) @JsonKey(name: 'country_of_origin') String? countryOfOrigin,
-    @HiveField(32) @JsonKey(name: 'usage_instructions') String? usageInstructions,
+    @HiveField(32)
+    @JsonKey(name: 'usage_instructions')
+    String? usageInstructions,
     @HiveField(33) @Default([]) List<String> warnings,
   }) = _ProductModel;
 
@@ -99,7 +98,8 @@ class ProductModel with _$ProductModel {
   }
 
   /// Get the primary image URL
-  String? get primaryImageUrl => imageUrls.isNotEmpty ? imageUrls.first.medium : null;
+  String? get primaryImageUrl =>
+      imageUrls.isNotEmpty ? imageUrls.first.medium : null;
 
   /// Get the primary thumbnail URL
   String? get primaryThumbnailUrl =>

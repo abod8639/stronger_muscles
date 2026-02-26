@@ -8,7 +8,6 @@ class OrdersController extends BaseController {
 
   final RxList<OrderModel> orders = <OrderModel>[].obs;
 
-
   // Future<void> _loadInitialOrders() async {
   //   // Lazy loading: orders will be fetched when needed (e.g., when Profile or Orders view is opened)
   // }

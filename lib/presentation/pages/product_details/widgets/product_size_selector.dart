@@ -59,9 +59,11 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
         Wrap(
           spacing: 8.0,
           runSpacing: 4.0,
-          children: productSizes.isNotEmpty 
-            ? productSizes.map((ps) => _buildChip(ps.size, primaryColor)).toList()
-            : legacySizes.map((s) => _buildChip(s, primaryColor)).toList(),
+          children: productSizes.isNotEmpty
+              ? productSizes
+                    .map((ps) => _buildChip(ps.size, primaryColor))
+                    .toList()
+              : legacySizes.map((s) => _buildChip(s, primaryColor)).toList(),
         ),
       ],
     );
@@ -89,9 +91,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
       ),
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: isSelected
-              ? primaryColor
-              : primaryColor.withOpacity(0.3),
+          color: isSelected ? primaryColor : primaryColor.withOpacity(0.3),
           width: isSelected ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(8),

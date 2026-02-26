@@ -14,7 +14,9 @@ void handleDeleteFromWishlist(BuildContext context, ProductModel product) {
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text('${product.getLocalizedName(locale: 'en')} removed from wishlist'),
+      content: Text(
+        '${product.getLocalizedName(locale: 'en')} removed from wishlist',
+      ),
       duration: const Duration(seconds: 2),
       action: SnackBarAction(
         label: 'UNDO',

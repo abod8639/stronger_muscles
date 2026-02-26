@@ -3,23 +3,23 @@ import 'package:flutter/services.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/presentation/components/flavor_image.dart';
 
+// دالة لجلب البيانات بناءً على الاسم مع توفير بديل افتراضي
+FlavorsModel getFlavorDetails(String flavorName) {
+  final key = flavorName.toLowerCase().trim();
+  // البحث عن أقرب تطابق (مثلاً "Chocolate Ice" سيجد "chocolate")
+  final match = flavorsData.keys.firstWhere(
+    (k) => key.contains(k),
+    orElse: () => "default",
+  );
 
-    // دالة لجلب البيانات بناءً على الاسم مع توفير بديل افتراضي
-  FlavorsModel getFlavorDetails(String flavorName) {
-    final key = flavorName.toLowerCase().trim();
-    // البحث عن أقرب تطابق (مثلاً "Chocolate Ice" سيجد "chocolate")
-    final match = flavorsData.keys.firstWhere(
-      (k) => key.contains(k),
-      orElse: () => "default",
-    );
+  return flavorsData[match] ??
+      FlavorsModel(
+        name: flavorName,
+        color: Colors.blueGrey,
+        image: "https://via.placeholder.com/150", // صورة افتراضية
+      );
+}
 
-    return flavorsData[match] ??
-        FlavorsModel(
-          name: flavorName,
-          color: Colors.blueGrey,
-          image: "https://via.placeholder.com/150", // صورة افتراضية
-        );
-  }
 class ProductFlavorSelector extends StatelessWidget {
   final ProductModel product;
   final String selectedFlavor;
@@ -32,10 +32,6 @@ class ProductFlavorSelector extends StatelessWidget {
     required this.onFlavorSelected,
   });
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final flavorsList = product.flavors;
@@ -47,10 +43,10 @@ class ProductFlavorSelector extends StatelessWidget {
         Text(
           "CHOOSE YOUR FLAVOR",
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-                fontStyle: FontStyle.italic,
-              ),
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+            fontStyle: FontStyle.italic,
+          ),
         ),
         const SizedBox(height: 12),
         Wrap(
@@ -66,7 +62,11 @@ class ProductFlavorSelector extends StatelessWidget {
                 HapticFeedback.lightImpact();
                 onFlavorSelected(flavor);
               },
-              child: FlavorImage(isSelected: isSelected, baseColor: baseColor, details: details),
+              child: FlavorImage(
+                isSelected: isSelected,
+                baseColor: baseColor,
+                details: details,
+              ),
             );
           }).toList(),
         ),

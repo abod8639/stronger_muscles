@@ -35,7 +35,10 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
     final locale = Localizations.localeOf(context).languageCode;
 
     return Scaffold(
-      appBar: AppBar(title: Text(product.getLocalizedName(locale: locale)), elevation: 0),
+      appBar: AppBar(
+        title: Text(product.getLocalizedName(locale: locale)),
+        elevation: 0,
+      ),
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
@@ -56,17 +59,18 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  
                   // Product Name
                   buildProductName(product),
                   const SizedBox(height: _smallSpacing),
-                  
-                  Obx(() => buildProductPrice(
-                    product, 
-                    alternateEffectivePrice: controller.displayEffectivePrice,
-                    alternateOriginalPrice: controller.displayPrice,
-                    alternateHasDiscount: controller.displayHasDiscount,
-                  )),
+
+                  Obx(
+                    () => buildProductPrice(
+                      product,
+                      alternateEffectivePrice: controller.displayEffectivePrice,
+                      alternateOriginalPrice: controller.displayPrice,
+                      alternateHasDiscount: controller.displayHasDiscount,
+                    ),
+                  ),
                   const SizedBox(height: _smallSpacing),
 
                   // Product Badges (Featured, New, Best Seller, Discount)

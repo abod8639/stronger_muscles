@@ -43,7 +43,7 @@ class ProductsController extends BaseController {
 
       // 3. تحديث الواجهة بالنتائج الجديدة
       products.assignAll(result);
-      
+
       // مسح حالة الخطأ في حال نجاح الطلب
       resetState();
     } catch (e) {
@@ -75,7 +75,7 @@ class ProductsController extends BaseController {
   }
 
   // تحويل الدوال إلى Getters لتحسين الأداء في Widget Tree
-  ProductModel? get selectedProduct => 
+  ProductModel? get selectedProduct =>
       products.firstWhereOrNull((p) => p.id == selectedProductId.value);
 
   String get price {

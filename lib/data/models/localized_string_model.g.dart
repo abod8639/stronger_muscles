@@ -16,10 +16,7 @@ class LocalizedStringAdapter extends TypeAdapter<LocalizedString> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return LocalizedString(
-      ar: fields[0] as String?,
-      en: fields[1] as String?,
-    );
+    return LocalizedString(ar: fields[0] as String?, en: fields[1] as String?);
   }
 
   @override
@@ -48,15 +45,10 @@ class LocalizedStringAdapter extends TypeAdapter<LocalizedString> {
 // **************************************************************************
 
 _$LocalizedStringImpl _$$LocalizedStringImplFromJson(
-        Map<String, dynamic> json) =>
-    _$LocalizedStringImpl(
-      ar: json['ar'] as String?,
-      en: json['en'] as String?,
-    );
+  Map<String, dynamic> json,
+) =>
+    _$LocalizedStringImpl(ar: json['ar'] as String?, en: json['en'] as String?);
 
 Map<String, dynamic> _$$LocalizedStringImplToJson(
-        _$LocalizedStringImpl instance) =>
-    <String, dynamic>{
-      'ar': instance.ar,
-      'en': instance.en,
-    };
+  _$LocalizedStringImpl instance,
+) => <String, dynamic>{'ar': instance.ar, 'en': instance.en};

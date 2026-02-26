@@ -12,7 +12,8 @@ part of 'product_category_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ProductCategory _$ProductCategoryFromJson(Map<String, dynamic> json) {
   return _ProductCategory.fromJson(json);
@@ -36,12 +37,14 @@ mixin _$ProductCategory {
 /// @nodoc
 abstract class $ProductCategoryCopyWith<$Res> {
   factory $ProductCategoryCopyWith(
-          ProductCategory value, $Res Function(ProductCategory) then) =
-      _$ProductCategoryCopyWithImpl<$Res, ProductCategory>;
+    ProductCategory value,
+    $Res Function(ProductCategory) then,
+  ) = _$ProductCategoryCopyWithImpl<$Res, ProductCategory>;
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'id') String id,
-      @HiveField(1) @JsonKey(name: 'name') LocalizedString? name});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'id') String id,
+    @HiveField(1) @JsonKey(name: 'name') LocalizedString? name,
+  });
 
   $LocalizedStringCopyWith<$Res>? get name;
 }
@@ -58,20 +61,20 @@ class _$ProductCategoryCopyWithImpl<$Res, $Val extends ProductCategory>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? name = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-    ) as $Val);
+  $Res call({Object? id = null, Object? name = freezed}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: freezed == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as LocalizedString?,
+          )
+          as $Val,
+    );
   }
 
   @override
@@ -90,14 +93,16 @@ class _$ProductCategoryCopyWithImpl<$Res, $Val extends ProductCategory>
 /// @nodoc
 abstract class _$$ProductCategoryImplCopyWith<$Res>
     implements $ProductCategoryCopyWith<$Res> {
-  factory _$$ProductCategoryImplCopyWith(_$ProductCategoryImpl value,
-          $Res Function(_$ProductCategoryImpl) then) =
-      __$$ProductCategoryImplCopyWithImpl<$Res>;
+  factory _$$ProductCategoryImplCopyWith(
+    _$ProductCategoryImpl value,
+    $Res Function(_$ProductCategoryImpl) then,
+  ) = __$$ProductCategoryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'id') String id,
-      @HiveField(1) @JsonKey(name: 'name') LocalizedString? name});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'id') String id,
+    @HiveField(1) @JsonKey(name: 'name') LocalizedString? name,
+  });
 
   @override
   $LocalizedStringCopyWith<$Res>? get name;
@@ -108,35 +113,35 @@ class __$$ProductCategoryImplCopyWithImpl<$Res>
     extends _$ProductCategoryCopyWithImpl<$Res, _$ProductCategoryImpl>
     implements _$$ProductCategoryImplCopyWith<$Res> {
   __$$ProductCategoryImplCopyWithImpl(
-      _$ProductCategoryImpl _value, $Res Function(_$ProductCategoryImpl) _then)
-      : super(_value, _then);
+    _$ProductCategoryImpl _value,
+    $Res Function(_$ProductCategoryImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? name = freezed,
-  }) {
-    return _then(_$ProductCategoryImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-    ));
+  $Res call({Object? id = null, Object? name = freezed}) {
+    return _then(
+      _$ProductCategoryImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: freezed == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as LocalizedString?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ProductCategoryImpl extends _ProductCategory {
-  const _$ProductCategoryImpl(
-      {@HiveField(0) @JsonKey(name: 'id') required this.id,
-      @HiveField(1) @JsonKey(name: 'name') this.name})
-      : super._();
+  const _$ProductCategoryImpl({
+    @HiveField(0) @JsonKey(name: 'id') required this.id,
+    @HiveField(1) @JsonKey(name: 'name') this.name,
+  }) : super._();
 
   factory _$ProductCategoryImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductCategoryImplFromJson(json);
@@ -173,21 +178,21 @@ class _$ProductCategoryImpl extends _ProductCategory {
   @pragma('vm:prefer-inline')
   _$$ProductCategoryImplCopyWith<_$ProductCategoryImpl> get copyWith =>
       __$$ProductCategoryImplCopyWithImpl<_$ProductCategoryImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProductCategoryImplToJson(
-      this,
-    );
+    return _$$ProductCategoryImplToJson(this);
   }
 }
 
 abstract class _ProductCategory extends ProductCategory {
-  const factory _ProductCategory(
-          {@HiveField(0) @JsonKey(name: 'id') required final String id,
-          @HiveField(1) @JsonKey(name: 'name') final LocalizedString? name}) =
-      _$ProductCategoryImpl;
+  const factory _ProductCategory({
+    @HiveField(0) @JsonKey(name: 'id') required final String id,
+    @HiveField(1) @JsonKey(name: 'name') final LocalizedString? name,
+  }) = _$ProductCategoryImpl;
   const _ProductCategory._() : super._();
 
   factory _ProductCategory.fromJson(Map<String, dynamic> json) =

@@ -21,31 +21,36 @@ class ApiService {
     );
 
     // إضافة Interceptor للتعامل مع الـ Headers والـ Logging تلقائياً
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) async {
-        final token = StorageService.getToken();
-        final languageCode = getx.Get.find<LanguageController>().currentLocale.value.languageCode;
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = StorageService.getToken();
+          final languageCode = getx.Get.find<LanguageController>()
+              .currentLocale
+              .value
+              .languageCode;
 
-        options.headers['Content-Type'] = 'application/json';
-        options.headers['Accept'] = 'application/json';
-        options.headers['Accept-Language'] = languageCode;
+          options.headers['Content-Type'] = 'application/json';
+          options.headers['Accept'] = 'application/json';
+          options.headers['Accept-Language'] = languageCode;
 
-        if (token != null && !options.headers.containsKey('Authorization')) {
-          options.headers['Authorization'] = 'Bearer $token';
-        }
+          if (token != null && !options.headers.containsKey('Authorization')) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
 
-        print('🚀 Request: ${options.method} ${options.uri}');
-        if (options.data != null) print('📦 Body: ${options.data}');
-        
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        return handler.next(response);
-      },
-      onError: (DioException e, handler) {
-        return handler.next(e);
-      },
-    ));
+          print('🚀 Request: ${options.method} ${options.uri}');
+          if (options.data != null) print('📦 Body: ${options.data}');
+
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          return handler.next(response);
+        },
+        onError: (DioException e, handler) {
+          return handler.next(e);
+        },
+      ),
+    );
   }
 
   // --- Methods ---
@@ -153,15 +158,19 @@ class ApiService {
     FailureType failureType = FailureType.server;
 
     final dynamic data = response.data;
-    String? serverMessage = data is Map ? (data['message'] ?? data['error']) : null;
+    String? serverMessage = data is Map
+        ? (data['message'] ?? data['error'])
+        : null;
 
     if (response.statusCode == 401 || response.statusCode == 403) {
       failureType = FailureType.auth;
       // التحقق من المسار إذا لزم الأمر عبر response.requestOptions.path
       if (response.requestOptions.path.contains('login')) {
-        errorDescription = serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+        errorDescription =
+            serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
       } else {
-        errorDescription = serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
+        errorDescription =
+            serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
         StorageService.deleteToken();
       }
     } else if (response.statusCode == 422) {
@@ -175,7 +184,9 @@ class ApiService {
             allErrors.add(value.toString());
           }
         });
-        errorDescription = allErrors.isNotEmpty ? allErrors.join('\n') : "بيانات المدخلات غير صالحة";
+        errorDescription = allErrors.isNotEmpty
+            ? allErrors.join('\n')
+            : "بيانات المدخلات غير صالحة";
       }
     } else {
       errorDescription = serverMessage ?? errorDescription;

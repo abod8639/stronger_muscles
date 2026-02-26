@@ -51,7 +51,6 @@ class OrderSuccessView extends StatelessWidget {
               const SizedBox(height: _buttonSpacing),
               ElevatedButton(
                 onPressed: () {
-                  
                   Get.offAllNamed(AppRoutes.main);
                 },
                 style: ElevatedButton.styleFrom(

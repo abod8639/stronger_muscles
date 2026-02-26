@@ -19,7 +19,7 @@ Future<void> hiveInit() async {
   Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(ProductModelAdapter());
   Hive.registerAdapter(CategoryModelAdapter());
-  
+
   // Register new adapters for localized data
   Hive.registerAdapter(LocalizedStringAdapter());
   Hive.registerAdapter(ImageUrlAdapter());

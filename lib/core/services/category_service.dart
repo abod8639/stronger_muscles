@@ -9,7 +9,7 @@ class CategoryService extends GetxService {
   Future<List<CategoryModel>> fetchCategoriesFromApi() async {
     try {
       final response = await _apiService.get(ApiConfig.categories);
-      
+
       return _parseCategories(response.data);
     } catch (e) {
       rethrow;
@@ -18,7 +18,7 @@ class CategoryService extends GetxService {
 
   List<CategoryModel> _parseCategories(dynamic decodedData) {
     List<dynamic> list = [];
-    
+
     if (decodedData is List) {
       list = decodedData;
     } else if (decodedData is Map) {
@@ -28,7 +28,7 @@ class CategoryService extends GetxService {
         list = data;
       }
     }
-    
+
     return list.map((json) => CategoryModel.fromJson(json)).toList();
   }
 }

@@ -50,7 +50,7 @@ class ProductService extends GetxService {
 
   List<ProductModel> _parseProductsList(dynamic data) {
     List<dynamic> list = [];
-    
+
     if (data is List) {
       list = data;
     } else if (data is Map) {
@@ -63,15 +63,12 @@ class ProductService extends GetxService {
         list = rawData['data'];
       }
     }
-    
+
     return list.map((json) => ProductModel.fromJson(json)).toList();
   }
 
   Failure _handleError(dynamic e, String defaultMsg) {
     if (e is Failure) return e;
-    return Failure(
-      message: defaultMsg,
-      type: FailureType.unknown,
-    );
+    return Failure(message: defaultMsg, type: FailureType.unknown);
   }
 }

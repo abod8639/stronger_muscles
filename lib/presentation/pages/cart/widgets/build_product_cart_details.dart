@@ -33,7 +33,9 @@ Widget buildProductCartDetails(CartItemModel item) {
 
           // Product Name
           Text(
-            item.product.getLocalizedName(locale: AppLocalizations.of(context)!.localeName ),
+            item.product.getLocalizedName(
+              locale: AppLocalizations.of(context)!.localeName,
+            ),
             style: theme.textTheme.titleMedium?.copyWith(
               fontSize: _titleFontSize,
               fontWeight: FontWeight.bold,
@@ -41,7 +43,9 @@ Widget buildProductCartDetails(CartItemModel item) {
             ),
             maxLines: _maxTitleLines,
             overflow: TextOverflow.ellipsis,
-            semanticsLabel: item.product.getLocalizedName(locale: AppLocalizations.of(context)!.localeName ),
+            semanticsLabel: item.product.getLocalizedName(
+              locale: AppLocalizations.of(context)!.localeName,
+            ),
           ),
 
           // Selected Flavor
@@ -49,27 +53,29 @@ Widget buildProductCartDetails(CartItemModel item) {
             Row(
               children: [
                 selectedValue(
-                  title: AppLocalizations.of(context)!.flavor, 
-                  value: item.selectedFlavor!, 
+                  title: AppLocalizations.of(context)!.flavor,
+                  value: item.selectedFlavor!,
                   item: item,
-                  ),
-                  SizedBox(width: 45),
-              FlavorImage(
-              width: 80,
-              height: 30,
-              isSelected: false,
-              baseColor: AppColors.primary,
-              details: getFlavorDetails(item.selectedFlavor!),
-            )
+                ),
+
+                const Spacer(),
+
+                FlavorImage(
+                  width: 90,
+                  height: 30,
+                  isSelected: false,
+                  baseColor: AppColors.primary,
+                  details: getFlavorDetails(item.selectedFlavor!),
+                ),
               ],
             ),
 
           // Selected Size
           if (item.selectedSize != null && item.selectedSize!.isNotEmpty)
             selectedValue(
-            title:  AppLocalizations.of(context)!.size,
-            value: item.selectedSize!,
-            item: item,
+              title: AppLocalizations.of(context)!.size,
+              value: item.selectedSize!,
+              item: item,
             ),
 
           const SizedBox(height: 8.0),
@@ -78,7 +84,6 @@ Widget buildProductCartDetails(CartItemModel item) {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Text(
                 '\$${item.product.baseEffectivePrice.toStringAsFixed(2)}',
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -118,14 +123,11 @@ Widget buildProductCartDetails(CartItemModel item) {
   );
 }
 
-
-
 Builder selectedValue({
   required String title,
   required String value,
   required CartItemModel item,
   Color? color,
-  
 }) {
   return Builder(
     builder: (context) {
@@ -134,7 +136,6 @@ Builder selectedValue({
         padding: const EdgeInsets.only(top: 4.0),
         child: Row(
           children: [
-             
             Text(
               "$title: ",
               // '${AppLocalizations.of(context)!.flavor}: ',
@@ -148,11 +149,10 @@ Builder selectedValue({
               value,
               // '${item.selectedFlavor}',
               style: theme.textTheme.bodySmall?.copyWith(
-                color:color ?? AppColors.primary,
+                color: color ?? AppColors.primary,
                 fontWeight: FontWeight.w600,
               ),
             ),
-
           ],
         ),
       );

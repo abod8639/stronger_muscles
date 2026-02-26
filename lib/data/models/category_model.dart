@@ -43,43 +43,64 @@ class PredefinedCategories {
     CategoryModel(
       id: 'protein',
       name: const LocalizedString(ar: 'بروتين', en: 'Protein'),
-      description: const LocalizedString(ar: 'مكملات البروتين', en: 'Protein powders and supplements'),
+      description: const LocalizedString(
+        ar: 'مكملات البروتين',
+        en: 'Protein powders and supplements',
+      ),
       sortOrder: 1,
     ),
     CategoryModel(
       id: 'creatine',
       name: const LocalizedString(ar: 'كرياتين', en: 'Creatine'),
-      description: const LocalizedString(ar: 'مكملات الكرياتين', en: 'Creatine supplements'),
+      description: const LocalizedString(
+        ar: 'مكملات الكرياتين',
+        en: 'Creatine supplements',
+      ),
       sortOrder: 2,
     ),
     CategoryModel(
       id: 'amino',
       name: const LocalizedString(ar: 'أمينو', en: 'Amino Acids'),
-      description: const LocalizedString(ar: 'مكملات الأحماض الأمينية', en: 'Amino acid supplements'),
+      description: const LocalizedString(
+        ar: 'مكملات الأحماض الأمينية',
+        en: 'Amino acid supplements',
+      ),
       sortOrder: 3,
     ),
     CategoryModel(
       id: 'bcaa',
       name: const LocalizedString(ar: 'BCAA', en: 'BCAA'),
-      description: const LocalizedString(ar: 'أحماض أمينية متشعبة', en: 'Branched-chain amino acids'),
+      description: const LocalizedString(
+        ar: 'أحماض أمينية متشعبة',
+        en: 'Branched-chain amino acids',
+      ),
       sortOrder: 4,
     ),
     CategoryModel(
       id: 'preworkout',
       name: const LocalizedString(ar: 'قبل التمرين', en: 'Pre-Workout'),
-      description: const LocalizedString(ar: 'مكملات قبل التمرين', en: 'Pre-workout supplements'),
+      description: const LocalizedString(
+        ar: 'مكملات قبل التمرين',
+        en: 'Pre-workout supplements',
+      ),
       sortOrder: 5,
     ),
     CategoryModel(
       id: 'massgainer',
       name: const LocalizedString(ar: 'زيادة الوزن', en: 'Mass Gainer'),
-      description: const LocalizedString(ar: 'مكملات زيادة الوزن', en: 'Mass gainer supplements'),
+      description: const LocalizedString(
+        ar: 'مكملات زيادة الوزن',
+        en: 'Mass gainer supplements',
+      ),
       sortOrder: 6,
     ),
     CategoryModel(
       id: 'accessories',
       name: const LocalizedString(ar: 'إكسسوارات', en: 'Accessories'),
-      description: const LocalizedString(ar: 'شيكرات وحقائب وإكسسوارات', en: 'Shakers, bags, and accessories'),
+      description: const LocalizedString(
+        ar: 'شيكرات وحقائب وإكسسوارات',
+        en: 'Shakers, bags, and accessories',
+      ),
       sortOrder: 7,
     ),
   ];

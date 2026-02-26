@@ -8,7 +8,9 @@ const double _imageSize = 100.0;
 const double _imageBorderRadius = 8.0;
 
 Widget buildProductImage(ProductModel product) {
-  final imageUrl = product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : '';
+  final imageUrl = product.imageUrls.isNotEmpty
+      ? product.imageUrls.first.medium
+      : '';
 
   return Hero(
     tag: 'wishlist_product_${product.id}',

@@ -13,7 +13,7 @@ class AddressService extends GetxService {
   Future<List<AddressModel>> getAddresses() async {
     try {
       final response = await _apiService.get(ApiConfig.addresses);
-      
+
       final data = response.data;
       final List<dynamic> addressesJson = data['addresses'] ?? [];
 
@@ -31,7 +31,7 @@ class AddressService extends GetxService {
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
       final Map<String, dynamic> addressData = address.toJson();
-      
+
       _cleanAddressData(addressData);
 
       final response = await _apiService.post(
@@ -97,8 +97,9 @@ class AddressService extends GetxService {
 
   /// Helper to remove unnecessary fields before sending to API
   void _cleanAddressData(Map<String, dynamic> data) {
-    data.removeWhere((key, value) => 
-      ['id', 'user_id', 'created_at', 'updated_at'].contains(key)
+    data.removeWhere(
+      (key, value) =>
+          ['id', 'user_id', 'created_at', 'updated_at'].contains(key),
     );
   }
 
@@ -111,7 +112,8 @@ class AddressService extends GetxService {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) throw 'تم رفض صلاحيات الموقع';
+      if (permission == LocationPermission.denied)
+        throw 'تم رفض صلاحيات الموقع';
     }
 
     if (permission == LocationPermission.deniedForever) {

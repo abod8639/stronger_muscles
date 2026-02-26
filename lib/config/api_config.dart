@@ -10,8 +10,6 @@ class ApiConfig {
     // استخدم IP جهازك (مثل 192.168.1.17) إذا كنت تستخدم جوال حقيقي
     // const String pcIp = '192.168.1.17';
     return 'http://$ip:$port/api/v1';
-
-
   }
 
   // Auth
@@ -36,5 +34,4 @@ class ApiConfig {
 
   // Legacy/Deprecated - Keep for compatibility until services are updated
   static const String usersStats = '/customer/profile';
-  
 }

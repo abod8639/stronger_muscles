@@ -152,10 +152,8 @@ class CartController extends BaseController {
     );
   }
 
-  double get totalPrice => cartItems.fold(
-    0,
-    (sum, item) => sum + item.subtotal,
-  );
+  double get totalPrice =>
+      cartItems.fold(0, (sum, item) => sum + item.subtotal);
 
   void clearCart() {
     try {

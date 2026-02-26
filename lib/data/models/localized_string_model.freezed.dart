@@ -12,7 +12,8 @@ part of 'localized_string_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 LocalizedString _$LocalizedStringFromJson(Map<String, dynamic> json) {
   return _LocalizedString.fromJson(json);
@@ -36,12 +37,14 @@ mixin _$LocalizedString {
 /// @nodoc
 abstract class $LocalizedStringCopyWith<$Res> {
   factory $LocalizedStringCopyWith(
-          LocalizedString value, $Res Function(LocalizedString) then) =
-      _$LocalizedStringCopyWithImpl<$Res, LocalizedString>;
+    LocalizedString value,
+    $Res Function(LocalizedString) then,
+  ) = _$LocalizedStringCopyWithImpl<$Res, LocalizedString>;
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'ar') String? ar,
-      @HiveField(1) @JsonKey(name: 'en') String? en});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'ar') String? ar,
+    @HiveField(1) @JsonKey(name: 'en') String? en,
+  });
 }
 
 /// @nodoc
@@ -56,34 +59,36 @@ class _$LocalizedStringCopyWithImpl<$Res, $Val extends LocalizedString>
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? ar = freezed,
-    Object? en = freezed,
-  }) {
-    return _then(_value.copyWith(
-      ar: freezed == ar
-          ? _value.ar
-          : ar // ignore: cast_nullable_to_non_nullable
-              as String?,
-      en: freezed == en
-          ? _value.en
-          : en // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+  $Res call({Object? ar = freezed, Object? en = freezed}) {
+    return _then(
+      _value.copyWith(
+            ar: freezed == ar
+                ? _value.ar
+                : ar // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            en: freezed == en
+                ? _value.en
+                : en // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$LocalizedStringImplCopyWith<$Res>
     implements $LocalizedStringCopyWith<$Res> {
-  factory _$$LocalizedStringImplCopyWith(_$LocalizedStringImpl value,
-          $Res Function(_$LocalizedStringImpl) then) =
-      __$$LocalizedStringImplCopyWithImpl<$Res>;
+  factory _$$LocalizedStringImplCopyWith(
+    _$LocalizedStringImpl value,
+    $Res Function(_$LocalizedStringImpl) then,
+  ) = __$$LocalizedStringImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'ar') String? ar,
-      @HiveField(1) @JsonKey(name: 'en') String? en});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'ar') String? ar,
+    @HiveField(1) @JsonKey(name: 'en') String? en,
+  });
 }
 
 /// @nodoc
@@ -91,35 +96,35 @@ class __$$LocalizedStringImplCopyWithImpl<$Res>
     extends _$LocalizedStringCopyWithImpl<$Res, _$LocalizedStringImpl>
     implements _$$LocalizedStringImplCopyWith<$Res> {
   __$$LocalizedStringImplCopyWithImpl(
-      _$LocalizedStringImpl _value, $Res Function(_$LocalizedStringImpl) _then)
-      : super(_value, _then);
+    _$LocalizedStringImpl _value,
+    $Res Function(_$LocalizedStringImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? ar = freezed,
-    Object? en = freezed,
-  }) {
-    return _then(_$LocalizedStringImpl(
-      ar: freezed == ar
-          ? _value.ar
-          : ar // ignore: cast_nullable_to_non_nullable
-              as String?,
-      en: freezed == en
-          ? _value.en
-          : en // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+  $Res call({Object? ar = freezed, Object? en = freezed}) {
+    return _then(
+      _$LocalizedStringImpl(
+        ar: freezed == ar
+            ? _value.ar
+            : ar // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        en: freezed == en
+            ? _value.en
+            : en // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$LocalizedStringImpl extends _LocalizedString {
-  const _$LocalizedStringImpl(
-      {@HiveField(0) @JsonKey(name: 'ar') this.ar,
-      @HiveField(1) @JsonKey(name: 'en') this.en})
-      : super._();
+  const _$LocalizedStringImpl({
+    @HiveField(0) @JsonKey(name: 'ar') this.ar,
+    @HiveField(1) @JsonKey(name: 'en') this.en,
+  }) : super._();
 
   factory _$LocalizedStringImpl.fromJson(Map<String, dynamic> json) =>
       _$$LocalizedStringImplFromJson(json);
@@ -156,21 +161,21 @@ class _$LocalizedStringImpl extends _LocalizedString {
   @pragma('vm:prefer-inline')
   _$$LocalizedStringImplCopyWith<_$LocalizedStringImpl> get copyWith =>
       __$$LocalizedStringImplCopyWithImpl<_$LocalizedStringImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$LocalizedStringImplToJson(
-      this,
-    );
+    return _$$LocalizedStringImplToJson(this);
   }
 }
 
 abstract class _LocalizedString extends LocalizedString {
-  const factory _LocalizedString(
-          {@HiveField(0) @JsonKey(name: 'ar') final String? ar,
-          @HiveField(1) @JsonKey(name: 'en') final String? en}) =
-      _$LocalizedStringImpl;
+  const factory _LocalizedString({
+    @HiveField(0) @JsonKey(name: 'ar') final String? ar,
+    @HiveField(1) @JsonKey(name: 'en') final String? en,
+  }) = _$LocalizedStringImpl;
   const _LocalizedString._() : super._();
 
   factory _LocalizedString.fromJson(Map<String, dynamic> json) =

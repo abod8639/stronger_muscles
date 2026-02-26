@@ -75,21 +75,21 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
           colors: isDark
               ? [
                   theme.colorScheme.surface,
-                  theme.colorScheme.surface..withValues(alpha:.8),
+                  theme.colorScheme.surface..withValues(alpha: .8),
                 ]
               : [
                   theme.colorScheme.surface,
-                  theme.colorScheme.primaryContainer..withValues(alpha:.1),
+                  theme.colorScheme.primaryContainer..withValues(alpha: .1),
                 ],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.primary..withValues(alpha:.2),
+          color: AppColors.primary..withValues(alpha: .2),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary..withValues(alpha:.08),
+            color: AppColors.primary..withValues(alpha: .08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

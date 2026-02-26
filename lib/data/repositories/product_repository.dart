@@ -6,7 +6,7 @@ import 'package:stronger_muscles/data/models/product_model.dart';
 
 class ProductRepository {
   final ProductService _service = Get.find<ProductService>();
-  
+
   // تأكد من أن Box المنتجات مفتوح بالفعل في الـ main أو الـ Service
   final Box<ProductModel> _box = Hive.box<ProductModel>('products');
 
@@ -14,9 +14,15 @@ class ProductRepository {
   List<ProductModel> getCachedProducts() => _box.values.toList();
 
   /// Fetch and cache products
-  Future<List<ProductModel>> getProducts({String? categoryId, int page = 1}) async {
+  Future<List<ProductModel>> getProducts({
+    String? categoryId,
+    int page = 1,
+  }) async {
     try {
-      final products = await _service.getProducts(categoryId: categoryId, page: page);
+      final products = await _service.getProducts(
+        categoryId: categoryId,
+        page: page,
+      );
 
       // تحديث الـ Cache
       // ملاحظة: إذا كانت الصفحة 1، قد ترغب في مسح الكاش القديم أو تحديثه فقط
@@ -58,9 +64,12 @@ class ProductRepository {
       if (e.type == FailureType.network) {
         final currentLocale = Get.locale?.languageCode ?? 'ar';
         return _box.values
-            .where((p) => p.getLocalizedName(locale: currentLocale)
-                .toLowerCase()
-                .contains(query.toLowerCase()))
+            .where(
+              (p) => p
+                  .getLocalizedName(locale: currentLocale)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()),
+            )
             .toList();
       }
       rethrow;

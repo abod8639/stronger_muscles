@@ -25,7 +25,7 @@ class AuthService extends GetxService {
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
         data['user'] ?? data['data'] ?? data,
       );
-      
+
       final String? token = data['token']?.toString();
       if (token != null) {
         userMap['token'] = token;
@@ -63,7 +63,7 @@ class AuthService extends GetxService {
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
         data['user'] ?? data['data'] ?? data,
       );
-      
+
       final String? token = data['token']?.toString();
       if (token != null) {
         userMap['token'] = token;
@@ -85,7 +85,7 @@ class AuthService extends GetxService {
 
       final response = await _apiService.get(ApiConfig.customerProfile);
       final data = response.data;
-      
+
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
         data['user'] ?? data['data'] ?? data,
       );
@@ -155,7 +155,7 @@ class AuthService extends GetxService {
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
         data['user'] ?? data['data'] ?? data,
       );
-      
+
       final String? token = (data['token'] ?? data['access_token'])?.toString();
       if (token != null) {
         userMap['token'] = token;

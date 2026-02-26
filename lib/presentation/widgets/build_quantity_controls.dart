@@ -32,7 +32,8 @@ Widget buildQuantityControls(ProductModel product) {
             children: [
               // Increase Button
               Semantics(
-                label: 'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
+                label:
+                    'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
                 button: true,
                 child: IconButton(
                   icon: const Icon(

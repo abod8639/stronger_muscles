@@ -12,10 +12,7 @@ class OrderRepository {
     try {
       // Dio سيرمي Exception تلقائياً إذا كان الـ Status Code ليس 2xx
       // بناءً على إعدادات الـ ApiService التي صممناها
-      await _apiService.post(
-        ApiConfig.orders,
-        data: payload,
-      );
+      await _apiService.post(ApiConfig.orders, data: payload);
 
       print("✅ Order placed successfully on server.");
     } on Failure catch (e) {
@@ -30,7 +27,7 @@ class OrderRepository {
   Future<List<OrderModel>> getUserOrders() async {
     try {
       final response = await _apiService.get(ApiConfig.orders);
-      
+
       // البيانات تأتي معالجة كـ Map أو List تلقائياً عبر Dio
       final dynamic body = response.data;
       List<dynamic> data = [];
@@ -47,9 +44,7 @@ class OrderRepository {
       throw Failure(message: e.message);
     } catch (e) {
       print("❌ Error in OrderRepository (getUserOrders): $e");
-      throw Failure(
-        message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً",
-      );
+      throw Failure(message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً");
     }
   }
 }

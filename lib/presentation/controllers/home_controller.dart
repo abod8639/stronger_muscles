@@ -40,10 +40,10 @@ class HomeController extends BaseController {
         categoryId: categoryId,
       );
       searchController.setProducts(fetchedProducts);
-      } catch (e) {
-        debugPrint('Background fetch error: $e');
-      }
+    } catch (e) {
+      debugPrint('Background fetch error: $e');
     }
+  }
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
@@ -96,6 +96,5 @@ class HomeController extends BaseController {
     } else {
       await fetchProductsForSection(selectedSectionIndex.value);
     }
-
   }
 }

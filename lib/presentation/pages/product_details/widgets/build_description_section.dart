@@ -8,7 +8,7 @@ Widget buildDescriptionSection(ProductModel product) {
     builder: (context) {
       final locale = Localizations.localeOf(context).languageCode;
       final description = product.getLocalizedDescription(locale: locale);
-      
+
       if (description.isEmpty) {
         return const SizedBox.shrink();
       }
