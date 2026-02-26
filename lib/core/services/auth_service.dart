@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import '../../config/api_config.dart';
 import '../../data/models/user_model.dart';
@@ -8,7 +7,8 @@ import 'api_service.dart';
 import 'storage_service.dart';
 
 class AuthService extends GetxService {
-  final ApiService _apiService = Get.put(ApiService());
+  // استخدام Get.find بدلاً من Put إذا كان قد تم تعريفه مسبقاً في الـ Bindings
+  final ApiService _apiService = Get.find<ApiService>();
 
   Future<UserModel> register({
     required String email,
@@ -18,31 +18,25 @@ class AuthService extends GetxService {
     try {
       final response = await _apiService.post(
         ApiConfig.register,
-        includeAuth: false,
         data: {'email': email, 'password': password, 'name': name},
       );
 
-      print('📝 Register Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
+      final data = response.data;
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
-        body['user'] ?? body['data'] ?? body,
+        data['user'] ?? data['data'] ?? data,
       );
-      final String? token = body['token']?.toString();
-
+      
+      final String? token = data['token']?.toString();
       if (token != null) {
         userMap['token'] = token;
         await StorageService.saveToken(token);
-        print('✅ Token saved successfully');
       }
 
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
-      print('❌ Register API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Register Error: $e');
-      throw 'حدث خطأ أثناء إنشاء الحساب: ${e.toString()}';
+      throw 'حدث خطأ غير متوقع أثناء إنشاء الحساب';
     }
   }
 
@@ -53,42 +47,34 @@ class AuthService extends GetxService {
     try {
       final response = await _apiService.post(
         ApiConfig.login,
-        includeAuth: false,
         data: {'email': email, 'password': password},
       );
 
-      print('🔐 Login Response: ${response.body}');
+      final data = response.data;
 
-      final body = jsonDecode(response.body);
-
-      if (body['status'] == 'error' ||
-          (body['status'] == 'success' &&
-              body['user'] == null &&
-              body['token'] == null)) {
+      // فحص منطقي لحالة الاستجابة بناءً على هيكلة السيرفر لديك
+      if (data['status'] == 'error') {
         throw Failure(
-          message: body['message'] ?? 'فشل تسجيل الدخول',
+          message: data['message'] ?? 'فشل تسجيل الدخول',
           type: FailureType.auth,
         );
       }
 
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
-        body['user'] ?? body['data'] ?? body,
+        data['user'] ?? data['data'] ?? data,
       );
-      final String? token = body['token']?.toString();
-
+      
+      final String? token = data['token']?.toString();
       if (token != null) {
         userMap['token'] = token;
         await StorageService.saveToken(token);
-        print('✅ Token saved successfully');
       }
 
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
-      print('❌ Login API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Login Error: $e');
-      throw 'حدث خطأ أثناء محاولة تسجيل الدخول: ${e.toString()}';
+      throw 'حدث خطأ أثناء محاولة تسجيل الدخول';
     }
   }
 
@@ -98,14 +84,12 @@ class AuthService extends GetxService {
       if (token == null) return null;
 
       final response = await _apiService.get(ApiConfig.customerProfile);
-      print('👤 Get Current User Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
+      final data = response.data;
+      
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
-        body['user'] ?? body['data'] ?? body,
+        data['user'] ?? data['data'] ?? data,
       );
 
-      // Inject existing token into the model if not present in response
       if (userMap['token'] == null) {
         userMap['token'] = token;
       }
@@ -129,23 +113,20 @@ class AuthService extends GetxService {
       final response = await _apiService.post(
         ApiConfig.updateProfileRoute,
         data: {
-          'name': name,
-          'email': email,
-          'phone': phone,
-          'photo_url': photoUrl,
-          'preferred_language': preferredLanguage,
-          'notifications_enabled': notificationsEnabled,
+          if (name != null) 'name': name,
+          if (email != null) 'email': email,
+          if (phone != null) 'phone': phone,
+          if (photoUrl != null) 'photo_url': photoUrl,
+          if (preferredLanguage != null) 'preferred_language': preferredLanguage,
+          if (notificationsEnabled != null) 'notifications_enabled': notificationsEnabled,
         },
       );
 
-      print('📝 Update Profile Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
+      final data = response.data;
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
-        body['user'] ?? body['data'] ?? body,
+        data['user'] ?? data['data'] ?? data,
       );
 
-      // Keep existing token
       final token = StorageService.getToken();
       if (token != null && userMap['token'] == null) {
         userMap['token'] = token;
@@ -153,11 +134,9 @@ class AuthService extends GetxService {
 
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
-      print('❌ Update Profile API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Update Profile Error: $e');
-      throw 'حدث خطأ أثناء تحديث البيانات: ${e.toString()}';
+      throw 'حدث خطأ أثناء تحديث البيانات';
     }
   }
 
@@ -169,31 +148,25 @@ class AuthService extends GetxService {
     try {
       final response = await _apiService.post(
         ApiConfig.googleSignIn,
-        includeAuth: false,
         data: {'email': email, 'name': name, 'photo_url': photoUrl},
       );
 
-      print('🔐 Google SignIn Response: ${response.body}');
-
-      final body = jsonDecode(response.body);
+      final data = response.data;
       final Map<String, dynamic> userMap = Map<String, dynamic>.from(
-        body['user'] ?? body['data'] ?? body,
+        data['user'] ?? data['data'] ?? data,
       );
-      final String? token = (body['token'] ?? body['access_token'])?.toString();
-
+      
+      final String? token = (data['token'] ?? data['access_token'])?.toString();
       if (token != null) {
         userMap['token'] = token;
         await StorageService.saveToken(token);
-        print('✅ Token saved successfully');
       }
 
       return UserModel.fromJson(userMap);
     } on Failure catch (e) {
-      print('❌ Google SignIn API Error: ${e.message}');
       throw e.message;
     } catch (e) {
-      print('❌ Google SignIn Error: $e');
-      throw 'حدث خطأ أثناء تسجيل الدخول عبر جوجل: ${e.toString()}';
+      throw 'حدث خطأ أثناء تسجيل الدخول عبر جوجل';
     }
   }
 
@@ -207,12 +180,10 @@ class AuthService extends GetxService {
     }
   }
 
-  // جلب بيانات إحصائيات المستخدمين
   Future<UsersStatsResponse> getUsersStats() async {
     try {
       final response = await _apiService.get(ApiConfig.usersStats);
-      final body = jsonDecode(response.body);
-      return UsersStatsResponse.fromJson(body);
+      return UsersStatsResponse.fromJson(response.data);
     } catch (e) {
       rethrow;
     }
