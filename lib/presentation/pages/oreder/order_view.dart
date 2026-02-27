@@ -10,6 +10,7 @@ class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<OrdersController>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(),
       body: Obx(() {
@@ -20,15 +21,17 @@ class OrderView extends StatelessWidget {
           itemCount: controller.orders.length,
           itemBuilder: (context, index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8.0,
-                vertical: 20.0,
+              padding: EdgeInsets.only(
+                left: 8.0,
+                right: 8.0,
+                top: index == 0 ? 30 : 5,
+                bottom: 5,
               ),
               child: OrderCard(
                 onTap: () =>
                     Get.to(OrderDetailsView(order: controller.orders[index])),
                 order: controller.orders[index],
-                isDark: true,
+                isDark: isDark,
                 isAr: false,
               ),
             );

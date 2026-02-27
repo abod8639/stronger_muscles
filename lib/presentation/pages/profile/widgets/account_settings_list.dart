@@ -27,11 +27,11 @@ class AccountSettingsList extends StatelessWidget {
         horizontal: _containerMarginHorizontal,
       ),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
+        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
         borderRadius: BorderRadius.circular(_containerBorderRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withOpacity(_shadowOpacity),
+            color: AppColors.black.withValues(alpha: _shadowOpacity),
             blurRadius: _shadowBlurRadius,
             offset: const Offset(0, _shadowOffsetY),
           ),
@@ -199,8 +199,8 @@ class AccountSettingsList extends StatelessWidget {
       child: Divider(
         height: 1,
         color: isDark
-            ? AppColors.greyDark.withOpacity(0.3)
-            : AppColors.greyMedium.withOpacity(0.3),
+            ? AppColors.greyDark.withValues(alpha: 0.3)
+            : AppColors.greyMedium.withValues(alpha: 0.3),
       ),
     );
   }

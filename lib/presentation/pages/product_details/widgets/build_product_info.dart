@@ -116,16 +116,15 @@ Widget buildProductInfo(
                 BoxShadow(
                   blurStyle: BlurStyle.outer,
                   color: isDark
-                      ? AppColors.greyLight.withOpacity(0.3)
-                      : AppColors.surfaceDark.withOpacity(0.3),
+                      ? AppColors.greyLight.withValues(alpha: .1)
+                      : AppColors.surfaceDark.withValues(alpha: .3),
                   blurRadius: 10,
                   offset: const Offset(0, 2),
                 ),
               ],
               color: isDark
-
                   ? AppColors.surfaceDark
-                  : AppColors.greyLight.withOpacity(0.3),
+                  : AppColors.greyLight.withValues(alpha: .3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(children: infoItems),
