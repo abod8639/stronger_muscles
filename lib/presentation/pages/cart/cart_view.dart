@@ -34,6 +34,7 @@ class CartView extends GetView<CartController> {
     final l10n = AppLocalizations.of(context)!;
 
     return AppBar(
+      centerTitle: true,
       title: Obx(
         () => Text(
           controller.cartItems.isEmpty

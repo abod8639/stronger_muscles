@@ -13,6 +13,7 @@ class WishlistView extends GetView<WishlistController> {
     final controller = Get.find<WishlistController>();
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           AppLocalizations.of(context)!.wishlist,
           style: const TextStyle(color: AppColors.white),

@@ -36,6 +36,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(product.getLocalizedName(locale: locale)),
         elevation: 0,
       ),

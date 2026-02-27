@@ -48,6 +48,13 @@ class SearchBar extends StatelessWidget {
       height: _searchBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .1),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(_borderRadius),
       ),

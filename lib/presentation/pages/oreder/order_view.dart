@@ -12,7 +12,10 @@ class OrderView extends StatelessWidget {
     final controller = Get.find<OrdersController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Orders'),
+      ),
       body: Obx(() {
         if (controller.orders.isEmpty) {
           return const Center(child: Text('No orders found'));
