@@ -107,6 +107,13 @@ class SearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .1),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: IconButton(
         icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
