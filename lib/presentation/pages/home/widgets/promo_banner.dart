@@ -6,6 +6,19 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 
+class AddModle {
+  final String? title;
+  final String? subTitle;
+  final String image;
+  final void Function()? onPressed;
+  const AddModle({
+    this.title,
+    this.subTitle,
+    required this.image,
+    this.onPressed,
+  });
+}
+
 /// Promotional banner widget displayed on the home page
 class PromoBanner extends StatelessWidget {
   // Constants for styling
@@ -26,7 +39,7 @@ class PromoBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-   final controller = Get.find<AddController>();
+    final controller = Get.find<AddController>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -46,69 +59,74 @@ class PromoBanner extends StatelessWidget {
             end: Alignment.centerRight,
           ),
         ),
-        child: Obx(()=>  Row(
-          children: [
-            // Banner content
-          Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(_contentPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Title
-                    Text(
-                      controller.title.value ?? AppLocalizations.of(context)!.specialOffer,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    const SizedBox(height: _titleSpacing),
-
-                    // Subtitle
-                    Text(
-                      controller.subtitle.value ?? AppLocalizations.of(context)!.getDiscount,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    const SizedBox(height: _buttonSpacing),
-
-                    // Action button
-                    SizedBox(
-                      height: _buttonHeight,
-                      child: ElevatedButton(
-                        onPressed: controller.onPressed,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              _buttonBorderRadius,
-                            ),
-                          ),
-                          elevation: 2.0,
+        child: Obx(
+          () => Row(
+            children: [
+              // Banner content
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(_contentPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Title
+                      Text(
+                        controller.title.value == ""
+                            ? AppLocalizations.of(context)!.specialOffer
+                            : "err",
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onPrimaryContainer,
                         ),
-                        child: Text(AppLocalizations.of(context)!.shopNow),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: _titleSpacing),
+
+                      // Subtitle
+                      Text(
+                        controller.subtitle.value == ""
+                            ? AppLocalizations.of(context)!.getDiscount
+                            : "err",
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                      const SizedBox(height: _buttonSpacing),
+
+                      // Action button
+                      SizedBox(
+                        height: _buttonHeight,
+                        child: ElevatedButton(
+                          onPressed: controller.onPressed,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                _buttonBorderRadius,
+                              ),
+                            ),
+                            elevation: 2.0,
+                          ),
+                          child: Text(AppLocalizations.of(context)!.shopNow),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            // Icon
-            Padding(
-              padding: const EdgeInsets.only(right: _iconPadding),
-              child: Icon(
-                Icons.local_offer_outlined,
-                size: _iconSize,
-                color: theme.colorScheme.onPrimaryContainer.withOpacity(0.3),
+              // Icon
+              Padding(
+                padding: const EdgeInsets.only(right: _iconPadding),
+                child: Icon(
+                  Icons.local_offer_outlined,
+                  size: _iconSize,
+                  color: theme.colorScheme.onPrimaryContainer.withOpacity(0.3),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );
