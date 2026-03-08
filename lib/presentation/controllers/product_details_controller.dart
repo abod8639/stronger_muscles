@@ -116,7 +116,7 @@ class ProductDetailsController extends GetxController {
       title,
       message,
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.redAccent.withOpacity(0.8),
+      backgroundColor: Colors.redAccent.withValues(alpha:.8),
       colorText: Colors.white,
       margin: const EdgeInsets.all(15),
     );

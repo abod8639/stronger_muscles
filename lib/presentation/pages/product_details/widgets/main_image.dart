@@ -109,7 +109,7 @@ class MainImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(
           context,
-        ).colorScheme.surfaceContainerHighest.withOpacity(0.3),
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: .3),
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(

@@ -42,7 +42,7 @@ class ShowReviewsList extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.15),
+                  color: AppColors.primary.withValues(alpha:.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -87,20 +87,20 @@ class ShowReviewsList extends StatelessWidget {
               colors: isDark
                   ? [
                       theme.colorScheme.surfaceContainerHighest,
-                      theme.colorScheme.surfaceContainerHighest.withOpacity(
+                      theme.colorScheme.surfaceContainerHighest.withValues(alpha:
                         0.8,
                       ),
                     ]
-                  : [Colors.white, AppColors.primary.withOpacity(0.02)],
+                  : [Colors.white, AppColors.primary.withValues(alpha:.02)],
             ),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.15),
+              color: AppColors.primary.withValues(alpha:.15),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.05),
+                color: AppColors.primary.withValues(alpha:.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -122,13 +122,13 @@ class ShowReviewsList extends StatelessWidget {
                         gradient: LinearGradient(
                           colors: [
                             AppColors.primary,
-                            AppColors.primary.withOpacity(0.7),
+                            AppColors.primary.withValues(alpha:.7),
                           ],
                         ),
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha:.3),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -197,10 +197,10 @@ class ShowReviewsList extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.primary.withOpacity(0.1),
+            color: AppColors.primary.withValues(alpha:.1),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.3),
+              color: AppColors.primary.withValues(alpha:.3),
               width: 1,
             ),
           ),
@@ -231,10 +231,10 @@ class ShowReviewsList extends StatelessWidget {
           margin: const EdgeInsets.all(16),
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .3),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primary.withOpacity(0.1),
+              color: AppColors.primary.withValues(alpha: .1),
               width: 1,
             ),
           ),
@@ -245,7 +245,7 @@ class ShowReviewsList extends StatelessWidget {
               Icon(
                 Icons.rate_review_outlined,
                 size: 48,
-                color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .5),
               ),
               const SizedBox(height: 12),
               Text(
@@ -259,7 +259,7 @@ class ShowReviewsList extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.beTheFirstToReviewThisProduct,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha:.7),
                 ),
               ),
             ],

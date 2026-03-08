@@ -81,7 +81,7 @@ class QuickActionsRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(_cardBorderRadius),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.black.withOpacity(_shadowOpacity),
+                  color: AppColors.black.withValues(alpha: _shadowOpacity),
                   blurRadius: _shadowBlurRadius,
                   offset: const Offset(0, 2),
                 ),

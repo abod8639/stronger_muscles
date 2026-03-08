@@ -26,7 +26,7 @@ Step buildAddressStep(String title) {
                     return Card(
                       elevation: isSelected ? 2 : 0,
                       color: isSelected
-                          ? AppColors.primary.withOpacity(0.05)
+                          ? AppColors.primary.withValues(alpha:.05)
                           : null,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),

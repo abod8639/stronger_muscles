@@ -73,7 +73,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
     final isSelected = _selectedSize == size;
 
     return ChoiceChip(
-      backgroundColor: primaryColor.withOpacity(0.05),
+      backgroundColor: primaryColor.withValues(alpha: .05),
       label: Text(size),
       selected: isSelected,
       onSelected: (selected) {
@@ -91,7 +91,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
       ),
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: isSelected ? primaryColor : primaryColor.withOpacity(0.3),
+          color: isSelected ? primaryColor : primaryColor.withValues(alpha: .3),
           width: isSelected ? 2 : 1,
         ),
         borderRadius: BorderRadius.circular(8),

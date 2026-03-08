@@ -37,7 +37,7 @@ Widget totalPriceSection() {
                       vertical: 2.0,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withValues(alpha:.1),
                       borderRadius: BorderRadius.circular(12.0),
                     ),
                     child: Text(

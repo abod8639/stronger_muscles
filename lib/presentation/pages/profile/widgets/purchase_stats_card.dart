@@ -37,7 +37,7 @@ class PurchaseStatsCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(_cardBorderRadius),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(_shadowOpacity),
+              color: AppColors.primary.withValues(alpha:_shadowOpacity),
               blurRadius: _shadowBlurRadius,
               offset: const Offset(0, _shadowOffsetY),
             ),
@@ -54,7 +54,7 @@ class PurchaseStatsCard extends StatelessWidget {
             Container(
               height: _dividerHeight,
               width: _dividerWidth,
-              color: AppColors.white.withOpacity(_dividerOpacity),
+              color: AppColors.white.withValues(alpha:_dividerOpacity),
             ),
             _buildStatItem(
               'Completed',
@@ -85,7 +85,7 @@ class PurchaseStatsCard extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: _labelFont,
-            color: AppColors.white.withOpacity(0.9),
+            color: AppColors.white.withValues(alpha:0.9),
           ),
         ),
       ],

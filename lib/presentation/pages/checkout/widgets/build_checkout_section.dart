@@ -20,7 +20,7 @@ Widget buildCheckoutSection() {
           color: theme.colorScheme.surface,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha:.05),
               blurRadius: 10.0,
               offset: const Offset(0, -2),
             ),

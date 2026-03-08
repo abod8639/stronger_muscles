@@ -43,8 +43,8 @@ Widget buildShortcutItem(int index) {
                     boxShadow: [
                       BoxShadow(
                         color: isSelected
-                            ? theme.colorScheme.primary.withOpacity(0.3)
-                            : theme.colorScheme.primary.withOpacity(0.1),
+                            ? theme.colorScheme.primary.withValues(alpha:.3)
+                            : theme.colorScheme.primary.withValues(alpha:.1),
                         blurRadius: isSelected ? 6 : 3,
                         offset: const Offset(2, 3),
                         blurStyle: BlurStyle.outer,
@@ -61,7 +61,7 @@ Widget buildShortcutItem(int index) {
                       BoxShadow(
                         color: isSelected
                             ? theme.scaffoldBackgroundColor
-                            : theme.colorScheme.primary.withOpacity(0.1),
+                            : theme.colorScheme.primary.withValues(alpha:.1),
                         blurRadius: isSelected ? 6 : 3,
                         offset: const Offset(2, 3),
                         blurStyle: BlurStyle.outer,

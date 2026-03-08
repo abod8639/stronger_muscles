@@ -14,13 +14,13 @@ class HeaderWithIconandTitle extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppColors.primary.withOpacity(0.1),
-            AppColors.primary.withOpacity(0.05),
+            AppColors.primary.withValues(alpha:.1),
+            AppColors.primary.withValues(alpha:.05),
           ],
         ),
         border: Border(
           bottom: BorderSide(
-            color: AppColors.primary.withOpacity(0.15),
+            color: AppColors.primary.withValues(alpha:.15),
             width: 1,
           ),
         ),
@@ -30,7 +30,7 @@ class HeaderWithIconandTitle extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.15),
+              color: AppColors.primary.withValues(alpha:.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(

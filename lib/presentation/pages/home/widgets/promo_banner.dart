@@ -121,7 +121,7 @@ class PromoBanner extends GetView<AddController> {
                   Text(
                     promo.subtitle ?? "",
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withValues(alpha:.9),
                       fontSize: 14,
                     ),
                     maxLines: 2,

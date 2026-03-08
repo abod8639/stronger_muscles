@@ -80,7 +80,7 @@ class ImageListView extends StatelessWidget {
                   boxShadow: isSelected
                       ? [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.3),
+                            color: AppColors.primary.withValues(alpha: .3),
                             blurRadius: 8.0,
                             spreadRadius: 1.0,
                           ),
@@ -112,8 +112,8 @@ class ImageListView extends StatelessWidget {
           fit: BoxFit.cover,
           width: _thumbnailSize,
           height: _thumbnailSize,
-          memCacheWidth: 100,
-          memCacheHeight: 100,
+          // memCacheWidth: 100,
+          // memCacheHeight: 100,
           placeholder: (context, url) => Container(
             width: _thumbnailSize,
             height: _thumbnailSize,

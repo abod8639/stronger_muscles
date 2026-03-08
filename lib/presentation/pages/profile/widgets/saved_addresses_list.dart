@@ -79,10 +79,10 @@ class SavedAddressesList extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
               side: BorderSide(
-                color: AppColors.primary.withOpacity(0.5),
+                color: AppColors.primary.withValues(alpha:.5),
                 width: 1.5,
               ),
-              backgroundColor: AppColors.primary.withOpacity(0.05),
+              backgroundColor: AppColors.primary.withValues(alpha:.05),
               padding: const EdgeInsets.symmetric(
                 horizontal: _addButtonPaddingHorizontal,
                 vertical: _addButtonPaddingVertical,
