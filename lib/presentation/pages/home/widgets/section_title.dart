@@ -12,9 +12,11 @@ class SectionTitle extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _horizontalPadding,
-        vertical: _verticalPadding,
+      padding: const EdgeInsets.only(
+        left: _horizontalPadding,
+        right: _horizontalPadding,
+        bottom: _verticalPadding,
+        top: 0
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

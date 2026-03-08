@@ -19,9 +19,9 @@ class PromoBanner extends GetView<AddController> {
             return PageView.builder(
               controller: controller.pageController,
               onPageChanged: controller.updateCurrentIndex,
-              itemCount: controller.promos.length,
               itemBuilder: (context, index) {
-                final promo = controller.promos[index];
+                final promo =
+                    controller.promos[index % controller.promos.length];
                 return _buildPromoCard(promo);
               },
             );
@@ -38,8 +38,8 @@ class PromoBanner extends GetView<AddController> {
               (index) => AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4),
-                height: 8,
-                width: controller.currentIndex.value == index ? 24 : 8,
+                height: 4,
+                width: controller.currentIndex.value == index ? 15 : 5,
                 decoration: BoxDecoration(
                   color: controller.currentIndex.value == index
                       ? AppColors.primary
@@ -50,7 +50,6 @@ class PromoBanner extends GetView<AddController> {
             ),
           );
         }),
-        const SizedBox(height: 16),
       ],
     );
   }

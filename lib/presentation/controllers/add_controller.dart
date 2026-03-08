@@ -24,11 +24,12 @@ class AddController extends BaseController {
   final RxInt currentIndex = 0.obs;
   late final PageController pageController;
   Timer? _timer;
+  final int initialPage = 10000;
 
   @override
   void onInit() {
     super.onInit();
-    pageController = PageController();
+    pageController = PageController(initialPage: initialPage);
     _loadPromotions();
     _startAutoPlay();
   }
@@ -61,7 +62,7 @@ class AddController extends BaseController {
       ),
       PromoModel(
         title: "وصل حديثاً",
-        subtitle: "ملابس رياضية مصممة للراحة والأداء العالي",
+        subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
         imageUrl:
             "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تصفح التشكيلة",
@@ -72,20 +73,20 @@ class AddController extends BaseController {
 
   void _startAutoPlay() {
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (promos.isEmpty) return;
-      int nextIndex = (currentIndex.value + 1) % promos.length;
-      if (pageController.hasClients) {
-        pageController.animateToPage(
-          nextIndex,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
+      if (promos.isEmpty || !pageController.hasClients) return;
+
+      int nextPage = pageController.page!.round() + 1;
+      pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
     });
   }
 
   void updateCurrentIndex(int index) {
-    currentIndex.value = index;
+    if (promos.isEmpty) return;
+    currentIndex.value = index % promos.length;
   }
 
   void onPromoPressed(PromoModel promo) {
