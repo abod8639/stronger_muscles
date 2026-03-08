@@ -51,7 +51,7 @@ class SearchBar extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .1),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -110,7 +110,7 @@ class SearchBar extends StatelessWidget {
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
-            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .1),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

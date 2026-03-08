@@ -1,132 +1,150 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 
-class AddModle {
-  final String? title;
-  final String? subTitle;
-  final String image;
-  final void Function()? onPressed;
-  const AddModle({
-    this.title,
-    this.subTitle,
-    required this.image,
-    this.onPressed,
-  });
-}
-
-/// Promotional banner widget displayed on the home page
-class PromoBanner extends StatelessWidget {
-  // Constants for styling
-  static const double _horizontalPadding = 16.0;
-  static const double _verticalPadding = 8.0;
-  static const double _bannerHeight = 150.0;
-  static const double _borderRadius = 16.0;
-  static const double _contentPadding = 16.0;
-  static const double _titleSpacing = 8.0;
-  static const double _buttonSpacing = 12.0;
-  static const double _buttonHeight = 36.0;
-  static const double _buttonBorderRadius = 20.0;
-  static const double _iconSize = 72.0;
-  static const double _iconPadding = 12.0;
-
+class PromoBanner extends GetView<AddController> {
   const PromoBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final controller = Get.find<AddController>();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: _horizontalPadding,
-        vertical: _verticalPadding,
-      ),
-      child: Container(
-        height: _bannerHeight,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(_borderRadius),
-          gradient: LinearGradient(
-            colors: [
-              theme.colorScheme.primaryContainer,
-              theme.colorScheme.secondaryContainer,
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+    return Column(
+      children: [
+        SizedBox(
+          height: 180,
+          child: Obx(() {
+            if (controller.promos.isEmpty) {
+              return const SizedBox.shrink();
+            }
+            return PageView.builder(
+              controller: controller.pageController,
+              onPageChanged: controller.updateCurrentIndex,
+              itemCount: controller.promos.length,
+              itemBuilder: (context, index) {
+                final promo = controller.promos[index];
+                return _buildPromoCard(promo);
+              },
+            );
+          }),
         ),
-        child: Obx(
-          () => Row(
-            children: [
-              // Banner content
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(_contentPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Title
-                      Text(
-                        controller.title.value == ""
-                            ? AppLocalizations.of(context)!.specialOffer
-                            : "err",
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                      const SizedBox(height: _titleSpacing),
+        const SizedBox(height: 12),
+        // Dots Indicator
+        Obx(() {
+          if (controller.promos.isEmpty) return const SizedBox.shrink();
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              controller.promos.length,
+              (index) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                height: 8,
+                width: controller.currentIndex.value == index ? 24 : 8,
+                decoration: BoxDecoration(
+                  color: controller.currentIndex.value == index
+                      ? AppColors.primary
+                      : AppColors.greyMedium,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          );
+        }),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
 
-                      // Subtitle
-                      Text(
-                        controller.subtitle.value == ""
-                            ? AppLocalizations.of(context)!.getDiscount
-                            : "err",
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                      const SizedBox(height: _buttonSpacing),
-
-                      // Action button
-                      SizedBox(
-                        height: _buttonHeight,
-                        child: ElevatedButton(
-                          onPressed: controller.onPressed,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                _buttonBorderRadius,
-                              ),
-                            ),
-                            elevation: 2.0,
-                          ),
-                          child: Text(AppLocalizations.of(context)!.shopNow),
-                        ),
-                      ),
-                    ],
+  Widget _buildPromoCard(PromoModel promo) {
+    return GestureDetector(
+      onTap: () => controller.onPromoPressed(promo),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: promo.backgroundColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Background Image
+            Image.network(
+              promo.imageUrl,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  Container(color: promo.backgroundColor),
+            ),
+            // Gradient Overlay for text readability
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.8),
+                    Colors.black.withOpacity(0.2),
+                  ],
+                  // Default Directionality is RTL in Arabic apps usually,
+                  // but we set strong gradient on the start to match text.
+                  begin: AlignmentDirectional.centerStart,
+                  end: AlignmentDirectional.centerEnd,
+                ),
+              ),
+            ),
+            // Text Content
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    promo.title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Text(
+                    promo.subtitle,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 14,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      promo.buttonText,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-
-              // Icon
-              Padding(
-                padding: const EdgeInsets.only(right: _iconPadding),
-                child: Icon(
-                  Icons.local_offer_outlined,
-                  size: _iconSize,
-                  color: theme.colorScheme.onPrimaryContainer.withOpacity(0.3),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
