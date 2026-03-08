@@ -1,23 +1,10 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/data/models/promo_model.dart';
 import 'package:stronger_muscles/presentation/controllers/base_controller.dart';
 import 'package:flutter/material.dart';
 
-class PromoModel {
-  final String title;
-  final String subtitle;
-  final String imageUrl;
-  final String buttonText;
-  final Color backgroundColor;
 
-  PromoModel({
-    required this.title,
-    required this.subtitle,
-    required this.imageUrl,
-    required this.buttonText,
-    required this.backgroundColor,
-  });
-}
 
 class AddController extends BaseController {
   final RxList<PromoModel> promos = <PromoModel>[].obs;
