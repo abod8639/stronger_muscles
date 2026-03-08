@@ -20,6 +20,7 @@ class PromoBanner extends GetView<AddController> {
               return const SizedBox.shrink();
             }
             return PageView.builder(
+              pageSnapping: false,
               controller: controller.pageController,
               onPageChanged: controller.updateCurrentIndex,
               itemBuilder: (context, index) {
@@ -30,7 +31,7 @@ class PromoBanner extends GetView<AddController> {
             );
           }),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
         // Dots Indicator
         Obx(() {
           if (controller.promos.isEmpty) return const SizedBox.shrink();
@@ -40,13 +41,13 @@ class PromoBanner extends GetView<AddController> {
               controller.promos.length,
               (index) => AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                height: 4,
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                height: 5,
                 width: controller.currentIndex.value == index ? 15 : 5,
                 decoration: BoxDecoration(
                   color: controller.currentIndex.value == index
                       ? AppColors.primary
-                      : AppColors.greyMedium,
+                      : AppColors.greyDark,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -70,6 +71,7 @@ class PromoBanner extends GetView<AddController> {
               color: Colors.black.withOpacity(0.1),
               blurRadius: 10,
               offset: const Offset(0, 5),
+              blurStyle: BlurStyle.outer
             ),
           ],
         ),
@@ -86,6 +88,7 @@ class PromoBanner extends GetView<AddController> {
                   Container(color: promo.backgroundColor),
             ),
             // Gradient Overlay for text readability
+        if (promo.title != null)
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -93,8 +96,6 @@ class PromoBanner extends GetView<AddController> {
                     Colors.black.withOpacity(0.8),
                     Colors.black.withOpacity(0.2),
                   ],
-                  // Default Directionality is RTL in Arabic apps usually,
-                  // but we set strong gradient on the start to match text.
                   begin: AlignmentDirectional.centerStart,
                   end: AlignmentDirectional.centerEnd,
                 ),
@@ -108,7 +109,7 @@ class PromoBanner extends GetView<AddController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    promo.title,
+                    promo.title ?? "",
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
@@ -117,7 +118,7 @@ class PromoBanner extends GetView<AddController> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    promo.subtitle,
+                    promo.subtitle ?? "",
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),
                       fontSize: 14,

@@ -56,12 +56,20 @@ class AddController extends BaseController {
         backgroundColor: const Color(0xFF0D47A1),
       ),
       PromoModel(
-        title: "وصل حديثاً",
-        subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
+        // title: "وصل حديثاً",
+        // subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
         imageUrl:
-            "https://eg.bigramylabs.com/cdn/shop/files/Desktop--AR--Ramdan.png?v=1770717101&width=2800",
+            "https://eg.bigramylabs.com/cdn/shop/files/Desktop--AR--Ramdan.png",
         buttonText: "تصفح التشكيلة",
         backgroundColor: const Color(0xFF0D47A1),
+      ),
+      PromoModel(
+        // title: "وصل حديثاً",
+        // subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
+        imageUrl:
+            "https://eg.bigramylabs.com/cdn/shop/files/Best-seller-_-AR.png",
+        buttonText: "تصفح التشكيلة",
+        backgroundColor: Colors.transparent,
       ),
     ]);
   }
