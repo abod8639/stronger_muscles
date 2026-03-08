@@ -29,7 +29,6 @@ class AddController extends BaseController {
   }
 
   void _loadPromotions() {
-    // Mock data for products advertisements
     promos.assignAll([
       PromoModel(
         title: "خصم 50% على البروتين",
@@ -38,6 +37,7 @@ class AddController extends BaseController {
             "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تسوق الآن",
         backgroundColor: const Color(0xFF1E1E1E),
+        onTap: (){},
       ),
       PromoModel(
         title: "تخفيضات العيد الرياضية",
@@ -46,6 +46,8 @@ class AddController extends BaseController {
             "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop",
         buttonText: "اكتشف العروض",
         backgroundColor: const Color(0xFF8B0000),
+                onTap: (){},
+
       ),
       PromoModel(
         title: "وصل حديثاً",
@@ -54,6 +56,8 @@ class AddController extends BaseController {
             "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تصفح التشكيلة",
         backgroundColor: const Color(0xFF0D47A1),
+                onTap: (){},
+
       ),
       PromoModel(
         // title: "وصل حديثاً",

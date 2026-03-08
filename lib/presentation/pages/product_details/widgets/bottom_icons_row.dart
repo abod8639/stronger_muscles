@@ -87,6 +87,7 @@ class BottomIconsRow extends StatelessWidget {
     final isPriceZero = detailsController.displayEffectivePrice <= 0;
 
     return ElevatedButton.icon(
+      
       onPressed: isPriceZero
           ? null
           : () {
@@ -102,6 +103,7 @@ class BottomIconsRow extends StatelessWidget {
       ),
       label: Text(isPriceZero ? l10n.contactUs : l10n.addToCart),
       style: ElevatedButton.styleFrom(
+        
         backgroundColor: isPriceZero ? Colors.grey : AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),

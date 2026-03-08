@@ -65,12 +65,12 @@ class MainImage extends StatelessWidget {
                 child: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
                   imageUrl: imageUrl.medium,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                   placeholder: (context, url) => _buildPlaceholder(),
                   errorWidget: (context, url, error) =>
                       _buildErrorWidget(context),
-                  memCacheWidth: 500,
-                  memCacheHeight: 500,
+                  // memCacheWidth: 500,
+                  // memCacheHeight: 500,
                 ),
               ),
             ),

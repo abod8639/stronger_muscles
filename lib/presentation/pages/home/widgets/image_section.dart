@@ -96,13 +96,13 @@ class ImageSection extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: CachedNetworkImage(
+          
           cacheManager: CustomCacheManager.instance,
           imageUrl: url,
           fit: BoxFit.fitHeight,
           placeholder: (context, url) => buildShimmerEffect(theme),
           errorWidget: (context, url, error) => buildErrorWidget(theme),
-          memCacheWidth: 400,
-          memCacheHeight: 400,
+
         ),
       ),
     );

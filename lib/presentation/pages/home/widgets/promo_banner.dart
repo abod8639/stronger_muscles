@@ -45,6 +45,7 @@ class PromoBanner extends GetView<AddController> {
                 height: 5,
                 width: controller.currentIndex.value == index ? 15 : 5,
                 decoration: BoxDecoration(
+
                   color: controller.currentIndex.value == index
                       ? AppColors.primary
                       : AppColors.greyDark,
@@ -68,7 +69,7 @@ class PromoBanner extends GetView<AddController> {
           color: promo.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha:.1),
               blurRadius: 10,
               offset: const Offset(0, 5),
               blurStyle: BlurStyle.outer
@@ -93,8 +94,8 @@ class PromoBanner extends GetView<AddController> {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Colors.black.withOpacity(0.8),
-                    Colors.black.withOpacity(0.2),
+                    Colors.black.withValues(alpha: .8),
+                    Colors.black.withValues(alpha: .2),
                   ],
                   begin: AlignmentDirectional.centerStart,
                   end: AlignmentDirectional.centerEnd,
@@ -127,7 +128,7 @@ class PromoBanner extends GetView<AddController> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 16),
-                  Container(
+             if( promo.onTap != null )  Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,
