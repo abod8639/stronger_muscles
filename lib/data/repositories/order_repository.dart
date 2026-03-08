@@ -24,9 +24,10 @@ class OrderRepository {
     }
   }
 
-  Future<List<OrderModel>> getUserOrders() async {
+  Future<List<OrderModel>> getUserOrders({int? limit}) async {
     try {
-      final response = await _apiService.get(ApiConfig.orders);
+      final queryParams = limit != null ? {'limit': limit} : null;
+      final response = await _apiService.get(ApiConfig.orders, queryParameters: queryParams);
 
       // البيانات تأتي معالجة كـ Map أو List تلقائياً عبر Dio
       final dynamic body = response.data;

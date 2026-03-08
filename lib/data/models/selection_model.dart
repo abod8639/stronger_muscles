@@ -5,5 +5,9 @@ class SelectionsModel {
   final IconData icon;
   final String id;
 
-  SelectionsModel({required this.label, required this.icon, required this.id});
+  SelectionsModel({
+    required this.label, 
+    required this.icon, 
+    required this.id,
+    });
 }

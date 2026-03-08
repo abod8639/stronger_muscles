@@ -10,6 +10,12 @@ class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<OrdersController>();
+    
+    // جلب باقي الطلبات عند الدخول لصفحة كل الطلبات
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchAllOrders();
+    });
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(

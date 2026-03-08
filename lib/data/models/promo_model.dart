@@ -9,8 +9,8 @@ class PromoModel {
   final void Function()? onTap;
 
   PromoModel({
-     this.title,
-     this.subtitle,
+    this.title,
+    this.subtitle,
     required this.imageUrl,
     required this.buttonText,
     required this.backgroundColor, 
