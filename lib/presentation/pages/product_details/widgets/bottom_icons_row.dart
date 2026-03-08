@@ -127,9 +127,9 @@ class BottomIconsRow extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha:.4),
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,8 +179,8 @@ class BottomIconsRow extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isInWishlist
-            ? AppColors.primary.withOpacity(0.1)
-            : theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
+            ? AppColors.primary.withValues(alpha:.1)
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha:.4),
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: IconButton(

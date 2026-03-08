@@ -25,6 +25,7 @@ class SearchBar extends StatelessWidget {
       snap: true,
       pinned: false,
       backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
       toolbarHeight: _searchBarHeight + _verticalPadding * 2,
       titleSpacing: _horizontalPadding,

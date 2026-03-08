@@ -16,8 +16,11 @@ class PromoBanner extends StatelessWidget {
   static const double _buttonBorderRadius = 20.0;
   static const double _iconSize = 72.0;
   static const double _iconPadding = 12.0;
+  final String? subtitle;
+  final String? title;
+  final void Function()? onPressed;
 
-  const PromoBanner({super.key});
+  const PromoBanner({super.key, this.subtitle, this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +56,7 @@ class PromoBanner extends StatelessWidget {
                   children: [
                     // Title
                     Text(
-                      AppLocalizations.of(context)!.specialOffer,
+                      title ?? AppLocalizations.of(context)!.specialOffer,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onPrimaryContainer,
@@ -63,7 +66,7 @@ class PromoBanner extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      AppLocalizations.of(context)!.getDiscount,
+                      subtitle ?? AppLocalizations.of(context)!.getDiscount,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onPrimaryContainer,
                       ),
@@ -74,9 +77,7 @@ class PromoBanner extends StatelessWidget {
                     SizedBox(
                       height: _buttonHeight,
                       child: ElevatedButton(
-                        onPressed: () {
-                          // TODO: Implement promo action
-                        },
+                        onPressed: onPressed,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
