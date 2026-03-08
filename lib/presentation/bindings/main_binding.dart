@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
@@ -21,5 +22,7 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => WishlistController());
     Get.lazyPut(() => CartController());
     Get.lazyPut(() => ProfileController());
+    Get.lazyPut(() => AddController());
+
   }
 }

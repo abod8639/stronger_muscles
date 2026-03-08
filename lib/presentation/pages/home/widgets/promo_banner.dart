@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 
 /// Promotional banner widget displayed on the home page
 class PromoBanner extends StatelessWidget {
@@ -16,15 +20,13 @@ class PromoBanner extends StatelessWidget {
   static const double _buttonBorderRadius = 20.0;
   static const double _iconSize = 72.0;
   static const double _iconPadding = 12.0;
-  final String? subtitle;
-  final String? title;
-  final void Function()? onPressed;
 
-  const PromoBanner({super.key, this.subtitle, this.title, this.onPressed});
+  const PromoBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+   final controller = Get.find<AddController>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -44,10 +46,10 @@ class PromoBanner extends StatelessWidget {
             end: Alignment.centerRight,
           ),
         ),
-        child: Row(
+        child: Obx(()=>  Row(
           children: [
             // Banner content
-            Expanded(
+          Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(_contentPadding),
                 child: Column(
@@ -56,7 +58,7 @@ class PromoBanner extends StatelessWidget {
                   children: [
                     // Title
                     Text(
-                      title ?? AppLocalizations.of(context)!.specialOffer,
+                      controller.title.value ?? AppLocalizations.of(context)!.specialOffer,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: theme.colorScheme.onPrimaryContainer,
@@ -66,7 +68,7 @@ class PromoBanner extends StatelessWidget {
 
                     // Subtitle
                     Text(
-                      subtitle ?? AppLocalizations.of(context)!.getDiscount,
+                      controller.subtitle.value ?? AppLocalizations.of(context)!.getDiscount,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onPrimaryContainer,
                       ),
@@ -77,7 +79,7 @@ class PromoBanner extends StatelessWidget {
                     SizedBox(
                       height: _buttonHeight,
                       child: ElevatedButton(
-                        onPressed: onPressed,
+                        onPressed: controller.onPressed,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -106,6 +108,7 @@ class PromoBanner extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
