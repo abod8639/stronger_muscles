@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/data/models/promo_model.dart';
+import 'package:stronger_muscles/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 
 class PromoBanner extends GetView<AddController> {
@@ -76,10 +78,11 @@ class PromoBanner extends GetView<AddController> {
           fit: StackFit.expand,
           children: [
             // Background Image
-            Image.network(
-              promo.imageUrl,
+            CachedNetworkImage(
+              cacheManager: CustomCacheManager.instance,
+              imageUrl: promo.imageUrl,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
+              errorWidget: (context, error, stackTrace) =>
                   Container(color: promo.backgroundColor),
             ),
             // Gradient Overlay for text readability
