@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 
 Step buildAddressStep(String title) {
   final checkoutController = Get.find<CheckoutController>();

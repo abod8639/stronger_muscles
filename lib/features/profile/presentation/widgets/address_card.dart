@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
 

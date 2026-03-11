@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import '../../data/datasources/auth_service.dart';
-import '../../../../data/models/user_model.dart';
 import '../../../../routes/routes.dart';
 import '../../../../presentation/controllers/base_controller.dart';
 

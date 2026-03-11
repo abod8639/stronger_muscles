@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
 import 'package:stronger_muscles/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
 class AddressService extends GetxService {
   final ApiService _apiService = Get.find<ApiService>();

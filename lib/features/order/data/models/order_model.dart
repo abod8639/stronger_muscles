@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
 part 'order_model.freezed.dart';
 part 'order_model.g.dart';

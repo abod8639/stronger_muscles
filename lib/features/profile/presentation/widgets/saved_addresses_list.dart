@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/show_address_form.dart';
 import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/presentation/pages/profile/widgets/address_card.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/address_card.dart';
 
 const double _headerPaddingLeft = 16.0;
 const double _headerPaddingRight = 8.0;

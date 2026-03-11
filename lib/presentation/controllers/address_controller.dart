@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/data/repositories/address_repository.dart';
-import 'package:stronger_muscles/core/services/address_service.dart';
+import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'base_controller.dart';
 
 const String _defaultLabel = 'Home';

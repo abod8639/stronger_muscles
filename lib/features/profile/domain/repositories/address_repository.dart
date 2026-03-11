@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:stronger_muscles/core/services/address_service.dart';
-import 'package:stronger_muscles/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
 class AddressRepository {
   final AddressService _service = Get.find<AddressService>();
