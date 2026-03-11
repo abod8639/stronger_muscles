@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/presentation/pages/auth/signin_page.dart';
-import 'package:stronger_muscles/presentation/pages/auth/signup_page.dart';
+import 'package:stronger_muscles/features/auth/presentation/pages/signin_page.dart';
+import 'package:stronger_muscles/features/auth/presentation/pages/signup_page.dart';
 
 class AuthView extends GetView<AuthController> {
   const AuthView({super.key});
