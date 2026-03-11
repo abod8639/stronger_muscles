@@ -3,7 +3,7 @@ import 'package:stronger_muscles/features/profile/domain/repositories/address_re
 import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
-import 'base_controller.dart';
+import '../../../../presentation/controllers/base_controller.dart';
 
 const String _defaultLabel = 'Home';
 const String _successDeleteMsg = 'تم حذف العنوان بنجاح';

@@ -11,7 +11,7 @@ import 'package:stronger_muscles/presentation/widgets/internet_connection_banner
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';
 
 Future<void> main() async {
