@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
 
 const double _imageSize = 100.0;

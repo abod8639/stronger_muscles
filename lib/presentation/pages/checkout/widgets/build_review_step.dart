@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
-import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
 
 Step buildReviewStep(String title) {

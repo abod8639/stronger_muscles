@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/cart_item_model.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_details.dart';
-import 'package:stronger_muscles/presentation/pages/cart/widgets/build_product_cart_image.dart';
+import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_details.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_image.dart';
 import 'package:stronger_muscles/presentation/widgets/build_quantity_controls.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
