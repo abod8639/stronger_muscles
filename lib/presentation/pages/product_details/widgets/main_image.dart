@@ -41,7 +41,7 @@ class MainImage extends StatelessWidget {
     ProductDetailsController controller,
   ) {
     return PageView.builder(
-      allowImplicitScrolling: false,
+      allowImplicitScrolling: true,
       controller: controller.pageController,
       itemCount: product.imageUrls.length,
       onPageChanged: controller.selectImage,

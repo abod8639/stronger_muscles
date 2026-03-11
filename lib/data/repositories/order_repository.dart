@@ -5,7 +5,6 @@ import 'package:stronger_muscles/core/errors/failures.dart';
 import '../../data/models/order_model.dart';
 
 class OrderRepository {
-  // يفضل استخدام Get.find إذا كان قد تم حقنه في الـ Bindings
   final ApiService _apiService = Get.find<ApiService>();
 
   Future<void> createOrder(Map<String, dynamic> payload) async {

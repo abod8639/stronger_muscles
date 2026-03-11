@@ -42,7 +42,7 @@ class ImageSection extends StatelessWidget {
               child: images.isEmpty
                   ? buildNoImage(theme)
                   : PageView.builder(
-                      allowImplicitScrolling: false,
+                      allowImplicitScrolling: true,
                       controller: _pageController,
                       itemCount: images.length,
                       onPageChanged:

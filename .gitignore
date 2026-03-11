@@ -44,8 +44,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.agents/
-.agent/
+# .agents/
+# .agent/
 
 # .gitignore
 .env

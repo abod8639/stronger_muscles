@@ -71,7 +71,8 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+
+  #    dart run icons_launcher:create
 icons_launcher:
   image_path: "assets/icon/ChatGPT2.png"
   platforms:

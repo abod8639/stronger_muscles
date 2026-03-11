@@ -31,49 +31,57 @@ class AddController extends BaseController {
   void _loadPromotions() {
     promos.assignAll([
       PromoModel(
+        id: 1,
+        targetType: "product",
+        targetId: "1",
         title: "خصم 50% على البروتين",
         subtitle: "أفضل المكملات لزيادة العضلات بأسرع وقت",
         imageUrl:
             "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تسوق الآن",
-        backgroundColor: const Color(0xFF1E1E1E),
-        onTap: (){},
-      ),
+        hexBackgroundColor: "#1E1E1E",
+       ),
       PromoModel(
+        id: 2,
+        targetType: "category",
+        targetId: "2",
         title: "تخفيضات العيد الرياضية",
         subtitle: "معدات رياضية بأقل الأسعار لفترة محدودة",
         imageUrl:
             "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=2070&auto=format&fit=crop",
         buttonText: "اكتشف العروض",
-        backgroundColor: const Color(0xFF8B0000),
-                onTap: (){},
-
+        hexBackgroundColor: "#8B0000",
       ),
       PromoModel(
+        id: 3,
+        targetType: "web",
+        targetId: "https://www.google.com",
         title: "وصل حديثاً",
         subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
         imageUrl:
             "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تصفح التشكيلة",
-        backgroundColor: const Color(0xFF0D47A1),
-                onTap: (){},
-
+        hexBackgroundColor: "#0D47A1",
       ),
       PromoModel(
-        // title: "وصل حديثاً",
-        // subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
+        id: 4,
+        targetType: "web",
+        targetId: "https://www.google.com",
+        title: "وصل حديثاً",
+        subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
         imageUrl:
             "https://eg.bigramylabs.com/cdn/shop/files/Desktop--AR--Ramdan.png",
         buttonText: "تصفح التشكيلة",
-        backgroundColor: const Color(0xFF0D47A1),
+        hexBackgroundColor: "#0D47A1",
       ),
       PromoModel(
-        // title: "وصل حديثاً",
-        // subtitle: "مكملات غذائيه صممت خصيصا لتعزيز ادائك",
+        id: 5,
+        targetType: "web",
+        targetId: "https://www.google.com",
         imageUrl:
             "https://eg.bigramylabs.com/cdn/shop/files/Best-seller-_-AR.png",
         buttonText: "تصفح التشكيلة",
-        backgroundColor: Colors.transparent,
+        hexBackgroundColor: "#0D47A1",
       ),
     ]);
   }
@@ -107,3 +115,6 @@ class AddController extends BaseController {
     );
   }
 }
+
+
+

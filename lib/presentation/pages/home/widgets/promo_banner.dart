@@ -14,23 +14,28 @@ class PromoBanner extends GetView<AddController> {
     return Column(
       children: [
         SizedBox(
-          height: 180,
+          height: 170,
           child: Obx(() {
             if (controller.promos.isEmpty) {
               return const SizedBox.shrink();
             }
             return PageView.builder(
-              pageSnapping: false,
+              allowImplicitScrolling: false,
+              pageSnapping: true,
               controller: controller.pageController,
               onPageChanged: controller.updateCurrentIndex,
               itemBuilder: (context, index) {
                 final promo =
-                    controller.promos[index % controller.promos.length];
+                    controller.promos[
+                      index % 
+                      controller.promos.length
+                      ];
                 return _buildPromoCard(promo);
               },
             );
           }),
         ),
+
         const SizedBox(height: 8),
         // Dots Indicator
         Obx(() {
@@ -128,7 +133,7 @@ class PromoBanner extends GetView<AddController> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 16),
-             if( promo.onTap != null )  Container(
+             if( promo.targetId != null )  Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 8,

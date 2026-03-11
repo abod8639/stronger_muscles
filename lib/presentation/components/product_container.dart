@@ -128,7 +128,7 @@ class _ProductContainerState extends State<ProductContainer>
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              'LE ${widget.product.formattedEffectivePrice}',
+                              'LE ${widget.product.baseEffectivePrice}',
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
