@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/order_details_view.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/order_card.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
 
 class OrderView extends StatelessWidget {
   const OrderView({super.key});

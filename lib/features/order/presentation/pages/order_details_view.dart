@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_info_item.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_order_item.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_price_row.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_row_info.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_section.dart';
-import 'package:stronger_muscles/presentation/pages/oreder/widgets/build_status_tracker.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_info_item.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_order_item.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_price_row.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_row_info.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_status_tracker.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final OrderModel order;

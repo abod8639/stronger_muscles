@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
-import 'package:stronger_muscles/data/repositories/order_repository.dart';
-import 'base_controller.dart';
+import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import '../../../../presentation/controllers/base_controller.dart';
 
 class OrdersController extends BaseController {
   final OrderRepository _orderRepository = Get.put(OrderRepository());

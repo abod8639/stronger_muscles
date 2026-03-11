@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 
 class OrderBinding extends Bindings {
   @override

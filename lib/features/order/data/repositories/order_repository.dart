@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
-import '../../data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 
 class OrderRepository {
   final ApiService _apiService = Get.find<ApiService>();

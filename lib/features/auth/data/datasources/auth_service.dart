@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import '../../config/api_config.dart';
-import '../../data/models/user_model.dart';
-import '../../data/models/user_stats_model.dart';
-import '../../core/errors/failures.dart';
-import 'api_service.dart';
-import 'storage_service.dart';
+import '../../../../config/api_config.dart';
+import '../../../../data/models/user_model.dart';
+import '../../../../data/models/user_stats_model.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/services/api_service.dart';
+import '../../../../core/services/storage_service.dart';
 
 class AuthService extends GetxService {
   // استخدام Get.find بدلاً من Put إذا كان قد تم تعريفه مسبقاً في الـ Bindings

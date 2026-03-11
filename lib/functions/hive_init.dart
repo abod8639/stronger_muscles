@@ -4,11 +4,11 @@ import 'package:stronger_muscles/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/data/models/category_model.dart';
 import 'package:stronger_muscles/data/models/image_url_model.dart';
 import 'package:stronger_muscles/data/models/localized_string_model.dart';
-import 'package:stronger_muscles/data/models/order_model.dart';
 import 'package:stronger_muscles/data/models/product_category_model.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/models/product_size_model.dart';
 import 'package:stronger_muscles/data/models/user_model.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 
 Future<void> hiveInit() async {
   // Register Adapters

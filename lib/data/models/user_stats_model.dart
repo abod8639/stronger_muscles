@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'order_model.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 
 part 'user_stats_model.freezed.dart';
 part 'user_stats_model.g.dart';

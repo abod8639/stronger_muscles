@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import 'package:stronger_muscles/core/services/auth_service.dart';
+import 'package:stronger_muscles/features/auth/data/datasources/auth_service.dart';
 import 'package:stronger_muscles/core/services/address_service.dart';
 import 'package:stronger_muscles/core/services/category_service.dart';
 import 'package:stronger_muscles/core/services/product_service.dart';
@@ -9,10 +9,10 @@ import 'package:stronger_muscles/data/repositories/category_repository.dart';
 import 'package:stronger_muscles/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/data/repositories/address_repository.dart';
 import 'package:stronger_muscles/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/language_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
 

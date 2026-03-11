@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
 
 class AppGuard {

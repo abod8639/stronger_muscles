@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/address_model.dart';
-import 'package:stronger_muscles/data/repositories/order_repository.dart';
+import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';

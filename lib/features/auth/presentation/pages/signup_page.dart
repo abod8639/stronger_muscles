@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/functions/app_guard.dart';
-import 'package:stronger_muscles/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/presentation/pages/auth/widgets/auth_text_field.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
