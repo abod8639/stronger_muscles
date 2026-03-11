@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
-import 'package:stronger_muscles/presentation/widgets/cart_icon.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/cart_icon.dart';
 
 /// A custom bottom navigation bar widget for the main app navigation.
 ///

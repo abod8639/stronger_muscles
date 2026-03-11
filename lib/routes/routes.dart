@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/home_binding.dart';
-import 'package:stronger_muscles/presentation/bindings/cart_binding.dart';
-import 'package:stronger_muscles/presentation/bindings/order_binding.dart';
+import 'package:stronger_muscles/features/cart/presentation/controllers/cart_binding.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/order_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
-import 'package:stronger_muscles/presentation/bindings/profile_binding.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/profile_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/wishlist_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/checkout_binding.dart';
 import 'package:stronger_muscles/presentation/bindings/main_binding.dart';

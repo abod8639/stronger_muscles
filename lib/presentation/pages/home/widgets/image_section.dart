@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/functions/cache_manager.dart';
-import 'package:stronger_muscles/presentation/components/product_container.dart';
+import 'package:stronger_muscles/core/utils/components/product_container.dart';
 
 class ImageSection extends StatelessWidget {
   const ImageSection({

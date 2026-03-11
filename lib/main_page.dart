@@ -5,7 +5,7 @@ import 'package:stronger_muscles/features/cart/presentation/pages/cart_view.dart
 import 'package:stronger_muscles/presentation/pages/home/home_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/presentation/pages/wishlist/wishlist_view.dart';
-import 'package:stronger_muscles/presentation/widgets/my_bottom_navigation_bar.dart';
+import 'package:stronger_muscles/core/utils/components/my_bottom_navigation_bar.dart';
 
 class MainPage extends GetView<MainController> {
   const MainPage({super.key});

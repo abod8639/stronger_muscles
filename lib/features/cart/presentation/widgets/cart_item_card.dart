@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_details.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_image.dart';
-import 'package:stronger_muscles/presentation/widgets/build_quantity_controls.dart';
+import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends StatelessWidget {

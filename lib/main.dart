@@ -7,7 +7,7 @@ import 'package:stronger_muscles/firebase_options.dart';
 import 'package:stronger_muscles/functions/hive_init.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
 import 'package:stronger_muscles/presentation/bindings/initial_binding.dart';
-import 'package:stronger_muscles/presentation/widgets/internet_connection_banner.dart';
+import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';

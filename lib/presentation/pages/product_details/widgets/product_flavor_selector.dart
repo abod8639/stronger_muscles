@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/components/flavor_image.dart';
+import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
 
 // دالة لجلب البيانات بناءً على الاسم مع توفير بديل افتراضي
 FlavorsModel getFlavorDetails(String flavorName) {
