@@ -22,7 +22,6 @@ class CategoryService extends GetxService {
     if (decodedData is List) {
       list = decodedData;
     } else if (decodedData is Map) {
-      // التعامل مع Laravel API Resource (data wrap)
       var data = decodedData['data'];
       if (data is List) {
         list = data;
