@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
-import 'package:stronger_muscles/functions/app_guard.dart';
+import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/search_bar.dart';

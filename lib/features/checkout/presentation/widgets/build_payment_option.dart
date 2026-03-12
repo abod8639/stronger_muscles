@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
+import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 
 Widget buildPaymentOption({
   required String value,

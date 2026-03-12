@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
 import 'package:stronger_muscles/data/models/product_size_model.dart';
-import 'package:stronger_muscles/functions/cache_manager.dart';
+import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 
 const int _imageAnimationDurationMs = 300;
 const String _updateFailedErrorMsg = 'Update failed';

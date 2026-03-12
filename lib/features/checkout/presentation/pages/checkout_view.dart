@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/functions/app_guard.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_payment_step.dart';
-import 'package:stronger_muscles/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_address_step.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/widgets/build_review_step.dart';
+import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
+import 'package:stronger_muscles/features/checkout/presentation/widgets/build_payment_step.dart';
+import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
+import 'package:stronger_muscles/features/checkout/presentation/widgets/build_address_step.dart';
+import 'package:stronger_muscles/features/checkout/presentation/widgets/build_review_step.dart';
 
 const String _checkoutTitle = 'Checkout';
 const String _addressStepTitle = 'Address';

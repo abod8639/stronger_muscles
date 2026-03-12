@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/functions/cache_manager.dart';
+import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 
 Widget buildProductImage(String? url) {
   return Container(

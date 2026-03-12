@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/functions/cache_manager.dart';
+import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/widgets/build_product_price.dart';

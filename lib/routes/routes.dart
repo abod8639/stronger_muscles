@@ -6,7 +6,7 @@ import 'package:stronger_muscles/features/order/presentation/controllers/order_b
 import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_binding.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_binding.dart';
-import 'package:stronger_muscles/presentation/bindings/checkout_binding.dart';
+import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_binding.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/main_binding.dart';
 
 import 'package:stronger_muscles/features/auth/presentation/pages/auth_view.dart';
@@ -20,8 +20,8 @@ import 'package:stronger_muscles/presentation/pages/product_details/product_deta
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/checkout_view.dart';
-import 'package:stronger_muscles/presentation/pages/checkout/order_success_view.dart';
+import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
+import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 
 class AppRoutes {
   static const String main = '/';

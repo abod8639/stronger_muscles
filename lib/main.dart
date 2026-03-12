@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stronger_muscles/firebase_options.dart';
-import 'package:stronger_muscles/functions/hive_init.dart';
+import 'package:stronger_muscles/core/utils/functions/hive_init.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
 import 'package:stronger_muscles/presentation/bindings/initial_binding.dart';
 import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';

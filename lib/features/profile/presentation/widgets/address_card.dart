@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
-import 'package:stronger_muscles/functions/show_address_form.dart';
+import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 
 const double _containerBorderRadius = 20.0;

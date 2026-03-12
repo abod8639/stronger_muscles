@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/functions/handle_checkout.dart';
+import 'package:stronger_muscles/core/utils/functions/handle_checkout.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _checkoutButtonPadding = 32.0;
