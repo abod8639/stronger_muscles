@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/main_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_cart_content.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 

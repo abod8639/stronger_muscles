@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 
 class PriceFilterSlider extends StatefulWidget {

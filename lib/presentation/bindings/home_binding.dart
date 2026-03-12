@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';

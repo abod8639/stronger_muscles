@@ -10,7 +10,7 @@ import 'package:stronger_muscles/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';

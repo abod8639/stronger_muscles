@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
 
 class InternetConnectionBanner extends GetView<InternetConnectionController> {
   final String title;
