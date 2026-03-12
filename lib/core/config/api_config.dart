@@ -1,7 +1,7 @@
 class ApiConfig {
   static String get baseUrl {
     const String port = '8080';
-    const String ip = '192.168.1.17';
+    const String ip = '192.168.2.169';
 
     // const String ip = '192.168.1.43';
     // const String pcIp = 'localhost';
