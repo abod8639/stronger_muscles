@@ -5,7 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import '../../data/datasources/auth_service.dart';
 import '../../../../routes/routes.dart';
-import '../../../../presentation/controllers/base_controller.dart';
+import '../../../home/presentation/controllers/base_controller.dart';
 
 const String _googleWebClientId =
     '1610448649-0hqb4e42ik3lg90q7nktbu3704orrd2k.apps.googleusercontent.com';

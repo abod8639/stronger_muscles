@@ -2,10 +2,10 @@ import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/shortcuts_row.dart';
-import 'package:stronger_muscles/features/home/presentation/widgets/promo_banner.dart';
+import 'package:stronger_muscles/features/promo/presentation/widgets/promo_banner.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/section_title.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/product_list.dart';
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/image_indicators.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/image_section.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/title_and_description.dart';

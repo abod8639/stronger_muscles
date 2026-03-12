@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 class ImageIndicators extends StatelessWidget {
   const ImageIndicators({

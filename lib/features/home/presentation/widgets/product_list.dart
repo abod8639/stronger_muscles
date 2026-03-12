@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
-import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 /// Grid view of products displayed on the home page

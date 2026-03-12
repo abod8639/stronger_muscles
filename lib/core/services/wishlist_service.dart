@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 class WishlistService extends GetxService {
   final RxList<ProductModel> items = <ProductModel>[].obs;

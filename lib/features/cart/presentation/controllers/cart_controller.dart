@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
-import '../../../../presentation/controllers/base_controller.dart';
+import '../../../home/presentation/controllers/base_controller.dart';
 
 const String _cartBoxName = 'cart';
 const String _cartErrorMsg = 'فشل تحميل عناصر السلة';

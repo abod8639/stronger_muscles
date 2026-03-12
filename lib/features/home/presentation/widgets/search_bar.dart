@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/price_filter_slider.dart';
 
 class SearchBar extends StatelessWidget {

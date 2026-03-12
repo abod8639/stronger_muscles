@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 part 'cart_item_model.freezed.dart';
 part 'cart_item_model.g.dart';

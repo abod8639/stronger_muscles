@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/data/repositories/product_repository.dart';
-import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
-import '../../../../presentation/controllers/base_controller.dart';
+import 'base_controller.dart';
 
 class HomeController extends BaseController {
   final ProductRepository _productRepository = Get.find<ProductRepository>();

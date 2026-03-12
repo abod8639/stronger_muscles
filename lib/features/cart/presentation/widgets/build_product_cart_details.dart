@@ -3,7 +3,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/widgets/product_flavor_selector.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/product_flavor_selector.dart';
 
 const double _titleFontSize = 18.0;
 

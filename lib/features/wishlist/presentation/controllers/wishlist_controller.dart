@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
-import 'package:stronger_muscles/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 class WishlistController extends GetxController {
   WishlistService get _wishlistService => Get.find<WishlistService>();

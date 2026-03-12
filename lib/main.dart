@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:stronger_muscles/firebase_options.dart';
+import 'package:stronger_muscles/data/services/firebase_options.dart';
 import 'package:stronger_muscles/core/utils/functions/hive_init.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
-import 'package:stronger_muscles/presentation/bindings/initial_binding.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/initial_binding.dart';
 import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

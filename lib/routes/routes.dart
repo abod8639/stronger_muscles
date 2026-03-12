@@ -3,7 +3,7 @@ import 'package:stronger_muscles/features/auth/presentation/controllers/auth_bin
 import 'package:stronger_muscles/features/home/presentation/controllers/home_binding.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_binding.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/order_binding.dart';
-import 'package:stronger_muscles/presentation/bindings/product_details_binding.dart';
+import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_binding.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_binding.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_binding.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_binding.dart';
@@ -16,7 +16,7 @@ import 'package:stronger_muscles/features/cart/presentation/pages/cart_view.dart
 import 'package:stronger_muscles/features/home/presentation/pages/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_view.dart';
-import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
+import 'package:stronger_muscles/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
