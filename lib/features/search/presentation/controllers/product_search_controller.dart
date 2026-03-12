@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/data/datasources/product_service.dart';
-import 'dart:math' as math;
-import 'base_controller.dart';
+import 'package:stronger_muscles/features/search/data/datasources/search_local_datasource.dart';
+import 'package:stronger_muscles/features/search/data/datasources/search_remote_datasource.dart';
+import '../../../home/presentation/controllers/base_controller.dart';
+
 
 class ProductSearchController extends BaseController {
-  final ProductService _productService = Get.find<ProductService>();
+  final SearchRemoteDataSource _remoteDataSource = SearchRemoteDataSource();
+  final SearchLocalDataSource _localDataSource = SearchLocalDataSource();
+  
   final TextEditingController textController = TextEditingController();
 
   // Observable state
@@ -17,41 +20,25 @@ class ProductSearchController extends BaseController {
   final searchQuery = ''.obs;
   final filterMinPrice = 0.0.obs;
   final filterMaxPrice = 1000.0.obs;
-
-  // Track the range of prices in the current data set
   final dataMinPrice = 0.0.obs;
   final dataMaxPrice = 1000.0.obs;
 
   @override
   void onInit() {
     super.onInit();
-
-    // Debounce search query to avoid frequent API calls
-    debounce(
-      searchQuery,
-      _handleSearch,
-      time: const Duration(milliseconds: 500),
-    );
-
+    debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));
     everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
   }
 
-  /// Sets the base products (e.g., from a category) and updates price bounds
   void setProducts(List<ProductModel> products) {
     _localProducts.assignAll(products);
     _updateDataBounds();
     _applyFilters();
   }
 
-  /// Updates the search query and triggers the debounce mechanism
-  void updateSearchQuery(String query) {
-    searchQuery.value = query.trim();
-  }
-
-  /// Alias for updateSearchQuery to maintain compatibility with UI widgets
+  void updateSearchQuery(String query) => searchQuery.value = query.trim();
   void onSearchChanged(String query) => updateSearchQuery(query);
 
-  /// Resets the search and filters
   void clearSearch() {
     textController.clear();
     searchQuery.value = '';
@@ -60,13 +47,11 @@ class ProductSearchController extends BaseController {
     _applyFilters();
   }
 
-  /// Sets the active price filter
   void applyPriceFilter(double min, double max) {
     filterMinPrice.value = min;
     filterMaxPrice.value = max;
   }
 
-  /// Internal handler for the debounced search query
   Future<void> _handleSearch(String query) async {
     if (query.isEmpty) {
       _remoteProducts.clear();
@@ -78,7 +63,8 @@ class ProductSearchController extends BaseController {
     try {
       setLoading(true);
       resetState();
-      final results = await _productService.getProducts(query: query);
+      // استخدام الـ Remote DataSource
+      final results = await _remoteDataSource.fetchProductsFromApi(query);
       _remoteProducts.assignAll(results);
       _updateDataBounds();
       _applyFilters();
@@ -89,39 +75,25 @@ class ProductSearchController extends BaseController {
     }
   }
 
-  /// Calculates the price range (min/max) from the current source of truth
   void _updateDataBounds() {
     final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
-
-    if (source.isEmpty) {
-      dataMinPrice.value = 0.0;
-      dataMaxPrice.value = 1000.0;
-    } else {
-      double min = source.first.price;
-      double max = source.first.price;
-      for (var p in source) {
-        min = math.min(min, p.price);
-        max = math.max(max, p.price);
-      }
-      dataMinPrice.value = min;
-      dataMaxPrice.value = max;
-    }
-
-    // Adjust active filters if they fall outside the new bounds
+    // استخدام الـ Local DataSource للحسابات
+    final bounds = _localDataSource.calculatePriceBounds(source);
+    
+    dataMinPrice.value = bounds['min']!;
+    dataMaxPrice.value = bounds['max']!;
     filterMinPrice.value = dataMinPrice.value;
     filterMaxPrice.value = dataMaxPrice.value;
   }
 
-  /// Filters the source data by price and assigns it to filteredProducts
   void _applyFilters() {
     final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
-    final min = filterMinPrice.value;
-    final max = filterMaxPrice.value;
-
-    final filtered = source.where((p) {
-      return p.price >= min && p.price <= max;
-    }).toList();
-
+    // استخدام الـ Local DataSource للفلترة
+    final filtered = _localDataSource.filterByPrice(
+      source, 
+      filterMinPrice.value, 
+      filterMaxPrice.value
+    );
     filteredProducts.assignAll(filtered);
   }
 }

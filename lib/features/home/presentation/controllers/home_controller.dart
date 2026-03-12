@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'base_controller.dart';
 

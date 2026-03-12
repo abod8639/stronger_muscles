@@ -19,7 +19,7 @@ class ProductService extends GetxService {
         queryParameters: {
           'category': ?categoryId,
           'search': ?query,
-          'page': page, // Dio يتعامل مع int تلقائياً
+          'page': page, 
           'limit': limit,
         },
       );
@@ -54,12 +54,10 @@ class ProductService extends GetxService {
     if (data is List) {
       list = data;
     } else if (data is Map) {
-      // التعامل مع Pagination الخاص بـ Laravel (data wrap)
       final rawData = data['data'];
       if (rawData is List) {
         list = rawData;
       } else if (rawData is Map && rawData['data'] is List) {
-        // في حالة وجود nested pagination
         list = rawData['data'];
       }
     }

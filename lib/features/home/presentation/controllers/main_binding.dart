@@ -6,7 +6,7 @@ import 'package:stronger_muscles/features/cart/presentation/controllers/cart_con
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 
 class MainBinding extends Bindings {
   @override
