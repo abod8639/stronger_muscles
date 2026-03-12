@@ -1,27 +1,21 @@
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:stronger_muscles/features/product/data/datasources/category_service.dart';
+import 'package:stronger_muscles/features/product/data/datasources/category_remote_datasource.dart';
+import 'package:stronger_muscles/features/product/data/datasources/category_local_datasource.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 
 class CategoryRepository {
-  final CategoryService _service = Get.put(CategoryService());
-  final Box<CategoryModel> _box = Hive.box<CategoryModel>('categories');
+  final CategoryRemoteDataSource _remote = Get.find<CategoryRemoteDataSource>();
+  final CategoryLocalDataSource _local = CategoryLocalDataSource();
 
-  List<CategoryModel> getCachedCategories() => _box.values.toList();
+  List<CategoryModel> getCachedCategories() => _local.getCachedCategories();
 
   Future<List<CategoryModel>> getAllCategories() async {
     try {
-      final categories = await _service.fetchCategoriesFromApi();
-
-      await _box.clear();
-      await _box.addAll(categories);
-
+      final categories = await _remote.fetchCategoriesFromApi();
+      await _local.cacheCategories(categories);
       return categories;
-    } on Failure catch (e) {
-      if (e.type == FailureType.network && _box.isNotEmpty) {
-        return _box.values.toList();
-      }
+    } catch (e) {
+      if (_local.getCachedCategories().isNotEmpty) return _local.getCachedCategories();
       rethrow;
     }
   }
