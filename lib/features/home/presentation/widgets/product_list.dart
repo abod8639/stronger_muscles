@@ -50,7 +50,7 @@ class ProductList extends StatelessWidget {
                         ? Icons.wifi_off_rounded
                         : Icons.error_outline_rounded,
                     size: 64.0,
-                    color: Colors.red.withValues(alpha:.5),
+                    color: Colors.red.withValues(alpha: .5),
                   ),
                   const SizedBox(height: 16.0),
                   Text(

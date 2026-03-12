@@ -10,7 +10,7 @@ class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<OrdersController>();
-    
+
     // جلب باقي الطلبات عند الدخول لصفحة كل الطلبات
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchAllOrders();
@@ -18,10 +18,7 @@ class OrderView extends StatelessWidget {
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Orders'),
-      ),
+      appBar: AppBar(centerTitle: true, title: const Text('Orders')),
       body: Obx(() {
         if (controller.orders.isEmpty) {
           return const Center(child: Text('No orders found'));

@@ -38,7 +38,10 @@ class AddressCard extends StatelessWidget {
         color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(_containerBorderRadius),
         border: address.isDefault
-            ? Border.all(color: AppColors.primary.withValues(alpha:.5), width: 1.5)
+            ? Border.all(
+                color: AppColors.primary.withValues(alpha: .5),
+                width: 1.5,
+              )
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
@@ -122,7 +125,7 @@ class AddressCard extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   stops: const [0.0, 0.7, 1.0],
-                  colors: [Colors.black.withValues(alpha:.1)],
+                  colors: [Colors.black.withValues(alpha: .1)],
                 ),
               ),
             ),
@@ -185,7 +188,7 @@ class AddressCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha:.1),
+            color: AppColors.primary.withValues(alpha: .1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(labelIcon, color: AppColors.primary, size: 18),
@@ -206,7 +209,7 @@ class AddressCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withValues(alpha:.7)],
+          colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
         ),
         borderRadius: BorderRadius.circular(20),
       ),

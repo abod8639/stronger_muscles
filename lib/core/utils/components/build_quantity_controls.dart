@@ -24,7 +24,9 @@ Widget buildQuantityControls(ProductModel product) {
         final theme = Theme.of(context);
         return Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha:.3),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: .3,
+            ),
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Column(
@@ -59,7 +61,7 @@ Widget buildQuantityControls(ProductModel product) {
                   vertical: 4.0,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha:.1),
+                  color: AppColors.primary.withValues(alpha: .1),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
                 child: Text(

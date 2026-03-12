@@ -71,7 +71,7 @@ class RecentOrdersList extends StatelessWidget {
                   borderRadius: BorderRadius.circular(4),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha:.3),
+                      color: AppColors.primary.withValues(alpha: .3),
                       blurRadius: 4,
                       offset: const Offset(1, 0),
                     ),

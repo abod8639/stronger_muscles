@@ -25,7 +25,7 @@ class OrdersController extends BaseController {
 
       final fetchedOrders = await _orderRepository.getUserOrders(limit: limit);
       orders.assignAll(fetchedOrders);
-      
+
       if (limit == null) {
         _hasFetchedAll = true;
       } else {
@@ -43,7 +43,7 @@ class OrdersController extends BaseController {
 
     try {
       setLoading(true);
-      
+
       final fetchedOrders = await _orderRepository.getUserOrders();
       orders.assignAll(fetchedOrders);
       _hasFetchedAll = true;

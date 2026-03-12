@@ -16,7 +16,7 @@ class SectionTitle extends StatelessWidget {
         left: _horizontalPadding,
         right: _horizontalPadding,
         bottom: _verticalPadding,
-        top: 0
+        top: 0,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

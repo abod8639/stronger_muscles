@@ -12,7 +12,8 @@ part of 'product_size_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ProductSize _$ProductSizeFromJson(Map<String, dynamic> json) {
   return _ProductSize.fromJson(json);
@@ -39,13 +40,15 @@ mixin _$ProductSize {
 /// @nodoc
 abstract class $ProductSizeCopyWith<$Res> {
   factory $ProductSizeCopyWith(
-          ProductSize value, $Res Function(ProductSize) then) =
-      _$ProductSizeCopyWithImpl<$Res, ProductSize>;
+    ProductSize value,
+    $Res Function(ProductSize) then,
+  ) = _$ProductSizeCopyWithImpl<$Res, ProductSize>;
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'size') String size,
-      @HiveField(1) @JsonKey(name: 'price') double price,
-      @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'size') String size,
+    @HiveField(1) @JsonKey(name: 'price') double price,
+    @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice,
+  });
 }
 
 /// @nodoc
@@ -65,20 +68,23 @@ class _$ProductSizeCopyWithImpl<$Res, $Val extends ProductSize>
     Object? price = null,
     Object? discountPrice = freezed,
   }) {
-    return _then(_value.copyWith(
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double,
-      discountPrice: freezed == discountPrice
-          ? _value.discountPrice
-          : discountPrice // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            size: null == size
+                ? _value.size
+                : size // ignore: cast_nullable_to_non_nullable
+                      as String,
+            price: null == price
+                ? _value.price
+                : price // ignore: cast_nullable_to_non_nullable
+                      as double,
+            discountPrice: freezed == discountPrice
+                ? _value.discountPrice
+                : discountPrice // ignore: cast_nullable_to_non_nullable
+                      as double?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -86,14 +92,16 @@ class _$ProductSizeCopyWithImpl<$Res, $Val extends ProductSize>
 abstract class _$$ProductSizeImplCopyWith<$Res>
     implements $ProductSizeCopyWith<$Res> {
   factory _$$ProductSizeImplCopyWith(
-          _$ProductSizeImpl value, $Res Function(_$ProductSizeImpl) then) =
-      __$$ProductSizeImplCopyWithImpl<$Res>;
+    _$ProductSizeImpl value,
+    $Res Function(_$ProductSizeImpl) then,
+  ) = __$$ProductSizeImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'size') String size,
-      @HiveField(1) @JsonKey(name: 'price') double price,
-      @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'size') String size,
+    @HiveField(1) @JsonKey(name: 'price') double price,
+    @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice,
+  });
 }
 
 /// @nodoc
@@ -101,8 +109,9 @@ class __$$ProductSizeImplCopyWithImpl<$Res>
     extends _$ProductSizeCopyWithImpl<$Res, _$ProductSizeImpl>
     implements _$$ProductSizeImplCopyWith<$Res> {
   __$$ProductSizeImplCopyWithImpl(
-      _$ProductSizeImpl _value, $Res Function(_$ProductSizeImpl) _then)
-      : super(_value, _then);
+    _$ProductSizeImpl _value,
+    $Res Function(_$ProductSizeImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -111,31 +120,33 @@ class __$$ProductSizeImplCopyWithImpl<$Res>
     Object? price = null,
     Object? discountPrice = freezed,
   }) {
-    return _then(_$ProductSizeImpl(
-      size: null == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as String,
-      price: null == price
-          ? _value.price
-          : price // ignore: cast_nullable_to_non_nullable
-              as double,
-      discountPrice: freezed == discountPrice
-          ? _value.discountPrice
-          : discountPrice // ignore: cast_nullable_to_non_nullable
-              as double?,
-    ));
+    return _then(
+      _$ProductSizeImpl(
+        size: null == size
+            ? _value.size
+            : size // ignore: cast_nullable_to_non_nullable
+                  as String,
+        price: null == price
+            ? _value.price
+            : price // ignore: cast_nullable_to_non_nullable
+                  as double,
+        discountPrice: freezed == discountPrice
+            ? _value.discountPrice
+            : discountPrice // ignore: cast_nullable_to_non_nullable
+                  as double?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ProductSizeImpl extends _ProductSize {
-  const _$ProductSizeImpl(
-      {@HiveField(0) @JsonKey(name: 'size') required this.size,
-      @HiveField(1) @JsonKey(name: 'price') required this.price,
-      @HiveField(2) @JsonKey(name: 'discount_price') this.discountPrice})
-      : super._();
+  const _$ProductSizeImpl({
+    @HiveField(0) @JsonKey(name: 'size') required this.size,
+    @HiveField(1) @JsonKey(name: 'price') required this.price,
+    @HiveField(2) @JsonKey(name: 'discount_price') this.discountPrice,
+  }) : super._();
 
   factory _$ProductSizeImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductSizeImplFromJson(json);
@@ -181,19 +192,16 @@ class _$ProductSizeImpl extends _ProductSize {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProductSizeImplToJson(
-      this,
-    );
+    return _$$ProductSizeImplToJson(this);
   }
 }
 
 abstract class _ProductSize extends ProductSize {
-  const factory _ProductSize(
-      {@HiveField(0) @JsonKey(name: 'size') required final String size,
-      @HiveField(1) @JsonKey(name: 'price') required final double price,
-      @HiveField(2)
-      @JsonKey(name: 'discount_price')
-      final double? discountPrice}) = _$ProductSizeImpl;
+  const factory _ProductSize({
+    @HiveField(0) @JsonKey(name: 'size') required final String size,
+    @HiveField(1) @JsonKey(name: 'price') required final double price,
+    @HiveField(2) @JsonKey(name: 'discount_price') final double? discountPrice,
+  }) = _$ProductSizeImpl;
   const _ProductSize._() : super._();
 
   factory _ProductSize.fromJson(Map<String, dynamic> json) =

@@ -87,7 +87,6 @@ class BottomIconsRow extends StatelessWidget {
     final isPriceZero = detailsController.displayEffectivePrice <= 0;
 
     return ElevatedButton.icon(
-      
       onPressed: isPriceZero
           ? null
           : () {
@@ -103,7 +102,6 @@ class BottomIconsRow extends StatelessWidget {
       ),
       label: Text(isPriceZero ? l10n.contactUs : l10n.addToCart),
       style: ElevatedButton.styleFrom(
-        
         backgroundColor: isPriceZero ? Colors.grey : AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
@@ -129,7 +127,7 @@ class BottomIconsRow extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha:.4),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
         borderRadius: BorderRadius.circular(12.0),
         border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
       ),
@@ -181,8 +179,8 @@ class BottomIconsRow extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isInWishlist
-            ? AppColors.primary.withValues(alpha:.1)
-            : theme.colorScheme.surfaceContainerHighest.withValues(alpha:.4),
+            ? AppColors.primary.withValues(alpha: .1)
+            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: IconButton(

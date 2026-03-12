@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stronger_muscles/data/models/selection_model.dart';
+import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart'; // استخدم الـ Repository
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';

@@ -23,6 +23,5 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => CartController());
     Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => PromoController());
-
   }
 }

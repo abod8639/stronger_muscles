@@ -25,7 +25,7 @@ Widget buildIngredientsSection(ProductModel product, bool isDark) {
             decoration: BoxDecoration(
               color: isDark
                   ? AppColors.surfaceDark
-                  : AppColors.greyLight.withValues(alpha:.3),
+                  : AppColors.greyLight.withValues(alpha: .3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Wrap(

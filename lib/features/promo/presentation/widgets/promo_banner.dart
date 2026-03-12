@@ -26,10 +26,7 @@ class PromoBanner extends GetView<PromoController> {
               onPageChanged: controller.updateCurrentIndex,
               itemBuilder: (context, index) {
                 final promo =
-                    controller.promos[
-                      index % 
-                      controller.promos.length
-                      ];
+                    controller.promos[index % controller.promos.length];
                 return _buildPromoCard(promo);
               },
             );
@@ -50,7 +47,6 @@ class PromoBanner extends GetView<PromoController> {
                 height: 5,
                 width: controller.currentIndex.value == index ? 15 : 5,
                 decoration: BoxDecoration(
-
                   color: controller.currentIndex.value == index
                       ? AppColors.primary
                       : AppColors.greyDark,
@@ -74,10 +70,10 @@ class PromoBanner extends GetView<PromoController> {
           color: promo.backgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:.1),
+              color: Colors.black.withValues(alpha: .1),
               blurRadius: 10,
               offset: const Offset(0, 5),
-              blurStyle: BlurStyle.outer
+              blurStyle: BlurStyle.outer,
             ),
           ],
         ),
@@ -94,19 +90,19 @@ class PromoBanner extends GetView<PromoController> {
                   Container(color: promo.backgroundColor),
             ),
             // Gradient Overlay for text readability
-        if (promo.title != null)
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withValues(alpha: .8),
-                    Colors.black.withValues(alpha: .2),
-                  ],
-                  begin: AlignmentDirectional.centerStart,
-                  end: AlignmentDirectional.centerEnd,
+            if (promo.title != null)
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withValues(alpha: .8),
+                      Colors.black.withValues(alpha: .2),
+                    ],
+                    begin: AlignmentDirectional.centerStart,
+                    end: AlignmentDirectional.centerEnd,
+                  ),
                 ),
               ),
-            ),
             // Text Content
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -126,31 +122,32 @@ class PromoBanner extends GetView<PromoController> {
                   Text(
                     promo.subtitle ?? "",
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha:.9),
+                      color: Colors.white.withValues(alpha: .9),
                       fontSize: 14,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 16),
-             if( promo.targetId != null )  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      promo.buttonText,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
+                  if (promo.targetId != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        promo.buttonText,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

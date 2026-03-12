@@ -89,20 +89,18 @@ class ImageSection extends StatelessWidget {
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: isBackgroundWhite
-            ? Colors.white.withValues(alpha:.9)
+            ? Colors.white.withValues(alpha: .9)
             : Colors.transparent,
         borderRadius: BorderRadius.circular(12),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: CachedNetworkImage(
-          
           cacheManager: CustomCacheManager.instance,
           imageUrl: url,
           fit: BoxFit.fitHeight,
           placeholder: (context, url) => buildShimmerEffect(theme),
           errorWidget: (context, url, error) => buildErrorWidget(theme),
-
         ),
       ),
     );
@@ -112,7 +110,7 @@ class ImageSection extends StatelessWidget {
     return Center(
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: theme.colorScheme.primary.withValues(alpha:.5),
+        color: theme.colorScheme.primary.withValues(alpha: .5),
       ),
     );
   }
@@ -136,7 +134,7 @@ class ImageSection extends StatelessWidget {
 
   Widget buildErrorWidget(ThemeData theme) {
     return Container(
-      color: theme.colorScheme.errorContainer.withValues(alpha:.2),
+      color: theme.colorScheme.errorContainer.withValues(alpha: .2),
       child: Icon(Icons.broken_image_outlined, color: theme.colorScheme.error),
     );
   }

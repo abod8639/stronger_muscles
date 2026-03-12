@@ -30,9 +30,9 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.blue.withValues(alpha:.1),
+                color: Colors.blue.withValues(alpha: .1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.blue.withValues(alpha:.3)),
+                border: Border.all(color: Colors.blue.withValues(alpha: .3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,9 +71,9 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
                 margin: const EdgeInsets.only(bottom: 8),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.red.withValues(alpha:.1),
+                  color: Colors.red.withValues(alpha: .1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.red.withValues(alpha:.3)),
+                  border: Border.all(color: Colors.red.withValues(alpha: .3)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

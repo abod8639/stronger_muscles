@@ -4,8 +4,6 @@ import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/base_controller.dart';
 import 'package:flutter/material.dart';
 
-
-
 class PromoController extends BaseController {
   final RxList<PromoModel> promos = <PromoModel>[].obs;
   final RxInt currentIndex = 0.obs;
@@ -40,7 +38,7 @@ class PromoController extends BaseController {
             "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=2070&auto=format&fit=crop",
         buttonText: "تسوق الآن",
         hexBackgroundColor: "#1E1E1E",
-       ),
+      ),
       PromoModel(
         id: 2,
         targetType: "category",
@@ -115,6 +113,3 @@ class PromoController extends BaseController {
     );
   }
 }
-
-
-

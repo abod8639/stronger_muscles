@@ -40,14 +40,12 @@ class ProfileHeader extends StatelessWidget {
             end: Alignment.topRight,
             colors: [
               AppColors.primary.withAlpha(30),
-              theme.scaffoldBackgroundColor, 
-              ],
+              theme.scaffoldBackgroundColor,
+            ],
           ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.backgroundDark.withValues(
-                alpha: _shadowOpacity,
-              ),
+              color: AppColors.backgroundDark.withValues(alpha: _shadowOpacity),
               blurRadius: _shadowBlurRadius,
               offset: const Offset(0, 4),
             ),
@@ -96,7 +94,9 @@ class ProfileHeader extends StatelessWidget {
                   Text(
                     user.email,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .8) ,
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: .8,
+                      ),
                       fontWeight: FontWeight.bold,
                     ),
                     overflow: TextOverflow.ellipsis,

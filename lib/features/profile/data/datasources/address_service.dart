@@ -103,7 +103,6 @@ class AddressService extends GetxService {
     );
   }
 
-
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) throw 'خدمات الموقع معطلة. يرجى تفعيلها.';

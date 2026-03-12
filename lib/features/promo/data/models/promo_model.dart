@@ -14,16 +14,23 @@ class PromoModel with _$PromoModel {
     @HiveField(1) String? title,
     @HiveField(2) String? subtitle,
     @HiveField(3) @JsonKey(name: 'image_url') required String imageUrl,
-    @HiveField(4) @JsonKey(name: 'button_text', defaultValue: 'عرض الآن') required String buttonText,
-    @HiveField(5) @JsonKey(name: 'background_color', defaultValue: '#FFFFFF') required String hexBackgroundColor,
-    @HiveField(6) @JsonKey(name: 'target_type', defaultValue: 'none') required String targetType,
+    @HiveField(4)
+    @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
+    required String buttonText,
+    @HiveField(5)
+    @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
+    required String hexBackgroundColor,
+    @HiveField(6)
+    @JsonKey(name: 'target_type', defaultValue: 'none')
+    required String targetType,
     @HiveField(7) @JsonKey(name: 'target_id') String? targetId,
   }) = _PromoModel;
 
   // ضروري للسماح بإضافة Getters داخل الكلاس
   const PromoModel._();
 
-  factory PromoModel.fromJson(Map<String, dynamic> json) => _$PromoModelFromJson(json);
+  factory PromoModel.fromJson(Map<String, dynamic> json) =>
+      _$PromoModelFromJson(json);
 
   // تحويل اللون بطريقة آمنة
   Color get backgroundColor {

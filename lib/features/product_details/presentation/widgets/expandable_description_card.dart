@@ -206,5 +206,4 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     )..layout(maxWidth: MediaQuery.of(context).size.width - 64);
     return textPainter.didExceedMaxLines;
   }
-  
 }

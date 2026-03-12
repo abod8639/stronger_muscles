@@ -1,9 +1,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PaymobConstants {
-  static final String baseUrl =
-      dotenv.env['BASE_URL'] ??
-      'fallback_url'; // Use a fallback or use get() for required values
+  static final String baseUrl = dotenv.env['BASE_URL'] ?? 'fallback_url';
   static final String apiKey = dotenv.env['API_KEY'] ?? 'fallback_key';
   static final String secretKey = dotenv.env['SECRET_KEY'] ?? 'fallback_key';
   static final String publicKey = dotenv.env['PUBLIC_KEY'] ?? 'fallback_key';

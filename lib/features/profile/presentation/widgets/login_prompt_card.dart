@@ -42,7 +42,7 @@ class LoginPromptCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_containerBorderRadius),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha:.1),
+            color: AppColors.black.withValues(alpha: .1),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -53,7 +53,7 @@ class LoginPromptCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(_iconBackgroundSize),
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha:.1),
+              color: AppColors.primary.withValues(alpha: .1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

@@ -63,7 +63,7 @@ class CartView extends GetView<CartController> {
             Icon(
               Icons.shopping_cart_outlined,
               size: _emptyIconSize,
-              color: theme.colorScheme.onSurfaceVariant.withValues(alpha:.5),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .5),
             ),
             const SizedBox(height: _emptyIconSpacing),
             Text(
@@ -80,7 +80,7 @@ class CartView extends GetView<CartController> {
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 fontSize: _emptySubtitleFontSize,
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha:.7),
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .7),
               ),
             ),
             const SizedBox(height: 32.0),
