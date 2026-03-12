@@ -14,7 +14,7 @@ import 'package:stronger_muscles/features/home/presentation/controllers/internet
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/theme_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 
 class InitialBinding extends Bindings {
   @override

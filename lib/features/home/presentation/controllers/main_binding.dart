@@ -3,7 +3,7 @@ import 'package:stronger_muscles/presentation/controllers/add_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/presentation/controllers/wishlist_controller.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/product_search_controller.dart';
