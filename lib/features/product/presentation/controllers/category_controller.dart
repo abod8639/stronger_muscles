@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
+import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
 import '../../../home/presentation/controllers/base_controller.dart';
 
 class CategoryController extends BaseController {

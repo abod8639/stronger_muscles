@@ -62,7 +62,8 @@ class MyApp extends StatelessWidget {
               bottom: 80,
               left: 0,
               right: 0,
-              child: InternetConnectionBanner(title: "No internet connection"),
+              child: InternetConnectionBanner(
+                title: "No internet connection"),
             ),
           ],
         ),

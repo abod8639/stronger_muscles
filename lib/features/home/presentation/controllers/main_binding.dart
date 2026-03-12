@@ -1,4 +1,10 @@
 import 'package:get/get.dart';
+import 'package:stronger_muscles/features/product/data/datasources/category_remote_datasource.dart';
+import 'package:stronger_muscles/features/product/data/datasources/product_remote_datasource.dart';
+import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
+import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/product/presentation/controllers/category_controller.dart';
+import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
 import 'package:stronger_muscles/features/promo/presentation/controllers/premo_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
@@ -23,5 +29,14 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => CartController());
     Get.lazyPut(() => ProfileController());
     Get.lazyPut(() => PromoController());
+    Get.lazyPut(() => CategoryRemoteDataSource());
+    Get.lazyPut(() => ProductRemoteDataSource());
+    Get.lazyPut(() => CategoryRepository());
+    Get.lazyPut(() => ProductRepository());
+
+    Get.lazyPut(() => CategoryController());
+    Get.lazyPut(() => ProductsController());
+    
+    
   }
 }

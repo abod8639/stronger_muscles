@@ -4,8 +4,8 @@ import 'package:stronger_muscles/features/product/data/datasources/category_loca
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 
 class CategoryRepository {
-  final CategoryRemoteDataSource _remote = Get.find<CategoryRemoteDataSource>();
-  final CategoryLocalDataSource _local = CategoryLocalDataSource();
+final CategoryRemoteDataSource _remote = Get.find();
+  final CategoryLocalDataSource _local = Get.find();
 
   List<CategoryModel> getCachedCategories() => _local.getCachedCategories();
 

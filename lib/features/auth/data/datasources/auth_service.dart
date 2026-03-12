@@ -7,7 +7,6 @@ import '../../../../core/services/api_service.dart';
 import '../../../../core/services/storage_service.dart';
 
 class AuthService extends GetxService {
-  // استخدام Get.find بدلاً من Put إذا كان قد تم تعريفه مسبقاً في الـ Bindings
   final ApiService _apiService = Get.find<ApiService>();
 
   Future<UserModel> register({
@@ -52,7 +51,6 @@ class AuthService extends GetxService {
 
       final data = response.data;
 
-      // فحص منطقي لحالة الاستجابة بناءً على هيكلة السيرفر لديك
       if (data['status'] == 'error') {
         throw Failure(
           message: data['message'] ?? 'فشل تسجيل الدخول',
