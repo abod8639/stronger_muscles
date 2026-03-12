@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/data/models/product_model.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_delete_button.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_details.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/widget/build_product_image.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/widget/build_delete_button.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/widget/build_product_details.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/widget/build_product_image.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class WishlistItemCard extends StatelessWidget {

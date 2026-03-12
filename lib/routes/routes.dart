@@ -19,7 +19,7 @@ import 'package:stronger_muscles/features/order/presentation/pages/order_view.da
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
-import 'package:stronger_muscles/presentation/pages/wishlist/wishlist_view.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/presentation/pages/checkout/checkout_view.dart';
 import 'package:stronger_muscles/presentation/pages/checkout/order_success_view.dart';
 
