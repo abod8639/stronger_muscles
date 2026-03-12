@@ -7,7 +7,11 @@ class FlavorsModel {
   final String name;
   final Color color;
   final String image;
-  FlavorsModel({required this.name, required this.color, required this.image});
+  FlavorsModel({
+    required this.name, 
+    required this.color, 
+    required this.image
+    });
 }
 
 final Map<String, FlavorsModel> flavorsData = {

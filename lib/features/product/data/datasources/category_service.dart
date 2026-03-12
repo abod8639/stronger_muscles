@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import '../../../../config/api_config.dart';
+import '../../../../core/config/api_config.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 
 class CategoryService extends GetxService {

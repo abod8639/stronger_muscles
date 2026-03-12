@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:stronger_muscles/config/api_config.dart';
+import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';

@@ -119,8 +119,7 @@ class ProductList extends StatelessWidget {
             (context, index) {
               final product = controller.products[index];
               return GestureDetector(
-                onTap: () =>
-                    Get.toNamed(AppRoutes.productDetails, arguments: product),
+                onTap: () => Get.toNamed(AppRoutes.productDetails, arguments: product),
                 child: ProductContainer(
                   showName: true,
                   product: product,

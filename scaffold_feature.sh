@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # ============================================================
+#
 #   Flutter Clean Architecture - Scaffold Generator
-#   ينشئ المجلدات والملفات الفارغة فقط
+#
 # ============================================================
 
 GREEN='\033[0;32m'
@@ -50,27 +51,27 @@ make() {
 
 # ══════════════════════════════════════════════════════════════
 echo -e "${BOLD}📂 Domain${RESET}"
-make "${BASE_PATH}/domain/entities/${FEATURE}_entity.test.dart"
-make "${BASE_PATH}/domain/repositories/${FEAtestTURE}_repository.test.dart"
-make "${BASE_PATH}/domain/usecases/get_${FEATURE}s_usecase.test.dart"
-make "${BASE_PATH}/domain/usecases/get_${FEATURE}_by_id_usecase.test.dart"
-make "${BASE_PATH}/domain/usecases/create_${FEATURE}_usecase.test.dart"
+make "${BASE_PATH}/domain/entities/${FEATURE}_G_entity.dart"
+make "${BASE_PATH}/domain/repositories/${FEAtestTURE}_G_repository.dart"
+make "${BASE_PATH}/domain/usecases/get_${FEATURE}_G_s_usecase.dart"
+make "${BASE_PATH}/domain/usecases/get_${FEATURE}_G_by_id_usecase.dart"
+make "${BASE_PATH}/domain/usecases/create_${FEATURE}_G_usecase.dart"
 
 echo ""
 echo -e "${BOLD}📂 Data${RESET}"
-make "${BASE_PATH}/data/models/${FEATURE}_model.test.dart"
-make "${BASE_PATH}/data/datasources/${FEATURE}_remote_datasource.test.dart"
-make "${BASE_PATH}/data/datasources/${FEATURE}_local_datasource.test.dart"
-make "${BASE_PATH}/data/repositories/${FEATURE}_repository_impl.test.dart"
+make "${BASE_PATH}/data/models/${FEATURE}_G_model.dart"
+make "${BASE_PATH}/data/datasources/${FEATURE}_G_remote_datasource.dart"
+make "${BASE_PATH}/data/datasources/${FEATURE}_G_local_datasource.dart"
+make "${BASE_PATH}/data/repositories/${FEATURE}_G_repository_impl.dart"
 
 echo ""
 echo -e "${BOLD}📂 Presentation${RESET}"
-make "${BASE_PATH}/presentation/pages/${FEATURE}s_page.test.dart"
-make "${BASE_PATH}/presentation/widgets/${FEATURE}_card.test.dart"
-make "${BASE_PATH}/presentation/widgets/${FEATURE}_list.test.dart"
-make "${BASE_PATH}/presentation/widgets/${FEATURE}_search_bar.test.dart"
-make "${BASE_PATH}/presentation/controllers/${FEATURE}_controller.test.dart"
-make "${BASE_PATH}/presentation/controllers/${FEATURE}_binding.test.dart"
+make "${BASE_PATH}/presentation/pages/${FEATURE}s_G_page.dart"
+make "${BASE_PATH}/presentation/widgets/${FEATURE}_G_card.dart"
+make "${BASE_PATH}/presentation/widgets/${FEATURE}_G_list.dart"
+make "${BASE_PATH}/presentation/widgets/${FEATURE}_G_search_bar.dart"
+make "${BASE_PATH}/presentation/controllers/${FEATURE}_G_controller.dart"
+make "${BASE_PATH}/presentation/controllers/${FEATURE}_G_binding.dart"
 
 # ══════════════════════════════════════════════════════════════
 echo ""

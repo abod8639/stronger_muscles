@@ -6,12 +6,9 @@ import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_flavor_selector.dart';
 
 const double _titleFontSize = 18.0;
-
 const double _priceFontSize = 16.0;
-
 const int _maxTitleLines = 2;
 
-/// Builds the product details section (name and price)
 Widget buildProductCartDetails(CartItemModel item) {
   return Builder(
     builder: (context) {
@@ -137,9 +134,7 @@ Builder selectedValue({
         padding: const EdgeInsets.only(top: 4.0),
         child: Row(
           children: [
-            Text(
-              "$title: ",
-              // '${AppLocalizations.of(context)!.flavor}: ',
+            Text( "$title: ",
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,

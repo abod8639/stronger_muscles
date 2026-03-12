@@ -3,10 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
 
-// دالة لجلب البيانات بناءً على الاسم مع توفير بديل افتراضي
 FlavorsModel getFlavorDetails(String flavorName) {
   final key = flavorName.toLowerCase().trim();
-  // البحث عن أقرب تطابق (مثلاً "Chocolate Ice" سيجد "chocolate")
   final match = flavorsData.keys.firstWhere(
     (k) => key.contains(k),
     orElse: () => "default",
@@ -16,7 +14,7 @@ FlavorsModel getFlavorDetails(String flavorName) {
       FlavorsModel(
         name: flavorName,
         color: Colors.blueGrey,
-        image: "https://via.placeholder.com/150", // صورة افتراضية
+        image: "https://via.placeholder.com/150", 
       );
 }
 

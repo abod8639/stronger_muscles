@@ -13,11 +13,46 @@ Widget buildProductInfo(
   // Brand
   if (product.brand != null && product.brand!.isNotEmpty) {
     infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.brand,
-        product.brand!,
-        isDark,
-      ),
+Padding(
+    padding: const EdgeInsets.only(bottom: 12),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            AppLocalizations.of(context)!.brand,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppColors.white : AppColors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 8,
+          child: TextButton(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            onPressed:(){
+              
+              // ToDo: Navigate to brand page
+            },
+           child: Text( product.brand!,
+            style: TextStyle(
+              fontSize: 14,
+              color: isDark ? AppColors.info : AppColors.black,
+              fontWeight: FontWeight.w600,
+            ),
+           ),
+          ),
+        ),
+      ],
+    ),
+  )
     );
   }
 

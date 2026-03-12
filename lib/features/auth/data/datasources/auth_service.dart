@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_stats_model.dart';
-import '../../../../config/api_config.dart';
+import '../../../../core/config/api_config.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/services/storage_service.dart';

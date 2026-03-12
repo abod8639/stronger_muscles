@@ -160,7 +160,7 @@ class SearchBar extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 Text(
-                  'Price Range', // TODO: Localize
+                  l10n.priceOnRequest.replaceAll("on request", '').replaceAll("عند الطلب", ''),
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -172,19 +172,6 @@ class SearchBar extends StatelessWidget {
 
                 const SizedBox(height: 32),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Get.back(),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Apply Filter'),
-                  ),
-                ),
               ],
             ),
           );

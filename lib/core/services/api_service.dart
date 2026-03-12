@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as getx;
 import '../../features/profile/presentation/controllers/language_controller.dart';
-import '../../config/api_config.dart';
+import '../config/api_config.dart';
 import 'storage_service.dart';
 import '../errors/failures.dart';
 

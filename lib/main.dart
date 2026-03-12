@@ -1,36 +1,21 @@
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:get/get.dart';
-
 import 'package:hive_flutter/hive_flutter.dart';
-
 import 'package:stronger_muscles/core/services/firebase_options.dart';
-
 import 'package:stronger_muscles/core/utils/functions/hive_init.dart';
-
 import 'package:stronger_muscles/core/constants/app_theme.dart';
-
 import 'package:stronger_muscles/features/home/presentation/controllers/initial_binding.dart';
-
 import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';
-
 import 'package:stronger_muscles/routes/routes.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
-
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await dotenv.load(fileName: ".env");
 
   if (Firebase.apps.isEmpty) {
@@ -40,7 +25,6 @@ Future<void> main() async {
   }
 
   await Hive.initFlutter();
-
   await hiveInit();
 
   runApp(const MyApp());
@@ -52,50 +36,32 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeController = Get.put(ThemeController());
-
     final languageController = Get.put(LanguageController());
 
     return Obx(
       () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-
         theme: AppTheme.lightTheme,
-
         darkTheme: AppTheme.darkTheme,
-
         themeMode: themeController.themeMode,
-
         initialBinding: InitialBinding(),
-
         initialRoute: AppRoutes.main,
-
         getPages: AppPages.routes,
-
         localizationsDelegates: const [
           AppLocalizations.delegate,
-
           GlobalMaterialLocalizations.delegate,
-
           GlobalWidgetsLocalizations.delegate,
-
           GlobalCupertinoLocalizations.delegate,
         ],
-
         supportedLocales: AppLocalizations.supportedLocales,
-
         locale: languageController.currentLocale.value,
-
         builder: (context, child) => Stack(
           children: [
             child!,
-
             const Positioned(
               bottom: 80,
-
               left: 0,
-
               right: 0,
-
               child: InternetConnectionBanner(title: "No internet connection"),
             ),
           ],
