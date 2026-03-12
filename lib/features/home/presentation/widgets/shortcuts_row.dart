@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/build_shortcut_item.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/build_shortcut_item.dart';
 
 /// Horizontal scrollable row of category shortcuts
 class CategoriesShortcutsRow extends StatelessWidget {

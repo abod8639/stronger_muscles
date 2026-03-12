@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:stronger_muscles/functions/app_guard.dart';
 import 'package:stronger_muscles/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/search_bar.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/shortcuts_row.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/promo_banner.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/section_title.dart';
-import 'package:stronger_muscles/presentation/pages/home/widgets/product_list.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/search_bar.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/shortcuts_row.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/promo_banner.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/section_title.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/product_list.dart';
 
 class HomeView extends GetView<HomeController> {
   // Constants for spacing

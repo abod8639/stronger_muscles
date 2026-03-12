@@ -13,7 +13,7 @@ import 'package:stronger_muscles/features/auth/presentation/pages/auth_view.dart
 import 'package:stronger_muscles/features/auth/presentation/pages/signin_page.dart';
 import 'package:stronger_muscles/features/auth/presentation/pages/signup_page.dart';
 import 'package:stronger_muscles/features/cart/presentation/pages/cart_view.dart';
-import 'package:stronger_muscles/presentation/pages/home/home_view.dart';
+import 'package:stronger_muscles/features/home/presentation/pages/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_view.dart';
 import 'package:stronger_muscles/presentation/pages/product_details/product_details_view.dart';
