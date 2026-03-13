@@ -17,60 +17,64 @@ class CartItemCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                cacheManager: CustomCacheManager.instance,
-                imageUrl: item.product.imageUrls.isNotEmpty
-                    ? item.product.imageUrls.first.thumbnail
-                    : '',
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-                errorWidget: (_, __, ___) => const Icon(Icons.image, size: 40),
+    return InkWell(
+      onTap: () => cartNotifier,
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  cacheManager: CustomCacheManager.instance,
+                  imageUrl: item.product.imageUrls.isNotEmpty
+                      ? item.product.imageUrls.first.thumbnail
+                      : '',
+                  width: 80,
+                  height: 80,
+                  fit: BoxFit.cover,
+                  errorWidget: (_, __, ___) => const Icon(Icons.image, size: 40),
+                ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.product.getLocalizedName(locale: 'en'),
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-                  if (item.selectedFlavor != null || item.selectedSize != null)
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      '${item.selectedFlavor ?? ""} ${item.selectedSize ?? ""}',
-                      style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      item.product.getLocalizedName(locale: 'en'),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'LE ${item.product.baseEffectivePrice}',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.bold,
+                    const SizedBox(height: 4),
+                    if (item.selectedFlavor != null || item.selectedSize != null)
+                      Text(
+                        '${item.selectedFlavor ?? ""} ${item.selectedSize ?? ""}',
+                        style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'LE ${item.product.baseEffectivePrice}',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            QuantityControls(product: item.product),
-          ],
+              QuantityControls(product: item.product),
+            ],
+          ),
         ),
       ),
     );
   }
+
 }

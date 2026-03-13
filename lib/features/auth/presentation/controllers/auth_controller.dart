@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/auth/data/datasources/auth_service.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 part 'auth_controller.g.dart';
@@ -20,14 +20,13 @@ class AuthController extends _$AuthController {
       passwordController.dispose();
     });
     
-    // Initial check for user
     _initUser();
     return null;
   }
 
   Future<void> _initUser() async {
-    final service = ref.read(authServiceProvider);
-    final user = await service.getCurrentUser();
+    final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
+    final user = await getCurrentUser();
     if (user != null) {
       state = user;
     }
@@ -38,10 +37,10 @@ class AuthController extends _$AuthController {
 
   Future<void> signInWithEmail({required String email, required String password}) async {
     _isLoading = true;
-    state = state;
+    ref.notifyListeners();
     try {
-      final service = ref.read(authServiceProvider);
-      state = await service.login(email: email, password: password);
+      final login = ref.read(loginUseCaseProvider);
+      state = await login(email: email, password: password);
     } finally {
       _isLoading = false;
       ref.notifyListeners();
@@ -50,10 +49,10 @@ class AuthController extends _$AuthController {
 
   Future<void> signUpWithEmail({required String email, required String password, String? name}) async {
     _isLoading = true;
-    state = state;
+    ref.notifyListeners();
     try {
-      final service = ref.read(authServiceProvider);
-      state = await service.register(email: email, password: password, name: name ?? "");
+      final register = ref.read(registerUseCaseProvider);
+      state = await register(email: email, password: password, name: name ?? "");
     } finally {
       _isLoading = false;
       ref.notifyListeners();
@@ -61,20 +60,12 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signInWithGoogle() async {
-    _isLoading = true;
-    state = state;
-    try {
-      // Logic for Google SignIn would go here, then calling authService.googleSignIn
-      // For now keeping it simple as it requires external setup
-    } finally {
-      _isLoading = false;
-      ref.notifyListeners();
-    }
+    // This logic should be expanded to use a GoogleSignInUseCase
   }
 
   Future<void> signOut() async {
-    final service = ref.read(authServiceProvider);
-    await service.logout();
+    final logout = ref.read(logoutUseCaseProvider);
+    await logout();
     state = null;
   }
 
@@ -89,8 +80,8 @@ class AuthController extends _$AuthController {
     _isLoading = true;
     ref.notifyListeners();
     try {
-      final service = ref.read(authServiceProvider);
-      state = await service.updateProfile(
+      final updateProfile = ref.read(updateProfileUseCaseProvider);
+      state = await updateProfile(
         name: name,
         email: email,
         phone: phone,
