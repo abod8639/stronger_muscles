@@ -38,7 +38,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeControllerProvider.notifier).themeMode;
+    // final themeMode = ref.watch(themeControllerProvider.notifier).themeMode;
     final isDarkMode = ref.watch(themeControllerProvider);
     final locale = ref.watch(languageControllerProvider);
 

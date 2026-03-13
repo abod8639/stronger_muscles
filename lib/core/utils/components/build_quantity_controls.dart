@@ -15,7 +15,7 @@ class QuantityControls extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartState = ref.watch(cartControllerProvider);
+    // final cartState = ref.watch(cartControllerProvider);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
     final item = cartNotifier.getCartItem(product);
 

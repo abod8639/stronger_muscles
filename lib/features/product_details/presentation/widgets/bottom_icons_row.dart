@@ -23,7 +23,7 @@ class BottomIconsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cartState = ref.watch(cartControllerProvider);
+    // final cartState = ref.watch(cartControllerProvider);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
     final detailsState = ref.watch(productDetailsControllerProvider(product));
     final detailsNotifier = ref.watch(productDetailsControllerProvider(product).notifier);

@@ -24,129 +24,150 @@ class SearchInputGroup extends ConsumerWidget {
 
     return Row(
       children: [
-        Expanded(child: _buildSearchField( ref, theme, controller, l10n)),
+        Expanded(child: buildSearchField(
+       ref: ref, 
+        theme:  theme, 
+        controller:  controller, 
+        l10n:  l10n,
+        readOnly: true,
+        autofocus: false,
+        onTap: () {
+                  ref
+                      .read(productSearchControllerProvider.notifier)
+                      .clearSearch();
+                  context.push(AppRoutes.search, extra: controller.searchQuery);
+                },
+          )),
         const SizedBox(width: _spacing),
-        _buildFilterButton( theme, controller, l10n),
+        buildFilterButton( 
+          controller: controller, 
+          l10n: l10n,
+          onTap: () {
+                              ref
+                      .read(productSearchControllerProvider.notifier)
+                      .clearSearch();
+                  context.push(AppRoutes.search, extra: controller.searchQuery);
+          }
+          ),
       ],
     );
   }
+}
 
-  Widget _buildSearchField( WidgetRef ref, ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
-    return Builder(
-      builder: (context) {
-        return Container(
-          height: _searchBarHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(_borderRadius),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => context.push(
-                  AppRoutes.search,
-                  extra: controller.searchQuery,
-                ),
-                icon: Icon(Icons.search, color: theme.colorScheme.onSurfaceVariant),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: TextField(
-                  autofocus: true,
-                  onTap: () {
-                    ref.read(productSearchControllerProvider.notifier).clearSearch();
-                    context.push(AppRoutes.search, extra: controller.searchQuery);
-                  },
-                  decoration: InputDecoration.collapsed(hintText: l10n.searchProducts),
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-    );
+
+Widget buildSearchField({
+  required WidgetRef ref,
+  required ThemeData theme,
+  required ProductSearchController controller,
+  required AppLocalizations l10n,
+  required bool readOnly,
+  required bool autofocus,
+  Function()? onTap,
+   Function(String)? onChanged,
+  
   }
-
-  Widget _buildFilterButton( ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
-    return Builder(
-      builder: (context) {
-        return Container(
-          width: _iconButtonSize,
-          height: _iconButtonSize,
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: IconButton(
-            icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
-            onPressed: () => _showFilterBottomSheet(context, l10n),
-            tooltip: l10n.filter,
-          ),
-        );
-      }
-    );
-  }
-
-  void _showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.45,
-        minChildSize: 0.3,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) => SingleChildScrollView(
-          controller: scrollController,
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(child: _buildHandle(context)),
-              const SizedBox(height: 24),
-              Text(l10n.filterProducts, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 32),
-              Text(
-                l10n.priceOnRequest.replaceAll("on request", '').replaceAll("عند الطلب", ''),
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              const PriceFilterSlider(),
-              const SizedBox(height: 32),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHandle(BuildContext context) => Container(
-        width: 40,
-        height: 4,
+) {
+  return Builder(
+    builder: (context) {
+      return Container(
+        height: _searchBarHeight,
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.outlineVariant,
-          borderRadius: BorderRadius.circular(2),
+          color: theme.colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(_borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            IconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () =>
+                  context.push(AppRoutes.search, extra: controller.searchQuery),
+              icon: Icon(
+                Icons.search,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: TextField(
+                onChanged: onChanged,
+                readOnly: readOnly,
+                autofocus: autofocus,
+                textInputAction: TextInputAction.search,
+                onTap:onTap,
+                decoration: InputDecoration.collapsed(
+                  hintText: l10n.searchProducts,
+                ),
+              ),
+            ),
+          ],
         ),
       );
+    },
+  );
 }
+
+void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Theme.of(context).colorScheme.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    ),
+    builder: (context) => DraggableScrollableSheet(
+      initialChildSize: 0.45,
+      minChildSize: 0.3,
+      maxChildSize: 0.9,
+      expand: false,
+      builder: (context, scrollController) => SingleChildScrollView(
+        controller: scrollController,
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(child: _buildHandle(context)),
+            const SizedBox(height: 24),
+            Text(
+              l10n.filterProducts,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              l10n.priceOnRequest
+                  .replaceAll("on request", '')
+                  .replaceAll("عند الطلب", ''),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            const PriceFilterSlider(),
+            const SizedBox(height: 32),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _buildHandle(BuildContext context) => Container(
+  width: 40,
+  height: 4,
+  decoration: BoxDecoration(
+    color: Theme.of(context).colorScheme.outlineVariant,
+    borderRadius: BorderRadius.circular(2),
+  ),
+);
 
 class SearchBar extends StatelessWidget {
   const SearchBar({super.key});
@@ -167,6 +188,39 @@ class SearchBar extends StatelessWidget {
   }
 }
 
+Widget buildFilterButton({
+  required ProductSearchController controller,
+  required AppLocalizations l10n,
+   Function()? onTap,
+}
+) {
+  return Builder(
+    builder: (context) {
+      final theme = Theme.of(context);
+      return Container(
+        width: _iconButtonSize,
+        height: _iconButtonSize,
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surfaceContainerHighest,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: IconButton(
+          icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
+          onPressed: onTap,
+          tooltip: l10n.filter,
+        ),
+      );
+    },
+  );
+}
+
 class SearchBarInline extends ConsumerWidget {
   const SearchBarInline({super.key});
 
@@ -178,36 +232,27 @@ class SearchBarInline extends ConsumerWidget {
 
     return Container(
       height: _searchBarHeight,
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(_borderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
       child: Row(
         children: [
-          Icon(
-            Icons.search,
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          const SizedBox(width: 8.0),
           Expanded(
-            child: TextField(
-              controller: controller.textController,
+            child: buildSearchField(
+              ref: ref, 
+              theme: theme, 
+              controller: controller, 
+              l10n: l10n,
+              readOnly: false,
               autofocus: true,
               onChanged: (val) => ref.read(productSearchControllerProvider.notifier).onSearchChanged(val),
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration.collapsed(
-                hintText: l10n.searchProducts,
               ),
             ),
-          ),
+
+          const SizedBox(width: _spacing),
+
+          buildFilterButton( 
+            controller: controller, 
+            l10n: l10n,
+            onTap: () => showFilterBottomSheet(context, l10n),
+            ),
         ],
       ),
     );

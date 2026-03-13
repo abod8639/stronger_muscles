@@ -27,7 +27,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final profileController = ref.watch(profileControllerProvider.notifier);
+    // final profileController = ref.watch(profileControllerProvider.notifier);
     final currentUser = ref.watch(profileControllerProvider.notifier).currentUser;
     final isLoading = ref.watch(profileControllerProvider.notifier).isLoading;
     final orders = ref.watch(profileControllerProvider.notifier).orders;

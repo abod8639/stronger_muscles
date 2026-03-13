@@ -21,7 +21,7 @@ class SavedAddressesList extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final addressesState = ref.watch(addressControllerProvider);
-    final addressNotifier = ref.watch(addressControllerProvider.notifier);
+    // final addressNotifier = ref.watch(addressControllerProvider.notifier);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
