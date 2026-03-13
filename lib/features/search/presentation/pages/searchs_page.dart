@@ -59,11 +59,9 @@ class ProductSearchsPage extends GetView<ProductSearchController> {
             final products = controller.searchQuery.value.isEmpty
                 ? homeController.products
                 : controller.searchResults;
-            if (controller.searchQuery.value.isNotEmpty && products.isEmpty) {
-              return SliverToBoxAdapter(child: _buildEmptyState());
-            }
 
-            if (products.isEmpty) {
+            // لا نعرض رسالة عدم وجود نتائج إلا بعد إكمال عملية بحث فعلية
+            if (controller.hasSearched.value && products.isEmpty) {
               return SliverToBoxAdapter(child: _buildEmptyState());
             }
 

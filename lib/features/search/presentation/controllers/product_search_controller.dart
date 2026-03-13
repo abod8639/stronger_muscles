@@ -19,6 +19,7 @@ class ProductSearchController extends BaseController {
   final searchResults = <ProductModel>[].obs;
 
   final searchQuery = "".obs;
+  final hasSearched = false.obs;
   final filterMinPrice = 0.0.obs;
   final filterMaxPrice = 1000.0.obs;
   final dataMinPrice = 0.0.obs;
@@ -49,6 +50,7 @@ class ProductSearchController extends BaseController {
   void clearSearch() {
     textController.clear();
     searchQuery.value = '';
+    hasSearched.value = false;
     _remoteProducts.clear();
     searchResults.clear();
     _updateDataBounds();
@@ -62,6 +64,7 @@ class ProductSearchController extends BaseController {
     if (query.isEmpty) {
       _remoteProducts.clear();
       searchResults.clear();
+      hasSearched.value = false;
       _updateDataBounds();
       if (dataMinPrice.value <= dataMaxPrice.value) {
         filterMinPrice.value = dataMinPrice.value;
@@ -77,6 +80,7 @@ class ProductSearchController extends BaseController {
       _remoteProducts.assignAll(results);
       _updateDataBounds();
       _applySearchFilters();
+      hasSearched.value = true;
     } catch (e) {
       handleError(e, title: 'خطأ في البحث');
     } finally {
