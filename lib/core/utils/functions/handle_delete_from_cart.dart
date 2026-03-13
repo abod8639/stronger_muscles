@@ -16,10 +16,14 @@ void handleDecrease(BuildContext context, WidgetRef ref, ProductModel item) {
 }
 
 /// Shows a confirmation dialog before removing the item from cart
-void showRemoveConfirmation(BuildContext context, WidgetRef ref, ProductModel item) {
+void showRemoveConfirmation(
+  BuildContext context,
+  WidgetRef ref,
+  ProductModel item,
+) {
   final cartNotifier = ref.read(cartControllerProvider.notifier);
   final cartItem = cartNotifier.getCartItem(item);
-  
+
   if (cartItem != null) {
     cartNotifier.decreaseQuantity(cartItem);
 

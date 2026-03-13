@@ -27,14 +27,14 @@ String _$ordersControllerHash() => r'd7af20133c1ffec541b5427e78da9b7187006002';
 @ProviderFor(OrdersController)
 final ordersControllerProvider =
     AsyncNotifierProvider<OrdersController, List<OrderModel>>.internal(
-  OrdersController.new,
-  name: r'ordersControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$ordersControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      OrdersController.new,
+      name: r'ordersControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$ordersControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$OrdersController = AsyncNotifier<List<OrderModel>>;
 // ignore_for_file: type=lint

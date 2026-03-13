@@ -36,7 +36,11 @@ class SignInPage extends ConsumerWidget {
                   child: TextButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(localizations.forgotPasswordNotImplemented)),
+                        SnackBar(
+                          content: Text(
+                            localizations.forgotPasswordNotImplemented,
+                          ),
+                        ),
                       );
                     },
                     child: Text(localizations.forgotPassword),
@@ -49,10 +53,14 @@ class SignInPage extends ConsumerWidget {
                         onPressed: () {
                           AppGuard.runSafeInternet(ref, () async {
                             if (formKey.currentState!.validate()) {
-                              await ref.read(authControllerProvider.notifier).signInWithEmail(
-                                email: authController.emailController.text.trim(),
-                                password: authController.passwordController.text,
-                              );
+                              await ref
+                                  .read(authControllerProvider.notifier)
+                                  .signInWithEmail(
+                                    email: authController.emailController.text
+                                        .trim(),
+                                    password:
+                                        authController.passwordController.text,
+                                  );
                             }
                           });
                         },
@@ -77,7 +85,9 @@ class SignInPage extends ConsumerWidget {
                 _buildDivider(localizations),
                 const SizedBox(height: 24.0),
                 OutlinedButton.icon(
-                  onPressed: () => ref.read(authControllerProvider.notifier).signInWithGoogle(),
+                  onPressed: () => ref
+                      .read(authControllerProvider.notifier)
+                      .signInWithGoogle(),
                   icon: const Icon(Icons.g_mobiledata, size: 30),
                   label: Text(localizations.signInWithGoogle),
                   style: OutlinedButton.styleFrom(
@@ -98,7 +108,11 @@ class SignInPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildInputFields(BuildContext context, AuthController controller, AppLocalizations l10n) {
+  Widget _buildInputFields(
+    BuildContext context,
+    AuthController controller,
+    AppLocalizations l10n,
+  ) {
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -114,9 +128,7 @@ class SignInPage extends ConsumerWidget {
         Text(
           l10n.signInToContinue,
           textAlign: TextAlign.center,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: Colors.grey[600],
-          ),
+          style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
         ),
         const SizedBox(height: 32.0),
         AuthTextField(
@@ -161,10 +173,7 @@ class SignInPage extends ConsumerWidget {
         Expanded(child: Divider(color: Colors.grey[300])),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            l10n.or,
-            style: TextStyle(color: Colors.grey[500]),
-          ),
+          child: Text(l10n.or, style: TextStyle(color: Colors.grey[500])),
         ),
         Expanded(child: Divider(color: Colors.grey[300])),
       ],
@@ -175,10 +184,7 @@ class SignInPage extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          l10n.dontHaveAccount,
-          style: TextStyle(color: Colors.grey[600]),
-        ),
+        Text(l10n.dontHaveAccount, style: TextStyle(color: Colors.grey[600])),
         TextButton(
           onPressed: onSignUpTap,
           child: Text(

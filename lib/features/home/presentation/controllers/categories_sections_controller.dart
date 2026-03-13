@@ -12,13 +12,13 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   @override
   FutureOr<List<SelectionsModel>> build() async {
     final categoryRepository = ref.watch(categoryRepositoryProvider.notifier);
-    
+
     final cached = categoryRepository.getCachedCategories();
     if (cached.isNotEmpty) {
       _categories = cached;
       return _getSelectionsList(cached);
     }
-    
+
     final fetched = await categoryRepository.getAllCategories();
     _categories = fetched;
     return _getSelectionsList(fetched);
@@ -48,7 +48,7 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
       ...categoryList.map(
         (cat) => SelectionsModel(
           id: cat.id,
-          label: cat.getLocalizedName(locale: 'en'), 
+          label: cat.getLocalizedName(locale: 'en'),
           icon: _getIconForCategory(cat.id),
         ),
       ),
@@ -59,12 +59,14 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
     if (index >= 0 && state.hasValue && index < state.value!.length) {
       _selectedIndex = index;
       final selectedId = state.value![index].id;
-      
-      ref.read(homeControllerProvider.notifier).fetchProductsForSection(
-        index,
-        categoryId: selectedId.isEmpty ? null : selectedId,
-      );
-      
+
+      ref
+          .read(homeControllerProvider.notifier)
+          .fetchProductsForSection(
+            index,
+            categoryId: selectedId.isEmpty ? null : selectedId,
+          );
+
       // إعادة تعيين الحالة لإعلام المستمعين بتغيير الـ selectedIndex
       // في Riverpod، يفضل فصل الـ selectedIndex في provider مستقل إذا كان يتغير كثيراً
       state = AsyncData(state.value!);

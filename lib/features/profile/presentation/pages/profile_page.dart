@@ -28,7 +28,9 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     // final profileController = ref.watch(profileControllerProvider.notifier);
-    final currentUser = ref.watch(profileControllerProvider.notifier).currentUser;
+    final currentUser = ref
+        .watch(profileControllerProvider.notifier)
+        .currentUser;
     final isLoading = ref.watch(profileControllerProvider.notifier).isLoading;
     final orders = ref.watch(profileControllerProvider.notifier).orders;
 
@@ -42,7 +44,8 @@ class ProfilePage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: RefreshIndicator(
-        onRefresh: () => ref.read(profileControllerProvider.notifier).loadUserData(),
+        onRefresh: () =>
+            ref.read(profileControllerProvider.notifier).loadUserData(),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
@@ -56,7 +59,13 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, dynamic currentUser, bool isLoading, List orders) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    dynamic currentUser,
+    bool isLoading,
+    List orders,
+  ) {
     if (isLoading && orders.isEmpty) {
       return const SizedBox(
         height: 400,

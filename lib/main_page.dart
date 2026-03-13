@@ -25,10 +25,7 @@ class MainPage extends ConsumerWidget {
       body: Column(
         children: [
           Expanded(
-            child: IndexedStack(
-              index: tabIndex,
-              children: pages,
-            ),
+            child: IndexedStack(index: tabIndex, children: pages),
           ),
         ],
       ),

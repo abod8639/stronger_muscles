@@ -61,7 +61,7 @@ class CartController extends _$CartController {
       );
       await _cartBox.add(newItem);
     }
-    
+
     state = AsyncData(_cartBox.values.toList());
   }
 

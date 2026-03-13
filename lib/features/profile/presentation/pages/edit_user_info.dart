@@ -100,7 +100,9 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                   if (value == null || value.isEmpty) {
                     return localizations.enterEmail;
                   }
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
                     return localizations.validEmail;
                   }
                   return null;
@@ -188,10 +190,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
             height: 120,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.primary,
-                width: 3,
-              ),
+              border: Border.all(color: AppColors.primary, width: 3),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.black.withValues(alpha: .1),
@@ -233,7 +232,9 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                 ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('سيتم إضافة ميزة تغيير الصورة قريباً')),
+                    const SnackBar(
+                      content: Text('سيتم إضافة ميزة تغيير الصورة قريباً'),
+                    ),
                   );
                 },
               ),

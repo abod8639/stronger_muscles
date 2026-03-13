@@ -19,7 +19,7 @@ class OrderView extends ConsumerWidget {
     });
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: const Text('Orders')),
       body: ordersState.when(
@@ -37,7 +37,8 @@ class OrderView extends ConsumerWidget {
                       bottom: 5,
                     ),
                     child: OrderCard(
-                      onTap: () => context.push(AppRoutes.orderDetails, extra: order),
+                      onTap: () =>
+                          context.push(AppRoutes.orderDetails, extra: order),
                       order: order,
                       isDark: isDark,
                       isAr: false,

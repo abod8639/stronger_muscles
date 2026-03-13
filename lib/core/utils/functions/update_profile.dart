@@ -7,9 +7,7 @@ Future<void> updateProfile(
   String email,
   String phone,
 ) async {
-  await ref.read(authControllerProvider.notifier).updateUserProfile(
-    name: name,
-    email: email,
-    phone: phone,
-  );
+  await ref
+      .read(authControllerProvider.notifier)
+      .updateUserProfile(name: name, email: email, phone: phone);
 }

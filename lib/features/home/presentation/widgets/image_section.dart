@@ -5,10 +5,7 @@ import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'image_indicators.dart';
 
 class ImageSection extends StatefulWidget {
-  const ImageSection({
-    super.key,
-    required this.widget,
-  });
+  const ImageSection({super.key, required this.widget});
 
   final ProductContainer widget;
 
@@ -78,7 +75,7 @@ class _ImageSectionState extends State<ImageSection> {
                     ),
             ),
           ),
-          
+
           if (images.length > 1)
             ImageIndicators(
               product: widget.widget.product,

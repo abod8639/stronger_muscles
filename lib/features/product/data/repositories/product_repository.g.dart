@@ -13,14 +13,14 @@ String _$productRemoteDataSourceHash() =>
 @ProviderFor(productRemoteDataSource)
 final productRemoteDataSourceProvider =
     Provider<ProductRemoteDataSource>.internal(
-  productRemoteDataSource,
-  name: r'productRemoteDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$productRemoteDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      productRemoteDataSource,
+      name: r'productRemoteDataSourceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$productRemoteDataSourceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef ProductRemoteDataSourceRef = ProviderRef<ProductRemoteDataSource>;
 String _$productLocalDataSourceHash() =>
@@ -30,14 +30,14 @@ String _$productLocalDataSourceHash() =>
 @ProviderFor(productLocalDataSource)
 final productLocalDataSourceProvider =
     Provider<ProductLocalDataSource>.internal(
-  productLocalDataSource,
-  name: r'productLocalDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$productLocalDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      productLocalDataSource,
+      name: r'productLocalDataSourceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$productLocalDataSourceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef ProductLocalDataSourceRef = ProviderRef<ProductLocalDataSource>;
 String _$productRepositoryHash() => r'80de79a8c3895bf991d8d7c34e43c8b8bc7606cf';
@@ -46,14 +46,14 @@ String _$productRepositoryHash() => r'80de79a8c3895bf991d8d7c34e43c8b8bc7606cf';
 @ProviderFor(ProductRepository)
 final productRepositoryProvider =
     NotifierProvider<ProductRepository, void>.internal(
-  ProductRepository.new,
-  name: r'productRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$productRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      ProductRepository.new,
+      name: r'productRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$productRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ProductRepository = Notifier<void>;
 // ignore_for_file: type=lint

@@ -4,7 +4,11 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 
-void handleDeleteFromWishlist(BuildContext context, WidgetRef ref, ProductModel product) {
+void handleDeleteFromWishlist(
+  BuildContext context,
+  WidgetRef ref,
+  ProductModel product,
+) {
   final wishlistNotifier = ref.read(wishlistControllerProvider.notifier);
 
   wishlistNotifier.removeFromWishlist(product);

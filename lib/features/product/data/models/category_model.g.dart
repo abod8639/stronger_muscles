@@ -80,7 +80,8 @@ _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] == null
           ? null
           : LocalizedString.fromJson(
-              json['description'] as Map<String, dynamic>),
+              json['description'] as Map<String, dynamic>,
+            ),
       imageUrl: json['image_url'] as String?,
       sortOrder: (json['sort_order'] as num?)?.toInt() ?? 0,
       isActive: json['is_active'] as bool? ?? true,
@@ -89,7 +90,8 @@ _$CategoryModelImpl _$$CategoryModelImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['created_at'] as String),
       icon: json['icon'] as String?,
       parentId: json['parent_id'] as String?,
-      children: (json['children'] as List<dynamic>?)
+      children:
+          (json['children'] as List<dynamic>?)
               ?.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],

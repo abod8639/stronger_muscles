@@ -47,17 +47,21 @@ class ProductDetailsView extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final locale = Localizations.localeOf(context).languageCode;
-    
-    final detailsState = ref.watch(productDetailsControllerProvider(
-      product!,
-      initialFlavor: initialFlavor,
-      initialSize: initialSize,
-    ));
-    final detailsNotifier = ref.watch(productDetailsControllerProvider(
-      product!,
-      initialFlavor: initialFlavor,
-      initialSize: initialSize,
-    ).notifier);
+
+    final detailsState = ref.watch(
+      productDetailsControllerProvider(
+        product!,
+        initialFlavor: initialFlavor,
+        initialSize: initialSize,
+      ),
+    );
+    final detailsNotifier = ref.watch(
+      productDetailsControllerProvider(
+        product!,
+        initialFlavor: initialFlavor,
+        initialSize: initialSize,
+      ).notifier,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -86,9 +90,14 @@ class ProductDetailsView extends ConsumerWidget {
                   const SizedBox(height: _smallSpacing),
                   buildProductPrice(
                     product!,
-                    alternateEffectivePrice: detailsNotifier.getDisplayEffectivePrice(product!),
-                    alternateOriginalPrice: detailsNotifier.getDisplayPrice(product!),
-                    alternateHasDiscount: detailsNotifier.getDisplayHasDiscount(product!),
+                    alternateEffectivePrice: detailsNotifier
+                        .getDisplayEffectivePrice(product!),
+                    alternateOriginalPrice: detailsNotifier.getDisplayPrice(
+                      product!,
+                    ),
+                    alternateHasDiscount: detailsNotifier.getDisplayHasDiscount(
+                      product!,
+                    ),
                   ),
                   const SizedBox(height: _smallSpacing),
                   buildProductBadges(product!, context),

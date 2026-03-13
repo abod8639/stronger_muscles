@@ -18,10 +18,7 @@ class EmptyCartView extends StatelessWidget {
             color: theme.colorScheme.outline.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
-          Text(
-            'سلتك فارغة',
-            style: theme.textTheme.headlineSmall,
-          ),
+          Text('سلتك فارغة', style: theme.textTheme.headlineSmall),
           const SizedBox(height: 8),
           Text(
             'ابدأ بالتسوق الآن وأضف بعض المنتجات',

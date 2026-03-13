@@ -36,11 +36,17 @@ class ProductDetailsState {
 @riverpod
 class ProductDetailsController extends _$ProductDetailsController {
   @override
-  ProductDetailsState build(ProductModel product, {String? initialFlavor, String? initialSize}) {
+  ProductDetailsState build(
+    ProductModel product, {
+    String? initialFlavor,
+    String? initialSize,
+  }) {
     final wishlistService = ref.watch(wishlistServiceProvider.notifier);
-    
-    final flavor = initialFlavor ?? (product.flavors.isNotEmpty ? product.flavors.first : "");
-    
+
+    final flavor =
+        initialFlavor ??
+        (product.flavors.isNotEmpty ? product.flavors.first : "");
+
     ProductSize? sizeObj;
     if (product.productSizes.isNotEmpty) {
       if (initialSize != null) {
@@ -67,7 +73,9 @@ class ProductDetailsController extends _$ProductDetailsController {
   void toggleWishlist(ProductModel product) {
     final wishlistService = ref.read(wishlistServiceProvider.notifier);
     wishlistService.toggleFavorite(product);
-    state = state.copyWith(isInWishlist: wishlistService.isFavorite(product.id));
+    state = state.copyWith(
+      isInWishlist: wishlistService.isFavorite(product.id),
+    );
   }
 
   void updateFlavor(String flavor) {

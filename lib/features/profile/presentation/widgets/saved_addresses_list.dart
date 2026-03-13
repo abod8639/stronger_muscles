@@ -34,9 +34,13 @@ class SavedAddressesList extends ConsumerWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   addRepaintBoundaries: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   itemCount: addresses.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: _listItemSpacing),
                   itemBuilder: (context, index) {
                     final address = addresses[index];
                     return AddressCard(address: address);

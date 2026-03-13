@@ -13,8 +13,9 @@ String _$loginUseCaseHash() => r'e83ce94a1117008588a4ce3d0021fc9f4f785c20';
 final loginUseCaseProvider = AutoDisposeProvider<LoginUseCase>.internal(
   loginUseCase,
   name: r'loginUseCaseProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$loginUseCaseHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$loginUseCaseHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -57,17 +58,17 @@ String _$getCurrentUserUseCaseHash() =>
 @ProviderFor(getCurrentUserUseCase)
 final getCurrentUserUseCaseProvider =
     AutoDisposeProvider<GetCurrentUserUseCase>.internal(
-  getCurrentUserUseCase,
-  name: r'getCurrentUserUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getCurrentUserUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      getCurrentUserUseCase,
+      name: r'getCurrentUserUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$getCurrentUserUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef GetCurrentUserUseCaseRef
-    = AutoDisposeProviderRef<GetCurrentUserUseCase>;
+typedef GetCurrentUserUseCaseRef =
+    AutoDisposeProviderRef<GetCurrentUserUseCase>;
 String _$updateProfileUseCaseHash() =>
     r'c2bb4d443c4246cad70ab905fc61297cef519fdc';
 
@@ -75,14 +76,14 @@ String _$updateProfileUseCaseHash() =>
 @ProviderFor(updateProfileUseCase)
 final updateProfileUseCaseProvider =
     AutoDisposeProvider<UpdateProfileUseCase>.internal(
-  updateProfileUseCase,
-  name: r'updateProfileUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$updateProfileUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      updateProfileUseCase,
+      name: r'updateProfileUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$updateProfileUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef UpdateProfileUseCaseRef = AutoDisposeProviderRef<UpdateProfileUseCase>;
 // ignore_for_file: type=lint

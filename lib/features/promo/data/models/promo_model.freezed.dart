@@ -12,7 +12,8 @@ part of 'promo_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 PromoModel _$PromoModelFromJson(Map<String, dynamic> json) {
   return _PromoModel.fromJson(json);
@@ -51,24 +52,26 @@ mixin _$PromoModel {
 /// @nodoc
 abstract class $PromoModelCopyWith<$Res> {
   factory $PromoModelCopyWith(
-          PromoModel value, $Res Function(PromoModel) then) =
-      _$PromoModelCopyWithImpl<$Res, PromoModel>;
+    PromoModel value,
+    $Res Function(PromoModel) then,
+  ) = _$PromoModelCopyWithImpl<$Res, PromoModel>;
   @useResult
-  $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) String? title,
-      @HiveField(2) String? subtitle,
-      @HiveField(3) @JsonKey(name: 'image_url') String imageUrl,
-      @HiveField(4)
-      @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
-      String buttonText,
-      @HiveField(5)
-      @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
-      String hexBackgroundColor,
-      @HiveField(6)
-      @JsonKey(name: 'target_type', defaultValue: 'none')
-      String targetType,
-      @HiveField(7) @JsonKey(name: 'target_id') String? targetId});
+  $Res call({
+    @HiveField(0) int id,
+    @HiveField(1) String? title,
+    @HiveField(2) String? subtitle,
+    @HiveField(3) @JsonKey(name: 'image_url') String imageUrl,
+    @HiveField(4)
+    @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
+    String buttonText,
+    @HiveField(5)
+    @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
+    String hexBackgroundColor,
+    @HiveField(6)
+    @JsonKey(name: 'target_type', defaultValue: 'none')
+    String targetType,
+    @HiveField(7) @JsonKey(name: 'target_id') String? targetId,
+  });
 }
 
 /// @nodoc
@@ -93,40 +96,43 @@ class _$PromoModelCopyWithImpl<$Res, $Val extends PromoModel>
     Object? targetType = null,
     Object? targetId = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      subtitle: freezed == subtitle
-          ? _value.subtitle
-          : subtitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      buttonText: null == buttonText
-          ? _value.buttonText
-          : buttonText // ignore: cast_nullable_to_non_nullable
-              as String,
-      hexBackgroundColor: null == hexBackgroundColor
-          ? _value.hexBackgroundColor
-          : hexBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      targetType: null == targetType
-          ? _value.targetType
-          : targetType // ignore: cast_nullable_to_non_nullable
-              as String,
-      targetId: freezed == targetId
-          ? _value.targetId
-          : targetId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as int,
+            title: freezed == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            subtitle: freezed == subtitle
+                ? _value.subtitle
+                : subtitle // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            imageUrl: null == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String,
+            buttonText: null == buttonText
+                ? _value.buttonText
+                : buttonText // ignore: cast_nullable_to_non_nullable
+                      as String,
+            hexBackgroundColor: null == hexBackgroundColor
+                ? _value.hexBackgroundColor
+                : hexBackgroundColor // ignore: cast_nullable_to_non_nullable
+                      as String,
+            targetType: null == targetType
+                ? _value.targetType
+                : targetType // ignore: cast_nullable_to_non_nullable
+                      as String,
+            targetId: freezed == targetId
+                ? _value.targetId
+                : targetId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -134,25 +140,27 @@ class _$PromoModelCopyWithImpl<$Res, $Val extends PromoModel>
 abstract class _$$PromoModelImplCopyWith<$Res>
     implements $PromoModelCopyWith<$Res> {
   factory _$$PromoModelImplCopyWith(
-          _$PromoModelImpl value, $Res Function(_$PromoModelImpl) then) =
-      __$$PromoModelImplCopyWithImpl<$Res>;
+    _$PromoModelImpl value,
+    $Res Function(_$PromoModelImpl) then,
+  ) = __$$PromoModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) int id,
-      @HiveField(1) String? title,
-      @HiveField(2) String? subtitle,
-      @HiveField(3) @JsonKey(name: 'image_url') String imageUrl,
-      @HiveField(4)
-      @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
-      String buttonText,
-      @HiveField(5)
-      @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
-      String hexBackgroundColor,
-      @HiveField(6)
-      @JsonKey(name: 'target_type', defaultValue: 'none')
-      String targetType,
-      @HiveField(7) @JsonKey(name: 'target_id') String? targetId});
+  $Res call({
+    @HiveField(0) int id,
+    @HiveField(1) String? title,
+    @HiveField(2) String? subtitle,
+    @HiveField(3) @JsonKey(name: 'image_url') String imageUrl,
+    @HiveField(4)
+    @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
+    String buttonText,
+    @HiveField(5)
+    @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
+    String hexBackgroundColor,
+    @HiveField(6)
+    @JsonKey(name: 'target_type', defaultValue: 'none')
+    String targetType,
+    @HiveField(7) @JsonKey(name: 'target_id') String? targetId,
+  });
 }
 
 /// @nodoc
@@ -160,8 +168,9 @@ class __$$PromoModelImplCopyWithImpl<$Res>
     extends _$PromoModelCopyWithImpl<$Res, _$PromoModelImpl>
     implements _$$PromoModelImplCopyWith<$Res> {
   __$$PromoModelImplCopyWithImpl(
-      _$PromoModelImpl _value, $Res Function(_$PromoModelImpl) _then)
-      : super(_value, _then);
+    _$PromoModelImpl _value,
+    $Res Function(_$PromoModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -175,40 +184,42 @@ class __$$PromoModelImplCopyWithImpl<$Res>
     Object? targetType = null,
     Object? targetId = freezed,
   }) {
-    return _then(_$PromoModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
-      subtitle: freezed == subtitle
-          ? _value.subtitle
-          : subtitle // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      buttonText: null == buttonText
-          ? _value.buttonText
-          : buttonText // ignore: cast_nullable_to_non_nullable
-              as String,
-      hexBackgroundColor: null == hexBackgroundColor
-          ? _value.hexBackgroundColor
-          : hexBackgroundColor // ignore: cast_nullable_to_non_nullable
-              as String,
-      targetType: null == targetType
-          ? _value.targetType
-          : targetType // ignore: cast_nullable_to_non_nullable
-              as String,
-      targetId: freezed == targetId
-          ? _value.targetId
-          : targetId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$PromoModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as int,
+        title: freezed == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        subtitle: freezed == subtitle
+            ? _value.subtitle
+            : subtitle // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        imageUrl: null == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String,
+        buttonText: null == buttonText
+            ? _value.buttonText
+            : buttonText // ignore: cast_nullable_to_non_nullable
+                  as String,
+        hexBackgroundColor: null == hexBackgroundColor
+            ? _value.hexBackgroundColor
+            : hexBackgroundColor // ignore: cast_nullable_to_non_nullable
+                  as String,
+        targetType: null == targetType
+            ? _value.targetType
+            : targetType // ignore: cast_nullable_to_non_nullable
+                  as String,
+        targetId: freezed == targetId
+            ? _value.targetId
+            : targetId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
@@ -216,22 +227,22 @@ class __$$PromoModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 @HiveType(typeId: 10)
 class _$PromoModelImpl extends _PromoModel {
-  const _$PromoModelImpl(
-      {@HiveField(0) required this.id,
-      @HiveField(1) this.title,
-      @HiveField(2) this.subtitle,
-      @HiveField(3) @JsonKey(name: 'image_url') required this.imageUrl,
-      @HiveField(4)
-      @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
-      required this.buttonText,
-      @HiveField(5)
-      @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
-      required this.hexBackgroundColor,
-      @HiveField(6)
-      @JsonKey(name: 'target_type', defaultValue: 'none')
-      required this.targetType,
-      @HiveField(7) @JsonKey(name: 'target_id') this.targetId})
-      : super._();
+  const _$PromoModelImpl({
+    @HiveField(0) required this.id,
+    @HiveField(1) this.title,
+    @HiveField(2) this.subtitle,
+    @HiveField(3) @JsonKey(name: 'image_url') required this.imageUrl,
+    @HiveField(4)
+    @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
+    required this.buttonText,
+    @HiveField(5)
+    @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
+    required this.hexBackgroundColor,
+    @HiveField(6)
+    @JsonKey(name: 'target_type', defaultValue: 'none')
+    required this.targetType,
+    @HiveField(7) @JsonKey(name: 'target_id') this.targetId,
+  }) : super._();
 
   factory _$PromoModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PromoModelImplFromJson(json);
@@ -294,8 +305,17 @@ class _$PromoModelImpl extends _PromoModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, subtitle, imageUrl,
-      buttonText, hexBackgroundColor, targetType, targetId);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    title,
+    subtitle,
+    imageUrl,
+    buttonText,
+    hexBackgroundColor,
+    targetType,
+    targetId,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -305,30 +325,27 @@ class _$PromoModelImpl extends _PromoModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PromoModelImplToJson(
-      this,
-    );
+    return _$$PromoModelImplToJson(this);
   }
 }
 
 abstract class _PromoModel extends PromoModel {
-  const factory _PromoModel(
-      {@HiveField(0) required final int id,
-      @HiveField(1) final String? title,
-      @HiveField(2) final String? subtitle,
-      @HiveField(3) @JsonKey(name: 'image_url') required final String imageUrl,
-      @HiveField(4)
-      @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
-      required final String buttonText,
-      @HiveField(5)
-      @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
-      required final String hexBackgroundColor,
-      @HiveField(6)
-      @JsonKey(name: 'target_type', defaultValue: 'none')
-      required final String targetType,
-      @HiveField(7)
-      @JsonKey(name: 'target_id')
-      final String? targetId}) = _$PromoModelImpl;
+  const factory _PromoModel({
+    @HiveField(0) required final int id,
+    @HiveField(1) final String? title,
+    @HiveField(2) final String? subtitle,
+    @HiveField(3) @JsonKey(name: 'image_url') required final String imageUrl,
+    @HiveField(4)
+    @JsonKey(name: 'button_text', defaultValue: 'عرض الآن')
+    required final String buttonText,
+    @HiveField(5)
+    @JsonKey(name: 'background_color', defaultValue: '#FFFFFF')
+    required final String hexBackgroundColor,
+    @HiveField(6)
+    @JsonKey(name: 'target_type', defaultValue: 'none')
+    required final String targetType,
+    @HiveField(7) @JsonKey(name: 'target_id') final String? targetId,
+  }) = _$PromoModelImpl;
   const _PromoModel._() : super._();
 
   factory _PromoModel.fromJson(Map<String, dynamic> json) =

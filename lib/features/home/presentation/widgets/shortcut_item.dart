@@ -18,7 +18,9 @@ class ShortcutItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsState = ref.watch(categoriesSectionsControllerProvider);
-    final selectedIndex = ref.watch(categoriesSectionsControllerProvider.notifier).selectedIndex;
+    final selectedIndex = ref
+        .watch(categoriesSectionsControllerProvider.notifier)
+        .selectedIndex;
     final isSelected = selectedIndex == index;
 
     return sectionsState.when(
@@ -31,7 +33,9 @@ class ShortcutItem extends ConsumerWidget {
           selected: isSelected,
           button: true,
           child: GestureDetector(
-            onTap: () => ref.read(categoriesSectionsControllerProvider.notifier).updateIndex(index),
+            onTap: () => ref
+                .read(categoriesSectionsControllerProvider.notifier)
+                .updateIndex(index),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -79,8 +83,12 @@ class ShortcutItem extends ConsumerWidget {
                     getLocalizedLabel(context, item.label),
                     style: TextStyle(
                       fontSize: _labelFontSize,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isSelected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,

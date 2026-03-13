@@ -9,7 +9,7 @@ part 'auth_controller.g.dart';
 class AuthController extends _$AuthController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -19,7 +19,7 @@ class AuthController extends _$AuthController {
       emailController.dispose();
       passwordController.dispose();
     });
-    
+
     _initUser();
     return null;
   }
@@ -35,7 +35,10 @@ class AuthController extends _$AuthController {
   UserModel? get currentUser => state;
   bool get isLoggedIn => state != null;
 
-  Future<void> signInWithEmail({required String email, required String password}) async {
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
     _isLoading = true;
     ref.notifyListeners();
     try {
@@ -47,12 +50,20 @@ class AuthController extends _$AuthController {
     }
   }
 
-  Future<void> signUpWithEmail({required String email, required String password, String? name}) async {
+  Future<void> signUpWithEmail({
+    required String email,
+    required String password,
+    String? name,
+  }) async {
     _isLoading = true;
     ref.notifyListeners();
     try {
       final register = ref.read(registerUseCaseProvider);
-      state = await register(email: email, password: password, name: name ?? "");
+      state = await register(
+        email: email,
+        password: password,
+        name: name ?? "",
+      );
     } finally {
       _isLoading = false;
       ref.notifyListeners();
@@ -76,7 +87,7 @@ class AuthController extends _$AuthController {
     String? photoUrl,
   }) async {
     if (state == null) return;
-    
+
     _isLoading = true;
     ref.notifyListeners();
     try {

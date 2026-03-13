@@ -36,11 +36,16 @@ class AddressCard extends ConsumerWidget {
         color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(_containerBorderRadius),
         border: address.isDefault
-            ? Border.all(color: AppColors.primary.withValues(alpha: .5), width: 1.5)
+            ? Border.all(
+                color: AppColors.primary.withValues(alpha: .5),
+                width: 1.5,
+              )
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(isDark ? _defaultShadowOpacity : _shadowOpacity),
+            color: Colors.black.withOpacity(
+              isDark ? _defaultShadowOpacity : _shadowOpacity,
+            ),
             blurRadius: _shadowBlurRadius,
             offset: const Offset(0, _shadowOffsetY),
           ),
@@ -84,7 +89,10 @@ class AddressCard extends ConsumerWidget {
         children: [
           GoogleMap(
             key: ValueKey('map_${address.id}'),
-            initialCameraPosition: CameraPosition(target: position, zoom: _mapZoom),
+            initialCameraPosition: CameraPosition(
+              target: position,
+              zoom: _mapZoom,
+            ),
             liteModeEnabled: true,
             zoomControlsEnabled: false,
             myLocationButtonEnabled: false,
@@ -94,12 +102,17 @@ class AddressCard extends ConsumerWidget {
               Marker(
                 markerId: MarkerId(address.id.toString()),
                 position: position,
-                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+                icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueAzure,
+                ),
               ),
             },
           ),
           Positioned.fill(
-            child: GestureDetector(onTap: () {}, child: Container(color: Colors.transparent)),
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(color: Colors.transparent),
+            ),
           ),
           Positioned(
             top: 12,
@@ -111,7 +124,11 @@ class AddressCard extends ConsumerWidget {
                 shape: BoxShape.circle,
                 boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
               ),
-              child: const Icon(Icons.map_outlined, size: _mapIconSize, color: AppColors.primary),
+              child: const Icon(
+                Icons.map_outlined,
+                size: _mapIconSize,
+                color: AppColors.primary,
+              ),
             ),
           ),
         ],
@@ -128,7 +145,10 @@ class AddressCard extends ConsumerWidget {
         children: [
           Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
           const SizedBox(height: 8),
-          Text("Map unavailable", style: TextStyle(color: Colors.grey[500], fontSize: 12)),
+          Text(
+            "Map unavailable",
+            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+          ),
         ],
       ),
     );
@@ -150,7 +170,10 @@ class AddressCard extends ConsumerWidget {
           child: Icon(labelIcon, color: AppColors.primary, size: 18),
         ),
         const SizedBox(width: 12),
-        Text(address.label ?? 'Other', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        Text(
+          address.label ?? 'Other',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         const Spacer(),
         if (address.isDefault) _buildDefaultBadge(),
       ],
@@ -161,10 +184,19 @@ class AddressCard extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)]),
+        gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
+        ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Text('DEFAULT', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white)),
+      child: const Text(
+        'DEFAULT',
+        style: TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w900,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 
@@ -172,7 +204,10 @@ class AddressCard extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(address.fullName ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
+        Text(
+          address.fullName ?? '',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
         const SizedBox(height: _cardDetailsSpacing),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +217,11 @@ class AddressCard extends ConsumerWidget {
             Expanded(
               child: Text(
                 address.fullAddress,
-                style: const TextStyle(color: Colors.grey, fontSize: 13, height: _adapterTextLineHeight),
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 13,
+                  height: _adapterTextLineHeight,
+                ),
               ),
             ),
           ],
@@ -206,11 +245,19 @@ class AddressCard extends ConsumerWidget {
           ),
         IconButton(
           onPressed: () => showAddressForm(context, address: address),
-          icon: const Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
+          icon: const Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: Colors.blueGrey,
+          ),
         ),
         IconButton(
           onPressed: () => _confirmDelete(context, controller),
-          icon: Icon(Icons.delete_outline_rounded, size: 20, color: Theme.of(context).colorScheme.error),
+          icon: Icon(
+            Icons.delete_outline_rounded,
+            size: 20,
+            color: Theme.of(context).colorScheme.error,
+          ),
         ),
       ],
     );
@@ -223,7 +270,10 @@ class AddressCard extends ConsumerWidget {
         title: const Text('Delete Address?'),
         content: const Text('Are you sure you want to remove this address?'),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
           TextButton(
             onPressed: () {
               controller.deleteAddress(address.id);

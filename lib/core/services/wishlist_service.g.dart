@@ -12,14 +12,14 @@ String _$wishlistServiceHash() => r'ea5f30bd5271475e4fffbeafb571655852e3ef8b';
 @ProviderFor(WishlistService)
 final wishlistServiceProvider =
     NotifierProvider<WishlistService, List<ProductModel>>.internal(
-  WishlistService.new,
-  name: r'wishlistServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$wishlistServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      WishlistService.new,
+      name: r'wishlistServiceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$wishlistServiceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$WishlistService = Notifier<List<ProductModel>>;
 // ignore_for_file: type=lint

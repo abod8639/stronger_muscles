@@ -25,7 +25,9 @@ class PromoBanner extends ConsumerWidget {
             allowImplicitScrolling: false,
             pageSnapping: true,
             controller: promoNotifier.pageController,
-            onPageChanged: (index) => ref.read(promoControllerProvider.notifier).updateCurrentIndex(index),
+            onPageChanged: (index) => ref
+                .read(promoControllerProvider.notifier)
+                .updateCurrentIndex(index),
             itemBuilder: (context, index) {
               final promo = promos[index % promos.length];
               return _buildPromoCard(context, ref, promo);
@@ -55,9 +57,13 @@ class PromoBanner extends ConsumerWidget {
     );
   }
 
-  Widget _buildPromoCard(BuildContext context, WidgetRef ref, PromoModel promo) {
+  Widget _buildPromoCard(
+    BuildContext context,
+    WidgetRef ref,
+    PromoModel promo,
+  ) {
     final promoNotifier = ref.read(promoControllerProvider.notifier);
-    
+
     return GestureDetector(
       onTap: () => promoNotifier.onPromoPressed(context, promo),
       child: Container(

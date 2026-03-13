@@ -44,7 +44,8 @@ class CartItemCard extends ConsumerWidget {
                   width: 80,
                   height: 80,
                   fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) => const Icon(Icons.image, size: 40),
+                  errorWidget: (_, __, ___) =>
+                      const Icon(Icons.image, size: 40),
                 ),
               ),
               const SizedBox(width: 16),
@@ -61,10 +62,13 @@ class CartItemCard extends ConsumerWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 4),
-                    if (item.selectedFlavor != null || item.selectedSize != null)
+                    if (item.selectedFlavor != null ||
+                        item.selectedSize != null)
                       Text(
                         '${item.selectedFlavor ?? ""} ${item.selectedSize ?? ""}',
-                        style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                        ),
                       ),
                     const SizedBox(height: 8),
                     Text(
@@ -84,5 +88,4 @@ class CartItemCard extends ConsumerWidget {
       ),
     );
   }
-
 }

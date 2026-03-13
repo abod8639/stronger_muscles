@@ -17,7 +17,7 @@ class AddressController extends _$AddressController {
   final stateController = TextEditingController();
   final postalCodeController = TextEditingController();
   final countryController = TextEditingController();
-  
+
   String _selectedLabel = _defaultLabel;
   String get selectedLabel => _selectedLabel;
   set selectedLabel(String val) {
@@ -39,7 +39,7 @@ class AddressController extends _$AddressController {
       postalCodeController.dispose();
       countryController.dispose();
     });
-    
+
     final repository = ref.watch(addressRepositoryProvider);
     return repository.getCachedAddresses();
   }
@@ -62,7 +62,9 @@ class AddressController extends _$AddressController {
       final repository = ref.read(addressRepositoryProvider);
       await repository.deleteAddress(id);
       final currentAddresses = state.value ?? [];
-      state = AsyncData(currentAddresses.where((addr) => addr.id != id).toList());
+      state = AsyncData(
+        currentAddresses.where((addr) => addr.id != id).toList(),
+      );
     } finally {
       _isLoading = false;
       ref.notifyListeners();

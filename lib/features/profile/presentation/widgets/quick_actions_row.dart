@@ -22,7 +22,7 @@ class QuickActionsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileNotifier = ref.watch(profileControllerProvider.notifier);
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(

@@ -9,7 +9,9 @@ class CategoryRemoteDataSource {
 
   Future<List<CategoryModel>> fetchCategoriesFromApi() async {
     final response = await _apiService.get(ApiConfig.categories);
-    List<dynamic> list = (response.data is Map) ? response.data['data'] : response.data;
+    List<dynamic> list = (response.data is Map)
+        ? response.data['data']
+        : response.data;
     return list.map((json) => CategoryModel.fromJson(json)).toList();
   }
 }

@@ -17,7 +17,9 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final sectionsState = ref.watch(categoriesSectionsControllerProvider);
-    final selectedCategoryIndex = ref.watch(categoriesSectionsControllerProvider.notifier).selectedIndex;
+    final selectedCategoryIndex = ref
+        .watch(categoriesSectionsControllerProvider.notifier)
+        .selectedIndex;
 
     return Scaffold(
       body: SafeArea(
@@ -25,8 +27,10 @@ class HomeView extends ConsumerWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
-              onRefresh: () =>
-                  AppGuard.runSafeInternet(ref, () => ref.read(homeControllerProvider.notifier).refreshHome()),
+              onRefresh: () => AppGuard.runSafeInternet(
+                ref,
+                () => ref.read(homeControllerProvider.notifier).refreshHome(),
+              ),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),

@@ -13,7 +13,7 @@ Widget buildPaymentOption({
 }) {
   final checkoutState = ref.watch(checkoutControllerProvider);
   final isSelected = checkoutState.selectedPaymentMethod == value;
-  
+
   return Card(
     elevation: isSelected ? 2 : 0,
     color: isSelected ? AppColors.primary.withValues(alpha: .05) : null,
@@ -27,7 +27,9 @@ Widget buildPaymentOption({
       value: value,
       groupValue: checkoutState.selectedPaymentMethod,
       onChanged: enabled
-          ? (val) => ref.read(checkoutControllerProvider.notifier).setPaymentMethod(val.toString())
+          ? (val) => ref
+                .read(checkoutControllerProvider.notifier)
+                .setPaymentMethod(val.toString())
           : null,
       title: Text(
         title,

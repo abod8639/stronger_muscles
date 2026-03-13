@@ -10,12 +10,12 @@ class CategoryController extends _$CategoryController {
   FutureOr<List<CategoryModel>> build() async {
     final repository = ref.watch(categoryRepositoryProvider.notifier);
     final cached = repository.getCachedCategories();
-    
+
     if (cached.isNotEmpty) {
       _initFetch();
       return cached;
     }
-    
+
     return await repository.getAllCategories();
   }
 

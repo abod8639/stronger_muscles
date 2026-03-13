@@ -24,8 +24,10 @@ class ProfileController extends _$ProfileController {
   UserModel? get currentUser => ref.watch(authControllerProvider);
   bool get isLoading => ref.watch(authControllerProvider.notifier).isLoading;
 
-  List<OrderModel> get orders => ref.watch(ordersControllerProvider).value ?? [];
-  List<AddressModel> get addresses => ref.watch(addressControllerProvider).value ?? [];
+  List<OrderModel> get orders =>
+      ref.watch(ordersControllerProvider).value ?? [];
+  List<AddressModel> get addresses =>
+      ref.watch(addressControllerProvider).value ?? [];
 
   int get wishlistCount {
     try {
@@ -53,7 +55,8 @@ class ProfileController extends _$ProfileController {
   int get totalOrders => orders.length;
   double get totalSpent =>
       orders.fold(0.0, (sum, order) => sum + order.totalAmount);
-  int get deliveredOrders => orders.where((o) => o.status.toLowerCase() == 'delivered').length;
+  int get deliveredOrders =>
+      orders.where((o) => o.status.toLowerCase() == 'delivered').length;
 
   Future<void> signOut() async {
     await ref.read(authControllerProvider.notifier).signOut();

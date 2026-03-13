@@ -8,7 +8,9 @@ import 'package:stronger_muscles/core/services/api_service.dart';
 part 'product_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-ProductRemoteDataSource productRemoteDataSource(ProductRemoteDataSourceRef ref) {
+ProductRemoteDataSource productRemoteDataSource(
+  ProductRemoteDataSourceRef ref,
+) {
   return ProductRemoteDataSource(ref.watch(apiServiceProvider));
 }
 
@@ -26,18 +28,28 @@ class ProductRepository extends _$ProductRepository {
     return ref.read(productLocalDataSourceProvider).getCachedProducts();
   }
 
-  Future<List<ProductModel>> getProducts({String? categoryId, int page = 1}) async {
+  Future<List<ProductModel>> getProducts({
+    String? categoryId,
+    int page = 1,
+  }) async {
     final remote = ref.read(productRemoteDataSourceProvider);
     final local = ref.read(productLocalDataSourceProvider);
-    
+
     try {
-      final products = await remote.getProductsFromApi(categoryId: categoryId, page: page);
+      final products = await remote.getProductsFromApi(
+        categoryId: categoryId,
+        page: page,
+      );
       await local.cacheProducts(products);
       return products;
     } on Failure catch (e) {
-      if (e.type == FailureType.network && local.getCachedProducts().isNotEmpty) {
-        return categoryId != null 
-            ? local.getCachedProducts().where((p) => p.categoryId == categoryId).toList()
+      if (e.type == FailureType.network &&
+          local.getCachedProducts().isNotEmpty) {
+        return categoryId != null
+            ? local
+                  .getCachedProducts()
+                  .where((p) => p.categoryId == categoryId)
+                  .toList()
             : local.getCachedProducts();
       }
       rethrow;
@@ -47,7 +59,7 @@ class ProductRepository extends _$ProductRepository {
   Future<List<ProductModel>> searchProducts(String query) async {
     final remote = ref.read(productRemoteDataSourceProvider);
     final local = ref.read(productLocalDataSourceProvider);
-    
+
     if (query.trim().isEmpty) {
       return await getProducts();
     }

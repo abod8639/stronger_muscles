@@ -24,7 +24,7 @@ class PurchaseStatsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileNotifier = ref.watch(profileControllerProvider.notifier);
-    
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: _cardMarginHorizontal),
       padding: const EdgeInsets.all(_cardPadding),

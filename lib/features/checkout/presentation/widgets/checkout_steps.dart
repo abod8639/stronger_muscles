@@ -22,20 +22,27 @@ Step buildAddressStep(WidgetRef ref, String title) {
         else
           Column(
             children: profileNotifier.addresses.map((address) {
-              final bool isSelected = checkoutState.selectedAddress?.id == address.id;
+              final bool isSelected =
+                  checkoutState.selectedAddress?.id == address.id;
               return Card(
                 elevation: isSelected ? 2 : 0,
-                color: isSelected ? AppColors.primary.withValues(alpha: .05) : null,
+                color: isSelected
+                    ? AppColors.primary.withValues(alpha: .05)
+                    : null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                   side: BorderSide(
-                    color: isSelected ? AppColors.primary : Colors.grey.shade300,
+                    color: isSelected
+                        ? AppColors.primary
+                        : Colors.grey.shade300,
                   ),
                 ),
                 child: RadioListTile(
                   value: address,
                   groupValue: checkoutState.selectedAddress,
-                  onChanged: (value) => ref.read(checkoutControllerProvider.notifier).setAddress(value!),
+                  onChanged: (value) => ref
+                      .read(checkoutControllerProvider.notifier)
+                      .setAddress(value!),
                   title: Text(
                     address.label ?? "error",
                     style: const TextStyle(fontWeight: FontWeight.bold),
@@ -55,7 +62,9 @@ Step buildAddressStep(WidgetRef ref, String title) {
       ],
     ),
     isActive: checkoutState.currentStep >= 0,
-    state: checkoutState.currentStep > 0 ? StepState.complete : StepState.editing,
+    state: checkoutState.currentStep > 0
+        ? StepState.complete
+        : StepState.editing,
   );
 }
 
@@ -83,7 +92,9 @@ Step buildPaymentStep(WidgetRef ref, String title) {
       ],
     ),
     isActive: checkoutState.currentStep >= 1,
-    state: checkoutState.currentStep > 1 ? StepState.complete : StepState.editing,
+    state: checkoutState.currentStep > 1
+        ? StepState.complete
+        : StepState.editing,
   );
 }
 
@@ -97,7 +108,10 @@ Step buildReviewStep(WidgetRef ref, String title) {
     content: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Order Summary', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const Text(
+          'Order Summary',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         cartState.when(
           data: (items) => ListView.builder(
@@ -109,15 +123,21 @@ Step buildReviewStep(WidgetRef ref, String title) {
               return ListTile(
                 leading: CachedNetworkImage(
                   cacheManager: CustomCacheManager.instance,
-                  imageUrl: item.product.imageUrls.isNotEmpty ? item.product.imageUrls.first.thumbnail : '',
+                  imageUrl: item.product.imageUrls.isNotEmpty
+                      ? item.product.imageUrls.first.thumbnail
+                      : '',
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
                   errorWidget: (_, __, ___) => const Icon(Icons.image),
                 ),
                 title: Text(item.product.getLocalizedName(locale: 'en')),
-                subtitle: Text('${item.quantity} x LE ${item.product.baseEffectivePrice}'),
-                trailing: Text('LE ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}'),
+                subtitle: Text(
+                  '${item.quantity} x LE ${item.product.baseEffectivePrice}',
+                ),
+                trailing: Text(
+                  'LE ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}',
+                ),
               );
             },
           ),
@@ -128,21 +148,38 @@ Step buildReviewStep(WidgetRef ref, String title) {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Total Amount', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Total Amount',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             Text(
               'LE ${cartNotifier.totalPrice.toStringAsFixed(2)}',
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: AppColors.primary),
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: AppColors.primary,
+              ),
             ),
           ],
         ),
         const SizedBox(height: 16),
         if (checkoutState.selectedAddress != null) ...[
-          const Text('Shipping To:', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text(
+            'Shipping To:',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
           Text(checkoutState.selectedAddress!.fullAddress),
         ],
         const SizedBox(height: 8),
-        const Text('Payment Method:', style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(checkoutState.selectedPaymentMethod == 'cash' ? 'Cash on Delivery' : 'Credit Card'),
+        const Text(
+          'Payment Method:',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          checkoutState.selectedPaymentMethod == 'cash'
+              ? 'Cash on Delivery'
+              : 'Credit Card',
+        ),
         const SizedBox(height: 16),
         const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),

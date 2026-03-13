@@ -5,9 +5,14 @@ import 'package:stronger_muscles/features/product/data/models/product_model.dart
 class ProductRemoteDataSource {
   final ProductService _productService;
 
-  ProductRemoteDataSource(ApiService apiService) : _productService = ProductService(apiService);
+  ProductRemoteDataSource(ApiService apiService)
+    : _productService = ProductService(apiService);
 
-  Future<List<ProductModel>> getProductsFromApi({String? categoryId, String? query, int page = 1}) async {
+  Future<List<ProductModel>> getProductsFromApi({
+    String? categoryId,
+    String? query,
+    int page = 1,
+  }) async {
     return _productService.getProducts(
       categoryId: categoryId,
       query: query,

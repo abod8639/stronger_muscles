@@ -60,7 +60,8 @@ class ProfileHeader extends ConsumerWidget {
             child: CircleAvatar(
               radius: _profileImageRadius,
               backgroundColor: AppColors.greyLight,
-              backgroundImage: user.photoUrl != null && user.photoUrl!.isNotEmpty
+              backgroundImage:
+                  user.photoUrl != null && user.photoUrl!.isNotEmpty
                   ? NetworkImage(user.photoUrl!)
                   : null,
               child: user.photoUrl == null || user.photoUrl!.isEmpty

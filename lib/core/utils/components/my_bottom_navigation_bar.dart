@@ -22,7 +22,8 @@ class MyBottomNavigationBar extends ConsumerWidget {
     return BottomNavigationBar(
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
       currentIndex: tabIndex,
-      onTap: (index) => ref.read(mainControllerProvider.notifier).changeTabIndex(index),
+      onTap: (index) =>
+          ref.read(mainControllerProvider.notifier).changeTabIndex(index),
       type: BottomNavigationBarType.fixed,
       elevation: _elevation,
       backgroundColor:

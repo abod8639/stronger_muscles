@@ -22,8 +22,12 @@ class _MainImageState extends ConsumerState<MainImage> {
   @override
   void initState() {
     super.initState();
-    final detailsState = ref.read(productDetailsControllerProvider(widget.product));
-    _pageController = PageController(initialPage: detailsState.selectedImageIndex);
+    final detailsState = ref.read(
+      productDetailsControllerProvider(widget.product),
+    );
+    _pageController = PageController(
+      initialPage: detailsState.selectedImageIndex,
+    );
   }
 
   @override
@@ -35,9 +39,13 @@ class _MainImageState extends ConsumerState<MainImage> {
   @override
   Widget build(BuildContext context) {
     // Listen for image selection changes to animate the PageController
-    ref.listen(productDetailsControllerProvider(widget.product), (previous, next) {
+    ref.listen(productDetailsControllerProvider(widget.product), (
+      previous,
+      next,
+    ) {
       if (next.selectedImageIndex != previous?.selectedImageIndex) {
-        if (_pageController.hasClients && _pageController.page?.round() != next.selectedImageIndex) {
+        if (_pageController.hasClients &&
+            _pageController.page?.round() != next.selectedImageIndex) {
           _pageController.animateToPage(
             next.selectedImageIndex,
             duration: const Duration(milliseconds: 300),
@@ -61,7 +69,9 @@ class _MainImageState extends ConsumerState<MainImage> {
       allowImplicitScrolling: true,
       controller: _pageController,
       itemCount: widget.product.imageUrls.length,
-      onPageChanged: (index) => ref.read(productDetailsControllerProvider(widget.product).notifier).selectImage(index),
+      onPageChanged: (index) => ref
+          .read(productDetailsControllerProvider(widget.product).notifier)
+          .selectImage(index),
       physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         final imageUrl = widget.product.imageUrls[index];
@@ -71,14 +81,18 @@ class _MainImageState extends ConsumerState<MainImage> {
             tag: 'product_image_${widget.product.id}_$index',
             child: Container(
               decoration: BoxDecoration(
-                color: widget.product.isBackgroundWhite ? Colors.white : Colors.transparent,
+                color: widget.product.isBackgroundWhite
+                    ? Colors.white
+                    : Colors.transparent,
               ),
               child: CachedNetworkImage(
                 cacheManager: CustomCacheManager.instance,
                 imageUrl: imageUrl.medium,
                 fit: BoxFit.cover,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator.adaptive()),
-                errorWidget: (context, url, error) => _buildErrorWidget(context),
+                placeholder: (context, url) =>
+                    const Center(child: CircularProgressIndicator.adaptive()),
+                errorWidget: (context, url, error) =>
+                    _buildErrorWidget(context),
               ),
             ),
           ),
@@ -92,9 +106,16 @@ class _MainImageState extends ConsumerState<MainImage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.broken_image_outlined, size: 48, color: Theme.of(context).colorScheme.error),
+          Icon(
+            Icons.broken_image_outlined,
+            size: 48,
+            color: Theme.of(context).colorScheme.error,
+          ),
           const SizedBox(height: 8),
-          Text('فشل تحميل الصورة', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          Text(
+            'فشل تحميل الصورة',
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
         ],
       ),
     );
@@ -103,13 +124,19 @@ class _MainImageState extends ConsumerState<MainImage> {
   Widget _buildEmptyState(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .3),
+        color: Theme.of(
+          context,
+        ).colorScheme.surfaceContainerHighest.withValues(alpha: .3),
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.image_not_supported_outlined, size: 64, color: Colors.grey),
+          const Icon(
+            Icons.image_not_supported_outlined,
+            size: 64,
+            color: Colors.grey,
+          ),
           const SizedBox(height: 16),
           Text(AppLocalizations.of(context)!.noImagesAvailable),
         ],

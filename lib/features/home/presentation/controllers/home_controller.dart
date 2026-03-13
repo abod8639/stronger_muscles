@@ -10,7 +10,7 @@ class HomeController extends _$HomeController {
   @override
   FutureOr<List<ProductModel>> build() async {
     final productRepository = ref.watch(productRepositoryProvider.notifier);
-    
+
     final cachedProducts = productRepository.getCachedProducts();
     if (cachedProducts.isNotEmpty) {
       _products = cachedProducts;
@@ -18,7 +18,7 @@ class HomeController extends _$HomeController {
       _initFetch();
       return _products;
     }
-    
+
     await fetchProductsForSection(_selectedSectionIndex);
     return _products;
   }
@@ -35,7 +35,7 @@ class HomeController extends _$HomeController {
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     _selectedSectionIndex = index;
     state = const AsyncLoading();
-    
+
     final productRepository = ref.read(productRepositoryProvider.notifier);
     try {
       final fetchedProducts = await productRepository.getProducts(
@@ -51,9 +51,11 @@ class HomeController extends _$HomeController {
   Future<void> refreshHome() async {
     final index = _selectedSectionIndex;
     final sectionsState = ref.read(categoriesSectionsControllerProvider);
-    
+
     String? categoryId;
-    if (sectionsState.hasValue && index >= 0 && index < sectionsState.value!.length) {
+    if (sectionsState.hasValue &&
+        index >= 0 &&
+        index < sectionsState.value!.length) {
       final id = sectionsState.value![index].id;
       categoryId = id.isEmpty ? null : id;
     }

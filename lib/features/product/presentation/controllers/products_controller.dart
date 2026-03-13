@@ -13,12 +13,12 @@ class ProductsController extends _$ProductsController {
   FutureOr<List<ProductModel>> build() async {
     final repository = ref.watch(productRepositoryProvider.notifier);
     final cached = repository.getCachedProducts();
-    
+
     if (cached.isNotEmpty) {
       _initFetch();
       return cached;
     }
-    
+
     return await repository.getProducts();
   }
 
@@ -35,7 +35,9 @@ class ProductsController extends _$ProductsController {
         result = await repository.searchProducts(query);
       } else {
         result = await repository.getProducts(
-          categoryId: categoryId ?? (_selectedCategoryId.isEmpty ? null : _selectedCategoryId),
+          categoryId:
+              categoryId ??
+              (_selectedCategoryId.isEmpty ? null : _selectedCategoryId),
         );
       }
       state = AsyncData(result);
@@ -46,6 +48,8 @@ class ProductsController extends _$ProductsController {
 
   void filterByCategory(String categoryId) {
     _selectedCategoryId = (_selectedCategoryId == categoryId) ? '' : categoryId;
-    fetchProducts(categoryId: _selectedCategoryId.isEmpty ? null : _selectedCategoryId);
+    fetchProducts(
+      categoryId: _selectedCategoryId.isEmpty ? null : _selectedCategoryId,
+    );
   }
 }

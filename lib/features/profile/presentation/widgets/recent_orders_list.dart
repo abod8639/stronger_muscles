@@ -35,13 +35,18 @@ class RecentOrdersList extends ConsumerWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: _horizontalPadding,
+                vertical: 8,
+              ),
               itemCount: recentOrders.length,
-              separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: _listItemSpacing),
               itemBuilder: (context, index) {
                 final order = recentOrders[index];
                 return OrderCard(
-                  onTap: () => context.push(AppRoutes.orderDetails, extra: order),
+                  onTap: () =>
+                      context.push(AppRoutes.orderDetails, extra: order),
                   order: order,
                   isDark: isDark,
                   isAr: isAr,
@@ -94,7 +99,10 @@ class RecentOrdersList extends ConsumerWidget {
             onPressed: () => context.push(AppRoutes.orderView),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.primary,
-              textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
               visualDensity: VisualDensity.compact,
             ),
             child: Row(

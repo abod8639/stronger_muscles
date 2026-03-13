@@ -59,10 +59,12 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
           width: double.infinity,
           child: FilledButton(
             onPressed: () {
-              ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
-                _currentRangeValues.start,
-                _currentRangeValues.end,
-              );
+              ref
+                  .read(productSearchControllerProvider.notifier)
+                  .applyPriceFilter(
+                    _currentRangeValues.start,
+                    _currentRangeValues.end,
+                  );
               Navigator.pop(context);
             },
             child: const Text('Apply'),

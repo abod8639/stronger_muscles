@@ -20,7 +20,7 @@ class LanguageController extends _$LanguageController {
   Locale build() {
     _settingsBox = Hive.box('settings');
     final savedLanguageCode = _settingsBox.get(_languageStorageKey);
-    
+
     if (savedLanguageCode != null) {
       return Locale(savedLanguageCode);
     } else {

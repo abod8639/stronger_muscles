@@ -63,7 +63,9 @@ class AccountSettingsList extends ConsumerWidget {
           ),
           _buildDivider(isDark),
           _buildSettingItem(
-            icon: isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+            icon: isDarkMode
+                ? Icons.dark_mode_outlined
+                : Icons.light_mode_outlined,
             title: localizations.theme,
             trailing: Switch(
               value: isDarkMode,
@@ -88,7 +90,8 @@ class AccountSettingsList extends ConsumerWidget {
               languageNotifier.currentLanguageName,
               style: const TextStyle(color: AppColors.greyDark),
             ),
-            onTap: () => _showLanguageDialog(context, ref, currentLocale, localizations),
+            onTap: () =>
+                _showLanguageDialog(context, ref, currentLocale, localizations),
             isDark: isDark,
           ),
           _buildDivider(isDark),
@@ -111,7 +114,12 @@ class AccountSettingsList extends ConsumerWidget {
     );
   }
 
-  void _showLanguageDialog(BuildContext context, WidgetRef ref, Locale currentLocale, AppLocalizations l10n) {
+  void _showLanguageDialog(
+    BuildContext context,
+    WidgetRef ref,
+    Locale currentLocale,
+    AppLocalizations l10n,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -124,7 +132,9 @@ class AccountSettingsList extends ConsumerWidget {
               value: 'en',
               groupValue: currentLocale.languageCode,
               onChanged: (value) {
-                ref.read(languageControllerProvider.notifier).changeLanguage(const Locale('en'));
+                ref
+                    .read(languageControllerProvider.notifier)
+                    .changeLanguage(const Locale('en'));
                 Navigator.pop(context);
               },
             ),
@@ -133,7 +143,9 @@ class AccountSettingsList extends ConsumerWidget {
               value: 'ar',
               groupValue: currentLocale.languageCode,
               onChanged: (value) {
-                ref.read(languageControllerProvider.notifier).changeLanguage(const Locale('ar'));
+                ref
+                    .read(languageControllerProvider.notifier)
+                    .changeLanguage(const Locale('ar'));
                 Navigator.pop(context);
               },
             ),

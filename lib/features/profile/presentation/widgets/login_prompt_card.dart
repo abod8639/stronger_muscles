@@ -98,7 +98,9 @@ class LoginPromptCard extends ConsumerWidget {
           ElevatedButton.icon(
             onPressed: () async {
               AppGuard.runSafeInternet(ref, () async {
-                await ref.read(profileControllerProvider.notifier).signInWithGoogle();
+                await ref
+                    .read(profileControllerProvider.notifier)
+                    .signInWithGoogle();
               });
             },
             icon: const Icon(

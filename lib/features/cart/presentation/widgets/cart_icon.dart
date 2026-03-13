@@ -10,7 +10,7 @@ class CartIcon extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartState = ref.watch(cartControllerProvider);
     final itemCount = cartState.value?.length ?? 0;
-    
+
     return Badge(
       backgroundColor: AppColors.primary,
       isLabelVisible: itemCount > 0,

@@ -13,14 +13,12 @@ class CartView extends ConsumerWidget {
     final cartState = ref.watch(cartControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('السلة'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('السلة'), centerTitle: true),
       body: cartState.when(
         data: (items) => items.isEmpty
             ? EmptyCartView(
-                onGoShopping: () => ref.read(mainControllerProvider.notifier).changeTabIndex(0),
+                onGoShopping: () =>
+                    ref.read(mainControllerProvider.notifier).changeTabIndex(0),
               )
             : const BuildCartContent(),
         loading: () => const Center(child: CircularProgressIndicator()),

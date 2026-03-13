@@ -57,10 +57,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         onPressed: () {
                           AppGuard.runSafeInternet(ref, () async {
                             if (_formKey.currentState!.validate()) {
-                              await ref.read(authControllerProvider.notifier).signUpWithEmail(
-                                email: authController.emailController.text.trim(),
-                                password: authController.passwordController.text,
-                              );
+                              await ref
+                                  .read(authControllerProvider.notifier)
+                                  .signUpWithEmail(
+                                    email: authController.emailController.text
+                                        .trim(),
+                                    password:
+                                        authController.passwordController.text,
+                                  );
                             }
                           });
                         },
@@ -83,7 +87,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                       ),
                 const SizedBox(height: 24.0),
                 OutlinedButton.icon(
-                  onPressed: () => ref.read(authControllerProvider.notifier).signInWithGoogle(),
+                  onPressed: () => ref
+                      .read(authControllerProvider.notifier)
+                      .signInWithGoogle(),
                   icon: const Icon(Icons.g_mobiledata, size: 30),
                   label: Text(localizations.signInWithGoogle),
                   style: OutlinedButton.styleFrom(
@@ -104,7 +110,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     );
   }
 
-  Widget _buildInputFields(BuildContext context, AuthController controller, AppLocalizations l10n) {
+  Widget _buildInputFields(
+    BuildContext context,
+    AuthController controller,
+    AppLocalizations l10n,
+  ) {
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -120,9 +130,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         Text(
           l10n.signUpToGetStarted,
           textAlign: TextAlign.center,
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: Colors.grey[600],
-          ),
+          style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
         ),
         const SizedBox(height: 32.0),
         AuthTextField(

@@ -30,7 +30,8 @@ class CheckoutState {
     return CheckoutState(
       currentStep: currentStep ?? this.currentStep,
       selectedAddress: selectedAddress ?? this.selectedAddress,
-      selectedPaymentMethod: selectedPaymentMethod ?? this.selectedPaymentMethod,
+      selectedPaymentMethod:
+          selectedPaymentMethod ?? this.selectedPaymentMethod,
       isProcessing: isProcessing ?? this.isProcessing,
     );
   }
@@ -42,12 +43,14 @@ class CheckoutController extends _$CheckoutController {
   CheckoutState build() {
     final profileNotifier = ref.watch(profileControllerProvider.notifier);
     final addresses = profileNotifier.addresses;
-    
+
     AddressModel? initialAddress;
     if (addresses.isNotEmpty) {
-      initialAddress = addresses.where((addr) => addr.isDefault).firstOrNull ?? addresses.first;
+      initialAddress =
+          addresses.where((addr) => addr.isDefault).firstOrNull ??
+          addresses.first;
     }
-    
+
     return CheckoutState(selectedAddress: initialAddress);
   }
 
@@ -84,7 +87,7 @@ class CheckoutController extends _$CheckoutController {
     try {
       final cartNotifier = ref.read(cartControllerProvider.notifier);
       final orderRepository = ref.read(orderRepositoryProvider);
-      
+
       final payload = {
         "address_id": state.selectedAddress!.id,
         "payment_method": state.selectedPaymentMethod,
@@ -103,9 +106,9 @@ class CheckoutController extends _$CheckoutController {
       await cartNotifier.clearCart();
       AppPages.router.go(AppRoutes.orderSuccess);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to place order: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
     } finally {
       state = state.copyWith(isProcessing: false);
     }

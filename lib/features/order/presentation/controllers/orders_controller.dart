@@ -50,7 +50,9 @@ class OrdersController extends _$OrdersController {
   List<OrderModel> get cancelledOrders => _filterByStatus('cancelled');
 
   List<OrderModel> _filterByStatus(String status) {
-    return (state.value ?? []).where((o) => o.status.toLowerCase() == status).toList();
+    return (state.value ?? [])
+        .where((o) => o.status.toLowerCase() == status)
+        .toList();
   }
 
   void clearData() {

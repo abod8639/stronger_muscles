@@ -13,7 +13,7 @@ class InternetConnectionController extends _$InternetConnectionController {
   bool build() {
     _internetConnection = InternetConnection();
     _startMonitoring();
-    
+
     ref.onDispose(() {
       _subscription?.cancel();
     });

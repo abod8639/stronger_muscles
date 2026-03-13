@@ -26,16 +26,15 @@ class QuantityControls extends ConsumerWidget {
     final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(
-          alpha: .3,
-        ),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .3),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Semantics(
-            label: 'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
+            label:
+                'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
             button: true,
             child: IconButton(
               icon: const Icon(
@@ -54,10 +53,7 @@ class QuantityControls extends ConsumerWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 4.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: .1),
               borderRadius: BorderRadius.circular(4.0),

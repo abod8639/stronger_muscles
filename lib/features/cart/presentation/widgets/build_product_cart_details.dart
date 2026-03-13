@@ -134,7 +134,8 @@ Builder selectedValue({
         padding: const EdgeInsets.only(top: 4.0),
         child: Row(
           children: [
-            Text( "$title: ",
+            Text(
+              "$title: ",
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w600,

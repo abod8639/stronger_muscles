@@ -11,7 +11,10 @@ class OrderStatusTimeline extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Status: ${order.status}', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'Status: ${order.status}',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         // A real timeline widget would go here
       ],
     );

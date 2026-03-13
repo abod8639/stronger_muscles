@@ -26,7 +26,9 @@ class BottomIconsRow extends ConsumerWidget {
     // final cartState = ref.watch(cartControllerProvider);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
     final detailsState = ref.watch(productDetailsControllerProvider(product));
-    final detailsNotifier = ref.watch(productDetailsControllerProvider(product).notifier);
+    final detailsNotifier = ref.watch(
+      productDetailsControllerProvider(product).notifier,
+    );
     final l10n = AppLocalizations.of(context)!;
 
     return BottomAppBar(
@@ -75,7 +77,12 @@ class BottomIconsRow extends ConsumerWidget {
 
     return item != null
         ? _buildQuantityControls(theme, cartNotifier, item, l10n)
-        : _buildAddToCartButton(detailsState, detailsNotifier, cartNotifier, l10n);
+        : _buildAddToCartButton(
+            detailsState,
+            detailsNotifier,
+            cartNotifier,
+            l10n,
+          );
   }
 
   Widget _buildAddToCartButton(

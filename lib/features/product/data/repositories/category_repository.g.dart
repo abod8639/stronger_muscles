@@ -13,14 +13,14 @@ String _$categoryRemoteDataSourceHash() =>
 @ProviderFor(categoryRemoteDataSource)
 final categoryRemoteDataSourceProvider =
     Provider<CategoryRemoteDataSource>.internal(
-  categoryRemoteDataSource,
-  name: r'categoryRemoteDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$categoryRemoteDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      categoryRemoteDataSource,
+      name: r'categoryRemoteDataSourceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$categoryRemoteDataSourceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef CategoryRemoteDataSourceRef = ProviderRef<CategoryRemoteDataSource>;
 String _$categoryLocalDataSourceHash() =>
@@ -30,14 +30,14 @@ String _$categoryLocalDataSourceHash() =>
 @ProviderFor(categoryLocalDataSource)
 final categoryLocalDataSourceProvider =
     Provider<CategoryLocalDataSource>.internal(
-  categoryLocalDataSource,
-  name: r'categoryLocalDataSourceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$categoryLocalDataSourceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      categoryLocalDataSource,
+      name: r'categoryLocalDataSourceProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$categoryLocalDataSourceHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef CategoryLocalDataSourceRef = ProviderRef<CategoryLocalDataSource>;
 String _$categoryRepositoryHash() =>
@@ -47,14 +47,14 @@ String _$categoryRepositoryHash() =>
 @ProviderFor(CategoryRepository)
 final categoryRepositoryProvider =
     NotifierProvider<CategoryRepository, void>.internal(
-  CategoryRepository.new,
-  name: r'categoryRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$categoryRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      CategoryRepository.new,
+      name: r'categoryRepositoryProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$categoryRepositoryHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CategoryRepository = Notifier<void>;
 // ignore_for_file: type=lint

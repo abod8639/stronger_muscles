@@ -4,7 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart' hide SearchBar;
+import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart'
+    hide SearchBar;
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
 
@@ -41,9 +42,7 @@ class ProductSearchsPage extends ConsumerWidget {
             ),
           ),
 
-          SliverToBoxAdapter(
-            child: _buildFilterChips(ref),
-          ),
+          SliverToBoxAdapter(child: _buildFilterChips(ref)),
 
           searchState.when(
             data: (products) {
@@ -56,31 +55,35 @@ class ProductSearchsPage extends ConsumerWidget {
               }
 
               return SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 16.0,
+                ),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
-                    childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(context),
+                    crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(
+                      context,
+                    ),
+                    childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
+                      context,
+                    ),
                     crossAxisSpacing: 8.0,
                     mainAxisSpacing: 12.0,
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final product = displayedProducts[index];
-                      return GestureDetector(
-                        onTap: () => context.push(
-                          AppRoutes.productDetails,
-                          extra: product,
-                        ),
-                        child: ProductContainer(
-                          showName: true,
-                          product: product,
-                          isBackgroundWhite: false,
-                        ),
-                      );
-                    },
-                    childCount: displayedProducts.length,
-                  ),
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    final product = displayedProducts[index];
+                    return GestureDetector(
+                      onTap: () => context.push(
+                        AppRoutes.productDetails,
+                        extra: product,
+                      ),
+                      child: ProductContainer(
+                        showName: true,
+                        product: product,
+                        isBackgroundWhite: false,
+                      ),
+                    );
+                  }, childCount: displayedProducts.length),
                 ),
               );
             },
@@ -90,9 +93,8 @@ class ProductSearchsPage extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            error: (e, st) => SliverToBoxAdapter(
-              child: Center(child: Text('Error: $e')),
-            ),
+            error: (e, st) =>
+                SliverToBoxAdapter(child: Center(child: Text('Error: $e'))),
           ),
         ],
       ),
@@ -116,14 +118,17 @@ class ProductSearchsPage extends ConsumerWidget {
   }
 
   Widget _buildFilterChips(WidgetRef ref) {
-    final query = ref.watch(productSearchControllerProvider.notifier).searchQuery;
+    final query = ref
+        .watch(productSearchControllerProvider.notifier)
+        .searchQuery;
     if (query.isEmpty) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       alignment: Alignment.centerRight,
       child: Chip(
         label: Text('نتائج البحث عن: $query'),
-        onDeleted: () => ref.read(productSearchControllerProvider.notifier).clearSearch(),
+        onDeleted: () =>
+            ref.read(productSearchControllerProvider.notifier).clearSearch(),
       ),
     );
   }

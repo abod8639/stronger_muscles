@@ -24,36 +24,33 @@ class SearchInputGroup extends ConsumerWidget {
 
     return Row(
       children: [
-        Expanded(child: buildSearchField(
-       ref: ref, 
-        theme:  theme, 
-        controller:  controller, 
-        l10n:  l10n,
-        readOnly: true,
-        autofocus: false,
-        onTap: () {
-                  ref
-                      .read(productSearchControllerProvider.notifier)
-                      .clearSearch();
-                  context.push(AppRoutes.search, extra: controller.searchQuery);
-                },
-          )),
+        Expanded(
+          child: buildSearchField(
+            ref: ref,
+            theme: theme,
+            controller: controller,
+            l10n: l10n,
+            readOnly: true,
+            autofocus: false,
+            onTap: () {
+              ref.read(productSearchControllerProvider.notifier).clearSearch();
+              context.push(AppRoutes.search, extra: controller.searchQuery);
+            },
+          ),
+        ),
         const SizedBox(width: _spacing),
-        buildFilterButton( 
-          controller: controller, 
+        buildFilterButton(
+          controller: controller,
           l10n: l10n,
           onTap: () {
-                              ref
-                      .read(productSearchControllerProvider.notifier)
-                      .clearSearch();
-                  context.push(AppRoutes.search, extra: controller.searchQuery);
-          }
-          ),
+            ref.read(productSearchControllerProvider.notifier).clearSearch();
+            context.push(AppRoutes.search, extra: controller.searchQuery);
+          },
+        ),
       ],
     );
   }
 }
-
 
 Widget buildSearchField({
   required WidgetRef ref,
@@ -63,10 +60,8 @@ Widget buildSearchField({
   required bool readOnly,
   required bool autofocus,
   Function()? onTap,
-   Function(String)? onChanged,
-  
-  }
-) {
+  Function(String)? onChanged,
+}) {
   return Builder(
     builder: (context) {
       return Container(
@@ -101,7 +96,7 @@ Widget buildSearchField({
                 readOnly: readOnly,
                 autofocus: autofocus,
                 textInputAction: TextInputAction.search,
-                onTap:onTap,
+                onTap: onTap,
                 decoration: InputDecoration.collapsed(
                   hintText: l10n.searchProducts,
                 ),
@@ -191,9 +186,8 @@ class SearchBar extends StatelessWidget {
 Widget buildFilterButton({
   required ProductSearchController controller,
   required AppLocalizations l10n,
-   Function()? onTap,
-}
-) {
+  Function()? onTap,
+}) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
@@ -236,23 +230,25 @@ class SearchBarInline extends ConsumerWidget {
         children: [
           Expanded(
             child: buildSearchField(
-              ref: ref, 
-              theme: theme, 
-              controller: controller, 
+              ref: ref,
+              theme: theme,
+              controller: controller,
               l10n: l10n,
               readOnly: false,
               autofocus: true,
-              onChanged: (val) => ref.read(productSearchControllerProvider.notifier).onSearchChanged(val),
-              ),
+              onChanged: (val) => ref
+                  .read(productSearchControllerProvider.notifier)
+                  .onSearchChanged(val),
             ),
+          ),
 
           const SizedBox(width: _spacing),
 
-          buildFilterButton( 
-            controller: controller, 
+          buildFilterButton(
+            controller: controller,
             l10n: l10n,
             onTap: () => showFilterBottomSheet(context, l10n),
-            ),
+          ),
         ],
       ),
     );

@@ -32,7 +32,9 @@ class ImageListView extends ConsumerWidget {
     }
 
     final detailsState = ref.watch(productDetailsControllerProvider(product));
-    final detailsNotifier = ref.watch(productDetailsControllerProvider(product).notifier);
+    final detailsNotifier = ref.watch(
+      productDetailsControllerProvider(product).notifier,
+    );
 
     return SizedBox(
       height: _listHeight,
@@ -42,17 +44,24 @@ class ImageListView extends ConsumerWidget {
         itemCount: product.imageUrls.length,
         physics: const BouncingScrollPhysics(),
         addRepaintBoundaries: true,
-        itemBuilder: (context, index) => _buildThumbnail(context, detailsState, detailsNotifier, index),
+        itemBuilder: (context, index) =>
+            _buildThumbnail(context, detailsState, detailsNotifier, index),
       ),
     );
   }
 
-  Widget _buildThumbnail(BuildContext context, ProductDetailsState state, ProductDetailsController notifier, int index) {
+  Widget _buildThumbnail(
+    BuildContext context,
+    ProductDetailsState state,
+    ProductDetailsController notifier,
+    int index,
+  ) {
     final isSelected = state.selectedImageIndex == index;
     final localizations = AppLocalizations.of(context)!;
 
     return Semantics(
-      label: '${localizations.productImage} ${index + 1} of ${product.imageUrls.length}',
+      label:
+          '${localizations.productImage} ${index + 1} of ${product.imageUrls.length}',
       button: true,
       child: GestureDetector(
         onTap: () => notifier.selectImage(index),

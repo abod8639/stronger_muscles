@@ -15,9 +15,15 @@ class OrderDetailsView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Order Date: ${order.formattedDate}', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Order Date: ${order.formattedDate}',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
-            Text('Total: LE ${order.totalAmount}', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Total: LE ${order.totalAmount}',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
@@ -26,11 +32,13 @@ class OrderDetailsView extends StatelessWidget {
             const Divider(),
             const SizedBox(height: 16),
             Text('Items:', style: Theme.of(context).textTheme.titleMedium),
-            ...(order.items ?? []).map((item) => ListTile(
-                  title: Text(item.productName),
-                  subtitle: Text('Quantity: ${item.quantity}'),
-                  trailing: Text('LE ${item.price}'),
-                )),
+            ...(order.items ?? []).map(
+              (item) => ListTile(
+                title: Text(item.productName),
+                subtitle: Text('Quantity: ${item.quantity}'),
+                trailing: Text('LE ${item.price}'),
+              ),
+            ),
           ],
         ),
       ),

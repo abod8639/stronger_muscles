@@ -12,7 +12,8 @@ class ProductLocalDataSource {
     }
   }
 
-  Future<void> cacheProduct(ProductModel product) async => await _box.put(product.id, product);
+  Future<void> cacheProduct(ProductModel product) async =>
+      await _box.put(product.id, product);
 
   ProductModel? getProductById(String id) => _box.get(id);
 

@@ -7,12 +7,16 @@ import 'package:stronger_muscles/core/services/api_service.dart';
 part 'category_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-CategoryRemoteDataSource categoryRemoteDataSource(CategoryRemoteDataSourceRef ref) {
+CategoryRemoteDataSource categoryRemoteDataSource(
+  CategoryRemoteDataSourceRef ref,
+) {
   return CategoryRemoteDataSource(ref.watch(apiServiceProvider));
 }
 
 @Riverpod(keepAlive: true)
-CategoryLocalDataSource categoryLocalDataSource(CategoryLocalDataSourceRef ref) {
+CategoryLocalDataSource categoryLocalDataSource(
+  CategoryLocalDataSourceRef ref,
+) {
   return CategoryLocalDataSource();
 }
 
@@ -28,7 +32,7 @@ class CategoryRepository extends _$CategoryRepository {
   Future<List<CategoryModel>> getAllCategories() async {
     final remote = ref.read(categoryRemoteDataSourceProvider);
     final local = ref.read(categoryLocalDataSourceProvider);
-    
+
     try {
       final categories = await remote.fetchCategoriesFromApi();
       await local.cacheCategories(categories);

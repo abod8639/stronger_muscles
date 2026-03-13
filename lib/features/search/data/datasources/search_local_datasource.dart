@@ -3,7 +3,11 @@ import 'package:stronger_muscles/features/product/data/models/product_model.dart
 
 class SearchLocalDataSource {
   /// فلترة القائمة بناءً على السعر
-  List<ProductModel> filterByPrice(List<ProductModel> products, double min, double max) {
+  List<ProductModel> filterByPrice(
+    List<ProductModel> products,
+    double min,
+    double max,
+  ) {
     return products.where((p) => p.price >= min && p.price <= max).toList();
   }
 

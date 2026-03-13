@@ -49,15 +49,13 @@ class AppPages {
       ),
       GoRoute(
         path: AppRoutes.signIn,
-        builder: (context, state) => SignInPage(
-          onSignUpTap: () => context.go(AppRoutes.signUp),
-        ),
+        builder: (context, state) =>
+            SignInPage(onSignUpTap: () => context.go(AppRoutes.signUp)),
       ),
       GoRoute(
         path: AppRoutes.signUp,
-        builder: (context, state) => SignUpPage(
-          onSignInTap: () => context.go(AppRoutes.signIn),
-        ),
+        builder: (context, state) =>
+            SignUpPage(onSignInTap: () => context.go(AppRoutes.signIn)),
       ),
       GoRoute(
         path: AppRoutes.home,

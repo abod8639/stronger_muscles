@@ -28,7 +28,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     final theme = Theme.of(context);
     final controller = ref.watch(addressControllerProvider.notifier);
     final isLoading = ref.watch(addressControllerProvider.notifier).isLoading;
-    final selectedLabel = ref.watch(addressControllerProvider.notifier).selectedLabel;
+    final selectedLabel = ref
+        .watch(addressControllerProvider.notifier)
+        .selectedLabel;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -42,7 +44,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             ),
             const SizedBox(height: 20),
             OutlinedButton.icon(
-              onPressed: isLoading ? null : () => controller.getCurrentLocation(),
+              onPressed: isLoading
+                  ? null
+                  : () => controller.getCurrentLocation(),
               icon: const Icon(Icons.my_location),
               label: const Text('استخدم موقعي الحالي'),
             ),
@@ -59,17 +63,28 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(child: _buildField(controller.cityController, 'المدينة')),
+                Expanded(
+                  child: _buildField(controller.cityController, 'المدينة'),
+                ),
                 const SizedBox(width: 16),
-                Expanded(child: _buildField(controller.stateController, 'المنطقة')),
+                Expanded(
+                  child: _buildField(controller.stateController, 'المنطقة'),
+                ),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(child: _buildField(controller.postalCodeController, 'الرمز البريدي')),
+                Expanded(
+                  child: _buildField(
+                    controller.postalCodeController,
+                    'الرمز البريدي',
+                  ),
+                ),
                 const SizedBox(width: 16),
-                Expanded(child: _buildField(controller.countryController, 'الدولة')),
+                Expanded(
+                  child: _buildField(controller.countryController, 'الدولة'),
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -82,7 +97,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     );
   }
 
-  Widget _buildField(TextEditingController controller, String label, {TextInputType? keyboardType}) {
+  Widget _buildField(
+    TextEditingController controller,
+    String label, {
+    TextInputType? keyboardType,
+  }) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -94,7 +113,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     );
   }
 
-  Widget _buildLabelSelector(AddressController controller, String selectedLabel) {
+  Widget _buildLabelSelector(
+    AddressController controller,
+    String selectedLabel,
+  ) {
     return Row(
       children: ['Home', 'Work', 'Other']
           .map(
@@ -127,7 +149,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             ? const SizedBox(
                 width: 20,
                 height: 20,
-                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Colors.white,
+                ),
               )
             : Text(widget.address == null ? 'حفظ' : 'تحديث'),
       ),

@@ -52,7 +52,9 @@ class ProductList extends ConsumerWidget {
           sliver: SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
-              childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(context),
+              childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
+                context,
+              ),
               crossAxisSpacing: _crossAxisSpacing,
               mainAxisSpacing: _mainAxisSpacing,
             ),
@@ -60,7 +62,8 @@ class ProductList extends ConsumerWidget {
               (context, index) {
                 final product = products[index];
                 return GestureDetector(
-                  onTap: () => context.push(AppRoutes.productDetails, extra: product),
+                  onTap: () =>
+                      context.push(AppRoutes.productDetails, extra: product),
                   child: ProductContainer(
                     showName: true,
                     product: product,
@@ -101,9 +104,13 @@ class ProductList extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16.0),
                 ElevatedButton.icon(
-                  onPressed: () => ref.read(homeControllerProvider.notifier).fetchProductsForSection(
-                    ref.read(homeControllerProvider.notifier).selectedSectionIndex,
-                  ),
+                  onPressed: () => ref
+                      .read(homeControllerProvider.notifier)
+                      .fetchProductsForSection(
+                        ref
+                            .read(homeControllerProvider.notifier)
+                            .selectedSectionIndex,
+                      ),
                   icon: const Icon(Icons.refresh),
                   label: const Text('إعادة محاولة'),
                 ),

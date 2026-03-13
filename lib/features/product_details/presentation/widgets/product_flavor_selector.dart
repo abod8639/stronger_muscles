@@ -14,7 +14,7 @@ FlavorsModel getFlavorDetails(String flavorName) {
       FlavorsModel(
         name: flavorName,
         color: Colors.blueGrey,
-        image: "https://via.placeholder.com/150", 
+        image: "https://via.placeholder.com/150",
       );
 }
 

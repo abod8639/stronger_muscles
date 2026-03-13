@@ -51,12 +51,7 @@ class _ProductContainerState extends State<ProductContainer>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image Section
-          Expanded(
-            flex: 3,
-            child: ImageSection(
-              widget: widget,
-            ),
-          ),
+          Expanded(flex: 3, child: ImageSection(widget: widget)),
 
           // Details Section
           if (widget.showName != null && widget.showName == true)

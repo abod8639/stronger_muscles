@@ -79,11 +79,11 @@ class OrderItemModel with _$OrderItemModel {
     @JsonKey(name: 'selected_size', includeIfNull: false)
     String? selectedSize,
   }) = _OrderItemModel;
-  
+
   const OrderItemModel._(); // Added private constructor for freezed
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) =>
       _$OrderItemModelFromJson(json);
-  
+
   double get price => unitPrice;
 }

@@ -9,12 +9,12 @@ part 'product_search_controller.g.dart';
 @riverpod
 class ProductSearchController extends _$ProductSearchController {
   final SearchLocalDataSource _localDataSource = SearchLocalDataSource();
-  
+
   final TextEditingController textController = TextEditingController();
 
   List<ProductModel> _localProducts = [];
   List<ProductModel> _remoteProducts = [];
-  
+
   String _searchQuery = "";
   double _filterMinPrice = 0.0;
   double _filterMaxPrice = 1000.0;
@@ -70,7 +70,7 @@ class ProductSearchController extends _$ProductSearchController {
       state = AsyncData(_localProducts);
       return;
     }
-    
+
     _hasSearched = true;
     state = const AsyncLoading();
     try {
