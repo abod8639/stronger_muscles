@@ -8,7 +8,8 @@ import 'base_controller.dart';
 
 class HomeController extends BaseController {
   final ProductRepository _productRepository = Get.find<ProductRepository>();
-  final ProductSearchController searchController = Get.find<ProductSearchController>();
+  final ProductSearchController searchController =
+      Get.find<ProductSearchController>();
 
   final RxList<ProductModel> products = <ProductModel>[].obs;
 
@@ -56,11 +57,12 @@ class HomeController extends BaseController {
 
     setLoading(true);
     try {
-      final fetchedProducts = await _productRepository.getProducts(categoryId: categoryId);
+      final fetchedProducts = await _productRepository.getProducts(
+        categoryId: categoryId,
+      );
       products.assignAll(fetchedProducts);
       searchController.setProducts(fetchedProducts);
       resetState();
-    } catch (e) {
     } finally {
       setLoading(false);
     }

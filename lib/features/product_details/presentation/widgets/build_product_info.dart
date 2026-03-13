@@ -13,58 +13,58 @@ Widget buildProductInfo(
 ) {
   final infoItems = <Widget>[];
 
+
+   void navigateToBrandPage(String brandName) {
+    final brandName = product.brand!;
+    final searchController = Get.find<ProductSearchController>();
+
+    searchController.clearSearch();
+    searchController.textController.text = brandName;
+    searchController.updateSearchQuery(brandName);
+
+    Get.toNamed(AppRoutes.search);
+  }
   // Brand
   if (product.brand != null && product.brand!.isNotEmpty) {
     infoItems.add(
-Padding(
-    padding: const EdgeInsets.only(bottom: 12),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 1,
-          child: Text(
-            AppLocalizations.of(context)!.brand,
-            style: TextStyle(
-              fontSize: 14,
-              color: isDark ? AppColors.white : AppColors.black,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 8,
-          child: TextButton(
-            style: TextButton.styleFrom(
-              padding: EdgeInsets.zero,
-              minimumSize: Size.zero,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            onPressed: () {
-              final brandName = product.brand!;
-              final searchController = Get.find<ProductSearchController>();
-
-              // تهيئة حالة البحث بالاسم المختار
-              searchController.clearSearch();
-              searchController.textController.text = brandName;
-              searchController.updateSearchQuery(brandName);
-
-              // الانتقال إلى صفحة البحث
-              Get.toNamed(AppRoutes.search);
-            },
-            child: Text(
-              product.brand!,
-              style: TextStyle(
-                fontSize: 14,
-                color: isDark ? AppColors.info : AppColors.black,
-                fontWeight: FontWeight.w600,
+      Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                AppLocalizations.of(context)!.brand,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isDark ? AppColors.white : AppColors.black,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
-          ),
+            Expanded(
+              flex: 8,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed:()=> navigateToBrandPage(product.brand!),
+                child: Text(
+                  product.brand!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: isDark ? AppColors.info : AppColors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  )
+      ),
     );
   }
 
@@ -214,4 +214,6 @@ Widget _buildInfoRow(String label, String value, bool isDark) {
       ],
     ),
   );
+
+
 }
