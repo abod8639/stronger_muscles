@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 Widget buildProductInfo(
   ProductModel product,
@@ -37,17 +40,26 @@ Padding(
               minimumSize: Size.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            onPressed:(){
-              
-              // ToDo: Navigate to brand page
+            onPressed: () {
+              final brandName = product.brand!;
+              final searchController = Get.find<ProductSearchController>();
+
+              // تهيئة حالة البحث بالاسم المختار
+              searchController.clearSearch();
+              searchController.textController.text = brandName;
+              searchController.updateSearchQuery(brandName);
+
+              // الانتقال إلى صفحة البحث
+              Get.toNamed(AppRoutes.search);
             },
-           child: Text( product.brand!,
-            style: TextStyle(
-              fontSize: 14,
-              color: isDark ? AppColors.info : AppColors.black,
-              fontWeight: FontWeight.w600,
+            child: Text(
+              product.brand!,
+              style: TextStyle(
+                fontSize: 14,
+                color: isDark ? AppColors.info : AppColors.black,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-           ),
           ),
         ),
       ],
