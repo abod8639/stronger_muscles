@@ -1,9 +1,13 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class MainController extends GetxController {
-  var tabIndex = 0.obs;
+part 'main_controller.g.dart';
+
+@riverpod
+class MainController extends _$MainController {
+  @override
+  int build() => 0;
 
   void changeTabIndex(int index) {
-    tabIndex.value = index;
+    state = index;
   }
 }

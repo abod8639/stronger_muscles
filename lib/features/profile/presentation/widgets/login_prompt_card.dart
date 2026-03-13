@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
-import 'package:stronger_muscles/features/auth/presentation/pages/auth_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 const String _loginTitle = 'Sign in to Your Account';
 const String _loginMessage =
@@ -25,14 +26,13 @@ const double _buttonElevation = 2.0;
 const double _googleButtonPaddingHorizontal = 25.0;
 const double _googleButtonPaddingVertical = 10.0;
 
-class LoginPromptCard extends StatelessWidget {
+class LoginPromptCard extends ConsumerWidget {
   const LoginPromptCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final ProfileController controller = Get.find<ProfileController>();
 
     return Container(
       margin: const EdgeInsets.all(_containerMargin),
@@ -81,7 +81,7 @@ class LoginPromptCard extends StatelessWidget {
           ),
           const SizedBox(height: _buttonsSpacing),
           ElevatedButton.icon(
-            onPressed: () => _handleLogin(),
+            onPressed: () => _handleLogin(context, ref),
             icon: const Icon(Icons.login),
             label: const Text(_loginButtonLabel),
             style: ElevatedButton.styleFrom(
@@ -94,13 +94,12 @@ class LoginPromptCard extends StatelessWidget {
               elevation: _buttonElevation,
             ),
           ),
-
           const SizedBox(height: _buttonsSpacing),
           ElevatedButton.icon(
             onPressed: () async {
-              AppGuard.runSafeInternet(
-                () async => await controller.signInWithGoogle(),
-              );
+              AppGuard.runSafeInternet(ref, () async {
+                await ref.read(profileControllerProvider.notifier).signInWithGoogle();
+              });
             },
             icon: const Icon(
               Icons.g_mobiledata_outlined,
@@ -120,7 +119,6 @@ class LoginPromptCard extends StatelessWidget {
               elevation: _buttonElevation,
             ),
           ),
-
           const SizedBox(height: _buttonsSpacing),
           const AccountSettingsList(),
           const SizedBox(height: _buttonsSpacing),
@@ -128,8 +126,10 @@ class LoginPromptCard extends StatelessWidget {
       ),
     );
   }
-}
 
-Future<void> _handleLogin() async {
-  return AppGuard.runSafeInternet(() async => Get.to(() => const AuthView()));
+  Future<void> _handleLogin(BuildContext context, WidgetRef ref) async {
+    return AppGuard.runSafeInternet(ref, () async {
+      context.push(AppRoutes.auth);
+    });
+  }
 }

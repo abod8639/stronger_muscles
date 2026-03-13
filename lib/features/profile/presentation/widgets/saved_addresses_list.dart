@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
@@ -12,47 +12,44 @@ const double _addButtonPaddingHorizontal = 12.0;
 const double _addButtonPaddingVertical = 8.0;
 const double _addButtonIconSize = 20.0;
 const double _listItemSpacing = 16.0;
-// const double _loadingHeight = 32.0;
-// const double _emptyStateIconSize = 64.0;
 
-class SavedAddressesList extends StatelessWidget {
+class SavedAddressesList extends ConsumerWidget {
   const SavedAddressesList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final controller = Get.put(AddressController());
     final isDark = theme.brightness == Brightness.dark;
+    final addressesState = ref.watch(addressControllerProvider);
+    final addressNotifier = ref.watch(addressControllerProvider.notifier);
 
-    return Obx(() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(context, theme, isDark),
-          if (controller.isLoading.isTrue && controller.addresses.isEmpty)
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Center(child: CircularProgressIndicator()),
-            )
-          else if (controller.addresses.isEmpty)
-            _buildEmptyState(theme)
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              addRepaintBoundaries: true,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: controller.addresses.length,
-              separatorBuilder: (context, index) =>
-                  const SizedBox(height: _listItemSpacing),
-              itemBuilder: (context, index) {
-                final address = controller.addresses[index];
-                return AddressCard(address: address);
-              },
-            ),
-        ],
-      );
-    });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildHeader(context, theme, isDark),
+        addressesState.when(
+          data: (addresses) => addresses.isEmpty
+              ? _buildEmptyState(theme)
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  addRepaintBoundaries: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: addresses.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+                  itemBuilder: (context, index) {
+                    final address = addresses[index];
+                    return AddressCard(address: address);
+                  },
+                ),
+          loading: () => const Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+          error: (e, _) => Center(child: Text('Error: $e')),
+        ),
+      ],
+    );
   }
 
   Widget _buildHeader(BuildContext context, ThemeData theme, bool isDark) {
@@ -73,7 +70,6 @@ class SavedAddressesList extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          // add new address button
           OutlinedButton.icon(
             onPressed: () => showAddressForm(context),
             style: OutlinedButton.styleFrom(
@@ -87,7 +83,7 @@ class SavedAddressesList extends StatelessWidget {
                 horizontal: _addButtonPaddingHorizontal,
                 vertical: _addButtonPaddingVertical,
               ),
-              shape: const StadiumBorder(), // شكل كبسولة احترافي
+              shape: const StadiumBorder(),
             ),
             icon: const Icon(Icons.add_rounded, size: _addButtonIconSize),
             label: const Text(

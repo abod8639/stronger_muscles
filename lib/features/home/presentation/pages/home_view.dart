@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' hide SearchBar;
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
@@ -9,15 +9,15 @@ import 'package:stronger_muscles/features/promo/presentation/widgets/promo_banne
 import 'package:stronger_muscles/features/search/presentation/widgets/section_title.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/product_list.dart';
 
-class HomeView extends GetView<HomeController> {
-  // Constants for spacing
+class HomeView extends ConsumerWidget {
   static const double _bottomPadding = 20.0;
 
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final sectionsController = Get.find<CategoriesSectionsController>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sectionsState = ref.watch(categoriesSectionsControllerProvider);
+    final selectedCategoryIndex = ref.watch(categoriesSectionsControllerProvider.notifier).selectedIndex;
 
     return Scaffold(
       body: SafeArea(
@@ -26,31 +26,18 @@ class HomeView extends GetView<HomeController> {
             constraints: const BoxConstraints(maxWidth: 1200),
             child: RefreshIndicator(
               onRefresh: () =>
-                  AppGuard.runSafeInternet(() => controller.refreshHome()),
+                  AppGuard.runSafeInternet(ref, () => ref.read(homeControllerProvider.notifier).refreshHome()),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
                 slivers: [
-                  // Search bar and filter button
                   const SearchBar(),
-
-                  // Category shortcuts row
                   const SliverToBoxAdapter(child: CategoriesShortcutsRow()),
-
-                  // Promo banner (only shown for "All" category)
-                  Obx(
-                    () => sectionsController.selectedIndex.value == 0
-                        ? const SliverToBoxAdapter(child: PromoBanner())
-                        : const SliverToBoxAdapter(child: SizedBox.shrink()),
-                  ),
-
-                  // Section title
+                  if (selectedCategoryIndex == 0)
+                    const SliverToBoxAdapter(child: PromoBanner()),
                   const SliverToBoxAdapter(child: SectionTitle()),
-
-                  // Product grid
                   const ProductList(),
-
                   const SliverToBoxAdapter(
                     child: SizedBox(height: _bottomPadding),
                   ),

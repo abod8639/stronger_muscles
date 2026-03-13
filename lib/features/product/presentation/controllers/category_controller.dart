@@ -1,25 +1,35 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
-import '../../../home/presentation/controllers/base_controller.dart';
 
-class CategoryController extends BaseController {
-  final CategoryRepository _repository = Get.find<CategoryRepository>();
-  final RxList<CategoryModel> categories = <CategoryModel>[].obs;
+part 'category_controller.g.dart';
 
+@riverpod
+class CategoryController extends _$CategoryController {
   @override
-  void onInit() {
-    super.onInit();
-    categories.assignAll(_repository.getCachedCategories());
-    fetchCategories();
+  FutureOr<List<CategoryModel>> build() async {
+    final repository = ref.watch(categoryRepositoryProvider.notifier);
+    final cached = repository.getCachedCategories();
+    
+    if (cached.isNotEmpty) {
+      _initFetch();
+      return cached;
+    }
+    
+    return await repository.getAllCategories();
+  }
+
+  Future<void> _initFetch() async {
+    await fetchCategories();
   }
 
   Future<void> fetchCategories() async {
+    final repository = ref.read(categoryRepositoryProvider.notifier);
     try {
-      final result = await _repository.getAllCategories();
-      categories.assignAll(result);
-    } catch (e) {
-      handleError(e);
+      final result = await repository.getAllCategories();
+      state = AsyncData(result);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 }

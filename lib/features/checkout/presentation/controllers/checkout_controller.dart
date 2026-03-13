@@ -1,65 +1,95 @@
-import 'package:get/get.dart';
-import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-class CheckoutController extends GetxController {
-  // final AddressController _addressController = Get.find<AddressController>();
-  final CartController _cartController = Get.find<CartController>();
-  final ProfileController _profileController = Get.find<ProfileController>();
-  final OrderRepository _orderRepository = OrderRepository();
-  final RxInt currentStep = 0.obs;
-  final Rx<AddressModel?> selectedAddress = Rx<AddressModel?>(null);
-  final RxString selectedPaymentMethod = 'cash'.obs; // 'cash' or 'card'
-  final RxBool isProcessing = false.obs;
+part 'checkout_controller.g.dart';
 
+class CheckoutState {
+  final int currentStep;
+  final AddressModel? selectedAddress;
+  final String selectedPaymentMethod;
+  final bool isProcessing;
+
+  CheckoutState({
+    this.currentStep = 0,
+    this.selectedAddress,
+    this.selectedPaymentMethod = 'cash',
+    this.isProcessing = false,
+  });
+
+  CheckoutState copyWith({
+    int? currentStep,
+    AddressModel? selectedAddress,
+    String? selectedPaymentMethod,
+    bool? isProcessing,
+  }) {
+    return CheckoutState(
+      currentStep: currentStep ?? this.currentStep,
+      selectedAddress: selectedAddress ?? this.selectedAddress,
+      selectedPaymentMethod: selectedPaymentMethod ?? this.selectedPaymentMethod,
+      isProcessing: isProcessing ?? this.isProcessing,
+    );
+  }
+}
+
+@riverpod
+class CheckoutController extends _$CheckoutController {
   @override
-  void onInit() {
-    super.onInit();
-    if (_profileController.addresses.isNotEmpty) {
-      selectedAddress.value = _profileController.addresses.firstWhere(
-        (addr) => addr.isDefault,
-        orElse: () => _profileController.addresses.first,
-      );
+  CheckoutState build() {
+    final profileNotifier = ref.watch(profileControllerProvider.notifier);
+    final addresses = profileNotifier.addresses;
+    
+    AddressModel? initialAddress;
+    if (addresses.isNotEmpty) {
+      initialAddress = addresses.where((addr) => addr.isDefault).firstOrNull ?? addresses.first;
     }
+    
+    return CheckoutState(selectedAddress: initialAddress);
   }
 
   void nextStep() {
-    if (currentStep.value < 2) {
-      currentStep.value++;
+    if (state.currentStep < 2) {
+      state = state.copyWith(currentStep: state.currentStep + 1);
     }
   }
 
   void previousStep() {
-    if (currentStep.value > 0) {
-      currentStep.value--;
+    if (state.currentStep > 0) {
+      state = state.copyWith(currentStep: state.currentStep - 1);
     }
   }
 
   void setAddress(AddressModel address) {
-    selectedAddress.value = address;
+    state = state.copyWith(selectedAddress: address);
   }
 
   void setPaymentMethod(String method) {
-    selectedPaymentMethod.value = method;
+    state = state.copyWith(selectedPaymentMethod: method);
   }
 
-  Future<void> placeOrder() async {
-    if (selectedAddress.value == null) {
-      Get.snackbar('Error', 'Please select a shipping address');
+  Future<void> placeOrder(BuildContext context) async {
+    if (state.selectedAddress == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a shipping address')),
+      );
       return;
     }
 
-    isProcessing.value = true;
+    state = state.copyWith(isProcessing: true);
 
     try {
+      final cartNotifier = ref.read(cartControllerProvider.notifier);
+      final orderRepository = ref.read(orderRepositoryProvider);
+      
       final payload = {
-        "address_id": selectedAddress.value!.id,
-        "payment_method": selectedPaymentMethod.value,
-        "notes": _cartController.notesController.text,
-        "items": _cartController.cartItems.map((item) {
+        "address_id": state.selectedAddress!.id,
+        "payment_method": state.selectedPaymentMethod,
+        "notes": cartNotifier.notesController.text,
+        "items": cartNotifier.cartItems.map((item) {
           return {
             "product_id": item.product.id,
             "quantity": item.quantity,
@@ -69,14 +99,15 @@ class CheckoutController extends GetxController {
         }).toList(),
       };
 
-      await _orderRepository.createOrder(payload);
-      _cartController.clearCart();
+      await orderRepository.createOrder(payload);
+      await cartNotifier.clearCart();
       AppPages.router.go(AppRoutes.orderSuccess);
     } catch (e) {
-      Get.snackbar('Error', 'Failed to place order: $e');
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to place order: $e')),
+      );
     } finally {
-      isProcessing.value = false;
+      state = state.copyWith(isProcessing: false);
     }
   }
 }

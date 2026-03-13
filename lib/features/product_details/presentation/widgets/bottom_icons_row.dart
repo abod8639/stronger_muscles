@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
@@ -7,7 +7,6 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 
-// Constants
 const double _horizontalPadding = 16.0;
 const double _verticalPadding = 8.0;
 const double _buttonVerticalPadding = 12.0;
@@ -16,21 +15,23 @@ const double _quantityFontSize = 18.0;
 const double _spacing = 12.0;
 const double _iconButtonSize = 32.0;
 
-class BottomIconsRow extends StatelessWidget {
+class BottomIconsRow extends ConsumerWidget {
   final ProductModel product;
 
   const BottomIconsRow({super.key, required this.product});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cartController = Get.find<CartController>();
-    final detailsController = Get.find<ProductDetailsController>();
+    final cartState = ref.watch(cartControllerProvider);
+    final cartNotifier = ref.watch(cartControllerProvider.notifier);
+    final detailsState = ref.watch(productDetailsControllerProvider(product));
+    final detailsNotifier = ref.watch(productDetailsControllerProvider(product).notifier);
     final l10n = AppLocalizations.of(context)!;
 
     return BottomAppBar(
       elevation: 10.0,
-      height: 85, // تحديد ارتفاع مناسب
+      height: 85,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: _horizontalPadding,
@@ -38,62 +39,61 @@ class BottomIconsRow extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Cart Action Area
             Expanded(
-              child: Obx(() {
-                final selectedFlavor = detailsController.selectedFlavor.value;
-                final selectedSize =
-                    detailsController.selectedSizeObject.value?.size;
-
-                final item = cartController.getCartItem(
-                  product,
-                  selectedFlavor: selectedFlavor,
-                  selectedSize: selectedSize,
-                );
-
-                return item != null
-                    ? _buildQuantityControls(
-                        context,
-                        theme,
-                        cartController,
-                        item,
-                      )
-                    : _buildAddToCartButton(
-                        context,
-                        detailsController,
-                        cartController,
-                        l10n,
-                      );
-              }),
+              child: _buildCartActionArea(
+                context,
+                ref,
+                theme,
+                cartNotifier,
+                detailsState,
+                detailsNotifier,
+                l10n,
+              ),
             ),
-
             const SizedBox(width: _spacing),
-
-            // Wishlist Button
-            Obx(() => _buildWishlistButton(theme, detailsController)),
+            _buildWishlistButton(theme, detailsState, detailsNotifier),
           ],
         ),
       ),
     );
   }
 
-  /// زر إضافة للسلة
-  Widget _buildAddToCartButton(
+  Widget _buildCartActionArea(
     BuildContext context,
-    ProductDetailsController detailsController,
-    CartController cartController,
+    WidgetRef ref,
+    ThemeData theme,
+    CartController cartNotifier,
+    ProductDetailsState detailsState,
+    ProductDetailsController detailsNotifier,
     AppLocalizations l10n,
   ) {
-    final isPriceZero = detailsController.displayEffectivePrice <= 0;
+    final item = cartNotifier.getCartItem(
+      product,
+      selectedFlavor: detailsState.selectedFlavor,
+      selectedSize: detailsState.selectedSizeObject?.size,
+    );
+
+    return item != null
+        ? _buildQuantityControls(theme, cartNotifier, item, l10n)
+        : _buildAddToCartButton(detailsState, detailsNotifier, cartNotifier, l10n);
+  }
+
+  Widget _buildAddToCartButton(
+    ProductDetailsState detailsState,
+    ProductDetailsController detailsNotifier,
+    CartController cartNotifier,
+    AppLocalizations l10n,
+  ) {
+    final isPriceZero = detailsNotifier.getDisplayEffectivePrice(product) <= 0;
 
     return ElevatedButton.icon(
       onPressed: isPriceZero
           ? null
           : () {
-              cartController.addToCart(
+              cartNotifier.addToCart(
                 product,
-                selectedFlavor: detailsController.selectedFlavor.value,
-                selectedSize: detailsController.selectedSizeObject.value?.size,
+                selectedFlavor: detailsState.selectedFlavor,
+                selectedSize: detailsState.selectedSizeObject?.size,
               );
             },
       icon: Icon(
@@ -116,15 +116,12 @@ class BottomIconsRow extends StatelessWidget {
     );
   }
 
-  /// متحكم الكمية (عندما يكون المنتج في السلة)
   Widget _buildQuantityControls(
-    BuildContext context,
     ThemeData theme,
-    CartController cartController,
+    CartController cartNotifier,
     CartItemModel item,
+    AppLocalizations l10n,
   ) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
@@ -141,7 +138,7 @@ class BottomIconsRow extends StatelessWidget {
                   : Icons.delete_outline_rounded,
               color: item.quantity > 1 ? AppColors.primary : Colors.redAccent,
             ),
-            onPressed: () => cartController.decreaseQuantity(item),
+            onPressed: () => cartNotifier.decreaseQuantity(item),
             iconSize: _iconButtonSize,
             tooltip: item.quantity > 1
                 ? l10n.decreaseQuantity
@@ -160,21 +157,20 @@ class BottomIconsRow extends StatelessWidget {
               Icons.add_circle_outline,
               color: AppColors.primary,
             ),
-            onPressed: () => cartController.increaseQuantity(item),
+            onPressed: () => cartNotifier.increaseQuantity(item),
             iconSize: _iconButtonSize,
-            // tooltip: l10n.increaseQuantity,
           ),
         ],
       ),
     );
   }
 
-  /// زر المفضلة
   Widget _buildWishlistButton(
     ThemeData theme,
-    ProductDetailsController controller,
+    ProductDetailsState detailsState,
+    ProductDetailsController detailsNotifier,
   ) {
-    final isInWishlist = controller.isInWishlist.value;
+    final isInWishlist = detailsState.isInWishlist;
 
     return Container(
       decoration: BoxDecoration(
@@ -191,7 +187,7 @@ class BottomIconsRow extends StatelessWidget {
               : theme.colorScheme.onSurfaceVariant,
           size: 28,
         ),
-        onPressed: () => controller.toggleWishlist(),
+        onPressed: () => detailsNotifier.toggleWishlist(product),
       ),
     );
   }

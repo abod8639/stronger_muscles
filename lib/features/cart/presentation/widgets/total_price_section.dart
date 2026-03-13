@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
@@ -9,13 +9,18 @@ const double _totalPriceFontSize = 24.0;
 const double _itemCountFontSize = 12.0;
 const double _smallSpacing = 4.0;
 
-Widget totalPriceSection() {
-  final controller = Get.find<CartController>();
-  return Builder(
-    builder: (context) {
-      final theme = Theme.of(context);
+class TotalPriceSection extends ConsumerWidget {
+  const TotalPriceSection({super.key});
 
-      return Expanded(
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartState = ref.watch(cartControllerProvider);
+    final cartNotifier = ref.watch(cartControllerProvider.notifier);
+    final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context)!;
+
+    return cartState.when(
+      data: (items) => Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -23,49 +28,47 @@ Widget totalPriceSection() {
             Row(
               children: [
                 Text(
-                  AppLocalizations.of(context)!.total,
+                  localizations.total,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     fontSize: _totalLabelFontSize,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(width: 8.0),
-                Obx(
-                  () => Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 2.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: .1),
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Text(
-                      '${controller.cartItems.length} ${controller.cartItems.length == 1 ? AppLocalizations.of(context)!.item : AppLocalizations.of(context)!.items}',
-                      style: TextStyle(
-                        fontSize: _itemCountFontSize,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 2.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Text(
+                    '${items.length} ${items.length == 1 ? localizations.item : localizations.items}',
+                    style: TextStyle(
+                      fontSize: _itemCountFontSize,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: _smallSpacing),
-            Obx(
-              () => Text(
-                '\$${controller.totalPrice.toStringAsFixed(2)}',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontSize: _totalPriceFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
-                ),
+            Text(
+              '\$${cartNotifier.totalPrice.toStringAsFixed(2)}',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontSize: _totalPriceFontSize,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
               ),
             ),
           ],
         ),
-      );
-    },
-  );
+      ),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
 }

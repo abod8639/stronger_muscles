@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
@@ -14,14 +14,18 @@ const double _shadowOpacity = 0.05;
 const double _shadowBlurRadius = 10.0;
 const double _shadowOffsetY = 4.0;
 
-class AccountSettingsList extends StatelessWidget {
+class AccountSettingsList extends ConsumerWidget {
   const AccountSettingsList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final themeController = Get.find<ThemeController>();
+    final isDarkMode = ref.watch(themeControllerProvider);
+    final themeNotifier = ref.watch(themeControllerProvider.notifier);
+    final languageNotifier = ref.watch(languageControllerProvider.notifier);
+    final currentLocale = ref.watch(languageControllerProvider);
     final isDark = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -44,7 +48,7 @@ class AccountSettingsList extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(_containerPadding),
             child: Text(
-              AppLocalizations.of(context)!.accountSettings,
+              localizations.accountSettings,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDark ? AppColors.white : AppColors.black,
@@ -53,62 +57,51 @@ class AccountSettingsList extends StatelessWidget {
           ),
           _buildSettingItem(
             icon: Icons.person_outline,
-            title: AppLocalizations.of(context)!.editProfile,
-            onTap: () {
-              context.push(AppRoutes.editUserInfo);
-            },
+            title: localizations.editProfile,
+            onTap: () => context.push(AppRoutes.editUserInfo),
             isDark: isDark,
           ),
           _buildDivider(isDark),
-          Obx(
-            () => _buildSettingItem(
-              icon: themeController.isDarkMode.value
-                  ? Icons.dark_mode_outlined
-                  : Icons.light_mode_outlined,
-              title: AppLocalizations.of(context)!.theme,
-              trailing: Switch(
-                value: themeController.isDarkMode.value,
-                onChanged: (val) => themeController.toggleTheme(),
-                activeThumbColor: AppColors.primary,
-              ),
-              onTap: () => themeController.toggleTheme(),
-              isDark: isDark,
+          _buildSettingItem(
+            icon: isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+            title: localizations.theme,
+            trailing: Switch(
+              value: isDarkMode,
+              onChanged: (val) => themeNotifier.toggleTheme(),
+              activeThumbColor: AppColors.primary,
             ),
+            onTap: () => themeNotifier.toggleTheme(),
+            isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
             icon: Icons.notifications_outlined,
-            title: AppLocalizations.of(context)!.notifications,
+            title: localizations.notifications,
             onTap: () {},
             isDark: isDark,
           ),
-
           _buildDivider(isDark),
-
           _buildSettingItem(
             icon: Icons.language_outlined,
-            title: AppLocalizations.of(context)!.language,
-            trailing: Obx(() {
-              final languageController = Get.find<LanguageController>();
-              return Text(
-                languageController.currentLanguageName,
-                style: const TextStyle(color: AppColors.greyDark),
-              );
-            }),
-            onTap: () => _showLanguageDialog(context),
+            title: localizations.language,
+            trailing: Text(
+              languageNotifier.currentLanguageName,
+              style: const TextStyle(color: AppColors.greyDark),
+            ),
+            onTap: () => _showLanguageDialog(context, ref, currentLocale, localizations),
             isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
             icon: Icons.help_outline,
-            title: AppLocalizations.of(context)!.helpSupport,
+            title: localizations.helpSupport,
             onTap: () {},
             isDark: isDark,
           ),
           _buildDivider(isDark),
           _buildSettingItem(
             icon: Icons.info_outline,
-            title: AppLocalizations.of(context)!.about,
+            title: localizations.about,
             onTap: () {},
             isLast: true,
             isDark: isDark,
@@ -118,37 +111,33 @@ class AccountSettingsList extends StatelessWidget {
     );
   }
 
-  void _showLanguageDialog(BuildContext context) {
-    final languageController = Get.find<LanguageController>();
-
+  void _showLanguageDialog(BuildContext context, WidgetRef ref, Locale currentLocale, AppLocalizations l10n) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.language),
-        content: Obx(
-          () => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<String>(
-                title: Text(AppLocalizations.of(context)!.english),
-                value: 'en',
-                groupValue: languageController.currentLocale.value.languageCode,
-                onChanged: (value) {
-                  languageController.changeLanguage(const Locale('en'));
-                  Navigator.pop(context);
-                },
-              ),
-              RadioListTile<String>(
-                title: Text(AppLocalizations.of(context)!.arabic),
-                value: 'ar',
-                groupValue: languageController.currentLocale.value.languageCode,
-                onChanged: (value) {
-                  languageController.changeLanguage(const Locale('ar'));
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+        title: Text(l10n.language),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            RadioListTile<String>(
+              title: Text(l10n.english),
+              value: 'en',
+              groupValue: currentLocale.languageCode,
+              onChanged: (value) {
+                ref.read(languageControllerProvider.notifier).changeLanguage(const Locale('en'));
+                Navigator.pop(context);
+              },
+            ),
+            RadioListTile<String>(
+              title: Text(l10n.arabic),
+              value: 'ar',
+              groupValue: currentLocale.languageCode,
+              onChanged: (value) {
+                ref.read(languageControllerProvider.notifier).changeLanguage(const Locale('ar'));
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );

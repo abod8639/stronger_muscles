@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
@@ -15,21 +15,19 @@ const double _mapIconSize = 16.0;
 const double _cardTopRowSpacing = 12.0;
 const double _cardDetailsSpacing = 4.0;
 const double _dividerHeight = 24.0;
-// const double _labelIconSize = 8.0;
-// const double _defaultBadgeRadius = 20.0;
 const double _shadowBlurRadius = 20.0;
 const double _shadowOffsetY = 10.0;
 const double _shadowOpacity = 0.06;
 const double _defaultShadowOpacity = 0.3;
 const double _adapterTextLineHeight = 1.4;
 
-class AddressCard extends StatelessWidget {
+class AddressCard extends ConsumerWidget {
   final AddressModel address;
 
   const AddressCard({super.key, required this.address});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -38,16 +36,11 @@ class AddressCard extends StatelessWidget {
         color: isDark ? AppColors.surfaceDark : AppColors.white,
         borderRadius: BorderRadius.circular(_containerBorderRadius),
         border: address.isDefault
-            ? Border.all(
-                color: AppColors.primary.withValues(alpha: .5),
-                width: 1.5,
-              )
+            ? Border.all(color: AppColors.primary.withValues(alpha: .5), width: 1.5)
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(
-              isDark ? _defaultShadowOpacity : _shadowOpacity,
-            ),
+            color: Colors.black.withOpacity(isDark ? _defaultShadowOpacity : _shadowOpacity),
             blurRadius: _shadowBlurRadius,
             offset: const Offset(0, _shadowOffsetY),
           ),
@@ -57,20 +50,17 @@ class AddressCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_containerClipRadius),
         child: Column(
           children: [
-            // قسم الخريطة المصغر
-            // if (address.latitude != null && address.longitude != null)
             _buildMapPreview(),
-
             Padding(
               padding: const EdgeInsets.all(_containerPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildCardTopRow(context),
+                  _buildCardTopRow(),
                   const SizedBox(height: _cardTopRowSpacing),
                   _buildAddressDetails(theme),
                   const Divider(height: _dividerHeight, thickness: 0.5),
-                  _buildActionButtons(context),
+                  _buildActionButtons(context, ref),
                 ],
               ),
             ),
@@ -85,10 +75,7 @@ class AddressCard extends StatelessWidget {
       return _buildMapPlaceholder();
     }
 
-    final LatLng position = LatLng(
-      address.latitude ?? 1.0,
-      address.longitude ?? 1.0,
-    );
+    final LatLng position = LatLng(address.latitude!, address.longitude!);
 
     return SizedBox(
       height: _mapHeight,
@@ -97,47 +84,23 @@ class AddressCard extends StatelessWidget {
         children: [
           GoogleMap(
             key: ValueKey('map_${address.id}'),
-            initialCameraPosition: CameraPosition(
-              target: position,
-              zoom: _mapZoom,
-            ),
+            initialCameraPosition: CameraPosition(target: position, zoom: _mapZoom),
             liteModeEnabled: true,
             zoomControlsEnabled: false,
             myLocationButtonEnabled: false,
             compassEnabled: false,
             mapToolbarEnabled: false,
-            onMapCreated: (controller) {},
             markers: {
               Marker(
                 markerId: MarkerId(address.id.toString()),
                 position: position,
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueAzure,
-                ),
+                icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
               ),
             },
           ),
-
           Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: const [0.0, 0.7, 1.0],
-                  colors: [Colors.black.withValues(alpha: .1)],
-                ),
-              ),
-            ),
+            child: GestureDetector(onTap: () {}, child: Container(color: Colors.transparent)),
           ),
-
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(color: Colors.transparent),
-            ),
-          ),
-
           Positioned(
             top: 12,
             right: 12,
@@ -148,11 +111,7 @@ class AddressCard extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
               ),
-              child: Icon(
-                Icons.map_outlined,
-                size: _mapIconSize,
-                color: AppColors.primary,
-              ),
+              child: const Icon(Icons.map_outlined, size: _mapIconSize, color: AppColors.primary),
             ),
           ),
         ],
@@ -169,16 +128,13 @@ class AddressCard extends StatelessWidget {
         children: [
           Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
           const SizedBox(height: 8),
-          Text(
-            "Map unavailable",
-            style: TextStyle(color: Colors.grey[500], fontSize: 12),
-          ),
+          Text("Map unavailable", style: TextStyle(color: Colors.grey[500], fontSize: 12)),
         ],
       ),
     );
   }
 
-  Widget _buildCardTopRow(BuildContext context) {
+  Widget _buildCardTopRow() {
     IconData labelIcon = Icons.location_on_rounded;
     if (address.label?.toLowerCase() == 'home') labelIcon = Icons.home_rounded;
     if (address.label?.toLowerCase() == 'work') labelIcon = Icons.work_rounded;
@@ -194,10 +150,7 @@ class AddressCard extends StatelessWidget {
           child: Icon(labelIcon, color: AppColors.primary, size: 18),
         ),
         const SizedBox(width: 12),
-        Text(
-          address.label ?? 'Other',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
+        Text(address.label ?? 'Other', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         const Spacer(),
         if (address.isDefault) _buildDefaultBadge(),
       ],
@@ -208,19 +161,10 @@ class AddressCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
-        ),
+        gradient: LinearGradient(colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)]),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Text(
-        'DEFAULT',
-        style: TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w900,
-          color: Colors.white,
-        ),
-      ),
+      child: const Text('DEFAULT', style: TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.white)),
     );
   }
 
@@ -228,10 +172,7 @@ class AddressCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          address.fullName ?? '',
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        Text(address.fullName ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
         const SizedBox(height: _cardDetailsSpacing),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,11 +182,7 @@ class AddressCard extends StatelessWidget {
             Expanded(
               child: Text(
                 address.fullAddress,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
-                  height: _adapterTextLineHeight,
-                ),
+                style: const TextStyle(color: Colors.grey, fontSize: 13, height: _adapterTextLineHeight),
               ),
             ),
           ],
@@ -254,8 +191,8 @@ class AddressCard extends StatelessWidget {
     );
   }
 
-  Widget _buildActionButtons(BuildContext context) {
-    final controller = Get.find<AddressController>();
+  Widget _buildActionButtons(BuildContext context, WidgetRef ref) {
+    final controller = ref.read(addressControllerProvider.notifier);
 
     return Row(
       children: [
@@ -269,37 +206,28 @@ class AddressCard extends StatelessWidget {
           ),
         IconButton(
           onPressed: () => showAddressForm(context, address: address),
-          icon: const Icon(
-            Icons.edit_outlined,
-            size: 20,
-            color: Colors.blueGrey,
-          ),
+          icon: const Icon(Icons.edit_outlined, size: 20, color: Colors.blueGrey),
         ),
         IconButton(
-          onPressed: () => _confirmDelete(context),
-          icon: Icon(
-            Icons.delete_outline_rounded,
-            size: 20,
-            color: Theme.of(context).colorScheme.error,
-          ),
+          onPressed: () => _confirmDelete(context, controller),
+          icon: Icon(Icons.delete_outline_rounded, size: 20, color: Theme.of(context).colorScheme.error),
         ),
       ],
     );
   }
 
-  void _confirmDelete(BuildContext context) {
-    final controller = Get.find<AddressController>();
-
-    Get.dialog(
-      AlertDialog(
+  void _confirmDelete(BuildContext context, AddressController controller) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
         title: const Text('Delete Address?'),
         content: const Text('Are you sure you want to remove this address?'),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
           TextButton(
             onPressed: () {
               controller.deleteAddress(address.id);
-              Get.back();
+              Navigator.of(context).pop();
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),

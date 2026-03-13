@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 
-// No global controller here
+void handleDeleteFromWishlist(BuildContext context, WidgetRef ref, ProductModel product) {
+  final wishlistNotifier = ref.read(wishlistControllerProvider.notifier);
 
-/// Handles the delete action with optional confirmation
-void handleDeleteFromWishlist(BuildContext context, ProductModel product) {
-  final controller = Get.find<WishlistController>();
-  // Show a snackbar for undo functionality
-  controller.removeFromWishlist(product);
+  wishlistNotifier.removeFromWishlist(product);
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -22,7 +19,7 @@ void handleDeleteFromWishlist(BuildContext context, ProductModel product) {
         label: 'UNDO',
         textColor: AppColors.primary,
         onPressed: () {
-          controller.addToWishlist(product);
+          wishlistNotifier.addToWishlist(product);
         },
       ),
     ),

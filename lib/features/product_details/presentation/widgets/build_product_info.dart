@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
@@ -11,19 +11,20 @@ Widget buildProductInfo(
   ProductModel product,
   bool isDark,
   BuildContext context,
+  WidgetRef ref,
 ) {
   final infoItems = <Widget>[];
 
+  void navigateToBrandPage(String brandName) {
+    final searchNotifier = ref.read(productSearchControllerProvider.notifier);
 
-   void navigateToBrandPage(String brandName) {
-    final searchController = Get.find<ProductSearchController>();
-
-    searchController.clearSearch();
-    searchController.textController.text = brandName;
-    searchController.updateSearchQuery(brandName);
+    searchNotifier.clearSearch();
+    searchNotifier.textController.text = brandName;
+    searchNotifier.updateSearchQuery(brandName);
 
     context.push(AppRoutes.search);
   }
+
   // Brand
   if (product.brand != null && product.brand!.isNotEmpty) {
     infoItems.add(
@@ -51,7 +52,7 @@ Widget buildProductInfo(
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                onPressed:()=> navigateToBrandPage(product.brand!),
+                onPressed: () => navigateToBrandPage(product.brand!),
                 child: Text(
                   product.brand!,
                   style: TextStyle(
@@ -142,43 +143,39 @@ Widget buildProductInfo(
 
   if (infoItems.isEmpty) return const SizedBox.shrink();
 
-  return Builder(
-    builder: (context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.productInfo,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: isDark ? AppColors.white : AppColors.black,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  blurStyle: BlurStyle.outer,
-                  color: isDark
-                      ? AppColors.greyLight.withValues(alpha: .1)
-                      : AppColors.surfaceDark.withValues(alpha: .3),
-                  blurRadius: 10,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        AppLocalizations.of(context)!.productInfo,
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: isDark ? AppColors.white : AppColors.black,
+        ),
+      ),
+      const SizedBox(height: 12),
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurStyle: BlurStyle.outer,
               color: isDark
-                  ? AppColors.surfaceDark
-                  : AppColors.greyLight.withValues(alpha: .3),
-              borderRadius: BorderRadius.circular(12),
+                  ? AppColors.greyLight.withValues(alpha: .1)
+                  : AppColors.surfaceDark.withValues(alpha: .3),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
             ),
-            child: Column(children: infoItems),
-          ),
-        ],
-      );
-    },
+          ],
+          color: isDark
+              ? AppColors.surfaceDark
+              : AppColors.greyLight.withValues(alpha: .3),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(children: infoItems),
+      ),
+    ],
   );
 }
 
@@ -195,7 +192,6 @@ Widget _buildInfoRow(String label, String value, bool isDark) {
             style: TextStyle(
               fontSize: 14,
               color: isDark ? AppColors.white : AppColors.black,
-              //  isDark ? AppColors.grey : AppColors.greyDark,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -214,6 +210,4 @@ Widget _buildInfoRow(String label, String value, bool isDark) {
       ],
     ),
   );
-
-
 }

@@ -1,43 +1,36 @@
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class InternetConnectionController extends GetxController {
-  final RxBool isConnected = true.obs;
+part 'internet_connection_controller.g.dart';
 
+@Riverpod(keepAlive: true)
+class InternetConnectionController extends _$InternetConnectionController {
   StreamSubscription? _subscription;
   late final InternetConnection _internetConnection;
 
   @override
-  void onInit() {
-    super.onInit();
+  bool build() {
     _internetConnection = InternetConnection();
     _startMonitoring();
+    
+    ref.onDispose(() {
+      _subscription?.cancel();
+    });
+
+    return true; // Assume connected initially or check first
   }
 
   void _startMonitoring() {
     _checkInitialStatus();
 
     _subscription = _internetConnection.onStatusChange.listen((status) {
-      switch (status) {
-        case InternetStatus.connected:
-          isConnected.value = true;
-          break;
-        case InternetStatus.disconnected:
-          isConnected.value = false;
-          break;
-      }
+      state = (status == InternetStatus.connected);
     });
   }
 
   Future<void> _checkInitialStatus() async {
     bool hasAccess = await _internetConnection.hasInternetAccess;
-    isConnected.value = hasAccess;
-  }
-
-  @override
-  void onClose() {
-    _subscription?.cancel();
-    super.onClose();
+    state = hasAccess;
   }
 }

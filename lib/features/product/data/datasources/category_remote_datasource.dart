@@ -1,10 +1,11 @@
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import '../../../../core/config/api_config.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 
-class CategoryRemoteDataSource extends GetxService {
-  final ApiService _apiService = Get.find<ApiService>();
+class CategoryRemoteDataSource {
+  final ApiService _apiService;
+
+  CategoryRemoteDataSource(this._apiService);
 
   Future<List<CategoryModel>> fetchCategoriesFromApi() async {
     final response = await _apiService.get(ApiConfig.categories);

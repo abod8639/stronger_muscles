@@ -1,11 +1,20 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import '../../../../core/config/api_config.dart';
 import '../../../../core/errors/failures.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
-class ProductService extends GetxService {
-  final ApiService _apiService = Get.find<ApiService>();
+part 'product_service.g.dart';
+
+@Riverpod(keepAlive: true)
+ProductService productService(ProductServiceRef ref) {
+  return ProductService(ref.watch(apiServiceProvider));
+}
+
+class ProductService {
+  final ApiService _apiService;
+
+  ProductService(this._apiService);
 
   Future<List<ProductModel>> getProducts({
     String? categoryId,
@@ -17,14 +26,13 @@ class ProductService extends GetxService {
       final response = await _apiService.get(
         ApiConfig.products,
         queryParameters: {
-          'category': ?categoryId,
-          'search': ?query,
-          'page': page, 
+          if (categoryId != null) 'category': categoryId,
+          if (query != null) 'search': query,
+          'page': page,
           'limit': limit,
         },
       );
 
-      // استخدام response.data مباشرة
       return _parseProductsList(response.data);
     } catch (e) {
       throw _handleError(e, "حدث خطأ عند جلب المنتجات");
@@ -36,14 +44,12 @@ class ProductService extends GetxService {
       final response = await _apiService.get('${ApiConfig.products}/$id');
       final data = response.data;
 
-      // فحص البيانات المستلمة من Laravel Resource
       final productData = (data is Map && data['data'] != null)
           ? data['data']
           : data;
 
       return ProductModel.fromJson(productData);
     } catch (e) {
-      // الـ ApiService يرمي Failure بالفعل، لذا rethrow كافية
       rethrow;
     }
   }

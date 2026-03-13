@@ -1,68 +1,65 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/promo/presentation/controllers/premo_controller.dart';
+import 'package:stronger_muscles/features/promo/presentation/controllers/promo_controller.dart';
 
-class PromoBanner extends GetView<PromoController> {
+class PromoBanner extends ConsumerWidget {
   const PromoBanner({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final promoNotifier = ref.watch(promoControllerProvider.notifier);
+    final currentIndex = ref.watch(promoControllerProvider);
+    final promos = promoNotifier.promos;
+
+    if (promos.isEmpty) return const SizedBox.shrink();
+
     return Column(
       children: [
         SizedBox(
           height: 170,
-          child: Obx(() {
-            if (controller.promos.isEmpty) {
-              return const SizedBox.shrink();
-            }
-            return PageView.builder(
-              allowImplicitScrolling: false,
-              pageSnapping: true,
-              controller: controller.pageController,
-              onPageChanged: controller.updateCurrentIndex,
-              itemBuilder: (context, index) {
-                final promo =
-                    controller.promos[index % controller.promos.length];
-                return _buildPromoCard(promo);
-              },
-            );
-          }),
+          child: PageView.builder(
+            allowImplicitScrolling: false,
+            pageSnapping: true,
+            controller: promoNotifier.pageController,
+            onPageChanged: (index) => ref.read(promoControllerProvider.notifier).updateCurrentIndex(index),
+            itemBuilder: (context, index) {
+              final promo = promos[index % promos.length];
+              return _buildPromoCard(context, ref, promo);
+            },
+          ),
         ),
-
         const SizedBox(height: 8),
-        // Dots Indicator
-        Obx(() {
-          if (controller.promos.isEmpty) return const SizedBox.shrink();
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              controller.promos.length,
-              (index) => AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                margin: const EdgeInsets.symmetric(horizontal: 3),
-                height: 5,
-                width: controller.currentIndex.value == index ? 15 : 5,
-                decoration: BoxDecoration(
-                  color: controller.currentIndex.value == index
-                      ? AppColors.primary
-                      : AppColors.greyDark,
-                  borderRadius: BorderRadius.circular(4),
-                ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            promos.length,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              height: 5,
+              width: currentIndex == index ? 15 : 5,
+              decoration: BoxDecoration(
+                color: currentIndex == index
+                    ? AppColors.primary
+                    : AppColors.greyDark,
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-          );
-        }),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildPromoCard(PromoModel promo) {
+  Widget _buildPromoCard(BuildContext context, WidgetRef ref, PromoModel promo) {
+    final promoNotifier = ref.read(promoControllerProvider.notifier);
+    
     return GestureDetector(
-      onTap: () => controller.onPromoPressed(promo),
+      onTap: () => promoNotifier.onPromoPressed(context, promo),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
@@ -81,7 +78,6 @@ class PromoBanner extends GetView<PromoController> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // Background Image
             CachedNetworkImage(
               cacheManager: CustomCacheManager.instance,
               imageUrl: promo.imageUrl,
@@ -89,7 +85,6 @@ class PromoBanner extends GetView<PromoController> {
               errorWidget: (context, error, stackTrace) =>
                   Container(color: promo.backgroundColor),
             ),
-            // Gradient Overlay for text readability
             if (promo.title != null)
               Container(
                 decoration: BoxDecoration(
@@ -103,7 +98,6 @@ class PromoBanner extends GetView<PromoController> {
                   ),
                 ),
               ),
-            // Text Content
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

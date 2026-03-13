@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_price.dart';
@@ -18,26 +19,50 @@ import 'package:stronger_muscles/features/product_details/presentation/widgets/b
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_usage_and_warnings.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_size_selector.dart';
 
-class ProductDetailsView extends GetView<ProductDetailsController> {
+class ProductDetailsView extends ConsumerWidget {
   static const double _contentPadding = 16.0;
   static const double _sectionSpacing = 24.0;
   static const double _smallSpacing = 8.0;
   static const double _mediumSpacing = 16.0;
   static const double _bottomPadding = 32.0;
 
-  const ProductDetailsView({super.key});
+  final ProductModel? product;
+  final String? initialFlavor;
+  final String? initialSize;
+
+  const ProductDetailsView({
+    super.key,
+    this.product,
+    this.initialFlavor,
+    this.initialSize,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // If product is null, try to get it from arguments (though extra is preferred)
+    if (product == null) {
+      return const Scaffold(body: Center(child: Text("Product not found")));
+    }
+
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final product = Get.find<ProductDetailsController>().product;
     final locale = Localizations.localeOf(context).languageCode;
+    
+    final detailsState = ref.watch(productDetailsControllerProvider(
+      product!,
+      initialFlavor: initialFlavor,
+      initialSize: initialSize,
+    ));
+    final detailsNotifier = ref.watch(productDetailsControllerProvider(
+      product!,
+      initialFlavor: initialFlavor,
+      initialSize: initialSize,
+    ).notifier);
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(product.getLocalizedName(locale: locale)),
+        title: Text(product!.getLocalizedName(locale: locale)),
         elevation: 0,
       ),
       body: CustomScrollView(
@@ -45,91 +70,62 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          // Main Product Image with Hero Animation
           SliverToBoxAdapter(
             child: MainImage(
-              product: product,
+              product: product!,
               onImageTap: (index) => _showImageViewer(context, index),
             ),
           ),
-
-          // Product Details Content
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(_contentPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
-                  buildProductName(product),
+                  buildProductName(product!),
                   const SizedBox(height: _smallSpacing),
-
-                  Obx(
-                    () => buildProductPrice(
-                      product,
-                      alternateEffectivePrice: controller.displayEffectivePrice,
-                      alternateOriginalPrice: controller.displayPrice,
-                      alternateHasDiscount: controller.displayHasDiscount,
-                    ),
+                  buildProductPrice(
+                    product!,
+                    alternateEffectivePrice: detailsNotifier.getDisplayEffectivePrice(product!),
+                    alternateOriginalPrice: detailsNotifier.getDisplayPrice(product!),
+                    alternateHasDiscount: detailsNotifier.getDisplayHasDiscount(product!),
                   ),
                   const SizedBox(height: _smallSpacing),
-
-                  // Product Badges (Featured, New, Best Seller, Discount)
-                  buildProductBadges(product, context),
+                  buildProductBadges(product!, context),
                   const SizedBox(height: _mediumSpacing),
-
-                  ImageListView(product: product),
+                  ImageListView(product: product!),
                   const SizedBox(height: _mediumSpacing),
-
-                  // Product Flavors
-                  if (product.flavors.isNotEmpty) ...[
-                    Obx(
-                      () => ProductFlavorSelector(
-                        product: product,
-                        selectedFlavor: controller.selectedFlavor.value,
-                        onFlavorSelected: (selectedFlavor) {
-                          controller.selectedFlavor.value = selectedFlavor;
-                        },
-                      ),
+                  if (product!.flavors.isNotEmpty) ...[
+                    ProductFlavorSelector(
+                      product: product!,
+                      selectedFlavor: detailsState.selectedFlavor,
+                      onFlavorSelected: (selectedFlavor) {
+                        detailsNotifier.updateFlavor(selectedFlavor);
+                      },
                     ),
                     const SizedBox(height: _mediumSpacing),
                   ],
-
-                  // Size Selector
-                  if (product.productSizes.isNotEmpty) ...[
-                    Obx(
-                      () => ProductSizeSelector(
-                        product: product,
-                        initialSize: controller.selectedSizeObject.value?.size,
-                        onSizeSelected: (selectedSize) {
-                          controller.updateSize(selectedSize);
-                        },
-                      ),
+                  if (product!.productSizes.isNotEmpty) ...[
+                    ProductSizeSelector(
+                      product: product!,
+                      initialSize: detailsState.selectedSizeObject?.size,
+                      onSizeSelected: (selectedSize) {
+                        detailsNotifier.updateSize(product!, selectedSize);
+                      },
                     ),
                     const SizedBox(height: _mediumSpacing),
                   ],
-
-                  if (product.imageUrls.length > 1)
+                  if (product!.imageUrls.length > 1)
                     const SizedBox(height: _sectionSpacing),
-
-                  // Description Section
-                  buildDescriptionSection(product),
+                  buildDescriptionSection(product!),
                   const SizedBox(height: _sectionSpacing),
-
-                  // Product Info (Brand, SKU, Weight, etc.)
-                  buildProductInfo(product, isDark, context),
+                  buildProductInfo(product!, isDark, context, ref),
                   const SizedBox(height: _sectionSpacing),
-
-                  // Ingredients
-                  buildIngredientsSection(product, isDark),
+                  buildIngredientsSection(product!, isDark),
                   const SizedBox(height: _sectionSpacing),
-
-                  // Usage Instructions & Warnings
-                  buildUsageAndWarnings(product, isDark),
+                  buildUsageAndWarnings(product!, isDark),
                   const SizedBox(height: _sectionSpacing),
-
-                  // Reviews Section
-                  buildShowReviewsListSection(product),
+                  buildShowReviewsListSection(product!),
                   const SizedBox(height: _bottomPadding),
                 ],
               ),
@@ -137,15 +133,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomIconsRow(product: product),
+      bottomNavigationBar: BottomIconsRow(product: product!),
     );
   }
 
   void _showImageViewer(BuildContext context, int initialIndex) {
-    if (controller.product.imageUrls.isEmpty) return;
+    if (product!.imageUrls.isEmpty) return;
 
     MultiImageProvider multiImageProvider = MultiImageProvider(
-      controller.product.imageUrls
+      product!.imageUrls
           .map(
             (url) => CachedNetworkImageProvider(
               url.original,

@@ -44,7 +44,7 @@ class WishlistItemCard extends StatelessWidget {
               buildProductImage(product),
               const SizedBox(width: _spacing),
               Expanded(child: buildProductDetails(product)),
-              buildDeleteButtonFromWishlist(product),
+              DeleteButtonFromWishlist(product: product),
             ],
           ),
         ),

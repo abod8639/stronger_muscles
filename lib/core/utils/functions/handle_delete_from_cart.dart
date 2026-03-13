@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 
-// No global controller here
-
 /// Handles the decrease quantity action
-void handleDecrease(BuildContext context, ProductModel item) {
-  final controller = Get.find<CartController>();
-  final cartItem = controller.getCartItem(item);
+void handleDecrease(BuildContext context, WidgetRef ref, ProductModel item) {
+  final cartNotifier = ref.read(cartControllerProvider.notifier);
+  final cartItem = cartNotifier.getCartItem(item);
   if (cartItem != null && cartItem.quantity > 1) {
-    controller.decreaseQuantity(cartItem);
+    cartNotifier.decreaseQuantity(cartItem);
   } else {
-    // Show confirmation before removing the last item
-    showRemoveConfirmation(context, item);
+    showRemoveConfirmation(context, ref, item);
   }
 }
 
 /// Shows a confirmation dialog before removing the item from cart
-void showRemoveConfirmation(BuildContext context, ProductModel item) {
-  final controller = Get.find<CartController>();
-  // Immediately remove the item from the cart
-  controller.decreaseQuantity(controller.getCartItem(item)!);
+void showRemoveConfirmation(BuildContext context, WidgetRef ref, ProductModel item) {
+  final cartNotifier = ref.read(cartControllerProvider.notifier);
+  final cartItem = cartNotifier.getCartItem(item);
+  
+  if (cartItem != null) {
+    cartNotifier.decreaseQuantity(cartItem);
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text('${item.name} removed from cart.'),
-      duration: const Duration(seconds: 3),
-      action: SnackBarAction(
-        label: 'UNDO',
-        textColor: AppColors.primary,
-        onPressed: () {
-          controller.addToCart(item);
-        },
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${item.name} removed from cart.'),
+        duration: const Duration(seconds: 3),
+        action: SnackBarAction(
+          label: 'UNDO',
+          textColor: AppColors.primary,
+          onPressed: () {
+            cartNotifier.addToCart(item);
+          },
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

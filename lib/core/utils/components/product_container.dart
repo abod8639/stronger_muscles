@@ -1,10 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/home/presentation/widgets/image_indicators.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/image_section.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/title_and_description.dart';
 
@@ -13,7 +9,6 @@ class ProductContainer extends StatefulWidget {
     super.key,
     required this.product,
     this.showName,
-    this.selectedImageIndex,
     this.onPageChanged,
     this.onTap,
     required this.isBackgroundWhite,
@@ -22,48 +17,17 @@ class ProductContainer extends StatefulWidget {
   final void Function()? onTap;
   final ProductModel product;
   final bool? showName;
-  final RxInt? selectedImageIndex;
   final bool isBackgroundWhite;
   final ValueChanged<int>? onPageChanged;
+
   @override
   State<ProductContainer> createState() => _ProductContainerState();
 }
 
 class _ProductContainerState extends State<ProductContainer>
     with AutomaticKeepAliveClientMixin {
-  late final RxInt _selectedImageIndex;
-  late final PageController _pageController;
-  StreamSubscription<int>? _subscription;
-
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedImageIndex = widget.selectedImageIndex ?? 0.obs;
-    _pageController = PageController(initialPage: _selectedImageIndex.value);
-
-    if (widget.selectedImageIndex != null) {
-      _subscription = widget.selectedImageIndex!.listen((index) {
-        if (_pageController.hasClients &&
-            _pageController.page?.round() != index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
-        }
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _subscription?.cancel();
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,22 +53,8 @@ class _ProductContainerState extends State<ProductContainer>
           // Image Section
           Expanded(
             flex: 3,
-            child: Stack(
-              children: [
-                ImageSection(
-                  // product: widget.product,
-                  widget: widget,
-                  pageController: _pageController,
-                  selectedImageIndex: _selectedImageIndex,
-                ),
-                // Indicators
-                if (widget.showName != null && widget.showName == true)
-                  if (widget.product.imageUrls.length > 1)
-                    ImageIndicators(
-                      product: widget.product,
-                      selectedImageIndex: _selectedImageIndex,
-                    ),
-              ],
+            child: ImageSection(
+              widget: widget,
             ),
           ),
 

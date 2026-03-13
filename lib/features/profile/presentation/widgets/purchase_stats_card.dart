@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 
@@ -18,53 +18,52 @@ const double _shadowOpacity = 0.3;
 const double _shadowBlurRadius = 12.0;
 const double _shadowOffsetY = 4.0;
 
-class PurchaseStatsCard extends StatelessWidget {
+class PurchaseStatsCard extends ConsumerWidget {
   const PurchaseStatsCard({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<ProfileController>();
-    return Obx(() {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: _cardMarginHorizontal),
-        padding: const EdgeInsets.all(_cardPadding),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [AppColors.primary, AppColors.primaryDark],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileNotifier = ref.watch(profileControllerProvider.notifier);
+    
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: _cardMarginHorizontal),
+      padding: const EdgeInsets.all(_cardPadding),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [AppColors.primary, AppColors.primaryDark],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(_cardBorderRadius),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withValues(alpha: _shadowOpacity),
+            blurRadius: _shadowBlurRadius,
+            offset: const Offset(0, _shadowOffsetY),
           ),
-          borderRadius: BorderRadius.circular(_cardBorderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: _shadowOpacity),
-              blurRadius: _shadowBlurRadius,
-              offset: const Offset(0, _shadowOffsetY),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildStatItem(
-              'Total Spent',
-              'LE ${controller.totalSpent.toStringAsFixed(0)}',
-              Icons.payments_outlined,
-            ),
-            Container(
-              height: _dividerHeight,
-              width: _dividerWidth,
-              color: AppColors.white.withValues(alpha: _dividerOpacity),
-            ),
-            _buildStatItem(
-              'Completed',
-              '${controller.deliveredOrders}',
-              Icons.check_circle_outline,
-            ),
-          ],
-        ),
-      );
-    });
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildStatItem(
+            'Total Spent',
+            'LE ${profileNotifier.totalSpent.toStringAsFixed(0)}',
+            Icons.payments_outlined,
+          ),
+          Container(
+            height: _dividerHeight,
+            width: _dividerWidth,
+            color: AppColors.white.withValues(alpha: _dividerOpacity),
+          ),
+          _buildStatItem(
+            'Completed',
+            '${profileNotifier.deliveredOrders}',
+            Icons.check_circle_outline,
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildStatItem(String label, String value, IconData icon) {

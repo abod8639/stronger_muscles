@@ -1,16 +1,25 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:get/get.dart' as getx;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/profile/presentation/controllers/language_controller.dart';
 import '../config/api_config.dart';
 import 'storage_service.dart';
 import '../errors/failures.dart';
 
+part 'api_service.g.dart';
+
+@Riverpod(keepAlive: true)
+ApiService apiService(ApiServiceRef ref) {
+  return ApiService(ref);
+}
+
 class ApiService {
   late final Dio _dio;
   final Duration _timeout = const Duration(seconds: 15);
+  final Ref _ref;
 
-  ApiService() {
+  ApiService(this._ref) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConfig.baseUrl,
@@ -20,15 +29,12 @@ class ApiService {
       ),
     );
 
-    // إضافة Interceptor للتعامل مع الـ Headers والـ Logging تلقائياً
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final token = StorageService.getToken();
-          final languageCode = getx.Get.find<LanguageController>()
-              .currentLocale
-              .value
-              .languageCode;
+          final locale = _ref.read(languageControllerProvider);
+          final languageCode = locale.languageCode;
 
           options.headers['Content-Type'] = 'application/json';
           options.headers['Accept'] = 'application/json';
@@ -37,9 +43,6 @@ class ApiService {
           if (token != null && !options.headers.containsKey('Authorization')) {
             options.headers['Authorization'] = 'Bearer $token';
           }
-
-          print('🚀 Request: ${options.method} ${options.uri}');
-          if (options.data != null) print('📦 Body: ${options.data}');
 
           return handler.next(options);
         },
@@ -123,8 +126,6 @@ class ApiService {
     }
   }
 
-  // --- Error Handling ---
-
   Failure _handleDioError(DioException e) {
     String errorDescription = "حدث خطأ غير متوقع";
     FailureType failureType = FailureType.unknown;
@@ -164,7 +165,6 @@ class ApiService {
 
     if (response.statusCode == 401 || response.statusCode == 403) {
       failureType = FailureType.auth;
-      // التحقق من المسار إذا لزم الأمر عبر response.requestOptions.path
       if (response.requestOptions.path.contains('login')) {
         errorDescription =
             serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
@@ -192,7 +192,6 @@ class ApiService {
       errorDescription = serverMessage ?? errorDescription;
     }
 
-    print('❌ API Error (${response.statusCode}): $errorDescription');
     return Failure(message: errorDescription, type: failureType);
   }
 

@@ -1,24 +1,19 @@
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 
 class OrderRepository {
-  final ApiService _apiService = Get.find<ApiService>();
+  final ApiService _apiService;
+
+  OrderRepository(this._apiService);
 
   Future<void> createOrder(Map<String, dynamic> payload) async {
     try {
-      // Dio سيرمي Exception تلقائياً إذا كان الـ Status Code ليس 2xx
-      // بناءً على إعدادات الـ ApiService التي صممناها
       await _apiService.post(ApiConfig.orders, data: payload);
-
-      print("✅ Order placed successfully on server.");
-    } on Failure catch (e) {
-      print("❌ API Failure in createOrder: ${e.message}");
+    } on Failure {
       rethrow;
     } catch (e) {
-      print("❌ Unexpected Error in createOrder: $e");
       throw Failure(message: "حدث خطأ غير متوقع أثناء إرسال الطلب");
     }
   }
@@ -31,7 +26,6 @@ class OrderRepository {
         queryParameters: queryParams,
       );
 
-      // البيانات تأتي معالجة كـ Map أو List تلقائياً عبر Dio
       final dynamic body = response.data;
       List<dynamic> data = [];
 
@@ -43,10 +37,8 @@ class OrderRepository {
 
       return data.map((json) => OrderModel.fromJson(json)).toList();
     } on Failure catch (e) {
-      // إعادة رمي الفشل القادم من السيرفر مع رسالة مخصصة إذا أردت
       throw Failure(message: e.message);
     } catch (e) {
-      print("❌ Error in OrderRepository (getUserOrders): $e");
       throw Failure(message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً");
     }
   }

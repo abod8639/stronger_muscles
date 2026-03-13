@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
 part 'order_model.freezed.dart';
@@ -47,6 +48,11 @@ class OrderModel with _$OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
 
+  String get formattedDate {
+    if (orderDate == null) return '';
+    return DateFormat('d MMMM yyyy').format(orderDate!);
+  }
+
   bool get isPaid => paymentStatus == 'paid';
   bool get canBeCancelled => status == 'pending' || status == 'processing';
   bool get isCompleted => status == 'delivered';
@@ -57,7 +63,7 @@ class OrderModel with _$OrderModel {
 class OrderItemModel with _$OrderItemModel {
   @JsonSerializable(explicitToJson: true)
   const factory OrderItemModel({
-    @HiveField(0) required String id, // can be empty for new items
+    @HiveField(0) required String id,
     @HiveField(1) @JsonKey(name: 'order_id') required String orderId,
     @HiveField(2) @JsonKey(name: 'product_id') required String productId,
     @HiveField(3) @JsonKey(name: 'product_name') required String productName,
@@ -68,12 +74,16 @@ class OrderItemModel with _$OrderItemModel {
     @HiveField(8) DateTime? createdAt,
     @HiveField(9)
     @JsonKey(name: 'selected_flavor', includeIfNull: false)
-    String? selectedFlavor, // تم التعديل
+    String? selectedFlavor,
     @HiveField(10)
     @JsonKey(name: 'selected_size', includeIfNull: false)
     String? selectedSize,
   }) = _OrderItemModel;
+  
+  const OrderItemModel._(); // Added private constructor for freezed
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) =>
       _$OrderItemModelFromJson(json);
+  
+  double get price => unitPrice;
 }

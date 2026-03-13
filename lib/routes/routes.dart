@@ -1,15 +1,4 @@
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:get/get.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_binding.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/home_binding.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_binding.dart';
-import 'package:stronger_muscles/features/order/presentation/controllers/order_binding.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_binding.dart';
-import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_binding.dart';
-import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_binding.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/main_binding.dart';
-
 import 'package:stronger_muscles/features/auth/presentation/pages/auth_view.dart';
 import 'package:stronger_muscles/features/auth/presentation/pages/signin_page.dart';
 import 'package:stronger_muscles/features/auth/presentation/pages/signup_page.dart';
@@ -27,7 +16,6 @@ import 'package:stronger_muscles/features/search/presentation/pages/searchs_page
 import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 
 class AppRoutes {
   static const String main = '/';
@@ -53,113 +41,75 @@ class AppPages {
     routes: [
       GoRoute(
         path: AppRoutes.main,
-        builder: (context, state) {
-          MainBinding().dependencies();
-          return const MainPage();
-        },
+        builder: (context, state) => const MainPage(),
       ),
       GoRoute(
         path: AppRoutes.auth,
-        builder: (context, state) {
-          AuthBinding().dependencies();
-          return const AuthView();
-        },
+        builder: (context, state) => const AuthView(),
       ),
       GoRoute(
         path: AppRoutes.signIn,
-        builder: (context, state) {
-          AuthBinding().dependencies();
-          return SignInPage(
-            onSignUpTap: () => context.go(AppRoutes.signUp),
-          );
-        },
+        builder: (context, state) => SignInPage(
+          onSignUpTap: () => context.go(AppRoutes.signUp),
+        ),
       ),
       GoRoute(
         path: AppRoutes.signUp,
-        builder: (context, state) {
-          AuthBinding().dependencies();
-          return SignUpPage(
-            onSignInTap: () => context.go(AppRoutes.signIn),
-          );
-        },
+        builder: (context, state) => SignUpPage(
+          onSignInTap: () => context.go(AppRoutes.signIn),
+        ),
       ),
       GoRoute(
         path: AppRoutes.home,
-        builder: (context, state) {
-          HomeBinding().dependencies();
-          return const HomeView();
-        },
+        builder: (context, state) => const HomeView(),
       ),
       GoRoute(
         path: AppRoutes.cart,
-        builder: (context, state) {
-          CartBinding().dependencies();
-          return const CartView();
-        },
+        builder: (context, state) => const CartView(),
       ),
       GoRoute(
         path: AppRoutes.productDetails,
         builder: (context, state) {
-          final product = state.extra;
-          if (product is ProductModel) {
-            Get.replace<ProductDetailsController>(ProductDetailsController(product));
-          } else if (product is Map<String, dynamic>) {
-            final p = product['product'] as ProductModel;
-            final flavor = product['selectedFlavor'] as String?;
-            final size = product['selectedSize'] as String?;
-            Get.replace<ProductDetailsController>(ProductDetailsController(p, initialFlavor: flavor, initialSize: size));
+          final extra = state.extra;
+          if (extra is ProductModel) {
+            return ProductDetailsView(product: extra);
+          } else if (extra is Map<String, dynamic>) {
+            return ProductDetailsView(
+              product: extra['product'] as ProductModel,
+              initialFlavor: extra['selectedFlavor'] as String?,
+              initialSize: extra['selectedSize'] as String?,
+            );
           }
           return const ProductDetailsView();
         },
       ),
       GoRoute(
         path: AppRoutes.wishlist,
-        builder: (context, state) {
-          WishlistBinding().dependencies();
-          return const WishlistView();
-        },
+        builder: (context, state) => const WishlistView(),
       ),
       GoRoute(
         path: AppRoutes.search,
-        builder: (context, state) {
-          // If we need to pass data to search, we can use Get.put or something
-          return const ProductSearchsPage();
-        },
+        builder: (context, state) => const ProductSearchsPage(),
       ),
       GoRoute(
         path: AppRoutes.profile,
-        builder: (context, state) {
-          ProfileBinding().dependencies();
-          return const ProfilePage();
-        },
+        builder: (context, state) => const ProfilePage(),
       ),
       GoRoute(
         path: AppRoutes.checkout,
-        builder: (context, state) {
-          CheckoutBinding().dependencies();
-          return const CheckoutView();
-        },
+        builder: (context, state) => const CheckoutView(),
       ),
       GoRoute(
         path: AppRoutes.orderSuccess,
-        builder: (context, state) {
-          OrderBinding().dependencies();
-          return const OrderSuccessView();
-        },
+        builder: (context, state) => const OrderSuccessView(),
       ),
       GoRoute(
         path: AppRoutes.editUserInfo,
-        builder: (context, state) {
-          ProfileBinding().dependencies();
-          return const EditUserInfoView();
-        },
+        builder: (context, state) => const EditUserInfoView(),
       ),
       GoRoute(
         path: AppRoutes.orderView,
-        builder: (context, state) {
-          OrderBinding().dependencies();
-          return const OrderView();
-        },
+        builder: (context, state) => const OrderView(),
       ),
       GoRoute(
         path: AppRoutes.orderDetails,

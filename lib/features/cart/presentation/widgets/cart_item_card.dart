@@ -1,65 +1,76 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
-import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_details.dart';
-import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_image.dart';
+import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 
-class CartItemCard extends StatelessWidget {
-  static const double _borderRadius = 12.0;
-  static const double _cardElevation = 2.0;
-  static const double _horizontalPadding = 16.0;
-  static const double _verticalPadding = 8.0;
-  static const double _contentPadding = 12.0;
-  static const double _spacing = 16.0;
-
+class CartItemCard extends ConsumerWidget {
   final CartItemModel item;
 
   const CartItemCard({super.key, required this.item});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final cartNotifier = ref.watch(cartControllerProvider.notifier);
 
     return Card(
-      color: theme.colorScheme.surface,
-      margin: const EdgeInsets.symmetric(
-        horizontal: _horizontalPadding,
-        vertical: _verticalPadding,
-      ),
-      elevation: _cardElevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(_borderRadius),
-      ),
-      child: InkWell(
-        onTap: () => _navigateToProductDetails(context),
-        borderRadius: BorderRadius.circular(_borderRadius),
-        child: Padding(
-          padding: const EdgeInsets.all(_contentPadding),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              buildProductCartImage(item),
-              const SizedBox(width: _spacing),
-              Expanded(child: buildProductCartDetails(item)),
-              const SizedBox(width: 8.0),
-              buildQuantityControls(item.product),
-            ],
-          ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: CachedNetworkImage(
+                cacheManager: CustomCacheManager.instance,
+                imageUrl: item.product.imageUrls.isNotEmpty
+                    ? item.product.imageUrls.first.thumbnail
+                    : '',
+                width: 80,
+                height: 80,
+                fit: BoxFit.cover,
+                errorWidget: (_, __, ___) => const Icon(Icons.image, size: 40),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.product.getLocalizedName(locale: 'en'),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  if (item.selectedFlavor != null || item.selectedSize != null)
+                    Text(
+                      '${item.selectedFlavor ?? ""} ${item.selectedSize ?? ""}',
+                      style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'LE ${item.product.baseEffectivePrice}',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            QuantityControls(product: item.product),
+          ],
         ),
       ),
-    );
-  }
-
-  void _navigateToProductDetails(BuildContext context) {
-    context.push(
-      AppRoutes.productDetails,
-      extra: {
-        'product': item.product,
-        'selectedFlavor': item.selectedFlavor,
-        'selectedSize': item.selectedSize,
-      },
     );
   }
 }

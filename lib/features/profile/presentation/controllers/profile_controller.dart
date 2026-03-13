@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
@@ -7,71 +7,60 @@ import 'package:stronger_muscles/features/profile/presentation/controllers/addre
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 
-class ProfileController extends GetxController {
-  final AuthController _authController = Get.find<AuthController>();
-  final OrdersController _ordersController = Get.find<OrdersController>();
-  final AddressController _addressController = Get.find<AddressController>();
+part 'profile_controller.g.dart';
 
-  RxList<OrderModel> get orders => _ordersController.orders;
-  RxList<AddressModel> get addresses => _addressController.addresses;
-
-  final RxInt wishlistCount = 0.obs;
-
-  RxBool get isLoading => _authController.isLoading;
-  Rx<UserModel?> get currentUser => _authController.currentUser;
-
+@riverpod
+class ProfileController extends _$ProfileController {
   @override
-  void onInit() {
-    super.onInit();
-
-    // Listen for future changes (e.g. login/logout)
-    ever(_authController.currentUser, (UserModel? user) {
-      if (user == null) {
+  void build() {
+    // Listen for auth changes to clear data on logout
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next == null) {
         _clearData();
       }
     });
   }
 
+  UserModel? get currentUser => ref.watch(authControllerProvider);
+  bool get isLoading => ref.watch(authControllerProvider.notifier).isLoading;
+
+  List<OrderModel> get orders => ref.watch(ordersControllerProvider).value ?? [];
+  List<AddressModel> get addresses => ref.watch(addressControllerProvider).value ?? [];
+
+  int get wishlistCount {
+    try {
+      if (Hive.isBoxOpen('wishlist')) {
+        return Hive.box<String>('wishlist').length;
+      }
+    } catch (_) {}
+    return 0;
+  }
+
   void _clearData() {
-    _ordersController.clearData();
-    _addressController.addresses.clear();
-    wishlistCount.value = 0;
+    ref.read(ordersControllerProvider.notifier).clearData();
+    ref.read(addressControllerProvider.notifier).clearForm();
   }
 
   Future<void> loadUserData() async {
-    // Only fetch if authenticated
-    if (_authController.currentUser.value == null) return;
+    if (currentUser == null) return;
 
     await Future.wait([
-      _ordersController.fetchOrders(),
-      _addressController.fetchAddresses(),
-      _loadWishlistCount(),
+      ref.read(ordersControllerProvider.notifier).refreshOrders(),
+      ref.read(addressControllerProvider.notifier).fetchAddresses(),
     ]);
   }
 
-  Future<void> _loadWishlistCount() async {
-    try {
-      if (Hive.isBoxOpen('wishlist')) {
-        final wishlistBox = Hive.box<String>('wishlist');
-        wishlistCount.value = wishlistBox.length;
-      }
-    } catch (e) {
-      wishlistCount.value = 0;
-    }
-  }
-
-  // Statistics
-  int get totalOrders => _ordersController.orders.length;
+  int get totalOrders => orders.length;
   double get totalSpent =>
-      _ordersController.orders.fold(0, (sum, order) => sum + order.totalAmount);
-  int get deliveredOrders => _ordersController.deliveredOrders.length;
+      orders.fold(0.0, (sum, order) => sum + order.totalAmount);
+  int get deliveredOrders => orders.where((o) => o.status.toLowerCase() == 'delivered').length;
 
   Future<void> signOut() async {
-    await _authController.signOut();
+    await ref.read(authControllerProvider.notifier).signOut();
     _clearData();
   }
 
   Future<void> signInWithGoogle() async {
-    await _authController.signInWithGoogle();
+    await ref.read(authControllerProvider.notifier).signInWithGoogle();
   }
 }

@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'theme_controller.g.dart';
 
 const String _themeStorageKey = 'isDarkMode';
 const bool _defaultThemeIsDark = true;
 
-class ThemeController extends GetxController {
-  final _box = Hive.box('settings');
-
-  RxBool isDarkMode = _defaultThemeIsDark.obs;
+@riverpod
+class ThemeController extends _$ThemeController {
+  late final Box _box;
 
   @override
-  void onInit() {
-    super.onInit();
-    isDarkMode.value = _box.get(
-      _themeStorageKey,
-      defaultValue: _defaultThemeIsDark,
-    );
+  bool build() {
+    _box = Hive.box('settings');
+    return _box.get(_themeStorageKey, defaultValue: _defaultThemeIsDark);
   }
 
-  ThemeMode get themeMode =>
-      isDarkMode.value ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode get themeMode => state ? ThemeMode.dark : ThemeMode.light;
 
   void toggleTheme() {
-    isDarkMode.value = !isDarkMode.value;
-    Get.changeThemeMode(themeMode);
-    _box.put(_themeStorageKey, isDarkMode.value);
+    state = !state;
+    _box.put(_themeStorageKey, state);
   }
 }

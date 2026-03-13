@@ -1,110 +1,73 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
-import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart'; // استخدم الـ Repository
+import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 
-class CategoriesSectionsController extends GetxController {
-  final HomeController _homeController = Get.find<HomeController>();
-  final CategoryRepository _categoryRepository = Get.find<CategoryRepository>();
+part 'categories_sections_controller.g.dart';
 
-  final RxInt selectedIndex = 0.obs;
-  final RxList<CategoryModel> categories = <CategoryModel>[].obs;
-  final RxBool isLoading = false.obs;
-
-  final RxList<SelectionsModel> selections = <SelectionsModel>[
-    SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
-  ].obs;
-
+@riverpod
+class CategoriesSectionsController extends _$CategoriesSectionsController {
   @override
-  void onInit() {
-    super.onInit();
-    _initialize();
-
-    ever<int>(_homeController.selectedSectionIndex, (index) {
-      if (selectedIndex.value != index) {
-        selectedIndex.value = index;
-      }
-    });
-  }
-
-  Future<void> _initialize() async {
-    final cached = _categoryRepository.getCachedCategories();
+  FutureOr<List<SelectionsModel>> build() async {
+    final categoryRepository = ref.watch(categoryRepositoryProvider.notifier);
+    
+    final cached = categoryRepository.getCachedCategories();
     if (cached.isNotEmpty) {
-      categories.assignAll(cached);
-      _updateSelections(cached);
+      _categories = cached;
+      return _getSelectionsList(cached);
     }
-
-    if (categories.isNotEmpty) {
-      _fetchCategoriesInBackground();
-      return;
-    }
-
-    await fetchCategories();
+    
+    final fetched = await categoryRepository.getAllCategories();
+    _categories = fetched;
+    return _getSelectionsList(fetched);
   }
 
-  Future<void> _fetchCategoriesInBackground() async {
-    try {
-      final fetched = await _categoryRepository.getAllCategories();
-      categories.assignAll(fetched);
-      _updateSelections(fetched);
-    } catch (e) {
-      debugPrint('Background categories fetch error: $e');
-    }
-  }
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+  List<CategoryModel> _categories = [];
+  List<CategoryModel> get categories => _categories;
 
   Future<void> fetchCategories() async {
+    state = const AsyncLoading();
+    final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
     try {
-      if (categories.isEmpty) isLoading.value = true;
-
-      final fetched = await _categoryRepository.getAllCategories();
-      categories.assignAll(fetched);
-      _updateSelections(fetched);
-    } catch (e) {
-      print('DEBUG: Error in CategoriesSectionsController: $e');
-    } finally {
-      isLoading.value = false;
+      final fetched = await categoryRepository.getAllCategories();
+      _categories = fetched;
+      state = AsyncData(_getSelectionsList(fetched));
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 
-  void _updateSelections(List<CategoryModel> categoryList) {
-    String? currentId;
-    if (selectedIndex.value < selections.length) {
-      currentId = selections[selectedIndex.value].id;
-    }
-
-    final List<SelectionsModel> newList = [
+  List<SelectionsModel> _getSelectionsList(List<CategoryModel> categoryList) {
+    return [
       SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
       ...categoryList.map(
         (cat) => SelectionsModel(
           id: cat.id,
-          label: cat.getLocalizedName(locale: Get.locale?.languageCode ?? 'en'),
+          label: cat.getLocalizedName(locale: 'en'), 
           icon: _getIconForCategory(cat.id),
         ),
       ),
     ];
-
-    selections.assignAll(newList);
-
-    if (currentId != null) {
-      final newIndex = selections.indexWhere((s) => s.id == currentId);
-      if (newIndex != -1) {
-        selectedIndex.value = newIndex;
-        _homeController.selectedSectionIndex.value = newIndex;
-      }
-    }
   }
 
   void updateIndex(int index) {
-    if (index >= 0 && index < selections.length) {
-      selectedIndex.value = index;
-      final selectedId = selections[index].id;
-
-      _homeController.fetchProductsForSection(
+    if (index >= 0 && state.hasValue && index < state.value!.length) {
+      _selectedIndex = index;
+      final selectedId = state.value![index].id;
+      
+      ref.read(homeControllerProvider.notifier).fetchProductsForSection(
         index,
         categoryId: selectedId.isEmpty ? null : selectedId,
       );
+      
+      // إعادة تعيين الحالة لإعلام المستمعين بتغيير الـ selectedIndex
+      // في Riverpod، يفضل فصل الـ selectedIndex في provider مستقل إذا كان يتغير كثيراً
+      state = AsyncData(state.value!);
     }
   }
 

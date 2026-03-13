@@ -1,28 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/auth/presentation/pages/signin_page.dart';
 import 'package:stronger_muscles/features/auth/presentation/pages/signup_page.dart';
 
-class AuthView extends GetView<AuthController> {
+class AuthView extends ConsumerStatefulWidget {
   const AuthView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final RxBool isSignIn = true.obs;
+  ConsumerState<AuthView> createState() => _AuthViewState();
+}
 
+class _AuthViewState extends ConsumerState<AuthView> {
+  bool _isSignIn = true;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Obx(
-          () => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            transitionBuilder: (child, animation) {
-              return FadeTransition(opacity: animation, child: child);
-            },
-            child: isSignIn.value
-                ? SignInPage(onSignUpTap: () => isSignIn.value = false)
-                : SignUpPage(onSignInTap: () => isSignIn.value = true),
-          ),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          child: _isSignIn
+              ? SignInPage(onSignUpTap: () => setState(() => _isSignIn = false))
+              : SignUpPage(onSignInTap: () => setState(() => _isSignIn = true)),
         ),
       ),
     );

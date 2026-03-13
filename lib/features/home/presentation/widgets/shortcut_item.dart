@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _iconSize = 56.0;
-const double _iconInnerSize = 28.0;
-const double _labelWidth = 70.0;
-const double _labelFontSize = 12.0;
-const double _labelSpacing = 6.0;
-const Duration _animationDuration = Duration(milliseconds: 180);
+class ShortcutItem extends ConsumerWidget {
+  final int index;
 
-/// Builds a single shortcut item
-Widget buildShortcutItem(int index) {
-  final sectionsController = Get.find<CategoriesSectionsController>();
-  final item = sectionsController.selections[index];
+  const ShortcutItem({super.key, required this.index});
 
-  return Obx(() {
-    final isSelected = sectionsController.selectedIndex.value == index;
+  static const double _iconSize = 56.0;
+  static const double _iconInnerSize = 28.0;
+  static const double _labelWidth = 70.0;
+  static const double _labelFontSize = 12.0;
+  static const double _labelSpacing = 6.0;
+  static const Duration _animationDuration = Duration(milliseconds: 180);
 
-    return Builder(
-      builder: (context) {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sectionsState = ref.watch(categoriesSectionsControllerProvider);
+    final selectedIndex = ref.watch(categoriesSectionsControllerProvider.notifier).selectedIndex;
+    final isSelected = selectedIndex == index;
+
+    return sectionsState.when(
+      data: (selections) {
+        final item = selections[index];
         final theme = Theme.of(context);
 
         return Semantics(
@@ -27,11 +31,10 @@ Widget buildShortcutItem(int index) {
           selected: isSelected,
           button: true,
           child: GestureDetector(
-            onTap: () => sectionsController.updateIndex(index),
+            onTap: () => ref.read(categoriesSectionsControllerProvider.notifier).updateIndex(index),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Icon container with animation
                 AnimatedContainer(
                   duration: _animationDuration,
                   curve: Curves.easeInOut,
@@ -69,22 +72,15 @@ Widget buildShortcutItem(int index) {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: _labelSpacing),
-
-                // Label
                 SizedBox(
                   width: _labelWidth,
                   child: Text(
                     getLocalizedLabel(context, item.label),
                     style: TextStyle(
                       fontSize: _labelFontSize,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isSelected
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.onSurfaceVariant,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
                     ),
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
@@ -96,35 +92,36 @@ Widget buildShortcutItem(int index) {
           ),
         );
       },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
-  });
-}
+  }
 
-String getLocalizedLabel(BuildContext context, String key) {
-  final localizations = AppLocalizations.of(context)!;
-  switch (key) {
-    case 'categoryHome':
-      return localizations.categoryHome;
-    case 'categoryProtein':
-      return localizations.categoryProtein;
-    case 'categoryAmino':
-      return localizations.categoryAmino;
-    case 'categoryVitamins':
-      return localizations.categoryVitamins;
-    case 'categoryPreWorkout':
-      return localizations.categoryPreWorkout;
-    case 'categoryRecovery':
-      return localizations.categoryRecovery;
-    case 'categoryFatBurner':
-      return localizations.categoryFatBurner;
-    case 'categoryHealth':
-      return localizations.categoryHealth;
-    case 'categoryCarb':
-      return localizations.categoryCarb;
-    case 'categoryCreatine':
-      return localizations.categoryCreatine;
-    default:
-      // If no match is found, return the key as is (this allows names from DB to show up automatically)
-      return key;
+  String getLocalizedLabel(BuildContext context, String key) {
+    final localizations = AppLocalizations.of(context)!;
+    switch (key) {
+      case 'categoryHome':
+        return localizations.categoryHome;
+      case 'categoryProtein':
+        return localizations.categoryProtein;
+      case 'categoryAmino':
+        return localizations.categoryAmino;
+      case 'categoryVitamins':
+        return localizations.categoryVitamins;
+      case 'categoryPreWorkout':
+        return localizations.categoryPreWorkout;
+      case 'categoryRecovery':
+        return localizations.categoryRecovery;
+      case 'categoryFatBurner':
+        return localizations.categoryFatBurner;
+      case 'categoryHealth':
+        return localizations.categoryHealth;
+      case 'categoryCarb':
+        return localizations.categoryCarb;
+      case 'categoryCreatine':
+        return localizations.categoryCreatine;
+      default:
+        return key;
+    }
   }
 }

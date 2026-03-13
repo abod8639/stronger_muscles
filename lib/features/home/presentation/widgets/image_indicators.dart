@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 class ImageIndicators extends StatelessWidget {
   const ImageIndicators({
     super.key,
     required this.product,
-    required RxInt selectedImageIndex,
-  }) : _selectedImageIndex = selectedImageIndex;
+    required this.selectedImageIndex,
+  });
 
   final ProductModel product;
-  final RxInt _selectedImageIndex;
+  final int selectedImageIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +23,8 @@ class ImageIndicators extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
           product.imageUrls.length,
-          (index) => Obx(() {
-            final isActive = _selectedImageIndex.value == index;
+          (index) {
+            final isActive = selectedImageIndex == index;
             return AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               margin: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -38,7 +37,7 @@ class ImageIndicators extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2.0),
               ),
             );
-          }),
+          },
         ),
       ),
     );

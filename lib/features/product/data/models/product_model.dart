@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:get/get_navigation/src/root/parse_route.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
 import 'package:stronger_muscles/features/product/data/models/image_url_model.dart';
@@ -8,6 +7,16 @@ import 'package:stronger_muscles/features/product/data/models/product_size_model
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';
+
+// Extension to add firstWhereOrNull functionality
+extension FirstWhereOrNullExtension<T> on List<T> {
+  T? firstWhereOrNull(bool Function(T element) test) {
+    for (var element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
+}
 
 @freezed
 @HiveType(typeId: 5, adapterName: 'ProductModelAdapter')

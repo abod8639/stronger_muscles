@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
@@ -6,17 +6,23 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
-class AddressService extends GetxService {
-  final ApiService _apiService = Get.find<ApiService>();
+part 'address_service.g.dart';
 
-  /// Get all addresses for the current user
+@Riverpod(keepAlive: true)
+AddressService addressService(AddressServiceRef ref) {
+  return AddressService(ref.watch(apiServiceProvider));
+}
+
+class AddressService {
+  final ApiService _apiService;
+
+  AddressService(this._apiService);
+
   Future<List<AddressModel>> getAddresses() async {
     try {
       final response = await _apiService.get(ApiConfig.addresses);
-
       final data = response.data;
       final List<dynamic> addressesJson = data['addresses'] ?? [];
-
       return addressesJson
           .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
           .toList();
@@ -27,18 +33,14 @@ class AddressService extends GetxService {
     }
   }
 
-  /// Create a new address
   Future<AddressModel> createAddress(AddressModel address) async {
     try {
       final Map<String, dynamic> addressData = address.toJson();
-
       _cleanAddressData(addressData);
-
       final response = await _apiService.post(
         ApiConfig.addresses,
         data: addressData,
       );
-
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
@@ -48,17 +50,14 @@ class AddressService extends GetxService {
     }
   }
 
-  /// Update an existing address
   Future<AddressModel> updateAddress(int id, AddressModel address) async {
     try {
       final Map<String, dynamic> addressData = address.toJson();
       _cleanAddressData(addressData);
-
       final response = await _apiService.put(
         '${ApiConfig.addresses}/$id',
         data: addressData,
       );
-
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
@@ -68,7 +67,6 @@ class AddressService extends GetxService {
     }
   }
 
-  /// Delete an address
   Future<void> deleteAddress(int id) async {
     try {
       await _apiService.delete('${ApiConfig.addresses}/$id');
@@ -79,13 +77,11 @@ class AddressService extends GetxService {
     }
   }
 
-  /// Set an address as default
   Future<AddressModel> setDefaultAddress(int id) async {
     try {
       final response = await _apiService.post(
         '${ApiConfig.addresses}/$id/set-default',
       );
-
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
     } on Failure catch (e) {
@@ -95,7 +91,6 @@ class AddressService extends GetxService {
     }
   }
 
-  /// Helper to remove unnecessary fields before sending to API
   void _cleanAddressData(Map<String, dynamic> data) {
     data.removeWhere(
       (key, value) =>

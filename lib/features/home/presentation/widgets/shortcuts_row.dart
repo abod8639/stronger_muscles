@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/widgets/build_shortcut_item.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/shortcut_item.dart';
 
-/// Horizontal scrollable row of category shortcuts
-class CategoriesShortcutsRow extends StatelessWidget {
-  // Constants for styling
+class CategoriesShortcutsRow extends ConsumerWidget {
   static const double _horizontalPadding = 12.0;
   static const double _verticalPadding = 8.0;
   static const double _rowHeight = 90.0;
@@ -14,11 +12,11 @@ class CategoriesShortcutsRow extends StatelessWidget {
   const CategoriesShortcutsRow({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final sectionsController = Get.find<CategoriesSectionsController>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sectionsState = ref.watch(categoriesSectionsControllerProvider);
 
-    return Obx(
-      () => Padding(
+    return sectionsState.when(
+      data: (selections) => Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: _horizontalPadding,
           vertical: _verticalPadding,
@@ -28,13 +26,15 @@ class CategoriesShortcutsRow extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
-            itemCount: sectionsController.selections.length,
+            itemCount: selections.length,
             separatorBuilder: (_, index) => const SizedBox(width: _spacing),
-            itemBuilder: (context, index) => buildShortcutItem(index),
+            itemBuilder: (context, index) => ShortcutItem(index: index),
             addRepaintBoundaries: true,
           ),
         ),
       ),
+      loading: () => const SizedBox(height: _rowHeight),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

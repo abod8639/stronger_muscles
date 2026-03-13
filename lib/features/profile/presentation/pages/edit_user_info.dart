@@ -1,62 +1,43 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/update_profile.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-class EditUserInfoView extends StatefulWidget {
+class EditUserInfoView extends ConsumerStatefulWidget {
   const EditUserInfoView({super.key});
 
   @override
-  State<EditUserInfoView> createState() => _EditUserInfoViewState();
+  ConsumerState<EditUserInfoView> createState() => _EditUserInfoViewState();
 }
 
-class _EditUserInfoViewState extends State<EditUserInfoView> {
+class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController phoneController;
   final formKey = GlobalKey<FormState>();
-  late Worker _userWorker;
 
   @override
   void initState() {
     super.initState();
-    final controller = Get.find<AuthController>();
+    final user = ref.read(authControllerProvider);
     final firebaseUser = FirebaseAuth.instance.currentUser;
 
-    // Initialize controllers with current user data (fallback to Firebase)
     nameController = TextEditingController(
-      text:
-          controller.currentUser.value?.name ?? firebaseUser?.displayName ?? '',
+      text: user?.name ?? firebaseUser?.displayName ?? '',
     );
     emailController = TextEditingController(
-      text: controller.currentUser.value?.email ?? firebaseUser?.email ?? '',
+      text: user?.email ?? firebaseUser?.email ?? '',
     );
     phoneController = TextEditingController(
-      text:
-          controller.currentUser.value?.phone ??
-          firebaseUser?.phoneNumber ??
-          '',
+      text: user?.phone ?? firebaseUser?.phoneNumber ?? '',
     );
-
-    // If data loads later, update controllers if they are still empty
-    _userWorker = ever(controller.currentUser, (user) {
-      if (!mounted) return;
-      if (user != null) {
-        if (nameController.text.isEmpty) nameController.text = user.name;
-        if (emailController.text.isEmpty) emailController.text = user.email;
-        if (phoneController.text.isEmpty && user.phone != null) {
-          phoneController.text = user.phone!;
-        }
-      }
-    });
   }
 
   @override
   void dispose() {
-    _userWorker.dispose();
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
@@ -65,13 +46,26 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AuthController>();
+    final user = ref.watch(authControllerProvider);
+    final isLoading = ref.watch(authControllerProvider.notifier).isLoading;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final localizations = AppLocalizations.of(context)!;
+
+    // Update if user data changes
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next != null) {
+        if (nameController.text.isEmpty) nameController.text = next.name;
+        if (emailController.text.isEmpty) emailController.text = next.email;
+        if (phoneController.text.isEmpty && next.phone != null) {
+          phoneController.text = next.phone!;
+        }
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.editProfile),
+        title: Text(localizations.editProfile),
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.white,
       ),
@@ -82,115 +76,38 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Profile Photo Section
-              Center(
-                child: Stack(
-                  children: [
-                    Obx(() {
-                      final photoUrl = controller.currentUser.value?.photoUrl;
-                      return Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.primary,
-                            width: 3,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.black.withValues(alpha: .1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 58,
-                          backgroundColor: AppColors.greyLight,
-                          backgroundImage: photoUrl != null
-                              ? NetworkImage(photoUrl)
-                              : null,
-                          child: photoUrl == null
-                              ? const Icon(
-                                  Icons.person,
-                                  size: 50,
-                                  color: AppColors.greyDark,
-                                )
-                              : null,
-                        ),
-                      );
-                    }),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: isDark
-                                ? AppColors.backgroundDark
-                                : AppColors.white,
-                            width: 3,
-                          ),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.camera_alt,
-                            color: AppColors.white,
-                            size: 20,
-                          ),
-                          onPressed: () {
-                            // TODO: Implement photo upload
-                            Get.snackbar(
-                              'قريباً',
-                              'سيتم إضافة ميزة تغيير الصورة قريباً',
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              _buildPhotoSection(user?.photoUrl, isDark),
               const SizedBox(height: 32),
-
-              // Name Field
               _buildTextField(
                 controller: nameController,
-                label: AppLocalizations.of(context)!.fullName,
+                label: localizations.fullName,
                 icon: Icons.person_outline,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.enterName;
+                    return localizations.enterName;
                   }
                   return null;
                 },
                 isDark: isDark,
               ),
               const SizedBox(height: 16),
-
-              // Email Field
               _buildTextField(
                 controller: emailController,
-                label: AppLocalizations.of(context)!.email,
+                label: localizations.email,
                 icon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return AppLocalizations.of(context)!.enterEmail;
+                    return localizations.enterEmail;
                   }
-                  if (!GetUtils.isEmail(value)) {
-                    return AppLocalizations.of(context)!.validEmail;
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    return localizations.validEmail;
                   }
                   return null;
                 },
                 isDark: isDark,
               ),
               const SizedBox(height: 16),
-
-              // Phone Field
               _buildTextField(
                 controller: phoneController,
                 label: 'رقم الهاتف',
@@ -205,45 +122,39 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
                 isDark: isDark,
               ),
               const SizedBox(height: 32),
-
-              // Save Button
-              Obx(
-                () => controller.isLoading.value
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            await updateProfile(
-                              controller,
-                              nameController.text.trim(),
-                              emailController.text.trim(),
-                              phoneController.text.trim(),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 2,
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          await updateProfile(
+                            ref,
+                            nameController.text.trim(),
+                            emailController.text.trim(),
+                            phoneController.text.trim(),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Text(
-                          'حفظ التغييرات',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        elevation: 2,
+                      ),
+                      child: const Text(
+                        'حفظ التغييرات',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-              ),
+                    ),
               const SizedBox(height: 16),
-
-              // Cancel Button
               OutlinedButton(
-                onPressed: () => Get.back(),
+                onPressed: () => Navigator.of(context).pop(),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -264,6 +175,71 @@ class _EditUserInfoViewState extends State<EditUserInfoView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildPhotoSection(String? photoUrl, bool isDark) {
+    return Center(
+      child: Stack(
+        children: [
+          Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: AppColors.primary,
+                width: 3,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.black.withValues(alpha: .1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 58,
+              backgroundColor: AppColors.greyLight,
+              backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
+              child: photoUrl == null
+                  ? const Icon(
+                      Icons.person,
+                      size: 50,
+                      color: AppColors.greyDark,
+                    )
+                  : null,
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isDark ? AppColors.backgroundDark : AppColors.white,
+                  width: 3,
+                ),
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.camera_alt,
+                  color: AppColors.white,
+                  size: 20,
+                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('سيتم إضافة ميزة تغيير الصورة قريباً')),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

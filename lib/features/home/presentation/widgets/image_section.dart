@@ -1,29 +1,44 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
+import 'image_indicators.dart';
 
-class ImageSection extends StatelessWidget {
+class ImageSection extends StatefulWidget {
   const ImageSection({
     super.key,
     required this.widget,
-    required PageController pageController,
-    required RxInt selectedImageIndex,
-  }) : _pageController = pageController,
-       _selectedImageIndex = selectedImageIndex;
+  });
 
   final ProductContainer widget;
-  final PageController _pageController;
-  final RxInt _selectedImageIndex;
+
+  @override
+  State<ImageSection> createState() => _ImageSectionState();
+}
+
+class _ImageSectionState extends State<ImageSection> {
+  late final PageController _pageController;
+  int _selectedImageIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final images = widget.product.imageUrls;
+    final images = widget.widget.product.imageUrls;
 
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: widget.widget.onTap,
       child: Stack(
         children: [
           Container(
@@ -45,21 +60,32 @@ class ImageSection extends StatelessWidget {
                       allowImplicitScrolling: true,
                       controller: _pageController,
                       itemCount: images.length,
-                      onPageChanged:
-                          widget.onPageChanged ??
-                          (index) => _selectedImageIndex.value = index,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _selectedImageIndex = index;
+                        });
+                        if (widget.widget.onPageChanged != null) {
+                          widget.widget.onPageChanged!(index);
+                        }
+                      },
                       itemBuilder: (context, index) {
                         return buildImage(
                           images[index].medium,
                           theme,
-                          widget.product.isBackgroundWhite,
+                          widget.widget.product.isBackgroundWhite,
                         );
                       },
                     ),
             ),
           ),
+          
+          if (images.length > 1)
+            ImageIndicators(
+              product: widget.widget.product,
+              selectedImageIndex: _selectedImageIndex,
+            ),
 
-          if (widget.product.discountPrice != null)
+          if (widget.widget.product.discountPrice != null)
             Positioned(
               top: 12,
               right: 15,

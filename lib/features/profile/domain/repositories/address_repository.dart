@@ -1,22 +1,28 @@
 import 'dart:async';
-import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
+part 'address_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+AddressRepository addressRepository(AddressRepositoryRef ref) {
+  return AddressRepository(ref.watch(addressServiceProvider));
+}
+
 class AddressRepository {
-  final AddressService _service = Get.find<AddressService>();
+  final AddressService _service;
   final Box<AddressModel> _box = Hive.box<AddressModel>('addresses');
+
+  AddressRepository(this._service);
 
   Completer<List<AddressModel>>? _fetchCompleter;
 
-  /// Get cached addresses
   List<AddressModel> getCachedAddresses() => _box.values.toList();
 
-  /// Fetch and cache addresses
   Future<List<AddressModel>> getAddresses() async {
-    // If a request is already in progress, wait for it
     if (_fetchCompleter != null) {
       return _fetchCompleter!.future;
     }
@@ -26,7 +32,6 @@ class AddressRepository {
     try {
       final addresses = await _service.getAddresses();
 
-      // Update cache
       await _box.clear();
       for (var address in addresses) {
         await _box.put(address.id, address);
@@ -35,7 +40,6 @@ class AddressRepository {
       _fetchCompleter!.complete(addresses);
       return addresses;
     } on Failure catch (e) {
-      // On failure, if we have cache, return it
       if (e.type == FailureType.network && _box.isNotEmpty) {
         final cached = getCachedAddresses();
         _fetchCompleter!.complete(cached);
@@ -71,7 +75,6 @@ class AddressRepository {
   Future<AddressModel> setDefaultAddress(int id) async {
     final updatedAddress = await _service.setDefaultAddress(id);
 
-    // Update all local items to reflect the new default
     final all = _box.values.toList();
     for (var addr in all) {
       if (addr.id == id) {

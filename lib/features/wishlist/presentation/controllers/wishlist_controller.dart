@@ -1,25 +1,31 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
-class WishlistController extends GetxController {
-  WishlistService get _wishlistService => Get.find<WishlistService>();
+part 'wishlist_controller.g.dart';
 
-  RxList<ProductModel> get wishlistItems => _wishlistService.items;
+@riverpod
+class WishlistController extends _$WishlistController {
+  @override
+  List<ProductModel> build() {
+    return ref.watch(wishlistServiceProvider);
+  }
 
   void addToWishlist(ProductModel product) {
-    if (!_wishlistService.isFavorite(product.id)) {
-      _wishlistService.toggleFavorite(product);
+    final wishlistService = ref.read(wishlistServiceProvider.notifier);
+    if (!wishlistService.isFavorite(product.id)) {
+      wishlistService.toggleFavorite(product);
     }
   }
 
   void removeFromWishlist(ProductModel product) {
-    if (_wishlistService.isFavorite(product.id)) {
-      _wishlistService.toggleFavorite(product);
+    final wishlistService = ref.read(wishlistServiceProvider.notifier);
+    if (wishlistService.isFavorite(product.id)) {
+      wishlistService.toggleFavorite(product);
     }
   }
 
   bool isInWishlist(String productId) {
-    return _wishlistService.isFavorite(productId);
+    return ref.read(wishlistServiceProvider.notifier).isFavorite(productId);
   }
 }

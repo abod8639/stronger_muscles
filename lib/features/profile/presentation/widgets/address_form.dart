@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 
-class AddressForm extends StatefulWidget {
+class AddressForm extends ConsumerStatefulWidget {
   final AddressModel? address;
   const AddressForm({super.key, this.address});
 
   @override
-  State<AddressForm> createState() => _AddressFormState();
+  ConsumerState<AddressForm> createState() => _AddressFormState();
 }
 
-class _AddressFormState extends State<AddressForm> {
+class _AddressFormState extends ConsumerState<AddressForm> {
   final _formKey = GlobalKey<FormState>();
-  final AddressController _controller = Get.find<AddressController>();
 
   @override
   void initState() {
     super.initState();
-    // ملء البيانات فوراً وبشكل منفرد عند البدء لضمان عدم تصفير الحقول عند الـ Rebuild
-    _controller.fillForm(widget.address);
+    // Fill form using ref.read since it's inside initState
+    Future.microtask(() {
+      ref.read(addressControllerProvider.notifier).fillForm(widget.address);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final controller = ref.watch(addressControllerProvider.notifier);
+    final isLoading = ref.watch(addressControllerProvider.notifier).isLoading;
+    final selectedLabel = ref.watch(addressControllerProvider.notifier).selectedLabel;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -37,74 +41,48 @@ class _AddressFormState extends State<AddressForm> {
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
-
-            // زر الموقع الحالي مع مؤشر تحميل
-            Obx(
-              () => OutlinedButton.icon(
-                onPressed: _controller.isLoading.value
-                    ? null
-                    : _controller.getCurrentLocation,
-                icon: const Icon(Icons.my_location),
-                label: const Text('استخدم موقعي الحالي'),
-              ),
+            OutlinedButton.icon(
+              onPressed: isLoading ? null : () => controller.getCurrentLocation(),
+              icon: const Icon(Icons.my_location),
+              label: const Text('استخدم موقعي الحالي'),
             ),
-
             const SizedBox(height: 24),
-            _buildField(_controller.fullNameController, 'الاسم الكامل'),
+            _buildField(controller.fullNameController, 'الاسم الكامل'),
             const SizedBox(height: 16),
             _buildField(
-              _controller.phoneController,
+              controller.phoneController,
               'رقم الهاتف',
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 16),
-            _buildField(_controller.streetController, 'عنوان الشارع'),
-            const SizedBox(height: 16),
-
-            Row(
-              children: [
-                Expanded(
-                  child: _buildField(_controller.cityController, 'المدينة'),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildField(_controller.stateController, 'المنطقة'),
-                ),
-              ],
-            ),
-
+            _buildField(controller.streetController, 'عنوان الشارع'),
             const SizedBox(height: 16),
             Row(
               children: [
-                Expanded(
-                  child: _buildField(
-                    _controller.postalCodeController,
-                    'الرمز البريدي',
-                  ),
-                ),
+                Expanded(child: _buildField(controller.cityController, 'المدينة')),
                 const SizedBox(width: 16),
-                Expanded(
-                  child: _buildField(_controller.countryController, 'الدولة'),
-                ),
+                Expanded(child: _buildField(controller.stateController, 'المنطقة')),
               ],
             ),
-
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(child: _buildField(controller.postalCodeController, 'الرمز البريدي')),
+                const SizedBox(width: 16),
+                Expanded(child: _buildField(controller.countryController, 'الدولة')),
+              ],
+            ),
             const SizedBox(height: 24),
-            _buildLabelSelector(),
-
+            _buildLabelSelector(controller, selectedLabel),
             const SizedBox(height: 32),
-            _buildSubmitButton(),
+            _buildSubmitButton(controller, isLoading),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildField(
-    TextEditingController controller,
-    String label, {
-    TextInputType? keyboardType,
-  }) {
+  Widget _buildField(TextEditingController controller, String label, {TextInputType? keyboardType}) {
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -116,41 +94,42 @@ class _AddressFormState extends State<AddressForm> {
     );
   }
 
-  Widget _buildLabelSelector() {
-    return Obx(
-      () => Row(
-        children: ['Home', 'Work', 'Other']
-            .map(
-              (label) => Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
-                  label: Text(label),
-                  selected: _controller.selectedLabel.value == label,
-                  onSelected: (val) => _controller.selectedLabel.value = label,
-                ),
+  Widget _buildLabelSelector(AddressController controller, String selectedLabel) {
+    return Row(
+      children: ['Home', 'Work', 'Other']
+          .map(
+            (label) => Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: ChoiceChip(
+                label: Text(label),
+                selected: selectedLabel == label,
+                onSelected: (val) => controller.selectedLabel = label,
               ),
-            )
-            .toList(),
-      ),
+            ),
+          )
+          .toList(),
     );
   }
 
-  Widget _buildSubmitButton() {
-    return Obx(
-      () => SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: _controller.isLoading.value
-              ? null
-              : () {
-                  if (_formKey.currentState!.validate()) {
-                    _controller.saveAddress(widget.address?.id);
-                  }
-                },
-          child: _controller.isLoading.value
-              ? const CircularProgressIndicator()
-              : Text(widget.address == null ? 'حفظ' : 'تحديث'),
-        ),
+  Widget _buildSubmitButton(AddressController controller, bool isLoading) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: isLoading
+            ? null
+            : () async {
+                if (_formKey.currentState!.validate()) {
+                  await controller.saveAddress(widget.address?.id);
+                  if (mounted) Navigator.of(context).pop();
+                }
+              },
+        child: isLoading
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              )
+            : Text(widget.address == null ? 'حفظ' : 'تحديث'),
       ),
     );
   }

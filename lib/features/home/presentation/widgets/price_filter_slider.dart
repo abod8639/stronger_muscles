@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 
-class PriceFilterSlider extends StatefulWidget {
+class PriceFilterSlider extends ConsumerStatefulWidget {
   const PriceFilterSlider({super.key});
 
   @override
-  State<PriceFilterSlider> createState() => PriceFilterSliderState();
+  ConsumerState<PriceFilterSlider> createState() => PriceFilterSliderState();
 }
 
-class PriceFilterSliderState extends State<PriceFilterSlider> {
-  final controller = Get.find<HomeController>();
-  final searchController = Get.find<ProductSearchController>();
-
+class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
   late RangeValues _currentRangeValues;
 
   @override
   void initState() {
     super.initState();
+    // Use Future.microtask to access ref safely or just read initial values
+    final searchController = ref.read(productSearchControllerProvider.notifier);
     _currentRangeValues = RangeValues(
-      searchController.filterMinPrice.value,
-      searchController.filterMaxPrice.value,
+      searchController.filterMinPrice,
+      searchController.filterMaxPrice,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final minData = searchController.dataMinPrice.value;
-    final maxData = searchController.dataMaxPrice.value;
+    // Watch relevant state if needed, or just read once if it only changes here
+    final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
+    final minData = searchNotifier.dataMinPrice;
+    final maxData = searchNotifier.dataMaxPrice;
 
     return Column(
       children: [
@@ -59,78 +59,16 @@ class PriceFilterSliderState extends State<PriceFilterSlider> {
           width: double.infinity,
           child: FilledButton(
             onPressed: () {
-              searchController.applyPriceFilter(
+              ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
                 _currentRangeValues.start,
                 _currentRangeValues.end,
               );
               Navigator.pop(context);
             },
-            child: Text('Apply'),
+            child: const Text('Apply'),
           ),
         ),
       ],
-    );
-  }
-
-  /// Legacy function for backward compatibility.
-  ///
-  /// **Deprecated**: Use [SearchBar] widget instead.
-  @Deprecated('Use SearchBar widget instead')
-  Padding searchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-      child: Builder(
-        builder: (context) {
-          final theme = Theme.of(context);
-          return Row(
-            children: [
-              Expanded(
-                child: Container(
-                  height: 44,
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
-                    borderRadius: BorderRadius.circular(24.0),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 8.0),
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration.collapsed(
-                            hintText: 'Search',
-                          ),
-                          onChanged: searchController.onSearchChanged,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12.0),
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.tune,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ],
-          );
-        },
-      ),
     );
   }
 }

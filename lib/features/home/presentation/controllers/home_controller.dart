@@ -1,91 +1,66 @@
-import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
-import 'base_controller.dart';
 
-class HomeController extends BaseController {
-  final ProductRepository _productRepository = Get.find<ProductRepository>();
-  final ProductSearchController searchController =
-      Get.find<ProductSearchController>();
+part 'home_controller.g.dart';
 
-  final RxList<ProductModel> products = <ProductModel>[].obs;
-
-  final isConnectionError = false.obs;
-  final selectedSectionIndex = 0.obs;
-
+@riverpod
+class HomeController extends _$HomeController {
   @override
-  void onInit() {
-    super.onInit();
-    _loadInitialData();
-  }
-
-  Future<void> _loadInitialData() async {
-    final cachedProducts = _productRepository.getCachedProducts();
+  FutureOr<List<ProductModel>> build() async {
+    final productRepository = ref.watch(productRepositoryProvider.notifier);
+    
+    final cachedProducts = productRepository.getCachedProducts();
     if (cachedProducts.isNotEmpty) {
-      products.assignAll(cachedProducts);
-      searchController.setProducts(cachedProducts);
+      _products = cachedProducts;
+      // لا نحتاج لاستدعاء void هنا كقيمة، بل كعملية جانبية
+      _initFetch();
+      return _products;
     }
-
-    await fetchProductsForSection(selectedSectionIndex.value);
+    
+    await fetchProductsForSection(_selectedSectionIndex);
+    return _products;
   }
 
-  Future<void> _fetchProductsInBackground(
-    int index, {
-    String? categoryId,
-  }) async {
-    try {
-      final fetchedProducts = await _productRepository.getProducts(
-        categoryId: categoryId,
-      );
-      searchController.setProducts(fetchedProducts);
-    } catch (e) {
-      debugPrint('Background fetch error: $e');
-    }
+  // دالة مساعدة لبدء التحميل في الخلفية دون تعطيل الـ build
+  Future<void> _initFetch() async {
+    await fetchProductsForSection(_selectedSectionIndex);
   }
+
+  List<ProductModel> _products = [];
+  int _selectedSectionIndex = 0;
+  int get selectedSectionIndex => _selectedSectionIndex;
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
-    selectedSectionIndex.value = index;
-    isConnectionError.value = false;
-
-    if (searchController.filteredProducts.isNotEmpty) {
-      _fetchProductsInBackground(index, categoryId: categoryId);
-      return;
-    }
-
-    setLoading(true);
+    _selectedSectionIndex = index;
+    state = const AsyncLoading();
+    
+    final productRepository = ref.read(productRepositoryProvider.notifier);
     try {
-      final fetchedProducts = await _productRepository.getProducts(
+      final fetchedProducts = await productRepository.getProducts(
         categoryId: categoryId,
       );
-      products.assignAll(fetchedProducts);
-      searchController.setProducts(fetchedProducts);
-      resetState();
-    } finally {
-      setLoading(false);
+      _products = fetchedProducts;
+      state = AsyncData(_products);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 
   Future<void> refreshHome() async {
+    final index = _selectedSectionIndex;
+    final sectionsState = ref.read(categoriesSectionsControllerProvider);
+    
     String? categoryId;
-
-    if (Get.isRegistered<CategoriesSectionsController>()) {
-      final sectionsController = Get.find<CategoriesSectionsController>();
-      final index = selectedSectionIndex.value;
-
-      if (index >= 0 && index < sectionsController.selections.length) {
-        final id = sectionsController.selections[index].id;
-        categoryId = id.isEmpty ? null : id;
-      }
-
-      await Future.wait([
-        fetchProductsForSection(index, categoryId: categoryId),
-        sectionsController.fetchCategories(),
-      ]);
-    } else {
-      await fetchProductsForSection(selectedSectionIndex.value);
+    if (sectionsState.hasValue && index >= 0 && index < sectionsState.value!.length) {
+      final id = sectionsState.value![index].id;
+      categoryId = id.isEmpty ? null : id;
     }
+
+    await Future.wait([
+      fetchProductsForSection(index, categoryId: categoryId),
+      ref.read(categoriesSectionsControllerProvider.notifier).fetchCategories(),
+    ]);
   }
 }

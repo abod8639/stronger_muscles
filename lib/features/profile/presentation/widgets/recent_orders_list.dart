@@ -1,59 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const int _maxOrdersToDisplay = 3;
 const double _horizontalPadding = 16.0;
 const double _listItemSpacing = 12.0;
 
-class RecentOrdersList extends StatelessWidget {
+class RecentOrdersList extends ConsumerWidget {
   const RecentOrdersList({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final controller = Get.find<OrdersController>();
+    final ordersState = ref.watch(ordersControllerProvider);
     final isDark = theme.brightness == Brightness.dark;
-    final isAr = Get.locale?.languageCode == 'ar';
+    final locale = ref.watch(languageControllerProvider);
+    final isAr = locale.languageCode == 'ar';
 
-    return Obx(() {
-      final recentOrders = controller.orders.take(_maxOrdersToDisplay).toList();
+    return ordersState.when(
+      data: (orders) {
+        final recentOrders = orders.take(_maxOrdersToDisplay).toList();
+        if (recentOrders.isEmpty) return const SizedBox.shrink();
 
-      if (recentOrders.isEmpty) return const SizedBox.shrink();
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(context, theme, isAr),
-          const SizedBox(height: 4),
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: _horizontalPadding,
-              vertical: 8,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context, theme, isAr),
+            const SizedBox(height: 4),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: 8),
+              itemCount: recentOrders.length,
+              separatorBuilder: (context, index) => const SizedBox(height: _listItemSpacing),
+              itemBuilder: (context, index) {
+                final order = recentOrders[index];
+                return OrderCard(
+                  onTap: () => context.push(AppRoutes.orderDetails, extra: order),
+                  order: order,
+                  isDark: isDark,
+                  isAr: isAr,
+                );
+              },
             ),
-            itemCount: recentOrders.length,
-            separatorBuilder: (context, index) =>
-                const SizedBox(height: _listItemSpacing),
-            itemBuilder: (context, index) {
-              final order = recentOrders[index];
-              return OrderCard(
-                onTap: () => context.push(AppRoutes.orderDetails, extra: order),
-                order: order,
-                isDark: isDark,
-                isAr: isAr,
-              );
-            },
-          ),
-          const SizedBox(height: 8),
-        ],
-      );
-    });
+            const SizedBox(height: 8),
+          ],
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(child: Text('Error: $e')),
+    );
   }
 
   Widget _buildHeader(BuildContext context, ThemeData theme, bool isAr) {
@@ -79,9 +80,7 @@ class RecentOrdersList extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(width: 10),
-
               Text(
                 isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -91,16 +90,11 @@ class RecentOrdersList extends StatelessWidget {
               ),
             ],
           ),
-
-          // زر عرض الكل بتصميم أبسط
           TextButton(
             onPressed: () => context.push(AppRoutes.orderView),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.primary,
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
+              textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
               visualDensity: VisualDensity.compact,
             ),
             child: Row(

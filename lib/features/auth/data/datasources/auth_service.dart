@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_stats_model.dart';
 import '../../../../core/config/api_config.dart';
@@ -6,8 +6,17 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/services/storage_service.dart';
 
-class AuthService extends GetxService {
-  final ApiService _apiService = Get.find<ApiService>();
+part 'auth_service.g.dart';
+
+@Riverpod(keepAlive: true)
+AuthService authService(AuthServiceRef ref) {
+  return AuthService(ref.watch(apiServiceProvider));
+}
+
+class AuthService {
+  final ApiService _apiService;
+
+  AuthService(this._apiService);
 
   Future<UserModel> register({
     required String email,
@@ -94,7 +103,6 @@ class AuthService extends GetxService {
 
       return UserModel.fromJson(userMap);
     } catch (e) {
-      print('❌ Get Current User Error: $e');
       return null;
     }
   }
@@ -111,12 +119,13 @@ class AuthService extends GetxService {
       final response = await _apiService.post(
         ApiConfig.updateProfileRoute,
         data: {
-          'name': ?name,
-          'email': ?email,
-          'phone': ?phone,
-          'photoUrl': ?photoUrl,
-          'preferredLanguage': ?preferredLanguage,
-          'notificationsEnabled': ?notificationsEnabled,
+          if (name != null) 'name': name,
+          if (email != null) 'email': email,
+          if (phone != null) 'phone': phone,
+          if (photoUrl != null) 'photoUrl': photoUrl,
+          if (preferredLanguage != null) 'preferredLanguage': preferredLanguage,
+          if (notificationsEnabled != null)
+            'notificationsEnabled': notificationsEnabled,
         },
       );
 
@@ -172,7 +181,7 @@ class AuthService extends GetxService {
     try {
       await _apiService.post(ApiConfig.logout);
     } catch (e) {
-      print('❌ Logout API Error: $e');
+      // ignore error
     } finally {
       await StorageService.deleteToken();
     }

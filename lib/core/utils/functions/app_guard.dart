@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class AppGuard {
   static Future<void> runSafe(
+    WidgetRef ref,
     Future<void> Function() action, {
     bool requireAuth = true,
     bool requireInternet = true,
   }) async {
     if (requireInternet) {
-      final isOnline =
-          Get.find<InternetConnectionController>().isConnected.value;
+      final isOnline = ref.read(internetConnectionControllerProvider);
       if (!isOnline) {
         _showError(
+          ref.context,
           title: "لا يوجد اتصال",
           message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
@@ -25,13 +26,14 @@ class AppGuard {
     }
 
     if (requireAuth) {
-      final isLoggedIn = Get.find<AuthController>().isLoggedIn.value;
+      final isLoggedIn = ref.read(authControllerProvider.notifier).isLoggedIn;
       if (!isLoggedIn) {
         _showError(
+          ref.context,
           title: "تنبيه",
           message: "يرجى تسجيل الدخول للمتابعة",
           icon: Icons.lock_person_rounded,
-          isCritical: false, // عرض Snackbar
+          isCritical: false,
         );
         AppPages.router.push(AppRoutes.auth);
         return;
@@ -41,15 +43,17 @@ class AppGuard {
     await action();
   }
 
-  static void _showError({
+  static void _showError(
+    BuildContext context, {
     required String title,
     required String message,
     required IconData icon,
     required bool isCritical,
   }) {
     if (isCritical) {
-      Get.dialog(
-        AlertDialog(
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -62,32 +66,41 @@ class AppGuard {
           ),
           content: Text(message),
           actions: [
-            TextButton(onPressed: () => AppPages.router.pop(), child: const Text('حسناً')),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('حسناً'),
+            ),
           ],
         ),
       );
     } else {
-      Get.snackbar(
-        title,
-        message,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.black87,
-        colorText: Colors.white,
-        icon: Icon(icon, color: Colors.amber),
-        margin: const EdgeInsets.all(15),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              Icon(icon, color: Colors.amber, size: 20),
+              const SizedBox(width: 10),
+              Expanded(child: Text(message)),
+            ],
+          ),
+          backgroundColor: Colors.black87,
+          margin: const EdgeInsets.all(15),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     }
   }
 
   static Future<void> runSafeInternet(
+    WidgetRef ref,
     Future<void> Function() action, {
     bool requireInternet = true,
   }) async {
     if (requireInternet) {
-      final isOnline =
-          Get.find<InternetConnectionController>().isConnected.value;
+      final isOnline = ref.read(internetConnectionControllerProvider);
       if (!isOnline) {
         _showError(
+          ref.context,
           title: "لا يوجد اتصال",
           message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
@@ -101,17 +114,19 @@ class AppGuard {
   }
 
   static Future<void> runSafeAuth(
+    WidgetRef ref,
     Future<void> Function() action, {
     bool requireAuth = true,
   }) async {
     if (requireAuth) {
-      final isLoggedIn = Get.find<AuthController>().isLoggedIn.value;
+      final isLoggedIn = ref.read(authControllerProvider.notifier).isLoggedIn;
       if (!isLoggedIn) {
         _showError(
+          ref.context,
           title: "تنبيه",
           message: "يرجى تسجيل الدخول للمتابعة",
           icon: Icons.lock_person_rounded,
-          isCritical: false, // عرض Snackbar
+          isCritical: false,
         );
         AppPages.router.push(AppRoutes.auth);
         return;

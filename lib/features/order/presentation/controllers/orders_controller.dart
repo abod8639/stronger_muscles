@@ -1,62 +1,47 @@
-import 'package:get/get.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
-import '../../../home/presentation/controllers/base_controller.dart';
 
-class OrdersController extends BaseController {
-  final OrderRepository _orderRepository = Get.put(OrderRepository());
+part 'orders_controller.g.dart';
 
-  final RxList<OrderModel> orders = <OrderModel>[].obs;
-  bool _hasFetchedAll = false;
+@Riverpod(keepAlive: true)
+OrderRepository orderRepository(OrderRepositoryRef ref) {
+  return OrderRepository(ref.watch(apiServiceProvider));
+}
 
-  // Future<void> _loadInitialOrders() async {
-  //   // Lazy loading: orders will be fetched when needed (e.g., when Profile or Orders view is opened)
-  // }
+@Riverpod(keepAlive: true)
+class OrdersController extends _$OrdersController {
+  @override
+  FutureOr<List<OrderModel>> build() async {
+    // Initial fetch
+    return await _fetchOrders(limit: 3);
+  }
 
-  Future<void> fetchOrders({int? limit = 3}) async {
-    if (isLoading.value) return;
-
-    try {
-      setLoading(true);
-      // Reset state if we are fetching limited amount initially
-      if (limit != null) {
-        resetState();
-      }
-
-      final fetchedOrders = await _orderRepository.getUserOrders(limit: limit);
-      orders.assignAll(fetchedOrders);
-
-      if (limit == null) {
-        _hasFetchedAll = true;
-      } else {
-        _hasFetchedAll = fetchedOrders.length < limit;
-      }
-    } catch (e) {
-      handleError(e, message: _handleErrorMessage(e));
-    } finally {
-      setLoading(false);
-    }
+  Future<List<OrderModel>> _fetchOrders({int? limit}) async {
+    final repository = ref.read(orderRepositoryProvider);
+    return await repository.getUserOrders(limit: limit);
   }
 
   Future<void> fetchAllOrders() async {
-    if (isLoading.value || _hasFetchedAll) return;
-
+    state = const AsyncLoading();
     try {
-      setLoading(true);
-
-      final fetchedOrders = await _orderRepository.getUserOrders();
-      orders.assignAll(fetchedOrders);
-      _hasFetchedAll = true;
-    } catch (e) {
-      handleError(e, message: _handleErrorMessage(e));
-    } finally {
-      setLoading(false);
+      final orders = await _fetchOrders();
+      state = AsyncData(orders);
+    } catch (e, st) {
+      state = AsyncError(e, st);
     }
   }
 
   Future<void> refreshOrders() async {
-    _hasFetchedAll = false;
-    await fetchOrders(limit: orders.length > 3 ? null : 3);
+    state = const AsyncLoading();
+    try {
+      final currentLength = state.value?.length ?? 3;
+      final orders = await _fetchOrders(limit: currentLength > 3 ? null : 3);
+      state = AsyncData(orders);
+    } catch (e, st) {
+      state = AsyncError(e, st);
+    }
   }
 
   List<OrderModel> get deliveredOrders => _filterByStatus('delivered');
@@ -65,18 +50,10 @@ class OrdersController extends BaseController {
   List<OrderModel> get cancelledOrders => _filterByStatus('cancelled');
 
   List<OrderModel> _filterByStatus(String status) {
-    return orders.where((o) => o.status.toLowerCase() == status).toList();
+    return (state.value ?? []).where((o) => o.status.toLowerCase() == status).toList();
   }
 
   void clearData() {
-    orders.clear();
-    resetState();
-  }
-
-  String _handleErrorMessage(dynamic e) {
-    if (e.toString().contains('network')) {
-      return 'تأكد من اتصالك بالإنترنت';
-    }
-    return 'حدث خطأ أثناء تحميل الطلبات';
+    state = const AsyncData([]);
   }
 }
