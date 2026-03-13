@@ -16,6 +16,7 @@ class ProductSearchController extends BaseController {
   final _localProducts = <ProductModel>[].obs;
   final _remoteProducts = <ProductModel>[].obs;
   final filteredProducts = <ProductModel>[].obs;
+  final searchResults = <ProductModel>[].obs;
 
   final searchQuery = "".obs;
   final filterMinPrice = 0.0.obs;
@@ -23,11 +24,14 @@ class ProductSearchController extends BaseController {
   final dataMinPrice = 0.0.obs;
   final dataMaxPrice = 1000.0.obs;
 
-@override
+  @override
   void onInit() {
     super.onInit();
-    debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));    
-    everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
+    debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));
+    everAll([filterMinPrice, filterMaxPrice], (_) {
+      _applyFilters();
+      _applySearchFilters();
+    });
   }
 
 
@@ -42,10 +46,11 @@ class ProductSearchController extends BaseController {
     _applyFilters();
   }
 
-    void clearSearch() {
+  void clearSearch() {
     textController.clear();
     searchQuery.value = '';
     _remoteProducts.clear();
+    searchResults.clear();
     _updateDataBounds();
     if (dataMinPrice.value <= dataMaxPrice.value) {
       filterMinPrice.value = dataMinPrice.value;
@@ -56,12 +61,13 @@ class ProductSearchController extends BaseController {
   Future<void> _handleSearch(String query) async {
     if (query.isEmpty) {
       _remoteProducts.clear();
+      searchResults.clear();
       _updateDataBounds();
       if (dataMinPrice.value <= dataMaxPrice.value) {
         filterMinPrice.value = dataMinPrice.value;
         filterMaxPrice.value = dataMaxPrice.value;
       }
-      _applyFilters();
+      _applySearchFilters();
       return;
     }
     try {
@@ -70,7 +76,7 @@ class ProductSearchController extends BaseController {
       final results = await _remoteDataSource.fetchProductsFromApi(query);
       _remoteProducts.assignAll(results);
       _updateDataBounds();
-      _applyFilters();
+      _applySearchFilters();
     } catch (e) {
       handleError(e, title: 'خطأ في البحث');
     } finally {
@@ -87,62 +93,32 @@ class ProductSearchController extends BaseController {
   }
 
   void updateSearchQuery(String query) => searchQuery.value = query.trim();
+
   void onSearchChanged(String query) => updateSearchQuery(query);
 
-  // void clearSearch() {
-  //   textController.clear();
-  //   searchQuery.value = '';
-  //   _remoteProducts.clear();
-  //   _updateDataBounds();
-  //   _applyFilters();
-  // }
 
   void applyPriceFilter(double min, double max) {
     filterMinPrice.value = min;
     filterMaxPrice.value = max;
+    _applyFilters();
+    _applySearchFilters();
   }
 
-  // Future<void> _handleSearch(String query) async {
-  //   if (query.isEmpty) {
-  //     _remoteProducts.clear();
-  //     _updateDataBounds();
-  //     _applyFilters();
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     resetState();
-  //     // استخدام الـ Remote DataSource
-  //     final results = await _remoteDataSource.fetchProductsFromApi(query);
-  //     _remoteProducts.assignAll(results);
-  //     _updateDataBounds();
-  //     _applyFilters();
-  //   } catch (e) {
-  //     handleError(e, title: 'خطأ في البحث');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // void _updateDataBounds() {
-  //   final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
-  //   // استخدام الـ Local DataSource للحسابات
-  //   final bounds = _localDataSource.calculatePriceBounds(source);
-    
-  //   dataMinPrice.value = bounds['min']!;
-  //   dataMaxPrice.value = bounds['max']!;
-  //   filterMinPrice.value = dataMinPrice.value;
-  //   filterMaxPrice.value = dataMaxPrice.value;
-  // }
-
   void _applyFilters() {
-    final source = searchQuery.value.isEmpty ? _localProducts : _remoteProducts;
     final filtered = _localDataSource.filterByPrice(
-      source,
+      _localProducts,
       filterMinPrice.value,
       filterMaxPrice.value,
     );
     filteredProducts.assignAll(filtered);
+  }
+
+  void _applySearchFilters() {
+    final filtered = _localDataSource.filterByPrice(
+      _remoteProducts,
+      filterMinPrice.value,
+      filterMaxPrice.value,
+    );
+    searchResults.assignAll(filtered);
   }
 }

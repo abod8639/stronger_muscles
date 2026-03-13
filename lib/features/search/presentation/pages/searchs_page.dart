@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stronger_muscles/core/utils/components/product_container.dart';
+import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart' hide SearchBar;
+import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
 
 class ProductSearchsPage extends GetView<ProductSearchController> {
@@ -7,142 +12,93 @@ class ProductSearchsPage extends GetView<ProductSearchController> {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Get.find<HomeController>();
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('البحث عن المنتجات'),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: _buildSearchBar(),
+      body: CustomScrollView(
+                        physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                        ),
+        slivers: [
+          const SliverAppBar(
+            backgroundColor: Colors.transparent,
+            surfaceTintColor: Colors.transparent,
+            elevation: 0,
+            pinned: false,
+            floating: true,
+            snap: true,
+            centerTitle: true,
+            title: Text('البحث عن المنتجات'),
           ),
-        ),
-      ),
-      body: Column(
-        children: [
-          _buildFilterChips(), 
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value && controller.filteredProducts.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
 
-              // 2. حالة عدم وجود نتائج
-              if (controller.filteredProducts.isEmpty) {
-                return _buildEmptyState();
-              }
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: SearchBarInline(),
+            ),
+          ),
 
-              // 3. عرض المنتجات
-              return GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+          SliverToBoxAdapter(
+            child: _buildFilterChips(),
+          ),
+
+          // شبكة المنتجات
+          Obx(() {
+            // حالة التحميل أثناء وجود نص بحث
+            if (controller.isLoading.value &&
+                controller.searchQuery.value.isNotEmpty &&
+                controller.searchResults.isEmpty) {
+              return const SliverToBoxAdapter(
+                child: Center(
+                  heightFactor: 3,
+                  child: CircularProgressIndicator(),
                 ),
-                itemCount: controller.filteredProducts.length,
-                itemBuilder: (context, index) {
-                  final product = controller.filteredProducts[index];
-                  return _buildProductCard(product);
-                },
               );
-            }),
-          ),
-        ],
-      ),
-      // زر جانبي لفتح فلاتر الأسعار
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showFilterBottomSheet(context),
-        child: const Icon(Icons.filter_list),
-      ),
-    );
-  }
+            }
 
-  // شريط البحث
-  Widget _buildSearchBar() {
-    return TextField(
-      controller: controller.textController,
-      onChanged: controller.onSearchChanged,
-      decoration: InputDecoration(
-        hintText: 'ابحث عن منتجك المفضل...',
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: controller.clearSearch,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-        filled: true,
-        fillColor: Colors.grey[200],
-      ),
-    );
-  }
+            final products = controller.searchQuery.value.isEmpty
+                ? homeController.products
+                : controller.searchResults;
+            if (controller.searchQuery.value.isNotEmpty && products.isEmpty) {
+              return SliverToBoxAdapter(child: _buildEmptyState());
+            }
 
-  // بطاقة المنتج (يمكنك استبدالها ببطاقتك الجاهزة)
-  Widget _buildProductCard(dynamic product) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-              child: Container(
-                width: double.infinity,
-                color: Colors.grey[300],
-                child: const Icon(Icons.image, size: 50), // استبدلها بصورة المنتج
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(product.getLocalizedName(), maxLines: 1, overflow: TextOverflow.ellipsis),
-                Text('${product.price} ر.س', style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+            if (products.isEmpty) {
+              return SliverToBoxAdapter(child: _buildEmptyState());
+            }
 
-  // واجهة الفلترة (Bottom Sheet)
-  void _showFilterBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('تصفية حسب السعر', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            Obx(() => RangeSlider(
-                  values: RangeValues(controller.filterMinPrice.value, controller.filterMaxPrice.value),
-                  min: controller.dataMinPrice.value,
-                  max: controller.dataMaxPrice.value,
-                  divisions: 20,
-                  labels: RangeLabels('${controller.filterMinPrice.value}', '${controller.filterMaxPrice.value}'),
-                  onChanged: (values) {
-                    controller.applyPriceFilter(values.start, values.end);
+            return SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+              sliver: SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
+                  childAspectRatio:
+                      ResponsiveHelper.getGridChildAspectRatio(context),
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 12.0,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final product = products[index];
+                    return GestureDetector(
+                      onTap: () => Get.toNamed(
+                        AppRoutes.productDetails,
+                        arguments: product,
+                      ),
+                      child: ProductContainer(
+                        showName: true,
+                        product: product,
+                        isBackgroundWhite: false,
+                      ),
+                    );
                   },
-                )),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Get.back(),
-              child: const Text('تطبيق الفلتر'),
-            )
-          ],
-        ),
+                  childCount: products.length,
+                ),
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -154,7 +110,10 @@ class ProductSearchsPage extends GetView<ProductSearchController> {
         children: [
           Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
-          const Text('لا توجد نتائج تطابق بحثك', style: TextStyle(fontSize: 16, color: Colors.grey)),
+          const Text(
+            'لا توجد نتائج تطابق بحثك',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
         ],
       ),
     );

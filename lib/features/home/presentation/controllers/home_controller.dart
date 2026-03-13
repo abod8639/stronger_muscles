@@ -8,9 +8,9 @@ import 'base_controller.dart';
 
 class HomeController extends BaseController {
   final ProductRepository _productRepository = Get.find<ProductRepository>();
-  final searchController = Get.find<ProductSearchController>();
+  final ProductSearchController searchController = Get.find<ProductSearchController>();
 
-  RxList<ProductModel> get products => searchController.filteredProducts;
+  final RxList<ProductModel> products = <ProductModel>[].obs;
 
   final isConnectionError = false.obs;
   final selectedSectionIndex = 0.obs;
@@ -24,6 +24,7 @@ class HomeController extends BaseController {
   Future<void> _loadInitialData() async {
     final cachedProducts = _productRepository.getCachedProducts();
     if (cachedProducts.isNotEmpty) {
+      products.assignAll(cachedProducts);
       searchController.setProducts(cachedProducts);
     }
 
@@ -56,6 +57,7 @@ class HomeController extends BaseController {
     setLoading(true);
     try {
       final fetchedProducts = await _productRepository.getProducts(categoryId: categoryId);
+      products.assignAll(fetchedProducts);
       searchController.setProducts(fetchedProducts);
       resetState();
     } catch (e) {

@@ -20,6 +20,7 @@ import 'package:stronger_muscles/features/product_details/presentation/pages/pro
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
+import 'package:stronger_muscles/features/search/presentation/pages/searchs_page.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 
@@ -32,6 +33,7 @@ class AppRoutes {
   static const String cart = '/cart';
   static const String productDetails = '/product_details';
   static const String wishlist = '/wishlist';
+  static const String search = '/search';
   static const String profile = '/profile';
   static const String checkout = '/checkout';
   static const String orderSuccess = '/order_success';
@@ -81,6 +83,10 @@ class AppPages {
       name: AppRoutes.wishlist,
       page: () => const WishlistView(),
       binding: WishlistBinding(),
+    ),
+    GetPage(
+      name: AppRoutes.search,
+      page: () => const ProductSearchsPage(),
     ),
     GetPage(
       name: AppRoutes.profile,
