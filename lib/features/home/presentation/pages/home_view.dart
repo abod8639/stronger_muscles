@@ -16,7 +16,7 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sectionsState = ref.watch(categoriesSectionsControllerProvider);
+    // final sectionsState = ref.watch(categoriesSectionsControllerProvider);
     final selectedCategoryIndex = ref.watch(categoriesSectionsControllerProvider.notifier).selectedIndex;
 
     return Scaffold(

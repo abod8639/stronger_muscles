@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends ConsumerWidget {
   final CartItemModel item;
@@ -15,10 +16,17 @@ class CartItemCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cartNotifier = ref.watch(cartControllerProvider.notifier);
+    // final cartNotifier = ref.watch(cartControllerProvider.notifier);
 
     return InkWell(
-      onTap: () => cartNotifier,
+      onTap: () => context.push(
+        AppRoutes.productDetails,
+        extra: {
+          'product': item.product,
+          'selectedFlavor': item.selectedFlavor,
+          'selectedSize': item.selectedSize,
+        },
+      ),
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
