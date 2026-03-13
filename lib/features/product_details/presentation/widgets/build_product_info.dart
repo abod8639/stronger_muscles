@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -21,7 +22,7 @@ Widget buildProductInfo(
     searchController.textController.text = brandName;
     searchController.updateSearchQuery(brandName);
 
-    Get.toNamed(AppRoutes.search);
+    context.push(AppRoutes.search);
   }
   // Brand
   if (product.brand != null && product.brand!.isNotEmpty) {

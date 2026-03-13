@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class AppGuard {
   static Future<void> runSafe(
@@ -32,7 +33,7 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false, // عرض Snackbar
         );
-        Get.toNamed('/login');
+        AppPages.router.push(AppRoutes.auth);
         return;
       }
     }
@@ -61,7 +62,7 @@ class AppGuard {
           ),
           content: Text(message),
           actions: [
-            TextButton(onPressed: () => Get.back(), child: const Text('حسناً')),
+            TextButton(onPressed: () => AppPages.router.pop(), child: const Text('حسناً')),
           ],
         ),
       );
@@ -112,7 +113,7 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false, // عرض Snackbar
         );
-        Get.toNamed('/login');
+        AppPages.router.push(AppRoutes.auth);
         return;
       }
     }

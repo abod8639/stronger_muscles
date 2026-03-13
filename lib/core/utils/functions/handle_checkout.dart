@@ -8,5 +8,5 @@ Future<void> handleCheckout() async {
   if (controller.cartItems.isEmpty) {
     return;
   }
-  return AppGuard.runSafe(() async => Get.toNamed(AppRoutes.checkout));
+  return AppGuard.runSafe(() async => AppPages.router.push(AppRoutes.checkout));
 }

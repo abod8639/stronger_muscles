@@ -5,7 +5,6 @@ import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_fi
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 
 class SignUpPage extends GetView<AuthController> {
   final VoidCallback? onSignInTap;
@@ -94,7 +93,7 @@ class SignUpPage extends GetView<AuthController> {
                       style: TextStyle(color: Colors.grey[600]),
                     ),
                     TextButton(
-                      onPressed: () => Get.toNamed(AppRoutes.signIn),
+                      onPressed: onSignInTap,
                       child: Text(
                         AppLocalizations.of(context)!.login,
                         style: const TextStyle(fontWeight: FontWeight.bold),

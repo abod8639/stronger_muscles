@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
@@ -80,9 +81,9 @@ class ProductSearchsPage extends GetView<ProductSearchController> {
                   (context, index) {
                     final product = products[index];
                     return GestureDetector(
-                      onTap: () => Get.toNamed(
+                      onTap: () => context.push(
                         AppRoutes.productDetails,
-                        arguments: product,
+                        extra: product,
                       ),
                       child: ProductContainer(
                         showName: true,

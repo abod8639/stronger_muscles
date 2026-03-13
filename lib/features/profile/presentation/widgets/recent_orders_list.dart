@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
-import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 const int _maxOrdersToDisplay = 3;
 const double _horizontalPadding = 16.0;
@@ -42,7 +43,7 @@ class RecentOrdersList extends StatelessWidget {
             itemBuilder: (context, index) {
               final order = recentOrders[index];
               return OrderCard(
-                onTap: () => Get.to(() => OrderDetailsView(order: order)),
+                onTap: () => context.push(AppRoutes.orderDetails, extra: order),
                 order: order,
                 isDark: isDark,
                 isAr: isAr,
@@ -93,7 +94,7 @@ class RecentOrdersList extends StatelessWidget {
 
           // زر عرض الكل بتصميم أبسط
           TextButton(
-            onPressed: () => Get.toNamed('/order_view'),
+            onPressed: () => context.push(AppRoutes.orderView),
             style: TextButton.styleFrom(
               foregroundColor: AppColors.primary,
               textStyle: const TextStyle(

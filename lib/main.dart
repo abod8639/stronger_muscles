@@ -37,16 +37,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeController = Get.put(ThemeController());
     final languageController = Get.put(LanguageController());
+    InitialBinding().dependencies();
 
     return Obx(
-      () => GetMaterialApp(
+      () => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: themeController.themeMode,
-        initialBinding: InitialBinding(),
-        initialRoute: AppRoutes.main,
-        getPages: AppPages.routes,
+        routerConfig: AppPages.router,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,

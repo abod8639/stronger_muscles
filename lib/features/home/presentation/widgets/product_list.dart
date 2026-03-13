@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
@@ -119,7 +120,7 @@ class ProductList extends StatelessWidget {
             (context, index) {
               final product = controller.products[index];
               return GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.productDetails, arguments: product),
+                onTap: () => context.push(AppRoutes.productDetails, extra: product),
                 child: ProductContainer(
                   showName: true,
                   product: product,

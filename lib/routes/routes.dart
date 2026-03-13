@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
+// import 'package:get/get.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_binding.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_binding.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_binding.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/order_binding.dart';
-import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_binding.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_binding.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_binding.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_binding.dart';
@@ -19,10 +20,14 @@ import 'package:stronger_muscles/features/order/presentation/pages/order_view.da
 import 'package:stronger_muscles/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
+import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/searchs_page.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 
 class AppRoutes {
   static const String main = '/';
@@ -43,81 +48,126 @@ class AppRoutes {
 }
 
 class AppPages {
-  static final List<GetPage> routes = [
-    GetPage(
-      name: AppRoutes.main,
-      page: () => const MainPage(),
-      binding: MainBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.auth,
-      page: () => const AuthView(),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.signIn,
-      page: () => SignInPage(onSignUpTap: () => Get.offNamed(AppRoutes.signUp)),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.signUp,
-      page: () => SignUpPage(onSignInTap: () => Get.offNamed(AppRoutes.signIn)),
-      binding: AuthBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.home,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.cart,
-      page: () => const CartView(),
-      binding: CartBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.productDetails,
-      page: () => const ProductDetailsView(),
-      binding: ProductDetailsBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.wishlist,
-      page: () => const WishlistView(),
-      binding: WishlistBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.search,
-      page: () => const ProductSearchsPage(),
-    ),
-    GetPage(
-      name: AppRoutes.profile,
-      page: () => const ProfilePage(),
-      binding: ProfileBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.checkout,
-      page: () => const CheckoutView(),
-      binding: CheckoutBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.orderSuccess,
-      page: () => const OrderSuccessView(),
-      binding: OrderBinding(),
-    ),
-
-    GetPage(
-      name: AppRoutes.editUserInfo,
-      page: () => const EditUserInfoView(),
-      binding: ProfileBinding(),
-    ),
-    GetPage(
-      name: AppRoutes.orderView,
-      page: () => const OrderView(),
-      binding: OrderBinding(),
-    ),
-    // GetPage(
-    //   name: AppRoutes.orderDetails,
-    //   page: () => const OrderDetailsView(),
-    //   binding: OrderDetailsBinding(),
-    // ),
-  ];
+  static final router = GoRouter(
+    initialLocation: AppRoutes.main,
+    routes: [
+      GoRoute(
+        path: AppRoutes.main,
+        builder: (context, state) {
+          MainBinding().dependencies();
+          return const MainPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.auth,
+        builder: (context, state) {
+          AuthBinding().dependencies();
+          return const AuthView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.signIn,
+        builder: (context, state) {
+          AuthBinding().dependencies();
+          return SignInPage(
+            onSignUpTap: () => context.go(AppRoutes.signUp),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.signUp,
+        builder: (context, state) {
+          AuthBinding().dependencies();
+          return SignUpPage(
+            onSignInTap: () => context.go(AppRoutes.signIn),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.home,
+        builder: (context, state) {
+          HomeBinding().dependencies();
+          return const HomeView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.cart,
+        builder: (context, state) {
+          CartBinding().dependencies();
+          return const CartView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.productDetails,
+        builder: (context, state) {
+          final product = state.extra;
+          if (product is ProductModel) {
+            Get.replace<ProductDetailsController>(ProductDetailsController(product));
+          } else if (product is Map<String, dynamic>) {
+            final p = product['product'] as ProductModel;
+            final flavor = product['selectedFlavor'] as String?;
+            final size = product['selectedSize'] as String?;
+            Get.replace<ProductDetailsController>(ProductDetailsController(p, initialFlavor: flavor, initialSize: size));
+          }
+          return const ProductDetailsView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.wishlist,
+        builder: (context, state) {
+          WishlistBinding().dependencies();
+          return const WishlistView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.search,
+        builder: (context, state) {
+          // If we need to pass data to search, we can use Get.put or something
+          return const ProductSearchsPage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (context, state) {
+          ProfileBinding().dependencies();
+          return const ProfilePage();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.checkout,
+        builder: (context, state) {
+          CheckoutBinding().dependencies();
+          return const CheckoutView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.orderSuccess,
+        builder: (context, state) {
+          OrderBinding().dependencies();
+          return const OrderSuccessView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.editUserInfo,
+        builder: (context, state) {
+          ProfileBinding().dependencies();
+          return const EditUserInfoView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.orderView,
+        builder: (context, state) {
+          OrderBinding().dependencies();
+          return const OrderView();
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.orderDetails,
+        builder: (context, state) {
+          final order = state.extra as OrderModel;
+          return OrderDetailsView(order: order);
+        },
+      ),
+    ],
+  );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
@@ -51,7 +51,7 @@ class OrderSuccessView extends StatelessWidget {
               const SizedBox(height: _buttonSpacing),
               ElevatedButton(
                 onPressed: () {
-                  Get.offAllNamed(AppRoutes.main);
+                  context.go(AppRoutes.main);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,

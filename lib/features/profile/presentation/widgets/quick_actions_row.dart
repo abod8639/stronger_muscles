@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 const double _rowSpacing = 12.0;
 const double _cardPadding = 16.0;
@@ -41,7 +43,7 @@ class QuickActionsRow extends StatelessWidget {
                 label: 'Wishlist',
                 value: controller.wishlistCount.value.toString(),
                 color: AppColors.error,
-                onTap: () => Get.toNamed('/wishlist'),
+                onTap: () => context.push(AppRoutes.wishlist),
               ),
             ),
           ),

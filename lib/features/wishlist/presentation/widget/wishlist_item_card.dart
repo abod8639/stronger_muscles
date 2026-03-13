@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widget/build_delete_button.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widget/build_product_details.dart';
@@ -34,7 +34,7 @@ class WishlistItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
       child: InkWell(
-        onTap: () => Get.toNamed(AppRoutes.productDetails, arguments: product),
+        onTap: () => context.push(AppRoutes.productDetails, extra: product),
         borderRadius: BorderRadius.circular(_borderRadius),
         child: Padding(
           padding: const EdgeInsets.all(_contentPadding),

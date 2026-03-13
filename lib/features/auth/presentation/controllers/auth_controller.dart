@@ -48,7 +48,7 @@ class AuthController extends BaseController {
     currentUser.value = user;
     isLoggedIn.value = true;
     userId.value = user.id.toString();
-    Get.offAllNamed(AppRoutes.main);
+    AppPages.router.go(AppRoutes.main);
   }
 
   Future<User?> signInWithGoogle() async {
@@ -166,7 +166,7 @@ class AuthController extends BaseController {
       currentUser.value = null;
       isLoggedIn.value = false;
       userId.value = '';
-      Get.offAllNamed('/login'); // Adjust route
+      AppPages.router.go(AppRoutes.auth); // Or whatever the login route is
     } catch (e) {
       handleError(e, message: 'فشل تسجيل الخروج');
     }

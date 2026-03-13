@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -25,14 +26,14 @@ class SearchInputGroup extends StatelessWidget {
 
     return Row(
       children: [
-        Expanded(child: _buildSearchField(theme, controller, l10n)),
+        Expanded(child: _buildSearchField(context, theme, controller, l10n)),
         const SizedBox(width: _spacing),
         _buildFilterButton(context, theme, controller, l10n),
       ],
     );
   }
 
-  Widget _buildSearchField(ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
+  Widget _buildSearchField(BuildContext context, ThemeData theme, ProductSearchController controller, AppLocalizations l10n) {
     return Container(
       height: _searchBarHeight,
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -52,9 +53,9 @@ class SearchInputGroup extends StatelessWidget {
           IconButton(
             
             padding: EdgeInsets.zero,
-            onPressed: ()=>Get.toNamed(
+            onPressed: ()=>context.push(
               AppRoutes.search,
-               arguments: controller.searchQuery.value
+               extra: controller.searchQuery.value
                ),
 
               
@@ -67,7 +68,7 @@ class SearchInputGroup extends StatelessWidget {
               // readOnly: true,
               onTap: () {
                 controller.clearSearch();
-                Get.toNamed(AppRoutes.search, arguments: controller.searchQuery.value);
+                context.push(AppRoutes.search, extra: controller.searchQuery.value);
               },
               decoration: InputDecoration.collapsed(hintText: l10n.searchProducts),
             ),

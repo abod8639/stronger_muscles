@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
@@ -54,7 +55,7 @@ class AccountSettingsList extends StatelessWidget {
             icon: Icons.person_outline,
             title: AppLocalizations.of(context)!.editProfile,
             onTap: () {
-              Get.toNamed(AppRoutes.editUserInfo);
+              context.push(AppRoutes.editUserInfo);
             },
             isDark: isDark,
           ),

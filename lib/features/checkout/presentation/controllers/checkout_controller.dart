@@ -71,7 +71,7 @@ class CheckoutController extends GetxController {
 
       await _orderRepository.createOrder(payload);
       _cartController.clearCart();
-      Get.offNamed(AppRoutes.orderSuccess);
+      AppPages.router.go(AppRoutes.orderSuccess);
     } catch (e) {
       Get.snackbar('Error', 'Failed to place order: $e');
       print(e);

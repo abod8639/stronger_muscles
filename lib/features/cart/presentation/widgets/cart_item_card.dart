@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_details.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_image.dart';
@@ -33,7 +33,7 @@ class CartItemCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(_borderRadius),
       ),
       child: InkWell(
-        onTap: () => _navigateToProductDetails(),
+        onTap: () => _navigateToProductDetails(context),
         borderRadius: BorderRadius.circular(_borderRadius),
         child: Padding(
           padding: const EdgeInsets.all(_contentPadding),
@@ -52,10 +52,10 @@ class CartItemCard extends StatelessWidget {
     );
   }
 
-  void _navigateToProductDetails() {
-    Get.toNamed(
+  void _navigateToProductDetails(BuildContext context) {
+    context.push(
       AppRoutes.productDetails,
-      arguments: {
+      extra: {
         'product': item.product,
         'selectedFlavor': item.selectedFlavor,
         'selectedSize': item.selectedSize,
