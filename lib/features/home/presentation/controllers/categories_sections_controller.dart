@@ -13,7 +13,6 @@ class CategoriesSectionsController extends GetxController {
   final RxList<CategoryModel> categories = <CategoryModel>[].obs;
   final RxBool isLoading = false.obs;
 
-  // قائمة الاختيارات التي تظهر في الـ UI
   final RxList<SelectionsModel> selections = <SelectionsModel>[
     SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
   ].obs;
@@ -23,7 +22,6 @@ class CategoriesSectionsController extends GetxController {
     super.onInit();
     _initialize();
 
-    // مراقبة التغيير في الـ HomeController لمزامنة الـ UI
     ever<int>(_homeController.selectedSectionIndex, (index) {
       if (selectedIndex.value != index) {
         selectedIndex.value = index;
@@ -89,7 +87,6 @@ class CategoriesSectionsController extends GetxController {
 
     selections.assignAll(newList);
 
-    // إعادة ضبط الـ index بناءً على الـ ID المحفوظ
     if (currentId != null) {
       final newIndex = selections.indexWhere((s) => s.id == currentId);
       if (newIndex != -1) {
@@ -112,15 +109,14 @@ class CategoriesSectionsController extends GetxController {
   }
 
   IconData _getIconForCategory(String id) {
-    // نستخدم الـ Map بدلاً من Switch ليكون الكود أنظف وقابل للتوسع
     final icons = {
-      'creatine': Icons.local_fire_department_outlined,
+      'creatine': Icons.cookie_outlined,
       'protein': Icons.fitness_center,
-      'amino': Icons.local_drink,
+      'amino-acid': Icons.local_drink,
       'vitamins': Icons.medication,
       'preworkout': Icons.flash_on,
       'recovery': Icons.healing,
-      'fatburner': Icons.local_fire_department,
+      'Fat-Burner': Icons.local_fire_department_outlined,
       'health': Icons.favorite,
       'mass-gainers': Icons.man_3_sharp,
       'carb': Icons.bakery_dining_outlined,

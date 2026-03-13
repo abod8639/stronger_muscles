@@ -17,7 +17,7 @@ class ProductSearchController extends BaseController {
   final _remoteProducts = <ProductModel>[].obs;
   final filteredProducts = <ProductModel>[].obs;
 
-  final searchQuery = ''.obs;
+  final searchQuery = "".obs;
   final filterMinPrice = 0.0.obs;
   final filterMaxPrice = 1000.0.obs;
   final dataMinPrice = 0.0.obs;
@@ -26,56 +26,47 @@ class ProductSearchController extends BaseController {
 @override
   void onInit() {
     super.onInit();
-    _loadInitialProducts(); 
-    
-    debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));
+    debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));    
     everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
   }
-  Future<void> _loadInitialProducts() async {
-    try {
-      setLoading(true);
-      final results = await _remoteDataSource.fetchProductsFromApi("");
-      setProducts(results);
-    } catch (e) {
-      print("Error loading initial products: $e");
-    } finally {
-      setLoading(false);
-    }
-  }
+
+
+
   void setProducts(List<ProductModel> products) {
     _localProducts.assignAll(products);
     _updateDataBounds();
+    if (dataMinPrice.value <= dataMaxPrice.value) {
+      filterMinPrice.value = dataMinPrice.value;
+      filterMaxPrice.value = dataMaxPrice.value;
+    }
     _applyFilters();
   }
 
-  void updateSearchQuery(String query) => searchQuery.value = query.trim();
-  void onSearchChanged(String query) => updateSearchQuery(query);
-
-  void clearSearch() {
+    void clearSearch() {
     textController.clear();
     searchQuery.value = '';
     _remoteProducts.clear();
     _updateDataBounds();
+    if (dataMinPrice.value <= dataMaxPrice.value) {
+      filterMinPrice.value = dataMinPrice.value;
+      filterMaxPrice.value = dataMaxPrice.value;
+    }
     _applyFilters();
   }
-
-  void applyPriceFilter(double min, double max) {
-    filterMinPrice.value = min;
-    filterMaxPrice.value = max;
-  }
-
   Future<void> _handleSearch(String query) async {
     if (query.isEmpty) {
       _remoteProducts.clear();
       _updateDataBounds();
+      if (dataMinPrice.value <= dataMaxPrice.value) {
+        filterMinPrice.value = dataMinPrice.value;
+        filterMaxPrice.value = dataMaxPrice.value;
+      }
       _applyFilters();
       return;
     }
-
     try {
       setLoading(true);
       resetState();
-      // استخدام الـ Remote DataSource
       final results = await _remoteDataSource.fetchProductsFromApi(query);
       _remoteProducts.assignAll(results);
       _updateDataBounds();
@@ -86,25 +77,71 @@ class ProductSearchController extends BaseController {
       setLoading(false);
     }
   }
-
   void _updateDataBounds() {
-    final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
-    // استخدام الـ Local DataSource للحسابات
+    final source = searchQuery.value.isEmpty ? _localProducts : _remoteProducts;
+    if (source.isEmpty) return; // حماية من القوائم الفارغة
+
     final bounds = _localDataSource.calculatePriceBounds(source);
-    
     dataMinPrice.value = bounds['min']!;
     dataMaxPrice.value = bounds['max']!;
-    filterMinPrice.value = dataMinPrice.value;
-    filterMaxPrice.value = dataMaxPrice.value;
   }
 
+  void updateSearchQuery(String query) => searchQuery.value = query.trim();
+  void onSearchChanged(String query) => updateSearchQuery(query);
+
+  // void clearSearch() {
+  //   textController.clear();
+  //   searchQuery.value = '';
+  //   _remoteProducts.clear();
+  //   _updateDataBounds();
+  //   _applyFilters();
+  // }
+
+  void applyPriceFilter(double min, double max) {
+    filterMinPrice.value = min;
+    filterMaxPrice.value = max;
+  }
+
+  // Future<void> _handleSearch(String query) async {
+  //   if (query.isEmpty) {
+  //     _remoteProducts.clear();
+  //     _updateDataBounds();
+  //     _applyFilters();
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     resetState();
+  //     // استخدام الـ Remote DataSource
+  //     final results = await _remoteDataSource.fetchProductsFromApi(query);
+  //     _remoteProducts.assignAll(results);
+  //     _updateDataBounds();
+  //     _applyFilters();
+  //   } catch (e) {
+  //     handleError(e, title: 'خطأ في البحث');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  // void _updateDataBounds() {
+  //   final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
+  //   // استخدام الـ Local DataSource للحسابات
+  //   final bounds = _localDataSource.calculatePriceBounds(source);
+    
+  //   dataMinPrice.value = bounds['min']!;
+  //   dataMaxPrice.value = bounds['max']!;
+  //   filterMinPrice.value = dataMinPrice.value;
+  //   filterMaxPrice.value = dataMaxPrice.value;
+  // }
+
   void _applyFilters() {
-    final source = searchQuery.isEmpty ? _localProducts : _remoteProducts;
-    // استخدام الـ Local DataSource للفلترة
+    final source = searchQuery.value.isEmpty ? _localProducts : _remoteProducts;
     final filtered = _localDataSource.filterByPrice(
-      source, 
-      filterMinPrice.value, 
-      filterMaxPrice.value
+      source,
+      filterMinPrice.value,
+      filterMaxPrice.value,
     );
     filteredProducts.assignAll(filtered);
   }

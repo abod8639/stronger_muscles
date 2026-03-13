@@ -28,6 +28,7 @@ class InitialBinding extends Bindings {
     
     // 1. الأساسيات (Core Services)
     Get.put(ApiService(), permanent: true);
+    Get.put(ProductService(), permanent: true);
     Get.put(InternetConnectionController(), permanent: true);
     Get.put(LanguageController(), permanent: true);
     Get.put(ThemeController(), permanent: true);
@@ -54,6 +55,5 @@ class InitialBinding extends Bindings {
     Get.put(ProductsController(), permanent: true);
     Get.put(OrdersController(), permanent: true);
     Get.put(WishlistController(), permanent: true);
-    Get.put(ProductService(), permanent: true);
   }
 }

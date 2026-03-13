@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:stronger_muscles/features/product/data/datasources/category_remote_datasource.dart';
 import 'package:stronger_muscles/features/product/data/datasources/product_remote_datasource.dart';
+import 'package:stronger_muscles/features/product/data/datasources/product_service.dart';
 import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/product/presentation/controllers/category_controller.dart';
@@ -20,6 +21,7 @@ class MainBinding extends Bindings {
     Get.lazyPut(() => MainController());
 
     // Dependencies for Home Tab
+    Get.lazyPut(() => ProductService());
     Get.lazyPut(() => ProductSearchController());
     Get.lazyPut(() => HomeController());
     Get.lazyPut(() => CategoriesSectionsController());

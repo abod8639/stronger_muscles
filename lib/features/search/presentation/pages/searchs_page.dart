@@ -20,10 +20,9 @@ class ProductSearchsPage extends GetView<ProductSearchController> {
       ),
       body: Column(
         children: [
-          _buildFilterChips(), // عرض فلاتر الأسعار المختارة
+          _buildFilterChips(), 
           Expanded(
             child: Obx(() {
-              // 1. حالة التحميل
               if (controller.isLoading.value && controller.filteredProducts.isEmpty) {
                 return const Center(child: CircularProgressIndicator());
               }

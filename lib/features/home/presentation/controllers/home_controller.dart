@@ -4,7 +4,6 @@ import 'package:stronger_muscles/features/product/data/models/product_model.dart
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
 import 'base_controller.dart';
 
 class HomeController extends BaseController {
@@ -47,31 +46,19 @@ class HomeController extends BaseController {
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     selectedSectionIndex.value = index;
-    resetState();
     isConnectionError.value = false;
 
     if (searchController.filteredProducts.isNotEmpty) {
-      // Data already available (from cache or previous session), skip the loading state
-      // We can still fetch in the background to update, but don't block the UI
       _fetchProductsInBackground(index, categoryId: categoryId);
       return;
     }
 
     setLoading(true);
-
     try {
-      final fetchedProducts = await _productRepository.getProducts(
-        categoryId: categoryId,
-      );
+      final fetchedProducts = await _productRepository.getProducts(categoryId: categoryId);
       searchController.setProducts(fetchedProducts);
       resetState();
     } catch (e) {
-      isConnectionError.value = e is Failure && e.isConnectionError;
-      handleError(
-        e,
-        retryAction: () =>
-            fetchProductsForSection(index, categoryId: categoryId),
-      );
     } finally {
       setLoading(false);
     }
