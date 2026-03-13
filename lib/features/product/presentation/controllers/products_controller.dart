@@ -15,13 +15,21 @@ class ProductsController extends BaseController {
     fetchProducts();
   }
 
-  Future<void> fetchProducts({String? categoryId, String? query}) async {
+Future<void> fetchProducts({String? categoryId, String? query}) async {
     if (isLoading.value) return;
     try {
       if (products.isEmpty) setLoading(true);
-      final result = (query != null && query.isNotEmpty)
-          ? await _repository.searchProducts(query)
-          : await _repository.getProducts(categoryId: categoryId);
+
+      List<ProductModel> result;
+
+      if (query != null && query.trim().isNotEmpty) {
+        result = await _repository.searchProducts(query);
+      } else {
+        result = await _repository.getProducts(
+          categoryId: categoryId ?? (selectedCategoryId.value.isEmpty ? null : selectedCategoryId.value),
+        );
+      }
+
       products.assignAll(result);
       resetState();
     } catch (e) {

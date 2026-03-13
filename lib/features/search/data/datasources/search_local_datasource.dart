@@ -10,7 +10,7 @@ class SearchLocalDataSource {
   /// حساب أدنى وأقصى سعر في القائمة الحالية
   Map<String, double> calculatePriceBounds(List<ProductModel> products) {
     if (products.isEmpty) {
-      return {'min': 0.0, 'max': 1000.0};
+      return {'min': 100, 'max': 10000};
     }
     double min = products.first.price;
     double max = products.first.price;

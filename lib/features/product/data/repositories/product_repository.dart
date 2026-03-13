@@ -5,8 +5,8 @@ import 'package:stronger_muscles/features/product/data/models/product_model.dart
 import 'package:stronger_muscles/core/errors/failures.dart';
 
 class ProductRepository {
-  final ProductRemoteDataSource _remote = Get.find<ProductRemoteDataSource>();
-  final ProductLocalDataSource _local = ProductLocalDataSource();
+  final ProductRemoteDataSource _remote = Get.find();
+  final ProductLocalDataSource _local = Get.find();
 
   List<ProductModel> getCachedProducts() => _local.getCachedProducts();
 
@@ -25,13 +25,19 @@ class ProductRepository {
     }
   }
 
-  Future<List<ProductModel>> searchProducts(String query) async {
+Future<List<ProductModel>> searchProducts(String query) async {
+    if (query.trim().isEmpty) {
+      return await getProducts();
+    }
+
     try {
       return await _remote.getProductsFromApi(query: query);
     } on Failure catch (e) {
       if (e.type == FailureType.network) {
-        return _local.getCachedProducts().where((p) => 
-          p.getLocalizedName().toLowerCase().contains(query.toLowerCase())).toList();
+        return _local.getCachedProducts().where((p) {
+          final name = p.getLocalizedName().toLowerCase();
+          return name.contains(query.toLowerCase());
+        }).toList();
       }
       rethrow;
     }

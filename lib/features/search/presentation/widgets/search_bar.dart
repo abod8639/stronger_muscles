@@ -17,7 +17,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final searchController = Get.find<ProductSearchController>();
+    final ProductSearchController searchController = Get.find();
     final l10n = AppLocalizations.of(context)!;
 
     return SliverAppBar(
@@ -190,4 +190,5 @@ class SearchBar extends StatelessWidget {
       ),
     );
   }
+  
 }

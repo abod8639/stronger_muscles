@@ -4,7 +4,7 @@ import '../../../../core/config/api_config.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 class ProductRemoteDataSource extends GetxService {
-  final ApiService _apiService = Get.find<ApiService>();
+  final ApiService _apiService = Get.find();
 
   Future<List<ProductModel>> getProductsFromApi({String? categoryId, String? query, int page = 1}) async {
     final response = await _apiService.get(
@@ -23,8 +23,9 @@ class ProductRemoteDataSource extends GetxService {
 
   List<ProductModel> _parseProductsList(dynamic data) {
     List<dynamic> list = [];
-    if (data is List) list = data;
-    else if (data is Map) {
+    if (data is List) {
+      list = data;
+    } else if (data is Map) {
       final rawData = data['data'];
       if (rawData is List) list = rawData;
     }

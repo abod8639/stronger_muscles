@@ -23,13 +23,25 @@ class ProductSearchController extends BaseController {
   final dataMinPrice = 0.0.obs;
   final dataMaxPrice = 1000.0.obs;
 
-  @override
+@override
   void onInit() {
     super.onInit();
+    _loadInitialProducts(); 
+    
     debounce(searchQuery, _handleSearch, time: const Duration(milliseconds: 500));
     everAll([filterMinPrice, filterMaxPrice], (_) => _applyFilters());
   }
-
+  Future<void> _loadInitialProducts() async {
+    try {
+      setLoading(true);
+      final results = await _remoteDataSource.fetchProductsFromApi("");
+      setProducts(results);
+    } catch (e) {
+      print("Error loading initial products: $e");
+    } finally {
+      setLoading(false);
+    }
+  }
   void setProducts(List<ProductModel> products) {
     _localProducts.assignAll(products);
     _updateDataBounds();

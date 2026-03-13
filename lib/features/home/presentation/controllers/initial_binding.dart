@@ -20,9 +20,12 @@ import 'package:stronger_muscles/features/profile/presentation/controllers/langu
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
+
 class InitialBinding extends Bindings {
+
   @override
   void dependencies() {
+    
     // 1. الأساسيات (Core Services)
     Get.put(ApiService(), permanent: true);
     Get.put(InternetConnectionController(), permanent: true);
@@ -32,6 +35,7 @@ class InitialBinding extends Bindings {
     // Remote
     Get.put(CategoryRemoteDataSource(), permanent: true);
     Get.put(ProductRemoteDataSource(), permanent: true);
+
     // Local
     Get.put(CategoryLocalDataSource(), permanent: true);
     Get.put(ProductLocalDataSource(), permanent: true);
