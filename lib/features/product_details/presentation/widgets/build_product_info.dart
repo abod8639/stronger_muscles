@@ -15,7 +15,6 @@ Widget buildProductInfo(
 
 
    void navigateToBrandPage(String brandName) {
-    final brandName = product.brand!;
     final searchController = Get.find<ProductSearchController>();
 
     searchController.clearSearch();
