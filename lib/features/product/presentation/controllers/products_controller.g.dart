@@ -11,19 +11,16 @@ String _$productsControllerHash() =>
 
 /// See also [ProductsController].
 @ProviderFor(ProductsController)
-final productsControllerProvider =
-    AutoDisposeAsyncNotifierProvider<
-      ProductsController,
-      List<ProductModel>
-    >.internal(
-      ProductsController.new,
-      name: r'productsControllerProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$productsControllerHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+final productsControllerProvider = AutoDisposeAsyncNotifierProvider<
+    ProductsController, List<ProductModel>>.internal(
+  ProductsController.new,
+  name: r'productsControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$productsControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$ProductsController = AutoDisposeAsyncNotifier<List<ProductModel>>;
 // ignore_for_file: type=lint

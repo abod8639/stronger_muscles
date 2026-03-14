@@ -12,14 +12,14 @@ String _$promoControllerHash() => r'd7892c1b69e1b821a5db62cf802b7dfde5621dd8';
 @ProviderFor(PromoController)
 final promoControllerProvider =
     AutoDisposeNotifierProvider<PromoController, int>.internal(
-      PromoController.new,
-      name: r'promoControllerProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$promoControllerHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
+  PromoController.new,
+  name: r'promoControllerProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$promoControllerHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
 
 typedef _$PromoController = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint

@@ -92,34 +92,31 @@ class ProductDetailsControllerFamily extends Family<ProductDetailsState> {
 }
 
 /// See also [ProductDetailsController].
-class ProductDetailsControllerProvider
-    extends
-        AutoDisposeNotifierProviderImpl<
-          ProductDetailsController,
-          ProductDetailsState
-        > {
+class ProductDetailsControllerProvider extends AutoDisposeNotifierProviderImpl<
+    ProductDetailsController, ProductDetailsState> {
   /// See also [ProductDetailsController].
   ProductDetailsControllerProvider(
     ProductModel product, {
     String? initialFlavor,
     String? initialSize,
   }) : this._internal(
-         () => ProductDetailsController()
-           ..product = product
-           ..initialFlavor = initialFlavor
-           ..initialSize = initialSize,
-         from: productDetailsControllerProvider,
-         name: r'productDetailsControllerProvider',
-         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-             ? null
-             : _$productDetailsControllerHash,
-         dependencies: ProductDetailsControllerFamily._dependencies,
-         allTransitiveDependencies:
-             ProductDetailsControllerFamily._allTransitiveDependencies,
-         product: product,
-         initialFlavor: initialFlavor,
-         initialSize: initialSize,
-       );
+          () => ProductDetailsController()
+            ..product = product
+            ..initialFlavor = initialFlavor
+            ..initialSize = initialSize,
+          from: productDetailsControllerProvider,
+          name: r'productDetailsControllerProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$productDetailsControllerHash,
+          dependencies: ProductDetailsControllerFamily._dependencies,
+          allTransitiveDependencies:
+              ProductDetailsControllerFamily._allTransitiveDependencies,
+          product: product,
+          initialFlavor: initialFlavor,
+          initialSize: initialSize,
+        );
 
   ProductDetailsControllerProvider._internal(
     super._createNotifier, {
@@ -170,11 +167,8 @@ class ProductDetailsControllerProvider
   }
 
   @override
-  AutoDisposeNotifierProviderElement<
-    ProductDetailsController,
-    ProductDetailsState
-  >
-  createElement() {
+  AutoDisposeNotifierProviderElement<ProductDetailsController,
+      ProductDetailsState> createElement() {
     return _ProductDetailsControllerProviderElement(this);
   }
 
@@ -210,12 +204,8 @@ mixin ProductDetailsControllerRef
 }
 
 class _ProductDetailsControllerProviderElement
-    extends
-        AutoDisposeNotifierProviderElement<
-          ProductDetailsController,
-          ProductDetailsState
-        >
-    with ProductDetailsControllerRef {
+    extends AutoDisposeNotifierProviderElement<ProductDetailsController,
+        ProductDetailsState> with ProductDetailsControllerRef {
   _ProductDetailsControllerProviderElement(super.provider);
 
   @override
@@ -228,6 +218,5 @@ class _ProductDetailsControllerProviderElement
   String? get initialSize =>
       (origin as ProductDetailsControllerProvider).initialSize;
 }
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
