@@ -38,7 +38,7 @@ The platform is powered by a RESTful API built on the Laravel framework, ensurin
 
 ## Technical Architecture
 
-- Frontend: Flutter SDK, GetX, Hive, Google Maps API.
+- Frontend: Flutter SDK, Riverpod, go_router,Hive, Google Maps API.
 - Backend: Laravel Framework, RESTful API, MySQL/PostgreSQL.
 - Cloud Services: Firebase Core, Firebase Authentication, Cloud Firestore.
 

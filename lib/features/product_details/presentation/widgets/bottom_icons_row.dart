@@ -23,7 +23,8 @@ class BottomIconsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    // final cartState = ref.watch(cartControllerProvider);
+
+    final cartState = ref.watch(cartControllerProvider);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
     final detailsState = ref.watch(productDetailsControllerProvider(product));
     final detailsNotifier = ref.watch(
@@ -50,6 +51,7 @@ class BottomIconsRow extends ConsumerWidget {
                 detailsState,
                 detailsNotifier,
                 l10n,
+                cartState,
               ),
             ),
             const SizedBox(width: _spacing),
@@ -68,6 +70,7 @@ class BottomIconsRow extends ConsumerWidget {
     ProductDetailsState detailsState,
     ProductDetailsController detailsNotifier,
     AppLocalizations l10n,
+    dynamic cartState,
   ) {
     final item = cartNotifier.getCartItem(
       product,
@@ -82,6 +85,7 @@ class BottomIconsRow extends ConsumerWidget {
             detailsNotifier,
             cartNotifier,
             l10n,
+            cartState,
           );
   }
 
@@ -90,6 +94,7 @@ class BottomIconsRow extends ConsumerWidget {
     ProductDetailsController detailsNotifier,
     CartController cartNotifier,
     AppLocalizations l10n,
+    dynamic cartState,
   ) {
     final isPriceZero = detailsNotifier.getDisplayEffectivePrice(product) <= 0;
 
