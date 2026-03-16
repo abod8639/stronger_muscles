@@ -17,7 +17,6 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   @override
   void initState() {
     super.initState();
-    // Fill form using ref.read since it's inside initState
     Future.microtask(() {
       ref.read(addressControllerProvider.notifier).fillForm(widget.address);
     });
@@ -46,8 +45,29 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             OutlinedButton.icon(
               onPressed: isLoading
                   ? null
-                  : () => controller.getCurrentLocation(),
-              icon: const Icon(Icons.my_location),
+                  : () async {
+                      setState(() {}); // Start loading
+                      await controller.getCurrentLocation();
+                      if (mounted) {
+                        setState(() {}); // End loading
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('تم تحديث العنوان بناءً على موقعك'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      }
+                    },
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.blue,
+                      ),
+                    )
+                  : const Icon(Icons.my_location),
               label: const Text('استخدم موقعي الحالي'),
             ),
             const SizedBox(height: 24),
