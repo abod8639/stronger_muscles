@@ -56,6 +56,18 @@ class ProductRepository extends _$ProductRepository {
     }
   }
 
+  /// Fetches a single product by ID (cache-first, then API).
+  Future<ProductModel> getProductById(String id) async {
+    final local = ref.read(productLocalDataSourceProvider);
+    final cached = local.getProductById(id);
+    if (cached != null) return cached;
+
+    final remote = ref.read(productRemoteDataSourceProvider);
+    final product = await remote.getProductDetailsFromApi(id);
+    await local.cacheProduct(product);
+    return product;
+  }
+
   Future<List<ProductModel>> searchProducts(String query) async {
     final remote = ref.read(productRemoteDataSourceProvider);
     final local = ref.read(productLocalDataSourceProvider);

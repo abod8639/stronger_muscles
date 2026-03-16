@@ -71,12 +71,27 @@ class CartItemCard extends ConsumerWidget {
                         ),
                       ),
                     const SizedBox(height: 8),
-                    Text(
-                      'LE ${item.product.baseEffectivePrice}',
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LE ${item.product.baseEffectivePrice}',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        
+                        Text(
+                          'LE ${item.product.basePrice}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
                     ),
                   ],
                 ),

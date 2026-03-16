@@ -42,6 +42,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
+            // button to get current location
             OutlinedButton.icon(
               onPressed: isLoading
                   ? null

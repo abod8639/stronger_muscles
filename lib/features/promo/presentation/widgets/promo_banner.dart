@@ -19,6 +19,7 @@ class PromoBanner extends ConsumerWidget {
 
     return Column(
       children: [
+
         SizedBox(
           height: 170,
           child: PageView.builder(
@@ -34,7 +35,9 @@ class PromoBanner extends ConsumerWidget {
             },
           ),
         ),
+
         const SizedBox(height: 8),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
@@ -53,6 +56,7 @@ class PromoBanner extends ConsumerWidget {
             ),
           ),
         ),
+        
       ],
     );
   }
