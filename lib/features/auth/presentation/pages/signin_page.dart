@@ -90,10 +90,8 @@ class SignInPage extends ConsumerWidget {
                               await ref
                                   .read(authControllerProvider.notifier)
                                   .signInWithEmail(
-                                    email: authController.emailController.text
-                                        .trim(),
-                                    password:
-                                        authController.passwordController.text,
+                                    email: authController.emailController.text.trim(),
+                                    password: authController.passwordController.text,
                                   );
                             }
                           });

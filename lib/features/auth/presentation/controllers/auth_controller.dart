@@ -32,6 +32,7 @@ class AuthController extends _$AuthController {
     state = await AsyncValue.guard(() async {
       final login = ref.read(loginUseCaseProvider);
       return await login(email: email, password: password);
+      
     });
   }
 
@@ -49,6 +50,7 @@ class AuthController extends _$AuthController {
 
   Future<void> signInWithGoogle() async {
     // This logic should be expanded to use a GoogleSignInUseCase
+
   }
 
   Future<void> signOut() async {

@@ -6,22 +6,22 @@ import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/build_payment_option.dart';
 
 Step buildAddressStep(WidgetRef ref, String title) {
   final checkoutState = ref.watch(checkoutControllerProvider);
-  final profileNotifier = ref.watch(profileControllerProvider.notifier);
+  final addresses = ref.watch(addressControllerProvider).value ?? [];
 
   return Step(
     title: Text(title),
     content: Column(
       children: [
-        if (profileNotifier.addresses.isEmpty)
+        if (addresses.isEmpty)
           const Text('No addresses found. Please add one in your profile.')
         else
           Column(
-            children: profileNotifier.addresses.map((address) {
+            children: addresses.map((address) {
               final bool isSelected =
                   checkoutState.selectedAddress?.id == address.id;
               return Card(
