@@ -35,7 +35,7 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
-        AppPages.router.push(AppRoutes.auth);
+        ref.read(routerProvider).push(AppRoutes.auth);
         return;
       }
     }
@@ -128,7 +128,7 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
-        AppPages.router.push(AppRoutes.auth);
+        ref.read(routerProvider).push(AppRoutes.auth);
         return;
       }
     }

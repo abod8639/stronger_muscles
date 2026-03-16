@@ -11,12 +11,46 @@ class SignInPage extends ConsumerWidget {
 
   const SignInPage({super.key, this.onSignUpTap});
 
+  static final _passwordVisibleProvider = StateProvider.autoDispose<bool>((ref) => true);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     final formKey = GlobalKey<FormState>();
-    final authController = ref.watch(authControllerProvider.notifier);
-    final isLoading = ref.watch(authControllerProvider.notifier).isLoading;
+    final authState = ref.watch(authControllerProvider);
+    final authController = ref.read(authControllerProvider.notifier);
     final localizations = AppLocalizations.of(context)!;
+    
+    // Listen to authentication changes
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'خطأ في تسجيل الدخول: ${next.error}\nيرجى التأكد من البريد الإلكتروني وكلمة المرور والمحاولة مرة أخرى.',
+              textAlign: TextAlign.right,
+            ),
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      } else if (next is AsyncData &&
+          next.value != null &&
+          previous is AsyncLoading) {
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم تسجيل الدخول بنجاح!', textAlign: TextAlign.right),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        // Go back to the previous page only on success
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        }
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
@@ -29,7 +63,7 @@ class SignInPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildInputFields(context, authController, localizations),
+                _buildInputFields(context, authController, localizations,ref),
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
@@ -47,7 +81,7 @@ class SignInPage extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 24.0),
-                isLoading
+                authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                         onPressed: () {
@@ -112,7 +146,12 @@ class SignInPage extends ConsumerWidget {
     BuildContext context,
     AuthController controller,
     AppLocalizations l10n,
+    WidgetRef ref,
+
   ) {
+ 
+
+
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -134,7 +173,7 @@ class SignInPage extends ConsumerWidget {
         AuthTextField(
           controller: controller.emailController,
           label: l10n.email,
-          icon: Icons.email_outlined,
+          icon: Icon(Icons.email_outlined),
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -146,12 +185,20 @@ class SignInPage extends ConsumerWidget {
             return null;
           },
         ),
+
         const SizedBox(height: 16.0),
+
         AuthTextField(
           controller: controller.passwordController,
           label: l10n.password,
-          icon: Icons.lock_outline,
-          isPassword: true,
+          icon: IconButton(
+            icon: Icon(Icons.lock_outline),
+            onPressed: () {
+              ref.read(_passwordVisibleProvider.notifier).state = !ref.read(_passwordVisibleProvider);
+            },
+          ),
+          isPassword: ref.watch(_passwordVisibleProvider),
+           // ref.watch(authControllerProvider).isPasswordShow,
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -195,4 +242,5 @@ class SignInPage extends ConsumerWidget {
       ],
     );
   }
+
 }

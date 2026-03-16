@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
-  final IconData icon;
+  final Widget icon;
   final bool isPassword;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
@@ -30,7 +30,7 @@ class AuthTextField extends StatelessWidget {
       textInputAction: textInputAction,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: AppColors.primary),
+        prefixIcon: icon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: const BorderSide(color: AppColors.grey),

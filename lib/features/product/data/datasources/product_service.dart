@@ -26,8 +26,8 @@ class ProductService {
       final response = await _apiService.get(
         ApiConfig.products,
         queryParameters: {
-          if (categoryId != null) 'category': categoryId,
-          if (query != null) 'search': query,
+          'category': categoryId,
+          'search': query,
           'page': page,
           'limit': limit,
         },

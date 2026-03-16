@@ -104,11 +104,10 @@ class CheckoutController extends _$CheckoutController {
 
       await orderRepository.createOrder(payload);
       await cartNotifier.clearCart();
-      AppPages.router.go(AppRoutes.orderSuccess);
+      ref.read(routerProvider).go(AppRoutes.orderSuccess);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
+      ScaffoldMessenger.of(context).
+      showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
     } finally {
       state = state.copyWith(isProcessing: false);
     }

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
 import 'image_indicators.dart';
 
 class ImageSection extends StatefulWidget {
@@ -83,25 +84,29 @@ class _ImageSectionState extends State<ImageSection> {
             ),
 
           if (widget.widget.product.discountPrice != null)
-            Positioned(
-              top: 12,
-              right: 15,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'خصم',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
+          Positioned(
+            top: 12,
+             right: 15,
+              child: buildProductBadges( widget.widget.product, context, .5))
+            // Positioned(
+            //   top: 12,
+            //   right: 15,
+            //   child: Container(
+            //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //     decoration: BoxDecoration(
+            //       color: Colors.redAccent,
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     child: const Text(
+            //       'خصم',
+            //       style: TextStyle(
+            //         color: Colors.white,
+            //         fontSize: 10,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //   ),
+            // ),
         ],
       ),
     );

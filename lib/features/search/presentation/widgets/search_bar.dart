@@ -224,7 +224,7 @@ class SearchBarInline extends ConsumerWidget {
     final controller = ref.watch(productSearchControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
+    return SizedBox(
       height: _searchBarHeight,
       child: Row(
         children: [

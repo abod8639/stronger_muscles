@@ -129,7 +129,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,
-                  errorWidget: (_, __, ___) => const Icon(Icons.image),
+                  errorWidget: (_, _, _) => const Icon(Icons.image),
                 ),
                 title: Text(item.product.getLocalizedName(locale: 'en')),
                 subtitle: Text(

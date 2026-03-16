@@ -9,45 +9,30 @@ part 'auth_controller.g.dart';
 class AuthController extends _$AuthController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
   @override
-  UserModel? build() {
+  FutureOr<UserModel?> build() async {
     ref.onDispose(() {
       emailController.dispose();
       passwordController.dispose();
     });
 
-    _initUser();
-    return null;
-  }
-
-  Future<void> _initUser() async {
     final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
-    final user = await getCurrentUser();
-    if (user != null) {
-      state = user;
-    }
+    return await getCurrentUser();
   }
 
-  UserModel? get currentUser => state;
-  bool get isLoggedIn => state != null;
+  UserModel? get currentUser => state.value;
+  bool get isLoggedIn => state.value != null;
+  bool get isLoading => state.isLoading;
 
   Future<void> signInWithEmail({
     required String email,
     required String password,
   }) async {
-    _isLoading = true;
-    ref.notifyListeners();
-    try {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
       final login = ref.read(loginUseCaseProvider);
-      state = await login(email: email, password: password);
-    } finally {
-      _isLoading = false;
-      ref.notifyListeners();
-    }
+      return await login(email: email, password: password);
+    });
   }
 
   Future<void> signUpWithEmail({
@@ -55,19 +40,11 @@ class AuthController extends _$AuthController {
     required String password,
     String? name,
   }) async {
-    _isLoading = true;
-    ref.notifyListeners();
-    try {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
       final register = ref.read(registerUseCaseProvider);
-      state = await register(
-        email: email,
-        password: password,
-        name: name ?? "",
-      );
-    } finally {
-      _isLoading = false;
-      ref.notifyListeners();
-    }
+      return await register(email: email, password: password, name: name ?? "");
+    });
   }
 
   Future<void> signInWithGoogle() async {
@@ -75,9 +52,12 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signOut() async {
-    final logout = ref.read(logoutUseCaseProvider);
-    await logout();
-    state = null;
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final logout = ref.read(logoutUseCaseProvider);
+      await logout();
+      return null;
+    });
   }
 
   Future<void> updateUserProfile({
@@ -86,21 +66,17 @@ class AuthController extends _$AuthController {
     String? phone,
     String? photoUrl,
   }) async {
-    if (state == null) return;
+    if (state.value == null) return;
 
-    _isLoading = true;
-    ref.notifyListeners();
-    try {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
       final updateProfile = ref.read(updateProfileUseCaseProvider);
-      state = await updateProfile(
+      return await updateProfile(
         name: name,
         email: email,
         phone: phone,
         photoUrl: photoUrl,
       );
-    } finally {
-      _isLoading = false;
-      ref.notifyListeners();
-    }
+    });
   }
 }

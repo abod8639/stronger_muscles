@@ -7,7 +7,7 @@ part of 'checkout_controller.dart';
 // **************************************************************************
 
 String _$checkoutControllerHash() =>
-    r'5d9036ce3aa3ad57e0e52a9f24a839ba5bddb19f';
+    r'abe518b5532e52f97401c8aabe651f8ff22c48e4';
 
 /// See also [CheckoutController].
 @ProviderFor(CheckoutController)

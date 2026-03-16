@@ -91,6 +91,10 @@ class ProductSearchController extends _$ProductSearchController {
     final bounds = _localDataSource.calculatePriceBounds(source);
     _dataMinPrice = bounds['min']!;
     _dataMaxPrice = bounds['max']!;
+
+    // Keep existing filters within new bounds
+    _filterMinPrice = _filterMinPrice.clamp(_dataMinPrice, _dataMaxPrice);
+    _filterMaxPrice = _filterMaxPrice.clamp(_dataMinPrice, _dataMaxPrice);
   }
 
   void applyPriceFilter(double min, double max) {

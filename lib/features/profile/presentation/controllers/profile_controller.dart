@@ -15,14 +15,14 @@ class ProfileController extends _$ProfileController {
   void build() {
     // Listen for auth changes to clear data on logout
     ref.listen(authControllerProvider, (previous, next) {
-      if (next == null) {
+      if (next.value == null && !next.isLoading) {
         _clearData();
       }
     });
   }
 
-  UserModel? get currentUser => ref.watch(authControllerProvider);
-  bool get isLoading => ref.watch(authControllerProvider.notifier).isLoading;
+  UserModel? get currentUser => ref.watch(authControllerProvider).value;
+  bool get isLoading => ref.watch(authControllerProvider).isLoading;
 
   List<OrderModel> get orders =>
       ref.watch(ordersControllerProvider).value ?? [];

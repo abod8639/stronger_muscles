@@ -35,9 +35,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = ref.watch(authControllerProvider.notifier);
-    final isLoading = ref.watch(authControllerProvider.notifier).isLoading;
+    final authState = ref.watch(authControllerProvider);
+    final authController = ref.read(authControllerProvider.notifier);
     final localizations = AppLocalizations.of(context)!;
+
+    // Listen to authentication errors
+    ref.listen(authControllerProvider, (previous, next) {
+      if (next is AsyncError) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(next.error.toString()),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(backgroundColor: Colors.transparent),
@@ -51,7 +63,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildInputFields(context, authController, localizations),
-                isLoading
+                authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
                         onPressed: () {
@@ -64,6 +76,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                         .trim(),
                                     password:
                                         authController.passwordController.text,
+                                    name: _nameController.text.trim(),
                                   );
                             }
                           });
@@ -136,7 +149,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: _nameController,
           label: l10n.fullName,
-          icon: Icons.person_outline,
+          icon: Icon( Icons.person_outline),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return l10n.enterName;
@@ -148,7 +161,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: controller.emailController,
           label: l10n.email,
-          icon: Icons.email_outlined,
+          icon:Icon( Icons.email_outlined),
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -164,7 +177,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: controller.passwordController,
           label: l10n.password,
-          icon: Icons.lock_outline,
+          icon: Icon(Icons.lock_outline),
           isPassword: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -180,7 +193,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: _confirmPasswordController,
           label: l10n.confirmPassword,
-          icon: Icons.lock_outline,
+          icon: Icon(Icons.lock_outline),
           isPassword: true,
           textInputAction: TextInputAction.done,
           validator: (value) {

@@ -34,7 +34,7 @@ class CategoriesShortcutsRow extends ConsumerWidget {
         ),
       ),
       loading: () => const SizedBox(height: _rowHeight),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

@@ -25,45 +25,62 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch relevant state if needed, or just read once if it only changes here
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
     final minData = searchNotifier.dataMinPrice;
     final maxData = searchNotifier.dataMaxPrice;
+
+    // Ensure min < max to avoid RangeSlider crash
+    final effectiveMin = minData;
+    final effectiveMax = maxData > minData ? maxData : minData + 0.1;
+
+    // Clamp values to current bounds to prevent assertion errors
+    final startValue = _currentRangeValues.start.clamp(effectiveMin, effectiveMax);
+    final endValue = _currentRangeValues.end.clamp(effectiveMin, effectiveMax);
+    final effectiveValues = RangeValues(startValue, endValue);
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('LE ${_currentRangeValues.start.toStringAsFixed(0)}'),
-            Text('LE ${_currentRangeValues.end.toStringAsFixed(0)}'),
+            Text('LE ${effectiveValues.start.toStringAsFixed(0)}'),
+            Text('LE ${effectiveValues.end.toStringAsFixed(0)}'),
           ],
         ),
-        RangeSlider(
-          values: _currentRangeValues,
-          min: minData,
-          max: maxData,
-          divisions: (maxData - minData) > 0 ? (maxData - minData).toInt() : 1,
-          labels: RangeLabels(
-            'LE ${_currentRangeValues.start.toStringAsFixed(0)}',
-            'LE ${_currentRangeValues.end.toStringAsFixed(0)}',
+        if (maxData > minData)
+          RangeSlider(
+            values: effectiveValues,
+            min: effectiveMin,
+            max: effectiveMax,
+            divisions: (effectiveMax - effectiveMin) >= 1
+                ? (effectiveMax - effectiveMin).toInt()
+                : 1,
+            labels: RangeLabels(
+              'LE ${effectiveValues.start.toStringAsFixed(0)}',
+              'LE ${effectiveValues.end.toStringAsFixed(0)}',
+            ),
+            onChanged: (RangeValues values) {
+              setState(() {
+                _currentRangeValues = values;
+              });
+            },
+          )
+        else
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Text(
+              'Price: LE ${minData.toStringAsFixed(0)}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          onChanged: (RangeValues values) {
-            setState(() {
-              _currentRangeValues = values;
-            });
-          },
-        ),
         const SizedBox(height: 24),
         SizedBox(
           width: double.infinity,
           child: FilledButton(
             onPressed: () {
-              ref
-                  .read(productSearchControllerProvider.notifier)
-                  .applyPriceFilter(
-                    _currentRangeValues.start,
-                    _currentRangeValues.end,
+              ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
+                    effectiveValues.start,
+                    effectiveValues.end,
                   );
               Navigator.pop(context);
             },

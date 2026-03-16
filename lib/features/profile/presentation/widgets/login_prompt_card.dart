@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
@@ -131,7 +130,9 @@ class LoginPromptCard extends ConsumerWidget {
 
   Future<void> _handleLogin(BuildContext context, WidgetRef ref) async {
     return AppGuard.runSafeInternet(ref, () async {
-      context.push(AppRoutes.auth);
-    });
+      ref.read(routerProvider).push(
+        AppRoutes.auth);
+    }
+    );
   }
 }

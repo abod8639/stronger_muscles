@@ -100,7 +100,7 @@ class ProductDetailsView extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: _smallSpacing),
-                  buildProductBadges(product!, context),
+                  buildProductBadges(product!, context, .1),
                   const SizedBox(height: _mediumSpacing),
                   ImageListView(product: product!),
                   const SizedBox(height: _mediumSpacing),

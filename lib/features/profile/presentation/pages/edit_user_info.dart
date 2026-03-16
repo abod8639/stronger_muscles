@@ -22,7 +22,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
   @override
   void initState() {
     super.initState();
-    final user = ref.read(authControllerProvider);
+    final user = ref.read(authControllerProvider).value;
     final firebaseUser = FirebaseAuth.instance.currentUser;
 
     nameController = TextEditingController(
@@ -46,19 +46,21 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(authControllerProvider);
-    final isLoading = ref.watch(authControllerProvider.notifier).isLoading;
+    final userState = ref.watch(authControllerProvider);
+    final user = userState.value;
+    final isLoading = userState.isLoading;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final localizations = AppLocalizations.of(context)!;
 
     // Update if user data changes
     ref.listen(authControllerProvider, (previous, next) {
-      if (next != null) {
-        if (nameController.text.isEmpty) nameController.text = next.name;
-        if (emailController.text.isEmpty) emailController.text = next.email;
-        if (phoneController.text.isEmpty && next.phone != null) {
-          phoneController.text = next.phone!;
+      final user = next.value;
+      if (user != null) {
+        if (nameController.text.isEmpty) nameController.text = user.name;
+        if (emailController.text.isEmpty) emailController.text = user.email;
+        if (phoneController.text.isEmpty && user.phone != null) {
+          phoneController.text = user.phone!;
         }
       }
     });

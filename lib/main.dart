@@ -35,6 +35,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // final themeMode = ref.watch(themeControllerProvider.notifier).themeMode;
+    final router = ref.watch(routerProvider);
     final isDarkMode = ref.watch(themeControllerProvider);
     final locale = ref.watch(languageControllerProvider);
 
@@ -43,7 +44,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      routerConfig: AppPages.router,
+      routerConfig: router,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

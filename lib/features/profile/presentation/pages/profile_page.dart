@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
@@ -27,11 +28,9 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    // final profileController = ref.watch(profileControllerProvider.notifier);
-    final currentUser = ref
-        .watch(profileControllerProvider.notifier)
-        .currentUser;
-    final isLoading = ref.watch(profileControllerProvider.notifier).isLoading;
+    final authState = ref.watch(authControllerProvider);
+    final currentUser = authState.value;
+    final isLoading = authState.isLoading;
     final orders = ref.watch(profileControllerProvider.notifier).orders;
 
     // Trigger lazy loading for user data
