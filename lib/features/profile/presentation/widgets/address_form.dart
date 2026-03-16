@@ -125,7 +125,13 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               child: ChoiceChip(
                 label: Text(label),
                 selected: selectedLabel == label,
-                onSelected: (val) => controller.selectedLabel = label,
+                onSelected: (val) {
+                  if (val) {
+                    setState(() {
+                      controller.selectedLabel = label;
+                    });
+                  }
+                },
               ),
             ),
           )
@@ -141,8 +147,12 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             ? null
             : () async {
                 if (_formKey.currentState!.validate()) {
+                  setState(() {}); // Trigger loading state
                   await controller.saveAddress(widget.address?.id);
-                  if (mounted) Navigator.of(context).pop();
+                  if (mounted) {
+                    setState(() {}); // Clear loading state if not popped
+                    Navigator.of(context).pop();
+                  }
                 }
               },
         child: isLoading

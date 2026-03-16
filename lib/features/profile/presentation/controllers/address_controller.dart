@@ -22,7 +22,6 @@ class AddressController extends _$AddressController {
   String get selectedLabel => _selectedLabel;
   set selectedLabel(String val) {
     _selectedLabel = val;
-    ref.notifyListeners();
   }
 
   bool _isLoading = false;
@@ -57,7 +56,6 @@ class AddressController extends _$AddressController {
 
   Future<void> deleteAddress(int id) async {
     _isLoading = true;
-    ref.notifyListeners();
     try {
       final repository = ref.read(addressRepositoryProvider);
       await repository.deleteAddress(id);
@@ -73,7 +71,6 @@ class AddressController extends _$AddressController {
 
   Future<void> setDefaultAddress(int id) async {
     _isLoading = true;
-    ref.notifyListeners();
     try {
       final repository = ref.read(addressRepositoryProvider);
       await repository.setDefaultAddress(id);
@@ -105,7 +102,6 @@ class AddressController extends _$AddressController {
     postalCodeController.text = address.postalCode ?? '';
     countryController.text = address.country ?? '';
     _selectedLabel = address.label ?? _defaultLabel;
-    ref.notifyListeners();
   }
 
   Future<void> saveAddress(int? id) async {
@@ -141,7 +137,6 @@ class AddressController extends _$AddressController {
 
   Future<void> getCurrentLocation() async {
     _isLoading = true;
-    ref.notifyListeners();
     try {
       final service = ref.read(addressServiceProvider);
       final position = await service.getCurrentPosition();
