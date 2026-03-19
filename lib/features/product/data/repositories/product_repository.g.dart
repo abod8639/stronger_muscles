@@ -40,7 +40,7 @@ final productLocalDataSourceProvider =
 );
 
 typedef ProductLocalDataSourceRef = ProviderRef<ProductLocalDataSource>;
-String _$productRepositoryHash() => r'80de79a8c3895bf991d8d7c34e43c8b8bc7606cf';
+String _$productRepositoryHash() => r'2d15acfe0821245a7c477bd4d61a55753747a4a6';
 
 /// See also [ProductRepository].
 @ProviderFor(ProductRepository)

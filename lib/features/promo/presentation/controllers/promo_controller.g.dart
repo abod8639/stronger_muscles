@@ -6,7 +6,21 @@ part of 'promo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$promoControllerHash() => r'd7892c1b69e1b821a5db62cf802b7dfde5621dd8';
+String _$promosHash() => r'228b99e76f5f5d412a04ab8c9b2ced0a46c8f85d';
+
+/// See also [promos].
+@ProviderFor(promos)
+final promosProvider = AutoDisposeFutureProvider<List<PromoModel>>.internal(
+  promos,
+  name: r'promosProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$promosHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef PromosRef = AutoDisposeFutureProviderRef<List<PromoModel>>;
+String _$promoControllerHash() => r'4bd519ff0879ca2910f38fbd69842f81a957c9f9';
 
 /// See also [PromoController].
 @ProviderFor(PromoController)

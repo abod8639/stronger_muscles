@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_controller.dart';
+part of 'promo_remote_datasource.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authControllerHash() => r'6b616df28b9da9f2262875cd4b24bddd514cad2c';
+String _$promoRemoteDataSourceHash() =>
+    r'6f81201cde248cef0c25907e753323df9c0e991e';
 
-/// See also [AuthController].
-@ProviderFor(AuthController)
-final authControllerProvider =
-    AutoDisposeAsyncNotifierProvider<AuthController, UserModel?>.internal(
-  AuthController.new,
-  name: r'authControllerProvider',
+/// See also [promoRemoteDataSource].
+@ProviderFor(promoRemoteDataSource)
+final promoRemoteDataSourceProvider = Provider<PromoRemoteDataSource>.internal(
+  promoRemoteDataSource,
+  name: r'promoRemoteDataSourceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$authControllerHash,
+      : _$promoRemoteDataSourceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthController = AutoDisposeAsyncNotifier<UserModel?>;
+typedef PromoRemoteDataSourceRef = ProviderRef<PromoRemoteDataSource>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
