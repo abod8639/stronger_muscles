@@ -22,6 +22,9 @@ class ApiConfig {
   static const String updateProfileRoute = '/auth/update-profile';
   static const String addresses = '/customer/addresses';
 
+  // Promos (Public)
+  static const String promos = '/shop/promos';
+
   // Products (Public)
   static const String products = '/shop/products';
 

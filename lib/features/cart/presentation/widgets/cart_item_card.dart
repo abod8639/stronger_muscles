@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends ConsumerWidget {
@@ -96,7 +95,9 @@ class CartItemCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              QuantityControls(product: item.product),
+
+              SizedBox(width: 8),
+              // QuantityControls(product: item.product),
             ],
           ),
         ),

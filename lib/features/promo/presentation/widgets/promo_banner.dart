@@ -11,53 +11,57 @@ class PromoBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final promosAsync = ref.watch(promosProvider);
     final promoNotifier = ref.watch(promoControllerProvider.notifier);
     final currentIndex = ref.watch(promoControllerProvider);
-    final promos = promoNotifier.promos;
 
-    if (promos.isEmpty) return const SizedBox.shrink();
+    return promosAsync.when(
+      data: (promos) {
+        if (promos.isEmpty) return const SizedBox.shrink();
 
-    return Column(
-      children: [
-
-        SizedBox(
-          height: 170,
-          child: PageView.builder(
-            allowImplicitScrolling: false,
-            pageSnapping: true,
-            controller: promoNotifier.pageController,
-            onPageChanged: (index) => ref
-                .read(promoControllerProvider.notifier)
-                .updateCurrentIndex(index),
-            itemBuilder: (context, index) {
-              final promo = promos[index % promos.length];
-              return _buildPromoCard(context, ref, promo);
-            },
-          ),
-        ),
-
-        const SizedBox(height: 8),
-
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(
-            promos.length,
-            (index) => AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 3),
-              height: 5,
-              width: currentIndex == index ? 15 : 5,
-              decoration: BoxDecoration(
-                color: currentIndex == index
-                    ? AppColors.primary
-                    : AppColors.greyDark,
-                borderRadius: BorderRadius.circular(4),
+        return Column(
+          children: [
+            SizedBox(
+              height: 170,
+              child: PageView.builder(
+                allowImplicitScrolling: false,
+                pageSnapping: true,
+                controller: promoNotifier.pageController,
+                onPageChanged: (index) =>
+                    promoNotifier.updateCurrentIndex(index, promos.length),
+                itemBuilder: (context, index) {
+                  final promo = promos[index % promos.length];
+                  return _buildPromoCard(context, ref, promo);
+                },
               ),
             ),
-          ),
-        ),
-        
-      ],
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                promos.length,
+                (index) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  height: 5,
+                  width: currentIndex == index ? 15 : 5,
+                  decoration: BoxDecoration(
+                    color: currentIndex == index
+                        ? AppColors.primary
+                        : AppColors.greyDark,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox(
+        height: 170,
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stackTrace) => const SizedBox.shrink(),
     );
   }
 
