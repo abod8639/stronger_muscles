@@ -47,6 +47,7 @@ class ProductSearchController extends _$ProductSearchController {
 
   void updateSearchQuery(String query) {
     _searchQuery = query.trim();
+    textController.text = _searchQuery; 
     _handleSearch(_searchQuery);
   }
 

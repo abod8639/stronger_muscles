@@ -6,6 +6,7 @@ import 'package:stronger_muscles/features/product/data/repositories/product_repo
 import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
 import 'package:stronger_muscles/features/promo/data/repositories/promo_repository_impl.dart';
 import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 
 part 'promo_controller.g.dart';
 
@@ -56,22 +57,35 @@ class PromoController extends _$PromoController {
 
   /// Handles promo banner tap — navigates based on [PromoModel.targetType].
   Future<void> onPromoPressed(BuildContext context, PromoModel promo) async {
-    if (promo.targetType != 'product' || promo.targetId == null) return;
+    if (promo.targetId == null) return;
 
-    try {
-      final product = await ref
-          .read(productRepositoryProvider.notifier)
-          .getProductById(promo.targetId!);
+    if (promo.targetType == 'product') {
+      try {
+        final product = await ref
+            .read(productRepositoryProvider.notifier)
+            .getProductById(promo.targetId!);
 
-      if (context.mounted) {
-        context.push(AppRoutes.productDetails, extra: product);
+        if (context.mounted) {
+          context.push(AppRoutes.productDetails, extra: product);
+        }
+      } catch (_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('تعذر تحميل تفاصيل المنتج')),
+          );
+        }
       }
-    } catch (_) {
+      return;
+    }
+
+    if (promo.targetType == 'brand') {
+      final brandName = promo.targetId!;
+      ref.read(productSearchControllerProvider.notifier).updateSearchQuery(brandName);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('تعذر تحميل تفاصيل المنتج')),
-        );
+        context.push(AppRoutes.search);
       }
+      return;
     }
   }
+  
 }

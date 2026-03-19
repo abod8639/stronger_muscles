@@ -1,19 +1,20 @@
 {
   "configurations": [
-    {
-      "name": "Flutter (lib/features/promo/data/repositories/promo_repository_impl.test.dart)",
-      "type": "dart",
-      "request": "launch",
-      "program": "lib/features/promo/data/repositories/promo_repository_impl.test.dart"
-    },
-    {
-      "name": "Flutter (lib/features/promo/data/repositories/promo_repository_impl.test.dart)",
-      "type": "dart",
-      "request": "launch",
-      "program": "lib/features/promo/data/repositories/promo_repository_impl.test.dart"
-    }
+    // {
+    //   "name": "Flutter (lib/features/promo/data/repositories/promo_repository_impl.test.dart)",
+    //   "type": "dart",
+    //   "request": "launch",
+    //   "program": "lib/features/promo/data/repositories/promo_repository_impl.test.dart"
+    // },
+    // {
+    //   "name": "Flutter (lib/features/promo/data/repositories/promo_repository_impl.test.dart)",
+    //   "type": "dart",
+    //   "request": "launch",
+    //   "program": "lib/features/promo/data/repositories/promo_repository_impl.test.dart"
+    // }
   ]
-} // {
+}
+// {
 //   "version": "0.2.0",
 //   "configurations": [
 
