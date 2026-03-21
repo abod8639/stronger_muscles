@@ -10,7 +10,8 @@ import 'package:stronger_muscles/features/home/presentation/controllers/home_con
 import '../controllers/product_search_controller.dart';
 
 class ProductSearchsPage extends ConsumerWidget {
-  const ProductSearchsPage({super.key});
+  final bool isFocused;
+  const ProductSearchsPage({super.key, this.isFocused = false});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,10 +36,10 @@ class ProductSearchsPage extends ConsumerWidget {
             title: Text('البحث عن المنتجات'),
           ),
 
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SearchBarInline(),
+              child: SearchBarInline(isFocused: isFocused),
             ),
           ),
 

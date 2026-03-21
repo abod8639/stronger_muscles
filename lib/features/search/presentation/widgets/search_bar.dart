@@ -216,7 +216,8 @@ Widget buildFilterButton({
 }
 
 class SearchBarInline extends ConsumerWidget {
-  const SearchBarInline({super.key});
+  final bool isFocused;
+  const SearchBarInline({super.key, required this.isFocused});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -235,7 +236,7 @@ class SearchBarInline extends ConsumerWidget {
               controller: controller,
               l10n: l10n,
               readOnly: false,
-              autofocus: true,
+              autofocus: isFocused,
               onChanged: (val) => ref
                   .read(productSearchControllerProvider.notifier)
                   .onSearchChanged(val),

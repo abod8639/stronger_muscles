@@ -114,18 +114,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.search,
         builder: (context, state) => const ProductSearchsPage(),
-        pageBuilder: (context, state) =>buildPageWithTransition<ProductSearchsPage>(
-          state: state,
-          child: const ProductSearchsPage(),
-          transitionType: PageTransitionType.scale,
-        ),
-        // pageBuilder: (context, state) =>buildPageWithTransition<ProductSearchsPage>(
-        //   state: state,
-        //   child: const ProductSearchsPage(), 
-        //   transitionType: PageTransitionType.slideUp,
-
-        //  )
-
       ),
       GoRoute(
         path: AppRoutes.profile,

@@ -16,10 +16,10 @@ class HomeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final sectionsState = ref.watch(categoriesSectionsControllerProvider);
-    final selectedCategoryIndex = ref
-        .watch(categoriesSectionsControllerProvider.notifier)
-        .selectedIndex;
+    final selectedCategoryIndex = ref.watch(categoriesSectionsControllerProvider).maybeWhen(
+          data: (_) => ref.read(categoriesSectionsControllerProvider.notifier).selectedIndex,
+          orElse: () => 0,
+        );
 
     return Scaffold(
       body: SafeArea(
@@ -40,7 +40,8 @@ class HomeView extends ConsumerWidget {
                   const SliverToBoxAdapter(child: CategoriesShortcutsRow()),
                   if (selectedCategoryIndex == 0)
                     const SliverToBoxAdapter(child: PromoBanner()),
-                  const SliverToBoxAdapter(child: SectionTitle()),
+                  if (selectedCategoryIndex == 0)
+                    const SliverToBoxAdapter(child: SectionTitle()),
                   const ProductList(),
                   const SliverToBoxAdapter(
                     child: SizedBox(height: _bottomPadding),
