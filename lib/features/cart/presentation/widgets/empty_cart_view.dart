@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class EmptyCartView extends StatelessWidget {
   final VoidCallback onGoShopping;
@@ -18,10 +19,11 @@ class EmptyCartView extends StatelessWidget {
             color: theme.colorScheme.outline.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
-          Text('سلتك فارغة', style: theme.textTheme.headlineSmall),
+          Text(AppLocalizations.of(context)!.yourCartIsEmpty, style: theme.textTheme.headlineSmall),
           const SizedBox(height: 8),
-          Text(
-            'ابدأ بالتسوق الآن وأضف بعض المنتجات',
+          Text( 
+           AppLocalizations.of(context)!.addProductsToGetStarted,
+            // 'ابدأ بالتسوق الآن وأضف بعض المنتجات',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -29,7 +31,8 @@ class EmptyCartView extends StatelessWidget {
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: onGoShopping,
-            child: const Text('اذهب للتسوق'),
+            child:  Text(
+              AppLocalizations.of(context)!.startShopping ),
           ),
         ],
       ),

@@ -77,10 +77,15 @@ class AppGuard {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: Colors.amber, size: 20),
               const SizedBox(width: 10),
-              Expanded(child: Text(message)),
+              Expanded(child: Text(
+                style: Theme.of(context).textTheme.bodyMedium,
+                
+                message)),
             ],
           ),
           backgroundColor: Colors.black87,
