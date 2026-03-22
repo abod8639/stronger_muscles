@@ -43,10 +43,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String get work => 'العمل';
 
   @override
+  String get country => 'الدولة';
+
+  @override
+  String get save => 'حفظ';
+
+  @override
+  String get update => 'تحديث';
+
+  @override
+  String get postalCode => 'الرمز البريدي';
+
+  @override
   String get other => 'أخرى';
 
   @override
   String get thisFieldIsRequired => 'هذا الحقل مطلوب';
+
+  @override
+  String get editAddress => 'تعديل العنوان';
+
+  @override
+  String get addressUpdatedSuccessfully => 'تم تحديث العنوان بنجاح';
+
+  @override
+  String get useCurrentLocation => 'استخدم موقعي الحالي';
+
+  @override
+  String get phoneNumber => 'رقم الهاتف';
+
+  @override
+  String get streetAddress => 'عنوان الشارع';
+
+  @override
+  String get city => 'المدينة';
+
+  @override
+  String get state => 'المنطقة';
 
   @override
   String get savedAddresses => 'العناوين المحفوظة';

@@ -43,10 +43,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get work => 'Work';
 
   @override
+  String get country => 'Country';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get postalCode => 'Postal Code';
+
+  @override
   String get other => 'Other';
 
   @override
   String get thisFieldIsRequired => 'This field is required';
+
+  @override
+  String get editAddress => 'Edit Address';
+
+  @override
+  String get addressUpdatedSuccessfully => 'Address updated successfully';
+
+  @override
+  String get useCurrentLocation => 'Use Current Location';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get streetAddress => 'Street Address';
+
+  @override
+  String get city => 'City';
+
+  @override
+  String get state => 'State';
 
   @override
   String get savedAddresses => 'Saved Addresses';

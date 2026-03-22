@@ -54,8 +54,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                       if (mounted) {
                         setState(() {}); // End loading
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('تم تحديث العنوان بناءً على موقعك'),
+                           SnackBar(
+                            content: Text(intl10n.addressUpdatedSuccessfully),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -71,27 +71,27 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                       ),
                     )
                   : const Icon(Icons.my_location),
-              label: const Text('استخدم موقعي الحالي'),
+              label:  Text(intl10n.useCurrentLocation),
             ),
             const SizedBox(height: 24),
-            _buildField(controller.fullNameController, 'الاسم الكامل'),
+            _buildField(controller.fullNameController, intl10n.fullName),
             const SizedBox(height: 16),
             _buildField(
               controller.phoneController,
-              'رقم الهاتف',
+              intl10n.phoneNumber,
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 16),
-            _buildField(controller.streetController, 'عنوان الشارع'),
+            _buildField(controller.streetController, intl10n.streetAddress),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
-                  child: _buildField(controller.cityController, 'المدينة'),
+                  child: _buildField(controller.cityController, intl10n.city),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: _buildField(controller.stateController, 'المنطقة'),
+                  child: _buildField(controller.stateController,  intl10n.state),
                 ),
               ],
             ),
@@ -101,12 +101,12 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                 Expanded(
                   child: _buildField(
                     controller.postalCodeController,
-                    'الرمز البريدي',
+                    intl10n.postalCode,
                   ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: _buildField(controller.countryController, 'الدولة'),
+                  child: _buildField(controller.countryController, intl10n.country ),
                 ),
               ],
             ),
@@ -170,6 +170,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   }
 
   Widget _buildSubmitButton(AddressController controller, bool isLoading) {
+    final intl10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -194,7 +195,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   color: Colors.white,
                 ),
               )
-            : Text(widget.address == null ? 'حفظ' : 'تحديث'),
+            : Text(widget.address == null ? intl10n.save : intl10n.update),
       ),
     );
   }
