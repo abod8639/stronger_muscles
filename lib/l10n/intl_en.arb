@@ -11,6 +11,8 @@
   "setDefault": "Set Default",
   "home": "Home",
   "work": "Work",
+  "other": "Other",
+  "thisFieldIsRequired": "This field is required",
   "savedAddresses": "Saved Addresses",
   "enterEmail": "Please enter your email",
   "validEmail": "Please enter a valid email",

@@ -37,6 +37,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setDefault => 'Set Default';
 
   @override
+  String get home => 'Home';
+
+  @override
+  String get work => 'Work';
+
+  @override
+  String get other => 'Other';
+
+  @override
+  String get thisFieldIsRequired => 'This field is required';
+
+  @override
   String get savedAddresses => 'Saved Addresses';
 
   @override

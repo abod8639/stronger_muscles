@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AddressForm extends ConsumerStatefulWidget {
   final AddressModel? address;
@@ -109,7 +110,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildLabelSelector(controller, selectedLabel),
+            _buildLabelSelector(controller, selectedLabel, context),
             const SizedBox(height: 32),
             _buildSubmitButton(controller, isLoading),
           ],
@@ -123,23 +124,30 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     String label, {
     TextInputType? keyboardType,
   }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      ),
-      validator: (v) => v!.isEmpty ? 'هذا الحقل مطلوب' : null,
+    return Builder(
+      builder: (context) {
+        final intl10n = AppLocalizations.of(context)!;
+        return TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          decoration: InputDecoration(
+            labelText: label,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+          validator: (v) => v!.isEmpty ? intl10n.thisFieldIsRequired : null,
+        );
+      }
     );
   }
 
   Widget _buildLabelSelector(
     AddressController controller,
     String selectedLabel,
+    BuildContext context,
   ) {
+    final intl10n = AppLocalizations.of(context)!;
     return Row(
-      children: ['Home', 'Work', 'Other']
+      children: [intl10n.home, intl10n.work, intl10n.other]
           .map(
             (label) => Padding(
               padding: const EdgeInsets.only(right: 8),

@@ -63,7 +63,7 @@ class AddressCard extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildCardTopRow(),
+                  _buildCardTopRow(context),
                   const SizedBox(height: _cardTopRowSpacing),
                   _buildAddressDetails(theme),
                   const Divider(height: _dividerHeight, thickness: 0.5),

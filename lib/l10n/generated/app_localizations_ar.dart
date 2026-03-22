@@ -37,6 +37,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get setDefault => 'تعيين كافتراضي';
 
   @override
+  String get home => 'الرئيسية';
+
+  @override
+  String get work => 'العمل';
+
+  @override
+  String get other => 'أخرى';
+
+  @override
+  String get thisFieldIsRequired => 'هذا الحقل مطلوب';
+
+  @override
   String get savedAddresses => 'العناوين المحفوظة';
 
   @override
