@@ -7,8 +7,6 @@ import 'package:stronger_muscles/features/profile/presentation/widgets/account_s
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-// const String _loginMessage =
-    // 'Track orders, manage addresses, and enjoy a personalized shopping experience';
 const double _containerMargin = 16.0;
 const double _containerPadding = 32.0;
 const double _containerBorderRadius = 20.0;

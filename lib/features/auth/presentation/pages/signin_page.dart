@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class SignInPage extends ConsumerWidget {
   final VoidCallback? onSignUpTap;
 
   const SignInPage({super.key, this.onSignUpTap});
 
-  static final _passwordVisibleProvider = StateProvider.autoDispose<bool>((ref) => true);
+  static final _passwordVisibleProvider = StateProvider.autoDispose<bool>(
+    (ref) => true,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     final formKey = GlobalKey<FormState>();
     final authState = ref.watch(authControllerProvider);
     final authController = ref.read(authControllerProvider.notifier);
     final localizations = AppLocalizations.of(context)!;
-    
+
+    void onSignUpTap() {
+      AppGuard.runSafeInternet(ref, () async {
+        if (formKey.currentState!.validate()) {
+          await ref
+              .read(authControllerProvider.notifier)
+              .signInWithEmail(
+                email: authController.emailController.text.trim(),
+                password: authController.passwordController.text,
+              );
+          context.push(AppRoutes.profile);
+        }
+      });
+    }
+
     // Listen to authentication changes
     ref.listen(authControllerProvider, (previous, next) {
       if (next is AsyncError) {
@@ -63,7 +80,7 @@ class SignInPage extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildInputFields(context, authController, localizations,ref),
+                _buildInputFields(context, authController, localizations, ref),
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
@@ -84,18 +101,7 @@ class SignInPage extends ConsumerWidget {
                 authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
-                        onPressed: () {
-                          AppGuard.runSafeInternet(ref, () async {
-                            if (formKey.currentState!.validate()) {
-                              await ref
-                                  .read(authControllerProvider.notifier)
-                                  .signInWithEmail(
-                                    email: authController.emailController.text.trim(),
-                                    password: authController.passwordController.text,
-                                  );
-                            }
-                          });
-                        },
+                        onPressed: onSignUpTap,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -145,11 +151,7 @@ class SignInPage extends ConsumerWidget {
     AuthController controller,
     AppLocalizations l10n,
     WidgetRef ref,
-
   ) {
- 
-
-
     final theme = Theme.of(context);
     return Column(
       children: [
@@ -192,11 +194,13 @@ class SignInPage extends ConsumerWidget {
           icon: IconButton(
             icon: Icon(Icons.lock_outline),
             onPressed: () {
-              ref.read(_passwordVisibleProvider.notifier).state = !ref.read(_passwordVisibleProvider);
+              ref.read(_passwordVisibleProvider.notifier).state = !ref.read(
+                _passwordVisibleProvider,
+              );
             },
           ),
           isPassword: ref.watch(_passwordVisibleProvider),
-           // ref.watch(authControllerProvider).isPasswordShow,
+          // ref.watch(authControllerProvider).isPasswordShow,
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -240,5 +244,4 @@ class SignInPage extends ConsumerWidget {
       ],
     );
   }
-
 }
