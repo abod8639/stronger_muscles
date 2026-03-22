@@ -18,6 +18,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get signInToContinue => 'تسجيل الدخول للمتابعة';
 
   @override
+  String get signInToYourAccount => 'تسجيل الدخول إلى حسابك';
+
+  @override
+  String get loginButtonLabel => 'تسجيل الدخول / إنشاء حساب';
+
+  @override
+  String get loginMessage =>
+      'تتبع الطلبات، وإدارة العناوين، واستمتع بتجربة تسوق مخصصة';
+
+  @override
   String get email => 'البريد الإلكتروني';
 
   @override

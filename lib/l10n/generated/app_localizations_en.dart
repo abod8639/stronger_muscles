@@ -18,6 +18,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signInToContinue => 'Sign in to continue';
 
   @override
+  String get signInToYourAccount => 'Sign in to Your Account';
+
+  @override
+  String get loginButtonLabel => 'Login / Register';
+
+  @override
+  String get loginMessage =>
+      'Track orders, manage addresses, and enjoy a personalized shopping experience';
+
+  @override
   String get email => 'Email';
 
   @override

@@ -139,7 +139,7 @@ Widget _buildInfoRow({
                     ? AppColors.info 
                     : (isDark ? AppColors.white : AppColors.black),
                 fontWeight: isLink ? FontWeight.bold : FontWeight.w600,
-                decoration: isLink ? TextDecoration.underline : null,
+                // decoration: isLink ? TextDecoration.underline : null,
               ),
             ),
           ),

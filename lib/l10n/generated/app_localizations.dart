@@ -116,6 +116,24 @@ abstract class AppLocalizations {
   /// **'Sign in to continue'**
   String get signInToContinue;
 
+  /// No description provided for @signInToYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to Your Account'**
+  String get signInToYourAccount;
+
+  /// No description provided for @loginButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Login / Register'**
+  String get loginButtonLabel;
+
+  /// No description provided for @loginMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Track orders, manage addresses, and enjoy a personalized shopping experience'**
+  String get loginMessage;
+
   /// No description provided for @email.
   ///
   /// In en, this message translates to:
