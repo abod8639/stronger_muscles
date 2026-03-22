@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
@@ -78,19 +79,45 @@ class AddressCard extends ConsumerWidget {
   }
 
   Widget _buildMapPreview() {
-    if (address.latitude == null || address.longitude == null) {
-      return _buildMapPlaceholder();
+    if (address.latitude != null && address.longitude != null) {
+      return _buildMapWidget(LatLng(address.latitude!, address.longitude!));
     }
 
-    final LatLng position = LatLng(address.latitude!, address.longitude!);
+    // Try to geocode the address if coordinates are missing
+    return FutureBuilder<List<Location>>(
+      future: _geocodeAddress(address.fullAddress),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildMapLoading();
+        }
+        
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          final loc = snapshot.data!.first;
+          return _buildMapWidget(LatLng(loc.latitude, loc.longitude));
+        }
 
+        return _buildMapPlaceholder();
+      },
+    );
+  }
+
+  Future<List<Location>> _geocodeAddress(String address) async {
+    try {
+      // Small optimization: cache could be added here if needed
+      return await locationFromAddress(address);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  Widget _buildMapWidget(LatLng position) {
     return SizedBox(
       height: _mapHeight,
       width: double.infinity,
       child: Stack(
         children: [
           GoogleMap(
-            key: ValueKey('map_${address.id}'),
+            key: ValueKey('map_${address.id}_${position.latitude}'),
             initialCameraPosition: CameraPosition(
               target: position,
               zoom: _mapZoom,
@@ -119,21 +146,19 @@ class AddressCard extends ConsumerWidget {
           Positioned(
             top: 12,
             right: 12,
-            child: Container(
-              padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
-              ),
-              child: const Icon(
-                Icons.map_outlined,
-                size: _mapIconSize,
-                color: AppColors.primary,
-              ),
-            ),
+            child: _buildMapIcon(),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMapLoading() {
+    return Container(
+      height: _mapHeight,
+      color: Colors.grey[100],
+      child: const Center(
+        child: CircularProgressIndicator(strokeWidth: 2),
       ),
     );
   }
@@ -142,9 +167,19 @@ class AddressCard extends ConsumerWidget {
     return Builder(
       builder: (context) {
         final intl10n = AppLocalizations.of(context)!;
-        return SizedBox(
-          height: 150,
+        return Container(
+          height: _mapHeight,
           width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            image: const DecorationImage(
+              image: NetworkImage(
+                'https://maps.googleapis.com/maps/api/staticmap?center=30.0444,31.2357&zoom=10&size=400x150&scale=2',
+              ),
+              fit: BoxFit.cover,
+              opacity: 0.3,
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -157,7 +192,23 @@ class AddressCard extends ConsumerWidget {
             ],
           ),
         );
-      }
+      },
+    );
+  }
+
+  Widget _buildMapIcon() {
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+      ),
+      child: const Icon(
+        Icons.map_outlined,
+        size: _mapIconSize,
+        color: AppColors.primary,
+      ),
     );
   }
 

@@ -24,6 +24,9 @@ class AddressController extends _$AddressController {
     _selectedLabel = val;
   }
 
+  double? _latitude;
+  double? _longitude;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -102,6 +105,8 @@ class AddressController extends _$AddressController {
     postalCodeController.text = address.postalCode ?? '';
     countryController.text = address.country ?? '';
     _selectedLabel = address.label ?? _defaultLabel;
+    _latitude = address.latitude;
+    _longitude = address.longitude;
   }
 
   Future<void> saveAddress(int? id) async {
@@ -116,6 +121,8 @@ class AddressController extends _$AddressController {
       country: countryController.text,
       label: _selectedLabel,
       isDefault: false,
+      latitude: _latitude,
+      longitude: _longitude,
     );
 
     _isLoading = true;
@@ -151,6 +158,8 @@ class AddressController extends _$AddressController {
         stateController.text = place.administrativeArea ?? '';
         postalCodeController.text = place.postalCode ?? '';
         countryController.text = place.country ?? '';
+        _latitude = position.latitude;
+        _longitude = position.longitude;
       }
     } finally {
       _isLoading = false;
@@ -170,5 +179,7 @@ class AddressController extends _$AddressController {
     ]) {
       c.clear();
     }
+    _latitude = null;
+    _longitude = null;
   }
 }
