@@ -17,26 +17,43 @@ class SignUpPage extends ConsumerStatefulWidget {
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     _confirmPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  void _onSignUpPressed() {
+    AppGuard.runSafeInternet(ref, () async {
+      if (_formKey.currentState!.validate()) {
+        await ref.read(authControllerProvider.notifier).signUpWithEmail(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              name: _nameController.text.trim(),
+            );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
-    final authController = ref.read(authControllerProvider.notifier);
     final localizations = AppLocalizations.of(context)!;
 
     // Listen to authentication errors
@@ -62,25 +79,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildInputFields(context, authController, localizations),
+                _buildInputFields(context, localizations),
                 authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
-                        onPressed: () {
-                          AppGuard.runSafeInternet(ref, () async {
-                            if (_formKey.currentState!.validate()) {
-                              await ref
-                                  .read(authControllerProvider.notifier)
-                                  .signUpWithEmail(
-                                    email: authController.emailController.text
-                                        .trim(),
-                                    password:
-                                        authController.passwordController.text,
-                                    name: _nameController.text.trim(),
-                                  );
-                            }
-                          });
-                        },
+                        onPressed: _onSignUpPressed,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -125,7 +128,6 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   Widget _buildInputFields(
     BuildContext context,
-    AuthController controller,
     AppLocalizations l10n,
   ) {
     final theme = Theme.of(context);
@@ -149,7 +151,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: _nameController,
           label: l10n.fullName,
-          icon: Icon( Icons.person_outline),
+          icon: const Icon(Icons.person_outline),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return l10n.enterName;
@@ -159,9 +161,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         ),
         const SizedBox(height: 16.0),
         AuthTextField(
-          controller: controller.emailController,
+          controller: _emailController,
           label: l10n.email,
-          icon:Icon( Icons.email_outlined),
+          icon: const Icon(Icons.email_outlined),
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -175,9 +177,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         ),
         const SizedBox(height: 16.0),
         AuthTextField(
-          controller: controller.passwordController,
+          controller: _passwordController,
           label: l10n.password,
-          icon: Icon(Icons.lock_outline),
+          icon: const Icon(Icons.lock_outline),
           isPassword: true,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -193,14 +195,14 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         AuthTextField(
           controller: _confirmPasswordController,
           label: l10n.confirmPassword,
-          icon: Icon(Icons.lock_outline),
+          icon: const Icon(Icons.lock_outline),
           isPassword: true,
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return l10n.confirmYourPassword;
             }
-            if (value != controller.passwordController.text) {
+            if (value != _passwordController.text) {
               return l10n.passwordsDoNotMatch;
             }
             return null;

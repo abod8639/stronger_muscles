@@ -8,35 +8,53 @@ import 'package:stronger_muscles/features/auth/presentation/controllers/auth_con
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-class SignInPage extends ConsumerWidget {
+class SignInPage extends ConsumerStatefulWidget {
   final VoidCallback? onSignUpTap;
 
   const SignInPage({super.key, this.onSignUpTap});
 
-  static final _passwordVisibleProvider = StateProvider.autoDispose<bool>(
-    (ref) => true,
-  );
+  @override
+  ConsumerState<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends ConsumerState<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+  bool _passwordVisible = true;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final formKey = GlobalKey<FormState>();
-    final authState = ref.watch(authControllerProvider);
-    final authController = ref.read(authControllerProvider.notifier);
-    final localizations = AppLocalizations.of(context)!;
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
 
-    void onSignUpTap() {
-      AppGuard.runSafeInternet(ref, () async {
-        if (formKey.currentState!.validate()) {
-          await ref
-              .read(authControllerProvider.notifier)
-              .signInWithEmail(
-                email: authController.emailController.text.trim(),
-                password: authController.passwordController.text,
-              );
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _onLoginPressed() {
+    AppGuard.runSafeInternet(ref, () async {
+      if (_formKey.currentState!.validate()) {
+        await ref.read(authControllerProvider.notifier).signInWithEmail(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            );
+        if (mounted && ref.read(authControllerProvider).hasValue) {
           context.push(AppRoutes.profile);
         }
-      });
-    }
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final authState = ref.watch(authControllerProvider);
+    final localizations = AppLocalizations.of(context)!;
 
     // Listen to authentication changes
     ref.listen(authControllerProvider, (previous, next) {
@@ -75,12 +93,12 @@ class SignInPage extends ConsumerWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Form(
-            key: formKey,
+            key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildInputFields(context, authController, localizations, ref),
+                _buildInputFields(context, localizations),
                 const SizedBox(height: 12.0),
                 Align(
                   alignment: Alignment.centerRight,
@@ -101,7 +119,7 @@ class SignInPage extends ConsumerWidget {
                 authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : ElevatedButton(
-                        onPressed: onSignUpTap,
+                        onPressed: _onLoginPressed,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: Colors.white,
@@ -148,9 +166,7 @@ class SignInPage extends ConsumerWidget {
 
   Widget _buildInputFields(
     BuildContext context,
-    AuthController controller,
     AppLocalizations l10n,
-    WidgetRef ref,
   ) {
     final theme = Theme.of(context);
     return Column(
@@ -171,9 +187,9 @@ class SignInPage extends ConsumerWidget {
         ),
         const SizedBox(height: 32.0),
         AuthTextField(
-          controller: controller.emailController,
+          controller: _emailController,
           label: l10n.email,
-          icon: Icon(Icons.email_outlined),
+          icon: const Icon(Icons.email_outlined),
           keyboardType: TextInputType.emailAddress,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -185,22 +201,20 @@ class SignInPage extends ConsumerWidget {
             return null;
           },
         ),
-
         const SizedBox(height: 16.0),
-
         AuthTextField(
-          controller: controller.passwordController,
+          controller: _passwordController,
           label: l10n.password,
           icon: IconButton(
-            icon: Icon(Icons.lock_outline),
+            icon: Icon(
+                _passwordVisible ? Icons.visibility_off : Icons.visibility),
             onPressed: () {
-              ref.read(_passwordVisibleProvider.notifier).state = !ref.read(
-                _passwordVisibleProvider,
-              );
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
             },
           ),
-          isPassword: ref.watch(_passwordVisibleProvider),
-          // ref.watch(authControllerProvider).isPasswordShow,
+          isPassword: _passwordVisible,
           textInputAction: TextInputAction.done,
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -235,7 +249,7 @@ class SignInPage extends ConsumerWidget {
       children: [
         Text(l10n.dontHaveAccount, style: TextStyle(color: Colors.grey[600])),
         TextButton(
-          onPressed: onSignUpTap,
+          onPressed: widget.onSignUpTap,
           child: Text(
             l10n.signUp,
             style: const TextStyle(fontWeight: FontWeight.bold),

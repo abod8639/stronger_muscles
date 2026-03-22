@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
@@ -7,15 +6,8 @@ part 'auth_controller.g.dart';
 
 @riverpod
 class AuthController extends _$AuthController {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   @override
   FutureOr<UserModel?> build() async {
-    ref.onDispose(() {
-      emailController.dispose();
-      passwordController.dispose();
-    });
-
     final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
     return await getCurrentUser();
   }
@@ -32,7 +24,6 @@ class AuthController extends _$AuthController {
     state = await AsyncValue.guard(() async {
       final login = ref.read(loginUseCaseProvider);
       return await login(email: email, password: password);
-      
     });
   }
 
@@ -50,7 +41,6 @@ class AuthController extends _$AuthController {
 
   Future<void> signInWithGoogle() async {
     // This logic should be expanded to use a GoogleSignInUseCase
-
   }
 
   Future<void> signOut() async {
