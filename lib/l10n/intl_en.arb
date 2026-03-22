@@ -7,6 +7,7 @@
   "loginButtonLabel": "Login / Register",
   "loginMessage": "Track orders, manage addresses, and enjoy a personalized shopping experience",
   "email": "Email",
+  "savedAddresses": "Saved Addresses",
   "enterEmail": "Please enter your email",
   "validEmail": "Please enter a valid email",
   "password": "Password",

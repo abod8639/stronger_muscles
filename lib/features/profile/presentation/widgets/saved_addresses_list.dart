@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/address_card.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _headerPaddingLeft = 16.0;
 const double _headerPaddingRight = 8.0;
@@ -57,6 +58,7 @@ class SavedAddressesList extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context, ThemeData theme, bool isDark) {
+    final intl10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         _headerPaddingLeft,
@@ -68,7 +70,7 @@ class SavedAddressesList extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Saved Addresses',
+            intl10n.savedAddresses,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w800,
               letterSpacing: -0.5,
@@ -90,9 +92,9 @@ class SavedAddressesList extends ConsumerWidget {
               shape: const StadiumBorder(),
             ),
             icon: const Icon(Icons.add_rounded, size: _addButtonIconSize),
-            label: const Text(
-              'Add New',
-              style: TextStyle(fontWeight: FontWeight.w700),
+            label: Text(
+              intl10n.addNew,
+              style: const TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
         ],

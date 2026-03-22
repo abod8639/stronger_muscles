@@ -31,6 +31,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get email => 'Email';
 
   @override
+  String get savedAddresses => 'Saved Addresses';
+
+  @override
   String get enterEmail => 'Please enter your email';
 
   @override

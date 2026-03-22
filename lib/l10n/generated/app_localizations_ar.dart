@@ -31,6 +31,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get email => 'البريد الإلكتروني';
 
   @override
+  String get savedAddresses => 'العناوين المحفوظة';
+
+  @override
   String get enterEmail => 'يرجى إدخال البريد الإلكتروني';
 
   @override
