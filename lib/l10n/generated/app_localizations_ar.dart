@@ -55,6 +55,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postalCode => 'الرمز البريدي';
 
   @override
+  String get totalSpent => 'إجمالي الإنفاق';
+
+  @override
+  String get completed => 'مكتمل';
+
+  @override
   String get other => 'أخرى';
 
   @override

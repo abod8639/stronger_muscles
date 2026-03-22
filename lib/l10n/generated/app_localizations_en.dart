@@ -55,6 +55,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postalCode => 'Postal Code';
 
   @override
+  String get totalSpent => 'Total Spent';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
   String get other => 'Other';
 
   @override

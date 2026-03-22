@@ -188,6 +188,18 @@ abstract class AppLocalizations {
   /// **'Postal Code'**
   String get postalCode;
 
+  /// No description provided for @totalSpent.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Spent'**
+  String get totalSpent;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
   /// No description provided for @other.
   ///
   /// In en, this message translates to:

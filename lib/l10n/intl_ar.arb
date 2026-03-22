@@ -1,6 +1,8 @@
 {
   "@@locale": "ar",
   "appTitle": "عضلات أقوى",
+  "totalSpent": "إجمالي الإنفاق",
+  "completed": "مكتمل",
   "welcomeBack": "مرحبًا بعودتك!",
   "save": "حفظ",
   "update": "تحديث",
