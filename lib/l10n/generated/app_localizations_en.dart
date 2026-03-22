@@ -70,6 +70,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get readLess => 'Read less';
 
   @override
+  String get searchForProducts => 'Search for products';
+
+  @override
   String get other => 'Other';
 
   @override

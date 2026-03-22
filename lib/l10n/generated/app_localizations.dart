@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'Read less'**
   String get readLess;
 
+  /// No description provided for @searchForProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for products'**
+  String get searchForProducts;
+
   /// No description provided for @other.
   ///
   /// In en, this message translates to:

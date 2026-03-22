@@ -178,7 +178,13 @@ class SearchBar extends StatelessWidget {
       elevation: 0,
       toolbarHeight: _searchBarHeight + _verticalPadding * 2,
       titleSpacing: _horizontalPadding,
-      title: const SearchInputGroup(),
+      title: const Hero(
+        tag: 'searchBar',
+        child: Material(
+          color: Colors.transparent,
+          child: SearchInputGroup(),
+        ),
+      ),
     );
   }
 }

@@ -4,8 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart'
-    hide SearchBar;
+import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
 
@@ -18,14 +17,14 @@ class ProductSearchsPage extends ConsumerWidget {
     final searchState = ref.watch(productSearchControllerProvider);
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
     final homeProducts = ref.watch(homeControllerProvider).value ?? [];
-
+    
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(
           parent: AlwaysScrollableScrollPhysics(),
         ),
         slivers: [
-          const SliverAppBar(
+           SliverAppBar(
             backgroundColor: Colors.transparent,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
@@ -33,13 +32,12 @@ class ProductSearchsPage extends ConsumerWidget {
             floating: true,
             snap: true,
             centerTitle: true,
-            title: Text('البحث عن المنتجات'),
-          ),
-
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SearchBarInline(isFocused: isFocused),
+            title: Hero(
+              tag: 'searchBar',
+              child: Material(
+                color: Colors.transparent,
+                child: SearchBarInline(isFocused: isFocused),
+              ),
             ),
           ),
 

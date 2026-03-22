@@ -70,6 +70,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get readLess => 'اقرأ أقل';
 
   @override
+  String get searchForProducts => 'البحث عن المنتجات';
+
+  @override
   String get other => 'أخرى';
 
   @override
