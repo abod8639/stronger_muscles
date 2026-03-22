@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widget/wishlist_item_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -14,17 +15,7 @@ class WishlistView extends ConsumerWidget {
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          localizations.wishlist,
-          style: Theme.of(context).textTheme.titleLarge,
-
-          // style: const TextStyle(color: AppColors.white),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        iconTheme: const IconThemeData(color: AppColors.white),
-      ),
+      appBar: baseAppBar(context, localizations.wishlist),
       body: wishlistItems.isEmpty
           ? const _EmptyWishlistState()
           : ListView.builder(

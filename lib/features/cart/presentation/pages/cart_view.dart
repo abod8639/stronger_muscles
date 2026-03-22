@@ -17,7 +17,7 @@ class CartView extends ConsumerWidget {
 
     return Scaffold(
       // base app bar
-      appBar: baseAppBar(context, localizations),
+      appBar: baseAppBar(context, localizations.cart),
       body: cartState.when(
         data: (items) => items.isEmpty
             ? EmptyCartView(

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-AppBar baseAppBar(BuildContext context, AppLocalizations localizations) {
+AppBar baseAppBar(BuildContext context, String title) {
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.surface,
       title: Text(
-        localizations.cart,
+        title,
         style: Theme.of(context).textTheme.titleLarge,
       ),
      centerTitle: true,
