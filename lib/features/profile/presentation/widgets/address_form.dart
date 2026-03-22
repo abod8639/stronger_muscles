@@ -31,6 +31,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     final selectedLabel = ref
         .watch(addressControllerProvider.notifier)
         .selectedLabel;
+    final intl10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
@@ -39,7 +40,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
         child: Column(
           children: [
             Text(
-              widget.address == null ? 'أضف عنواناً جديداً' : 'تعديل العنوان',
+              widget.address == null ? intl10n.addNewAddress : intl10n.editAddress,
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),

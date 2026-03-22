@@ -13,6 +13,7 @@
   "work": "Work",
   "other": "Other",
   "thisFieldIsRequired": "This field is required",
+  "editAddress": "Edit Address",
   "savedAddresses": "Saved Addresses",
   "enterEmail": "Please enter your email",
   "validEmail": "Please enter a valid email",
