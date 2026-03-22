@@ -109,5 +109,6 @@
   "flavor": "النكهة",
   "contactUs": "اتصل بنا",
   "priceOnRequest": "السعر عند الطلب",
-  "category": "التصنيف"
+  "category": "التصنيف",
+  "cartTitle": "السلة"
 }

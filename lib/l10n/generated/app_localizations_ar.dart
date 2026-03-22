@@ -339,4 +339,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get category => 'التصنيف';
+
+  @override
+  String get cartTitle => 'السلة';
 }

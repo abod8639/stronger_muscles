@@ -18,9 +18,11 @@ class WishlistView extends ConsumerWidget {
         centerTitle: true,
         title: Text(
           localizations.wishlist,
-          style: const TextStyle(color: AppColors.white),
+          style: Theme.of(context).textTheme.titleLarge,
+
+          // style: const TextStyle(color: AppColors.white),
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         iconTheme: const IconThemeData(color: AppColors.white),
       ),
       body: wishlistItems.isEmpty

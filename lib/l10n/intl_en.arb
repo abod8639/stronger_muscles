@@ -109,5 +109,6 @@
   "flavor": "Flavor",
   "contactUs": "Contact Us",
   "priceOnRequest": "Price on Request",
-  "category": "Category"
+  "category": "Category",
+  "cartTitle": "Cart"
 }
