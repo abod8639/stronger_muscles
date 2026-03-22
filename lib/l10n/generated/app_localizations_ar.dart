@@ -61,6 +61,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get completed => 'مكتمل';
 
   @override
+  String get reviews => 'مراجعات';
+
+  @override
   String get other => 'أخرى';
 
   @override

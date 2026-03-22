@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class StarsRecord extends StatelessWidget {
   final List<ReviewModel> reviews;
@@ -62,6 +63,7 @@ class StarsRecord extends StatelessWidget {
     // Use calculated average rating from reviews
     final averageRating = _calculateAverageRating();
     final actualReviewCount = reviews.length;
+    final intl10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.only(top: 16),
@@ -70,7 +72,7 @@ class StarsRecord extends StatelessWidget {
           ..._buildStarRating(averageRating),
           const SizedBox(width: 8),
           Text(
-            '${averageRating.toStringAsFixed(1)} ($actualReviewCount reviews)',
+            '${averageRating.toStringAsFixed(1)} ($actualReviewCount ${intl10n.reviews})',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

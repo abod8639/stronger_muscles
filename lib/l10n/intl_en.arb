@@ -17,6 +17,7 @@
   "postalCode": "Postal Code",
   "totalSpent": "Total Spent",
   "completed": "Completed",
+  "reviews": "reviews",
   "other": "Other",
   "thisFieldIsRequired": "This field is required",
   "editAddress": "Edit Address",
