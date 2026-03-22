@@ -206,6 +206,18 @@ abstract class AppLocalizations {
   /// **'reviews'**
   String get reviews;
 
+  /// No description provided for @readMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read more'**
+  String get readMore;
+
+  /// No description provided for @readLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Read less'**
+  String get readLess;
+
   /// No description provided for @other.
   ///
   /// In en, this message translates to:

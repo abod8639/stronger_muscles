@@ -3,6 +3,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/header_with_icon_and_title.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/stars_record.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// A beautiful expandable description card with animations
 class ExpandableDescriptionCard extends StatefulWidget {
@@ -32,7 +33,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
 
   static const int _collapsedMaxLines = 4;
   static const Duration _animationDuration = Duration(milliseconds: 250);
-
   @override
   void initState() {
     super.initState();
@@ -66,6 +66,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final intl10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -159,7 +160,7 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                _isExpanded ? 'Read less' : 'Read more',
+                                _isExpanded ? intl10n.readLess : intl10n.readMore,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w600,

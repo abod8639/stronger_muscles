@@ -64,6 +64,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviews => 'مراجعات';
 
   @override
+  String get readMore => 'اقرأ المزيد';
+
+  @override
+  String get readLess => 'اقرأ أقل';
+
+  @override
   String get other => 'أخرى';
 
   @override

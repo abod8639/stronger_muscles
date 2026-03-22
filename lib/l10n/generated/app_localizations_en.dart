@@ -64,6 +64,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reviews => 'reviews';
 
   @override
+  String get readMore => 'Read more';
+
+  @override
+  String get readLess => 'Read less';
+
+  @override
   String get other => 'Other';
 
   @override

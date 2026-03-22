@@ -18,6 +18,8 @@
   "totalSpent": "Total Spent",
   "completed": "Completed",
   "reviews": "reviews",
+  "readMore": "Read more",
+  "readLess": "Read less",
   "other": "Other",
   "thisFieldIsRequired": "This field is required",
   "editAddress": "Edit Address",
