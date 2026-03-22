@@ -31,6 +31,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get email => 'البريد الإلكتروني';
 
   @override
+  String get mapUnavailable => 'خريطة غير متاحة';
+
+  @override
+  String get setDefault => 'تعيين كافتراضي';
+
+  @override
   String get savedAddresses => 'العناوين المحفوظة';
 
   @override

@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _containerBorderRadius = 20.0;
 const double _containerClipRadius = 20.0;
@@ -30,6 +31,7 @@ class AddressCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    // final intl10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -137,27 +139,33 @@ class AddressCard extends ConsumerWidget {
   }
 
   Widget _buildMapPlaceholder() {
-    return SizedBox(
-      height: 150,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
-          const SizedBox(height: 8),
-          Text(
-            "Map unavailable",
-            style: TextStyle(color: Colors.grey[500], fontSize: 12),
+    return Builder(
+      builder: (context) {
+        final intl10n = AppLocalizations.of(context)!;
+        return SizedBox(
+          height: 150,
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
+              const SizedBox(height: 8),
+              Text(
+                intl10n.mapUnavailable,
+                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 
-  Widget _buildCardTopRow() {
+  Widget _buildCardTopRow(BuildContext context) {
+    final intl10n = AppLocalizations.of(context)!;
     IconData labelIcon = Icons.location_on_rounded;
-    if (address.label?.toLowerCase() == 'home') labelIcon = Icons.home_rounded;
-    if (address.label?.toLowerCase() == 'work') labelIcon = Icons.work_rounded;
+    if (address.label?.toLowerCase() == intl10n.home) labelIcon = Icons.home_rounded;
+    if (address.label?.toLowerCase() == intl10n.work) labelIcon = Icons.work_rounded;
 
     return Row(
       children: [
@@ -232,7 +240,7 @@ class AddressCard extends ConsumerWidget {
 
   Widget _buildActionButtons(BuildContext context, WidgetRef ref) {
     final controller = ref.read(addressControllerProvider.notifier);
-
+    final intl10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         const Expanded(child: SizedBox.shrink()),
@@ -240,7 +248,7 @@ class AddressCard extends ConsumerWidget {
           Expanded(
             child: TextButton(
               onPressed: () => controller.setDefaultAddress(address.id),
-              child: const Text('Set Default', style: TextStyle(fontSize: 13)),
+              child: Text(intl10n.setDefault, style: TextStyle(fontSize: 13)),
             ),
           ),
         IconButton(

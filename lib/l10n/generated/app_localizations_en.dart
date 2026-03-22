@@ -31,6 +31,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get email => 'Email';
 
   @override
+  String get mapUnavailable => 'Map unavailable';
+
+  @override
+  String get setDefault => 'Set Default';
+
+  @override
   String get savedAddresses => 'Saved Addresses';
 
   @override

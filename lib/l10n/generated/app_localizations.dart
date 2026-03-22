@@ -140,6 +140,18 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get email;
 
+  /// No description provided for @mapUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Map unavailable'**
+  String get mapUnavailable;
+
+  /// No description provided for @setDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Default'**
+  String get setDefault;
+
   /// No description provided for @savedAddresses.
   ///
   /// In en, this message translates to:
