@@ -13,6 +13,7 @@ Widget buildProductInfo(
   BuildContext context,
   WidgetRef ref,
 ) {
+  final theme = Theme.of(context);
   final infoItems = <Widget>[];
 
   void navigateToBrandPage(String brandName) {
@@ -157,22 +158,34 @@ Widget buildProductInfo(
       const SizedBox(height: 12),
       Container(
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurStyle: BlurStyle.outer,
-              color: isDark
-                  ? AppColors.greyLight.withValues(alpha: .1)
-                  : AppColors.surfaceDark.withValues(alpha: .3),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-          color: isDark
-              ? AppColors.surfaceDark
-              : AppColors.greyLight.withValues(alpha: .3),
-          borderRadius: BorderRadius.circular(12),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark
+              ? [
+                  theme.colorScheme.surface,
+                  theme.colorScheme.surface..withValues(alpha: .8),
+                ]
+              : [
+                  theme.colorScheme.surface,
+                  theme.colorScheme.primaryContainer..withValues(alpha: .1),
+                ],
         ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.primary..withValues(alpha: .2),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary..withValues(alpha: .08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+        
         child: Column(children: infoItems),
       ),
     ],

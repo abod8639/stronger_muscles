@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends ConsumerWidget {
@@ -15,6 +16,8 @@ class CartItemCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+        final locale = Localizations.localeOf(context).languageCode;
+
     // final cartNotifier = ref.watch(cartControllerProvider.notifier);
 
     return InkWell(
@@ -53,7 +56,7 @@ class CartItemCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.product.getLocalizedName(locale: 'en'),
+                      item.product.getLocalizedName(locale: locale ),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -64,7 +67,8 @@ class CartItemCard extends ConsumerWidget {
                     if (item.selectedFlavor != null ||
                         item.selectedSize != null)
                       Text(
-                        '${item.selectedFlavor ?? ""} ${item.selectedSize ?? ""}',
+                        '${
+                          locale == "ar" ? item.selectedFlavor ?? "" : item.selectedFlavor ?? ""} ${locale == "ar" ? item.selectedSize ?? "" : item.selectedSize ?? ""}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: Colors.grey,
                         ),

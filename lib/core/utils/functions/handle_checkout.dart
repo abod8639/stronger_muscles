@@ -10,14 +10,16 @@ Future<void> handleCheckout(WidgetRef ref) async {
   if (cartState.value == null || cartState.value!.isEmpty) {
     return;
   }
-
   if (ref.read(authControllerProvider.notifier).isLoggedIn) {
     return AppGuard.runSafe(
       ref,
       () async => ref.read(routerProvider).push(AppRoutes.checkout),
     );
-  } 
-  //  (!ref.read(authControllerProvider.notifier).isLoggedIn) {
-    // return ref.read(routerProvider).push(AppRoutes.profile);
-  // }
+  } else {
+    return AppGuard.runSafe(
+      ref,
+      () async => ref.read(routerProvider).push(AppRoutes.signIn),
+    );
+  }
+
 }
