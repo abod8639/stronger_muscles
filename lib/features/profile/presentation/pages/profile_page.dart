@@ -14,7 +14,7 @@ import 'package:stronger_muscles/features/profile/presentation/widgets/account_s
 import 'package:stronger_muscles/features/profile/presentation/widgets/login_prompt_card.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-const double _appBarExpandedHeight = 100.0;
+const double _appBarExpandedHeight = 50.0;
 const double _contentVerticalSpacing = 16.0;
 const double _sectionSpacing = 24.0;
 const double _bottomSpacing = 32.0;
