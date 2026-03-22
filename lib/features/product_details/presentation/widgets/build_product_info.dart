@@ -1,6 +1,7 @@
-import 'package:go_router/go_router.dart';
+// [Certain]
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
@@ -14,132 +15,51 @@ Widget buildProductInfo(
   WidgetRef ref,
 ) {
   final theme = Theme.of(context);
+  final l10n = AppLocalizations.of(context)!;
+  final locale = Localizations.localeOf(context).languageCode;
   final infoItems = <Widget>[];
 
+  // دالة الملاحة للبراند
   void navigateToBrandPage(String brandName) {
     final searchNotifier = ref.read(productSearchControllerProvider.notifier);
-
     searchNotifier.clearSearch();
     searchNotifier.textController.text = brandName;
     searchNotifier.updateSearchQuery(brandName);
-
     context.push(AppRoutes.search);
   }
 
-  // Brand
-  if (product.brand != null && product.brand!.isNotEmpty) {
-    infoItems.add(
-      Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                AppLocalizations.of(context)!.brand,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: isDark ? AppColors.white : AppColors.black,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 8,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () => navigateToBrandPage(product.brand!),
-                child: Text(
-                  product.brand!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isDark ? AppColors.info : AppColors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  final dataMap = [
+    if (product.brand?.isNotEmpty ?? false)
+      {'label': l10n.brand, 'value': product.brand!, 'isLink': true},
+    if (product.category?.name != null)
+      {'label': l10n.category, 'value': product.category!.getLocalizedName(locale: locale)},
+    if (product.sku != null) 
+      {'label': l10n.sku, 'value': product.sku!},
+    if (product.servingSize != null) 
+      {'label': l10n.servingSize, 'value': product.servingSize!},
+    {'label': l10n.servingsPerContainer, 'value': '${product.servingsPerContainer}'},
+    if (product.weight != null) 
+      {'label': l10n.weight, 'value': '${product.weight} كجم'},
+    if (product.manufacturer != null) 
+      {'label': l10n.manufacturer, 'value': product.manufacturer!},
+    if (product.countryOfOrigin != null) 
+      {'label': l10n.countryOfOrigin, 'value': product.countryOfOrigin!},
+  ];
 
-  // Category
-  if (product.category != null && product.category!.name != null) {
-    final locale = Localizations.localeOf(context).languageCode;
+  for (var i = 0; i < dataMap.length; i++) {
+    final item = dataMap[i];
     infoItems.add(
       _buildInfoRow(
-        AppLocalizations.of(context)!.category,
-        product.category!.getLocalizedName(locale: locale),
-        isDark,
+        label: item['label'] as String,
+        value: item['value'] as String,
+        isDark: isDark,
+        isLink: item['isLink'] == true,
+        onTap: item['isLink'] == true ? () => navigateToBrandPage(item['value'] as String) : null,
       ),
     );
-  }
-
-  // SKU
-  if (product.sku != null) {
-    infoItems.add(
-      _buildInfoRow(AppLocalizations.of(context)!.sku, product.sku!, isDark),
-    );
-  }
-
-  // Serving Size
-  if (product.servingSize != null) {
-    infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.servingSize,
-        product.servingSize!,
-        isDark,
-      ),
-    );
-  }
-
-  // Servings Per Container
-  infoItems.add(
-    _buildInfoRow(
-      AppLocalizations.of(context)!.servingsPerContainer,
-      '${product.servingsPerContainer}',
-      isDark,
-    ),
-  );
-
-  // Weight
-  if (product.weight != null) {
-    infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.weight,
-        '${product.weight} كجم',
-        isDark,
-      ),
-    );
-  }
-
-  // Manufacturer
-  if (product.manufacturer != null) {
-    infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.manufacturer,
-        product.manufacturer!,
-        isDark,
-      ),
-    );
-  }
-
-  // Country of Origin
-  if (product.countryOfOrigin != null) {
-    infoItems.add(
-      _buildInfoRow(
-        AppLocalizations.of(context)!.countryOfOrigin,
-        product.countryOfOrigin!,
-        isDark,
-      ),
-    );
+    if (i < dataMap.length - 1) {
+      infoItems.add(Divider(color: AppColors.primary.withValues(alpha: 0.1), height: 16));
+    }
   }
 
   if (infoItems.isEmpty) return const SizedBox.shrink();
@@ -147,76 +67,80 @@ Widget buildProductInfo(
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        AppLocalizations.of(context)!.productInfo,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          color: isDark ? AppColors.white : AppColors.black,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Text(
+          l10n.productInfo,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: isDark ? AppColors.white : AppColors.black,
+          ),
         ),
       ),
-      const SizedBox(height: 12),
       Container(
         padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.surface..withValues(alpha: .8),
-                ]
-              : [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.primaryContainer..withValues(alpha: .1),
-                ],
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.primary..withValues(alpha: .2),
-          width: 1.5,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary..withValues(alpha: .08),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
+        decoration: BoxDecoration(
+          color: isDark ? theme.colorScheme.surface : Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: AppColors.primary.withValues(alpha: 0.15),
+            width: 1,
           ),
-        ],
-      ),
-        
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
         child: Column(children: infoItems),
       ),
     ],
   );
 }
 
-Widget _buildInfoRow(String label, String value, bool isDark) {
+Widget _buildInfoRow({
+  required String label,
+  required String value,
+  required bool isDark,
+  bool isLink = false,
+  VoidCallback? onTap,
+}) {
   return Padding(
-    padding: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.symmetric(vertical: 4),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          flex: 2,
+          flex: 4,
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 14,
-              color: isDark ? AppColors.white : AppColors.black,
-              fontWeight: FontWeight.w500,
+              fontSize: 16,
+              color: isDark ? Colors.grey[400] : Colors.grey[600],
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
+        const SizedBox(width: 8),
         Expanded(
-          flex: 3,
-          child: Text(
-            value,
-            style: TextStyle(
-              fontSize: 14,
-              color: isDark ? AppColors.white : AppColors.black,
-              fontWeight: FontWeight.w600,
+          flex: 6,
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(4),
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontSize: 14,
+                color: isLink 
+                    ? AppColors.info 
+                    : (isDark ? AppColors.white : AppColors.black),
+                fontWeight: isLink ? FontWeight.bold : FontWeight.w600,
+                decoration: isLink ? TextDecoration.underline : null,
+              ),
             ),
           ),
         ),

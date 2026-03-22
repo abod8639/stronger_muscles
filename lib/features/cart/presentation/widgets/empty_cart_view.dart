@@ -23,7 +23,6 @@ class EmptyCartView extends StatelessWidget {
           const SizedBox(height: 8),
           Text( 
            AppLocalizations.of(context)!.addProductsToGetStarted,
-            // 'ابدأ بالتسوق الآن وأضف بعض المنتجات',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
 import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 
 part 'categories_sections_controller.g.dart';
@@ -12,16 +13,18 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   @override
   FutureOr<List<SelectionsModel>> build() async {
     final categoryRepository = ref.watch(categoryRepositoryProvider.notifier);
+    final locale = ref.watch(languageControllerProvider);
+    final langCode = locale.languageCode;
 
     final cached = categoryRepository.getCachedCategories();
     if (cached.isNotEmpty) {
       _categories = cached;
-      return _getSelectionsList(cached);
+      return _getSelectionsList(cached, langCode);
     }
 
     final fetched = await categoryRepository.getAllCategories();
     _categories = fetched;
-    return _getSelectionsList(fetched);
+    return _getSelectionsList(fetched, langCode);
   }
 
   int _selectedIndex = 0;
@@ -33,22 +36,24 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   Future<void> fetchCategories() async {
     state = const AsyncLoading();
     final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
+    final langCode = ref.read(languageControllerProvider).languageCode;
     try {
       final fetched = await categoryRepository.getAllCategories();
       _categories = fetched;
-      state = AsyncData(_getSelectionsList(fetched));
+      state = AsyncData(_getSelectionsList(fetched, langCode));
     } catch (e, st) {
       state = AsyncError(e, st);
     }
   }
 
-  List<SelectionsModel> _getSelectionsList(List<CategoryModel> categoryList) {
+  List<SelectionsModel> _getSelectionsList(
+      List<CategoryModel> categoryList, String langCode) {
     return [
       SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
       ...categoryList.map(
         (cat) => SelectionsModel(
           id: cat.id,
-          label: cat.getLocalizedName(locale: 'en'),
+          label: cat.getLocalizedName(locale: langCode),
           icon: _getIconForCategory(cat.id),
         ),
       ),
