@@ -25,7 +25,7 @@ Widget buildProductInfo(
     searchNotifier.clearSearch();
     searchNotifier.textController.text = brandName;
     searchNotifier.updateSearchQuery(brandName);
-    context.push(AppRoutes.search);
+    context.push(AppRoutes.search , extra: false);
   }
 
   final dataMap = [

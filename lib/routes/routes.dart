@@ -112,8 +112,15 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const WishlistView(),
       ),
       GoRoute(
+        
         path: AppRoutes.search,
-        builder: (context, state) => const ProductSearchsPage(isFocused: true),
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is bool) {
+            return ProductSearchsPage(isFocused: extra);
+          }
+          return const ProductSearchsPage(isFocused: false);
+        },
       ),
       GoRoute(
         path: AppRoutes.profile,
