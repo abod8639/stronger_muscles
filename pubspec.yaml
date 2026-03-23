@@ -42,6 +42,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
+  fuzzy: ^0.5.1
  
 dev_dependencies:
   flutter_test:

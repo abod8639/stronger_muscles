@@ -36,4 +36,5 @@ Future<void> hiveInit() async {
   await Hive.openBox<UserModel>('users');
   await Hive.openBox('settings');
   await Hive.openBox('auth_box');
+  await Hive.openBox<String>('search_history');
 }

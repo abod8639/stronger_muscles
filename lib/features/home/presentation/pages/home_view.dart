@@ -36,7 +36,9 @@ class HomeView extends ConsumerWidget {
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
                 slivers: [
-                  const SearchBar(),
+                  const SearchBar(
+                    
+                  ),
                   const SliverToBoxAdapter(child: CategoriesShortcutsRow()),
                   if (selectedCategoryIndex == 0)
                     const SliverToBoxAdapter(child: PromoBanner()),

@@ -113,7 +113,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: AppRoutes.search,
-        builder: (context, state) => const ProductSearchsPage(),
+        builder: (context, state) => const ProductSearchsPage(isFocused: true),
       ),
       GoRoute(
         path: AppRoutes.profile,

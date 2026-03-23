@@ -36,7 +36,9 @@ class ProductSearchsPage extends ConsumerWidget {
               tag: 'searchBar',
               child: Material(
                 color: Colors.transparent,
-                child: SearchBarInline(isFocused: isFocused),
+                child: SearchBarInline(
+                  
+                  isFocused: isFocused),
               ),
             ),
           ),
