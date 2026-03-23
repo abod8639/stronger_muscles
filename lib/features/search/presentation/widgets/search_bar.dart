@@ -317,7 +317,7 @@ class _ProductSearchAutocompleteState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  _HighlightText(
+                                  HighlightText(
                                     text: product.getLocalizedName(locale: locale),
                                     query: query,
                                     style: theme.textTheme.titleSmall?.copyWith(
@@ -364,12 +364,13 @@ class _ProductSearchAutocompleteState
   }
 }
 
-class _HighlightText extends StatelessWidget {
+class HighlightText extends StatelessWidget {
   final String text;
   final String query;
   final TextStyle? style;
 
-  const _HighlightText({
+  const HighlightText({
+    super.key, 
     required this.text,
     required this.query,
     this.style,
