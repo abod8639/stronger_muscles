@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/features/search/presentation/widgets/search_bar_inline.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
 

@@ -119,7 +119,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           if (extra is bool) {
             return ProductSearchsPage(isFocused: extra);
           }
-          return const ProductSearchsPage(isFocused: false);
+          return const ProductSearchsPage(isFocused: true);
         },
       ),
       GoRoute(
