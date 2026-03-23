@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/search/presentation/widgets/product_search_autocomplete.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
