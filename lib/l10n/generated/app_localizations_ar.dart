@@ -37,6 +37,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get setDefault => 'تعيين كافتراضي';
 
   @override
+  String get noResultsFound => 'لا توجد نتائج تطابق بحثك';
+
+  @override
   String get home => 'الرئيسية';
 
   @override

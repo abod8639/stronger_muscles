@@ -37,6 +37,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setDefault => 'Set Default';
 
   @override
+  String get noResultsFound => 'No results found';
+
+  @override
   String get home => 'Home';
 
   @override

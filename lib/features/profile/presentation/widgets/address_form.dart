@@ -51,7 +51,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   : () async {
                       setState(() {}); // Start loading
                       await controller.getCurrentLocation();
-                      if (mounted) {
+                      if (context.mounted) {
                         setState(() {}); // End loading
                         ScaffoldMessenger.of(context).showSnackBar(
                            SnackBar(

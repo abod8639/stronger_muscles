@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Set Default'**
   String get setDefault;
 
+  /// No description provided for @noResultsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResultsFound;
+
   /// No description provided for @home.
   ///
   /// In en, this message translates to:

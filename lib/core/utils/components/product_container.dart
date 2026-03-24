@@ -12,12 +12,14 @@ class ProductContainer extends StatefulWidget {
     this.onPageChanged,
     this.onTap,
     required this.isBackgroundWhite,
+    this.query,
   });
 
   final void Function()? onTap;
   final ProductModel product;
   final bool? showName;
   final bool isBackgroundWhite;
+  final String? query;
   final ValueChanged<int>? onPageChanged;
 
   @override
@@ -63,7 +65,10 @@ class _ProductContainerState extends State<ProductContainer>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TitleAndDescription(product: widget.product),
+                    TitleAndDescription(
+                      product: widget.product,
+                      query: widget.query,
+                    ),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -106,6 +106,7 @@ class CheckoutController extends _$CheckoutController {
       await cartNotifier.clearCart();
       ref.read(routerProvider).go(AppRoutes.orderSuccess);
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).
       showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
     } finally {

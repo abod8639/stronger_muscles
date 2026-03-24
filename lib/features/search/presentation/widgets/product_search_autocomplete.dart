@@ -230,100 +230,107 @@ class _ProductSearchAutocompleteState
                   maxHeight: 400,
                   maxWidth: constraints.maxWidth,
                 ),
-                child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  shrinkWrap: true,
-                  itemCount: options.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, indent: 16),
-                  itemBuilder: (context, index) {
-                    final option = options.elementAt(index);
+                child: 
+                prudoctsList(options, onSelected, theme, locale),
+           // SizedBox.shrink( )
 
-                    // Search History Item UI
-                    if (option is String) {
-                      return ListTile(
-                        leading: const Icon(Icons.history, size: 20),
-                        title: Text(option),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.close, size: 16),
-                          onPressed: () => ref.read(searchHistoryProvider.notifier).remove(option),
-                        ),
-                        onTap: () => onSelected(option),
-                      );
-                    }
-
-                    // Product Item UI
-                    final product = option as ProductModel;
-                    final query = _textController.text;
-                    return InkWell(
-                      onTap: () => onSelected(product),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                        child: Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: CachedNetworkImage(
-                                imageUrl: product.primaryThumbnailUrl ?? '',
-                                width: 48,
-                                height: 48,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Container(
-                                  color: theme.colorScheme.surfaceContainerHighest,
-                                  child: const Icon(Icons.image, size: 20),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  HighlightText(
-                                    text: product.getLocalizedName(locale: locale),
-                                    query: query,
-                                    style: theme.textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  if (product.brand != null)
-                                    Text(
-                                      product.brand!,
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  '${product.price.toStringAsFixed(2)} LE',
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    color: theme.colorScheme.primary,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Icon(Icons.north_west, size: 14, color: Colors.grey),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
               ),
             ),
           );
         },
       ),
     );
+  }
+
+  ListView prudoctsList(Iterable<Object> options, AutocompleteOnSelected<Object> onSelected, ThemeData theme, String locale) {
+    return ListView.separated(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                shrinkWrap: true,
+                itemCount: options.length,
+                separatorBuilder: (context, index) =>
+                    const Divider(height: 1, indent: 16),
+                itemBuilder: (context, index) {
+                  final option = options.elementAt(index);
+
+                  // Search History Item UI
+                  if (option is String) {
+                    return ListTile(
+                      leading: const Icon(Icons.history, size: 20),
+                      title: Text(option),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.close, size: 16),
+                        onPressed: () => ref.read(searchHistoryProvider.notifier).remove(option),
+                      ),
+                      onTap: () => onSelected(option),
+                    );
+                  }
+
+                  // Product Item UI
+                  final product = option as ProductModel;
+                  final query = _textController.text;
+                  return InkWell(
+                    onTap: () => onSelected(product),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              imageUrl: product.primaryThumbnailUrl ?? '',
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: theme.colorScheme.surfaceContainerHighest,
+                                child: const Icon(Icons.image, size: 20),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                HighlightText(
+                                  text: product.getLocalizedName(locale: locale),
+                                  query: query,
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                if (product.brand != null)
+                                  Text(
+                                    product.brand!,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                '${product.price.toStringAsFixed(2)} LE',
+                                style: theme.textTheme.labelMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Icon(Icons.north_west, size: 14, color: Colors.grey),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
   }
 }
 

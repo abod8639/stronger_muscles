@@ -9,6 +9,8 @@
   "email": "Email",
   "mapUnavailable": "Map unavailable",
   "setDefault": "Set Default",
+  "noResultsFound": "No results found",
+  
   "home": "Home",
   "work": "Work",
   "country": "Country",

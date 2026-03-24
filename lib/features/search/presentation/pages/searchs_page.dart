@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar_inline.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
@@ -17,6 +18,7 @@ class ProductSearchsPage extends ConsumerWidget {
     final searchState = ref.watch(productSearchControllerProvider);
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
     final homeProducts = ref.watch(homeControllerProvider).value ?? [];
+    final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
       body: CustomScrollView(
@@ -43,7 +45,7 @@ class ProductSearchsPage extends ConsumerWidget {
             ),
           ),
 
-          SliverToBoxAdapter(child: _buildFilterChips(ref)),
+          SliverToBoxAdapter(child: _buildFilterChips(ref,l10n.searchForProducts)),
 
           searchState.when(
             data: (products) {
@@ -52,7 +54,7 @@ class ProductSearchsPage extends ConsumerWidget {
                   : products;
 
               if (searchNotifier.hasSearched && displayedProducts.isEmpty) {
-                return SliverToBoxAdapter(child: _buildEmptyState());
+                return SliverToBoxAdapter(child: _buildEmptyState(l10n.noResultsFound));
               }
 
               return SliverPadding(
@@ -82,6 +84,7 @@ class ProductSearchsPage extends ConsumerWidget {
                         showName: true,
                         product: product,
                         isBackgroundWhite: false,
+                        query: searchNotifier.searchQuery,
                       ),
                     );
                   }, childCount: displayedProducts.length),
@@ -102,15 +105,15 @@ class ProductSearchsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState() {
+  Widget _buildEmptyState(String title) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
-          const Text(
-            'لا توجد نتائج تطابق بحثك',
+          Text(
+            title,
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
         ],
@@ -118,7 +121,7 @@ class ProductSearchsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildFilterChips(WidgetRef ref) {
+  Widget _buildFilterChips(WidgetRef ref , String lable) {
     final query = ref
         .watch(productSearchControllerProvider.notifier)
         .searchQuery;
@@ -127,7 +130,7 @@ class ProductSearchsPage extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       alignment: Alignment.centerRight,
       child: Chip(
-        label: Text('نتائج البحث عن: $query'),
+        label: Text('$lable $query'),
         onDeleted: () =>
             ref.read(productSearchControllerProvider.notifier).clearSearch(),
       ),
