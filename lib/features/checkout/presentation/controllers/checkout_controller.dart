@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 part 'checkout_controller.g.dart';
@@ -41,8 +41,24 @@ class CheckoutState {
 class CheckoutController extends _$CheckoutController {
   @override
   CheckoutState build() {
-    final profileNotifier = ref.watch(profileControllerProvider.notifier);
-    final addresses = profileNotifier.addresses;
+    ref.listen<AsyncValue<List<AddressModel>>>(addressControllerProvider, (previous, next) {
+      final newAddresses = next.value ?? [];
+      if (state.selectedAddress == null && newAddresses.isNotEmpty) {
+        final defaultAddr = newAddresses.where((addr) => addr.isDefault).firstOrNull ?? newAddresses.first;
+        state = state.copyWith(selectedAddress: defaultAddr);
+      } else if (state.selectedAddress != null) {
+        final stillExists = newAddresses.any((addr) => addr.id == state.selectedAddress!.id);
+        if (!stillExists) {
+          final defaultAddr = newAddresses.where((addr) => addr.isDefault).firstOrNull ?? (newAddresses.isNotEmpty ? newAddresses.first : null);
+          state = state.copyWith(selectedAddress: defaultAddr);
+        } else {
+          final updatedAddr = newAddresses.firstWhere((addr) => addr.id == state.selectedAddress!.id);
+          state = state.copyWith(selectedAddress: updatedAddr);
+        }
+      }
+    });
+
+    final addresses = ref.read(addressControllerProvider).value ?? [];
 
     AddressModel? initialAddress;
     if (addresses.isNotEmpty) {
