@@ -6,7 +6,7 @@ import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar_inline.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
+// import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import '../controllers/product_search_controller.dart';
 
 class ProductSearchsPage extends ConsumerWidget {
@@ -17,7 +17,7 @@ class ProductSearchsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final searchState = ref.watch(productSearchControllerProvider);
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
-    final homeProducts = ref.watch(homeControllerProvider).value ?? [];
+    // final homeProducts = ref.watch(homeControllerProvider).value ?? [];
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
@@ -49,9 +49,9 @@ class ProductSearchsPage extends ConsumerWidget {
 
           searchState.when(
             data: (products) {
-              final displayedProducts = searchNotifier.searchQuery.isEmpty
-                  ? homeProducts
-                  : products;
+              // Show nothing if query is empty and we haven't searched (initial state)
+              // Or show all products if that's the intended initial state
+              final displayedProducts = products;
 
               if (searchNotifier.hasSearched && displayedProducts.isEmpty) {
                 return SliverToBoxAdapter(child: _buildEmptyState(l10n.noResultsFound));
