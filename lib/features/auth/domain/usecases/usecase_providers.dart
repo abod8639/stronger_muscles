@@ -6,6 +6,7 @@ import 'package:stronger_muscles/features/auth/domain/usecases/login_usecase.dar
 import 'package:stronger_muscles/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/register_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/update_profile_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/google_sign_in_usecase.dart';
 
 part 'usecase_providers.g.dart';
 
@@ -38,3 +39,10 @@ UpdateProfileUseCase updateProfileUseCase(UpdateProfileUseCaseRef ref) {
   final AuthRepository repository = ref.watch(authRepositoryProvider);
   return UpdateProfileUseCase(repository);
 }
+
+@riverpod
+GoogleSignInUseCase googleSignInUseCase(GoogleSignInUseCaseRef ref) {
+  final AuthRepository repository = ref.watch(authRepositoryProvider);
+  return GoogleSignInUseCase(repository);
+}
+
