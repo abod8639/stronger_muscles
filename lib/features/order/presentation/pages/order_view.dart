@@ -11,12 +11,6 @@ class OrderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ordersState = ref.watch(ordersControllerProvider);
-    final ordersNotifier = ref.watch(ordersControllerProvider.notifier);
-
-    // جلب باقي الطلبات عند الدخول لصفحة كل الطلبات
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ordersNotifier.fetchAllOrders();
-    });
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
