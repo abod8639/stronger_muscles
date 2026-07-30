@@ -14,8 +14,8 @@ OrderRepository orderRepository(OrderRepositoryRef ref) {
 class OrdersController extends _$OrdersController {
   @override
   FutureOr<List<OrderModel>> build() async {
-    // Initial fetch
-    return await _fetchOrders(limit: 3);
+    // Initial fetch of all user orders to ensure accurate profile stats
+    return await _fetchOrders();
   }
 
   Future<List<OrderModel>> _fetchOrders({int? limit}) async {
@@ -36,8 +36,7 @@ class OrdersController extends _$OrdersController {
   Future<void> refreshOrders() async {
     state = const AsyncLoading();
     try {
-      final currentLength = state.value?.length ?? 3;
-      final orders = await _fetchOrders(limit: currentLength > 3 ? null : 3);
+      final orders = await _fetchOrders();
       state = AsyncData(orders);
     } catch (e, st) {
       state = AsyncError(e, st);
