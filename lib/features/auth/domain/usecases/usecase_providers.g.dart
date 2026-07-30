@@ -85,5 +85,23 @@ final updateProfileUseCaseProvider =
 );
 
 typedef UpdateProfileUseCaseRef = AutoDisposeProviderRef<UpdateProfileUseCase>;
+
+String _$googleSignInUseCaseHash() => r'googleSignInUseCaseHash';
+
+/// See also [googleSignInUseCase].
+@ProviderFor(googleSignInUseCase)
+final googleSignInUseCaseProvider =
+    AutoDisposeProvider<GoogleSignInUseCase>.internal(
+  googleSignInUseCase,
+  name: r'googleSignInUseCaseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$googleSignInUseCaseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GoogleSignInUseCaseRef = AutoDisposeProviderRef<GoogleSignInUseCase>;
+
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
