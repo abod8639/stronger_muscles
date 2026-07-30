@@ -1,15 +1,14 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class ApiConfig {
   static String get baseUrl {
+    final envUrl = dotenv.env['BASE_URL'];
+    if (envUrl != null) {
+      return envUrl.endsWith('/api/v1') ? envUrl : '$envUrl/api/v1';
+    }
     const String port = '8080';
-    // const String ip = '192.168.2.169';
     const String ip = '192.168.1.17';
 
-    // const String ip = '192.168.1.43';
-    // const String pcIp = 'localhost';
-
-    // استخدم 10.0.2.2 إذا كنت تستخدم محاكي أندرويد (Android Emulator)
-    // استخدم IP جهازك (مثل 192.168.1.17) إذا كنت تستخدم جوال حقيقي
-    // const String pcIp = '192.168.1.17';
     return 'http://$ip:$port/api/v1';
   }
 
