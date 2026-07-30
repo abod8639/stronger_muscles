@@ -23,16 +23,56 @@ const double _shadowOpacity = 0.06;
 const double _defaultShadowOpacity = 0.3;
 const double _adapterTextLineHeight = 1.4;
 
-class AddressCard extends ConsumerWidget {
+class AddressCard extends ConsumerStatefulWidget {
   final AddressModel address;
 
   const AddressCard({super.key, required this.address});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AddressCard> createState() => _AddressCardState();
+}
+
+class _AddressCardState extends ConsumerState<AddressCard> {
+  Future<List<Location>>? _geocodeFuture;
+
+  AddressModel get address => widget.address;
+
+  @override
+  void initState() {
+    super.initState();
+    _initGeocode();
+  }
+
+  @override
+  void didUpdateWidget(AddressCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.address.fullAddress != widget.address.fullAddress ||
+        oldWidget.address.latitude != widget.address.latitude ||
+        oldWidget.address.longitude != widget.address.longitude) {
+      _initGeocode();
+    }
+  }
+
+  void _initGeocode() {
+    if (widget.address.latitude == null || widget.address.longitude == null) {
+      _geocodeFuture = _geocodeAddress(widget.address.fullAddress);
+    } else {
+      _geocodeFuture = null;
+    }
+  }
+
+  Future<List<Location>> _geocodeAddress(String address) async {
+    try {
+      return await locationFromAddress(address);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    // final intl10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -85,7 +125,7 @@ class AddressCard extends ConsumerWidget {
 
     // Try to geocode the address if coordinates are missing
     return FutureBuilder<List<Location>>(
-      future: _geocodeAddress(address.fullAddress),
+      future: _geocodeFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildMapLoading();
@@ -93,24 +133,12 @@ class AddressCard extends ConsumerWidget {
         
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           final loc = snapshot.data!.first;
-          // X5WH+7C Al Haram
-          
-          // return _buildMapWidget(LatLng(29.4 , 31.1));
           return _buildMapWidget(LatLng(loc.latitude, loc.longitude));
         }
 
         return _buildMapPlaceholder();
       },
     );
-  }
-
-  Future<List<Location>> _geocodeAddress(String address) async {
-    try {
-      // Small optimization: cache could be added here if needed
-      return await locationFromAddress(address);
-    } catch (_) {
-      return [];
-    }
   }
 
   Widget _buildMapWidget(LatLng position) {
