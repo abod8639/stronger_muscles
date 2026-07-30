@@ -49,7 +49,7 @@ class CartController extends _$CartController {
     if (existingItemIndex != -1) {
       final item = currentItems[existingItemIndex];
       final updatedItem = item.copyWith(quantity: item.quantity + 1);
-      await _cartBox.putAt(existingItemIndex, updatedItem);
+      await _cartBox.put(item.id, updatedItem);
     } else {
       final newItem = CartItemModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -59,43 +59,29 @@ class CartController extends _$CartController {
         selectedSize: selectedSize,
         addedAt: DateTime.now(),
       );
-      await _cartBox.add(newItem);
+      await _cartBox.put(newItem.id, newItem);
     }
 
     state = AsyncData(_cartBox.values.toList());
   }
 
   Future<void> removeFromCart(CartItemModel item) async {
-    final currentItems = state.value ?? [];
-    final index = currentItems.indexOf(item);
-    if (index != -1) {
-      await _cartBox.deleteAt(index);
-      state = AsyncData(_cartBox.values.toList());
-    }
+    await _cartBox.delete(item.id);
+    state = AsyncData(_cartBox.values.toList());
   }
 
   Future<void> increaseQuantity(CartItemModel item) async {
-    final currentItems = state.value ?? [];
-    final index = currentItems.indexOf(item);
-    if (index != -1) {
-      final updatedItem = item.copyWith(quantity: item.quantity + 1);
-      await _cartBox.putAt(index, updatedItem);
-      state = AsyncData(_cartBox.values.toList());
-    }
+    await _cartBox.put(item.id, item.copyWith(quantity: item.quantity + 1));
+    state = AsyncData(_cartBox.values.toList());
   }
 
   Future<void> decreaseQuantity(CartItemModel item) async {
-    final currentItems = state.value ?? [];
-    final index = currentItems.indexOf(item);
-    if (index != -1) {
-      if (item.quantity > 1) {
-        final updatedItem = item.copyWith(quantity: item.quantity - 1);
-        await _cartBox.putAt(index, updatedItem);
-      } else {
-        await _cartBox.deleteAt(index);
-      }
-      state = AsyncData(_cartBox.values.toList());
+    if (item.quantity > 1) {
+      await _cartBox.put(item.id, item.copyWith(quantity: item.quantity - 1));
+    } else {
+      await _cartBox.delete(item.id);
     }
+    state = AsyncData(_cartBox.values.toList());
   }
 
   bool isInCart(
