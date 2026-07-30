@@ -46,8 +46,8 @@ class AddressCard extends ConsumerWidget {
             : Border.all(color: Colors.transparent),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(
-              isDark ? _defaultShadowOpacity : _shadowOpacity,
+            color: Colors.black.withValues(
+              alpha: isDark ? _defaultShadowOpacity : _shadowOpacity,
             ),
             blurRadius: _shadowBlurRadius,
             offset: const Offset(0, _shadowOffsetY),
