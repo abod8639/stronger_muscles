@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
@@ -40,7 +41,24 @@ class AuthController extends _$AuthController {
   }
 
   Future<void> signInWithGoogle() async {
-    // This logic should be expanded to use a GoogleSignInUseCase
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      final googleSignIn = GoogleSignIn.instance;
+      try {
+        await googleSignIn.initialize();
+      } catch (_) {
+        // Safe to ignore if already initialized
+      }
+      
+      final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
+
+      final googleAuthUseCase = ref.read(googleSignInUseCaseProvider);
+      return await googleAuthUseCase(
+        email: googleUser.email,
+        name: googleUser.displayName ?? '',
+        photoUrl: googleUser.photoUrl,
+      );
+    });
   }
 
   Future<void> signOut() async {
