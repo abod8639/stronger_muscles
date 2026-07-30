@@ -40,6 +40,15 @@ class ProductSearchController extends _$ProductSearchController {
       textController.dispose();
       _debounceTimer?.cancel();
     });
+    
+    // Initialize with home products if they are already loaded
+    final homeProducts = ref.read(homeControllerProvider).value;
+    if (homeProducts != null && homeProducts.isNotEmpty) {
+      _localProducts = homeProducts;
+      _combinedResults = homeProducts;
+      return homeProducts;
+    }
+    
     return [];
   }
 
@@ -143,13 +152,14 @@ class ProductSearchController extends _$ProductSearchController {
     for (var p in products) {
       final name = p.getLocalizedName(locale: locale).toLowerCase();
       final brand = (p.brand ?? "").toLowerCase();
+      final category = (p.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
       final tags = p.tags.map((t) => t.toLowerCase()).toList();
 
-      if (name == lowerQuery || brand == lowerQuery) {
+      if (name == lowerQuery || brand == lowerQuery || category == lowerQuery) {
         exact.add(p);
-      } else if (name.startsWith(lowerQuery) || brand.startsWith(lowerQuery)) {
+      } else if (name.startsWith(lowerQuery) || brand.startsWith(lowerQuery) || category.startsWith(lowerQuery)) {
         prefix.add(p);
-      } else if (name.contains(lowerQuery) || brand.contains(lowerQuery) || tags.any((t) => t.contains(lowerQuery))) {
+      } else if (name.contains(lowerQuery) || brand.contains(lowerQuery) || category.contains(lowerQuery) || tags.any((t) => t.contains(lowerQuery))) {
         contains.add(p);
       } else {
         others.add(p);
@@ -182,7 +192,7 @@ class ProductSearchController extends _$ProductSearchController {
           WeightedKey(name: 'name', getter: (p) => p.getLocalizedName(locale: locale), weight: 1.0),
           WeightedKey(name: 'brand', getter: (p) => p.brand ?? "", weight: 0.7),
         ],
-        threshold: 0.3,
+        threshold: 0.35,
       ),
     );
 
