@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'main_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class MainController extends _$MainController {
   @override
   int build() => 0;
