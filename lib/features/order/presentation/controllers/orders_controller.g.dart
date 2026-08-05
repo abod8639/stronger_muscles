@@ -21,7 +21,7 @@ final orderRepositoryProvider = Provider<OrderRepository>.internal(
 );
 
 typedef OrderRepositoryRef = ProviderRef<OrderRepository>;
-String _$ordersControllerHash() => r'd7af20133c1ffec541b5427e78da9b7187006002';
+String _$ordersControllerHash() => r'6d678e57d9f15aeba23fe95959744101e7776646';
 
 /// See also [OrdersController].
 @ProviderFor(OrdersController)
