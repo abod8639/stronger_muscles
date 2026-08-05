@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _cardMarginHorizontal = 16.0;
@@ -24,7 +24,9 @@ class PurchaseStatsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileNotifier = ref.watch(profileControllerProvider.notifier);
+    final orders = ref.watch(ordersControllerProvider).value ?? [];
+    final totalSpent = orders.fold(0.0, (sum, order) => sum + order.totalAmount);
+    final deliveredOrders = orders.where((o) => o.status.toLowerCase() == 'delivered').length;
     final intl10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: _cardMarginHorizontal),
@@ -49,7 +51,7 @@ class PurchaseStatsCard extends ConsumerWidget {
         children: [
           _buildStatItem(
             intl10n.totalSpent,
-            'LE ${profileNotifier.totalSpent.toStringAsFixed(0)}',
+            'LE ${totalSpent.toStringAsFixed(0)}',
             Icons.payments_outlined,
           ),
           Container(
@@ -59,7 +61,7 @@ class PurchaseStatsCard extends ConsumerWidget {
           ),
           _buildStatItem(
             intl10n.completed,
-            '${profileNotifier.deliveredOrders}',
+            '$deliveredOrders',
             Icons.check_circle_outline,
           ),
         ],
