@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final VoidCallback? onSignInTap;
@@ -56,7 +58,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     final authState = ref.watch(authControllerProvider);
     final localizations = AppLocalizations.of(context)!;
 
-    // Listen to authentication errors
+    // Listen to authentication changes
     ref.listen(authControllerProvider, (previous, next) {
       if (next is AsyncError) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -65,6 +67,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             backgroundColor: Colors.redAccent,
           ),
         );
+      } else if (next is AsyncData &&
+          next.value != null &&
+          previous is AsyncLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('تم إنشاء الحساب وتسجيل الدخول بنجاح!', textAlign: TextAlign.right),
+            backgroundColor: Colors.green,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.main);
+        }
       }
     });
 
