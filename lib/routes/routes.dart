@@ -41,7 +41,6 @@ class AppRoutes {
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.main,
-    refreshListenable: AuthRefreshListenable(ref),
     redirect: (context, state) {
       final authState = ref.read(authControllerProvider);
       final isLoggedIn = authState.value != null;
@@ -205,14 +204,4 @@ CustomTransitionPage<T> buildPageWithTransition<T>({
     },
   );
 }
-/// A listenable that triggers whenever the auth state changes.
-class AuthRefreshListenable extends ChangeNotifier {
-  AuthRefreshListenable(Ref ref) {
-    ref.listen(authControllerProvider, (previous, next) {
-      // Trigger update whenever value changes (login/logout)
-      if (previous?.value != next.value) {
-        notifyListeners();
-      }
-    });
-  }
-}
+
