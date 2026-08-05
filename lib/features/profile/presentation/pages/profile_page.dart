@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/quick_actions_row.dart';
@@ -31,20 +33,17 @@ class ProfilePage extends ConsumerWidget {
     final authState = ref.watch(authControllerProvider);
     final currentUser = authState.value;
     final isLoading = authState.isLoading;
-    final orders = ref.watch(profileControllerProvider.notifier).orders;
-
-    // Trigger lazy loading for user data
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (currentUser != null && orders.isEmpty && !isLoading) {
-        ref.read(profileControllerProvider.notifier).loadUserData();
-      }
-    });
+    final orders = ref.watch(ordersControllerProvider).value ?? [];
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(profileControllerProvider.notifier).loadUserData(),
+        onRefresh: () async {
+          await Future.wait([
+            ref.read(ordersControllerProvider.notifier).refreshOrders(),
+            ref.read(addressControllerProvider.notifier).fetchAddresses(),
+          ]);
+        },
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
