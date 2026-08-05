@@ -85,8 +85,8 @@ final updateProfileUseCaseProvider =
 );
 
 typedef UpdateProfileUseCaseRef = AutoDisposeProviderRef<UpdateProfileUseCase>;
-
-String _$googleSignInUseCaseHash() => r'googleSignInUseCaseHash';
+String _$googleSignInUseCaseHash() =>
+    r'3ba25704ce0ff84eaaf54ffdc040c4029b8a4438';
 
 /// See also [googleSignInUseCase].
 @ProviderFor(googleSignInUseCase)
@@ -102,6 +102,5 @@ final googleSignInUseCaseProvider =
 );
 
 typedef GoogleSignInUseCaseRef = AutoDisposeProviderRef<GoogleSignInUseCase>;
-
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
