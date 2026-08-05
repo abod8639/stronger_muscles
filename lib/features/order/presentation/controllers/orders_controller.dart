@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 
 part 'orders_controller.g.dart';
 
@@ -14,6 +15,10 @@ OrderRepository orderRepository(OrderRepositoryRef ref) {
 class OrdersController extends _$OrdersController {
   @override
   FutureOr<List<OrderModel>> build() async {
+    final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.value != null));
+    if (!isLoggedIn) {
+      return [];
+    }
     // Initial fetch of all user orders to ensure accurate profile stats
     return await _fetchOrders();
   }
