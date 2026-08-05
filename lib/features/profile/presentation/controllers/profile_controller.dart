@@ -41,6 +41,11 @@ class ProfileController extends _$ProfileController {
   void _clearData() {
     ref.invalidate(ordersControllerProvider);
     ref.invalidate(addressControllerProvider);
+    try {
+      if (Hive.isBoxOpen('addresses')) {
+        Hive.box<AddressModel>('addresses').clear();
+      }
+    } catch (_) {}
   }
 
   Future<void> loadUserData() async {
