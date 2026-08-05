@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 
 const double _profileImageRadius = 35.0;
 const double _profileImageBorderWidth = 2.0;
@@ -20,7 +20,7 @@ class ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final user = ref.watch(profileControllerProvider.notifier).currentUser;
+    final user = ref.watch(authControllerProvider).value;
     final isDark = theme.brightness == Brightness.dark;
 
     if (user == null) return const SizedBox.shrink();
