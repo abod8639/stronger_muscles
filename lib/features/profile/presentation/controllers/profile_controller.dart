@@ -39,8 +39,8 @@ class ProfileController extends _$ProfileController {
   }
 
   void _clearData() {
-    ref.read(ordersControllerProvider.notifier).clearData();
-    ref.read(addressControllerProvider.notifier).clearForm();
+    ref.invalidate(ordersControllerProvider);
+    ref.invalidate(addressControllerProvider);
   }
 
   Future<void> loadUserData() async {
