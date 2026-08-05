@@ -3,6 +3,7 @@ import 'package:stronger_muscles/features/profile/domain/repositories/address_re
 import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 
 part 'address_controller.g.dart';
 
@@ -42,7 +43,13 @@ class AddressController extends _$AddressController {
       countryController.dispose();
     });
 
+    final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.value != null));
     final repository = ref.watch(addressRepositoryProvider);
+    
+    if (isLoggedIn) {
+      Future.microtask(() => fetchAddresses());
+    }
+    
     return repository.getCachedAddresses();
   }
 
