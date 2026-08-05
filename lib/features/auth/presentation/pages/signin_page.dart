@@ -44,9 +44,6 @@ class _SignInPageState extends ConsumerState<SignInPage> {
               email: _emailController.text.trim(),
               password: _passwordController.text,
             );
-        if (mounted && ref.read(authControllerProvider).hasValue) {
-          context.push(AppRoutes.profile);
-        }
       }
     });
   }
@@ -81,8 +78,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           ),
         );
         // Go back to the previous page only on success
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go(AppRoutes.main);
         }
       }
     });
