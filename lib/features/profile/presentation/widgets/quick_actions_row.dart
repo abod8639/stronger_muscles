@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const double _rowSpacing = 12.0;
@@ -21,7 +23,9 @@ class QuickActionsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final profileNotifier = ref.watch(profileControllerProvider.notifier);
+    final ordersCount = ref.watch(ordersControllerProvider).value?.length ?? 0;
+    final wishlistCount = ref.watch(wishlistControllerProvider).length;
+    final addressesCount = ref.watch(addressControllerProvider).value?.length ?? 0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -32,7 +36,7 @@ class QuickActionsRow extends ConsumerWidget {
               context,
               icon: Icons.shopping_bag_outlined,
               label: 'Orders',
-              value: profileNotifier.totalOrders.toString(),
+              value: ordersCount.toString(),
               color: AppColors.primary,
               onTap: () {},
             ),
@@ -43,7 +47,7 @@ class QuickActionsRow extends ConsumerWidget {
               context,
               icon: Icons.favorite_outline,
               label: 'Wishlist',
-              value: profileNotifier.wishlistCount.toString(),
+              value: wishlistCount.toString(),
               color: AppColors.error,
               onTap: () => context.push(AppRoutes.wishlist),
             ),
@@ -54,7 +58,7 @@ class QuickActionsRow extends ConsumerWidget {
               context,
               icon: Icons.location_on_outlined,
               label: 'Addresses',
-              value: profileNotifier.addresses.length.toString(),
+              value: addressesCount.toString(),
               color: AppColors.success,
               onTap: () {},
             ),
