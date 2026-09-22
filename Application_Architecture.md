@@ -94,37 +94,46 @@ Future<List<ProductModel>> getProducts({String? categoryId}) async {
 
 ---
 
-## ٤. إدارة الحالة (State Management)
+## ٤. إدارة الحالة (State Management) والتنقل (Routing)
 
-يستخدم التطبيق حزمة **GetX** كحل أساسي لإدارة الحالة، التنقل، وحقن الاعتماديات (Dependency Injection).
+يستخدم التطبيق حزمة **Riverpod 2.x** كحل أساسي لإدارة الحالة وحقن الاعتماديات، مع **GoRouter** للتنقل.
 
 -   **التحكم بالحالة (State Management)**:
-    -   يتم تعريف وحدات التحكم (Controllers) مثل `[[home_controller.dart]]` و `[[cart_controller.dart]]` لتمثيل منطق وحالة كل شاشة أو ميزة.
-    -   تُستخدم المتغيرات التفاعلية `.obs` (مثل `RxList`, `RxBool`) لجعل الواجهة تتفاعل مع تغييرات الحالة.
-    -   تُستخدم `Obx` أو `GetX` في طبقة الواجهة (UI) للاستماع لهذه المتغيرات وإعادة بناء الأجزاء اللازمة فقط عند حدوث تغيير.
+    -   يتم تعريف الـ Notifiers باستخدام مولد الأكواد `riverpod_generator` (`@riverpod` أو `@Riverpod(keepAlive: true)`).
+    -   تُستخدم `AsyncValue` (من خلال `AsyncData`, `AsyncLoading`, `AsyncError`) للتعامل الآمن مع الحالات غير المتزامنة وتجنب الأخطاء غير المعالجة.
+    -   تُستخدم `ConsumerWidget` أو `ConsumerStatefulWidget` مع `ref.watch` لإعادة بناء الأجزاء اللازمة فقط، أو `ref.select` للاستماع لحقول محددة بكفاءة.
 
 -   **حقن الاعتماديات (Dependency Injection)**:
-    -   يتم تسجيل وحدات التحكم والخدمات باستخدام `Get.put()` أو `Get.lazyPut()` عند بدء تشغيل التطبيق (في ملف `[[init_controllers_app.dart]]`).
-    -   يتم الوصول إلى هذه الوحدات المسجلة من أي مكان في التطبيق باستخدام `Get.find()`. هذا يقلل من الاعتمادية المباشرة بين المكونات.
+    -   الخدمات والمستودعات (`ApiService`, `ProductRepository`, `AddressRepository`) تُسجل وتُحقن عبر Providers نقية عديمة الحالة.
+    -   يتم الوصول للخدمات عبر تمرير `ref` أو مراقبة المزودات (`ref.watch(apiServiceProvider)`).
 
     ```dart
     // cart_controller.dart
-    class CartController extends GetxController {
-      final RxList<CartItemModel> cartItems = <CartItemModel>[].obs;
-      // ...
-      void addToCart(ProductModel product) {
-        // Logic to add item...
-        cartItems.add(newItem); // UI will update automatically
+    @riverpod
+    class CartController extends _$CartController {
+      @override
+      FutureOr<List<CartItemModel>> build() async {
+        return _cartBox.values.toList();
+      }
+
+      Future<void> addToCart(ProductModel product) async {
+        // Business logic...
+        state = AsyncData(_cartBox.values.toList());
       }
     }
 
     // cart_view.dart
-    Obx(() {
-      if (controller.cartItems.isEmpty) {
-        return _buildEmptyState(context, theme); // Show empty state
+    class CartView extends ConsumerWidget {
+      @override
+      Widget build(BuildContext context, WidgetRef ref) {
+        final cartState = ref.watch(cartControllerProvider);
+        return cartState.when(
+          data: (items) => buildCartContent(items),
+          loading: () => const CircularProgressIndicator(),
+          error: (e, st) => Text('Error: $e'),
+        );
       }
-      return buildCartContent(); // Show cart items
-    })
+    }
     ```
 
 -   **التخزين المحلي (Local Storage)**:
