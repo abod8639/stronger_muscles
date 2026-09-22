@@ -123,7 +123,8 @@ class AddressService {
 
   Future<Placemark?> getAddressFromCoordinates(double lat, double lng) async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+      List<Placemark> placemarks =
+          await Geocoding().placemarkFromCoordinates(lat, lng);
       return placemarks.isNotEmpty ? placemarks.first : null;
     } catch (e) {
       return null;
