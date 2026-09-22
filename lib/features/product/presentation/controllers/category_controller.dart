@@ -8,23 +8,18 @@ part 'category_controller.g.dart';
 class CategoryController extends _$CategoryController {
   @override
   FutureOr<List<CategoryModel>> build() async {
-    final repository = ref.watch(categoryRepositoryProvider.notifier);
+    final repository = ref.watch(categoryRepositoryProvider);
     final cached = repository.getCachedCategories();
 
     if (cached.isNotEmpty) {
-      _initFetch();
       return cached;
     }
 
     return await repository.getAllCategories();
   }
 
-  Future<void> _initFetch() async {
-    await fetchCategories();
-  }
-
   Future<void> fetchCategories() async {
-    final repository = ref.read(categoryRepositoryProvider.notifier);
+    final repository = ref.read(categoryRepositoryProvider);
     try {
       final result = await repository.getAllCategories();
       state = AsyncData(result);
