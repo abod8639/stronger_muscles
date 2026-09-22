@@ -49,7 +49,7 @@ class QuickActionsRow extends ConsumerWidget {
               label: 'Wishlist',
               value: wishlistCount.toString(),
               color: AppColors.error,
-              onTap: () => context.push(AppRoutes.wishlist),
+              onTap: () => context.go(AppRoutes.wishlist),
             ),
           ),
           const SizedBox(width: _rowSpacing),
