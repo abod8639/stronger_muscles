@@ -18,9 +18,7 @@ class ShortcutItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsState = ref.watch(categoriesSectionsControllerProvider);
-    final selectedIndex = ref
-        .watch(categoriesSectionsControllerProvider.notifier)
-        .selectedIndex;
+    final selectedIndex = ref.watch(selectedCategoryIndexProvider);
     final isSelected = selectedIndex == index;
 
     return sectionsState.when(
