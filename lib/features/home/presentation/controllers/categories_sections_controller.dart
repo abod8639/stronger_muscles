@@ -9,10 +9,18 @@ import 'package:stronger_muscles/features/home/presentation/controllers/home_con
 part 'categories_sections_controller.g.dart';
 
 @riverpod
+class SelectedCategoryIndex extends _$SelectedCategoryIndex {
+  @override
+  int build() => 0;
+
+  void setIndex(int index) => state = index;
+}
+
+@riverpod
 class CategoriesSectionsController extends _$CategoriesSectionsController {
   @override
   FutureOr<List<SelectionsModel>> build() async {
-    final categoryRepository = ref.watch(categoryRepositoryProvider.notifier);
+    final categoryRepository = ref.watch(categoryRepositoryProvider);
     final locale = ref.watch(languageControllerProvider);
     final langCode = locale.languageCode;
 
@@ -27,15 +35,14 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
     return _getSelectionsList(fetched, langCode);
   }
 
-  int _selectedIndex = 0;
-  int get selectedIndex => _selectedIndex;
+  int get selectedIndex => ref.read(selectedCategoryIndexProvider);
 
   List<CategoryModel> _categories = [];
   List<CategoryModel> get categories => _categories;
 
   Future<void> fetchCategories() async {
     state = const AsyncLoading();
-    final categoryRepository = ref.read(categoryRepositoryProvider.notifier);
+    final categoryRepository = ref.read(categoryRepositoryProvider);
     final langCode = ref.read(languageControllerProvider).languageCode;
     try {
       final fetched = await categoryRepository.getAllCategories();
@@ -62,7 +69,7 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
 
   void updateIndex(int index) {
     if (index >= 0 && state.hasValue && index < state.value!.length) {
-      _selectedIndex = index;
+      ref.read(selectedCategoryIndexProvider.notifier).setIndex(index);
       final selectedId = state.value![index].id;
 
       ref
@@ -71,10 +78,6 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
             index,
             categoryId: selectedId.isEmpty ? null : selectedId,
           );
-
-      // إعادة تعيين الحالة لإعلام المستمعين بتغيير الـ selectedIndex
-      // في Riverpod، يفضل فصل الـ selectedIndex في provider مستقل إذا كان يتغير كثيراً
-      state = AsyncData(state.value!);
     }
   }
 
