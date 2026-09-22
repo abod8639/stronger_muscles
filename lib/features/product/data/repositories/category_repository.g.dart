@@ -41,13 +41,12 @@ final categoryLocalDataSourceProvider =
 
 typedef CategoryLocalDataSourceRef = ProviderRef<CategoryLocalDataSource>;
 String _$categoryRepositoryHash() =>
-    r'41393b28b85e5532fec72755a4c960424134c189';
+    r'7caaf8996eeace65dcbb62a6cbdae1ba1092b5b8';
 
-/// See also [CategoryRepository].
-@ProviderFor(CategoryRepository)
-final categoryRepositoryProvider =
-    NotifierProvider<CategoryRepository, void>.internal(
-  CategoryRepository.new,
+/// See also [categoryRepository].
+@ProviderFor(categoryRepository)
+final categoryRepositoryProvider = Provider<CategoryRepository>.internal(
+  categoryRepository,
   name: r'categoryRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -56,6 +55,6 @@ final categoryRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$CategoryRepository = Notifier<void>;
+typedef CategoryRepositoryRef = ProviderRef<CategoryRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
