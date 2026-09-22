@@ -40,7 +40,9 @@ class ApiService {
           options.headers['Accept'] = 'application/json';
           options.headers['Accept-Language'] = languageCode;
 
-          if (token != null && !options.headers.containsKey('Authorization')) {
+          final bool includeAuth = options.headers.remove('includeAuth') != false;
+
+          if (includeAuth && token != null && !options.headers.containsKey('Authorization')) {
             options.headers['Authorization'] = 'Bearer $token';
           }
 
