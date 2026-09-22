@@ -24,7 +24,7 @@ class CartView extends ConsumerWidget {
                 onGoShopping: () =>
                     ref.read(mainControllerProvider.notifier).changeTabIndex(0),
               )
-            : const BuildCartContent(),
+            : BuildCartContent(items: items),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('خطأ: $e')),
       ),
