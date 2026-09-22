@@ -16,12 +16,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  # get: ^4.7.2
   firebase_core: ^4.2.0
   cached_network_image: ^3.4.1
   hive: ^2.2.3
   firebase_auth: ^6.1.1
-  cloud_firestore: ^6.0.3
   hive_flutter: ^1.1.0
   google_sign_in: ^7.2.0
   flutter_svg: ^2.2.1
@@ -29,14 +27,12 @@ dependencies:
   easy_image_viewer: ^1.5.1
   intl: ^0.20.2
   google_maps_flutter: ^2.14.0  
-  flutter_lints: ^6.0.0
   flutter_dotenv: ^6.0.0
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
   internet_connection_checker_plus: ^2.9.1+2
   geolocator: ^14.0.2
   geocoding: ^4.0.0
-  flutter_markdown: ^0.7.7+1
   dio: ^5.9.1
   go_router: ^17.1.0
   flutter_cache_manager: ^3.4.1
@@ -47,8 +43,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    # analyzer: ^10.0.1
-  # flutter_lints: ^6.0.0
+  flutter_lints: ^6.0.0
   build_runner: ^2.4.13
   hive_generator: ^2.0.1
   json_serializable: ^6.7.1
