@@ -26,10 +26,10 @@ class AddressService {
       return addressesJson
           .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
           .toList();
-    } on Failure catch (e) {
-      throw e.message;
+    } on Failure {
+      rethrow;
     } catch (e) {
-      throw 'فشل تحميل العناوين';
+      throw Failure(message: 'فشل تحميل العناوين', originalError: e);
     }
   }
 
@@ -43,10 +43,10 @@ class AddressService {
       );
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure catch (e) {
-      throw e.message;
+    } on Failure {
+      rethrow;
     } catch (e) {
-      throw 'فشل إضافة العنوان';
+      throw Failure(message: 'فشل إضافة العنوان', originalError: e);
     }
   }
 
@@ -60,20 +60,20 @@ class AddressService {
       );
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure catch (e) {
-      throw e.message;
+    } on Failure {
+      rethrow;
     } catch (e) {
-      throw 'فشل تحديث العنوان';
+      throw Failure(message: 'فشل تحديث العنوان', originalError: e);
     }
   }
 
   Future<void> deleteAddress(int id) async {
     try {
       await _apiService.delete('${ApiConfig.addresses}/$id');
-    } on Failure catch (e) {
-      throw e.message;
+    } on Failure {
+      rethrow;
     } catch (e) {
-      throw 'فشل حذف العنوان';
+      throw Failure(message: 'فشل حذف العنوان', originalError: e);
     }
   }
 
@@ -84,10 +84,10 @@ class AddressService {
       );
       final data = response.data;
       return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure catch (e) {
-      throw e.message;
+    } on Failure {
+      rethrow;
     } catch (e) {
-      throw 'فشل تعيين العنوان الافتراضي';
+      throw Failure(message: 'فشل تعيين العنوان الافتراضي', originalError: e);
     }
   }
 
@@ -100,18 +100,20 @@ class AddressService {
 
   Future<Position> getCurrentPosition() async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) throw 'خدمات الموقع معطلة. يرجى تفعيلها.';
+    if (!serviceEnabled) {
+      throw Failure(message: 'خدمات الموقع معطلة. يرجى تفعيلها.');
+    }
 
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        throw 'تم رفض صلاحيات الموقع';
+        throw Failure(message: 'تم رفض صلاحيات الموقع');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      throw 'صلاحيات الموقع مرفوضة بشكل دائم.';
+      throw Failure(message: 'صلاحيات الموقع مرفوضة بشكل دائم.');
     }
 
     return await Geolocator.getCurrentPosition(
