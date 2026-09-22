@@ -38,9 +38,21 @@ class AppRoutes {
   static const String orderDetails = '/order_details';
 }
 
+class RouterNotifier extends ChangeNotifier {
+  final Ref _ref;
+
+  RouterNotifier(this._ref) {
+    _ref.listen(authControllerProvider, (_, _) => notifyListeners());
+  }
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
+  final routerNotifier = RouterNotifier(ref);
+  ref.onDispose(routerNotifier.dispose);
+
   return GoRouter(
     initialLocation: AppRoutes.main,
+    refreshListenable: routerNotifier,
     redirect: (context, state) {
       final authState = ref.read(authControllerProvider);
       final isLoggedIn = authState.value != null;
@@ -59,9 +71,47 @@ final routerProvider = Provider<GoRouter>((ref) {
     },
 
     routes: [
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            MainPage(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.main,
+                builder: (context, state) => const HomeView(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.wishlist,
+                builder: (context, state) => const WishlistView(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.cart,
+                builder: (context, state) => const CartView(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.profile,
+                builder: (context, state) => const ProfilePage(),
+              ),
+            ],
+          ),
+        ],
+      ),
       GoRoute(
-        path: AppRoutes.main,
-        builder: (context, state) => const MainPage(),
+        path: AppRoutes.home,
+        redirect: (context, state) => AppRoutes.main,
       ),
       GoRoute(
         path: AppRoutes.auth,
@@ -76,14 +126,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.signIn,
         builder: (context, state) =>
             SignInPage(onSignUpTap: () => context.go(AppRoutes.signUp)),
-      ),
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => const HomeView(),
-      ),
-      GoRoute(
-        path: AppRoutes.cart,
-        builder: (context, state) => const CartView(),
       ),
       GoRoute(
         path: AppRoutes.productDetails,
@@ -107,10 +149,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
-        path: AppRoutes.wishlist,
-        builder: (context, state) => const WishlistView(),
-      ),
-      GoRoute(
         
         path: AppRoutes.search,
         builder: (context, state) {
@@ -120,10 +158,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           }
           return const ProductSearchsPage(isFocused: true);
         },
-      ),
-      GoRoute(
-        path: AppRoutes.profile,
-        builder: (context, state) => const ProfilePage(),
       ),
       GoRoute(
         path: AppRoutes.checkout,
