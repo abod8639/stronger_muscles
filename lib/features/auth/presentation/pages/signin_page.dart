@@ -77,12 +77,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        // Go back to the previous page only on success
-        if (context.canPop()) {
-          context.pop();
-        } else {
-          context.go(AppRoutes.main);
-        }
+        context.go(AppRoutes.profile);
       }
     });
 
