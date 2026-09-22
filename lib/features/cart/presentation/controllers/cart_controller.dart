@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
@@ -12,14 +11,9 @@ const String _cartBoxName = 'cart';
 @riverpod
 class CartController extends _$CartController {
   late Box<CartItemModel> _cartBox;
-  final TextEditingController notesController = TextEditingController();
 
   @override
   FutureOr<List<CartItemModel>> build() async {
-    ref.onDispose(() {
-      notesController.dispose();
-    });
-
     if (!Hive.isBoxOpen(_cartBoxName)) {
       _cartBox = await Hive.openBox<CartItemModel>(_cartBoxName);
     } else {
@@ -123,7 +117,6 @@ class CartController extends _$CartController {
 
   Future<void> clearCart() async {
     await _cartBox.clear();
-    notesController.clear();
     state = const AsyncData([]);
   }
 }
