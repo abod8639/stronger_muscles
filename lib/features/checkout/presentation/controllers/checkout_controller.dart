@@ -12,12 +12,14 @@ class CheckoutState {
   final int currentStep;
   final AddressModel? selectedAddress;
   final String selectedPaymentMethod;
+  final String notes;
   final bool isProcessing;
 
   CheckoutState({
     this.currentStep = 0,
     this.selectedAddress,
     this.selectedPaymentMethod = 'cash',
+    this.notes = '',
     this.isProcessing = false,
   });
 
@@ -25,6 +27,7 @@ class CheckoutState {
     int? currentStep,
     AddressModel? selectedAddress,
     String? selectedPaymentMethod,
+    String? notes,
     bool? isProcessing,
   }) {
     return CheckoutState(
@@ -32,6 +35,7 @@ class CheckoutState {
       selectedAddress: selectedAddress ?? this.selectedAddress,
       selectedPaymentMethod:
           selectedPaymentMethod ?? this.selectedPaymentMethod,
+      notes: notes ?? this.notes,
       isProcessing: isProcessing ?? this.isProcessing,
     );
   }
@@ -90,6 +94,10 @@ class CheckoutController extends _$CheckoutController {
     state = state.copyWith(selectedPaymentMethod: method);
   }
 
+  void setNotes(String notes) {
+    state = state.copyWith(notes: notes);
+  }
+
   Future<void> placeOrder(BuildContext context) async {
     if (state.selectedAddress == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,7 +115,7 @@ class CheckoutController extends _$CheckoutController {
       final payload = {
         "address_id": state.selectedAddress!.id,
         "payment_method": state.selectedPaymentMethod,
-        "notes": cartNotifier.notesController.text,
+        "notes": state.notes,
         "items": cartNotifier.cartItems.map((item) {
           return {
             "product_id": item.product.id,
