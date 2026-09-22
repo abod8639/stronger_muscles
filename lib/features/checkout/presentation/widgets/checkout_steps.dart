@@ -100,6 +100,7 @@ Step buildPaymentStep(WidgetRef ref, String title) {
 
 Step buildReviewStep(WidgetRef ref, String title) {
   final checkoutState = ref.watch(checkoutControllerProvider);
+  final checkoutNotifier = ref.read(checkoutControllerProvider.notifier);
   final cartState = ref.watch(cartControllerProvider);
   final cartNotifier = ref.watch(cartControllerProvider.notifier);
 
