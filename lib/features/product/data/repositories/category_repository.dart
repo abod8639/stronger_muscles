@@ -21,25 +21,31 @@ CategoryLocalDataSource categoryLocalDataSource(
 }
 
 @Riverpod(keepAlive: true)
-class CategoryRepository extends _$CategoryRepository {
-  @override
-  void build() {}
+CategoryRepository categoryRepository(CategoryRepositoryRef ref) {
+  return CategoryRepository(
+    ref.watch(categoryRemoteDataSourceProvider),
+    ref.watch(categoryLocalDataSourceProvider),
+  );
+}
+
+class CategoryRepository {
+  final CategoryRemoteDataSource _remote;
+  final CategoryLocalDataSource _local;
+
+  CategoryRepository(this._remote, this._local);
 
   List<CategoryModel> getCachedCategories() {
-    return ref.read(categoryLocalDataSourceProvider).getCachedCategories();
+    return _local.getCachedCategories();
   }
 
   Future<List<CategoryModel>> getAllCategories() async {
-    final remote = ref.read(categoryRemoteDataSourceProvider);
-    final local = ref.read(categoryLocalDataSourceProvider);
-
     try {
-      final categories = await remote.fetchCategoriesFromApi();
-      await local.cacheCategories(categories);
+      final categories = await _remote.fetchCategoriesFromApi();
+      await _local.cacheCategories(categories);
       return categories;
     } catch (e) {
-      if (local.getCachedCategories().isNotEmpty) {
-        return local.getCachedCategories();
+      if (_local.getCachedCategories().isNotEmpty) {
+        return _local.getCachedCategories();
       }
       rethrow;
     }
