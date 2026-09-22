@@ -61,9 +61,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           state.matchedLocation == AppRoutes.signIn ||
           state.matchedLocation == AppRoutes.signUp;
 
-      // If logged in and on an auth page, go to main
+      // If logged in and on an auth page, go to profile
       if (isLoggedIn && isAuthPath) {
-        return AppRoutes.main;
+        return AppRoutes.profile;
       }
 
       // No redirect
