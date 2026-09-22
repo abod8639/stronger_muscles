@@ -77,11 +77,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-        if (context.canPop()) {
-          context.pop();
-        } else {
-          context.go(AppRoutes.main);
-        }
+        context.go(AppRoutes.profile);
       }
     });
 
