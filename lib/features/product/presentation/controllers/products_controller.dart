@@ -11,24 +11,19 @@ class ProductsController extends _$ProductsController {
 
   @override
   FutureOr<List<ProductModel>> build() async {
-    final repository = ref.watch(productRepositoryProvider.notifier);
+    final repository = ref.watch(productRepositoryProvider);
     final cached = repository.getCachedProducts();
 
     if (cached.isNotEmpty) {
-      _initFetch();
       return cached;
     }
 
     return await repository.getProducts();
   }
 
-  Future<void> _initFetch() async {
-    await fetchProducts();
-  }
-
   Future<void> fetchProducts({String? categoryId, String? query}) async {
     state = const AsyncLoading();
-    final repository = ref.read(productRepositoryProvider.notifier);
+    final repository = ref.read(productRepositoryProvider);
     try {
       List<ProductModel> result;
       if (query != null && query.trim().isNotEmpty) {
