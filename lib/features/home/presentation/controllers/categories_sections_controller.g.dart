@@ -6,8 +6,25 @@ part of 'categories_sections_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$selectedCategoryIndexHash() =>
+    r'1d9a9baa3f14d6e030f7367eca1667364edf4738';
+
+/// See also [SelectedCategoryIndex].
+@ProviderFor(SelectedCategoryIndex)
+final selectedCategoryIndexProvider =
+    AutoDisposeNotifierProvider<SelectedCategoryIndex, int>.internal(
+  SelectedCategoryIndex.new,
+  name: r'selectedCategoryIndexProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$selectedCategoryIndexHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SelectedCategoryIndex = AutoDisposeNotifier<int>;
 String _$categoriesSectionsControllerHash() =>
-    r'fea1327c0a1d22482ff335cce93d774d7b719860';
+    r'90bf962599024cfaf91cf3beffe8ef19507d7f81';
 
 /// See also [CategoriesSectionsController].
 @ProviderFor(CategoriesSectionsController)
