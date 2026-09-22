@@ -10,6 +10,22 @@ part 'address_controller.g.dart';
 const String _defaultLabel = 'Home';
 
 @riverpod
+class AddressFormLoading extends _$AddressFormLoading {
+  @override
+  bool build() => false;
+
+  void setLoading(bool val) => state = val;
+}
+
+@riverpod
+class AddressFormSelectedLabel extends _$AddressFormSelectedLabel {
+  @override
+  String build() => _defaultLabel;
+
+  void setLabel(String val) => state = val;
+}
+
+@riverpod
 class AddressController extends _$AddressController {
   final fullNameController = TextEditingController();
   final phoneController = TextEditingController();
@@ -19,17 +35,15 @@ class AddressController extends _$AddressController {
   final postalCodeController = TextEditingController();
   final countryController = TextEditingController();
 
-  String _selectedLabel = _defaultLabel;
-  String get selectedLabel => _selectedLabel;
+  String get selectedLabel => ref.read(addressFormSelectedLabelProvider);
   set selectedLabel(String val) {
-    _selectedLabel = val;
+    ref.read(addressFormSelectedLabelProvider.notifier).setLabel(val);
   }
 
   double? _latitude;
   double? _longitude;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
+  bool get isLoading => ref.read(addressFormLoadingProvider);
 
   @override
   FutureOr<List<AddressModel>> build() async {
@@ -47,10 +61,14 @@ class AddressController extends _$AddressController {
     final repository = ref.watch(addressRepositoryProvider);
     
     if (isLoggedIn) {
-      Future.microtask(() => fetchAddresses());
+      final cached = repository.getCachedAddresses();
+      if (cached.isNotEmpty) {
+        return cached;
+      }
+      return await repository.getAddresses();
     }
     
-    return repository.getCachedAddresses();
+    return [];
   }
 
   Future<void> fetchAddresses() async {
@@ -65,7 +83,7 @@ class AddressController extends _$AddressController {
   }
 
   Future<void> deleteAddress(int id) async {
-    _isLoading = true;
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final repository = ref.read(addressRepositoryProvider);
       await repository.deleteAddress(id);
@@ -74,20 +92,18 @@ class AddressController extends _$AddressController {
         currentAddresses.where((addr) => addr.id != id).toList(),
       );
     } finally {
-      _isLoading = false;
-      ref.notifyListeners();
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     }
   }
 
   Future<void> setDefaultAddress(int id) async {
-    _isLoading = true;
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final repository = ref.read(addressRepositoryProvider);
       await repository.setDefaultAddress(id);
       await fetchAddresses();
     } finally {
-      _isLoading = false;
-      ref.notifyListeners();
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     }
   }
 
@@ -100,8 +116,7 @@ class AddressController extends _$AddressController {
   void fillForm(AddressModel? address) {
     if (address == null) {
       clearForm();
-      _selectedLabel = _defaultLabel;
-      ref.notifyListeners();
+      ref.read(addressFormSelectedLabelProvider.notifier).setLabel(_defaultLabel);
       return;
     }
     fullNameController.text = address.fullName ?? '';
@@ -111,7 +126,7 @@ class AddressController extends _$AddressController {
     stateController.text = address.state ?? '';
     postalCodeController.text = address.postalCode ?? '';
     countryController.text = address.country ?? '';
-    _selectedLabel = address.label ?? _defaultLabel;
+    ref.read(addressFormSelectedLabelProvider.notifier).setLabel(address.label ?? _defaultLabel);
     _latitude = address.latitude;
     _longitude = address.longitude;
   }
@@ -126,14 +141,13 @@ class AddressController extends _$AddressController {
       state: stateController.text,
       postalCode: postalCodeController.text,
       country: countryController.text,
-      label: _selectedLabel,
+      label: ref.read(addressFormSelectedLabelProvider),
       isDefault: false,
       latitude: _latitude,
       longitude: _longitude,
     );
 
-    _isLoading = true;
-    ref.notifyListeners();
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final repository = ref.read(addressRepositoryProvider);
       if (id == null) {
@@ -144,13 +158,12 @@ class AddressController extends _$AddressController {
       await fetchAddresses();
       clearForm();
     } finally {
-      _isLoading = false;
-      ref.notifyListeners();
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     }
   }
 
   Future<void> getCurrentLocation() async {
-    _isLoading = true;
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final service = ref.read(addressServiceProvider);
       final position = await service.getCurrentPosition();
@@ -169,8 +182,7 @@ class AddressController extends _$AddressController {
         _longitude = position.longitude;
       }
     } finally {
-      _isLoading = false;
-      ref.notifyListeners();
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     }
   }
 
