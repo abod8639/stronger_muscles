@@ -27,6 +27,7 @@ linter:
 analyzer:
   errors:
     invalid_annotation_target: ignore
+    deprecated_member_use: ignore
   exclude:
     - "**/*.freezed.dart"
     - "**/*.g.dart"
