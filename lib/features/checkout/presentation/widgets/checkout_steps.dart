@@ -183,8 +183,9 @@ Step buildReviewStep(WidgetRef ref, String title) {
         const SizedBox(height: 16),
         const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        TextField(
-          controller: cartNotifier.notesController,
+        TextFormField(
+          initialValue: checkoutState.notes,
+          onChanged: (val) => checkoutNotifier.setNotes(val),
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             hintText: 'Enter any additional notes',
