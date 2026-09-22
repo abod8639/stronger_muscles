@@ -62,7 +62,7 @@ class PromoController extends _$PromoController {
     if (promo.targetType == 'product') {
       try {
         final product = await ref
-            .read(productRepositoryProvider.notifier)
+            .read(productRepositoryProvider)
             .getProductById(promo.targetId!);
 
         if (context.mounted) {
