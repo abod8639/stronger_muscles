@@ -63,7 +63,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
   Future<List<Location>> _geocodeAddress(String address) async {
     try {
-      return await locationFromAddress(address);
+      return await Geocoding().locationFromAddress(address);
     } catch (_) {
       return [];
     }
