@@ -172,6 +172,8 @@ class ProductModel with _$ProductModel {
 
   /// Get the base effective price, fallback to first size if 0
   double get baseEffectivePrice {
+    if (hasDiscount) return discountPrice!;
+    if (price > 0) return price;
     if (productSizes.isNotEmpty) return productSizes.first.effectivePrice;
     return 0;
   }
