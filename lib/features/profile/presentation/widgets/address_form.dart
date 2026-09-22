@@ -27,10 +27,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = ref.watch(addressControllerProvider.notifier);
-    final isLoading = ref.watch(addressControllerProvider.notifier).isLoading;
-    final selectedLabel = ref
-        .watch(addressControllerProvider.notifier)
-        .selectedLabel;
+    final isLoading = ref.watch(addressFormLoadingProvider);
+    final selectedLabel = ref.watch(addressFormSelectedLabelProvider);
     final intl10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
