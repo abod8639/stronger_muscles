@@ -40,13 +40,12 @@ final productLocalDataSourceProvider =
 );
 
 typedef ProductLocalDataSourceRef = ProviderRef<ProductLocalDataSource>;
-String _$productRepositoryHash() => r'2d15acfe0821245a7c477bd4d61a55753747a4a6';
+String _$productRepositoryHash() => r'2d4264a22a2e945ec66b5db445f46ad8572b94d9';
 
-/// See also [ProductRepository].
-@ProviderFor(ProductRepository)
-final productRepositoryProvider =
-    NotifierProvider<ProductRepository, void>.internal(
-  ProductRepository.new,
+/// See also [productRepository].
+@ProviderFor(productRepository)
+final productRepositoryProvider = Provider<ProductRepository>.internal(
+  productRepository,
   name: r'productRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
@@ -55,6 +54,6 @@ final productRepositoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ProductRepository = Notifier<void>;
+typedef ProductRepositoryRef = ProviderRef<ProductRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
