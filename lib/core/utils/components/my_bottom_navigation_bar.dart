@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
@@ -11,19 +12,31 @@ class MyBottomNavigationBar extends ConsumerWidget {
   static const double _unselectedFontSize = 11.0;
   static const double _unselectedOpacity = 0.6;
 
-  const MyBottomNavigationBar({super.key});
+  final StatefulNavigationShell? navigationShell;
+
+  const MyBottomNavigationBar({super.key, this.navigationShell});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final tabIndex = ref.watch(mainControllerProvider);
+    final int tabIndex = navigationShell != null
+        ? navigationShell!.currentIndex
+        : ref.watch(mainControllerProvider);
     final cartState = ref.watch(cartControllerProvider);
 
     return BottomNavigationBar(
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
       currentIndex: tabIndex,
-      onTap: (index) =>
-          ref.read(mainControllerProvider.notifier).changeTabIndex(index),
+      onTap: (index) {
+        if (navigationShell != null) {
+          navigationShell!.goBranch(
+            index,
+            initialLocation: index == navigationShell!.currentIndex,
+          );
+        } else {
+          ref.read(mainControllerProvider.notifier).changeTabIndex(index);
+        }
+      },
       type: BottomNavigationBarType.fixed,
       elevation: _elevation,
       backgroundColor:
