@@ -7,42 +7,31 @@ part 'home_controller.g.dart';
 
 @riverpod
 class HomeController extends _$HomeController {
+  int _selectedSectionIndex = 0;
+  int get selectedSectionIndex => _selectedSectionIndex;
+
   @override
   FutureOr<List<ProductModel>> build() async {
-    final productRepository = ref.watch(productRepositoryProvider.notifier);
+    final productRepository = ref.watch(productRepositoryProvider);
 
     final cachedProducts = productRepository.getCachedProducts();
     if (cachedProducts.isNotEmpty) {
-      _products = cachedProducts;
-      // لا نحتاج لاستدعاء void هنا كقيمة، بل كعملية جانبية
-      _initFetch();
-      return _products;
+      return cachedProducts;
     }
 
-    await fetchProductsForSection(_selectedSectionIndex);
-    return _products;
+    return await productRepository.getProducts();
   }
-
-  // دالة مساعدة لبدء التحميل في الخلفية دون تعطيل الـ build
-  Future<void> _initFetch() async {
-    await fetchProductsForSection(_selectedSectionIndex);
-  }
-
-  List<ProductModel> _products = [];
-  int _selectedSectionIndex = 0;
-  int get selectedSectionIndex => _selectedSectionIndex;
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     _selectedSectionIndex = index;
     state = const AsyncLoading();
 
-    final productRepository = ref.read(productRepositoryProvider.notifier);
+    final productRepository = ref.read(productRepositoryProvider);
     try {
       final fetchedProducts = await productRepository.getProducts(
         categoryId: categoryId,
       );
-      _products = fetchedProducts;
-      state = AsyncData(_products);
+      state = AsyncData(fetchedProducts);
     } catch (e, st) {
       state = AsyncError(e, st);
     }
