@@ -20,17 +20,17 @@ void main() {
     });
 
     test('baseUrl returns default IP/port when dotenv is not set or empty', () {
-      dotenv.testLoad(fileAsString: '');
+      dotenv.loadFromString(envString: '', isOptional: true);
       expect(ApiConfig.baseUrl, 'http://192.168.1.17:8080/api/v1');
     });
 
     test('baseUrl appends /api/v1 if not already present in BASE_URL', () {
-      dotenv.testLoad(fileAsString: 'BASE_URL=https://api.strongermuscles.com');
+      dotenv.loadFromString(envString: 'BASE_URL=https://api.strongermuscles.com');
       expect(ApiConfig.baseUrl, 'https://api.strongermuscles.com/api/v1');
     });
 
     test('baseUrl preserves /api/v1 when already present in BASE_URL', () {
-      dotenv.testLoad(fileAsString: 'BASE_URL=https://api.strongermuscles.com/api/v1');
+      dotenv.loadFromString(envString: 'BASE_URL=https://api.strongermuscles.com/api/v1');
       expect(ApiConfig.baseUrl, 'https://api.strongermuscles.com/api/v1');
     });
   });
