@@ -34,8 +34,9 @@ class ApiConfig {
   static const String customerProfile = '/customer/profile';
   static const String cart = '/customer/cart';
   static const String orders = '/customer/orders';
+  static String payOrder(dynamic orderId) => '/customer/orders/$orderId/pay';
+  static const String fcmToken = '/customer/fcm-token';
 
   // Legacy/Deprecated - Keep for compatibility until services are updated
   static const String usersStats = '/customer/profile';
-  
 }
