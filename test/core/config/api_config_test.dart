@@ -17,6 +17,8 @@ void main() {
       expect(ApiConfig.customerProfile, '/customer/profile');
       expect(ApiConfig.cart, '/customer/cart');
       expect(ApiConfig.orders, '/customer/orders');
+      expect(ApiConfig.payOrder(12), '/customer/orders/12/pay');
+      expect(ApiConfig.fcmToken, '/customer/fcm-token');
     });
 
     test('baseUrl returns default IP/port when dotenv is not set or empty', () {
