@@ -4,6 +4,7 @@ import 'package:stronger_muscles/features/order/presentation/controllers/orders_
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
+import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 part 'checkout_controller.g.dart';
@@ -126,7 +127,23 @@ class CheckoutController extends _$CheckoutController {
         }).toList(),
       };
 
-      await orderRepository.createOrder(payload);
+      final response = await orderRepository.createOrder(payload);
+
+      // If online card payment is selected, initiate payment gateway flow
+      if (state.selectedPaymentMethod == 'card' ||
+          state.selectedPaymentMethod == 'paymob' ||
+          state.selectedPaymentMethod == 'stripe') {
+        final orderId = response['data']?['id'];
+        if (orderId != null) {
+          final paymentRepo = ref.read(paymentRepositoryProvider);
+          await paymentRepo.initiatePayment(
+            orderId: orderId,
+            gateway: state.selectedPaymentMethod == 'stripe' ? 'stripe' : 'paymob',
+            firstName: state.selectedAddress?.fullName,
+          );
+        }
+      }
+
       await cartNotifier.clearCart();
       ref.read(routerProvider).go(AppRoutes.orderSuccess);
     } catch (e) {
