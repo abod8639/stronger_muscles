@@ -3,6 +3,10 @@ import 'package:stronger_muscles/core/utils/functions/double_tap_prevention.dart
 
 void main() {
   group('DoubleTapPrevention Tests', () {
+    setUp(() {
+      resetDoubleTapPreventionForTesting();
+    });
+
     test('prevents rapid consecutive executions within debounce window', () {
       int executionCount = 0;
 
