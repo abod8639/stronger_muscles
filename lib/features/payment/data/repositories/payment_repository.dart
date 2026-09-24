@@ -21,13 +21,17 @@ class PaymentRepository {
     String? lastName,
   }) async {
     try {
+      final Map<String, dynamic> body = {'gateway': gateway};
+      if (firstName != null) {
+        body['first_name'] = firstName;
+      }
+      if (lastName != null) {
+        body['last_name'] = lastName;
+      }
+
       final response = await _apiService.post(
         ApiConfig.payOrder(orderId),
-        data: {
-          'gateway': gateway,
-          if (firstName != null) 'first_name': firstName,
-          if (lastName != null) 'last_name': lastName,
-        },
+        data: body,
       );
 
       final data = response.data;
