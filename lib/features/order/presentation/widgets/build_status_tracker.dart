@@ -4,7 +4,8 @@ import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
 
 Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
-  if (order.status.toLowerCase() == 'cancelled') {
+  final statusLower = order.status.toLowerCase();
+  if (statusLower == 'cancelled' || statusLower == 'canceled') {
     return Builder(
       builder: (context) {
         final theme = Theme.of(context);
