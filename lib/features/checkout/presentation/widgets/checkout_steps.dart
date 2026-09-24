@@ -84,10 +84,10 @@ Step buildPaymentStep(WidgetRef ref, String title) {
         buildPaymentOption(
           ref: ref,
           value: 'card',
-          title: 'Credit Card',
+          title: 'Credit Card / Online',
           icon: Icons.credit_card,
-          subtitle: 'Coming soon',
-          enabled: false,
+          subtitle: 'Pay securely with Paymob / Stripe',
+          enabled: true,
         ),
       ],
     ),
