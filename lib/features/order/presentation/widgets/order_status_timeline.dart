@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/presentation/widgets/build_status_tracker.dart';
 
 class OrderStatusTimeline extends StatelessWidget {
   final OrderModel order;
@@ -7,16 +8,8 @@ class OrderStatusTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This is a simplified version. A real implementation would be more complex.
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Status: ${order.status}',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        // A real timeline widget would go here
-      ],
-    );
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+    return buildStatusTracker(isDark, isAr, order);
   }
 }
