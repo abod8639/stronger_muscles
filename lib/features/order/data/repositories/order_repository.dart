@@ -8,9 +8,14 @@ class OrderRepository {
 
   OrderRepository(this._apiService);
 
-  Future<void> createOrder(Map<String, dynamic> payload) async {
+  Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
     try {
-      await _apiService.post(ApiConfig.orders, data: payload);
+      final response = await _apiService.post(ApiConfig.orders, data: payload);
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        return data;
+      }
+      return {'status': 'success'};
     } on Failure {
       rethrow;
     } catch (e) {
