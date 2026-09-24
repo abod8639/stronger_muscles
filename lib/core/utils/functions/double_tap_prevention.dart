@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 DateTime? _lastTapTime;
 const Duration _debounceDuration = Duration(milliseconds: 500);
 
@@ -8,4 +10,9 @@ void doubleTapPrevention(Function onTap) {
     _lastTapTime = now;
     onTap();
   }
+}
+
+@visibleForTesting
+void resetDoubleTapPreventionForTesting() {
+  _lastTapTime = null;
 }
