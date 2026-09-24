@@ -10,11 +10,13 @@ import 'package:stronger_muscles/core/utils/components/internet_connection_banne
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/core/services/crash_reporting_service.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  CrashReportingService.init();
   await dotenv.load(fileName: ".env");
 
   if (Firebase.apps.isEmpty) {
