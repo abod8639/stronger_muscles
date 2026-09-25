@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class InternetConnectionBanner extends ConsumerWidget {
-  final String title;
-  const InternetConnectionBanner({super.key, required this.title});
+  final String? title;
+  const InternetConnectionBanner({super.key, this.title});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,6 +14,10 @@ class InternetConnectionBanner extends ConsumerWidget {
     if (isConnected) {
       return const SizedBox.shrink();
     }
+
+    final displayTitle = title ??
+        AppLocalizations.of(context)?.noInternetConnection ??
+        'No internet connection';
 
     return Material(
       color: Colors.transparent,
@@ -28,7 +33,7 @@ class InternetConnectionBanner extends ConsumerWidget {
             const SizedBox(width: 8),
             Flexible(
               child: Text(
-                title,
+                displayTitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
