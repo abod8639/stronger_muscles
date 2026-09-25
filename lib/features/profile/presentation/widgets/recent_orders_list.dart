@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const int _maxOrdersToDisplay = 3;
@@ -17,6 +18,7 @@ class RecentOrdersList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final ordersState = ref.watch(ordersControllerProvider);
     final isDark = theme.brightness == Brightness.dark;
     final locale = ref.watch(languageControllerProvider);
@@ -30,7 +32,7 @@ class RecentOrdersList extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context, theme, isAr),
+            _buildHeader(context, theme, l10n, isAr),
             const SizedBox(height: 4),
             ListView.separated(
               shrinkWrap: true,
@@ -58,11 +60,16 @@ class RecentOrdersList extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text('${l10n.error}: $e')),
     );
   }
 
-  Widget _buildHeader(BuildContext context, ThemeData theme, bool isAr) {
+  Widget _buildHeader(
+    BuildContext context,
+    ThemeData theme,
+    AppLocalizations l10n,
+    bool isAr,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
       child: Row(
@@ -87,7 +94,7 @@ class RecentOrdersList extends ConsumerWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                isAr ? 'الطلبات الأخيرة' : 'Recent Orders',
+                l10n.recentOrders,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
@@ -108,7 +115,7 @@ class RecentOrdersList extends ConsumerWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(isAr ? 'عرض الكل' : 'View All'),
+                Text(l10n.viewAll),
                 const SizedBox(width: 4),
                 Icon(
                   isAr ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
