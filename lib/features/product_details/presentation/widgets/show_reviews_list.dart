@@ -251,7 +251,7 @@ class ShowReviewsList extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                'No reviews yet',
+                AppLocalizations.of(context)!.noReviewsYet,
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w600,
