@@ -134,6 +134,8 @@ class BottomIconsRow extends ConsumerWidget {
     CartItemModel item,
     AppLocalizations l10n,
   ) {
+    final canIncrease = item.quantity < product.stockQuantity;
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
@@ -165,11 +167,13 @@ class BottomIconsRow extends ConsumerWidget {
             ),
           ),
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.add_circle_outline,
-              color: AppColors.primary,
+              color: canIncrease ? AppColors.primary : Colors.grey,
             ),
-            onPressed: () => cartNotifier.increaseQuantity(item),
+            onPressed: canIncrease
+                ? () => cartNotifier.increaseQuantity(item)
+                : null,
             iconSize: _iconButtonSize,
           ),
         ],
