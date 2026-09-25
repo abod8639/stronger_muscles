@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class MyBottomNavigationBar extends ConsumerWidget {
   static const double _elevation = 8.0;
@@ -53,30 +54,36 @@ class MyBottomNavigationBar extends ConsumerWidget {
       showUnselectedLabels: true,
       showSelectedLabels: true,
       enableFeedback: true,
-      items: _buildNavigationItems(tabIndex, cartState.value?.length ?? 0),
+      items: _buildNavigationItems(
+        context,
+        tabIndex,
+        cartState.value?.length ?? 0,
+      ),
     );
   }
 
   List<BottomNavigationBarItem> _buildNavigationItems(
+    BuildContext context,
     int currentIndex,
     int cartCount,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     return [
       BottomNavigationBarItem(
         icon: Icon(
           currentIndex == 0 ? Icons.home : Icons.home_outlined,
           size: _iconSize,
         ),
-        label: 'Home',
-        tooltip: 'Navigate to Home',
+        label: l10n.home,
+        tooltip: l10n.navigateToHome,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           currentIndex == 1 ? Icons.favorite : Icons.favorite_outline,
           size: _iconSize,
         ),
-        label: 'Wishlist',
-        tooltip: 'Navigate to Wishlist',
+        label: l10n.wishlist,
+        tooltip: l10n.navigateToWishlist,
       ),
       BottomNavigationBarItem(
         icon: Badge(
@@ -91,16 +98,16 @@ class MyBottomNavigationBar extends ConsumerWidget {
             size: _iconSize,
           ),
         ),
-        label: 'Cart',
-        tooltip: 'Navigate to Cart',
+        label: l10n.cart,
+        tooltip: l10n.navigateToCart,
       ),
       BottomNavigationBarItem(
         icon: Icon(
           currentIndex == 3 ? Icons.person : Icons.person_outline,
           size: _iconSize,
         ),
-        label: 'Profile',
-        tooltip: 'Navigate to Profile',
+        label: l10n.profile,
+        tooltip: l10n.navigateToProfile,
       ),
     ];
   }
