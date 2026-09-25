@@ -16,7 +16,7 @@ Widget buildProductBadges(
   // Discount Badge
   if (product.hasDiscount) {
     badges.add(
-      _buildBadge('${product.discountPercentage.toInt()}% OFF', Colors.red, alpha),
+      _buildBadge('${product.discountPercentage.toInt()}% ${l10n.percentOff}', Colors.red, alpha),
     );
   }
 
@@ -37,7 +37,7 @@ Widget buildProductBadges(
 
   // Stock Status
   if (product.stockQuantity <= 0) {
-    badges.add(_buildBadge('OUT OF STOCK', Colors.grey, alpha));
+    badges.add(_buildBadge(l10n.outOfStock, Colors.grey, alpha));
   }
 
   if (badges.isEmpty) return const SizedBox.shrink();
