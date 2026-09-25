@@ -59,8 +59,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              'خطأ في تسجيل الدخول: ${next.error}\nيرجى التأكد من البريد الإلكتروني وكلمة المرور والمحاولة مرة أخرى.',
-              textAlign: TextAlign.right,
+              '${localizations.error}: ${next.error}\n${localizations.loginErrorCheckCredentials}',
             ),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
@@ -71,8 +70,8 @@ class _SignInPageState extends ConsumerState<SignInPage> {
           previous is AsyncLoading) {
         // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم تسجيل الدخول بنجاح!', textAlign: TextAlign.right),
+          SnackBar(
+            content: Text(localizations.loginSuccess),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
           ),
