@@ -120,7 +120,7 @@ class FlavorImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isSelected ? AppColors.primary : Colors.transparent,
-          width: 5,
+          width: 2,
         ),
         boxShadow: isSelected
             ? [
