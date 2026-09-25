@@ -4,10 +4,13 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+
 Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
+      final currency = AppLocalizations.of(context)?.currency ?? (isAr ? "ج.م" : "EGP");
       return Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
@@ -82,7 +85,7 @@ Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
               ),
             ),
             Text(
-              '${item.subtotal.toStringAsFixed(2)} ${isAr ? "ج.م" : "EGP"}',
+              '${item.subtotal.toStringAsFixed(2)} $currency',
               style: theme.textTheme.titleSmall?.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,
