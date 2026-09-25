@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class ProductList extends ConsumerWidget {
@@ -112,7 +113,9 @@ class ProductList extends ConsumerWidget {
                             .selectedSectionIndex,
                       ),
                   icon: const Icon(Icons.refresh),
-                  label: const Text('إعادة محاولة'),
+                  label: Text(
+                    AppLocalizations.of(context)?.retry ?? 'Retry',
+                  ),
                 ),
               ],
             ),
