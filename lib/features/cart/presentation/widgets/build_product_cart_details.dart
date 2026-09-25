@@ -109,7 +109,7 @@ Widget buildProductCartDetails(CartItemModel item) {
           // Total Price (if quantity > 1)
           if (item.quantity > 1)
             Text(
-              'Total: \$${item.subtotal.toStringAsFixed(2)}',
+              '${AppLocalizations.of(context)!.total}: \$${item.subtotal.toStringAsFixed(2)}',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w500,
