@@ -428,4 +428,254 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartTitle => 'Cart';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get placeOrder => 'Place Order';
+
+  @override
+  String get cashOnDelivery => 'Cash on Delivery';
+
+  @override
+  String get creditCardOrOnline => 'Credit Card / Online';
+
+  @override
+  String get paySecurelyStripe => 'Pay securely with Paymob / Stripe';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get enterAdditionalNotes => 'Enter any additional notes';
+
+  @override
+  String get orderPlacedSuccessfully => 'Order Placed Successfully!';
+
+  @override
+  String get orderPlacedThankYou =>
+      'Thank you for your purchase. Your order has been placed and is being processed.';
+
+  @override
+  String get pleaseSelectShippingAddress => 'Please select a shipping address';
+
+  @override
+  String get failedToPlaceOrder => 'Failed to place order';
+
+  @override
+  String get orders => 'Orders';
+
+  @override
+  String get noOrdersFound => 'No orders found';
+
+  @override
+  String get recentOrders => 'Recent Orders';
+
+  @override
+  String get orderDetails => 'Order Details';
+
+  @override
+  String get orderInfo => 'Order Info';
+
+  @override
+  String get orderId => 'Order ID';
+
+  @override
+  String get orderDate => 'Order Date';
+
+  @override
+  String get paymentStatus => 'Payment Status';
+
+  @override
+  String get paid => 'Paid';
+
+  @override
+  String get pending => 'Pending';
+
+  @override
+  String get trackingNumber => 'Tracking Number';
+
+  @override
+  String get deliveryAddress => 'Delivery Address';
+
+  @override
+  String get street => 'Street';
+
+  @override
+  String get phone => 'Phone';
+
+  @override
+  String get orderItems => 'Order Items';
+
+  @override
+  String get paymentSummary => 'Payment Summary';
+
+  @override
+  String get subtotal => 'Subtotal';
+
+  @override
+  String get shippingCost => 'Shipping Cost';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
+  String get orderCancelled => 'Order Cancelled';
+
+  @override
+  String get orderTracking => 'Order Tracking';
+
+  @override
+  String get processing => 'Processing';
+
+  @override
+  String get shipped => 'Shipped';
+
+  @override
+  String get delivered => 'Delivered';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get itemsMore => 'items more';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get currency => 'EGP';
+
+  @override
+  String get removedFromCart => 'removed from cart.';
+
+  @override
+  String get undo => 'UNDO';
+
+  @override
+  String get increaseQuantity => 'Increase Quantity';
+
+  @override
+  String get removeFromWishlist => 'Remove from Wishlist';
+
+  @override
+  String get removedFromWishlist => 'removed from wishlist';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get navigateToHome => 'Navigate to Home';
+
+  @override
+  String get navigateToWishlist => 'Navigate to Wishlist';
+
+  @override
+  String get navigateToCart => 'Navigate to Cart';
+
+  @override
+  String get navigateToProfile => 'Navigate to Profile';
+
+  @override
+  String get noInternetConnection => 'No internet connection';
+
+  @override
+  String get noInternetConnectionTitle => 'No Internet Connection';
+
+  @override
+  String get noInternetConnectionMessage =>
+      'Please check your internet connection to continue';
+
+  @override
+  String get alert => 'Alert';
+
+  @override
+  String get pleaseLoginToContinue => 'Please sign in to continue';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get loginSuccess => 'Logged in successfully!';
+
+  @override
+  String get signUpSuccess => 'Account created and logged in successfully!';
+
+  @override
+  String get loginErrorCheckCredentials =>
+      'Login error: Please verify your email and password and try again.';
+
+  @override
+  String get deleteAddressTitle => 'Delete Address?';
+
+  @override
+  String get deleteAddressConfirmation =>
+      'Are you sure you want to remove this address?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get pleaseEnterValidPhone => 'Please enter a valid phone number';
+
+  @override
+  String get changePhotoComingSoon => 'Change photo feature coming soon';
+
+  @override
+  String get noAddressesSavedYet => 'No addresses saved yet';
+
+  @override
+  String get addresses => 'Addresses';
+
+  @override
+  String get productNotFound => 'Product not found';
+
+  @override
+  String get kg => 'kg';
+
+  @override
+  String get failedToLoadImage => 'Failed to load image';
+
+  @override
+  String get percentOff => 'OFF';
+
+  @override
+  String get outOfStock => 'OUT OF STOCK';
+
+  @override
+  String get chooseYourFlavor => 'CHOOSE YOUR FLAVOR';
+
+  @override
+  String get noReviewsYet => 'No reviews yet';
+
+  @override
+  String get unableToLoadProductDetails => 'Unable to load product details';
+
+  @override
+  String get price => 'Price';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get categoryAccessories => 'Accessories';
+
+  @override
+  String get defaultBadge => 'DEFAULT';
+
+  @override
+  String get noImagesFound => 'No images available';
+
+  @override
+  String get productDataMissing => 'Product data missing';
 }
