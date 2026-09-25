@@ -7,6 +7,8 @@ import 'package:stronger_muscles/features/wishlist/presentation/controllers/wish
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+
 const double _rowSpacing = 12.0;
 const double _cardPadding = 16.0;
 const double _cardBorderRadius = 12.0;
@@ -23,6 +25,7 @@ class QuickActionsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final ordersCount = ref.watch(ordersControllerProvider).value?.length ?? 0;
     final wishlistCount = ref.watch(wishlistControllerProvider).length;
     final addressesCount = ref.watch(addressControllerProvider).value?.length ?? 0;
@@ -35,7 +38,7 @@ class QuickActionsRow extends ConsumerWidget {
             child: _buildQuickActionCard(
               context,
               icon: Icons.shopping_bag_outlined,
-              label: 'Orders',
+              label: l10n.orders,
               value: ordersCount.toString(),
               color: AppColors.primary,
               onTap: () {},
@@ -46,7 +49,7 @@ class QuickActionsRow extends ConsumerWidget {
             child: _buildQuickActionCard(
               context,
               icon: Icons.favorite_outline,
-              label: 'Wishlist',
+              label: l10n.wishlist,
               value: wishlistCount.toString(),
               color: AppColors.error,
               onTap: () => context.go(AppRoutes.wishlist),
@@ -57,7 +60,7 @@ class QuickActionsRow extends ConsumerWidget {
             child: _buildQuickActionCard(
               context,
               icon: Icons.location_on_outlined,
-              label: 'Addresses',
+              label: l10n.addresses,
               value: addressesCount.toString(),
               color: AppColors.success,
               onTap: () {},
