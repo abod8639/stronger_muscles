@@ -9,6 +9,8 @@ import 'package:stronger_muscles/features/product/data/repositories/product_repo
 import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+
 part 'checkout_controller.g.dart';
 
 class CheckoutState {
@@ -102,9 +104,15 @@ class CheckoutController extends _$CheckoutController {
   }
 
   Future<void> placeOrder(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     if (state.selectedAddress == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a shipping address')),
+        SnackBar(
+          content: Text(
+            l10n?.pleaseSelectShippingAddress ??
+                'Please select a shipping address',
+          ),
+        ),
       );
       return;
     }
@@ -156,8 +164,9 @@ class CheckoutController extends _$CheckoutController {
       ref.read(routerProvider).go(AppRoutes.orderSuccess);
     } catch (e) {
       if (!context.mounted) return;
+      final failedText = l10n?.failedToPlaceOrder ?? 'Failed to place order';
       ScaffoldMessenger.of(context).
-      showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
+      showSnackBar(SnackBar(content: Text('$failedText: $e')));
     } finally {
       state = state.copyWith(isProcessing: false);
     }
