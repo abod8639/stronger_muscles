@@ -113,7 +113,7 @@ class _MainImageState extends ConsumerState<MainImage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'فشل تحميل الصورة',
+            AppLocalizations.of(context)!.failedToLoadImage,
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ],
