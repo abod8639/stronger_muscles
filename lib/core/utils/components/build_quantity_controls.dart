@@ -24,6 +24,9 @@ class QuantityControls extends ConsumerWidget {
     }
 
     final theme = Theme.of(context);
+    final canIncrease =
+        product.stockQuantity > 0 && item.quantity < product.stockQuantity;
+
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .3),
@@ -37,12 +40,14 @@ class QuantityControls extends ConsumerWidget {
                 'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
             button: true,
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.add_circle_outline,
-                color: AppColors.primary,
+                color: canIncrease ? AppColors.primary : Colors.grey,
                 size: _iconSize,
               ),
-              onPressed: () => cartNotifier.increaseQuantity(item),
+              onPressed: canIncrease
+                  ? () => cartNotifier.increaseQuantity(item)
+                  : null,
               tooltip: 'Increase',
               splashRadius: 20.0,
               padding: const EdgeInsets.all(4.0),
