@@ -5,6 +5,7 @@ import 'package:stronger_muscles/features/product/data/models/product_model.dart
 import 'package:stronger_muscles/core/utils/functions/double_tap_prevention.dart';
 import 'package:stronger_muscles/core/utils/functions/handle_delete_from_cart.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _quantityFontSize = 16.0;
 const double _iconSize = 28.0;
@@ -23,6 +24,7 @@ class QuantityControls extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final canIncrease =
         product.stockQuantity > 0 && item.quantity < product.stockQuantity;
@@ -37,7 +39,7 @@ class QuantityControls extends ConsumerWidget {
         children: [
           Semantics(
             label:
-                'Increase quantity of ${item.product.getLocalizedName(locale: 'en')}',
+                '${l10n.increaseQuantity}: ${item.product.getLocalizedName(locale: l10n.localeName)}',
             button: true,
             child: IconButton(
               icon: Icon(
@@ -48,7 +50,7 @@ class QuantityControls extends ConsumerWidget {
               onPressed: canIncrease
                   ? () => cartNotifier.increaseQuantity(item)
                   : null,
-              tooltip: 'Increase',
+              tooltip: l10n.increaseQuantity,
               splashRadius: 20.0,
               padding: const EdgeInsets.all(4.0),
               constraints: const BoxConstraints(
@@ -74,8 +76,8 @@ class QuantityControls extends ConsumerWidget {
           ),
           Semantics(
             label: item.quantity > 1
-                ? 'Decrease quantity of ${item.product.getLocalizedName(locale: 'en')}'
-                : 'Remove ${item.product.getLocalizedName(locale: 'en')} from cart',
+                ? '${l10n.decreaseQuantity}: ${item.product.getLocalizedName(locale: l10n.localeName)}'
+                : '${l10n.removeFromCart}: ${item.product.getLocalizedName(locale: l10n.localeName)}',
             button: true,
             child: IconButton(
               icon: Icon(
@@ -88,7 +90,9 @@ class QuantityControls extends ConsumerWidget {
               onPressed: () => doubleTapPrevention(
                 () => showRemoveConfirmation(context, ref, product),
               ),
-              tooltip: item.quantity > 1 ? 'Decrease' : 'Remove',
+              tooltip: item.quantity > 1
+                  ? l10n.decreaseQuantity
+                  : l10n.removeFromCart,
               splashRadius: 20.0,
               padding: const EdgeInsets.all(4.0),
               constraints: const BoxConstraints(
