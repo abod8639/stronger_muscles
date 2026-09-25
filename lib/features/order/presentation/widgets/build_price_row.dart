@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+
 Widget buildPriceRow(
   String label,
   double amount,
@@ -11,6 +13,7 @@ Widget buildPriceRow(
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
+      final currency = AppLocalizations.of(context)?.currency ?? (isAr ? "ج.م" : "EGP");
       return Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
@@ -25,7 +28,7 @@ Widget buildPriceRow(
               ),
             ),
             Text(
-              '${amount.toStringAsFixed(2)} ${isAr ? "ج.م" : "EGP"}',
+              '${amount.toStringAsFixed(2)} $currency',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: isDiscount
                     ? AppColors.success
