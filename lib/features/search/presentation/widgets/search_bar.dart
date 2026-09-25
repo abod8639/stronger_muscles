@@ -97,9 +97,7 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
             ),
             const SizedBox(height: 32),
             Text(
-              l10n.priceOnRequest
-                  .replaceAll("on request", '')
-                  .replaceAll("عند الطلب", ''),
+              l10n.price,
               style: Theme.of(
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
