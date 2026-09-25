@@ -4,11 +4,8 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/checkout_steps.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const String _checkoutTitle = 'Checkout';
-const String _nextButtonText = 'Next';
-const String _placeOrderButtonText = 'Place Order';
-const String _backButtonText = 'Back';
 const double _controlsPadding = 20.0;
 const double _controlsSpacing = 12.0;
 const double _controlsVerticalPadding = 12.0;
@@ -20,12 +17,13 @@ class CheckoutView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final checkoutState = ref.watch(checkoutControllerProvider);
     final checkoutNotifier = ref.watch(checkoutControllerProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          _checkoutTitle,
-          style: TextStyle(color: AppColors.white),
+        title: Text(
+          l10n.checkout,
+          style: const TextStyle(color: AppColors.white),
         ),
         backgroundColor: AppColors.primary,
         iconTheme: const IconThemeData(color: AppColors.white),
@@ -62,8 +60,8 @@ class CheckoutView extends ConsumerWidget {
                           ),
                           child: Text(
                             checkoutState.currentStep == 2
-                                ? _placeOrderButtonText
-                                : _nextButtonText,
+                                ? l10n.placeOrder
+                                : l10n.next,
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -78,7 +76,7 @@ class CheckoutView extends ConsumerWidget {
                                 vertical: _controlsVerticalPadding,
                               ),
                             ),
-                            child: const Text(_backButtonText),
+                            child: Text(l10n.back),
                           ),
                         ),
                       ],
@@ -87,9 +85,9 @@ class CheckoutView extends ConsumerWidget {
                 );
               },
               steps: [
-                buildAddressStep(ref, 'Address'),
-                buildPaymentStep(ref, 'Payment'),
-                buildReviewStep(ref, 'Review'),
+                buildAddressStep(ref, l10n.address),
+                buildPaymentStep(ref, l10n.payment),
+                buildReviewStep(ref, l10n.review),
               ],
             ),
     );
