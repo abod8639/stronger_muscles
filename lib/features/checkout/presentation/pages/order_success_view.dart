@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const String _successTitle = 'Order Placed Successfully!';
-const String _successMessage =
-    'Thank you for your purchase. Your order has been placed and is being processed.';
-const String _continueButtonText = 'Continue Shopping';
 const double _iconSize = 100.0;
 const double _headlineSpacing = 24.0;
 const double _messageSpacing = 16.0;
@@ -21,6 +18,8 @@ class OrderSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: Center(
         child: Padding(
@@ -35,7 +34,7 @@ class OrderSuccessView extends StatelessWidget {
               ),
               const SizedBox(height: _headlineSpacing),
               Text(
-                _successTitle,
+                l10n.orderPlacedSuccessfully,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -43,10 +42,10 @@ class OrderSuccessView extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: _messageSpacing),
-              const Text(
-                _successMessage,
+              Text(
+                l10n.orderPlacedThankYou,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey),
+                style: const TextStyle(color: Colors.grey),
               ),
               const SizedBox(height: _buttonSpacing),
               ElevatedButton(
@@ -64,7 +63,7 @@ class OrderSuccessView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(_buttonBorderRadius),
                   ),
                 ),
-                child: const Text(_continueButtonText),
+                child: Text(l10n.continueShopping),
               ),
             ],
           ),
