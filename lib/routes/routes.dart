@@ -19,6 +19,7 @@ import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_v
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AppRoutes {
   static const String main = '/';
@@ -143,8 +144,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             );
           }
           // Return a safe fallback or error state if data is missing
-          return const Scaffold(
-            body: Center(child: Text("Product data missing")),
+          return Scaffold(
+            body: Center(
+              child: Text(
+                AppLocalizations.of(context)?.productDataMissing ??
+                    "Product data missing",
+              ),
+            ),
           );
         },
       ),
