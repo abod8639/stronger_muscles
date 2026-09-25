@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_product_image.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_status_badge.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderModel order;
@@ -22,7 +23,8 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final statusData = _getStatusData(order.status, isAr);
+    final l10n = AppLocalizations.of(context)!;
+    final statusData = _getStatusData(order.status, l10n);
     final statusColor = statusData['color'] as Color;
 
     return Container(
@@ -67,9 +69,7 @@ class OrderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            isAr
-                                ? 'طلب #${order.id.toString().substring(0, 6)}'
-                                : 'Order #${order.id.toString().substring(0, 6)}',
+                            '#${order.id.toString().substring(0, 6)}',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -112,9 +112,7 @@ class OrderCard extends StatelessWidget {
                           ),
                           if ((order.items?.length ?? 0) > 1)
                             Text(
-                              isAr
-                                  ? '+${order.items!.length - 1} منتجات أخرى'
-                                  : '+${order.items!.length - 1} items more',
+                              '+${order.items!.length - 1} ${l10n.itemsMore}',
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: AppColors.primary,
                               ),
@@ -133,7 +131,7 @@ class OrderCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          isAr ? 'ج.م' : 'EGP',
+                          l10n.currency,
                           style: theme.textTheme.labelSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey,
@@ -151,27 +149,27 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Map<String, dynamic> _getStatusData(String status, bool isAr) {
+  Map<String, dynamic> _getStatusData(String status, AppLocalizations l10n) {
     switch (status.toLowerCase()) {
       case 'pending':
         return {
-          'text': isAr ? 'قيد الانتظار' : 'Pending',
+          'text': l10n.pending,
           'color': AppColors.warning,
         };
       case 'processing':
         return {
-          'text': isAr ? 'يتم التجهيز' : 'Processing',
+          'text': l10n.processing,
           'color': AppColors.primary,
         };
       case 'shipped':
-        return {'text': isAr ? 'تم الشحن' : 'Shipped', 'color': Colors.blue};
+        return {'text': l10n.shipped, 'color': Colors.blue};
       case 'delivered':
         return {
-          'text': isAr ? 'تم التوصيل' : 'Delivered',
+          'text': l10n.delivered,
           'color': AppColors.success,
         };
       case 'cancelled':
-        return {'text': isAr ? 'ملغي' : 'Cancelled', 'color': AppColors.error};
+        return {'text': l10n.cancelled, 'color': AppColors.error};
       default:
         return {'text': status.toUpperCase(), 'color': AppColors.greyDark};
     }
