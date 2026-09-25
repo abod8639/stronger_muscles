@@ -262,16 +262,16 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         ),
         const SizedBox(width: 12),
         Text(
-          address.label ?? 'Other',
+          address.label ?? intl10n.other,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         const Spacer(),
-        if (address.isDefault) _buildDefaultBadge(),
+        if (address.isDefault) _buildDefaultBadge(intl10n),
       ],
     );
   }
 
-  Widget _buildDefaultBadge() {
+  Widget _buildDefaultBadge(AppLocalizations intl10n) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -280,9 +280,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Text(
-        'DEFAULT',
-        style: TextStyle(
+      child: Text(
+        intl10n.defaultBadge,
+        style: const TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w900,
           color: Colors.white,
@@ -355,22 +355,26 @@ class _AddressCardState extends ConsumerState<AddressCard> {
   }
 
   void _confirmDelete(BuildContext context, AddressController controller) {
+    final intl10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Address?'),
-        content: const Text('Are you sure you want to remove this address?'),
+        title: Text(intl10n.deleteAddressTitle),
+        content: Text(intl10n.deleteAddressConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(intl10n.cancel),
           ),
           TextButton(
             onPressed: () {
               controller.deleteAddress(address.id);
               Navigator.of(context).pop();
             },
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text(
+              intl10n.delete,
+              style: const TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
