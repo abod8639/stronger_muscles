@@ -18,6 +18,7 @@ import 'package:stronger_muscles/features/product_details/presentation/widgets/b
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_ingredients_section.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_usage_and_warnings.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_size_selector.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductDetailsView extends ConsumerWidget {
   static const double _contentPadding = 16.0;
@@ -41,7 +42,14 @@ class ProductDetailsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // If product is null, try to get it from arguments (though extra is preferred)
     if (product == null) {
-      return const Scaffold(body: Center(child: Text("Product not found")));
+      return Scaffold(
+        body: Center(
+          child: Text(
+            AppLocalizations.of(context)?.productNotFound ??
+                "Product not found",
+          ),
+        ),
+      );
     }
 
     final theme = Theme.of(context);
