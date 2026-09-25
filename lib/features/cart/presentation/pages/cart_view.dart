@@ -26,7 +26,7 @@ class CartView extends ConsumerWidget {
               )
             : BuildCartContent(items: items),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('خطأ: $e')),
+        error: (e, st) => Center(child: Text('${localizations.error}: $e')),
       ),
     );
   }
