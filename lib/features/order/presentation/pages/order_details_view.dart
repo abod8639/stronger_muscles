@@ -6,6 +6,7 @@ import 'package:stronger_muscles/features/order/presentation/widgets/build_price
 import 'package:stronger_muscles/features/order/presentation/widgets/build_row_info.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_status_tracker.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class OrderDetailsView extends StatelessWidget {
   final OrderModel order;
@@ -15,6 +16,7 @@ class OrderDetailsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     final formattedDate = order.orderDate != null
@@ -23,7 +25,7 @@ class OrderDetailsView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(isAr ? 'تفاصيل الطلب' : 'Order Details'),
+        title: Text(l10n.orderDetails),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -42,32 +44,32 @@ class OrderDetailsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isAr ? 'معلومات الطلب' : 'Order Info',
+                    l10n.orderInfo,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  buildRowInfo(isAr ? 'رقم الطلب' : 'Order ID', '#${order.id}'),
+                  buildRowInfo(l10n.orderId, '#${order.id}'),
                   const SizedBox(height: 8),
-                  buildRowInfo(isAr ? 'تاريخ الطلب' : 'Order Date', formattedDate),
+                  buildRowInfo(l10n.orderDate, formattedDate),
                   const SizedBox(height: 8),
                   buildRowInfo(
-                    isAr ? 'طريقة الدفع' : 'Payment Method',
+                    l10n.paymentMethod,
                     order.paymentMethod.toUpperCase(),
                   ),
                   const SizedBox(height: 8),
                   buildRowInfo(
-                    isAr ? 'حالة الدفع' : 'Payment Status',
+                    l10n.paymentStatus,
                     order.paymentStatus == 'paid'
-                        ? (isAr ? 'تم الدفع' : 'Paid')
-                        : (isAr ? 'قيد الانتظار' : 'Pending'),
+                        ? l10n.paid
+                        : l10n.pending,
                   ),
                   if (order.trackingNumber != null &&
                       order.trackingNumber!.isNotEmpty) ...[
                     const SizedBox(height: 8),
                     buildRowInfo(
-                      isAr ? 'رقم التتبع' : 'Tracking Number',
+                      l10n.trackingNumber,
                       order.trackingNumber!,
                     ),
                   ],
@@ -84,26 +86,26 @@ class OrderDetailsView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      isAr ? 'عنوان التوصيل' : 'Delivery Address',
+                      l10n.deliveryAddress,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 12),
                     buildRowInfo(
-                      isAr ? 'الشارع' : 'Street',
+                      l10n.street,
                       order.shippingAddress!.street,
                     ),
                     const SizedBox(height: 8),
                     buildRowInfo(
-                      isAr ? 'المدينة' : 'City',
+                      l10n.city,
                       order.shippingAddress!.city,
                     ),
                     if (order.phoneNumber != null &&
                         order.phoneNumber!.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       buildRowInfo(
-                        isAr ? 'رقم الهاتف' : 'Phone',
+                        l10n.phone,
                         order.phoneNumber!,
                       ),
                     ],
@@ -115,7 +117,7 @@ class OrderDetailsView extends StatelessWidget {
 
             // عناصر الطلب
             Text(
-              isAr ? 'المنتجات المطلوبة' : 'Order Items',
+              l10n.orderItems,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -133,24 +135,24 @@ class OrderDetailsView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isAr ? 'ملخص الحساب' : 'Payment Summary',
+                    l10n.paymentSummary,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  buildPriceRow(isAr ? 'المجموع الفرعي' : 'Subtotal', order.subtotal, isAr),
-                  buildPriceRow(isAr ? 'تكلفة الشحن' : 'Shipping Cost', order.shippingCost, isAr),
+                  buildPriceRow(l10n.subtotal, order.subtotal, isAr),
+                  buildPriceRow(l10n.shippingCost, order.shippingCost, isAr),
                   if (order.discount > 0)
                     buildPriceRow(
-                      isAr ? 'الخصم' : 'Discount',
+                      l10n.discount,
                       order.discount,
                       isAr,
                       isDiscount: true,
                     ),
                   const Divider(height: 20),
                   buildPriceRow(
-                    isAr ? 'الإجمالي الكلي' : 'Total Amount',
+                    l10n.totalAmount,
                     order.totalAmount,
                     isAr,
                     isTotal: true,
