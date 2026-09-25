@@ -39,7 +39,7 @@ Widget buildProductInfo(
       {'label': l10n.servingSize, 'value': product.servingSize!},
     {'label': l10n.servingsPerContainer, 'value': '${product.servingsPerContainer}'},
     if (product.weight != null) 
-      {'label': l10n.weight, 'value': '${product.weight} كجم'},
+      {'label': l10n.weight, 'value': '${product.weight} ${l10n.kg}'},
     if (product.manufacturer != null) 
       {'label': l10n.manufacturer, 'value': product.manufacturer!},
     if (product.countryOfOrigin != null) 
