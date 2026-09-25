@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'image_indicators.dart';
 
 class ImageSection extends StatefulWidget {
@@ -144,19 +145,26 @@ class _ImageSectionState extends State<ImageSection> {
   }
 
   Widget buildNoImage(ThemeData theme) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.image_not_supported_outlined,
-            size: 40,
-            color: theme.colorScheme.outline,
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.image_not_supported_outlined,
+                size: 40,
+                color: theme.colorScheme.outline,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                AppLocalizations.of(context)?.noImagesFound ?? 'No images available',
+                style: theme.textTheme.labelSmall,
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text('لا توجد صور', style: theme.textTheme.labelSmall),
-        ],
-      ),
+        );
+      },
     );
   }
 
