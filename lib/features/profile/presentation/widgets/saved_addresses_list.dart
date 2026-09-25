@@ -22,7 +22,7 @@ class SavedAddressesList extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final addressesState = ref.watch(addressControllerProvider);
-    // final addressNotifier = ref.watch(addressControllerProvider.notifier);
+    final intl10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +30,7 @@ class SavedAddressesList extends ConsumerWidget {
         _buildHeader(context, theme, isDark),
         addressesState.when(
           data: (addresses) => addresses.isEmpty
-              ? _buildEmptyState(theme)
+              ? _buildEmptyState(theme, intl10n)
               : ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -51,7 +51,7 @@ class SavedAddressesList extends ConsumerWidget {
             padding: EdgeInsets.all(32.0),
             child: Center(child: CircularProgressIndicator()),
           ),
-          error: (e, _) => Center(child: Text('Error: $e')),
+          error: (e, _) => Center(child: Text('${intl10n.error}: $e')),
         ),
       ],
     );
