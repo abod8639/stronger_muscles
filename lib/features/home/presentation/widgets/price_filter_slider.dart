@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class PriceFilterSlider extends ConsumerStatefulWidget {
   const PriceFilterSlider({super.key});
@@ -25,6 +26,8 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final currency = l10n?.currency ?? 'LE';
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
     final minData = searchNotifier.dataMinPrice;
     final maxData = searchNotifier.dataMaxPrice;
@@ -43,8 +46,8 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('LE ${effectiveValues.start.toStringAsFixed(0)}'),
-            Text('LE ${effectiveValues.end.toStringAsFixed(0)}'),
+            Text('${effectiveValues.start.toStringAsFixed(0)} $currency'),
+            Text('${effectiveValues.end.toStringAsFixed(0)} $currency'),
           ],
         ),
         if (maxData > minData)
@@ -56,8 +59,8 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
                 ? (effectiveMax - effectiveMin).toInt()
                 : 1,
             labels: RangeLabels(
-              'LE ${effectiveValues.start.toStringAsFixed(0)}',
-              'LE ${effectiveValues.end.toStringAsFixed(0)}',
+              '${effectiveValues.start.toStringAsFixed(0)} $currency',
+              '${effectiveValues.end.toStringAsFixed(0)} $currency',
             ),
             onChanged: (RangeValues values) {
               setState(() {
@@ -69,7 +72,7 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: Text(
-              'Price: LE ${minData.toStringAsFixed(0)}',
+              '${l10n?.price ?? 'Price'}: ${minData.toStringAsFixed(0)} $currency',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -84,7 +87,7 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
                   );
               Navigator.pop(context);
             },
-            child: const Text('Apply'),
+            child: Text(l10n?.apply ?? 'Apply'),
           ),
         ),
       ],
