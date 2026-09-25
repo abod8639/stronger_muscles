@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
 
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+
 FlavorsModel getFlavorDetails(String flavorName) {
   final key = flavorName.toLowerCase().trim();
   final match = flavorsData.keys.firstWhere(
@@ -35,11 +37,12 @@ class ProductFlavorSelector extends StatelessWidget {
     final flavorsList = product.flavors;
     if (flavorsList.isEmpty) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "CHOOSE YOUR FLAVOR",
+          l10n?.chooseYourFlavor ?? "CHOOSE YOUR FLAVOR",
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.bold,
