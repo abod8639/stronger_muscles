@@ -5,6 +5,8 @@ import 'package:stronger_muscles/features/cart/presentation/controllers/cart_con
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
+import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 part 'checkout_controller.g.dart';
@@ -145,6 +147,12 @@ class CheckoutController extends _$CheckoutController {
       }
 
       await cartNotifier.clearCart();
+
+      // Invalidate local product cache and refresh products provider so stock is updated
+      final productLocalDataSource = ref.read(productLocalDataSourceProvider);
+      await productLocalDataSource.clearCache();
+      ref.invalidate(productsControllerProvider);
+
       ref.read(routerProvider).go(AppRoutes.orderSuccess);
     } catch (e) {
       if (!context.mounted) return;
