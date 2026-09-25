@@ -8,17 +8,19 @@ import 'package:stronger_muscles/features/cart/presentation/controllers/cart_con
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/build_payment_option.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Step buildAddressStep(WidgetRef ref, String title) {
   final checkoutState = ref.watch(checkoutControllerProvider);
   final addresses = ref.watch(addressControllerProvider).value ?? [];
+  final l10n = AppLocalizations.of(ref.context)!;
 
   return Step(
     title: Text(title),
     content: Column(
       children: [
         if (addresses.isEmpty)
-          const Text('No addresses found. Please add one in your profile.')
+          Text(l10n.noAddressesFound)
         else
           Column(
             children: addresses.map((address) {
@@ -44,7 +46,7 @@ Step buildAddressStep(WidgetRef ref, String title) {
                       .read(checkoutControllerProvider.notifier)
                       .setAddress(value!),
                   title: Text(
-                    address.label ?? "error",
+                    address.label ?? l10n.error,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(address.fullAddress),
@@ -57,7 +59,7 @@ Step buildAddressStep(WidgetRef ref, String title) {
         TextButton.icon(
           onPressed: () => showAddressForm(ref.context),
           icon: const Icon(Icons.add),
-          label: const Text('Add New Address'),
+          label: Text(l10n.addNewAddress),
         ),
       ],
     ),
@@ -70,6 +72,8 @@ Step buildAddressStep(WidgetRef ref, String title) {
 
 Step buildPaymentStep(WidgetRef ref, String title) {
   final checkoutState = ref.watch(checkoutControllerProvider);
+  final l10n = AppLocalizations.of(ref.context)!;
+
   return Step(
     title: Text(title),
     content: Column(
@@ -77,16 +81,16 @@ Step buildPaymentStep(WidgetRef ref, String title) {
         buildPaymentOption(
           ref: ref,
           value: 'cash',
-          title: 'Cash on Delivery',
+          title: l10n.cashOnDelivery,
           icon: Icons.money,
         ),
         const SizedBox(height: 8),
         buildPaymentOption(
           ref: ref,
           value: 'card',
-          title: 'Credit Card / Online',
+          title: l10n.creditCardOrOnline,
           icon: Icons.credit_card,
-          subtitle: 'Pay securely with Paymob / Stripe',
+          subtitle: l10n.paySecurelyStripe,
           enabled: true,
         ),
       ],
@@ -103,15 +107,16 @@ Step buildReviewStep(WidgetRef ref, String title) {
   final checkoutNotifier = ref.read(checkoutControllerProvider.notifier);
   final cartState = ref.watch(cartControllerProvider);
   final cartNotifier = ref.watch(cartControllerProvider.notifier);
+  final l10n = AppLocalizations.of(ref.context)!;
 
   return Step(
     title: Text(title),
     content: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Order Summary',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          l10n.orderSummary,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
         cartState.when(
@@ -132,29 +137,29 @@ Step buildReviewStep(WidgetRef ref, String title) {
                   fit: BoxFit.cover,
                   errorWidget: (_, _, _) => const Icon(Icons.image),
                 ),
-                title: Text(item.product.getLocalizedName(locale: 'en')),
+                title: Text(item.product.getLocalizedName(locale: l10n.localeName)),
                 subtitle: Text(
-                  '${item.quantity} x LE ${item.product.baseEffectivePrice}',
+                  '${item.quantity} x ${l10n.currency} ${item.product.baseEffectivePrice}',
                 ),
                 trailing: Text(
-                  'LE ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}',
+                  '${l10n.currency} ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}',
                 ),
               );
             },
           ),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Text('Error: $e'),
+          error: (e, _) => Text('${l10n.error}: $e'),
         ),
         const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Total Amount',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              l10n.totalAmount,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
-              'LE ${cartNotifier.totalPrice.toStringAsFixed(2)}',
+              '${l10n.currency} ${cartNotifier.totalPrice.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
@@ -165,31 +170,31 @@ Step buildReviewStep(WidgetRef ref, String title) {
         ),
         const SizedBox(height: 16),
         if (checkoutState.selectedAddress != null) ...[
-          const Text(
-            'Shipping To:',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            l10n.shippingTo,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(checkoutState.selectedAddress!.fullAddress),
         ],
         const SizedBox(height: 8),
-        const Text(
-          'Payment Method:',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        Text(
+          l10n.paymentMethod,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Text(
           checkoutState.selectedPaymentMethod == 'cash'
-              ? 'Cash on Delivery'
-              : 'Credit Card',
+              ? l10n.cashOnDelivery
+              : l10n.creditCardOrOnline,
         ),
         const SizedBox(height: 16),
-        const Text('Notes:', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(l10n.notes, style: const TextStyle(fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
         TextFormField(
           initialValue: checkoutState.notes,
           onChanged: (val) => checkoutNotifier.setNotes(val),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter any additional notes',
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            hintText: l10n.enterAdditionalNotes,
           ),
         ),
       ],
