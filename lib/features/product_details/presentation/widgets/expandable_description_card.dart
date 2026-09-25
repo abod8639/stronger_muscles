@@ -149,7 +149,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: AppColors.primary.withValues(alpha: 0.3),
