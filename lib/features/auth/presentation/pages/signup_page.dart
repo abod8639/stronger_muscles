@@ -71,8 +71,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           next.value != null &&
           previous is AsyncLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('تم إنشاء الحساب وتسجيل الدخول بنجاح!', textAlign: TextAlign.right),
+          SnackBar(
+            content: Text(localizations.signUpSuccess),
             backgroundColor: Colors.green,
             behavior: SnackBarBehavior.floating,
           ),
