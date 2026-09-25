@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
-  final statusLower = order.status.toLowerCase();
-  if (statusLower == 'cancelled' || statusLower == 'canceled') {
-    return Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
+  return Builder(
+    builder: (context) {
+      final l10n = AppLocalizations.of(context)!;
+      final statusLower = order.status.toLowerCase();
+      if (statusLower == 'cancelled' || statusLower == 'canceled') {
         return buildSection(
           isDark,
           child: Row(
@@ -16,8 +17,8 @@ Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
               const Icon(Icons.cancel, color: AppColors.error),
               const SizedBox(width: 12),
               Text(
-                isAr ? 'تم إلغاء الطلب' : 'Order Cancelled',
-                style: theme.textTheme.titleMedium?.copyWith(
+                l10n.orderCancelled,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppColors.error,
                   fontWeight: FontWeight.bold,
                 ),
@@ -25,45 +26,41 @@ Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
             ],
           ),
         );
-      },
-    );
-  }
+      }
 
-  final steps = [
-    {'label': isAr ? 'طلب' : 'Order', 'status': 'pending'},
-    {'label': isAr ? 'تجهيزات' : 'Process', 'status': 'processing'},
-    {'label': isAr ? 'شحن' : 'Shipped', 'status': 'shipped'},
-    {'label': isAr ? 'توصيل' : 'Delivery', 'status': 'delivered'},
-  ];
+      final steps = [
+        {'label': l10n.pending, 'status': 'pending'},
+        {'label': l10n.processing, 'status': 'processing'},
+        {'label': l10n.shipped, 'status': 'shipped'},
+        {'label': l10n.delivered, 'status': 'delivered'},
+      ];
 
-  final currentStatus = order.status.toLowerCase();
-  int activeIndex = steps.indexWhere((s) => s['status'] == currentStatus);
+      final currentStatus = order.status.toLowerCase();
+      int activeIndex = steps.indexWhere((s) => s['status'] == currentStatus);
 
-  // Mapping complex statuses if any
-  if (activeIndex == -1) {
-    if (currentStatus == 'pending') {
-      activeIndex = 0;
-    } else if (currentStatus == 'processing') {
-      activeIndex = 1;
-    } else if (currentStatus == 'shipped') {
-      activeIndex = 2;
-    } else if (currentStatus == 'delivered') {
-      activeIndex = 3;
-    } else {
-      activeIndex = 0;
-    }
-  }
+      // Mapping complex statuses if any
+      if (activeIndex == -1) {
+        if (currentStatus == 'pending') {
+          activeIndex = 0;
+        } else if (currentStatus == 'processing') {
+          activeIndex = 1;
+        } else if (currentStatus == 'shipped') {
+          activeIndex = 2;
+        } else if (currentStatus == 'delivered') {
+          activeIndex = 3;
+        } else {
+          activeIndex = 0;
+        }
+      }
 
-  return buildSection(
-    isDark,
-    child: Builder(
-      builder: (context) {
-        final theme = Theme.of(context);
-        return Column(
+      final theme = Theme.of(context);
+      return buildSection(
+        isDark,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              isAr ? 'تتبع حالة الطلب' : 'Order Tracking',
+              l10n.orderTracking,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -157,8 +154,8 @@ Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
               ],
             ),
           ],
-        );
-      },
-    ),
+        ),
+      );
+    },
   );
 }
