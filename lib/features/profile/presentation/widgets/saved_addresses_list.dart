@@ -103,7 +103,7 @@ class SavedAddressesList extends ConsumerWidget {
     );
   }
 
-  Widget _buildEmptyState(ThemeData theme) {
+  Widget _buildEmptyState(ThemeData theme, AppLocalizations intl10n) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(40.0),
@@ -116,7 +116,7 @@ class SavedAddressesList extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No addresses saved yet',
+              intl10n.noAddressesSavedYet,
               style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
             ),
           ],
