@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class AppGuard {
@@ -11,13 +12,15 @@ class AppGuard {
     bool requireAuth = true,
     bool requireInternet = true,
   }) async {
+    final l10n = AppLocalizations.of(ref.context);
     if (requireInternet) {
       final isOnline = ref.read(internetConnectionControllerProvider);
       if (!isOnline) {
         _showError(
           ref.context,
-          title: "لا يوجد اتصال",
-          message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
+          title: l10n?.noInternetConnectionTitle ?? "لا يوجد اتصال",
+          message: l10n?.noInternetConnectionMessage ??
+              "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
           isCritical: true,
         );
@@ -30,8 +33,8 @@ class AppGuard {
       if (!isLoggedIn) {
         _showError(
           ref.context,
-          title: "تنبيه",
-          message: "يرجى تسجيل الدخول للمتابعة",
+          title: l10n?.alert ?? "تنبيه",
+          message: l10n?.pleaseLoginToContinue ?? "يرجى تسجيل الدخول للمتابعة",
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
@@ -50,6 +53,7 @@ class AppGuard {
     required IconData icon,
     required bool isCritical,
   }) {
+    final l10n = AppLocalizations.of(context);
     if (isCritical) {
       showDialog(
         context: context,
@@ -68,7 +72,7 @@ class AppGuard {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('حسناً'),
+              child: Text(l10n?.ok ?? 'حسناً'),
             ),
           ],
         ),
@@ -82,10 +86,12 @@ class AppGuard {
             children: [
               Icon(icon, color: Colors.amber, size: 20),
               const SizedBox(width: 10),
-              Expanded(child: Text(
-                style: Theme.of(context).textTheme.bodyMedium,
-                
-                message)),
+              Expanded(
+                child: Text(
+                  message,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
             ],
           ),
           backgroundColor: Colors.black87,
@@ -101,13 +107,15 @@ class AppGuard {
     Future<void> Function() action, {
     bool requireInternet = true,
   }) async {
+    final l10n = AppLocalizations.of(ref.context);
     if (requireInternet) {
       final isOnline = ref.read(internetConnectionControllerProvider);
       if (!isOnline) {
         _showError(
           ref.context,
-          title: "لا يوجد اتصال",
-          message: "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
+          title: l10n?.noInternetConnectionTitle ?? "لا يوجد اتصال",
+          message: l10n?.noInternetConnectionMessage ??
+              "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
           isCritical: true,
         );
@@ -123,13 +131,14 @@ class AppGuard {
     Future<void> Function() action, {
     bool requireAuth = true,
   }) async {
+    final l10n = AppLocalizations.of(ref.context);
     if (requireAuth) {
       final isLoggedIn = ref.read(authControllerProvider.notifier).isLoggedIn;
       if (!isLoggedIn) {
         _showError(
           ref.context,
-          title: "تنبيه",
-          message: "يرجى تسجيل الدخول للمتابعة",
+          title: l10n?.alert ?? "تنبيه",
+          message: l10n?.pleaseLoginToContinue ?? "يرجى تسجيل الدخول للمتابعة",
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
