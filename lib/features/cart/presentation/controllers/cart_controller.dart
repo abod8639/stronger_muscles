@@ -42,6 +42,9 @@ class CartController extends _$CartController {
 
     if (existingItemIndex != -1) {
       final item = currentItems[existingItemIndex];
+      if (product.stockQuantity > 0 && item.quantity >= product.stockQuantity) {
+        return;
+      }
       final updatedItem = item.copyWith(quantity: item.quantity + 1);
       await _cartBox.put(item.id, updatedItem);
     } else {
@@ -65,6 +68,10 @@ class CartController extends _$CartController {
   }
 
   Future<void> increaseQuantity(CartItemModel item) async {
+    if (item.product.stockQuantity > 0 &&
+        item.quantity >= item.product.stockQuantity) {
+      return;
+    }
     await _cartBox.put(item.id, item.copyWith(quantity: item.quantity + 1));
     state = AsyncData(_cartBox.values.toList());
   }
