@@ -85,14 +85,14 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: AppColors.primary..withValues(alpha: .2),
-          width: 1.5,
+          color: AppColors.primary..withValues(alpha: .02),
+          width: 0.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary..withValues(alpha: .08),
+            color: AppColors.primary.withValues(alpha: .1),
             blurRadius: 12,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 10),
           ),
         ],
       ),
