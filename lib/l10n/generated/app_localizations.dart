@@ -931,6 +931,498 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cart'**
   String get cartTitle;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @placeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Place Order'**
+  String get placeOrder;
+
+  /// No description provided for @cashOnDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on Delivery'**
+  String get cashOnDelivery;
+
+  /// No description provided for @creditCardOrOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Card / Online'**
+  String get creditCardOrOnline;
+
+  /// No description provided for @paySecurelyStripe.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay securely with Paymob / Stripe'**
+  String get paySecurelyStripe;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @enterAdditionalNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter any additional notes'**
+  String get enterAdditionalNotes;
+
+  /// No description provided for @orderPlacedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Placed Successfully!'**
+  String get orderPlacedSuccessfully;
+
+  /// No description provided for @orderPlacedThankYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your purchase. Your order has been placed and is being processed.'**
+  String get orderPlacedThankYou;
+
+  /// No description provided for @pleaseSelectShippingAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a shipping address'**
+  String get pleaseSelectShippingAddress;
+
+  /// No description provided for @failedToPlaceOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to place order'**
+  String get failedToPlaceOrder;
+
+  /// No description provided for @orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get orders;
+
+  /// No description provided for @noOrdersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders found'**
+  String get noOrdersFound;
+
+  /// No description provided for @recentOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Orders'**
+  String get recentOrders;
+
+  /// No description provided for @orderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get orderDetails;
+
+  /// No description provided for @orderInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Info'**
+  String get orderInfo;
+
+  /// No description provided for @orderId.
+  ///
+  /// In en, this message translates to:
+  /// **'Order ID'**
+  String get orderId;
+
+  /// No description provided for @orderDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Date'**
+  String get orderDate;
+
+  /// No description provided for @paymentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Status'**
+  String get paymentStatus;
+
+  /// No description provided for @paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid'**
+  String get paid;
+
+  /// No description provided for @pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get pending;
+
+  /// No description provided for @trackingNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Tracking Number'**
+  String get trackingNumber;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Address'**
+  String get deliveryAddress;
+
+  /// No description provided for @street.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get street;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @orderItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Items'**
+  String get orderItems;
+
+  /// No description provided for @paymentSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Summary'**
+  String get paymentSummary;
+
+  /// No description provided for @subtotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get subtotal;
+
+  /// No description provided for @shippingCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping Cost'**
+  String get shippingCost;
+
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
+
+  /// No description provided for @orderCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Cancelled'**
+  String get orderCancelled;
+
+  /// No description provided for @orderTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Tracking'**
+  String get orderTracking;
+
+  /// No description provided for @processing.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing'**
+  String get processing;
+
+  /// No description provided for @shipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipped'**
+  String get shipped;
+
+  /// No description provided for @delivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get delivered;
+
+  /// No description provided for @cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get cancelled;
+
+  /// No description provided for @itemsMore.
+  ///
+  /// In en, this message translates to:
+  /// **'items more'**
+  String get itemsMore;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @currency.
+  ///
+  /// In en, this message translates to:
+  /// **'EGP'**
+  String get currency;
+
+  /// No description provided for @removedFromCart.
+  ///
+  /// In en, this message translates to:
+  /// **'removed from cart.'**
+  String get removedFromCart;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'UNDO'**
+  String get undo;
+
+  /// No description provided for @increaseQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase Quantity'**
+  String get increaseQuantity;
+
+  /// No description provided for @removeFromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from Wishlist'**
+  String get removeFromWishlist;
+
+  /// No description provided for @removedFromWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'removed from wishlist'**
+  String get removedFromWishlist;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @navigateToHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to Home'**
+  String get navigateToHome;
+
+  /// No description provided for @navigateToWishlist.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to Wishlist'**
+  String get navigateToWishlist;
+
+  /// No description provided for @navigateToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to Cart'**
+  String get navigateToCart;
+
+  /// No description provided for @navigateToProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigate to Profile'**
+  String get navigateToProfile;
+
+  /// No description provided for @noInternetConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetConnection;
+
+  /// No description provided for @noInternetConnectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get noInternetConnectionTitle;
+
+  /// No description provided for @noInternetConnectionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection to continue'**
+  String get noInternetConnectionMessage;
+
+  /// No description provided for @alert.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert'**
+  String get alert;
+
+  /// No description provided for @pleaseLoginToContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in to continue'**
+  String get pleaseLoginToContinue;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @loginSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in successfully!'**
+  String get loginSuccess;
+
+  /// No description provided for @signUpSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account created and logged in successfully!'**
+  String get signUpSuccess;
+
+  /// No description provided for @loginErrorCheckCredentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Login error: Please verify your email and password and try again.'**
+  String get loginErrorCheckCredentials;
+
+  /// No description provided for @deleteAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Address?'**
+  String get deleteAddressTitle;
+
+  /// No description provided for @deleteAddressConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this address?'**
+  String get deleteAddressConfirmation;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @pleaseEnterValidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get pleaseEnterValidPhone;
+
+  /// No description provided for @changePhotoComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo feature coming soon'**
+  String get changePhotoComingSoon;
+
+  /// No description provided for @noAddressesSavedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No addresses saved yet'**
+  String get noAddressesSavedYet;
+
+  /// No description provided for @addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Addresses'**
+  String get addresses;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Product not found'**
+  String get productNotFound;
+
+  /// No description provided for @kg.
+  ///
+  /// In en, this message translates to:
+  /// **'kg'**
+  String get kg;
+
+  /// No description provided for @failedToLoadImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load image'**
+  String get failedToLoadImage;
+
+  /// No description provided for @percentOff.
+  ///
+  /// In en, this message translates to:
+  /// **'OFF'**
+  String get percentOff;
+
+  /// No description provided for @outOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'OUT OF STOCK'**
+  String get outOfStock;
+
+  /// No description provided for @chooseYourFlavor.
+  ///
+  /// In en, this message translates to:
+  /// **'CHOOSE YOUR FLAVOR'**
+  String get chooseYourFlavor;
+
+  /// No description provided for @noReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No reviews yet'**
+  String get noReviewsYet;
+
+  /// No description provided for @unableToLoadProductDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to load product details'**
+  String get unableToLoadProductDetails;
+
+  /// No description provided for @price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get price;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @categoryAccessories.
+  ///
+  /// In en, this message translates to:
+  /// **'Accessories'**
+  String get categoryAccessories;
+
+  /// No description provided for @defaultBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'DEFAULT'**
+  String get defaultBadge;
+
+  /// No description provided for @noImagesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No images available'**
+  String get noImagesFound;
+
+  /// No description provided for @productDataMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Product data missing'**
+  String get productDataMissing;
 }
 
 class _AppLocalizationsDelegate
