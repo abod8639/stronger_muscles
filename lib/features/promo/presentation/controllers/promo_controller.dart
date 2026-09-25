@@ -7,6 +7,7 @@ import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
 import 'package:stronger_muscles/features/promo/data/repositories/promo_repository_impl.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 part 'promo_controller.g.dart';
 
@@ -70,8 +71,13 @@ class PromoController extends _$PromoController {
         }
       } catch (_) {
         if (context.mounted) {
+          final l10n = AppLocalizations.of(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تعذر تحميل تفاصيل المنتج')),
+            SnackBar(
+              content: Text(
+                l10n?.unableToLoadProductDetails ?? 'Unable to load product details',
+              ),
+            ),
           );
         }
       }
