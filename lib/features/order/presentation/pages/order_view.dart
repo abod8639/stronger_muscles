@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class OrderView extends ConsumerWidget {
@@ -11,14 +12,14 @@ class OrderView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ordersState = ref.watch(ordersControllerProvider);
-
+    final l10n = AppLocalizations.of(context)!;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(isAr ? 'طلباتي' : 'Orders'),
+        title: Text(l10n.orders),
       ),
       body: ordersState.when(
         data: (orders) => orders.isEmpty
@@ -32,7 +33,7 @@ class OrderView extends ConsumerWidget {
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: Center(
                         child: Text(
-                          isAr ? 'لا توجد طلبات سابقة' : 'No orders found',
+                          l10n.noOrdersFound,
                         ),
                       ),
                     ),
@@ -70,12 +71,12 @@ class OrderView extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(isAr ? 'خطأ في جلب الطلبات: $e' : 'Error: $e'),
+              Text('${l10n.error}: $e'),
               const SizedBox(height: 12),
               FilledButton(
                 onPressed: () =>
                     ref.read(ordersControllerProvider.notifier).refreshOrders(),
-                child: Text(isAr ? 'إعادة المحاولة' : 'Retry'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
