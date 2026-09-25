@@ -133,26 +133,26 @@ packages:
     dependency: "direct main"
     description:
       name: cached_network_image
-      sha256: "03d9cff3f68ded9e7c5588ebe7fc8650a669192685e59d2d2413d7813b286d6b"
+      sha256: "3d8cca7b14130f094aa38e3a58cb132bd38eb12664d7d094e7995fdcc8640863"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "4.0.2"
   cached_network_image_platform_interface:
     dependency: transitive
     description:
       name: cached_network_image_platform_interface
-      sha256: ff60d021d5a013490368cd9efdcbe35df4227fdb6c5971d15b4bc6e3d0172fe0
+      sha256: a6de45d11286a05e8a6df3e8d158f51c2833b86b83521d21d3375bb3fb20fc5f
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "5.0.2"
   cached_network_image_web:
     dependency: transitive
     description:
       name: cached_network_image_web
-      sha256: c8edf00f48d91bc469731e4fb095350b0162e18efe2cf0054cb40c62d1a1f70a
+      sha256: "49b1034a1a6c74d61387f44ae81da8e66b66d0d7debc6190072fb1af228f0227"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.2"
   characters:
     dependency: transitive
     description:
@@ -617,10 +617,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_android
-      sha256: "50bf2abde65d1abbb4505c709b20a6d5e36436b1c4830d1f36bfc20fbef091bd"
+      sha256: edeab2e4011507c9b9682cb8f6242a6dec97ea3dad387d4f78f5e2cff3095076
       url: "https://pub.dev"
     source: hosted
-    version: "2.19.13"
+    version: "2.20.0"
   google_maps_flutter_ios:
     dependency: transitive
     description:
@@ -641,10 +641,10 @@ packages:
     dependency: transitive
     description:
       name: google_maps_flutter_web
-      sha256: "903db0e985e831d3883cf0971dd5b4dbee83468b748c3753dc94da0e9a269b93"
+      sha256: ec802303734d907dea71adfe8037233966837acb10c5282ebdbc65fe33787750
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.3+1"
+    version: "0.6.4"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -945,10 +945,10 @@ packages:
     dependency: transitive
     description:
       name: octo_image
-      sha256: "34faa6639a78c7e3cbe79be6f9f96535867e879748ade7d17c9b1ae7536293bd"
+      sha256: "66e8f59a538a9f9f53141bc22ec0a12f8e85f2ca3bfcacab6dd30315b2fc256d"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   package_config:
     dependency: transitive
     description:
