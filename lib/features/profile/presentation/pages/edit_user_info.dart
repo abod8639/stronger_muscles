@@ -78,7 +78,12 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildPhotoSection(user?.photoUrl, isDark),
+              _buildPhotoSection(
+                context,
+                user?.photoUrl,
+                isDark,
+                localizations,
+              ),
               const SizedBox(height: 32),
               _buildTextField(
                 controller: nameController,
@@ -114,12 +119,12 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
               const SizedBox(height: 16),
               _buildTextField(
                 controller: phoneController,
-                label: 'رقم الهاتف',
+                label: localizations.phoneNumber,
                 icon: Icons.phone_outlined,
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty && value.length < 10) {
-                    return 'الرجاء إدخال رقم هاتف صحيح';
+                    return localizations.pleaseEnterValidPhone;
                   }
                   return null;
                 },
@@ -148,9 +153,9 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                         ),
                         elevation: 2,
                       ),
-                      child: const Text(
-                        'حفظ التغييرات',
-                        style: TextStyle(
+                      child: Text(
+                        localizations.saveChanges,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
@@ -169,7 +174,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                   ),
                 ),
                 child: Text(
-                  'إلغاء',
+                  localizations.cancel,
                   style: TextStyle(
                     fontSize: 16,
                     color: isDark ? AppColors.white : AppColors.black,
@@ -183,7 +188,12 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
     );
   }
 
-  Widget _buildPhotoSection(String? photoUrl, bool isDark) {
+  Widget _buildPhotoSection(
+    BuildContext context,
+    String? photoUrl,
+    bool isDark,
+    AppLocalizations localizations,
+  ) {
     return Center(
       child: Stack(
         children: [
@@ -234,8 +244,8 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                 ),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('سيتم إضافة ميزة تغيير الصورة قريباً'),
+                    SnackBar(
+                      content: Text(localizations.changePhotoComingSoon),
                     ),
                   );
                 },
