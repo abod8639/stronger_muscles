@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
@@ -24,7 +25,9 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final login = ref.read(loginUseCaseProvider);
-      return await login(email: email, password: password);
+      final user = await login(email: email, password: password);
+      ref.read(pushNotificationServiceProvider).syncDeviceToken();
+      return user;
     });
   }
 
@@ -36,7 +39,9 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final register = ref.read(registerUseCaseProvider);
-      return await register(email: email, password: password, name: name ?? "");
+      final user = await register(email: email, password: password, name: name ?? "");
+      ref.read(pushNotificationServiceProvider).syncDeviceToken();
+      return user;
     });
   }
 
@@ -53,11 +58,13 @@ class AuthController extends _$AuthController {
       final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
 
       final googleAuthUseCase = ref.read(googleSignInUseCaseProvider);
-      return await googleAuthUseCase(
+      final user = await googleAuthUseCase(
         email: googleUser.email,
         name: googleUser.displayName ?? '',
         photoUrl: googleUser.photoUrl,
       );
+      ref.read(pushNotificationServiceProvider).syncDeviceToken();
+      return user;
     });
   }
 
