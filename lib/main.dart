@@ -1,12 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:stronger_muscles/core/services/firebase_options.dart';
+import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/core/utils/functions/hive_init.dart';
 import 'package:stronger_muscles/core/constants/app_theme.dart';
 import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';
+import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -25,18 +28,36 @@ Future<void> main() async {
     );
   }
 
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await Hive.initFlutter();
   await hiveInit();
 
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final themeMode = ref.watch(themeControllerProvider.notifier).themeMode;
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(pushNotificationServiceProvider).initialize(
+        onForegroundMessage: (message) {
+          ref.read(notificationControllerProvider.notifier).refresh();
+        },
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final isDarkMode = ref.watch(themeControllerProvider);
     final locale = ref.watch(languageControllerProvider);
