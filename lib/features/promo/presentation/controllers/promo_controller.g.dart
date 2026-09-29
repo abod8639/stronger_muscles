@@ -20,7 +20,7 @@ final promosProvider = AutoDisposeFutureProvider<List<PromoModel>>.internal(
 );
 
 typedef PromosRef = AutoDisposeFutureProviderRef<List<PromoModel>>;
-String _$promoControllerHash() => r'd6e6e57cf6aa866b3c4cfdcb39318a8ea46c6dba';
+String _$promoControllerHash() => r'd196238a7fbdf28df0625a496593a4d516d1ae6d';
 
 /// See also [PromoController].
 @ProviderFor(PromoController)
