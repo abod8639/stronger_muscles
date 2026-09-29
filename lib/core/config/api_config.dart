@@ -37,6 +37,12 @@ class ApiConfig {
   static String payOrder(dynamic orderId) => '/customer/orders/$orderId/pay';
   static const String fcmToken = '/customer/fcm-token';
 
+  // Notifications (Customer Protected)
+  static const String customerNotifications = '/customer/notifications';
+  static const String customerNotificationsUnreadCount = '/customer/notifications/unread-count';
+  static String markNotificationAsRead(dynamic id) => '/customer/notifications/$id/read';
+  static const String markAllNotificationsAsRead = '/customer/notifications/read-all';
+
   // Legacy/Deprecated - Keep for compatibility until services are updated
   static const String usersStats = '/customer/profile';
 }
