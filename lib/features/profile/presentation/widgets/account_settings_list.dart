@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -26,6 +27,7 @@ class AccountSettingsList extends ConsumerWidget {
     final currentLocale = ref.watch(languageControllerProvider);
     final isDark = theme.brightness == Brightness.dark;
     final localizations = AppLocalizations.of(context)!;
+    final unreadNotificationCount = ref.watch(unreadNotificationCountProvider);
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -79,7 +81,34 @@ class AccountSettingsList extends ConsumerWidget {
           _buildSettingItem(
             icon: Icons.notifications_outlined,
             title: localizations.notifications,
-            onTap: () {},
+            trailing: unreadNotificationCount > 0
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          '$unreadNotificationCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(Icons.chevron_right, color: AppColors.greyDark),
+                    ],
+                  )
+                : null,
+            onTap: () => context.push(AppRoutes.notifications),
             isDark: isDark,
           ),
           _buildDivider(isDark),
