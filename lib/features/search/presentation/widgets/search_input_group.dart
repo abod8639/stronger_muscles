@@ -2,15 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/product_search_autocomplete.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-
-const double _spacing = 12.0;
-
+const double _spacing = 10.0;
 
 class SearchInputGroup extends ConsumerWidget {
   const SearchInputGroup({super.key});
@@ -19,6 +19,8 @@ class SearchInputGroup extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(productSearchControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final unreadCount = ref.watch(unreadNotificationCountProvider);
 
     return Row(
       children: [
@@ -29,7 +31,6 @@ class SearchInputGroup extends ConsumerWidget {
             onTap: () {
               ref.read(productSearchControllerProvider.notifier).clearSearch();
               context.push(
-                
                 AppRoutes.search, extra: controller.searchQuery);
             },
           ),
@@ -42,6 +43,38 @@ class SearchInputGroup extends ConsumerWidget {
             ref.read(productSearchControllerProvider.notifier).clearSearch();
             context.push(AppRoutes.search, extra: controller.searchQuery);
           },
+        ),
+        const SizedBox(width: _spacing),
+        Container(
+          width: 48.0,
+          height: 48.0,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: IconButton(
+            icon: Badge(
+              isLabelVisible: unreadCount > 0,
+              label: Text(
+                unreadCount > 99 ? '99+' : '$unreadCount',
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: AppColors.primary,
+              child: Icon(
+                Icons.notifications_outlined,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            onPressed: () => context.push(AppRoutes.notifications),
+            tooltip: l10n.notifications,
+          ),
         ),
       ],
     );
