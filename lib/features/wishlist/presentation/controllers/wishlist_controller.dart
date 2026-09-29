@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/services/wishlist_service.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/wishlist/domain/usecases/usecase_providers.dart';
 
 part 'wishlist_controller.g.dart';
 
@@ -8,24 +8,24 @@ part 'wishlist_controller.g.dart';
 class WishlistController extends _$WishlistController {
   @override
   List<ProductModel> build() {
-    return ref.watch(wishlistServiceProvider);
+    final getWishlist = ref.watch(getWishlistUseCaseProvider);
+    return getWishlist();
   }
 
   void addToWishlist(ProductModel product) {
-    final wishlistService = ref.read(wishlistServiceProvider.notifier);
-    if (!wishlistService.isFavorite(product.id)) {
-      wishlistService.toggleFavorite(product);
-    }
+    final addUseCase = ref.read(addToWishlistUseCaseProvider);
+    addUseCase(product);
+    state = [...state, product];
   }
 
   void removeFromWishlist(ProductModel product) {
-    final wishlistService = ref.read(wishlistServiceProvider.notifier);
-    if (wishlistService.isFavorite(product.id)) {
-      wishlistService.toggleFavorite(product);
-    }
+    final removeUseCase = ref.read(removeFromWishlistUseCaseProvider);
+    removeUseCase(product);
+    state = state.where((item) => item.id != product.id).toList();
   }
 
   bool isInWishlist(String productId) {
-    return ref.read(wishlistServiceProvider.notifier).isFavorite(productId);
+    final isInWishlistUseCase = ref.read(isInWishlistUseCaseProvider);
+    return isInWishlistUseCase(productId);
   }
 }
