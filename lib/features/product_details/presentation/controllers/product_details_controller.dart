@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/services/wishlist_service.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_size_model.dart';
 
@@ -41,7 +41,7 @@ class ProductDetailsController extends _$ProductDetailsController {
     String? initialFlavor,
     String? initialSize,
   }) {
-    final wishlistService = ref.watch(wishlistServiceProvider.notifier);
+    final wishlistController = ref.watch(wishlistControllerProvider.notifier);
 
     final flavor =
         initialFlavor ??
@@ -62,7 +62,7 @@ class ProductDetailsController extends _$ProductDetailsController {
     return ProductDetailsState(
       selectedFlavor: flavor,
       selectedSizeObject: sizeObj,
-      isInWishlist: wishlistService.isFavorite(product.id),
+      isInWishlist: wishlistController.isInWishlist(product.id),
     );
   }
 
@@ -71,10 +71,14 @@ class ProductDetailsController extends _$ProductDetailsController {
   }
 
   void toggleWishlist(ProductModel product) {
-    final wishlistService = ref.read(wishlistServiceProvider.notifier);
-    wishlistService.toggleFavorite(product);
+    final wishlistCtrl = ref.read(wishlistControllerProvider.notifier);
+    if (wishlistCtrl.isInWishlist(product.id)) {
+      wishlistCtrl.removeFromWishlist(product);
+    } else {
+      wishlistCtrl.addToWishlist(product);
+    }
     state = state.copyWith(
-      isInWishlist: wishlistService.isFavorite(product.id),
+      isInWishlist: wishlistCtrl.isInWishlist(product.id),
     );
   }
 
