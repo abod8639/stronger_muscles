@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
-import 'package:stronger_muscles/features/wishlist/presentation/widget/wishlist_item_card.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class WishlistView extends ConsumerWidget {
@@ -41,8 +42,12 @@ class _EmptyWishlistState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.favorite_border, size: 80, color: AppColors.grey),
-          const SizedBox(height: 16.0),
+          const Icon(
+            Icons.favorite_border,
+            size: AppDimens.iconXl,
+            color: AppColors.grey,
+          ),
+          const SizedBox(height: AppDimens.spacingLg),
           Text(
             localizations.yourWishlistIsEmpty,
             style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
