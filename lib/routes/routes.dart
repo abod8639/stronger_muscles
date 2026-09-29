@@ -19,6 +19,7 @@ import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_v
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/notifications/presentation/pages/notifications_view.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AppRoutes {
@@ -37,6 +38,7 @@ class AppRoutes {
   static const String editUserInfo = '/edit_user_info';
   static const String orderView = '/order_view';
   static const String orderDetails = '/order_details';
+  static const String notifications = '/notifications';
 }
 
 class RouterNotifier extends ChangeNotifier {
@@ -187,6 +189,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           final order = state.extra as OrderModel;
           return OrderDetailsView(order: order);
         },
+      ),
+      GoRoute(
+        path: AppRoutes.notifications,
+        builder: (context, state) => const NotificationsView(),
       ),
     ],
   );
