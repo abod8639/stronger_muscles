@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_product_image.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_status_badge.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class OrderCard extends StatelessWidget {
-  final OrderModel order;
+  final OrderEntity order;
   final bool isDark;
   final bool isAr;
   final Function()? onTap;
@@ -30,19 +31,13 @@ class OrderCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-            blurRadius: 15,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        borderRadius: AppDimens.borderRadiusLg,
+        boxShadow: AppDimens.cardShadow(theme.shadowColor),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppDimens.borderRadiusLg,
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(14),
@@ -69,16 +64,18 @@ class OrderCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '#${order.id.toString().substring(0, 6)}',
+                            '#${order.id.length > 6 ? order.id.substring(0, 6) : order.id}',
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
                             ),
                           ),
                           Text(
-                            DateFormat(
-                              'MMM dd, yyyy • hh:mm a',
-                            ).format(order.orderDate!),
+                            order.orderDate != null
+                                ? DateFormat(
+                                    'MMM dd, yyyy • hh:mm a',
+                                  ).format(order.orderDate!)
+                                : '',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: Colors.grey,
                             ),
