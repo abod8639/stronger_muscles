@@ -1,9 +1,9 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
-import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
+import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/usecases/usecase_providers.dart';
 
 part 'address_controller.g.dart';
 
@@ -58,24 +58,24 @@ class AddressController extends _$AddressController {
     });
 
     final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.value != null));
-    final repository = ref.watch(addressRepositoryProvider);
-    
+    final getAddressesUseCase = ref.watch(getAddressesUseCaseProvider);
+
     if (isLoggedIn) {
-      final cached = repository.getCachedAddresses();
+      final cached = getAddressesUseCase.getCached();
       if (cached.isNotEmpty) {
         return cached;
       }
-      return await repository.getAddresses();
+      return await getAddressesUseCase();
     }
-    
+
     return [];
   }
 
   Future<void> fetchAddresses() async {
     state = const AsyncLoading();
-    final repository = ref.read(addressRepositoryProvider);
+    final getAddressesUseCase = ref.read(getAddressesUseCaseProvider);
     try {
-      final fetched = await repository.getAddresses();
+      final fetched = await getAddressesUseCase();
       state = AsyncData(fetched);
     } catch (e, st) {
       state = AsyncError(e, st);
@@ -85,8 +85,7 @@ class AddressController extends _$AddressController {
   Future<void> deleteAddress(int id) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
-      final repository = ref.read(addressRepositoryProvider);
-      await repository.deleteAddress(id);
+      await ref.read(deleteAddressUseCaseProvider).call(id);
       final currentAddresses = state.value ?? [];
       state = AsyncData(
         currentAddresses.where((addr) => addr.id != id).toList(),
@@ -99,8 +98,7 @@ class AddressController extends _$AddressController {
   Future<void> setDefaultAddress(int id) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
-      final repository = ref.read(addressRepositoryProvider);
-      await repository.setDefaultAddress(id);
+      await ref.read(setDefaultAddressUseCaseProvider).call(id);
       await fetchAddresses();
     } finally {
       ref.read(addressFormLoadingProvider.notifier).setLoading(false);
@@ -149,12 +147,7 @@ class AddressController extends _$AddressController {
 
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
-      final repository = ref.read(addressRepositoryProvider);
-      if (id == null) {
-        await repository.createAddress(model);
-      } else {
-        await repository.updateAddress(id, model);
-      }
+      await ref.read(saveAddressUseCaseProvider).call(id: id, address: model);
       await fetchAddresses();
       clearForm();
     } finally {
