@@ -3,7 +3,6 @@ import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart'
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/google_sign_in_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/update_profile_usecase.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 class MockAuthRepository implements AuthRepository {
   String? lastGoogleEmail;
@@ -16,7 +15,7 @@ class MockAuthRepository implements AuthRepository {
   String? lastUpdatedPhotoUrl;
 
   @override
-  Future<UserModel> googleSignIn({
+  Future<UserEntity> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
@@ -24,16 +23,16 @@ class MockAuthRepository implements AuthRepository {
     lastGoogleEmail = email;
     lastGoogleName = name;
     lastGooglePhotoUrl = photoUrl;
-    return UserModel(
+    return UserEntity(
       id: 5,
       email: email,
       name: name,
-      photoUrl: photoUrl,
+      token: "testToken"
     );
   }
 
   @override
-  Future<UserModel> updateProfile({
+  Future<UserEntity> updateProfile({
     String? name,
     String? email,
     String? phone,
@@ -43,27 +42,27 @@ class MockAuthRepository implements AuthRepository {
     lastUpdatedEmail = email;
     lastUpdatedPhone = phone;
     lastUpdatedPhotoUrl = photoUrl;
-    return UserModel(
+    return UserEntity(
       id: 5,
       email: email ?? 'orig@test.com',
       name: name ?? 'Original Name',
       phone: phone,
-      photoUrl: photoUrl,
+      token: "testToken",
     );
   }
 
   @override
-  Future<UserModel?> getCurrentUser() async => null;
+  Future<UserEntity?> getCurrentUser() async => null;
 
   @override
-  Future<UserModel> login({required String email, required String password}) async =>
+  Future<UserEntity> login({required String email, required String password}) async =>
       throw UnimplementedError();
 
   @override
   Future<void> logout() async {}
 
   @override
-  Future<UserModel> register({
+  Future<UserEntity> register({
     required String name,
     required String email,
     required String password,
