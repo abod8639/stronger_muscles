@@ -48,7 +48,7 @@ class RatingStars extends StatelessWidget {
           Text(
             [
               if (showValue) clampedRating.toStringAsFixed(1),
-              if (suffixText != null) suffixText!,
+              ?suffixText,
             ].join(' '),
             style: textStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
