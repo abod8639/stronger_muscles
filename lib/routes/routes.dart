@@ -18,6 +18,7 @@ import 'package:stronger_muscles/features/search/presentation/pages/search_page.
 import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/notifications/presentation/pages/notifications_view.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -136,14 +137,21 @@ final routerProvider = Provider<GoRouter>((ref) {
           final extra = state.extra;
           if (extra is ProductModel) {
             return ProductDetailsView(product: extra);
+          } else if (extra is ProductEntity) {
+            return ProductDetailsView(product: ProductModel.fromEntity(extra));
           } else if (extra is Map<String, dynamic> &&
-              extra.containsKey('product') &&
-              extra['product'] is ProductModel) {
-            return ProductDetailsView(
-              product: extra['product'] as ProductModel,
-              initialFlavor: extra['selectedFlavor'] as String?,
-              initialSize: extra['selectedSize'] as String?,
-            );
+              extra.containsKey('product')) {
+            final p = extra['product'];
+            final productModel = p is ProductModel
+                ? p
+                : (p is ProductEntity ? ProductModel.fromEntity(p) : null);
+            if (productModel != null) {
+              return ProductDetailsView(
+                product: productModel,
+                initialFlavor: extra['selectedFlavor'] as String?,
+                initialSize: extra['selectedSize'] as String?,
+              );
+            }
           }
           // Return a safe fallback or error state if data is missing
           return Scaffold(
