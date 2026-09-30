@@ -12,7 +12,7 @@ String _$categoryControllerHash() =>
 /// See also [CategoryController].
 @ProviderFor(CategoryController)
 final categoryControllerProvider = AutoDisposeAsyncNotifierProvider<
-    CategoryController, List<CategoryModel>>.internal(
+    CategoryController, List<CategoryEntity>>.internal(
   CategoryController.new,
   name: r'categoryControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +22,6 @@ final categoryControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$CategoryController = AutoDisposeAsyncNotifier<List<CategoryModel>>;
+typedef _$CategoryController = AutoDisposeAsyncNotifier<List<CategoryEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
