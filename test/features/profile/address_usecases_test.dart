@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
 import 'package:stronger_muscles/features/profile/domain/usecases/delete_address_usecase.dart';
 import 'package:stronger_muscles/features/profile/domain/usecases/get_addresses_usecase.dart';
@@ -7,7 +7,7 @@ import 'package:stronger_muscles/features/profile/domain/usecases/save_address_u
 import 'package:stronger_muscles/features/profile/domain/usecases/set_default_address_usecase.dart';
 
 class FakeAddressRepository implements AddressRepository {
-  List<AddressModel> addresses;
+  List<AddressEntity> addresses;
   Exception? exceptionToThrow;
 
   FakeAddressRepository({
@@ -16,23 +16,23 @@ class FakeAddressRepository implements AddressRepository {
   });
 
   @override
-  List<AddressModel> getCachedAddresses() => List.from(addresses);
+  List<AddressEntity> getCachedAddresses() => List.from(addresses);
 
   @override
-  Future<List<AddressModel>> getAddresses() async {
+  Future<List<AddressEntity>> getAddresses() async {
     if (exceptionToThrow != null) throw exceptionToThrow!;
     return List.from(addresses);
   }
 
   @override
-  Future<AddressModel> createAddress(AddressModel address) async {
+  Future<AddressEntity> createAddress(AddressEntity address) async {
     if (exceptionToThrow != null) throw exceptionToThrow!;
     addresses = [...addresses, address];
     return address;
   }
 
   @override
-  Future<AddressModel> updateAddress(int id, AddressModel address) async {
+  Future<AddressEntity> updateAddress(int id, AddressEntity address) async {
     if (exceptionToThrow != null) throw exceptionToThrow!;
     addresses = addresses.map((a) => a.id == id ? address : a).toList();
     return address;
@@ -45,9 +45,9 @@ class FakeAddressRepository implements AddressRepository {
   }
 
   @override
-  Future<AddressModel> setDefaultAddress(int id) async {
+  Future<AddressEntity> setDefaultAddress(int id) async {
     if (exceptionToThrow != null) throw exceptionToThrow!;
-    late AddressModel defaultAddr;
+    late AddressEntity defaultAddr;
     addresses = addresses.map((a) {
       if (a.id == id) {
         defaultAddr = a.copyWith(isDefault: true);
@@ -60,7 +60,7 @@ class FakeAddressRepository implements AddressRepository {
 }
 
 void main() {
-  const sampleAddress1 = AddressModel(
+  const sampleAddress1 = AddressEntity(
     id: 1,
     fullName: 'Mohamed Ali',
     phone: '+966500000001',
@@ -69,7 +69,7 @@ void main() {
     isDefault: true,
   );
 
-  const sampleAddress2 = AddressModel(
+  const sampleAddress2 = AddressEntity(
     id: 2,
     fullName: 'Khaled Omar',
     phone: '+966500000002',
@@ -116,7 +116,7 @@ void main() {
       final fakeRepo = FakeAddressRepository(addresses: [sampleAddress1]);
       final useCase = SaveAddressUseCase(fakeRepo);
 
-      const updated = AddressModel(
+      const updated = AddressEntity(
         id: 1,
         fullName: 'Mohamed Updated',
         street: 'King Fahd Rd 2',
