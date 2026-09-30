@@ -6,11 +6,11 @@ part of 'promo_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$promosHash() => r'228b99e76f5f5d412a04ab8c9b2ced0a46c8f85d';
+String _$promosHash() => r'06135c9bc704aa4172951c078dea4b037a1c1d2d';
 
 /// See also [promos].
 @ProviderFor(promos)
-final promosProvider = AutoDisposeFutureProvider<List<PromoModel>>.internal(
+final promosProvider = AutoDisposeFutureProvider<List<PromoEntity>>.internal(
   promos,
   name: r'promosProvider',
   debugGetCreateSourceHash:
@@ -19,8 +19,8 @@ final promosProvider = AutoDisposeFutureProvider<List<PromoModel>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef PromosRef = AutoDisposeFutureProviderRef<List<PromoModel>>;
-String _$promoControllerHash() => r'd196238a7fbdf28df0625a496593a4d516d1ae6d';
+typedef PromosRef = AutoDisposeFutureProviderRef<List<PromoEntity>>;
+String _$promoControllerHash() => r'6c6be6e5439d5200a38520476a67dba04fcff000';
 
 /// See also [PromoController].
 @ProviderFor(PromoController)
