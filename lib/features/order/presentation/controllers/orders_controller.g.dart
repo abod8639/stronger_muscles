@@ -26,7 +26,7 @@ String _$ordersControllerHash() => r'ffccc123bb99cfeb005d3db0d0f310f92ea59c1b';
 /// See also [OrdersController].
 @ProviderFor(OrdersController)
 final ordersControllerProvider =
-    AsyncNotifierProvider<OrdersController, List<OrderModel>>.internal(
+    AsyncNotifierProvider<OrdersController, List<OrderEntity>>.internal(
   OrdersController.new,
   name: r'ordersControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -36,6 +36,6 @@ final ordersControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$OrdersController = AsyncNotifier<List<OrderModel>>;
+typedef _$OrdersController = AsyncNotifier<List<OrderEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
