@@ -2,25 +2,25 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/cart_icon.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 class FakeCartController extends CartController {
-  final List<CartItemModel> _mockItems;
+  final List<CartItemEntity> _mockItems;
 
   FakeCartController(this._mockItems);
 
   @override
-  FutureOr<List<CartItemModel>> build() {
+  FutureOr<List<CartItemEntity>> build() {
     return _mockItems;
   }
 }
 
 void main() {
-  Widget buildTestApp(List<CartItemModel> items) {
+  Widget buildTestApp(List<CartItemEntity> items) {
     return ProviderScope(
       overrides: [
         cartControllerProvider.overrideWith(() => FakeCartController(items)),
@@ -50,20 +50,20 @@ void main() {
     });
 
     testWidgets('shows badge with item count when cart contains items', (tester) async {
-      const sampleProduct = ProductModel(
+      const sampleProduct = ProductEntity(
         id: 'p1',
-        name: LocalizedString(en: 'Whey'),
+        name: LocalizedStringEntity(en: 'Whey'),
         price: 100.0,
       );
 
       final items = [
-        CartItemModel(
+        const CartItemEntity(
           id: 'c1',
           userId: 'u1',
           product: sampleProduct,
           quantity: 2,
         ),
-        CartItemModel(
+        const CartItemEntity(
           id: 'c2',
           userId: 'u1',
           product: sampleProduct,
