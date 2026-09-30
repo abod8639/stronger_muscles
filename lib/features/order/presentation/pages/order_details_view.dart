@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_order_item.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_price_row.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_row_info.dart';
@@ -9,7 +9,7 @@ import 'package:stronger_muscles/features/order/presentation/widgets/build_statu
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class OrderDetailsView extends StatelessWidget {
-  final OrderModel order;
+  final OrderEntity order;
   const OrderDetailsView({super.key, required this.order});
 
   @override
