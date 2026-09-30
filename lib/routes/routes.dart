@@ -14,7 +14,7 @@ import 'package:stronger_muscles/features/profile/presentation/pages/profile_pag
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
-import 'package:stronger_muscles/features/search/presentation/pages/searchs_page.dart';
+import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
@@ -162,9 +162,9 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final extra = state.extra;
           if (extra is bool) {
-            return ProductSearchsPage(isFocused: extra);
+            return SearchPage(isFocused: extra);
           }
-          return const ProductSearchsPage(isFocused: true);
+          return const SearchPage(isFocused: true);
         },
       ),
       GoRoute(
