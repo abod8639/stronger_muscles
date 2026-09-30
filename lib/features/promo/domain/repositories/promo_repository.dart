@@ -1,5 +1,5 @@
-import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
+import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 
 abstract class PromoRepository {
-  Future<List<PromoModel>> getPromos();
+  Future<List<PromoEntity>> getPromos();
 }
