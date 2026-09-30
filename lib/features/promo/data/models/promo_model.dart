@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 
 part 'promo_model.freezed.dart';
 part 'promo_model.g.dart';
@@ -41,4 +42,28 @@ class PromoModel with _$PromoModel {
       return Colors.white;
     }
   }
+
+  /// Maps [PromoModel] to pure domain [PromoEntity]
+  PromoEntity toEntity() => PromoEntity(
+        id: id,
+        title: title,
+        subtitle: subtitle,
+        imageUrl: imageUrl,
+        buttonText: buttonText,
+        hexBackgroundColor: hexBackgroundColor,
+        targetType: targetType,
+        targetId: targetId,
+      );
+
+  /// Creates a [PromoModel] from domain [PromoEntity]
+  factory PromoModel.fromEntity(PromoEntity entity) => PromoModel(
+        id: entity.id,
+        title: entity.title,
+        subtitle: entity.subtitle,
+        imageUrl: entity.imageUrl,
+        buttonText: entity.buttonText,
+        hexBackgroundColor: entity.hexBackgroundColor,
+        targetType: entity.targetType,
+        targetId: entity.targetId,
+      );
 }
