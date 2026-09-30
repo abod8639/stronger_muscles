@@ -45,7 +45,7 @@ String _$addressControllerHash() => r'c90738f01d4705d094cb8b0d7810d92964096bf4';
 /// See also [AddressController].
 @ProviderFor(AddressController)
 final addressControllerProvider = AutoDisposeAsyncNotifierProvider<
-    AddressController, List<AddressModel>>.internal(
+    AddressController, List<AddressEntity>>.internal(
   AddressController.new,
   name: r'addressControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -55,6 +55,6 @@ final addressControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$AddressController = AutoDisposeAsyncNotifier<List<AddressModel>>;
+typedef _$AddressController = AutoDisposeAsyncNotifier<List<AddressEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
