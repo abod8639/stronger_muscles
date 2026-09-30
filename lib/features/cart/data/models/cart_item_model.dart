@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 part 'cart_item_model.freezed.dart';
@@ -27,4 +28,26 @@ class CartItemModel with _$CartItemModel {
       product.getEffectivePriceForSize(selectedSize) * quantity;
   String? get primaryImageUrl =>
       product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : null;
+
+  /// Converts this data model to the domain entity [CartItemEntity].
+  CartItemEntity toEntity() => CartItemEntity(
+        id: id,
+        userId: userId,
+        product: product.toEntity(),
+        quantity: quantity,
+        addedAt: addedAt,
+        selectedFlavor: selectedFlavor,
+        selectedSize: selectedSize,
+      );
+
+  /// Creates a data model from domain entity [CartItemEntity].
+  static CartItemModel fromEntity(CartItemEntity entity) => CartItemModel(
+        id: entity.id,
+        userId: entity.userId,
+        product: ProductModel.fromEntity(entity.product),
+        quantity: entity.quantity,
+        addedAt: entity.addedAt,
+        selectedFlavor: entity.selectedFlavor,
+        selectedSize: entity.selectedSize,
+      );
 }
