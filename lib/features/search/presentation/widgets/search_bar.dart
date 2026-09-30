@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/bottom_sheet_handle.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
@@ -50,13 +52,9 @@ Widget buildFilterButton({
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHighest,
           shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
+          boxShadow: AppDimens.subtleShadow(
+            theme.colorScheme.onSurfaceVariant,
+          ),
         ),
         child: IconButton(
           icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
@@ -73,8 +71,10 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Theme.of(context).colorScheme.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(AppDimens.radiusBottomSheet),
+      ),
     ),
     builder: (context) => DraggableScrollableSheet(
       initialChildSize: 0.45,
@@ -83,12 +83,12 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
       expand: false,
       builder: (context, scrollController) => SingleChildScrollView(
         controller: scrollController,
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppDimens.spacingXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(child: _buildHandle(context)),
-            const SizedBox(height: 24),
+            const Center(child: BottomSheetHandle()),
+            const SizedBox(height: AppDimens.spacingXl),
             Text(
               l10n.filterProducts,
               style: Theme.of(
@@ -102,7 +102,7 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
                 context,
               ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.spacingLg),
             const PriceFilterSlider(),
             const SizedBox(height: 32),
           ],
@@ -111,12 +111,3 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
     ),
   );
 }
-
-Widget _buildHandle(BuildContext context) => Container(
-  width: 40,
-  height: 4,
-  decoration: BoxDecoration(
-    color: Theme.of(context).colorScheme.outlineVariant,
-    borderRadius: BorderRadius.circular(2),
-  ),
-);
