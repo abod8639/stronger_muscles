@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/app_card.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
-const double _containerMarginHorizontal = 16.0;
-const double _containerBorderRadius = 16.0;
-const double _containerPadding = 20.0;
-const double _shadowOpacity = 0.05;
-const double _shadowBlurRadius = 10.0;
-const double _shadowOffsetY = 4.0;
 
 class AccountSettingsList extends ConsumerWidget {
   const AccountSettingsList({super.key});
@@ -29,26 +24,16 @@ class AccountSettingsList extends ConsumerWidget {
     final localizations = AppLocalizations.of(context)!;
     final unreadNotificationCount = ref.watch(unreadNotificationCountProvider);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: _containerMarginHorizontal,
-      ),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-        borderRadius: BorderRadius.circular(_containerBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: _shadowOpacity),
-            blurRadius: _shadowBlurRadius,
-            offset: const Offset(0, _shadowOffsetY),
-          ),
-        ],
-      ),
+    return AppCard(
+      margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
+      padding: EdgeInsets.zero,
+      borderRadius: AppDimens.borderRadiusLg,
+      boxShadow: AppDimens.cardShadow(theme.shadowColor),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(_containerPadding),
+            padding: const EdgeInsets.all(AppDimens.spacingXl),
             child: Text(
               localizations.accountSettings,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -87,12 +72,12 @@ class AccountSettingsList extends ConsumerWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
+                          horizontal: AppDimens.spacingSm,
                           vertical: 2,
                         ),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: AppDimens.borderRadiusSm,
                         ),
                         child: Text(
                           '$unreadNotificationCount',
@@ -103,7 +88,7 @@ class AccountSettingsList extends ConsumerWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppDimens.spacingSm),
                       const Icon(Icons.chevron_right, color: AppColors.greyDark),
                     ],
                   )
@@ -197,14 +182,17 @@ class AccountSettingsList extends ConsumerWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.vertical(
-          bottom: isLast ? const Radius.circular(16) : Radius.zero,
+          bottom: isLast ? const Radius.circular(AppDimens.radiusLg) : Radius.zero,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimens.spacingXl,
+            vertical: AppDimens.spacingLg,
+          ),
           child: Row(
             children: [
-              Icon(icon, color: AppColors.primary, size: 24),
-              const SizedBox(width: 16),
+              Icon(icon, color: AppColors.primary, size: AppDimens.iconMd),
+              const SizedBox(width: AppDimens.spacingLg),
               Expanded(
                 child: Text(
                   title,
@@ -226,7 +214,7 @@ class AccountSettingsList extends ConsumerWidget {
 
   Widget _buildDivider(bool isDark) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingXl),
       child: Divider(
         height: 1,
         color: isDark
