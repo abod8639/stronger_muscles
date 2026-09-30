@@ -26,13 +26,13 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
 
     final cached = categoryRepository.getCachedCategories();
     if (cached.isNotEmpty) {
-      _categories = cached;
-      return _getSelectionsList(cached, langCode);
+      _categories = cached.map((c) => CategoryModel.fromEntity(c)).toList();
+      return _getSelectionsList(_categories, langCode);
     }
 
     final fetched = await categoryRepository.getAllCategories();
-    _categories = fetched;
-    return _getSelectionsList(fetched, langCode);
+    _categories = fetched.map((c) => CategoryModel.fromEntity(c)).toList();
+    return _getSelectionsList(_categories, langCode);
   }
 
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
@@ -46,8 +46,8 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
     final langCode = ref.read(languageControllerProvider).languageCode;
     try {
       final fetched = await categoryRepository.getAllCategories();
-      _categories = fetched;
-      state = AsyncData(_getSelectionsList(fetched, langCode));
+      _categories = fetched.map((c) => CategoryModel.fromEntity(c)).toList();
+      state = AsyncData(_getSelectionsList(_categories, langCode));
     } catch (e, st) {
       state = AsyncError(e, st);
     }
