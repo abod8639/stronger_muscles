@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// A reusable section title widget with an optional action button.
+/// A reusable section title widget with an optional action button or custom action widget.
 ///
-/// Used across features (home, search, etc.) to display section headers
-/// with a "See All" or similar action.
+/// Used across features (home, search, profile, etc.) to display section headers
+/// with a "See All" or custom action.
 class SectionTitle extends StatelessWidget {
   static const double _horizontalPadding = 16.0;
   static const double _verticalPadding = 8.0;
@@ -11,12 +11,16 @@ class SectionTitle extends StatelessWidget {
   final String title;
   final String? actionText;
   final VoidCallback? onActionTap;
+  final Widget? actionWidget;
+  final Widget? leading;
 
   const SectionTitle({
     super.key,
     required this.title,
     this.actionText,
     this.onActionTap,
+    this.actionWidget,
+    this.leading,
   });
 
   @override
@@ -34,15 +38,29 @@ class SectionTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: theme.colorScheme.onSurface,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leading != null) ...[
+                  leading!,
+                  const SizedBox(width: 8.0),
+                ],
+                Flexible(
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ),
-          if (actionText != null)
+          if (actionWidget != null)
+            actionWidget!
+          else if (actionText != null)
             TextButton(
               onPressed: onActionTap,
               child: Text(actionText!),
