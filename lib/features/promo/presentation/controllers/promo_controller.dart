@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
-import 'package:stronger_muscles/features/promo/data/models/promo_model.dart';
-import 'package:stronger_muscles/features/promo/data/repositories/promo_repository_impl.dart';
+import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
+import 'package:stronger_muscles/features/promo/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -12,8 +12,8 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 part 'promo_controller.g.dart';
 
 @riverpod
-Future<List<PromoModel>> promos(PromosRef ref) {
-  return ref.watch(promoRepositoryProvider).getPromos();
+Future<List<PromoEntity>> promos(PromosRef ref) {
+  return ref.watch(getPromosUseCaseProvider).call();
 }
 
 @riverpod
@@ -56,8 +56,8 @@ class PromoController extends _$PromoController {
     state = index % length;
   }
 
-  /// Handles promo banner tap — navigates based on [PromoModel.targetType].
-  Future<void> onPromoPressed(BuildContext context, PromoModel promo) async {
+  /// Handles promo banner tap — navigates based on [PromoEntity.targetType].
+  Future<void> onPromoPressed(BuildContext context, PromoEntity promo) async {
     if (promo.targetId == null) return;
 
     if (promo.targetType == 'product') {
@@ -93,5 +93,4 @@ class PromoController extends _$PromoController {
       return;
     }
   }
-  
 }
