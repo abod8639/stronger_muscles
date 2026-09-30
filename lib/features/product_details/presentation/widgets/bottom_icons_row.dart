@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
@@ -80,7 +80,14 @@ class BottomIconsRow extends ConsumerWidget {
     );
 
     return item != null
-        ? _buildQuantityControls(theme, cartNotifier, item, l10n)
+        ? QuantityControls(
+            product: product,
+            selectedFlavor: detailsState.selectedFlavor,
+            selectedSize: detailsState.selectedSizeObject?.size,
+            axis: Axis.horizontal,
+            iconSize: _iconButtonSize,
+            quantityFontSize: _quantityFontSize,
+          )
         : _buildAddToCartButton(
             detailsState,
             detailsNotifier,
@@ -125,59 +132,6 @@ class BottomIconsRow extends ConsumerWidget {
         shape: const RoundedRectangleBorder(
           borderRadius: AppDimens.borderRadiusMd,
         ),
-      ),
-    );
-  }
-
-  Widget _buildQuantityControls(
-    ThemeData theme,
-    CartController cartNotifier,
-    CartItemModel item,
-    AppLocalizations l10n,
-  ) {
-    final canIncrease = item.quantity < product.stockQuantity;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: AppDimens.borderRadiusMd,
-        border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          IconButton(
-            icon: Icon(
-              item.quantity > 1
-                  ? Icons.remove_circle_outline
-                  : Icons.delete_outline_rounded,
-              color: item.quantity > 1 ? AppColors.primary : Colors.redAccent,
-            ),
-            onPressed: () => cartNotifier.decreaseQuantity(item),
-            iconSize: _iconButtonSize,
-            tooltip: item.quantity > 1
-                ? l10n.decreaseQuantity
-                : l10n.removeFromCart,
-          ),
-          Text(
-            item.quantity.toString(),
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: _quantityFontSize,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.add_circle_outline,
-              color: canIncrease ? AppColors.primary : Colors.grey,
-            ),
-            onPressed: canIncrease
-                ? () => cartNotifier.increaseQuantity(item)
-                : null,
-            iconSize: _iconButtonSize,
-          ),
-        ],
       ),
     );
   }
