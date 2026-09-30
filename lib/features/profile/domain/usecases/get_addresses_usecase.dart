@@ -1,4 +1,4 @@
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
 
 /// UseCase to retrieve saved addresses (remote or cached).
@@ -7,7 +7,7 @@ class GetAddressesUseCase {
 
   const GetAddressesUseCase(this.repository);
 
-  Future<List<AddressModel>> call() => repository.getAddresses();
+  Future<List<AddressEntity>> call() => repository.getAddresses();
 
-  List<AddressModel> getCached() => repository.getCachedAddresses();
+  List<AddressEntity> getCached() => repository.getCachedAddresses();
 }
