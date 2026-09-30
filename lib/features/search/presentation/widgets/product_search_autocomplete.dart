@@ -4,17 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/highlight_text.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/search_history_controller.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/highlight_text.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
-
-const double _borderRadius = 24.0;
-const double _searchBarHeight = 48.0;
 
 
 class ProductSearchAutocomplete extends ConsumerStatefulWidget {
@@ -62,18 +59,14 @@ class _ProductSearchAutocompleteState
     final locale = l10n.localeName;
 
     Widget searchContainer(Widget field) => Container(
-          height: _searchBarHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          height: 48.0,
+          padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingMd),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(_borderRadius),
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(AppDimens.radiusXl),
+            boxShadow: AppDimens.subtleShadow(
+              theme.colorScheme.onSurfaceVariant,
+            ),
           ),
           child: Row(
             children: [
@@ -81,7 +74,7 @@ class _ProductSearchAutocompleteState
                 Icons.search,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
-              const SizedBox(width: 8.0),
+              const SizedBox(width: AppDimens.spacingSm),
               Expanded(child: field),
               if (_textController.text.isNotEmpty && !widget.readOnly)
                 IconButton(
@@ -222,8 +215,8 @@ class _ProductSearchAutocompleteState
           return Align(
             alignment: Alignment.topLeft,
             child: Material(
-              elevation: 4.0,
-              borderRadius: BorderRadius.circular(16),
+              elevation: AppDimens.elevationMd,
+              borderRadius: BorderRadius.circular(AppDimens.radiusLg),
               color: theme.colorScheme.surface,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -232,7 +225,6 @@ class _ProductSearchAutocompleteState
                 ),
                 child: 
                 prudoctsList(options, onSelected, theme, locale),
-           // SizedBox.shrink( )
 
               ),
             ),
@@ -244,18 +236,18 @@ class _ProductSearchAutocompleteState
 
   ListView prudoctsList(Iterable<Object> options, AutocompleteOnSelected<Object> onSelected, ThemeData theme, String locale) {
     return ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
                 shrinkWrap: true,
                 itemCount: options.length,
                 separatorBuilder: (context, index) =>
-                    const Divider(height: 1, indent: 16),
+                    const Divider(height: 1, indent: AppDimens.spacingLg),
                 itemBuilder: (context, index) {
                   final option = options.elementAt(index);
 
                   // Search History Item UI
                   if (option is String) {
                     return ListTile(
-                      leading: const Icon(Icons.history, size: 20),
+                      leading: const Icon(Icons.history, size: AppDimens.iconSm),
                       title: Text(option),
                       trailing: IconButton(
                         icon: const Icon(Icons.close, size: 16),
@@ -271,11 +263,14 @@ class _ProductSearchAutocompleteState
                   return InkWell(
                     onTap: () => onSelected(product),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimens.spacingLg,
+                        vertical: AppDimens.spacingMd,
+                      ),
                       child: Row(
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppDimens.radiusSm),
                             child: CachedNetworkImage(
                               imageUrl: product.primaryThumbnailUrl ?? '',
                               width: 48,
@@ -283,11 +278,11 @@ class _ProductSearchAutocompleteState
                               fit: BoxFit.cover,
                               placeholder: (context, url) => Container(
                                 color: theme.colorScheme.surfaceContainerHighest,
-                                child: const Icon(Icons.image, size: 20),
+                                child: const Icon(Icons.image, size: AppDimens.iconSm),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppDimens.spacingMd),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +305,7 @@ class _ProductSearchAutocompleteState
                               ],
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: AppDimens.spacingSm),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisSize: MainAxisSize.min,
@@ -333,4 +328,3 @@ class _ProductSearchAutocompleteState
               );
   }
 }
-
