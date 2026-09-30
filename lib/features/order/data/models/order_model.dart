@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_item_entity.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 
 part 'order_model.freezed.dart';
@@ -56,6 +58,52 @@ class OrderModel with _$OrderModel {
   bool get isPaid => paymentStatus == 'paid';
   bool get canBeCancelled => status == 'pending' || status == 'processing';
   bool get isCompleted => status == 'delivered';
+
+  OrderEntity toEntity() => OrderEntity(
+        id: id,
+        userId: userId,
+        orderDate: orderDate,
+        status: status,
+        paymentStatus: paymentStatus,
+        paymentMethod: paymentMethod,
+        addressId: addressId,
+        subtotal: subtotal,
+        shippingCost: shippingCost,
+        discount: discount,
+        totalAmount: totalAmount,
+        trackingNumber: trackingNumber,
+        notes: notes,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        items: items?.map((i) => i.toEntity()).toList(),
+        shippingAddress: shippingAddress?.toEntity(),
+        phoneNumber: phoneNumber,
+        userName: userName,
+      );
+
+  static OrderModel fromEntity(OrderEntity entity) => OrderModel(
+        id: entity.id,
+        userId: entity.userId,
+        orderDate: entity.orderDate,
+        status: entity.status,
+        paymentStatus: entity.paymentStatus,
+        paymentMethod: entity.paymentMethod,
+        addressId: entity.addressId,
+        subtotal: entity.subtotal,
+        shippingCost: entity.shippingCost,
+        discount: entity.discount,
+        totalAmount: entity.totalAmount,
+        trackingNumber: entity.trackingNumber,
+        notes: entity.notes,
+        createdAt: entity.createdAt,
+        updatedAt: entity.updatedAt,
+        items: entity.items?.map((i) => OrderItemModel.fromEntity(i)).toList(),
+        shippingAddress: entity.shippingAddress != null
+            ? AddressModel.fromEntity(entity.shippingAddress!)
+            : null,
+        phoneNumber: entity.phoneNumber,
+        userName: entity.userName,
+      );
 }
 
 @freezed
@@ -86,4 +134,32 @@ class OrderItemModel with _$OrderItemModel {
       _$OrderItemModelFromJson(json);
 
   double get price => unitPrice;
+
+  OrderItemEntity toEntity() => OrderItemEntity(
+        id: id,
+        orderId: orderId,
+        productId: productId,
+        productName: productName,
+        unitPrice: unitPrice,
+        quantity: quantity,
+        subtotal: subtotal,
+        imageUrl: imageUrl,
+        createdAt: createdAt,
+        selectedFlavor: selectedFlavor,
+        selectedSize: selectedSize,
+      );
+
+  static OrderItemModel fromEntity(OrderItemEntity entity) => OrderItemModel(
+        id: entity.id,
+        orderId: entity.orderId,
+        productId: entity.productId,
+        productName: entity.productName,
+        unitPrice: entity.unitPrice,
+        quantity: entity.quantity,
+        subtotal: entity.subtotal,
+        imageUrl: entity.imageUrl,
+        createdAt: entity.createdAt,
+        selectedFlavor: entity.selectedFlavor,
+        selectedSize: entity.selectedSize,
+      );
 }
