@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/domain/usecases/usecase_providers.dart';
 
 part 'products_controller.g.dart';
 
@@ -10,26 +10,24 @@ class ProductsController extends _$ProductsController {
   String get selectedCategoryId => _selectedCategoryId;
 
   @override
-  FutureOr<List<ProductModel>> build() async {
-    final repository = ref.watch(productRepositoryProvider);
-    final cached = repository.getCachedProducts();
+  FutureOr<List<ProductEntity>> build() async {
+    final cached = ref.watch(getCachedProductsUseCaseProvider)();
 
     if (cached.isNotEmpty) {
       return cached;
     }
 
-    return await repository.getProducts();
+    return await ref.watch(getProductsUseCaseProvider)();
   }
 
   Future<void> fetchProducts({String? categoryId, String? query}) async {
     state = const AsyncLoading();
-    final repository = ref.read(productRepositoryProvider);
     try {
-      List<ProductModel> result;
+      List<ProductEntity> result;
       if (query != null && query.trim().isNotEmpty) {
-        result = await repository.searchProducts(query);
+        result = await ref.read(searchProductsUseCaseProvider)(query);
       } else {
-        result = await repository.getProducts(
+        result = await ref.read(getProductsUseCaseProvider)(
           categoryId:
               categoryId ??
               (_selectedCategoryId.isEmpty ? null : _selectedCategoryId),
