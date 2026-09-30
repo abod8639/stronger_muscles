@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 
 Widget buildProductImage(String? url) {
@@ -7,11 +8,11 @@ Widget buildProductImage(String? url) {
     width: 50,
     height: 50,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppDimens.borderRadiusMd,
       color: Colors.grey[100],
     ),
     child: ClipRRect(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: AppDimens.borderRadiusMd,
       child: url != null
           ? CachedNetworkImage(
               cacheManager: CustomCacheManager.instance,
