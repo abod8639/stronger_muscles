@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-
+import 'package:stronger_muscles/features/order/domain/entities/order_item_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
+Widget buildOrderItem(OrderItemEntity item, bool isDark, bool isAr) {
   return Builder(
     builder: (context) {
       final theme = Theme.of(context);
@@ -16,14 +16,8 @@ Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: isDark ? AppColors.surfaceDark : Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          borderRadius: AppDimens.borderRadiusMd,
+          boxShadow: AppDimens.subtleShadow(theme.shadowColor),
         ),
         child: Row(
           children: [
@@ -31,11 +25,11 @@ Widget buildOrderItem(OrderItemModel item, bool isDark, bool isAr) {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppDimens.borderRadiusSm,
                 color: Colors.grey[100],
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppDimens.borderRadiusSm,
                 child: item.imageUrl != null
                     ? CachedNetworkImage(
                         cacheManager: CustomCacheManager.instance,
