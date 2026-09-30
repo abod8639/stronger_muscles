@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class MockOnlineNotifier extends InternetConnectionController {
@@ -21,18 +21,20 @@ class MockOfflineNotifier extends InternetConnectionController {
 
 class MockLoggedInAuthNotifier extends AuthController {
   @override
-  FutureOr<UserModel?> build() {
-    return const UserModel(
+  FutureOr<UserEntity?> build() {
+    return const UserEntity(
       id: 1,
       email: 'member@muscle.com',
       name: 'Dexter',
+      phone: '123456789',
+      token: 'token',
     );
   }
 }
 
 class MockLoggedOutAuthNotifier extends AuthController {
   @override
-  FutureOr<UserModel?> build() {
+  FutureOr<UserEntity?> build() {
     return null;
   }
 }
