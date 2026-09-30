@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -12,7 +13,7 @@ const double _verticalPadding = 8.0;
 const double _buttonVerticalPadding = 12.0;
 const double _buttonFontSize = 16.0;
 const double _quantityFontSize = 18.0;
-const double _spacing = 12.0;
+const double _spacing = AppDimens.spacingMd;
 const double _iconButtonSize = 32.0;
 
 class BottomIconsRow extends ConsumerWidget {
@@ -121,8 +122,8 @@ class BottomIconsRow extends ConsumerWidget {
           fontSize: _buttonFontSize,
           fontWeight: FontWeight.bold,
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+        shape: const RoundedRectangleBorder(
+          borderRadius: AppDimens.borderRadiusMd,
         ),
       ),
     );
@@ -139,7 +140,7 @@ class BottomIconsRow extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: AppDimens.borderRadiusMd,
         border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
       ),
       child: Row(
@@ -193,7 +194,7 @@ class BottomIconsRow extends ConsumerWidget {
         color: isInWishlist
             ? AppColors.primary.withValues(alpha: .1)
             : theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: AppDimens.borderRadiusMd,
       ),
       child: IconButton(
         icon: Icon(
