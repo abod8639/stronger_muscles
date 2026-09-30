@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/get_current_user_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/register_usecase.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 class FakeAuthRepository implements AuthRepository {
-  UserModel? mockUser;
+  UserEntity? mockUser;
   bool shouldThrow = false;
   bool logoutCalled = false;
   String? lastLoginEmail;
@@ -15,7 +15,7 @@ class FakeAuthRepository implements AuthRepository {
   String? lastRegisterName;
 
   @override
-  Future<UserModel> login({
+  Future<UserEntity> login({
     required String email,
     required String password,
   }) async {
@@ -25,15 +25,17 @@ class FakeAuthRepository implements AuthRepository {
     lastLoginEmail = email;
     lastLoginPassword = password;
     return mockUser ??
-        UserModel(
+        UserEntity(
           id: 1,
           email: email,
           name: 'Logged In User',
+          token: "testToken",
+          
         );
   }
 
   @override
-  Future<UserModel> register({
+  Future<UserEntity> register({
     required String name,
     required String email,
     required String password,
@@ -42,10 +44,11 @@ class FakeAuthRepository implements AuthRepository {
       throw Exception('Email already in use');
     }
     lastRegisterName = name;
-    return UserModel(
+    return UserEntity(
       id: 2,
       email: email,
       name: name,
+      token: "testToken",
     );
   }
 
@@ -55,30 +58,31 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<UserModel?> getCurrentUser() async {
+  Future<UserEntity?> getCurrentUser() async {
     return mockUser;
   }
 
   @override
-  Future<UserModel> googleSignIn({
+  Future<UserEntity> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
   }) async {
-    return UserModel(id: 3, email: email, name: name, photoUrl: photoUrl);
+    return UserEntity(id: 3, email: email, name: name, photoUrl: photoUrl,token: "testToken");
   }
 
   @override
-  Future<UserModel> updateProfile({
+  Future<UserEntity> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? photoUrl,
   }) async {
-    return UserModel(
+    return UserEntity(
       id: 1,
       email: email ?? 'test@example.com',
       name: name ?? 'Updated',
+      token: "testToken",
     );
   }
 }
@@ -146,10 +150,11 @@ void main() {
       expect(user, isNull);
 
       // When user is set
-      fakeRepository.mockUser = const UserModel(
+      fakeRepository.mockUser = const UserEntity(
         id: 99,
         email: 'active@example.com',
         name: 'Active User',
+        token: "testToken",
       );
 
       user = await getCurrentUserUseCase();
