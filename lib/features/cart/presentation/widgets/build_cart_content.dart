@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/build_checkout_section.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/cart_item_card.dart';
 
 const double _listTopSpacing = 10.0;
 
 class BuildCartContent extends StatelessWidget {
-  final List<CartItemModel> items;
+  final List<CartItemEntity> items;
 
   const BuildCartContent({super.key, required this.items});
 
