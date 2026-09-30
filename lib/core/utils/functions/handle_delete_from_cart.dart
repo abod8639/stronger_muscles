@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Handles the decrease quantity action
-void handleDecrease(BuildContext context, WidgetRef ref, ProductModel item) {
+void handleDecrease(BuildContext context, WidgetRef ref, dynamic item) {
   final cartNotifier = ref.read(cartControllerProvider.notifier);
   final cartItem = cartNotifier.getCartItem(item);
   if (cartItem != null && cartItem.quantity > 1) {
@@ -21,7 +21,7 @@ void handleDecrease(BuildContext context, WidgetRef ref, ProductModel item) {
 void showRemoveConfirmation(
   BuildContext context,
   WidgetRef ref,
-  ProductModel item,
+  dynamic item,
 ) {
   final cartNotifier = ref.read(cartControllerProvider.notifier);
   final cartItem = cartNotifier.getCartItem(item);
@@ -30,9 +30,19 @@ void showRemoveConfirmation(
   if (cartItem != null) {
     cartNotifier.decreaseQuantity(cartItem);
 
-    final itemName = l10n != null
-        ? item.getLocalizedName(locale: l10n.localeName)
-        : item.name;
+    final String itemName;
+    if (item is ProductEntity) {
+      itemName = l10n != null
+          ? item.getLocalizedName(locale: l10n.localeName)
+          : (item.name?.en ?? '');
+    } else if (item is ProductModel) {
+      itemName = l10n != null
+          ? item.getLocalizedName(locale: l10n.localeName)
+          : (item.name?.en ?? '');
+    } else {
+      itemName = '';
+    }
+
     final message = l10n != null
         ? '$itemName ${l10n.removedFromCart}'
         : '$itemName removed from cart.';
