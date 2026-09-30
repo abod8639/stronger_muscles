@@ -6,10 +6,18 @@ class AppDimens {
   AppDimens._();
 
   // ── Border Radius ──────────────────────────────────────────────────────
+  static const double radiusXs = 4.0;
   static const double radiusSm = 8.0;
   static const double radiusMd = 12.0;
   static const double radiusLg = 16.0;
   static const double radiusXl = 24.0;
+
+  // ── Helper BorderRadius Objects ────────────────────────────────────────
+  static const BorderRadius borderRadiusXs = BorderRadius.all(Radius.circular(radiusXs));
+  static const BorderRadius borderRadiusSm = BorderRadius.all(Radius.circular(radiusSm));
+  static const BorderRadius borderRadiusMd = BorderRadius.all(Radius.circular(radiusMd));
+  static const BorderRadius borderRadiusLg = BorderRadius.all(Radius.circular(radiusLg));
+  static const BorderRadius borderRadiusXl = BorderRadius.all(Radius.circular(radiusXl));
 
   // ── Elevation / Shadow ─────────────────────────────────────────────────
   static const double elevationSm = 2.0;
@@ -34,6 +42,8 @@ class AppDimens {
 
   // ── Bottom Sheet ────────────────────────────────────────────────────────
   static const double radiusBottomSheet = 28.0;
+  static const BorderRadius borderRadiusBottomSheet =
+      BorderRadius.vertical(top: Radius.circular(radiusBottomSheet));
 
   // ── Common BoxShadow ───────────────────────────────────────────────────
   /// Shadow used on cards with moderate elevation (product cards, etc.)
@@ -52,6 +62,16 @@ class AppDimens {
           color: shadowColor.withValues(alpha: 0.03),
           blurRadius: 12,
           offset: const Offset(0, 4),
+        ),
+      ];
+
+  /// Outer shadow used on banners, promotional cards, and featured highlights
+  static List<BoxShadow> bannerShadow([Color? shadowColor]) => [
+        BoxShadow(
+          color: (shadowColor ?? Colors.black).withValues(alpha: 0.1),
+          blurRadius: 10,
+          offset: const Offset(0, 5),
+          blurStyle: BlurStyle.outer,
         ),
       ];
 }
