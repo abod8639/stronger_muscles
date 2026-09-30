@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_size_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
@@ -53,6 +54,35 @@ void main() {
       final updated = item.copyWith(quantity: item.quantity + 2);
       expect(updated.quantity, 3);
       expect(updated.subtotal, 3000.0);
+    });
+
+    test('toEntity and fromEntity convert properly between model and entity', () {
+      final model = CartItemModel(
+        id: 'cart-10',
+        userId: 'user-10',
+        product: sampleProduct,
+        quantity: 4,
+        selectedFlavor: 'Chocolate',
+        selectedSize: '2kg',
+        addedAt: DateTime(2026, 1, 1),
+      );
+
+      final entity = model.toEntity();
+      expect(entity, isA<CartItemEntity>());
+      expect(entity.id, 'cart-10');
+      expect(entity.userId, 'user-10');
+      expect(entity.quantity, 4);
+      expect(entity.selectedFlavor, 'Chocolate');
+      expect(entity.selectedSize, '2kg');
+      expect(entity.subtotal, 3600.0); // 900 * 4
+
+      final reconstructedModel = CartItemModel.fromEntity(entity);
+      expect(reconstructedModel.id, model.id);
+      expect(reconstructedModel.userId, model.userId);
+      expect(reconstructedModel.quantity, model.quantity);
+      expect(reconstructedModel.selectedFlavor, model.selectedFlavor);
+      expect(reconstructedModel.selectedSize, model.selectedSize);
+      expect(reconstructedModel.subtotal, model.subtotal);
     });
   });
 }
