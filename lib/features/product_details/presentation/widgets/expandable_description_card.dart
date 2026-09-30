@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/header_with_icon_and_title.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/stars_record.dart';
@@ -76,29 +77,23 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
           colors: isDark
               ? [
                   theme.colorScheme.surface,
-                  theme.colorScheme.surface..withValues(alpha: .8),
+                  theme.colorScheme.surface.withValues(alpha: .8),
                 ]
               : [
                   theme.colorScheme.surface,
-                  theme.colorScheme.primaryContainer..withValues(alpha: .1),
+                  theme.colorScheme.primaryContainer.withValues(alpha: .1),
                 ],
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppDimens.borderRadiusLg,
         border: Border.all(
-          color: AppColors.primary..withValues(alpha: .02),
+          color: AppColors.primary.withValues(alpha: .05),
           width: 0.5,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withValues(alpha: .1),
-            blurRadius: 12,
-            offset: const Offset(0, 10),
-          ),
-        ],
+        boxShadow: AppDimens.cardShadow(theme.shadowColor),
       ),
 
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppDimens.borderRadiusLg,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -142,14 +137,14 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                       padding: const EdgeInsets.only(top: 12),
                       child: InkWell(
                         onTap: _toggleExpanded,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: AppDimens.borderRadiusSm,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: AppDimens.borderRadiusSm,
                             border: Border.all(
                               color: AppColors.primary.withValues(alpha: 0.3),
                               width: 1,
