@@ -1,20 +1,20 @@
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 
 abstract class AuthRepository {
-  Future<UserModel> login({required String email, required String password});
-  Future<UserModel> register({
+  Future<UserEntity> login({required String email, required String password});
+  Future<UserEntity> register({
     required String name,
     required String email,
     required String password,
   });
   Future<void> logout();
-  Future<UserModel?> getCurrentUser();
-  Future<UserModel> googleSignIn({
+  Future<UserEntity?> getCurrentUser();
+  Future<UserEntity> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
   });
-  Future<UserModel> updateProfile({
+  Future<UserEntity> updateProfile({
     String? name,
     String? email,
     String? phone,
