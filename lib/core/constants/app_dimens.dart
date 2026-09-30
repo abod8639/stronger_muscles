@@ -32,13 +32,26 @@ class AppDimens {
   // ── Image Sizes ────────────────────────────────────────────────────────
   static const double thumbnailSize = 100.0;
 
+  // ── Bottom Sheet ────────────────────────────────────────────────────────
+  static const double radiusBottomSheet = 28.0;
+
   // ── Common BoxShadow ───────────────────────────────────────────────────
+  /// Shadow used on cards with moderate elevation (product cards, etc.)
   static List<BoxShadow> cardShadow(Color shadowColor) => [
         BoxShadow(
           color: shadowColor.withValues(alpha: 0.08),
           blurRadius: 15.0,
           offset: const Offset(0, 4),
           spreadRadius: 2,
+        ),
+      ];
+
+  /// Subtle shadow used on search bars, icon buttons, and inline controls
+  static List<BoxShadow> subtleShadow(Color shadowColor) => [
+        BoxShadow(
+          color: shadowColor.withValues(alpha: 0.03),
+          blurRadius: 12,
+          offset: const Offset(0, 4),
         ),
       ];
 }
