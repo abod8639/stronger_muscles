@@ -3,24 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _containerBorderRadius = 20.0;
-const double _containerClipRadius = 20.0;
-const double _containerPadding = 16.0;
 const double _mapHeight = 150.0;
 const double _mapZoom = 15.0;
-const double _mapIconSize = 16.0;
-const double _cardTopRowSpacing = 12.0;
-const double _cardDetailsSpacing = 4.0;
-const double _dividerHeight = 24.0;
-const double _shadowBlurRadius = 20.0;
-const double _shadowOffsetY = 10.0;
-const double _shadowOpacity = 0.06;
-const double _defaultShadowOpacity = 0.3;
 const double _adapterTextLineHeight = 1.4;
 
 class AddressCard extends ConsumerStatefulWidget {
@@ -77,37 +67,29 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(_containerBorderRadius),
+        borderRadius: AppDimens.borderRadiusLg,
         border: address.isDefault
             ? Border.all(
                 color: AppColors.primary.withValues(alpha: .5),
                 width: 1.5,
               )
             : Border.all(color: Colors.transparent),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(
-              alpha: isDark ? _defaultShadowOpacity : _shadowOpacity,
-            ),
-            blurRadius: _shadowBlurRadius,
-            offset: const Offset(0, _shadowOffsetY),
-          ),
-        ],
+        boxShadow: AppDimens.cardShadow(theme.shadowColor),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(_containerClipRadius),
+        borderRadius: AppDimens.borderRadiusLg,
         child: Column(
           children: [
             _buildMapPreview(),
             Padding(
-              padding: const EdgeInsets.all(_containerPadding),
+              padding: const EdgeInsets.all(AppDimens.spacingLg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildCardTopRow(context),
-                  const SizedBox(height: _cardTopRowSpacing),
+                  const SizedBox(height: AppDimens.spacingMd),
                   _buildAddressDetails(theme),
-                  const Divider(height: _dividerHeight, thickness: 0.5),
+                  const Divider(height: 24.0, thickness: 0.5),
                   _buildActionButtons(context, ref),
                 ],
               ),
@@ -231,14 +213,14 @@ class _AddressCardState extends ConsumerState<AddressCard> {
   Widget _buildMapIcon() {
     return Container(
       padding: const EdgeInsets.all(6),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+        boxShadow: AppDimens.subtleShadow(Colors.black),
       ),
       child: const Icon(
         Icons.map_outlined,
-        size: _mapIconSize,
+        size: AppDimens.iconSm,
         color: AppColors.primary,
       ),
     );
@@ -253,14 +235,14 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: .1),
-            borderRadius: BorderRadius.circular(10),
+          padding: const EdgeInsets.all(AppDimens.spacingSm),
+          decoration: const BoxDecoration(
+            color: AppColors.primaryLight,
+            borderRadius: AppDimens.borderRadiusSm,
           ),
           child: Icon(labelIcon, color: AppColors.primary, size: 18),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: AppDimens.spacingMd),
         Text(
           address.label ?? intl10n.other,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
@@ -278,7 +260,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         gradient: LinearGradient(
           colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: AppDimens.borderRadiusXl,
       ),
       child: Text(
         intl10n.defaultBadge,
@@ -299,7 +281,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
           address.fullName ?? '',
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: _cardDetailsSpacing),
+        const SizedBox(height: AppDimens.spacingSm),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
