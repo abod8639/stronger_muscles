@@ -4,6 +4,7 @@ import 'package:stronger_muscles/features/profile/data/models/localized_string_m
 import 'package:stronger_muscles/features/product/data/models/image_url_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_category_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_size_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 part 'product_model.freezed.dart';
 part 'product_model.g.dart';
@@ -180,4 +181,87 @@ class ProductModel with _$ProductModel {
 
   /// Check if the base price has a discount
   bool get baseHasDiscount => baseEffectivePrice < basePrice && basePrice > 0;
+
+  ProductEntity toEntity() => ProductEntity(
+        id: id,
+        name: name?.toEntity(),
+        description: description?.toEntity(),
+        brand: brand,
+        category: category?.toEntity(),
+        imageUrls: imageUrls.map((i) => i.toEntity()).toList(),
+        hasVariants: hasVariants,
+        price: price,
+        discountPrice: discountPrice,
+        stockQuantity: stockQuantity,
+        averageRating: averageRating,
+        reviewCount: reviewCount,
+        servingSize: servingSize,
+        servingsPerContainer: servingsPerContainer,
+        nutritionFacts: nutritionFacts,
+        flavors: flavors,
+        productSizes: productSizes.map((s) => s.toEntity()).toList(),
+        size: size,
+        tags: tags,
+        weight: weight,
+        isActive: isActive,
+        isBackgroundWhite: isBackgroundWhite,
+        featured: featured,
+        newArrival: newArrival,
+        bestSeller: bestSeller,
+        sku: sku,
+        totalSales: totalSales,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        ingredients: ingredients,
+        manufacturer: manufacturer,
+        countryOfOrigin: countryOfOrigin,
+        usageInstructions: usageInstructions,
+        warnings: warnings,
+      );
+
+  static ProductModel fromEntity(ProductEntity entity) => ProductModel(
+        id: entity.id,
+        name: entity.name != null
+            ? LocalizedString.fromEntity(entity.name!)
+            : null,
+        description: entity.description != null
+            ? LocalizedString.fromEntity(entity.description!)
+            : null,
+        brand: entity.brand,
+        category: entity.category != null
+            ? ProductCategory.fromEntity(entity.category!)
+            : null,
+        imageUrls:
+            entity.imageUrls.map((i) => ImageUrl.fromEntity(i)).toList(),
+        hasVariants: entity.hasVariants,
+        price: entity.price,
+        discountPrice: entity.discountPrice,
+        stockQuantity: entity.stockQuantity,
+        averageRating: entity.averageRating,
+        reviewCount: entity.reviewCount,
+        servingSize: entity.servingSize,
+        servingsPerContainer: entity.servingsPerContainer,
+        nutritionFacts: entity.nutritionFacts,
+        flavors: entity.flavors,
+        productSizes: entity.productSizes
+            .map((s) => ProductSize.fromEntity(s))
+            .toList(),
+        size: entity.size,
+        tags: entity.tags,
+        weight: entity.weight,
+        isActive: entity.isActive,
+        isBackgroundWhite: entity.isBackgroundWhite,
+        featured: entity.featured,
+        newArrival: entity.newArrival,
+        bestSeller: entity.bestSeller,
+        sku: entity.sku,
+        totalSales: entity.totalSales,
+        createdAt: entity.createdAt,
+        updatedAt: entity.updatedAt,
+        ingredients: entity.ingredients,
+        manufacturer: entity.manufacturer,
+        countryOfOrigin: entity.countryOfOrigin,
+        usageInstructions: entity.usageInstructions,
+        warnings: entity.warnings,
+      );
 }
