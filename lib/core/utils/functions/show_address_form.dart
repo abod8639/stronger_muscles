@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/address_form.dart';
 
-void showAddressForm(BuildContext context, {AddressModel? address}) {
+void showAddressForm(BuildContext context, {AddressEntity? address}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
