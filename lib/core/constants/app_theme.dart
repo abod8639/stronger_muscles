@@ -98,6 +98,12 @@ class AppTheme {
   static List<BoxShadow> bannerShadow([BuildContext? context]) =>
       AppDimens.bannerShadow(context != null ? Theme.of(context).shadowColor : null);
 
+  static List<BoxShadow> floatingShadow([BuildContext? context]) =>
+      AppDimens.floatingShadow(context != null ? Theme.of(context).shadowColor : null);
+
+  static List<BoxShadow> coloredShadow(Color color, {double alpha = 0.3}) =>
+      AppDimens.coloredShadow(color, alpha: alpha);
+
   static BorderRadius get radiusSm => AppDimens.borderRadiusSm;
   static BorderRadius get radiusMd => AppDimens.borderRadiusMd;
   static BorderRadius get radiusLg => AppDimens.borderRadiusLg;
