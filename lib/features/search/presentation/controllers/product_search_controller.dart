@@ -2,8 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/search/data/datasources/search_local_datasource.dart';
-import 'package:stronger_muscles/features/search/data/datasources/search_remote_datasource.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/search_products_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/filter_by_price_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/calculate_price_bounds_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/usecase_providers.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
@@ -12,7 +14,6 @@ part 'product_search_controller.g.dart';
 
 @riverpod
 class ProductSearchController extends _$ProductSearchController {
-  final SearchLocalDataSource _localDataSource = SearchLocalDataSource();
   final TextEditingController textController = TextEditingController();
   
   Timer? _debounceTimer;
@@ -33,6 +34,16 @@ class ProductSearchController extends _$ProductSearchController {
   double get dataMaxPrice => _dataMaxPrice;
   String get searchQuery => _searchQuery;
   bool get hasSearched => _hasSearched;
+
+  // ── Domain UseCases ─────────────────────────────────────────────────────
+  SearchProductsUseCase get _searchProductsUseCase =>
+      ref.read(searchProductsUseCaseProvider);
+
+  FilterByPriceUseCase get _filterByPriceUseCase =>
+      ref.read(filterByPriceUseCaseProvider);
+
+  CalculatePriceBoundsUseCase get _calculatePriceBoundsUseCase =>
+      ref.read(calculatePriceBoundsUseCaseProvider);
 
   @override
   FutureOr<List<ProductModel>> build() {
@@ -114,10 +125,9 @@ class ProductSearchController extends _$ProductSearchController {
     if (query.isEmpty) return;
 
     try {
-      final remoteDataSource = ref.read(searchRemoteDataSourceProvider);
-      
-      // Fetch remote results
-      final List<ProductModel> remoteResults = await remoteDataSource.fetchProductsFromApi(query);
+      // Fetch remote results via use case
+      final List<ProductModel> remoteResults =
+          await _searchProductsUseCase(query);
 
       // Merge with current local results
       final existingIds = _combinedResults.map((e) => e.id).toSet();
@@ -203,7 +213,7 @@ class ProductSearchController extends _$ProductSearchController {
     final source = _combinedResults.isEmpty && !_hasSearched ? _localProducts : _combinedResults;
     if (source.isEmpty) return;
 
-    final bounds = _localDataSource.calculatePriceBounds(source);
+    final bounds = _calculatePriceBoundsUseCase(source);
     _dataMinPrice = bounds['min']!;
     _dataMaxPrice = bounds['max']!;
 
@@ -222,7 +232,7 @@ class ProductSearchController extends _$ProductSearchController {
   }
 
   void _applyFiltersToResults(List<ProductModel> results) {
-    final filtered = _localDataSource.filterByPrice(results, _filterMinPrice, _filterMaxPrice);
+    final filtered = _filterByPriceUseCase(results, _filterMinPrice, _filterMaxPrice);
     state = AsyncData(filtered);
   }
 }
