@@ -1,50 +1,12 @@
-import 'package:stronger_muscles/core/config/api_config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/data/repositories/order_repository_impl.dart';
+import 'package:stronger_muscles/features/order/domain/repositories/order_repository.dart';
 
-class OrderRepository {
-  final ApiService _apiService;
+export 'package:stronger_muscles/features/order/domain/repositories/order_repository.dart';
+export 'package:stronger_muscles/features/order/data/repositories/order_repository_impl.dart';
 
-  OrderRepository(this._apiService);
-
-  Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
-    try {
-      final response = await _apiService.post(ApiConfig.orders, data: payload);
-      final data = response.data;
-      if (data is Map<String, dynamic>) {
-        return data;
-      }
-      return {'status': 'success'};
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: "حدث خطأ غير متوقع أثناء إرسال الطلب");
-    }
-  }
-
-  Future<List<OrderModel>> getUserOrders({int? limit}) async {
-    try {
-      final queryParams = limit != null ? {'limit': limit} : null;
-      final response = await _apiService.get(
-        ApiConfig.orders,
-        queryParameters: queryParams,
-      );
-
-      final dynamic body = response.data;
-      List<dynamic> data = [];
-
-      if (body is Map && body.containsKey('data')) {
-        data = body['data'];
-      } else if (body is List) {
-        data = body;
-      }
-
-      return data.map((json) => OrderModel.fromJson(json)).toList();
-    } on Failure catch (e) {
-      throw Failure(message: e.message);
-    } catch (e) {
-      throw Failure(message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً");
-    }
-  }
-}
+final orderRepositoryProvider = Provider<OrderRepository>((ref) {
+  final apiService = ref.watch(apiServiceProvider);
+  return OrderRepositoryImpl(apiService);
+});
