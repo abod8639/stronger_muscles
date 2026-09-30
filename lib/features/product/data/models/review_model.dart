@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/product/domain/entities/review_entity.dart';
 
 part 'review_model.g.dart';
 
@@ -133,4 +134,30 @@ class ReviewModel extends HiveObject {
       return '${(difference.inDays / 365).floor()} years ago';
     }
   }
+
+  ReviewEntity toEntity() => ReviewEntity(
+        id: id,
+        productId: productId,
+        userId: userId,
+        userName: userName,
+        userPhotoUrl: userPhotoUrl,
+        comment: comment,
+        rating: rating,
+        isVerifiedPurchase: isVerifiedPurchase,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+
+  static ReviewModel fromEntity(ReviewEntity entity) => ReviewModel(
+        id: entity.id,
+        productId: entity.productId,
+        userId: entity.userId,
+        userName: entity.userName,
+        userPhotoUrl: entity.userPhotoUrl,
+        comment: entity.comment,
+        rating: entity.rating,
+        isVerifiedPurchase: entity.isVerifiedPurchase,
+        createdAt: entity.createdAt,
+        updatedAt: entity.updatedAt,
+      );
 }
