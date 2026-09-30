@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
@@ -21,7 +21,7 @@ class ProfileController extends _$ProfileController {
     });
   }
 
-  UserModel? get currentUser => ref.watch(authControllerProvider).value;
+  UserEntity? get currentUser => ref.watch(authControllerProvider).value;
   bool get isLoading => ref.watch(authControllerProvider).isLoading;
 
   List<OrderEntity> get orders =>
