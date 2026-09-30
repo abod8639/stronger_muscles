@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_category_entity.dart';
 import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
 
 part 'product_category_model.freezed.dart';
@@ -22,4 +23,17 @@ class ProductCategory with _$ProductCategory {
   String getLocalizedName({String locale = 'en'}) {
     return name?.getValue(locale: locale) ?? '';
   }
+
+  ProductCategoryEntity toEntity() => ProductCategoryEntity(
+        id: id,
+        name: name?.toEntity(),
+      );
+
+  static ProductCategory fromEntity(ProductCategoryEntity entity) =>
+      ProductCategory(
+        id: entity.id,
+        name: entity.name != null
+            ? LocalizedString.fromEntity(entity.name!)
+            : null,
+      );
 }
