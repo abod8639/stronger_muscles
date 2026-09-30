@@ -16,10 +16,11 @@ class HomeController extends _$HomeController {
 
     final cachedProducts = productRepository.getCachedProducts();
     if (cachedProducts.isNotEmpty) {
-      return cachedProducts;
+      return cachedProducts.map((p) => ProductModel.fromEntity(p)).toList();
     }
 
-    return await productRepository.getProducts();
+    final products = await productRepository.getProducts();
+    return products.map((p) => ProductModel.fromEntity(p)).toList();
   }
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
@@ -31,7 +32,9 @@ class HomeController extends _$HomeController {
       final fetchedProducts = await productRepository.getProducts(
         categoryId: categoryId,
       );
-      state = AsyncData(fetchedProducts);
+      state = AsyncData(
+        fetchedProducts.map((p) => ProductModel.fromEntity(p)).toList(),
+      );
     } catch (e, st) {
       state = AsyncError(e, st);
     }
