@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
@@ -15,7 +15,7 @@ part 'checkout_controller.g.dart';
 
 class CheckoutState {
   final int currentStep;
-  final AddressModel? selectedAddress;
+  final AddressEntity? selectedAddress;
   final String selectedPaymentMethod;
   final String notes;
   final bool isProcessing;
@@ -30,7 +30,7 @@ class CheckoutState {
 
   CheckoutState copyWith({
     int? currentStep,
-    AddressModel? selectedAddress,
+    AddressEntity? selectedAddress,
     String? selectedPaymentMethod,
     String? notes,
     bool? isProcessing,
@@ -50,7 +50,7 @@ class CheckoutState {
 class CheckoutController extends _$CheckoutController {
   @override
   CheckoutState build() {
-    ref.listen<AsyncValue<List<AddressModel>>>(addressControllerProvider, (previous, next) {
+    ref.listen<AsyncValue<List<AddressEntity>>>(addressControllerProvider, (previous, next) {
       final newAddresses = next.value ?? [];
       if (state.selectedAddress == null && newAddresses.isNotEmpty) {
         final defaultAddr = newAddresses.where((addr) => addr.isDefault).firstOrNull ?? newAddresses.first;
@@ -69,7 +69,7 @@ class CheckoutController extends _$CheckoutController {
 
     final addresses = ref.read(addressControllerProvider).value ?? [];
 
-    AddressModel? initialAddress;
+    AddressEntity? initialAddress;
     if (addresses.isNotEmpty) {
       initialAddress =
           addresses.where((addr) => addr.isDefault).firstOrNull ??
@@ -91,7 +91,7 @@ class CheckoutController extends _$CheckoutController {
     }
   }
 
-  void setAddress(AddressModel address) {
+  void setAddress(AddressEntity address) {
     state = state.copyWith(selectedAddress: address);
   }
 
