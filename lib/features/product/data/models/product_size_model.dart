@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_size_entity.dart';
 
 part 'product_size_model.freezed.dart';
 part 'product_size_model.g.dart';
@@ -25,4 +26,16 @@ class ProductSize with _$ProductSize {
     if (!hasDiscount) return 0;
     return ((price - discountPrice!) / price * 100).roundToDouble();
   }
+
+  ProductSizeEntity toEntity() => ProductSizeEntity(
+        size: size,
+        price: price,
+        discountPrice: discountPrice,
+      );
+
+  static ProductSize fromEntity(ProductSizeEntity entity) => ProductSize(
+        size: entity.size,
+        price: entity.price,
+        discountPrice: entity.discountPrice,
+      );
 }
