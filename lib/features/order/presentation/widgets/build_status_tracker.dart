@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-Widget buildStatusTracker(bool isDark, bool isAr, OrderModel order) {
+Widget buildStatusTracker(bool isDark, bool isAr, OrderEntity order) {
   return Builder(
     builder: (context) {
       final l10n = AppLocalizations.of(context)!;
