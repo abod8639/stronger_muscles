@@ -1,18 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/app_card.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-
-const double _profileImageRadius = 35.0;
-const double _profileImageBorderWidth = 2.0;
-const double _profileIconSize = 35.0;
-const double _imageSpacing = 16.0;
-const double _containerMargin = 16.0;
-const double _containerPadding = 20.0;
-const double _containerBorderRadius = 16.0;
-const double _emailSpacing = 4.0;
-const double _shadowOpacity = 0.05;
-const double _shadowBlurRadius = 10.0;
 
 class ProfileHeader extends ConsumerWidget {
   const ProfileHeader({super.key});
@@ -25,28 +16,19 @@ class ProfileHeader extends ConsumerWidget {
 
     if (user == null) return const SizedBox.shrink();
 
-    return Container(
-      margin: const EdgeInsets.all(_containerMargin),
-      padding: const EdgeInsets.all(_containerPadding),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(_containerBorderRadius),
-        gradient: LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [
-            AppColors.primary.withAlpha(30),
-            theme.scaffoldBackgroundColor,
-          ],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.backgroundDark.withValues(alpha: _shadowOpacity),
-            blurRadius: _shadowBlurRadius,
-            offset: const Offset(0, 4),
-          ),
+    return AppCard(
+      margin: const EdgeInsets.all(AppDimens.spacingLg),
+      padding: const EdgeInsets.all(AppDimens.spacingXl),
+      borderRadius: AppDimens.borderRadiusLg,
+      gradient: LinearGradient(
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
+        colors: [
+          AppColors.primary.withAlpha(30),
+          theme.scaffoldBackgroundColor,
         ],
       ),
+      boxShadow: AppDimens.subtleShadow(theme.shadowColor),
       child: Row(
         children: [
           Container(
@@ -54,11 +36,11 @@ class ProfileHeader extends ConsumerWidget {
               shape: BoxShape.circle,
               border: Border.all(
                 color: AppColors.primary,
-                width: _profileImageBorderWidth,
+                width: 2.0,
               ),
             ),
             child: CircleAvatar(
-              radius: _profileImageRadius,
+              radius: 35.0,
               backgroundColor: AppColors.greyLight,
               backgroundImage:
                   user.photoUrl != null && user.photoUrl!.isNotEmpty
@@ -67,13 +49,13 @@ class ProfileHeader extends ConsumerWidget {
               child: user.photoUrl == null || user.photoUrl!.isEmpty
                   ? const Icon(
                       Icons.person,
-                      size: _profileIconSize,
+                      size: 35.0,
                       color: AppColors.greyDark,
                     )
                   : null,
             ),
           ),
-          const SizedBox(width: _imageSpacing),
+          const SizedBox(width: AppDimens.spacingLg),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +68,7 @@ class ProfileHeader extends ConsumerWidget {
                   ),
                   semanticsLabel: user.name,
                 ),
-                const SizedBox(height: _emailSpacing),
+                const SizedBox(height: AppDimens.spacingXs),
                 Text(
                   user.email,
                   style: theme.textTheme.bodyMedium?.copyWith(
