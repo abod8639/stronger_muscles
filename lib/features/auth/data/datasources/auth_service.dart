@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_stats_model.dart';
 import '../../../../core/config/api_config.dart';
 import '../../../../core/errors/failures.dart';
 import '../../../../core/services/api_service.dart';
@@ -183,24 +182,6 @@ class AuthService {
       // ignore error
     } finally {
       await StorageService.deleteToken();
-    }
-  }
-
-  Future<UsersStatsResponse> getUsersStats() async {
-    try {
-      final response = await _apiService.get(ApiConfig.usersStats);
-      return UsersStatsResponse.fromJson(response.data);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> deleteUser() async {
-    try {
-      await _apiService.delete(ApiConfig.customerProfile);
-      await StorageService.deleteToken();
-    } catch (e) {
-      rethrow;
     }
   }
 }
