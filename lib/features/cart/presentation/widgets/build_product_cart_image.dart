@@ -1,20 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 
-const double _imageSize = 100.0;
-const double _imageBorderRadius = 8.0;
+const double _imageSize = 85.0;
 
-/// Builds the product image with hero animation and error handling
-Widget buildProductCartImage(CartItemModel item) {
-  final imageUrl = item.primaryImageUrl ?? '';
+/// Builds the product image with hero animation, rounded corners, and error handling.
+Widget buildProductCartImage(CartItemEntity item) {
+  final imageUrl = item.primaryImageUrl ??
+      (item.product.imageUrls.isNotEmpty
+          ? item.product.imageUrls.first.thumbnail
+          : '');
 
   return Hero(
     tag: 'cart_product_${item.id}',
     child: ClipRRect(
-      borderRadius: BorderRadius.circular(_imageBorderRadius),
+      borderRadius: AppDimens.borderRadiusMd,
       child: imageUrl.isNotEmpty
           ? CachedNetworkImage(
               cacheManager: CustomCacheManager.instance,
