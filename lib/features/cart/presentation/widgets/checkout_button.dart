@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/functions/handle_checkout.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _checkoutButtonPadding = 32.0;
-const double _checkoutButtonVerticalPadding = 16.0;
 const double _checkoutButtonFontSize = 18.0;
-const double _checkoutButtonRadius = 12.0;
 
 class CheckoutButton extends ConsumerWidget {
   const CheckoutButton({super.key});
@@ -28,13 +26,13 @@ class CheckoutButton extends ConsumerWidget {
           disabledBackgroundColor: theme.colorScheme.surfaceContainerHighest,
           disabledForegroundColor: theme.colorScheme.onSurfaceVariant,
           padding: const EdgeInsets.symmetric(
-            horizontal: _checkoutButtonPadding,
-            vertical: _checkoutButtonVerticalPadding,
+            horizontal: AppDimens.spacingXl,
+            vertical: AppDimens.spacingLg,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(_checkoutButtonRadius),
+          shape: const RoundedRectangleBorder(
+            borderRadius: AppDimens.borderRadiusMd,
           ),
-          elevation: 2.0,
+          elevation: AppDimens.elevationSm,
         ),
         child: Text(
           localizations.checkout,
