@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/section_title.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
@@ -9,8 +11,6 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const int _maxOrdersToDisplay = 3;
-const double _horizontalPadding = 16.0;
-const double _listItemSpacing = 12.0;
 
 class RecentOrdersList extends ConsumerWidget {
   const RecentOrdersList({super.key});
@@ -32,18 +32,31 @@ class RecentOrdersList extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(context, theme, l10n, isAr),
+            SectionTitle(
+              title: l10n.recentOrders,
+              leading: Container(
+                width: 3,
+                height: 18,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: AppDimens.borderRadiusXs,
+                  boxShadow: AppDimens.coloredShadow(AppColors.primary, alpha: 0.3),
+                ),
+              ),
+              actionText: l10n.viewAll,
+              onActionTap: () => context.push(AppRoutes.orderView),
+            ),
             const SizedBox(height: 4),
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(
-                horizontal: _horizontalPadding,
-                vertical: 8,
+                horizontal: AppDimens.spacingLg,
+                vertical: AppDimens.spacingSm,
               ),
               itemCount: recentOrders.length,
               separatorBuilder: (context, index) =>
-                  const SizedBox(height: _listItemSpacing),
+                  const SizedBox(height: AppDimens.spacingMd),
               itemBuilder: (context, index) {
                 final order = recentOrders[index];
                 return OrderCard(
@@ -55,77 +68,12 @@ class RecentOrdersList extends ConsumerWidget {
                 );
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppDimens.spacingSm),
           ],
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('${l10n.error}: $e')),
-    );
-  }
-
-  Widget _buildHeader(
-    BuildContext context,
-    ThemeData theme,
-    AppLocalizations l10n,
-    bool isAr,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 3,
-                height: 18,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(4),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: .3),
-                      blurRadius: 4,
-                      offset: const Offset(1, 0),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              Text(
-                l10n.recentOrders,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 0.5,
-                ),
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () => context.push(AppRoutes.orderView),
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
-              visualDensity: VisualDensity.compact,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(l10n.viewAll),
-                const SizedBox(width: 4),
-                Icon(
-                  isAr ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
-                  size: 10,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
