@@ -40,7 +40,7 @@ final addressFormSelectedLabelProvider =
 );
 
 typedef _$AddressFormSelectedLabel = AutoDisposeNotifier<String>;
-String _$addressControllerHash() => r'cbae9a1cb4940339709a436ab6475b6747fb6cf0';
+String _$addressControllerHash() => r'c90738f01d4705d094cb8b0d7810d92964096bf4';
 
 /// See also [AddressController].
 @ProviderFor(AddressController)
