@@ -6,8 +6,9 @@ import 'package:stronger_muscles/features/home/presentation/controllers/categori
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/shortcuts_row.dart';
 import 'package:stronger_muscles/features/promo/presentation/widgets/promo_banner.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/section_title.dart';
+import 'package:stronger_muscles/core/utils/components/section_title.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/product_list.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class HomeView extends ConsumerWidget {
   static const double _bottomPadding = 20.0;
@@ -17,6 +18,8 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
+
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: SafeArea(
@@ -38,7 +41,15 @@ class HomeView extends ConsumerWidget {
                   if (selectedCategoryIndex == 0)
                     const SliverToBoxAdapter(child: PromoBanner()),
                   if (selectedCategoryIndex == 0)
-                    const SliverToBoxAdapter(child: SectionTitle()),
+                    SliverToBoxAdapter(
+                      child: SectionTitle(
+                        title: l10n.mostPopularOffers,
+                        actionText: l10n.seeAll,
+                        onActionTap: () {
+                          // TODO: Implement see all functionality
+                        },
+                      ),
+                    ),
                   const ProductList(),
                   const SliverToBoxAdapter(
                     child: SizedBox(height: _bottomPadding),
