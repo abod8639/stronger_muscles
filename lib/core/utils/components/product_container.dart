@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/image_section.dart';
@@ -39,15 +40,8 @@ class _ProductContainerState extends State<ProductContainer>
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withValues(alpha: 0.08),
-            blurRadius: 15.0,
-            offset: const Offset(0, 4),
-            spreadRadius: 2,
-          ),
-        ],
+        borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+        boxShadow: AppDimens.cardShadow(theme.shadowColor),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
