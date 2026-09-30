@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/functions/update_profile.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -149,7 +150,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                         foregroundColor: AppColors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: AppDimens.borderRadiusMd,
                         ),
                         elevation: 2,
                       ),
@@ -167,7 +168,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppDimens.borderRadiusMd,
                   ),
                   side: BorderSide(
                     color: isDark ? AppColors.greyDark : AppColors.grey,
@@ -203,13 +204,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.primary, width: 3),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withValues(alpha: .1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+              boxShadow: AppDimens.floatingShadow(),
             ),
             child: CircleAvatar(
               radius: 58,
@@ -274,19 +269,19 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
         labelText: label,
         prefixIcon: Icon(icon, color: AppColors.primary),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppDimens.borderRadiusMd,
           borderSide: BorderSide(
             color: isDark ? AppColors.greyDark : AppColors.grey,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppDimens.borderRadiusMd,
           borderSide: BorderSide(
             color: isDark ? AppColors.greyDark : AppColors.grey,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppDimens.borderRadiusMd,
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         filled: true,
