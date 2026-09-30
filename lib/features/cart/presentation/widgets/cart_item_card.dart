@@ -1,25 +1,31 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
-import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/app_card.dart';
+import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
+import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_details.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/build_product_cart_image.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class CartItemCard extends ConsumerWidget {
-  final CartItemModel item;
+  final CartItemEntity item;
 
   const CartItemCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-        final locale = Localizations.localeOf(context).languageCode;
 
-    // final cartNotifier = ref.watch(cartControllerProvider.notifier);
-
-    return InkWell(
+    return AppCard(
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppDimens.spacingLg,
+        vertical: AppDimens.spacingSm,
+      ),
+      padding: const EdgeInsets.all(AppDimens.spacingMd),
+      borderRadius: AppDimens.borderRadiusLg,
+      boxShadow: AppDimens.cardShadow(theme.shadowColor),
       onTap: () => context.push(
         AppRoutes.productDetails,
         extra: {
@@ -28,82 +34,29 @@ class CartItemCard extends ConsumerWidget {
           'selectedSize': item.selectedSize,
         },
       ),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  cacheManager: CustomCacheManager.instance,
-                  imageUrl: item.product.imageUrls.isNotEmpty
-                      ? item.product.imageUrls.first.thumbnail
-                      : '',
-                  width: 80,
-                  height: 80,
-                  fit: BoxFit.cover,
-                  errorWidget: (_, _, _) =>
-                      const Icon(Icons.image, size: 40),
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.product.getLocalizedName(locale: locale ),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    if (item.selectedFlavor != null ||
-                        item.selectedSize != null)
-                      Text(
-                        '${
-                          locale == "ar" ? item.selectedFlavor ?? "" : item.selectedFlavor ?? ""} ${locale == "ar" ? item.selectedSize ?? "" : item.selectedSize ?? ""}',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'LE ${item.product.baseEffectivePrice}',
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        
-                        Text(
-                          'LE ${item.product.basePrice}',
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.lineThrough,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // Product Image
+          buildProductCartImage(item),
+          const SizedBox(width: AppDimens.spacingMd),
 
-              SizedBox(width: 8),
-              // QuantityControls(product: item.product),
-            ],
+          // Product Details
+          Expanded(
+            child: buildProductCartDetails(item),
           ),
-        ),
+          const SizedBox(width: AppDimens.spacingSm),
+
+          // Quantity Controls
+          QuantityControls(
+            product: item.product,
+            selectedFlavor: item.selectedFlavor,
+            selectedSize: item.selectedSize,
+            axis: Axis.vertical,
+            iconSize: 22.0,
+            quantityFontSize: 14.0,
+          ),
+        ],
       ),
     );
   }
