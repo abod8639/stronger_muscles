@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/product/domain/entities/image_url_entity.dart';
 
 part 'image_url_model.freezed.dart';
 part 'image_url_model.g.dart';
@@ -17,4 +18,16 @@ class ImageUrl with _$ImageUrl {
 
   factory ImageUrl.fromJson(Map<String, dynamic> json) =>
       _$ImageUrlFromJson(json);
+
+  ImageUrlEntity toEntity() => ImageUrlEntity(
+        thumbnail: thumbnail,
+        medium: medium,
+        original: original,
+      );
+
+  static ImageUrl fromEntity(ImageUrlEntity entity) => ImageUrl(
+        thumbnail: entity.thumbnail,
+        medium: entity.medium,
+        original: entity.original,
+      );
 }
