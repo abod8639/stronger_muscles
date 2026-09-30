@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -79,21 +80,15 @@ Widget buildProductInfo(
         ),
       ),
       Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppDimens.spacingLg),
         decoration: BoxDecoration(
           color: isDark ? theme.colorScheme.surface : Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: AppDimens.borderRadiusLg,
           border: Border.all(
             color: AppColors.primary.withValues(alpha: 0.15),
             width: 1,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
+          boxShadow: AppDimens.subtleShadow(theme.shadowColor),
         ),
         child: Column(children: infoItems),
       ),
@@ -129,7 +124,7 @@ Widget _buildInfoRow({
           flex: 6,
           child: InkWell(
             onTap: onTap,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: AppDimens.borderRadiusXs,
             child: Text(
               value,
               textAlign: TextAlign.end,
