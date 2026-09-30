@@ -43,7 +43,7 @@ class ProfileController extends _$ProfileController {
     ref.invalidate(addressControllerProvider);
     try {
       if (Hive.isBoxOpen('addresses')) {
-        Hive.box<AddressEntity>('addresses').clear();
+        Hive.box('addresses').clear();
       }
     } catch (_) {}
   }
