@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/constants/app_text_styles.dart';
 
 class AppTheme {
@@ -82,8 +83,23 @@ class AppTheme {
         backgroundColor: AppColors.primaryDark,
         foregroundColor: AppColors.white,
         textStyle: AppTextStyles.button,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: AppDimens.borderRadiusSm),
       ),
     ),
   );
+
+  // ── Unified Shadows & Radius Access via Theme ──────────────────────────
+  static List<BoxShadow> cardShadow(BuildContext context) =>
+      AppDimens.cardShadow(Theme.of(context).shadowColor);
+
+  static List<BoxShadow> subtleShadow(BuildContext context) =>
+      AppDimens.subtleShadow(Theme.of(context).shadowColor);
+
+  static List<BoxShadow> bannerShadow([BuildContext? context]) =>
+      AppDimens.bannerShadow(context != null ? Theme.of(context).shadowColor : null);
+
+  static BorderRadius get radiusSm => AppDimens.borderRadiusSm;
+  static BorderRadius get radiusMd => AppDimens.borderRadiusMd;
+  static BorderRadius get radiusLg => AppDimens.borderRadiusLg;
+  static BorderRadius get radiusXl => AppDimens.borderRadiusXl;
 }
