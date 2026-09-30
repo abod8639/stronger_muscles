@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -127,7 +128,7 @@ class _MainImageState extends ConsumerState<MainImage> {
         color: Theme.of(
           context,
         ).colorScheme.surfaceContainerHighest.withValues(alpha: .3),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: AppDimens.borderRadiusLg,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
