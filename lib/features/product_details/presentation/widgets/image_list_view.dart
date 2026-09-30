@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -13,7 +14,6 @@ class ImageListView extends ConsumerWidget {
   static const double _horizontalMargin = 8.0;
   static const double _padding = 4.0;
   static const double _borderWidth = 3.0;
-  static const double _borderRadius = 8.0;
   static const Duration _animationDuration = Duration(milliseconds: 200);
 
   final ScrollController? scrollController;
@@ -75,19 +75,13 @@ class ImageListView extends ConsumerWidget {
               color: isSelected ? AppColors.primary : Colors.transparent,
               width: _borderWidth,
             ),
-            borderRadius: BorderRadius.circular(_borderRadius),
+            borderRadius: AppDimens.borderRadiusSm,
             boxShadow: isSelected
-                ? [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: .3),
-                      blurRadius: 8.0,
-                      spreadRadius: 1.0,
-                    ),
-                  ]
+                ? AppDimens.coloredShadow(AppColors.primary, alpha: 0.3)
                 : null,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(_borderRadius - _padding),
+            borderRadius: BorderRadius.circular(AppDimens.radiusSm - _padding),
             child: _buildThumbnailImage(context, index),
           ),
         ),
