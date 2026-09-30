@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
+import 'package:stronger_muscles/features/payment/data/datasources/payment_remote_datasource.dart';
 import 'package:stronger_muscles/features/payment/data/models/payment_init_result.dart';
 import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
 
@@ -83,7 +84,8 @@ void main() {
 
     setUp(() {
       fakeApi = FakeApiService();
-      repo = PaymentRepository(fakeApi);
+      final remoteDataSource = PaymentRemoteDataSource(fakeApi);
+      repo = PaymentRepositoryImpl(remoteDataSource);
     });
 
     test('initiatePayment posts correct path and payload', () async {
