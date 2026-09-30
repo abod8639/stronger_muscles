@@ -1,3 +1,5 @@
+import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
+
 class PaymentInitResult {
   final bool success;
   final String paymentUrl;
@@ -22,4 +24,21 @@ class PaymentInitResult {
       clientSecret: json['client_secret'] as String?,
     );
   }
+
+  PaymentResultEntity toEntity() => PaymentResultEntity(
+        success: success,
+        paymentUrl: paymentUrl,
+        transactionId: transactionId,
+        reference: reference,
+        clientSecret: clientSecret,
+      );
+
+  static PaymentInitResult fromEntity(PaymentResultEntity entity) =>
+      PaymentInitResult(
+        success: entity.success,
+        paymentUrl: entity.paymentUrl,
+        transactionId: entity.transactionId,
+        reference: entity.reference,
+        clientSecret: entity.clientSecret,
+      );
 }
