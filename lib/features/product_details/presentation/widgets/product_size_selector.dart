@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -94,7 +95,7 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
           color: isSelected ? primaryColor : primaryColor.withValues(alpha: .3),
           width: isSelected ? 2 : 1,
         ),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppDimens.borderRadiusSm,
       ),
     );
   }
