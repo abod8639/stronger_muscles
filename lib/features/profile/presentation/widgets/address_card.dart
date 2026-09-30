@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -14,7 +14,7 @@ const double _mapZoom = 15.0;
 const double _adapterTextLineHeight = 1.4;
 
 class AddressCard extends ConsumerStatefulWidget {
-  final AddressModel address;
+  final AddressEntity address;
 
   const AddressCard({super.key, required this.address});
 
@@ -25,7 +25,7 @@ class AddressCard extends ConsumerStatefulWidget {
 class _AddressCardState extends ConsumerState<AddressCard> {
   Future<List<Location>>? _geocodeFuture;
 
-  AddressModel get address => widget.address;
+  AddressEntity get address => widget.address;
 
   @override
   void initState() {
