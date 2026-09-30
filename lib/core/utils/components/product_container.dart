@@ -40,7 +40,7 @@ class _ProductContainerState extends State<ProductContainer>
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+        borderRadius: AppDimens.borderRadiusLg,
         boxShadow: AppDimens.cardShadow(theme.shadowColor),
       ),
       child: Column(
