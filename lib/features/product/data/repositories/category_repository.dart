@@ -1,8 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/datasources/category_remote_datasource.dart';
-import 'package:stronger_muscles/features/product/data/datasources/category_local_datasource.dart';
-import 'package:stronger_muscles/features/product/data/models/category_model.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
+import 'package:stronger_muscles/features/product/data/datasources/category_local_datasource.dart';
+import 'package:stronger_muscles/features/product/data/datasources/category_remote_datasource.dart';
+import 'package:stronger_muscles/features/product/domain/entities/category_entity.dart';
+import 'package:stronger_muscles/features/product/domain/repositories/category_repository.dart';
 
 part 'category_repository.g.dart';
 
@@ -22,30 +23,32 @@ CategoryLocalDataSource categoryLocalDataSource(
 
 @Riverpod(keepAlive: true)
 CategoryRepository categoryRepository(CategoryRepositoryRef ref) {
-  return CategoryRepository(
+  return CategoryRepositoryImpl(
     ref.watch(categoryRemoteDataSourceProvider),
     ref.watch(categoryLocalDataSourceProvider),
   );
 }
 
-class CategoryRepository {
+class CategoryRepositoryImpl implements CategoryRepository {
   final CategoryRemoteDataSource _remote;
   final CategoryLocalDataSource _local;
 
-  CategoryRepository(this._remote, this._local);
+  CategoryRepositoryImpl(this._remote, this._local);
 
-  List<CategoryModel> getCachedCategories() {
-    return _local.getCachedCategories();
+  @override
+  List<CategoryEntity> getCachedCategories() {
+    return _local.getCachedCategories().map((c) => c.toEntity()).toList();
   }
 
-  Future<List<CategoryModel>> getAllCategories() async {
+  @override
+  Future<List<CategoryEntity>> getAllCategories() async {
     try {
       final categories = await _remote.fetchCategoriesFromApi();
       await _local.cacheCategories(categories);
-      return categories;
+      return categories.map((c) => c.toEntity()).toList();
     } catch (e) {
       if (_local.getCachedCategories().isNotEmpty) {
-        return _local.getCachedCategories();
+        return _local.getCachedCategories().map((c) => c.toEntity()).toList();
       }
       rethrow;
     }
