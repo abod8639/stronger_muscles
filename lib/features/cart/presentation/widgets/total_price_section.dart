@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _totalLabelFontSize = 14.0;
-const double _totalPriceFontSize = 24.0;
+const double _totalPriceFontSize = 22.0;
 const double _itemCountFontSize = 12.0;
-const double _smallSpacing = 4.0;
 
 class TotalPriceSection extends ConsumerWidget {
   const TotalPriceSection({super.key});
@@ -34,15 +34,15 @@ class TotalPriceSection extends ConsumerWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: AppDimens.spacingSm),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
+                    horizontal: AppDimens.spacingSm,
                     vertical: 2.0,
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: .1),
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: AppDimens.borderRadiusPill,
                   ),
                   child: Text(
                     '${items.length} ${items.length == 1 ? localizations.item : localizations.items}',
@@ -55,9 +55,9 @@ class TotalPriceSection extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: _smallSpacing),
+            const SizedBox(height: AppDimens.spacingXs),
             Text(
-              '\$${cartNotifier.totalPrice.toStringAsFixed(2)}',
+              'LE ${cartNotifier.totalPrice.toStringAsFixed(2)}',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontSize: _totalPriceFontSize,
                 fontWeight: FontWeight.bold,
