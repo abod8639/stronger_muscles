@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -28,10 +29,10 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
             ),
             const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppDimens.spacingLg),
               decoration: BoxDecoration(
                 color: Colors.blue.withValues(alpha: .1),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppDimens.borderRadiusMd,
                 border: Border.all(color: Colors.blue.withValues(alpha: .3)),
               ),
               child: Row(
@@ -69,10 +70,10 @@ Widget buildUsageAndWarnings(ProductModel product, bool isDark) {
             ...product.warnings.map((warning) {
               return Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppDimens.spacingLg),
                 decoration: BoxDecoration(
                   color: Colors.red.withValues(alpha: .1),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppDimens.borderRadiusMd,
                   border: Border.all(color: Colors.red.withValues(alpha: .3)),
                 ),
                 child: Row(
