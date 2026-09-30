@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/app_card.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
-const double _containerMargin = 16.0;
-const double _containerPadding = 32.0;
-const double _containerBorderRadius = 20.0;
-const double _iconBackgroundSize = 20.0;
-const double _iconSize = 60.0;
-const double _titleIconSpacing = 24.0;
-const double _messageSpacing = 12.0;
-const double _buttonsSpacing = 20.0;
-const double _buttonBorderRadius = 12.0;
-const double _googleIconSize = 35.0;
-const double _buttonElevation = 2.0;
-const double _googleButtonPaddingHorizontal = 25.0;
-const double _googleButtonPaddingVertical = 10.0;
 
 class LoginPromptCard extends ConsumerWidget {
   const LoginPromptCard({super.key});
@@ -30,35 +18,26 @@ class LoginPromptCard extends ConsumerWidget {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      margin: const EdgeInsets.all(_containerMargin),
-      padding: const EdgeInsets.all(_containerPadding),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: BorderRadius.circular(_containerBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black.withValues(alpha: .1),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+    return AppCard(
+      margin: const EdgeInsets.all(AppDimens.spacingLg),
+      padding: const EdgeInsets.all(AppDimens.spacingXl),
+      borderRadius: AppDimens.borderRadiusXl,
+      boxShadow: AppDimens.floatingShadow(theme.shadowColor),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.all(_iconBackgroundSize),
+            padding: const EdgeInsets.all(AppDimens.spacingLg),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: .1),
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.shopping_bag_outlined,
-              size: _iconSize,
+              size: 60.0,
               color: AppColors.primary,
             ),
           ),
-          const SizedBox(height: _titleIconSpacing),
+          const SizedBox(height: AppDimens.spacingXl),
           Text(
             l10n.signInToYourAccount,
             style: theme.textTheme.headlineSmall?.copyWith(
@@ -67,7 +46,7 @@ class LoginPromptCard extends ConsumerWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: _messageSpacing),
+          const SizedBox(height: AppDimens.spacingMd),
           Text(
             l10n.loginMessage,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -75,7 +54,7 @@ class LoginPromptCard extends ConsumerWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: _buttonsSpacing),
+          const SizedBox(height: AppDimens.spacingLg),
           ElevatedButton.icon(
             onPressed: () => _handleLogin(context, ref),
             icon: const Icon(Icons.login),
@@ -84,13 +63,13 @@ class LoginPromptCard extends ConsumerWidget {
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_buttonBorderRadius),
+              shape: const RoundedRectangleBorder(
+                borderRadius: AppDimens.borderRadiusMd,
               ),
-              elevation: _buttonElevation,
+              elevation: AppDimens.elevationSm,
             ),
           ),
-          const SizedBox(height: _buttonsSpacing),
+          const SizedBox(height: AppDimens.spacingLg),
           ElevatedButton.icon(
             onPressed: () async {
               AppGuard.runSafeInternet(ref, () async {
@@ -101,25 +80,25 @@ class LoginPromptCard extends ConsumerWidget {
             },
             icon: const Icon(
               Icons.g_mobiledata_outlined,
-              size: _googleIconSize,
+              size: 35.0,
             ),
             label: Text(l10n.signInWithGoogle),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(
-                horizontal: _googleButtonPaddingHorizontal,
-                vertical: _googleButtonPaddingVertical,
+                horizontal: 25.0,
+                vertical: 10.0,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_buttonBorderRadius),
+              shape: const RoundedRectangleBorder(
+                borderRadius: AppDimens.borderRadiusMd,
               ),
-              elevation: _buttonElevation,
+              elevation: AppDimens.elevationSm,
             ),
           ),
-          const SizedBox(height: _buttonsSpacing),
+          const SizedBox(height: AppDimens.spacingLg),
           const AccountSettingsList(),
-          const SizedBox(height: _buttonsSpacing),
+          const SizedBox(height: AppDimens.spacingLg),
         ],
       ),
     );
@@ -127,9 +106,7 @@ class LoginPromptCard extends ConsumerWidget {
 
   Future<void> _handleLogin(BuildContext context, WidgetRef ref) async {
     return AppGuard.runSafeInternet(ref, () async {
-      ref.read(routerProvider).push(
-        AppRoutes.auth);
-    }
-    );
+      ref.read(routerProvider).push(AppRoutes.auth);
+    });
   }
 }
