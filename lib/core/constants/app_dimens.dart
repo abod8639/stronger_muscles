@@ -74,4 +74,22 @@ class AppDimens {
           blurStyle: BlurStyle.outer,
         ),
       ];
+
+  /// Floating / elevated shadow for prominent cards, dialogs, and floating sheets
+  static List<BoxShadow> floatingShadow([Color? shadowColor]) => [
+        BoxShadow(
+          color: (shadowColor ?? Colors.black).withValues(alpha: 0.1),
+          blurRadius: 20.0,
+          offset: const Offset(0, 10),
+        ),
+      ];
+
+  /// Colored glow or accent shadow for stat cards and key buttons
+  static List<BoxShadow> coloredShadow(Color color, {double alpha = 0.3}) => [
+        BoxShadow(
+          color: color.withValues(alpha: alpha),
+          blurRadius: 12.0,
+          offset: const Offset(0, 4),
+        ),
+      ];
 }
