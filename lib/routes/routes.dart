@@ -12,6 +12,7 @@ import 'package:stronger_muscles/features/product_details/presentation/pages/pro
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
@@ -194,7 +195,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.orderDetails,
         builder: (context, state) {
-          final order = state.extra as OrderModel;
+          final extra = state.extra;
+          final order = extra is OrderEntity
+              ? extra
+              : (extra as OrderModel).toEntity();
           return OrderDetailsView(order: order);
         },
       ),
