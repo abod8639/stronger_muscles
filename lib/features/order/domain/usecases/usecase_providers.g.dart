@@ -7,7 +7,7 @@ part of 'usecase_providers.dart';
 // **************************************************************************
 
 String _$getUserOrdersUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c1';
+    r'de1f8f90ad7466f68ebe21a5397714930ed453b7';
 
 /// See also [getUserOrdersUseCase].
 @ProviderFor(getUserOrdersUseCase)
@@ -23,9 +23,8 @@ final getUserOrdersUseCaseProvider =
 );
 
 typedef GetUserOrdersUseCaseRef = AutoDisposeProviderRef<GetUserOrdersUseCase>;
-
 String _$createOrderUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c2';
+    r'a1c7acef69597a6882cd522de1f6837807b710c8';
 
 /// See also [createOrderUseCase].
 @ProviderFor(createOrderUseCase)

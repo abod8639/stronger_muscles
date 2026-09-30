@@ -7,7 +7,7 @@ part of 'usecase_providers.dart';
 // **************************************************************************
 
 String _$getCartItemsUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c1';
+    r'5b804668e32cd593b6cdf055118c37d5b476740d';
 
 /// See also [getCartItemsUseCase].
 @ProviderFor(getCartItemsUseCase)
@@ -23,14 +23,11 @@ final getCartItemsUseCaseProvider =
 );
 
 typedef GetCartItemsUseCaseRef = AutoDisposeProviderRef<GetCartItemsUseCase>;
-
-String _$addToCartUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c2';
+String _$addToCartUseCaseHash() => r'30f192bb849c4e2b923ce92c1bb0beae3e7e5336';
 
 /// See also [addToCartUseCase].
 @ProviderFor(addToCartUseCase)
-final addToCartUseCaseProvider =
-    AutoDisposeProvider<AddToCartUseCase>.internal(
+final addToCartUseCaseProvider = AutoDisposeProvider<AddToCartUseCase>.internal(
   addToCartUseCase,
   name: r'addToCartUseCaseProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -41,9 +38,8 @@ final addToCartUseCaseProvider =
 );
 
 typedef AddToCartUseCaseRef = AutoDisposeProviderRef<AddToCartUseCase>;
-
 String _$removeFromCartUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c3';
+    r'2de013d104b1079ac1643353e4918e7f618869e8';
 
 /// See also [removeFromCartUseCase].
 @ProviderFor(removeFromCartUseCase)
@@ -58,10 +54,10 @@ final removeFromCartUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef RemoveFromCartUseCaseRef = AutoDisposeProviderRef<RemoveFromCartUseCase>;
-
+typedef RemoveFromCartUseCaseRef
+    = AutoDisposeProviderRef<RemoveFromCartUseCase>;
 String _$updateCartQuantityUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c4';
+    r'9fb97e529ec3aecb416bedd61e128eb3e8423130';
 
 /// See also [updateCartQuantityUseCase].
 @ProviderFor(updateCartQuantityUseCase)
@@ -78,14 +74,11 @@ final updateCartQuantityUseCaseProvider =
 
 typedef UpdateCartQuantityUseCaseRef
     = AutoDisposeProviderRef<UpdateCartQuantityUseCase>;
-
-String _$clearCartUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1c5';
+String _$clearCartUseCaseHash() => r'89f9a29fee356535f79f156500af9e4b6f516332';
 
 /// See also [clearCartUseCase].
 @ProviderFor(clearCartUseCase)
-final clearCartUseCaseProvider =
-    AutoDisposeProvider<ClearCartUseCase>.internal(
+final clearCartUseCaseProvider = AutoDisposeProvider<ClearCartUseCase>.internal(
   clearCartUseCase,
   name: r'clearCartUseCaseProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')

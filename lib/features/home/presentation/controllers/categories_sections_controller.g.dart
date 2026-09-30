@@ -24,7 +24,7 @@ final selectedCategoryIndexProvider =
 
 typedef _$SelectedCategoryIndex = AutoDisposeNotifier<int>;
 String _$categoriesSectionsControllerHash() =>
-    r'90bf962599024cfaf91cf3beffe8ef19507d7f81';
+    r'9523c21311c7cdcef46ed39537eeeed755adac68';
 
 /// See also [CategoriesSectionsController].
 @ProviderFor(CategoriesSectionsController)

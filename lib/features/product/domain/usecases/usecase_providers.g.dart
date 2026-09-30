@@ -7,7 +7,7 @@ part of 'usecase_providers.dart';
 // **************************************************************************
 
 String _$getProductsUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b1';
+    r'f4dcd69cd3f9b7d325d8a8a5006246f48f074e91';
 
 /// See also [getProductsUseCase].
 @ProviderFor(getProductsUseCase)
@@ -23,9 +23,8 @@ final getProductsUseCaseProvider =
 );
 
 typedef GetProductsUseCaseRef = AutoDisposeProviderRef<GetProductsUseCase>;
-
 String _$getCachedProductsUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2';
+    r'942f1133fd4e050853c8907abe25d291dc0d7125';
 
 /// See also [getCachedProductsUseCase].
 @ProviderFor(getCachedProductsUseCase)
@@ -40,10 +39,10 @@ final getCachedProductsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GetCachedProductsUseCaseRef = AutoDisposeProviderRef<GetCachedProductsUseCase>;
-
+typedef GetCachedProductsUseCaseRef
+    = AutoDisposeProviderRef<GetCachedProductsUseCase>;
 String _$getProductByIdUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b3';
+    r'dfca536ed09cb7a5daa8b642e2ba81f56fc412a5';
 
 /// See also [getProductByIdUseCase].
 @ProviderFor(getProductByIdUseCase)
@@ -58,10 +57,10 @@ final getProductByIdUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GetProductByIdUseCaseRef = AutoDisposeProviderRef<GetProductByIdUseCase>;
-
+typedef GetProductByIdUseCaseRef
+    = AutoDisposeProviderRef<GetProductByIdUseCase>;
 String _$searchProductsUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b4';
+    r'320cc8b12a6c328f74d5c2923b761a8e7452ec05';
 
 /// See also [searchProductsUseCase].
 @ProviderFor(searchProductsUseCase)
@@ -76,10 +75,10 @@ final searchProductsUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef SearchProductsUseCaseRef = AutoDisposeProviderRef<SearchProductsUseCase>;
-
+typedef SearchProductsUseCaseRef
+    = AutoDisposeProviderRef<SearchProductsUseCase>;
 String _$getAllCategoriesUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b5';
+    r'5d4a8d6eed54acd3b6be01d24c2e588079908e65';
 
 /// See also [getAllCategoriesUseCase].
 @ProviderFor(getAllCategoriesUseCase)
@@ -94,10 +93,10 @@ final getAllCategoriesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GetAllCategoriesUseCaseRef = AutoDisposeProviderRef<GetAllCategoriesUseCase>;
-
+typedef GetAllCategoriesUseCaseRef
+    = AutoDisposeProviderRef<GetAllCategoriesUseCase>;
 String _$getCachedCategoriesUseCaseHash() =>
-    r'a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b6';
+    r'4a9a3be53b9b934a74d834f108dc175ef2d5db7b';
 
 /// See also [getCachedCategoriesUseCase].
 @ProviderFor(getCachedCategoriesUseCase)
@@ -112,6 +111,7 @@ final getCachedCategoriesUseCaseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GetCachedCategoriesUseCaseRef = AutoDisposeProviderRef<GetCachedCategoriesUseCase>;
+typedef GetCachedCategoriesUseCaseRef
+    = AutoDisposeProviderRef<GetCachedCategoriesUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

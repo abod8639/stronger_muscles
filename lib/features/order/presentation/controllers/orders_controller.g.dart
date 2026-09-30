@@ -6,7 +6,7 @@ part of 'orders_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$orderRepositoryHash() => r'8ce64da2f2285c847db33d0e2b82fece41b13ed8';
+String _$orderRepositoryHash() => r'2f6367b235d318e3d201f36fdb406941e2b0053a';
 
 /// See also [orderRepository].
 @ProviderFor(orderRepository)
@@ -21,7 +21,7 @@ final orderRepositoryProvider = Provider<OrderRepository>.internal(
 );
 
 typedef OrderRepositoryRef = ProviderRef<OrderRepository>;
-String _$ordersControllerHash() => r'ffccc123bb99cfeb005d3db0d0f310f92ea59c1b';
+String _$ordersControllerHash() => r'62da876220e04d916c8082610645cb249a792702';
 
 /// See also [OrdersController].
 @ProviderFor(OrdersController)

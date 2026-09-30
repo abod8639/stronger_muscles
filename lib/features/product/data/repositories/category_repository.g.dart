@@ -41,7 +41,7 @@ final categoryLocalDataSourceProvider =
 
 typedef CategoryLocalDataSourceRef = ProviderRef<CategoryLocalDataSource>;
 String _$categoryRepositoryHash() =>
-    r'7caaf8996eeace65dcbb62a6cbdae1ba1092b5b8';
+    r'a6daef58c2d849b63e5a6cd1a77ca3464bdc4da2';
 
 /// See also [categoryRepository].
 @ProviderFor(categoryRepository)
