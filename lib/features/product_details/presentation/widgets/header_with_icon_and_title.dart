@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class HeaderWithIconandTitle extends StatelessWidget {
@@ -10,7 +11,7 @@ class HeaderWithIconandTitle extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppDimens.spacingLg),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -28,15 +29,15 @@ class HeaderWithIconandTitle extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(AppDimens.spacingSm),
             decoration: BoxDecoration(
               color: AppColors.primary.withValues(alpha: .15),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppDimens.borderRadiusSm,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.description_outlined,
               color: AppColors.primary,
-              size: 20,
+              size: AppDimens.iconSm,
             ),
           ),
 
