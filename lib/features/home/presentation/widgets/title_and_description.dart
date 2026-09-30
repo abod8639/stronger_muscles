@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/search/presentation/widgets/highlight_text.dart';
+import 'package:stronger_muscles/core/utils/components/highlight_text.dart';
 
 class TitleAndDescription extends StatelessWidget {
   const TitleAndDescription({super.key, required this.product, this.query});
