@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/auth/data/datasources/auth_service.dart';
+import 'package:stronger_muscles/features/auth/data/mappers/user_mapper.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 part 'auth_repository_impl.g.dart';
 
@@ -16,26 +17,29 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.authService);
 
   @override
-  Future<UserModel?> getCurrentUser() {
-    return authService.getCurrentUser();
+  Future<UserEntity?> getCurrentUser() async {
+    final model = await authService.getCurrentUser();
+    return model?.toEntity();
   }
 
   @override
-  Future<UserModel> googleSignIn({
+  Future<UserEntity> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
-  }) {
-    return authService.googleSignIn(
+  }) async {
+    final model = await authService.googleSignIn(
       email: email,
       name: name,
       photoUrl: photoUrl,
     );
+    return model.toEntity();
   }
 
   @override
-  Future<UserModel> login({required String email, required String password}) {
-    return authService.login(email: email, password: password);
+  Future<UserEntity> login({required String email, required String password}) async {
+    final model = await authService.login(email: email, password: password);
+    return model.toEntity();
   }
 
   @override
@@ -44,26 +48,28 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<UserModel> register({
+  Future<UserEntity> register({
     required String name,
     required String email,
     required String password,
-  }) {
-    return authService.register(name: name, email: email, password: password);
+  }) async {
+    final model = await authService.register(name: name, email: email, password: password);
+    return model.toEntity();
   }
 
   @override
-  Future<UserModel> updateProfile({
+  Future<UserEntity> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? photoUrl,
-  }) {
-    return authService.updateProfile(
+  }) async {
+    final model = await authService.updateProfile(
       name: name,
       email: email,
       phone: phone,
       photoUrl: photoUrl,
     );
+    return model.toEntity();
   }
 }
