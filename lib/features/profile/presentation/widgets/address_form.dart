@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/bottom_sheet_handle.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -32,11 +34,13 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     final intl10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       child: Form(
         key: _formKey,
         child: Column(
           children: [
+            const BottomSheetHandle(),
+            const SizedBox(height: AppDimens.spacingMd),
             Text(
               widget.address == null ? intl10n.addNewAddress : intl10n.editAddress,
               style: theme.textTheme.headlineSmall,
@@ -52,7 +56,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                       if (context.mounted) {
                         setState(() {}); // End loading
                         ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(
+                          SnackBar(
                             content: Text(intl10n.addressUpdatedSuccessfully),
                             backgroundColor: Colors.green,
                           ),
@@ -69,31 +73,31 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                       ),
                     )
                   : const Icon(Icons.my_location),
-              label:  Text(intl10n.useCurrentLocation),
+              label: Text(intl10n.useCurrentLocation),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimens.spacingXl),
             _buildField(controller.fullNameController, intl10n.fullName),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.spacingLg),
             _buildField(
               controller.phoneController,
               intl10n.phoneNumber,
               keyboardType: TextInputType.phone,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.spacingLg),
             _buildField(controller.streetController, intl10n.streetAddress),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.spacingLg),
             Row(
               children: [
                 Expanded(
                   child: _buildField(controller.cityController, intl10n.city),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppDimens.spacingLg),
                 Expanded(
-                  child: _buildField(controller.stateController,  intl10n.state),
+                  child: _buildField(controller.stateController, intl10n.state),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimens.spacingLg),
             Row(
               children: [
                 Expanded(
@@ -102,16 +106,17 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                     intl10n.postalCode,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppDimens.spacingLg),
                 Expanded(
-                  child: _buildField(controller.countryController, intl10n.country ),
+                  child: _buildField(controller.countryController, intl10n.country),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppDimens.spacingXl),
             _buildLabelSelector(controller, selectedLabel, context),
             const SizedBox(height: 32),
             _buildSubmitButton(controller, isLoading),
+            const SizedBox(height: AppDimens.spacingLg),
           ],
         ),
       ),
@@ -131,11 +136,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             labelText: label,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(AppDimens.radiusMd))),
           ),
           validator: (v) => v!.isEmpty ? intl10n.thisFieldIsRequired : null,
         );
-      }
+      },
     );
   }
 
@@ -172,6 +177,12 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const RoundedRectangleBorder(
+            borderRadius: AppDimens.borderRadiusMd,
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 14),
+        ),
         onPressed: isLoading
             ? null
             : () async {
