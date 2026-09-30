@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -43,7 +44,7 @@ class ShowReviewsList extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withValues(alpha: .15),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppDimens.borderRadiusMd,
                 ),
                 child: Text(
                   '${reviews.length}',
@@ -93,21 +94,15 @@ class ShowReviewsList extends StatelessWidget {
                     ]
                   : [Colors.white, AppColors.primary.withValues(alpha: .02)],
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppDimens.borderRadiusMd,
             border: Border.all(
               color: AppColors.primary.withValues(alpha: .15),
               width: 1,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: .05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            boxShadow: AppDimens.subtleShadow(theme.shadowColor),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppDimens.spacingLg),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -126,13 +121,7 @@ class ShowReviewsList extends StatelessWidget {
                           ],
                         ),
                         shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withValues(alpha: .3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
+                        boxShadow: AppDimens.coloredShadow(AppColors.primary, alpha: 0.3),
                       ),
                       child: Center(
                         child: Text(
@@ -198,7 +187,7 @@ class ShowReviewsList extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             color: AppColors.primary.withValues(alpha: .1),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: AppDimens.borderRadiusSm,
             border: Border.all(
               color: AppColors.primary.withValues(alpha: .3),
               width: 1,
@@ -228,13 +217,13 @@ class ShowReviewsList extends StatelessWidget {
       builder: (context) {
         final theme = Theme.of(context);
         return Container(
-          margin: const EdgeInsets.all(16),
-          padding: const EdgeInsets.all(24),
+          margin: const EdgeInsets.all(AppDimens.spacingLg),
+          padding: const EdgeInsets.all(AppDimens.spacingXl),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest.withValues(
               alpha: .3,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppDimens.borderRadiusMd,
             border: Border.all(
               color: AppColors.primary.withValues(alpha: .1),
               width: 1,
