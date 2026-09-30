@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/usecases/usecase_providers.dart';
 
 part 'address_controller.g.dart';
@@ -46,7 +46,7 @@ class AddressController extends _$AddressController {
   bool get isLoading => ref.read(addressFormLoadingProvider);
 
   @override
-  FutureOr<List<AddressModel>> build() async {
+  FutureOr<List<AddressEntity>> build() async {
     ref.onDispose(() {
       fullNameController.dispose();
       phoneController.dispose();
@@ -105,13 +105,13 @@ class AddressController extends _$AddressController {
     }
   }
 
-  AddressModel? get defaultAddress {
+  AddressEntity? get defaultAddress {
     final addresses = state.value ?? [];
     return addresses.where((addr) => addr.isDefault).firstOrNull ??
         (addresses.isNotEmpty ? addresses.first : null);
   }
 
-  void fillForm(AddressModel? address) {
+  void fillForm(AddressEntity? address) {
     if (address == null) {
       clearForm();
       ref.read(addressFormSelectedLabelProvider.notifier).setLabel(_defaultLabel);
@@ -130,7 +130,7 @@ class AddressController extends _$AddressController {
   }
 
   Future<void> saveAddress(int? id) async {
-    final model = AddressModel(
+    final entity = AddressEntity(
       id: id ?? 0,
       fullName: fullNameController.text,
       phone: phoneController.text,
@@ -147,7 +147,7 @@ class AddressController extends _$AddressController {
 
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
-      await ref.read(saveAddressUseCaseProvider).call(id: id, address: model);
+      await ref.read(saveAddressUseCaseProvider).call(id: id, address: entity);
       await fetchAddresses();
       clearForm();
     } finally {
