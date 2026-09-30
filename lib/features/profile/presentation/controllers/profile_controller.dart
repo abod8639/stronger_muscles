@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
@@ -26,7 +26,7 @@ class ProfileController extends _$ProfileController {
 
   List<OrderModel> get orders =>
       ref.watch(ordersControllerProvider).value ?? [];
-  List<AddressModel> get addresses =>
+  List<AddressEntity> get addresses =>
       ref.watch(addressControllerProvider).value ?? [];
 
   int get wishlistCount {
@@ -43,7 +43,7 @@ class ProfileController extends _$ProfileController {
     ref.invalidate(addressControllerProvider);
     try {
       if (Hive.isBoxOpen('addresses')) {
-        Hive.box<AddressModel>('addresses').clear();
+        Hive.box<AddressEntity>('addresses').clear();
       }
     } catch (_) {}
   }
