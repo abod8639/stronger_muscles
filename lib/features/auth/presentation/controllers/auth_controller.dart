@@ -1,20 +1,20 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
-import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 part 'auth_controller.g.dart';
 
 @riverpod
 class AuthController extends _$AuthController {
   @override
-  FutureOr<UserModel?> build() async {
+  FutureOr<UserEntity?> build() async {
     final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
     return await getCurrentUser();
   }
 
-  UserModel? get currentUser => state.value;
+  UserEntity? get currentUser => state.value;
   bool get isLoggedIn => state.value != null;
   bool get isLoading => state.isLoading;
 
