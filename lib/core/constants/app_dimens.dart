@@ -84,6 +84,19 @@ class AppDimens {
         ),
       ];
 
+  // ── Pill / Stadium Radius ──────────────────────────────────────────────
+  static const double radiusPill = 999.0;
+  static const BorderRadius borderRadiusPill = BorderRadius.all(Radius.circular(radiusPill));
+
+  /// Subtle soft shadow for delicate containers, chips, and review cards
+  static List<BoxShadow> softShadow([Color? shadowColor]) => [
+        BoxShadow(
+          color: (shadowColor ?? Colors.black).withValues(alpha: 0.04),
+          blurRadius: 10,
+          offset: const Offset(0, 4),
+        ),
+      ];
+
   /// Colored glow or accent shadow for stat cards and key buttons
   static List<BoxShadow> coloredShadow(Color color, {double alpha = 0.3}) => [
         BoxShadow(
