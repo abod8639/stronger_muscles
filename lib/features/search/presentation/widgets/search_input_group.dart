@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/product_search_autocomplete.dart';
@@ -51,13 +52,9 @@ class SearchInputGroup extends ConsumerWidget {
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest,
             shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: theme.colorScheme.onSurfaceVariant.withValues(alpha: .03),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
-            ],
+            boxShadow: AppDimens.subtleShadow(
+              theme.colorScheme.onSurfaceVariant,
+            ),
           ),
           child: IconButton(
             icon: Badge(
@@ -80,4 +77,3 @@ class SearchInputGroup extends ConsumerWidget {
     );
   }
 }
-
