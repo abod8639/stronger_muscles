@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 
 part 'address_model.freezed.dart';
 part 'address_model.g.dart';
@@ -31,6 +32,46 @@ class AddressModel with _$AddressModel {
 
   factory AddressModel.fromJson(Map<String, dynamic> json) =>
       _$AddressModelFromJson(json);
+
+  AddressEntity toEntity() {
+    return AddressEntity(
+      id: id,
+      userId: userId,
+      label: label,
+      fullName: fullName,
+      phone: phone,
+      street: street,
+      city: city,
+      state: state,
+      postalCode: postalCode,
+      country: country,
+      isDefault: isDefault,
+      latitude: latitude,
+      longitude: longitude,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+    );
+  }
+
+  factory AddressModel.fromEntity(AddressEntity entity) {
+    return AddressModel(
+      id: entity.id,
+      userId: entity.userId,
+      label: entity.label,
+      fullName: entity.fullName,
+      phone: entity.phone,
+      street: entity.street,
+      city: entity.city,
+      state: entity.state,
+      postalCode: entity.postalCode,
+      country: entity.country,
+      isDefault: entity.isDefault,
+      latitude: entity.latitude,
+      longitude: entity.longitude,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+    );
+  }
 
   String get fullAddress => [
     street,
