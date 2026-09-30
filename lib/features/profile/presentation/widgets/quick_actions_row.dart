@@ -2,23 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/app_card.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-
-const double _rowSpacing = 12.0;
-const double _cardPadding = 16.0;
-const double _cardBorderRadius = 12.0;
-const double _iconSize = 28.0;
-const double _valueFont = 20.0;
-const double _labelFont = 12.0;
-const double _labelSpacing = 8.0;
-const double _valueSpacing = 4.0;
-const double _shadowOpacity = 0.05;
-const double _shadowBlurRadius = 8.0;
 
 class QuickActionsRow extends ConsumerWidget {
   const QuickActionsRow({super.key});
@@ -31,7 +21,7 @@ class QuickActionsRow extends ConsumerWidget {
     final addressesCount = ref.watch(addressControllerProvider).value?.length ?? 0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
       child: Row(
         children: [
           Expanded(
@@ -44,7 +34,7 @@ class QuickActionsRow extends ConsumerWidget {
               onTap: () {},
             ),
           ),
-          const SizedBox(width: _rowSpacing),
+          const SizedBox(width: AppDimens.spacingMd),
           Expanded(
             child: _buildQuickActionCard(
               context,
@@ -55,7 +45,7 @@ class QuickActionsRow extends ConsumerWidget {
               onTap: () => context.go(AppRoutes.wishlist),
             ),
           ),
-          const SizedBox(width: _rowSpacing),
+          const SizedBox(width: AppDimens.spacingMd),
           Expanded(
             child: _buildQuickActionCard(
               context,
@@ -80,45 +70,33 @@ class QuickActionsRow extends ConsumerWidget {
     required VoidCallback onTap,
   }) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    return InkWell(
+
+    return AppCard(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(_cardBorderRadius),
-      child: Container(
-        padding: const EdgeInsets.all(_cardPadding),
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceDark : AppColors.white,
-          borderRadius: BorderRadius.circular(_cardBorderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.black.withValues(alpha: _shadowOpacity),
-              blurRadius: _shadowBlurRadius,
-              offset: const Offset(0, 2),
+      padding: const EdgeInsets.all(AppDimens.spacingLg),
+      borderRadius: AppDimens.borderRadiusMd,
+      boxShadow: AppDimens.subtleShadow(theme.shadowColor),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: AppDimens.iconMd),
+          const SizedBox(height: AppDimens.spacingSm),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: color,
             ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: _iconSize),
-            const SizedBox(height: _labelSpacing),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: _valueFont,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+          ),
+          const SizedBox(height: AppDimens.spacingXs),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 12.0,
+              color: AppColors.greyDark,
             ),
-            const SizedBox(height: _valueSpacing),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: _labelFont,
-                color: AppColors.greyDark,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
