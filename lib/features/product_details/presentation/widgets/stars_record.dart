@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/utils/components/rating_stars.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -19,66 +21,25 @@ class StarsRecord extends StatelessWidget {
     return totalRating / reviews.length;
   }
 
-  List<Icon> _buildStarRating(double stars) {
-    final fullStars = stars.floor();
-    final hasHalfStar = (stars - fullStars) >= 0.5;
-
-    final starIcons = <Icon>[];
-
-    // Add full stars
-    starIcons.addAll(
-      List.generate(
-        fullStars,
-        (index) =>
-            const Icon(Icons.star_rounded, color: Colors.amber, size: 20),
-      ),
-    );
-
-    // Add half star if applicable
-    if (hasHalfStar && fullStars < 5) {
-      starIcons.add(
-        const Icon(Icons.star_half_rounded, color: Colors.amber, size: 20),
-      );
-    }
-
-    // Add empty stars
-    final emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
-    starIcons.addAll(
-      List.generate(
-        emptyStars,
-        (index) => const Icon(
-          Icons.star_outline_rounded,
-          color: Colors.grey,
-          size: 20,
-        ),
-      ),
-    );
-
-    return starIcons;
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Use calculated average rating from reviews
     final averageRating = _calculateAverageRating();
     final actualReviewCount = reviews.length;
     final intl10n = AppLocalizations.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.only(top: 16),
-      child: Row(
-        children: [
-          ..._buildStarRating(averageRating),
-          const SizedBox(width: 8),
-          Text(
-            '${averageRating.toStringAsFixed(1)} ($actualReviewCount ${intl10n.reviews})',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.only(top: AppDimens.spacingLg),
+      child: RatingStars(
+        rating: averageRating,
+        starSize: 20.0,
+        showValue: true,
+        suffixText: '($actualReviewCount ${intl10n.reviews})',
+        textStyle: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
 }
+
