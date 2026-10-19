@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/bottom_icons_row.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_price.dart';
@@ -28,20 +29,34 @@ class ProductDetailsView extends ConsumerWidget {
   static const double _bottomPadding = 32.0;
 
   final ProductModel? product;
+  final ProductEntity? productEntity;
   final String? initialFlavor;
   final String? initialSize;
 
   const ProductDetailsView({
     super.key,
     this.product,
+    this.productEntity,
     this.initialFlavor,
     this.initialSize,
   });
 
+  const ProductDetailsView.fromEntity({
+    super.key,
+    required ProductEntity this.productEntity,
+    this.initialFlavor,
+    this.initialSize,
+  }) : product = null;
+
+  ProductModel? get _effectiveProduct =>
+      product ?? (productEntity != null ? ProductModel.fromEntity(productEntity!) : null);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final effectiveProd = _effectiveProduct;
+
     // If product is null, try to get it from arguments (though extra is preferred)
-    if (product == null) {
+    if (effectiveProd == null) {
       return Scaffold(
         body: Center(
           child: Text(
@@ -52,20 +67,19 @@ class ProductDetailsView extends ConsumerWidget {
       );
     }
 
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final locale = Localizations.localeOf(context).languageCode;
 
     final detailsState = ref.watch(
       productDetailsControllerProvider(
-        product!,
+        effectiveProd,
         initialFlavor: initialFlavor,
         initialSize: initialSize,
       ),
     );
     final detailsNotifier = ref.watch(
       productDetailsControllerProvider(
-        product!,
+        effectiveProd,
         initialFlavor: initialFlavor,
         initialSize: initialSize,
       ).notifier,
@@ -74,7 +88,7 @@ class ProductDetailsView extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(product!.getLocalizedName(locale: locale)),
+        title: Text(effectiveProd.getLocalizedName(locale: locale)),
         elevation: 0,
       ),
       body: CustomScrollView(
@@ -84,8 +98,8 @@ class ProductDetailsView extends ConsumerWidget {
         slivers: [
           SliverToBoxAdapter(
             child: MainImage(
-              product: product!,
-              onImageTap: (index) => _showImageViewer(context, index),
+              product: effectiveProd,
+              onImageTap: (index) => _showImageViewer(context, effectiveProd, index),
             ),
           ),
           SliverToBoxAdapter(
@@ -94,27 +108,27 @@ class ProductDetailsView extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildProductName(product!),
+                  buildProductName(effectiveProd),
                   const SizedBox(height: _smallSpacing),
                   buildProductPrice(
-                    product!,
+                    effectiveProd,
                     alternateEffectivePrice: detailsNotifier
-                        .getDisplayEffectivePrice(product!),
+                        .getDisplayEffectivePrice(effectiveProd),
                     alternateOriginalPrice: detailsNotifier.getDisplayPrice(
-                      product!,
+                      effectiveProd,
                     ),
                     alternateHasDiscount: detailsNotifier.getDisplayHasDiscount(
-                      product!,
+                      effectiveProd,
                     ),
                   ),
                   const SizedBox(height: _smallSpacing),
-                  buildProductBadges(product!, context, .1),
+                  buildProductBadges(effectiveProd, context, .1),
                   const SizedBox(height: _mediumSpacing),
-                  ImageListView(product: product!),
+                  ImageListView(product: effectiveProd),
                   const SizedBox(height: _mediumSpacing),
-                  if (product!.flavors.isNotEmpty) ...[
+                  if (effectiveProd.flavors.isNotEmpty) ...[
                     ProductFlavorSelector(
-                      product: product!,
+                      product: effectiveProd,
                       selectedFlavor: detailsState.selectedFlavor,
                       onFlavorSelected: (selectedFlavor) {
                         detailsNotifier.updateFlavor(selectedFlavor);
@@ -122,27 +136,27 @@ class ProductDetailsView extends ConsumerWidget {
                     ),
                     const SizedBox(height: _mediumSpacing),
                   ],
-                  if (product!.productSizes.isNotEmpty) ...[
+                  if (effectiveProd.productSizes.isNotEmpty) ...[
                     ProductSizeSelector(
-                      product: product!,
+                      product: effectiveProd,
                       initialSize: detailsState.selectedSizeObject?.size,
                       onSizeSelected: (selectedSize) {
-                        detailsNotifier.updateSize(product!, selectedSize);
+                        detailsNotifier.updateSize(effectiveProd, selectedSize);
                       },
                     ),
                     const SizedBox(height: _mediumSpacing),
                   ],
-                  if (product!.imageUrls.length > 1)
+                  if (effectiveProd.imageUrls.length > 1)
                     const SizedBox(height: _sectionSpacing),
-                  buildDescriptionSection(product!),
+                  buildDescriptionSection(effectiveProd),
                   const SizedBox(height: _sectionSpacing),
-                  buildProductInfo(product!, isDark, context, ref),
+                  buildProductInfo(effectiveProd, isDark, context, ref),
                   const SizedBox(height: _sectionSpacing),
-                  buildIngredientsSection(product!, isDark),
+                  buildIngredientsSection(effectiveProd, isDark),
                   const SizedBox(height: _sectionSpacing),
-                  buildUsageAndWarnings(product!, isDark),
+                  buildUsageAndWarnings(effectiveProd, isDark),
                   const SizedBox(height: _sectionSpacing),
-                  buildShowReviewsListSection(product!),
+                  buildShowReviewsListSection(effectiveProd),
                   const SizedBox(height: _bottomPadding),
                 ],
               ),
@@ -150,15 +164,15 @@ class ProductDetailsView extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomIconsRow(product: product!),
+      bottomNavigationBar: BottomIconsRow(product: effectiveProd),
     );
   }
 
-  void _showImageViewer(BuildContext context, int initialIndex) {
-    if (product!.imageUrls.isEmpty) return;
+  void _showImageViewer(BuildContext context, ProductModel currentProduct, int initialIndex) {
+    if (currentProduct.imageUrls.isEmpty) return;
 
     MultiImageProvider multiImageProvider = MultiImageProvider(
-      product!.imageUrls
+      currentProduct.imageUrls
           .map(
             (url) => CachedNetworkImageProvider(
               url.original,
