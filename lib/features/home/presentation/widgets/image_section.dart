@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
+import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/image_indicators.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'image_indicators.dart';
 
 class ImageSection extends StatefulWidget {
   const ImageSection({super.key, required this.widget});
@@ -45,14 +46,10 @@ class _ImageSectionState extends State<ImageSection> {
             height: double.infinity,
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerLowest,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16.0),
-              ),
+              borderRadius: AppRadius.top(AppRadius.lg),
             ),
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16.0),
-              ),
+              borderRadius: AppRadius.top(AppRadius.lg),
               child: images.isEmpty
                   ? buildNoImage(theme)
                   : PageView.builder(
@@ -77,37 +74,17 @@ class _ImageSectionState extends State<ImageSection> {
                     ),
             ),
           ),
-
           if (images.length > 1)
             ImageIndicators(
               product: widget.widget.product,
               selectedImageIndex: _selectedImageIndex,
             ),
-
           if (widget.widget.product.discountPrice != null)
-          Positioned(
-            top: 12,
-             right: 15,
-              child: buildProductBadges( widget.widget.product, context, .5))
-            // Positioned(
-            //   top: 12,
-            //   right: 15,
-            //   child: Container(
-            //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //     decoration: BoxDecoration(
-            //       color: Colors.redAccent,
-            //       borderRadius: BorderRadius.circular(8),
-            //     ),
-            //     child: const Text(
-            //       'خصم',
-            //       style: TextStyle(
-            //         color: Colors.white,
-            //         fontSize: 10,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned(
+              top: 12.0,
+              right: 15.0,
+              child: buildProductBadges(widget.widget.product, context, 0.5),
+            ),
         ],
       ),
     );
@@ -120,10 +97,10 @@ class _ImageSectionState extends State<ImageSection> {
         color: isBackgroundWhite
             ? Colors.white.withValues(alpha: .9)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.allMd,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.allMd,
         child: CachedNetworkImage(
           cacheManager: CustomCacheManager.instance,
           imageUrl: url,
@@ -138,7 +115,7 @@ class _ImageSectionState extends State<ImageSection> {
   Widget buildShimmerEffect(ThemeData theme) {
     return Center(
       child: CircularProgressIndicator(
-        strokeWidth: 2,
+        strokeWidth: 2.0,
         color: theme.colorScheme.primary.withValues(alpha: .5),
       ),
     );
@@ -153,10 +130,10 @@ class _ImageSectionState extends State<ImageSection> {
             children: [
               Icon(
                 Icons.image_not_supported_outlined,
-                size: 40,
+                size: 40.0,
                 color: theme.colorScheme.outline,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 4.0),
               Text(
                 AppLocalizations.of(context)?.noImagesFound ?? 'No images available',
                 style: theme.textTheme.labelSmall,
