@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_product_card.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/image_indicators.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';

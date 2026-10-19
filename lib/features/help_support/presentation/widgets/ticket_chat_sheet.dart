@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/components/bottom_sheet_handle.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
 

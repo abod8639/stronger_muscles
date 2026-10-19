@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/components/bottom_sheet_handle.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
