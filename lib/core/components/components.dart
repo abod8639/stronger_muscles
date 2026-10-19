@@ -12,3 +12,4 @@ export 'app_card.dart';
 export 'app_badge.dart';
 export 'app_info_row.dart';
 export 'app_step_progress.dart';
+export 'app_secure_badge.dart';
