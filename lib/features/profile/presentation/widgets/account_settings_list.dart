@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
@@ -27,8 +28,8 @@ class AccountSettingsList extends ConsumerWidget {
     return AppCard(
       margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
       padding: EdgeInsets.zero,
-      borderRadius: AppDimens.borderRadiusLg,
-      boxShadow: AppDimens.cardShadow(theme.shadowColor),
+      borderRadius: AppRadius.allLg,
+      boxShadow: AppShadows.ofCard(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
