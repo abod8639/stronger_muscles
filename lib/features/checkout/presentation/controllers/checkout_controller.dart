@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
+import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
+import 'package:stronger_muscles/features/checkout/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
-import 'package:stronger_muscles/routes/routes.dart';
-
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 part 'checkout_controller.g.dart';
 
@@ -20,7 +19,7 @@ class CheckoutState {
   final String notes;
   final bool isProcessing;
 
-  CheckoutState({
+  const CheckoutState({
     this.currentStep = 0,
     this.selectedAddress,
     this.selectedPaymentMethod = 'cash',
@@ -121,38 +120,19 @@ class CheckoutController extends _$CheckoutController {
 
     try {
       final cartNotifier = ref.read(cartControllerProvider.notifier);
-      final orderRepository = ref.read(orderRepositoryProvider);
+      final placeOrderUseCase = ref.read(placeOrderUseCaseProvider);
 
-      final payload = {
-        "address_id": state.selectedAddress!.id,
-        "payment_method": state.selectedPaymentMethod,
-        "notes": state.notes,
-        "items": cartNotifier.cartItems.map((item) {
-          return {
-            "product_id": item.product.id,
-            "quantity": item.quantity,
-            "selected_flavor": item.selectedFlavor,
-            "selected_size": item.selectedSize,
-          };
-        }).toList(),
-      };
+      final params = CheckoutParams(
+        addressId: state.selectedAddress!.id,
+        paymentMethod: state.selectedPaymentMethod,
+        notes: state.notes,
+        customerName: state.selectedAddress?.fullName,
+        items: cartNotifier.cartItems
+            .map((item) => CheckoutItemEntity.fromCartItem(item))
+            .toList(),
+      );
 
-      final response = await orderRepository.createOrder(payload);
-
-      // If online card payment is selected, initiate payment gateway flow
-      if (state.selectedPaymentMethod == 'card' ||
-          state.selectedPaymentMethod == 'paymob' ||
-          state.selectedPaymentMethod == 'stripe') {
-        final orderId = response['data']?['id'];
-        if (orderId != null) {
-          final paymentRepo = ref.read(paymentRepositoryProvider);
-          await paymentRepo.initiatePayment(
-            orderId: orderId,
-            gateway: state.selectedPaymentMethod == 'stripe' ? 'stripe' : 'paymob',
-            firstName: state.selectedAddress?.fullName,
-          );
-        }
-      }
+      await placeOrderUseCase(params);
 
       await cartNotifier.clearCart();
 
@@ -165,8 +145,9 @@ class CheckoutController extends _$CheckoutController {
     } catch (e) {
       if (!context.mounted) return;
       final failedText = l10n?.failedToPlaceOrder ?? 'Failed to place order';
-      ScaffoldMessenger.of(context).
-      showSnackBar(SnackBar(content: Text('$failedText: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$failedText: $e')),
+      );
     } finally {
       state = state.copyWith(isProcessing: false);
     }
