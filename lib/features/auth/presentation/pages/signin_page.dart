@@ -2,56 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_header.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_switch_prompt.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/login_form.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-class SignInPage extends ConsumerStatefulWidget {
+class SignInPage extends ConsumerWidget {
   final VoidCallback? onSignUpTap;
 
   const SignInPage({super.key, this.onSignUpTap});
 
-  @override
-  ConsumerState<SignInPage> createState() => _SignInPageState();
-}
-
-class _SignInPageState extends ConsumerState<SignInPage> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-  bool _passwordVisible = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _onLoginPressed() {
+  void _onLogin(BuildContext context, WidgetRef ref, String email, String password) {
     AppGuard.runSafeInternet(ref, () async {
-      if (_formKey.currentState!.validate()) {
-        await ref.read(authControllerProvider.notifier).signInWithEmail(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-            );
-      }
+      await ref.read(authControllerProvider.notifier).signInWithEmail(
+            email: email,
+            password: password,
+          );
     });
   }
 
+  void _onGoogleSignIn(BuildContext context, WidgetRef ref) {
+    AppGuard.runSafeInternet(ref, () async {
+      await ref.read(authControllerProvider.notifier).signInWithGoogle();
+    });
+  }
+
+  void _onForgotPassword(BuildContext context, AppLocalizations l10n) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(l10n.forgotPasswordNotImplemented),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     // Listen to authentication changes
     ref.listen(authControllerProvider, (previous, next) {
@@ -59,7 +50,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              '${localizations.error}: ${next.error}\n${localizations.loginErrorCheckCredentials}',
+              '${l10n.error}: ${next.error}\n${l10n.loginErrorCheckCredentials}',
             ),
             backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
@@ -68,11 +59,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       } else if (next is AsyncData &&
           next.value != null &&
           previous is AsyncLoading) {
-        // Show success message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(localizations.loginSuccess),
-            backgroundColor: Colors.green,
+            content: Text(l10n.loginSuccess),
+            backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -81,174 +71,40 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildInputFields(context, localizations),
-                const SizedBox(height: 12.0),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            localizations.forgotPasswordNotImplemented,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(localizations.forgotPassword),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                authState.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: _onLoginPressed,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          localizations.login,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                const SizedBox(height: 24.0),
-                _buildDivider(localizations),
-                const SizedBox(height: 24.0),
-                OutlinedButton.icon(
-                  onPressed: () => ref
-                      .read(authControllerProvider.notifier)
-                      .signInWithGoogle(),
-                  icon: const Icon(Icons.g_mobiledata, size: 30),
-                  label: Text(localizations.signInWithGoogle),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    side: BorderSide(color: Colors.grey[300]!),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                _buildSignUpRow(localizations),
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AuthHeader(
+                title: l10n.welcomeBack,
+                subtitle: l10n.signInToContinue,
+                icon: Icons.fitness_center_rounded,
+              ),
+              const SizedBox(height: 28.0),
+              LoginForm(
+                isLoading: authState.isLoading,
+                onLogin: (email, password) async {
+                  _onLogin(context, ref, email, password);
+                },
+                onGoogleSignIn: () => _onGoogleSignIn(context, ref),
+                onForgotPassword: () => _onForgotPassword(context, l10n),
+              ),
+              const SizedBox(height: 24.0),
+              AuthSwitchPrompt(
+                promptText: l10n.dontHaveAccount,
+                actionText: l10n.signUp,
+                onActionTap: onSignUpTap,
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildInputFields(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Text(
-          l10n.welcomeBack,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
-        ),
-        const SizedBox(height: 8.0),
-        Text(
-          l10n.signInToContinue,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
-        ),
-        const SizedBox(height: 32.0),
-        AuthTextField(
-          controller: _emailController,
-          label: l10n.email,
-          icon: const Icon(Icons.email_outlined),
-          keyboardType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.enterEmail;
-            }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-              return l10n.validEmail;
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16.0),
-        AuthTextField(
-          controller: _passwordController,
-          label: l10n.password,
-          icon: IconButton(
-            icon: Icon(
-                _passwordVisible ? Icons.visibility_off : Icons.visibility),
-            onPressed: () {
-              setState(() {
-                _passwordVisible = !_passwordVisible;
-              });
-            },
-          ),
-          isPassword: _passwordVisible,
-          textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.enterPassword;
-            }
-            if (value.length < 6) {
-              return l10n.passwordLength;
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDivider(AppLocalizations l10n) {
-    return Row(
-      children: [
-        Expanded(child: Divider(color: Colors.grey[300])),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(l10n.or, style: TextStyle(color: Colors.grey[500])),
-        ),
-        Expanded(child: Divider(color: Colors.grey[300])),
-      ],
-    );
-  }
-
-  Widget _buildSignUpRow(AppLocalizations l10n) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(l10n.dontHaveAccount, style: TextStyle(color: Colors.grey[600])),
-        TextButton(
-          onPressed: widget.onSignUpTap,
-          child: Text(
-            l10n.signUp,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
     );
   }
 }
