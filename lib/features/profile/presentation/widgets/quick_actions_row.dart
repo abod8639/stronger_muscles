@@ -70,8 +70,6 @@ class QuickActionsRow extends ConsumerWidget {
     required Color color,
     required VoidCallback onTap,
   }) {
-    final theme = Theme.of(context);
-
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.all(AppDimens.spacingLg),
