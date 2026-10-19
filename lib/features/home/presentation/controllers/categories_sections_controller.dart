@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
-import 'package:stronger_muscles/features/product/data/models/category_model.dart';
-import 'package:stronger_muscles/features/product/data/repositories/category_repository.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
+import 'package:stronger_muscles/features/home/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 
 part 'categories_sections_controller.g.dart';
 
@@ -19,52 +17,26 @@ class SelectedCategoryIndex extends _$SelectedCategoryIndex {
 @riverpod
 class CategoriesSectionsController extends _$CategoriesSectionsController {
   @override
-  FutureOr<List<SelectionsModel>> build() async {
-    final categoryRepository = ref.watch(categoryRepositoryProvider);
+  FutureOr<List<SelectionEntity>> build() async {
+    final getHomeShortcuts = ref.watch(getHomeShortcutsUseCaseProvider);
     final locale = ref.watch(languageControllerProvider);
     final langCode = locale.languageCode;
 
-    final cached = categoryRepository.getCachedCategories();
-    if (cached.isNotEmpty) {
-      _categories = cached.map((c) => CategoryModel.fromEntity(c)).toList();
-      return _getSelectionsList(_categories, langCode);
-    }
-
-    final fetched = await categoryRepository.getAllCategories();
-    _categories = fetched.map((c) => CategoryModel.fromEntity(c)).toList();
-    return _getSelectionsList(_categories, langCode);
+    return getHomeShortcuts(langCode: langCode);
   }
 
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
 
-  List<CategoryModel> _categories = [];
-  List<CategoryModel> get categories => _categories;
-
   Future<void> fetchCategories() async {
     state = const AsyncLoading();
-    final categoryRepository = ref.read(categoryRepositoryProvider);
+    final getHomeShortcuts = ref.read(getHomeShortcutsUseCaseProvider);
     final langCode = ref.read(languageControllerProvider).languageCode;
     try {
-      final fetched = await categoryRepository.getAllCategories();
-      _categories = fetched.map((c) => CategoryModel.fromEntity(c)).toList();
-      state = AsyncData(_getSelectionsList(_categories, langCode));
+      final fetched = await getHomeShortcuts(langCode: langCode);
+      state = AsyncData(fetched);
     } catch (e, st) {
       state = AsyncError(e, st);
     }
-  }
-
-  List<SelectionsModel> _getSelectionsList(
-      List<CategoryModel> categoryList, String langCode) {
-    return [
-      SelectionsModel(id: "", label: 'categoryHome', icon: Icons.home),
-      ...categoryList.map(
-        (cat) => SelectionsModel(
-          id: cat.id,
-          label: cat.getLocalizedName(locale: langCode),
-          icon: _getIconForCategory(cat.id),
-        ),
-      ),
-    ];
   }
 
   void updateIndex(int index) {
@@ -79,21 +51,5 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
             categoryId: selectedId.isEmpty ? null : selectedId,
           );
     }
-  }
-
-  IconData _getIconForCategory(String id) {
-    final icons = {
-      'creatine': Icons.cookie_outlined,
-      'protein': Icons.fitness_center,
-      'amino-acid': Icons.local_drink,
-      'vitamins': Icons.medication,
-      'preworkout': Icons.flash_on,
-      'recovery': Icons.healing,
-      'Fat-Burner': Icons.local_fire_department_outlined,
-      'health': Icons.favorite,
-      'mass-gainers': Icons.man_3_sharp,
-      'carb': Icons.bakery_dining_outlined,
-    };
-    return icons[id] ?? Icons.category;
   }
 }
