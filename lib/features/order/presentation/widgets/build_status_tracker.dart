@@ -1,61 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
-import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget buildStatusTracker(bool isDark, bool isAr, OrderEntity order) {
   return Builder(
     builder: (context) {
       final l10n = AppLocalizations.of(context)!;
+      final theme = Theme.of(context);
       final statusLower = order.status.toLowerCase();
-      if (statusLower == 'cancelled' || statusLower == 'canceled') {
-        return buildSection(
-          isDark,
-          child: Row(
-            children: [
-              const Icon(Icons.cancel, color: AppColors.error),
-              const SizedBox(width: 12),
-              Text(
-                l10n.orderCancelled,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppColors.error,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        );
-      }
+      final isCancelled = statusLower == 'cancelled' || statusLower == 'canceled';
 
       final steps = [
-        {'label': l10n.pending, 'status': 'pending'},
-        {'label': l10n.processing, 'status': 'processing'},
-        {'label': l10n.shipped, 'status': 'shipped'},
-        {'label': l10n.delivered, 'status': 'delivered'},
+        l10n.pending,
+        l10n.processing,
+        l10n.shipped,
+        l10n.delivered,
       ];
 
-      final currentStatus = order.status.toLowerCase();
-      int activeIndex = steps.indexWhere((s) => s['status'] == currentStatus);
-
-      // Mapping complex statuses if any
-      if (activeIndex == -1) {
-        if (currentStatus == 'pending') {
+      int activeIndex = 0;
+      switch (statusLower) {
+        case 'pending':
           activeIndex = 0;
-        } else if (currentStatus == 'processing') {
+          break;
+        case 'processing':
           activeIndex = 1;
-        } else if (currentStatus == 'shipped') {
+          break;
+        case 'shipped':
           activeIndex = 2;
-        } else if (currentStatus == 'delivered') {
+          break;
+        case 'delivered':
           activeIndex = 3;
-        } else {
+          break;
+        default:
           activeIndex = 0;
-        }
+          break;
       }
 
-      final theme = Theme.of(context);
-      return buildSection(
-        isDark,
+      return AppCard(
+        padding: const EdgeInsets.all(AppDimens.spacingLg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,93 +49,12 @@ Widget buildStatusTracker(bool isDark, bool isAr, OrderEntity order) {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                for (int i = 0; i < steps.length; i++) ...[
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            // Line before
-                            Expanded(
-                              child: Container(
-                                height: 2,
-                                color: i == 0
-                                    ? Colors.transparent
-                                    : (i <= activeIndex
-                                          ? AppColors.primary
-                                          : Colors.grey[300]),
-                              ),
-                            ),
-                            // Dot
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: i <= activeIndex
-                                    ? AppColors.primary
-                                    : Colors.grey[100],
-                                border: Border.all(
-                                  color: i <= activeIndex
-                                      ? AppColors.primary
-                                      : Colors.grey[300]!,
-                                  width: 2,
-                                ),
-                              ),
-                              child: Center(
-                                child: i < activeIndex
-                                    ? const Icon(
-                                        Icons.check,
-                                        size: 14,
-                                        color: Colors.white,
-                                      )
-                                    : Container(
-                                        width: 8,
-                                        height: 8,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: i == activeIndex
-                                              ? Colors.white
-                                              : Colors.grey[400],
-                                        ),
-                                      ),
-                              ),
-                            ),
-                            // Line after
-                            Expanded(
-                              child: Container(
-                                height: 2,
-                                color: i == steps.length - 1
-                                    ? Colors.transparent
-                                    : (i < activeIndex
-                                          ? AppColors.primary
-                                          : Colors.grey[300]),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          steps[i]['label']!,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: i <= activeIndex
-                                ? AppColors.primary
-                                : Colors.grey,
-                            fontWeight: i == activeIndex
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            fontSize: 10,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ],
+            const SizedBox(height: 20.0),
+            AppStepProgress(
+              steps: steps,
+              activeIndex: activeIndex,
+              isCancelled: isCancelled,
+              cancelledLabel: l10n.orderCancelled,
             ),
           ],
         ),
