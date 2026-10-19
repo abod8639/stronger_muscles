@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/utils/components/app_badge.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 
 Widget buildStatusBadge(String text, Color color) {
   return AppBadge(
