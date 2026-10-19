@@ -56,7 +56,7 @@ class CheckoutItemEntity {
 /// Pure domain parameters object passed to process the order placement.
 @immutable
 class CheckoutParams {
-  final String addressId;
+  final dynamic addressId;
   final String paymentMethod;
   final String notes;
   final List<CheckoutItemEntity> items;
