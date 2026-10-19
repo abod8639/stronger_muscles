@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/product_search_autocomplete.dart';
@@ -32,7 +31,9 @@ class SearchInputGroup extends ConsumerWidget {
             onTap: () {
               ref.read(productSearchControllerProvider.notifier).clearSearch();
               context.push(
-                AppRoutes.search, extra: controller.searchQuery);
+                AppRoutes.search,
+                extra: controller.searchQuery,
+              );
             },
           ),
         ),
@@ -52,7 +53,7 @@ class SearchInputGroup extends ConsumerWidget {
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest,
             shape: BoxShape.circle,
-            boxShadow: AppDimens.subtleShadow(
+            boxShadow: AppShadows.subtle(
               theme.colorScheme.onSurfaceVariant,
             ),
           ),
