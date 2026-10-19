@@ -1423,6 +1423,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Product data missing'**
   String get productDataMissing;
+
+  /// No description provided for @howCanWeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'How can we help you today?'**
+  String get howCanWeHelp;
+
+  /// No description provided for @helpSupportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find quick answers or reach out to our support team'**
+  String get helpSupportSubtitle;
+
+  /// No description provided for @searchFaqPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search questions, topics, supplements...'**
+  String get searchFaqPlaceholder;
+
+  /// No description provided for @contactUsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Available to assist with your orders and fitness goals'**
+  String get contactUsSubtitle;
+
+  /// No description provided for @faqTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequently Asked Questions'**
+  String get faqTitle;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allCategories;
+
+  /// No description provided for @categoryOrdersShipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders & Shipping'**
+  String get categoryOrdersShipping;
+
+  /// No description provided for @categorySupplements.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplements & Quality'**
+  String get categorySupplements;
+
+  /// No description provided for @categoryPaymentRefunds.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment & Refunds'**
+  String get categoryPaymentRefunds;
+
+  /// No description provided for @categoryAccountGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'Account & Nutrition'**
+  String get categoryAccountGeneral;
+
+  /// No description provided for @stillNeedHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Still need help?'**
+  String get stillNeedHelp;
+
+  /// No description provided for @stillNeedHelpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Our customer care & sports nutrition experts are here for you'**
+  String get stillNeedHelpSubtitle;
+
+  /// No description provided for @submitTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Support Ticket'**
+  String get submitTicket;
+
+  /// No description provided for @ticketSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get ticketSubject;
+
+  /// No description provided for @ticketSubjectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Brief description of your issue'**
+  String get ticketSubjectHint;
+
+  /// No description provided for @ticketCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Inquiry Category'**
+  String get ticketCategory;
+
+  /// No description provided for @ticketMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message Details'**
+  String get ticketMessage;
+
+  /// No description provided for @ticketMessageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide details so we can assist you quickly...'**
+  String get ticketMessageHint;
+
+  /// No description provided for @ticketPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get ticketPriority;
+
+  /// No description provided for @priorityNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get priorityNormal;
+
+  /// No description provided for @priorityUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get priorityUrgent;
+
+  /// No description provided for @ticketSubmittedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket Submitted Successfully!'**
+  String get ticketSubmittedTitle;
+
+  /// No description provided for @ticketSubmittedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for contacting us. Our support team will respond within 24 hours.'**
+  String get ticketSubmittedMessage;
+
+  /// No description provided for @noFaqsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching questions found'**
+  String get noFaqsFound;
+
+  /// No description provided for @tryDifferentKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Try different search terms or contact support directly'**
+  String get tryDifferentKeywords;
+
+  /// No description provided for @channelAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Now'**
+  String get channelAvailable;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @pleaseFillAllFields.
+  ///
+  /// In en, this message translates to:
+  /// **'Please fill in all required fields'**
+  String get pleaseFillAllFields;
 }
 
 class _AppLocalizationsDelegate

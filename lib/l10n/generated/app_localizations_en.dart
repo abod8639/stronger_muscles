@@ -678,4 +678,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productDataMissing => 'Product data missing';
+
+  @override
+  String get howCanWeHelp => 'How can we help you today?';
+
+  @override
+  String get helpSupportSubtitle =>
+      'Find quick answers or reach out to our support team';
+
+  @override
+  String get searchFaqPlaceholder => 'Search questions, topics, supplements...';
+
+  @override
+  String get contactUsSubtitle =>
+      'Available to assist with your orders and fitness goals';
+
+  @override
+  String get faqTitle => 'Frequently Asked Questions';
+
+  @override
+  String get allCategories => 'All';
+
+  @override
+  String get categoryOrdersShipping => 'Orders & Shipping';
+
+  @override
+  String get categorySupplements => 'Supplements & Quality';
+
+  @override
+  String get categoryPaymentRefunds => 'Payment & Refunds';
+
+  @override
+  String get categoryAccountGeneral => 'Account & Nutrition';
+
+  @override
+  String get stillNeedHelp => 'Still need help?';
+
+  @override
+  String get stillNeedHelpSubtitle =>
+      'Our customer care & sports nutrition experts are here for you';
+
+  @override
+  String get submitTicket => 'Submit Support Ticket';
+
+  @override
+  String get ticketSubject => 'Subject';
+
+  @override
+  String get ticketSubjectHint => 'Brief description of your issue';
+
+  @override
+  String get ticketCategory => 'Inquiry Category';
+
+  @override
+  String get ticketMessage => 'Message Details';
+
+  @override
+  String get ticketMessageHint =>
+      'Provide details so we can assist you quickly...';
+
+  @override
+  String get ticketPriority => 'Priority';
+
+  @override
+  String get priorityNormal => 'Normal';
+
+  @override
+  String get priorityUrgent => 'Urgent';
+
+  @override
+  String get ticketSubmittedTitle => 'Ticket Submitted Successfully!';
+
+  @override
+  String get ticketSubmittedMessage =>
+      'Thank you for contacting us. Our support team will respond within 24 hours.';
+
+  @override
+  String get noFaqsFound => 'No matching questions found';
+
+  @override
+  String get tryDifferentKeywords =>
+      'Try different search terms or contact support directly';
+
+  @override
+  String get channelAvailable => 'Online Now';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get pleaseFillAllFields => 'Please fill in all required fields';
 }
