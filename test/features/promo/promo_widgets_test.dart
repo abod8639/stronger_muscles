@@ -47,7 +47,12 @@ void main() {
     });
 
     testWidgets('does not render button when targetId is null', (tester) async {
-      final promoNoTarget = testPromo.copyWith(targetId: null);
+      const promoNoTarget = PromoEntity(
+        id: 2,
+        title: 'عرض بدون هدف',
+        imageUrl: 'https://example.com/banner.jpg',
+        targetId: null,
+      );
 
       await tester.pumpWidget(
         MaterialApp(
