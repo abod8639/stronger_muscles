@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -45,16 +46,11 @@ class ShortcutItem extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: theme.colorScheme.surfaceContainerHighest,
-                    boxShadow: [
-                      BoxShadow(
-                        color: isSelected
-                            ? theme.colorScheme.primary.withValues(alpha: .3)
-                            : theme.colorScheme.primary.withValues(alpha: .1),
-                        blurRadius: isSelected ? 6 : 3,
-                        offset: const Offset(2, 3),
-                        blurStyle: BlurStyle.outer,
-                      ),
-                    ],
+                    boxShadow: AppShadows.colored(
+                      theme.colorScheme.primary,
+                      alpha: isSelected ? 0.35 : 0.08,
+                      blur: isSelected ? 8.0 : 4.0,
+                    ),
                   ),
                   child: Icon(
                     item.icon,
@@ -62,16 +58,6 @@ class ShortcutItem extends ConsumerWidget {
                         ? theme.colorScheme.primary
                         : theme.colorScheme.onSurfaceVariant,
                     size: _iconInnerSize,
-                    shadows: [
-                      BoxShadow(
-                        color: isSelected
-                            ? theme.scaffoldBackgroundColor
-                            : theme.colorScheme.primary.withValues(alpha: .1),
-                        blurRadius: isSelected ? 6 : 3,
-                        offset: const Offset(2, 3),
-                        blurStyle: BlurStyle.outer,
-                      ),
-                    ],
                   ),
                 ),
                 const SizedBox(height: _labelSpacing),
