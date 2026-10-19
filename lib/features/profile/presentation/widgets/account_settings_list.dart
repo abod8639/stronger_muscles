@@ -78,7 +78,7 @@ class AccountSettingsList extends ConsumerWidget {
                         ),
                         decoration: const BoxDecoration(
                           color: AppColors.primary,
-                          borderRadius: AppDimens.borderRadiusSm,
+                          borderRadius: AppRadius.allSm,
                         ),
                         child: Text(
                           '$unreadNotificationCount',
@@ -138,6 +138,7 @@ class AccountSettingsList extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        shape: AppRadius.shapeLg,
         title: Text(l10n.language),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -183,7 +184,7 @@ class AccountSettingsList extends ConsumerWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.vertical(
-          bottom: isLast ? const Radius.circular(AppDimens.radiusLg) : Radius.zero,
+          bottom: isLast ? AppRadius.rLg : Radius.zero,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
