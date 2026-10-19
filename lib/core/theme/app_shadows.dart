@@ -124,4 +124,28 @@ class AppShadows {
           ]
         : floating();
   }
+
+  /// Top-directed shadow for bottom bars, checkout sticky bars, and bottom sheets.
+  static List<BoxShadow> topBar([Color? shadowColor]) => [
+        BoxShadow(
+          color: (shadowColor ?? Colors.black).withValues(alpha: 0.05),
+          blurRadius: 10.0,
+          offset: const Offset(0, -2),
+        ),
+      ];
+
+  /// Theme-adaptive top-directed shadow adjusting based on dark / light mode.
+  static List<BoxShadow> ofTopBar(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return isDark
+        ? [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.25),
+              blurRadius: 10.0,
+              offset: const Offset(0, -2),
+            ),
+          ]
+        : topBar();
+  }
 }
+
