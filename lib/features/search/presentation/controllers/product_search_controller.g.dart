@@ -12,7 +12,7 @@ String _$productSearchControllerHash() =>
 /// See also [ProductSearchController].
 @ProviderFor(ProductSearchController)
 final productSearchControllerProvider = AutoDisposeAsyncNotifierProvider<
-    ProductSearchController, List<ProductModel>>.internal(
+    ProductSearchController, List<ProductEntity>>.internal(
   ProductSearchController.new,
   name: r'productSearchControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -23,6 +23,6 @@ final productSearchControllerProvider = AutoDisposeAsyncNotifierProvider<
 );
 
 typedef _$ProductSearchController
-    = AutoDisposeAsyncNotifier<List<ProductModel>>;
+    = AutoDisposeAsyncNotifier<List<ProductEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
