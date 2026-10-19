@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
@@ -67,17 +68,17 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: AppDimens.borderRadiusLg,
+        borderRadius: AppRadius.allLg,
         border: address.isDefault
             ? Border.all(
                 color: AppColors.primary.withValues(alpha: .5),
                 width: 1.5,
               )
             : Border.all(color: Colors.transparent),
-        boxShadow: AppDimens.cardShadow(theme.shadowColor),
+        boxShadow: AppShadows.ofCard(context),
       ),
       child: ClipRRect(
-        borderRadius: AppDimens.borderRadiusLg,
+        borderRadius: AppRadius.allLg,
         child: Column(
           children: [
             _buildMapPreview(),
