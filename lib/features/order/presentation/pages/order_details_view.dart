@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_order_item.dart';
-import 'package:stronger_muscles/features/order/presentation/widgets/build_price_row.dart';
-import 'package:stronger_muscles/features/order/presentation/widgets/build_row_info.dart';
-import 'package:stronger_muscles/features/order/presentation/widgets/build_section.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/build_status_tracker.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -14,8 +14,8 @@ class OrderDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final isAr = Localizations.localeOf(context).languageCode == 'ar';
+    final isDark = context.isDark;
+    final isAr = context.isArabic;
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
@@ -29,17 +29,17 @@ class OrderDetailsView extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // تتبع حالة الطلب التفاعلي
+            // Status tracker with unified component
             buildStatusTracker(isDark, isAr, order),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16.0),
 
-            // تفاصيل الطلب العامة
-            buildSection(
-              isDark,
+            // Order General Information
+            AppCard(
+              padding: const EdgeInsets.all(AppDimens.spacingLg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -49,39 +49,32 @@ class OrderDetailsView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  buildRowInfo(l10n.orderId, '#${order.id}'),
-                  const SizedBox(height: 8),
-                  buildRowInfo(l10n.orderDate, formattedDate),
-                  const SizedBox(height: 8),
-                  buildRowInfo(
-                    l10n.paymentMethod,
-                    order.paymentMethod.toUpperCase(),
+                  const SizedBox(height: 12.0),
+                  AppInfoRow(label: l10n.orderId, value: '#${order.id}'),
+                  AppInfoRow(label: l10n.orderDate, value: formattedDate),
+                  AppInfoRow(
+                    label: l10n.paymentMethod,
+                    value: order.paymentMethod.toUpperCase(),
                   ),
-                  const SizedBox(height: 8),
-                  buildRowInfo(
-                    l10n.paymentStatus,
-                    order.paymentStatus == 'paid'
-                        ? l10n.paid
-                        : l10n.pending,
+                  AppInfoRow(
+                    label: l10n.paymentStatus,
+                    value: order.paymentStatus == 'paid' ? l10n.paid : l10n.pending,
                   ),
                   if (order.trackingNumber != null &&
-                      order.trackingNumber!.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    buildRowInfo(
-                      l10n.trackingNumber,
-                      order.trackingNumber!,
+                      order.trackingNumber!.isNotEmpty)
+                    AppInfoRow(
+                      label: l10n.trackingNumber,
+                      value: order.trackingNumber!,
                     ),
-                  ],
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16.0),
 
-            // عنوان التوصيل إن وجد
+            // Delivery Address if present
             if (order.shippingAddress != null) ...[
-              buildSection(
-                isDark,
+              AppCard(
+                padding: const EdgeInsets.all(AppDimens.spacingLg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,46 +84,43 @@ class OrderDetailsView extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    buildRowInfo(
-                      l10n.street,
-                      order.shippingAddress!.street,
+                    const SizedBox(height: 12.0),
+                    AppInfoRow(
+                      label: l10n.street,
+                      value: order.shippingAddress!.street,
                     ),
-                    const SizedBox(height: 8),
-                    buildRowInfo(
-                      l10n.city,
-                      order.shippingAddress!.city,
+                    AppInfoRow(
+                      label: l10n.city,
+                      value: order.shippingAddress!.city,
                     ),
                     if (order.phoneNumber != null &&
-                        order.phoneNumber!.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      buildRowInfo(
-                        l10n.phone,
-                        order.phoneNumber!,
+                        order.phoneNumber!.isNotEmpty)
+                      AppInfoRow(
+                        label: l10n.phone,
+                        value: order.phoneNumber!,
                       ),
-                    ],
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 16.0),
             ],
 
-            // عناصر الطلب
+            // Order Items
             Text(
               l10n.orderItems,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8.0),
             ...(order.items ?? []).map(
               (item) => buildOrderItem(item, isDark, isAr),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 16.0),
 
-            // ملخص الحساب
-            buildSection(
-              isDark,
+            // Payment Summary
+            AppCard(
+              padding: const EdgeInsets.all(AppDimens.spacingLg),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,27 +130,31 @@ class OrderDetailsView extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  buildPriceRow(l10n.subtotal, order.subtotal, isAr),
-                  buildPriceRow(l10n.shippingCost, order.shippingCost, isAr),
+                  const SizedBox(height: 12.0),
+                  AppPriceRow(
+                    label: l10n.subtotal,
+                    amount: order.subtotal,
+                  ),
+                  AppPriceRow(
+                    label: l10n.shippingCost,
+                    amount: order.shippingCost,
+                  ),
                   if (order.discount > 0)
-                    buildPriceRow(
-                      l10n.discount,
-                      order.discount,
-                      isAr,
+                    AppPriceRow(
+                      label: l10n.discount,
+                      amount: order.discount,
                       isDiscount: true,
                     ),
-                  const Divider(height: 20),
-                  buildPriceRow(
-                    l10n.totalAmount,
-                    order.totalAmount,
-                    isAr,
+                  const Divider(height: 20.0),
+                  AppPriceRow(
+                    label: l10n.totalAmount,
+                    amount: order.totalAmount,
                     isTotal: true,
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 20.0),
           ],
         ),
       ),
