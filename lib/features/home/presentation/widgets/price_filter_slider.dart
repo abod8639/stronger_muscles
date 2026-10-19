@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -16,7 +17,6 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
   @override
   void initState() {
     super.initState();
-    // Use Future.microtask to access ref safely or just read initial values
     final searchController = ref.read(productSearchControllerProvider.notifier);
     _currentRangeValues = RangeValues(
       searchController.filterMinPrice,
@@ -70,25 +70,23 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
             child: Text(
               '${l10n?.price ?? 'Price'}: ${minData.toStringAsFixed(0)} $currency',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-        const SizedBox(height: 24),
-        SizedBox(
+        const SizedBox(height: 24.0),
+        AppPrimaryButton(
+          text: l10n?.apply ?? 'Apply',
           width: double.infinity,
-          child: FilledButton(
-            onPressed: () {
-              ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
-                    effectiveValues.start,
-                    effectiveValues.end,
-                  );
-              Navigator.pop(context);
-            },
-            child: Text(l10n?.apply ?? 'Apply'),
-          ),
+          onPressed: () {
+            ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
+                  effectiveValues.start,
+                  effectiveValues.end,
+                );
+            Navigator.pop(context);
+          },
         ),
       ],
     );
