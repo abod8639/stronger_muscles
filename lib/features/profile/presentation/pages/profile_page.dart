@@ -14,9 +14,8 @@ import 'package:stronger_muscles/features/profile/presentation/widgets/recent_or
 import 'package:stronger_muscles/features/profile/presentation/widgets/saved_addresses_list.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/login_prompt_card.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
 
 const double _appBarExpandedHeight = 50.0;
 const double _contentVerticalSpacing = 16.0;
@@ -139,9 +138,7 @@ class ProfilePage extends ConsumerWidget {
             horizontal: _signOutButtonHorizontalPadding,
             vertical: _signOutButtonVerticalPadding,
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: AppDimens.borderRadiusMd,
-          ),
+          shape: AppRadius.shapeMd,
         ),
       ),
     );
