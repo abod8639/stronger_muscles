@@ -2,61 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/auth/presentation/widgets/auth_text_field.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_header.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_switch_prompt.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/signup_form.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
-class SignUpPage extends ConsumerStatefulWidget {
+class SignUpPage extends ConsumerWidget {
   final VoidCallback? onSignInTap;
+
   const SignUpPage({super.key, this.onSignInTap});
 
-  @override
-  ConsumerState<SignUpPage> createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends ConsumerState<SignUpPage> {
-  final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-  late final TextEditingController _confirmPasswordController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confirmPasswordController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  void _onSignUpPressed() {
+  void _onSignUp(
+    BuildContext context,
+    WidgetRef ref,
+    String name,
+    String email,
+    String password,
+  ) {
     AppGuard.runSafeInternet(ref, () async {
-      if (_formKey.currentState!.validate()) {
-        await ref.read(authControllerProvider.notifier).signUpWithEmail(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-              name: _nameController.text.trim(),
-            );
-      }
+      await ref.read(authControllerProvider.notifier).signUpWithEmail(
+            name: name,
+            email: email,
+            password: password,
+          );
+    });
+  }
+
+  void _onGoogleSignIn(BuildContext context, WidgetRef ref) {
+    AppGuard.runSafeInternet(ref, () async {
+      await ref.read(authControllerProvider.notifier).signInWithGoogle();
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     // Listen to authentication changes
     ref.listen(authControllerProvider, (previous, next) {
@@ -64,7 +48,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.error.toString()),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: AppColors.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       } else if (next is AsyncData &&
@@ -72,8 +57,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           previous is AsyncLoading) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(localizations.signUpSuccess),
-            backgroundColor: Colors.green,
+            content: Text(l10n.signUpSuccess),
+            backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -82,166 +67,39 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.transparent),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Center(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildInputFields(context, localizations),
-                authState.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : ElevatedButton(
-                        onPressed: _onSignUpPressed,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          localizations.signUp,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                const SizedBox(height: 24.0),
-                OutlinedButton.icon(
-                  onPressed: () => ref
-                      .read(authControllerProvider.notifier)
-                      .signInWithGoogle(),
-                  icon: const Icon(Icons.g_mobiledata, size: 30),
-                  label: Text(localizations.signInWithGoogle),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    side: BorderSide(color: Colors.grey[300]!),
-                  ),
-                ),
-                const SizedBox(height: 24.0),
-                _buildLoginRow(localizations),
-              ],
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AuthHeader(
+                title: l10n.createAccount,
+                subtitle: l10n.signUpToGetStarted,
+                icon: Icons.person_add_alt_1_rounded,
+              ),
+              const SizedBox(height: 28.0),
+              SignUpForm(
+                isLoading: authState.isLoading,
+                onSignUp: (name, email, password) async {
+                  _onSignUp(context, ref, name, email, password);
+                },
+                onGoogleSignIn: () => _onGoogleSignIn(context, ref),
+              ),
+              const SizedBox(height: 24.0),
+              AuthSwitchPrompt(
+                promptText: l10n.alreadyHaveAccount,
+                actionText: l10n.login,
+                onActionTap: onSignInTap,
+              ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildInputFields(
-    BuildContext context,
-    AppLocalizations l10n,
-  ) {
-    final theme = Theme.of(context);
-    return Column(
-      children: [
-        Text(
-          l10n.createAccount,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
-        ),
-        const SizedBox(height: 8.0),
-        Text(
-          l10n.signUpToGetStarted,
-          textAlign: TextAlign.center,
-          style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey[600]),
-        ),
-        const SizedBox(height: 32.0),
-        AuthTextField(
-          controller: _nameController,
-          label: l10n.fullName,
-          icon: const Icon(Icons.person_outline),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.enterName;
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16.0),
-        AuthTextField(
-          controller: _emailController,
-          label: l10n.email,
-          icon: const Icon(Icons.email_outlined),
-          keyboardType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.enterEmail;
-            }
-            if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-              return l10n.validEmail;
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16.0),
-        AuthTextField(
-          controller: _passwordController,
-          label: l10n.password,
-          icon: const Icon(Icons.lock_outline),
-          isPassword: true,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.enterPassword;
-            }
-            if (value.length < 6) {
-              return l10n.passwordLength;
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 16.0),
-        AuthTextField(
-          controller: _confirmPasswordController,
-          label: l10n.confirmPassword,
-          icon: const Icon(Icons.lock_outline),
-          isPassword: true,
-          textInputAction: TextInputAction.done,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return l10n.confirmYourPassword;
-            }
-            if (value != _passwordController.text) {
-              return l10n.passwordsDoNotMatch;
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 32.0),
-      ],
-    );
-  }
-
-  Widget _buildLoginRow(AppLocalizations l10n) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          l10n.alreadyHaveAccount,
-          style: TextStyle(color: Colors.grey[600]),
-        ),
-        TextButton(
-          onPressed: widget.onSignInTap,
-          child: Text(
-            l10n.login,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
     );
   }
 }
