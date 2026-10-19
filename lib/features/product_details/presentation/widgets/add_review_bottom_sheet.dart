@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/features/product/domain/entities/review_entity.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_reviews_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -111,7 +112,7 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
       ),
       decoration: BoxDecoration(
         color: isDark ? theme.colorScheme.surface : Colors.white,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        borderRadius: AppRadius.topBottomSheet,
       ),
       child: Form(
         key: _formKey,
@@ -121,15 +122,10 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Drag handle
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: AppBottomSheetHandle(),
                 ),
               ),
 
@@ -204,12 +200,12 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
                   fillColor: isDark
                       ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4)
                       : Colors.grey.shade100,
-                  border: OutlineInputBorder(
-                    borderRadius: AppDimens.borderRadiusMd,
+                  border: const OutlineInputBorder(
+                    borderRadius: AppRadius.allMd,
                     borderSide: BorderSide.none,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: AppDimens.borderRadiusMd,
+                  focusedBorder: const OutlineInputBorder(
+                    borderRadius: AppRadius.allMd,
                     borderSide: BorderSide(color: AppColors.primary, width: 1.5),
                   ),
                 ),
@@ -231,9 +227,7 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: AppDimens.borderRadiusMd,
-                    ),
+                    shape: AppRadius.shapeMd,
                   ),
                   child: _isLoading
                       ? const SizedBox(
