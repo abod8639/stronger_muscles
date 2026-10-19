@@ -1,18 +1,18 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/components/highlight_text.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/search_history_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-
 
 class ProductSearchAutocomplete extends ConsumerStatefulWidget {
   final bool autofocus;
@@ -55,6 +55,7 @@ class _ProductSearchAutocompleteState
     final l10n = AppLocalizations.of(context)!;
     final controller = ref.watch(productSearchControllerProvider.notifier);
     final homeProducts = ref.watch(homeControllerProvider).value ?? [];
+    final homeEntities = homeProducts.map((p) => p.toEntity()).toList();
     final searchHistory = ref.watch(searchHistoryProvider);
     final locale = l10n.localeName;
 
@@ -63,8 +64,8 @@ class _ProductSearchAutocompleteState
           padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingMd),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppDimens.radiusXl),
-            boxShadow: AppDimens.subtleShadow(
+            borderRadius: AppRadius.allXl,
+            boxShadow: AppShadows.subtle(
               theme.colorScheme.onSurfaceVariant,
             ),
           ),
@@ -111,7 +112,12 @@ class _ProductSearchAutocompleteState
     return LayoutBuilder(
       builder: (context, constraints) => RawAutocomplete<Object>(
         displayStringForOption: (option) {
-          if (option is ProductModel) return option.getLocalizedName(locale: locale);
+          if (option is ProductEntity) {
+            return option.getLocalizedName(locale: locale);
+          }
+          if (option is ProductModel) {
+            return option.getLocalizedName(locale: locale);
+          }
           if (option is String) return option;
           return "";
         },
@@ -126,20 +132,26 @@ class _ProductSearchAutocompleteState
           }
 
           // Search Logic: Intelligent Filtering & Ranking
-          final List<ProductModel> exactMatches = [];
-          final List<ProductModel> prefixMatches = [];
-          final List<ProductModel> containsMatches = [];
+          final List<ProductEntity> exactMatches = [];
+          final List<ProductEntity> prefixMatches = [];
+          final List<ProductEntity> containsMatches = [];
 
-          for (final product in homeProducts) {
+          for (final product in homeEntities) {
             final name = product.getLocalizedName(locale: locale).toLowerCase();
             final brand = (product.brand ?? "").toLowerCase();
-            final category = (product.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
+            final category =
+                (product.category?.getLocalizedName(locale: locale) ?? "")
+                    .toLowerCase();
 
             if (name == query || brand == query || category == query) {
               exactMatches.add(product);
-            } else if (name.startsWith(query) || brand.startsWith(query) || category.startsWith(query)) {
+            } else if (name.startsWith(query) ||
+                brand.startsWith(query) ||
+                category.startsWith(query)) {
               prefixMatches.add(product);
-            } else if (name.contains(query) || brand.contains(query) || category.contains(query)) {
+            } else if (name.contains(query) ||
+                brand.contains(query) ||
+                category.contains(query)) {
               containsMatches.add(product);
             }
           }
@@ -152,8 +164,8 @@ class _ProductSearchAutocompleteState
 
           // If no structural matches, try Fuzzy as fallback
           if (results.isEmpty) {
-            final fuse = Fuzzy<ProductModel>(
-              homeProducts,
+            final fuse = Fuzzy<ProductEntity>(
+              homeEntities,
               options: FuzzyOptions(
                 keys: [
                   WeightedKey(
@@ -176,11 +188,16 @@ class _ProductSearchAutocompleteState
           return results.take(15).toList();
         },
         onSelected: (selection) {
-          if (selection is ProductModel) {
+          if (selection is ProductEntity) {
             final name = selection.getLocalizedName(locale: locale);
             ref.read(searchHistoryProvider.notifier).add(name);
             controller.onSearchChanged(name);
             context.push(AppRoutes.productDetails, extra: selection);
+          } else if (selection is ProductModel) {
+            final name = selection.getLocalizedName(locale: locale);
+            ref.read(searchHistoryProvider.notifier).add(name);
+            controller.onSearchChanged(name);
+            context.push(AppRoutes.productDetails, extra: selection.toEntity());
           } else if (selection is String) {
             _textController.text = selection;
             controller.onSearchChanged(selection);
@@ -216,16 +233,14 @@ class _ProductSearchAutocompleteState
             alignment: Alignment.topLeft,
             child: Material(
               elevation: AppDimens.elevationMd,
-              borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+              borderRadius: AppRadius.allLg,
               color: theme.colorScheme.surface,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: 400,
                   maxWidth: constraints.maxWidth,
                 ),
-                child: 
-                prudoctsList(options, onSelected, theme, locale),
-
+                child: productsList(options, onSelected, theme, locale),
               ),
             ),
           );
@@ -234,97 +249,106 @@ class _ProductSearchAutocompleteState
     );
   }
 
-  ListView prudoctsList(Iterable<Object> options, AutocompleteOnSelected<Object> onSelected, ThemeData theme, String locale) {
+  ListView productsList(
+    Iterable<Object> options,
+    AutocompleteOnSelected<Object> onSelected,
+    ThemeData theme,
+    String locale,
+  ) {
     return ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
-                shrinkWrap: true,
-                itemCount: options.length,
-                separatorBuilder: (context, index) =>
-                    const Divider(height: 1, indent: AppDimens.spacingLg),
-                itemBuilder: (context, index) {
-                  final option = options.elementAt(index);
+      padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
+      shrinkWrap: true,
+      itemCount: options.length,
+      separatorBuilder: (context, index) =>
+          const Divider(height: 1, indent: AppDimens.spacingLg),
+      itemBuilder: (context, index) {
+        final option = options.elementAt(index);
 
-                  // Search History Item UI
-                  if (option is String) {
-                    return ListTile(
-                      leading: const Icon(Icons.history, size: AppDimens.iconSm),
-                      title: Text(option),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.close, size: 16),
-                        onPressed: () => ref.read(searchHistoryProvider.notifier).remove(option),
-                      ),
-                      onTap: () => onSelected(option),
-                    );
-                  }
+        // Search History Item UI
+        if (option is String) {
+          return ListTile(
+            leading: const Icon(Icons.history, size: AppDimens.iconSm),
+            title: Text(option),
+            trailing: IconButton(
+              icon: const Icon(Icons.close, size: 16),
+              onPressed: () =>
+                  ref.read(searchHistoryProvider.notifier).remove(option),
+            ),
+            onTap: () => onSelected(option),
+          );
+        }
 
-                  // Product Item UI
-                  final product = option as ProductModel;
-                  final query = _textController.text;
-                  return InkWell(
-                    onTap: () => onSelected(product),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimens.spacingLg,
-                        vertical: AppDimens.spacingMd,
+        // Product Item UI (Domain ProductEntity)
+        final product = option is ProductEntity
+            ? option
+            : (option as ProductModel).toEntity();
+        final query = _textController.text;
+
+        return InkWell(
+          onTap: () => onSelected(product),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimens.spacingLg,
+              vertical: AppDimens.spacingMd,
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: AppRadius.allSm,
+                  child: CachedNetworkImage(
+                    imageUrl: product.primaryThumbnailUrl ?? '',
+                    width: 48,
+                    height: 48,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      color: theme.colorScheme.surfaceContainerHighest,
+                      child: const Icon(Icons.image, size: AppDimens.iconSm),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppDimens.spacingMd),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppHighlightText(
+                        text: product.getLocalizedName(locale: locale),
+                        query: query,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(AppDimens.radiusSm),
-                            child: CachedNetworkImage(
-                              imageUrl: product.primaryThumbnailUrl ?? '',
-                              width: 48,
-                              height: 48,
-                              fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: theme.colorScheme.surfaceContainerHighest,
-                                child: const Icon(Icons.image, size: AppDimens.iconSm),
-                              ),
-                            ),
+                      if (product.brand != null)
+                        Text(
+                          product.brand!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
-                          const SizedBox(width: AppDimens.spacingMd),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                HighlightText(
-                                  text: product.getLocalizedName(locale: locale),
-                                  query: query,
-                                  style: theme.textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                if (product.brand != null)
-                                  Text(
-                                    product.brand!,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: AppDimens.spacingSm),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '${product.price.toStringAsFixed(2)} LE',
-                                style: theme.textTheme.labelMedium?.copyWith(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Icon(Icons.north_west, size: 14, color: Colors.grey),
-                            ],
-                          ),
-                        ],
+                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppDimens.spacingSm),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '${product.price.toStringAsFixed(2)} LE',
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  );
-                },
-              );
+                    const Icon(Icons.north_west, size: 14, color: Colors.grey),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
