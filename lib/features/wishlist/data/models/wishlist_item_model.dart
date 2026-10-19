@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/wishlist/domain/entities/wishlist_item_entity.dart';
 
 part 'wishlist_item_model.g.dart';
 
@@ -82,4 +83,27 @@ class WishlistItemModel extends HiveObject {
       productImageUrl: productImageUrl ?? this.productImageUrl,
     );
   }
+
+  /// Map to pure domain WishlistItemEntity
+  WishlistItemEntity toEntity() => WishlistItemEntity(
+        id: id,
+        userId: userId,
+        productId: productId,
+        addedAt: addedAt,
+        productName: productName,
+        productPrice: productPrice,
+        productImageUrl: productImageUrl,
+      );
+
+  /// Create WishlistItemModel from domain WishlistItemEntity
+  factory WishlistItemModel.fromEntity(WishlistItemEntity entity) =>
+      WishlistItemModel(
+        id: entity.id,
+        userId: entity.userId,
+        productId: entity.productId,
+        addedAt: entity.addedAt,
+        productName: entity.productName,
+        productPrice: entity.productPrice,
+        productImageUrl: entity.productImageUrl,
+      );
 }
