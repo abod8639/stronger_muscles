@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -136,7 +137,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
           keyboardType: keyboardType,
           decoration: InputDecoration(
             labelText: label,
-            border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(AppDimens.radiusMd))),
+            border: const OutlineInputBorder(borderRadius: AppRadius.allMd),
           ),
           validator: (v) => v!.isEmpty ? intl10n.thisFieldIsRequired : null,
         );
@@ -178,9 +179,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-            borderRadius: AppDimens.borderRadiusMd,
-          ),
+          shape: AppRadius.shapeMd,
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
         onPressed: isLoading
