@@ -91,11 +91,14 @@ class _AppProductCardState extends State<AppProductCard>
                       query: widget.query,
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8.0,
+                      runSpacing: 4.0,
                       children: [
                         Wrap(
-                          spacing: 8,
+                          spacing: 6,
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
@@ -117,6 +120,7 @@ class _AppProductCardState extends State<AppProductCard>
                         ),
                         if (widget.product.reviewCount > 0)
                           Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               const Icon(
                                 Icons.star_rounded,
