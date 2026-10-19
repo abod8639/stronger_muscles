@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -27,7 +28,7 @@ Widget buildIngredientsSection(ProductModel product, bool isDark) {
               color: isDark
                   ? AppColors.surfaceDark
                   : AppColors.greyLight.withValues(alpha: .3),
-              borderRadius: AppDimens.borderRadiusMd,
+              borderRadius: AppRadius.allMd,
             ),
             child: Wrap(
               spacing: 8,
