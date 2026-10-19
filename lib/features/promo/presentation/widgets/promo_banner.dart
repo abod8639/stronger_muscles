@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/components/dots_indicator.dart';
 import 'package:stronger_muscles/features/promo/presentation/controllers/promo_controller.dart';
 import 'package:stronger_muscles/features/promo/presentation/widgets/promo_card.dart';
 
@@ -39,7 +39,7 @@ class PromoBanner extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: AppDimens.spacingSm),
-            DotsIndicator(
+            AppDotsIndicator(
               itemCount: promos.length,
               currentIndex: currentIndex,
             ),
