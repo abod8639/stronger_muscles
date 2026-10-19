@@ -13,6 +13,7 @@ extension AppThemeContextExtension on BuildContext {
   List<BoxShadow> get cardShadow => AppShadows.ofCard(this);
   List<BoxShadow> get subtleShadow => AppShadows.ofSubtle(this);
   List<BoxShadow> get floatingShadow => AppShadows.ofFloating(this);
+  List<BoxShadow> get topBarShadow => AppShadows.ofTopBar(this);
 
   /// Locale check helper
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
