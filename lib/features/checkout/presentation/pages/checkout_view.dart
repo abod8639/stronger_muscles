@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/checkout_steps.dart';
@@ -8,7 +10,6 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _controlsPadding = 20.0;
 const double _controlsSpacing = 12.0;
-const double _controlsVerticalPadding = 12.0;
 
 class CheckoutView extends ConsumerWidget {
   const CheckoutView({super.key});
@@ -20,14 +21,7 @@ class CheckoutView extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          l10n.checkout,
-          style: const TextStyle(color: AppColors.white),
-        ),
-        backgroundColor: AppColors.primary,
-        iconTheme: const IconThemeData(color: AppColors.white),
-      ),
+      appBar: baseAppBar(context, l10n.checkout),
       body: checkoutState.isProcessing
           ? const Center(child: CircularProgressIndicator())
           : Stepper(
@@ -49,21 +43,12 @@ class CheckoutView extends ConsumerWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
+                        child: AppPrimaryButton(
+                          text: checkoutState.currentStep == 2
+                              ? l10n.placeOrder
+                              : l10n.next,
                           onPressed: details.onStepContinue,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: _controlsVerticalPadding,
-                            ),
-                          ),
-                          child: Text(
-                            checkoutState.currentStep == 2
-                                ? l10n.placeOrder
-                                : l10n.next,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                          height: 48.0,
                         ),
                       ),
                       if (checkoutState.currentStep > 0) ...[
@@ -72,11 +57,13 @@ class CheckoutView extends ConsumerWidget {
                           child: OutlinedButton(
                             onPressed: details.onStepCancel,
                             style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: _controlsVerticalPadding,
-                              ),
+                              shape: AppRadius.shapeMd,
+                              minimumSize: const Size.fromHeight(48.0),
                             ),
-                            child: Text(l10n.back),
+                            child: Text(
+                              l10n.back,
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
                           ),
                         ),
                       ],
