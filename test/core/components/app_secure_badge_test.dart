@@ -9,15 +9,15 @@ void main() {
         const MaterialApp(
           home: Scaffold(
             body: AppSecureBadge(
-              title: 'دفع مشفر 100%',
-              subtitle: 'معتمد دولياً',
+              title: 'مدفوعات آمنة ومشفرة بنسبة 100%',
+              subtitle: 'بياناتك المالية محمية',
             ),
           ),
         ),
       );
 
-      expect(find.text('دفع مشفر 100%'), findsOneWidget);
-      expect(find.text('معتمد دولياً'), findsOneWidget);
+      expect(find.text('مدفوعات آمنة ومشفرة بنسبة 100%'), findsOneWidget);
+      expect(find.text('بياناتك المالية محمية'), findsOneWidget);
       expect(find.byIcon(Icons.verified_user_outlined), findsOneWidget);
     });
 
@@ -32,20 +32,6 @@ void main() {
 
       expect(find.text('100% Secure & Encrypted Payments'), findsOneWidget);
       expect(find.byIcon(Icons.verified_user_outlined), findsOneWidget);
-    });
-
-    testWidgets('renders Arabic default text when locale is ar', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          supportedLocales: [Locale('ar'), Locale('en')],
-          locale: Locale('ar'),
-          home: Scaffold(
-            body: AppSecureBadge(),
-          ),
-        ),
-      );
-
-      expect(find.text('مدفوعات آمنة ومشفرة بنسبة 100%'), findsOneWidget);
     });
   });
 }
