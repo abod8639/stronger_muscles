@@ -58,5 +58,47 @@ void main() {
 
       expect(entity1, isNot(equals(entity2)));
     });
+
+    test('copyWith updates specified fields and preserves others', () {
+      const original = PromoEntity(
+        id: 1,
+        title: 'Original Title',
+        subtitle: 'Original Subtitle',
+        imageUrl: 'https://example.com/img.png',
+        buttonText: 'Shop',
+        hexBackgroundColor: '#112233',
+        targetType: 'product',
+        targetId: '99',
+      );
+
+      final updated = original.copyWith(
+        title: 'New Title',
+        targetId: '100',
+      );
+
+      expect(updated.id, 1);
+      expect(updated.title, 'New Title');
+      expect(updated.subtitle, 'Original Subtitle');
+      expect(updated.imageUrl, 'https://example.com/img.png');
+      expect(updated.buttonText, 'Shop');
+      expect(updated.hexBackgroundColor, '#112233');
+      expect(updated.targetType, 'product');
+      expect(updated.targetId, '100');
+    });
+
+    test('toString includes key identifying fields', () {
+      const entity = PromoEntity(
+        id: 42,
+        title: 'Special Promo',
+        imageUrl: 'https://example.com/promo.png',
+        targetType: 'brand',
+        targetId: 'Optimum',
+      );
+
+      expect(entity.toString(), contains('42'));
+      expect(entity.toString(), contains('Special Promo'));
+      expect(entity.toString(), contains('brand'));
+      expect(entity.toString(), contains('Optimum'));
+    });
   });
 }
