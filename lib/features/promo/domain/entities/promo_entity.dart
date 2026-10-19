@@ -33,6 +33,29 @@ class PromoEntity {
     }
   }
 
+  /// Creates a copy of this entity with given fields replaced
+  PromoEntity copyWith({
+    int? id,
+    String? title,
+    String? subtitle,
+    String? imageUrl,
+    String? buttonText,
+    String? hexBackgroundColor,
+    String? targetType,
+    String? targetId,
+  }) {
+    return PromoEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      imageUrl: imageUrl ?? this.imageUrl,
+      buttonText: buttonText ?? this.buttonText,
+      hexBackgroundColor: hexBackgroundColor ?? this.hexBackgroundColor,
+      targetType: targetType ?? this.targetType,
+      targetId: targetId ?? this.targetId,
+    );
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
