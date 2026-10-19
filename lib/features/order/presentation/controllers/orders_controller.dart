@@ -1,5 +1,4 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
@@ -9,7 +8,9 @@ part 'orders_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 OrderRepository orderRepository(OrderRepositoryRef ref) {
-  return OrderRepositoryImpl(ref.watch(apiServiceProvider));
+  final remote = ref.watch(orderRemoteDataSourceProvider);
+  final local = ref.watch(orderLocalDataSourceProvider);
+  return OrderRepositoryImpl(remote, local);
 }
 
 @Riverpod(keepAlive: true)
