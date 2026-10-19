@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/utils/components/app_badge.dart';
+import 'package:stronger_muscles/core/components/app_badge.dart';
 
 void main() {
   group('AppBadge Widget Tests', () {
