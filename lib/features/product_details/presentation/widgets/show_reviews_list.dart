@@ -6,8 +6,15 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ShowReviewsList extends StatelessWidget {
   final List<ReviewModel> reviews;
+  final VoidCallback? onAddReview;
+  final String? actionText;
 
-  const ShowReviewsList({super.key, required this.reviews});
+  const ShowReviewsList({
+    super.key,
+    required this.reviews,
+    this.onAddReview,
+    this.actionText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +61,21 @@ class ShowReviewsList extends StatelessWidget {
                   ),
                 ),
               ),
+
+              const Spacer(),
+
+              if (onAddReview != null)
+                TextButton.icon(
+                  onPressed: onAddReview,
+                  icon: Icon(Icons.edit_note, size: 18, color: AppColors.primary),
+                  label: Text(
+                    actionText ?? 'أضف تقييمك',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
@@ -255,6 +277,21 @@ class ShowReviewsList extends StatelessWidget {
                   ),
                 ),
               ),
+              if (onAddReview != null) ...[
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: onAddReview,
+                  icon: const Icon(Icons.rate_review, size: 18),
+                  label: Text(actionText ?? 'أضف تقييمك'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: AppDimens.borderRadiusMd,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         );
