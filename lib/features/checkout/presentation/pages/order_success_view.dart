@@ -1,69 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
-const double _iconSize = 100.0;
-const double _headlineSpacing = 24.0;
-const double _messageSpacing = 16.0;
-const double _buttonSpacing = 32.0;
-const double _contentPadding = 24.0;
-const double _buttonHorizontalPadding = 32.0;
-const double _buttonVerticalPadding = 16.0;
-const double _buttonBorderRadius = 12.0;
+const double _iconSize = 96.0;
 
+/// Order placed confirmation page using unified [AppPrimaryButton].
 class OrderSuccessView extends StatelessWidget {
   const OrderSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
 
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(_contentPadding),
+          padding: const EdgeInsets.all(AppDimens.spacingXl),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.check_circle_outline,
-                size: _iconSize,
-                color: AppColors.success,
+              Container(
+                padding: const EdgeInsets.all(AppDimens.spacingLg),
+                decoration: BoxDecoration(
+                  color: AppColors.success.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_circle_rounded,
+                  size: _iconSize,
+                  color: AppColors.success,
+                ),
               ),
-              const SizedBox(height: _headlineSpacing),
+              const SizedBox(height: AppDimens.spacingXl),
               Text(
                 l10n.orderPlacedSuccessfully,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: theme.colorScheme.onSurface,
                 ),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: _messageSpacing),
+              const SizedBox(height: AppDimens.spacingMd),
               Text(
                 l10n.orderPlacedThankYou,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: Colors.grey),
-              ),
-              const SizedBox(height: _buttonSpacing),
-              ElevatedButton(
-                onPressed: () {
-                  context.go(AppRoutes.main);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: _buttonHorizontalPadding,
-                    vertical: _buttonVerticalPadding,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(_buttonBorderRadius),
-                  ),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
-                child: Text(l10n.continueShopping),
+              ),
+              const SizedBox(height: 32.0),
+              SizedBox(
+                width: 240.0,
+                child: AppPrimaryButton(
+                  text: l10n.continueShopping,
+                  icon: Icons.storefront_outlined,
+                  onPressed: () => context.go(AppRoutes.main),
+                ),
               ),
             ],
           ),
