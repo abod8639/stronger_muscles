@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
 import 'package:stronger_muscles/features/order/domain/usecases/create_order_usecase.dart';
+import 'package:stronger_muscles/features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'package:stronger_muscles/features/order/domain/usecases/get_user_orders_usecase.dart';
 
 part 'usecase_providers.g.dart';
@@ -14,3 +15,7 @@ GetUserOrdersUseCase getUserOrdersUseCase(GetUserOrdersUseCaseRef ref) {
 CreateOrderUseCase createOrderUseCase(CreateOrderUseCaseRef ref) {
   return CreateOrderUseCase(ref.watch(orderRepositoryProvider));
 }
+
+final getOrderByIdUseCaseProvider = Provider<GetOrderByIdUseCase>((ref) {
+  return GetOrderByIdUseCase(ref.watch(orderRepositoryProvider));
+});
