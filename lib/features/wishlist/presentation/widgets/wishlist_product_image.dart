@@ -2,25 +2,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 /// Displays the product thumbnail image with Hero animation for the wishlist.
 class WishlistProductImage extends StatelessWidget {
   const WishlistProductImage({super.key, required this.product});
 
-  final ProductModel product;
+  final ProductEntity product;
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = product.imageUrls.isNotEmpty
-        ? product.imageUrls.first.medium
-        : '';
+    final imageUrl = product.primaryImageUrl ??
+        (product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : '');
 
     return Hero(
       tag: 'wishlist_product_${product.id}',
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimens.radiusSm),
+        borderRadius: AppRadius.allSm,
         child: imageUrl.isNotEmpty
             ? CachedNetworkImage(
                 cacheManager: CustomCacheManager.instance,
@@ -68,3 +68,4 @@ class WishlistProductImage extends StatelessWidget {
     );
   }
 }
+
