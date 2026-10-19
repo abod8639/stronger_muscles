@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _totalLabelFontSize = 14.0;
-const double _totalPriceFontSize = 22.0;
+const double _totalPriceFontSize = 21.0;
 const double _itemCountFontSize = 12.0;
 
+/// Total price and item count section for the bottom checkout bar.
 class TotalPriceSection extends ConsumerWidget {
   const TotalPriceSection({super.key});
 
@@ -37,16 +39,16 @@ class TotalPriceSection extends ConsumerWidget {
                 const SizedBox(width: AppDimens.spacingSm),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimens.spacingSm,
+                    horizontal: 8.0,
                     vertical: 2.0,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: .1),
-                    borderRadius: AppDimens.borderRadiusPill,
+                    color: AppColors.primary.withValues(alpha: .12),
+                    borderRadius: AppRadius.allPill,
                   ),
                   child: Text(
                     '${items.length} ${items.length == 1 ? localizations.item : localizations.items}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: _itemCountFontSize,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
@@ -55,7 +57,7 @@ class TotalPriceSection extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: AppDimens.spacingXs),
+            const SizedBox(height: 2.0),
             Text(
               'LE ${cartNotifier.totalPrice.toStringAsFixed(2)}',
               style: theme.textTheme.headlineSmall?.copyWith(
