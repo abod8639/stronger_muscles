@@ -1,25 +1,26 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/search/domain/usecases/search_products_usecase.dart';
-import 'package:stronger_muscles/features/search/domain/usecases/filter_by_price_usecase.dart';
-import 'package:stronger_muscles/features/search/domain/usecases/calculate_price_bounds_usecase.dart';
-import 'package:stronger_muscles/features/search/domain/usecases/usecase_providers.dart';
 import 'package:fuzzy/fuzzy.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/calculate_price_bounds_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/filter_by_price_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/search_products_usecase.dart';
+import 'package:stronger_muscles/features/search/domain/usecases/usecase_providers.dart';
 
 part 'product_search_controller.g.dart';
 
 @riverpod
 class ProductSearchController extends _$ProductSearchController {
   final TextEditingController textController = TextEditingController();
-  
+
   Timer? _debounceTimer;
 
-  List<ProductModel> _localProducts = [];
-  List<ProductModel> _combinedResults = [];
+  List<ProductEntity> _localProducts = [];
+  List<ProductEntity> _combinedResults = [];
 
   String _searchQuery = "";
   double _filterMinPrice = 0.0;
@@ -46,24 +47,25 @@ class ProductSearchController extends _$ProductSearchController {
       ref.read(calculatePriceBoundsUseCaseProvider);
 
   @override
-  FutureOr<List<ProductModel>> build() {
+  FutureOr<List<ProductEntity>> build() {
     ref.onDispose(() {
       textController.dispose();
       _debounceTimer?.cancel();
     });
-    
+
     // Initialize with home products if they are already loaded
     final homeProducts = ref.read(homeControllerProvider).value;
     if (homeProducts != null && homeProducts.isNotEmpty) {
-      _localProducts = homeProducts;
-      _combinedResults = homeProducts;
-      return homeProducts;
+      final entities = homeProducts.map((p) => p.toEntity()).toList();
+      _localProducts = entities;
+      _combinedResults = entities;
+      return entities;
     }
-    
+
     return [];
   }
 
-  void setProducts(List<ProductModel> products) {
+  void setProducts(List<ProductEntity> products) {
     _localProducts = products;
     _updateDataBounds();
     _filterMinPrice = _dataMinPrice;
@@ -71,9 +73,14 @@ class ProductSearchController extends _$ProductSearchController {
     _applyFilters();
   }
 
+  /// Backward compatibility helper if models are passed
+  void setProductsFromModels(List<ProductModel> models) {
+    setProducts(models.map((m) => m.toEntity()).toList());
+  }
+
   void onSearchChanged(String query) {
     _searchQuery = query.trim();
-    
+
     // 1. Instant local search for immediate feedback
     _performLocalSearchOnly(_searchQuery);
 
@@ -110,12 +117,15 @@ class ProductSearchController extends _$ProductSearchController {
 
     _hasSearched = true;
     final locale = ref.read(languageControllerProvider).languageCode;
-    final homeProducts = ref.read(homeControllerProvider).value ?? [];
-    
+    final homeProducts = (ref.read(homeControllerProvider).value ?? [])
+        .map((p) => p.toEntity())
+        .toList();
+    final source = _localProducts.isNotEmpty ? _localProducts : homeProducts;
+
     // Use prioritized local filtering
-    final results = _prioritizedLocalFilter(query, homeProducts, locale);
+    final results = _prioritizedLocalFilter(query, source, locale);
     _combinedResults = results;
-    
+
     _updateDataBounds();
     _applyFiltersToResults(results);
   }
@@ -126,13 +136,13 @@ class ProductSearchController extends _$ProductSearchController {
 
     try {
       // Fetch remote results via use case
-      final List<ProductModel> remoteResults =
+      final List<ProductEntity> remoteResults =
           await _searchProductsUseCase(query);
 
       // Merge with current local results
       final existingIds = _combinedResults.map((e) => e.id).toSet();
-      final List<ProductModel> merged = List.from(_combinedResults);
-      
+      final List<ProductEntity> merged = List.from(_combinedResults);
+
       for (var product in remoteResults) {
         if (!existingIds.contains(product.id)) {
           merged.add(product);
@@ -151,25 +161,35 @@ class ProductSearchController extends _$ProductSearchController {
   }
 
   /// Prioritized Local Filter: Exact > Prefix > Contains > Fuzzy
-  List<ProductModel> _prioritizedLocalFilter(String query, List<ProductModel> products, String locale) {
+  List<ProductEntity> _prioritizedLocalFilter(
+    String query,
+    List<ProductEntity> products,
+    String locale,
+  ) {
     final lowerQuery = query.toLowerCase();
-    
-    final List<ProductModel> exact = [];
-    final List<ProductModel> prefix = [];
-    final List<ProductModel> contains = [];
-    final List<ProductModel> others = [];
+
+    final List<ProductEntity> exact = [];
+    final List<ProductEntity> prefix = [];
+    final List<ProductEntity> contains = [];
+    final List<ProductEntity> others = [];
 
     for (var p in products) {
       final name = p.getLocalizedName(locale: locale).toLowerCase();
       final brand = (p.brand ?? "").toLowerCase();
-      final category = (p.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
+      final category =
+          (p.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
       final tags = p.tags.map((t) => t.toLowerCase()).toList();
 
       if (name == lowerQuery || brand == lowerQuery || category == lowerQuery) {
         exact.add(p);
-      } else if (name.startsWith(lowerQuery) || brand.startsWith(lowerQuery) || category.startsWith(lowerQuery)) {
+      } else if (name.startsWith(lowerQuery) ||
+          brand.startsWith(lowerQuery) ||
+          category.startsWith(lowerQuery)) {
         prefix.add(p);
-      } else if (name.contains(lowerQuery) || brand.contains(lowerQuery) || category.contains(lowerQuery) || tags.any((t) => t.contains(lowerQuery))) {
+      } else if (name.contains(lowerQuery) ||
+          brand.contains(lowerQuery) ||
+          category.contains(lowerQuery) ||
+          tags.any((t) => t.contains(lowerQuery))) {
         contains.add(p);
       } else {
         others.add(p);
@@ -177,7 +197,7 @@ class ProductSearchController extends _$ProductSearchController {
     }
 
     final combined = [...exact, ...prefix, ...contains];
-    
+
     // If we have few results, use fuzzy as fallback
     if (combined.length < 5) {
       final fuzzyResults = _performLocalFuzzySearch(query, products, locale);
@@ -192,15 +212,27 @@ class ProductSearchController extends _$ProductSearchController {
     return combined;
   }
 
-  List<ProductModel> _performLocalFuzzySearch(String query, List<ProductModel> products, String locale) {
+  List<ProductEntity> _performLocalFuzzySearch(
+    String query,
+    List<ProductEntity> products,
+    String locale,
+  ) {
     if (query.isEmpty) return [];
 
-    final fuse = Fuzzy<ProductModel>(
+    final fuse = Fuzzy<ProductEntity>(
       products,
       options: FuzzyOptions(
         keys: [
-          WeightedKey(name: 'name', getter: (p) => p.getLocalizedName(locale: locale), weight: 1.0),
-          WeightedKey(name: 'brand', getter: (p) => p.brand ?? "", weight: 0.7),
+          WeightedKey(
+            name: 'name',
+            getter: (p) => p.getLocalizedName(locale: locale),
+            weight: 1.0,
+          ),
+          WeightedKey(
+            name: 'brand',
+            getter: (p) => p.brand ?? "",
+            weight: 0.7,
+          ),
         ],
         threshold: 0.35,
       ),
@@ -210,7 +242,9 @@ class ProductSearchController extends _$ProductSearchController {
   }
 
   void _updateDataBounds() {
-    final source = _combinedResults.isEmpty && !_hasSearched ? _localProducts : _combinedResults;
+    final source = _combinedResults.isEmpty && !_hasSearched
+        ? _localProducts
+        : _combinedResults;
     if (source.isEmpty) return;
 
     final bounds = _calculatePriceBoundsUseCase(source);
@@ -224,15 +258,18 @@ class ProductSearchController extends _$ProductSearchController {
   void applyPriceFilter(double min, double max) {
     _filterMinPrice = min;
     _filterMaxPrice = max;
-    _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched ? _localProducts : _combinedResults);
+    _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched
+        ? _localProducts
+        : _combinedResults);
   }
 
   void _applyFilters() {
     _applyFiltersToResults(_localProducts);
   }
 
-  void _applyFiltersToResults(List<ProductModel> results) {
-    final filtered = _filterByPriceUseCase(results, _filterMinPrice, _filterMaxPrice);
+  void _applyFiltersToResults(List<ProductEntity> results) {
+    final filtered =
+        _filterByPriceUseCase(results, _filterMinPrice, _filterMaxPrice);
     state = AsyncData(filtered);
   }
 }
