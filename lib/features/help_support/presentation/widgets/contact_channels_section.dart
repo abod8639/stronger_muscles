@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/components/app_badge.dart';
 import 'package:stronger_muscles/core/utils/components/section_title.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
