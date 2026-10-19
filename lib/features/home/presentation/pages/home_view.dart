@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart' hide SearchBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_section_title.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/shortcuts_row.dart';
 import 'package:stronger_muscles/features/promo/presentation/widgets/promo_banner.dart';
-import 'package:stronger_muscles/core/utils/components/section_title.dart';
 import 'package:stronger_muscles/features/home/presentation/widgets/product_list.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
