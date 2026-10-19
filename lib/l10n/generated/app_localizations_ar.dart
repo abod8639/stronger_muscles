@@ -417,7 +417,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get flavor => 'النكهة';
 
   @override
-  String get contactUs => 'اتصل بنا';
+  String get contactUs => 'تواصل معنا';
 
   @override
   String get priceOnRequest => 'السعر عند الطلب';
@@ -677,4 +677,94 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get productDataMissing => 'بيانات المنتج مفقودة';
+
+  @override
+  String get howCanWeHelp => 'كيف يمكننا مساعدتك اليوم؟';
+
+  @override
+  String get helpSupportSubtitle =>
+      'اعثر على إجابات سريعة أو تواصل مع فريق خبرائنا';
+
+  @override
+  String get searchFaqPlaceholder => 'ابحث عن الأسئلة، المواضيع، المكملات...';
+
+  @override
+  String get contactUsSubtitle =>
+      'متواجدون دائماً لمساعدتك في طلباتك وأهدافك الرياضية';
+
+  @override
+  String get faqTitle => 'الأسئلة الشائعة';
+
+  @override
+  String get allCategories => 'الكل';
+
+  @override
+  String get categoryOrdersShipping => 'الطلبات والتوصيل';
+
+  @override
+  String get categorySupplements => 'المكملات والجودة';
+
+  @override
+  String get categoryPaymentRefunds => 'الدفع والاسترجاع';
+
+  @override
+  String get categoryAccountGeneral => 'الحساب والاستشارات';
+
+  @override
+  String get stillNeedHelp => 'لم تجد إجابة لسؤالك؟';
+
+  @override
+  String get stillNeedHelpSubtitle =>
+      'فريق الدعم الفني وخبراء التغذية الرياضية جاهزون لمساعدتك';
+
+  @override
+  String get submitTicket => 'إرسال تذكرة دعم';
+
+  @override
+  String get ticketSubject => 'عنوان الموضوع';
+
+  @override
+  String get ticketSubjectHint => 'وصف موجز للمشكلة أو الاستفسار';
+
+  @override
+  String get ticketCategory => 'نوع الاستفسار';
+
+  @override
+  String get ticketMessage => 'تفاصيل المشكلة';
+
+  @override
+  String get ticketMessageHint =>
+      'اكتب جميع التفاصيل لنتمكن من مساعدتك بأسرع وقت...';
+
+  @override
+  String get ticketPriority => 'الأهمية';
+
+  @override
+  String get priorityNormal => 'عادي';
+
+  @override
+  String get priorityUrgent => 'عاجل';
+
+  @override
+  String get ticketSubmittedTitle => 'تم إرسال تذكرتك بنجاح!';
+
+  @override
+  String get ticketSubmittedMessage =>
+      'شكراً لتواصلك معنا. سيقوم فريق الدعم الفني بالرد عليك خلال 24 ساعة.';
+
+  @override
+  String get noFaqsFound => 'لم يتم العثور على نتائج مطابقة';
+
+  @override
+  String get tryDifferentKeywords =>
+      'جرب استخدام كلمات بحث مختلفة أو تواصل معنا مباشرة';
+
+  @override
+  String get channelAvailable => 'متصل الآن';
+
+  @override
+  String get copiedToClipboard => 'تم النسخ إلى الحافظة';
+
+  @override
+  String get pleaseFillAllFields => 'يرجى تعبئة جميع الحقول المطلوبة';
 }
