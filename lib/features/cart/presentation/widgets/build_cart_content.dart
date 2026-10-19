@@ -5,10 +5,11 @@ import 'package:stronger_muscles/features/cart/presentation/widgets/cart_item_ca
 
 const double _listTopSpacing = 10.0;
 
-class BuildCartContent extends StatelessWidget {
+/// Displays the scrollable list of items in the cart and sticky checkout bottom section.
+class CartContentList extends StatelessWidget {
   final List<CartItemEntity> items;
 
-  const BuildCartContent({super.key, required this.items});
+  const CartContentList({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -34,3 +35,7 @@ class BuildCartContent extends StatelessWidget {
     );
   }
 }
+
+/// Backward compatibility alias
+typedef BuildCartContent = CartContentList;
+
