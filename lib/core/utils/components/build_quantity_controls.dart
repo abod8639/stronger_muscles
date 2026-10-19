@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/utils/functions/double_tap_prevention.dart';
 import 'package:stronger_muscles/core/utils/functions/handle_delete_from_cart.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
@@ -94,7 +94,7 @@ class QuantityControls extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: .1),
-        borderRadius: AppDimens.borderRadiusXs,
+        borderRadius: AppRadius.allXs,
       ),
       child: Text(
         item.quantity.toString(),
@@ -131,8 +131,8 @@ class QuantityControls extends ConsumerWidget {
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
         borderRadius: borderRadius ??
             (axis == Axis.horizontal
-                ? AppDimens.borderRadiusMd
-                : AppDimens.borderRadiusSm),
+                ? AppRadius.allMd
+                : AppRadius.allSm),
         border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
       ),
       child: axis == Axis.vertical
