@@ -14,25 +14,23 @@ const String _englishLabel = 'English';
 
 @riverpod
 class LanguageController extends _$LanguageController {
-  late final Box _settingsBox;
+  Box? _settingsBox;
 
   @override
   Locale build() {
-    _settingsBox = Hive.box('settings');
-    final savedLanguageCode = _settingsBox.get(_languageStorageKey);
-
-    if (savedLanguageCode != null) {
-      return Locale(savedLanguageCode);
-    } else {
-      // For simplicity in this migration, default to system or English
-      // In a real app, you might use window.locale
-      return const Locale(_defaultLanguage);
+    if (Hive.isBoxOpen('settings')) {
+      _settingsBox = Hive.box('settings');
+      final savedLanguageCode = _settingsBox?.get(_languageStorageKey);
+      if (savedLanguageCode != null) {
+        return Locale(savedLanguageCode);
+      }
     }
+    return const Locale(_defaultLanguage);
   }
 
   Future<void> changeLanguage(Locale locale) async {
     state = locale;
-    await _settingsBox.put(_languageStorageKey, locale.languageCode);
+    await _settingsBox?.put(_languageStorageKey, locale.languageCode);
   }
 
   String get currentLanguageName {
