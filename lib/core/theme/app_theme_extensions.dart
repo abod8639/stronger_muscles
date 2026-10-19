@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
 
 /// Extension on [BuildContext] to access unified theme tokens, shadows,
-/// and responsive state cleanly across widgets.
+/// border radius, and responsive state cleanly across widgets.
 extension AppThemeContextExtension on BuildContext {
   ThemeData get theme => Theme.of(this);
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
@@ -15,6 +16,14 @@ extension AppThemeContextExtension on BuildContext {
   List<BoxShadow> get floatingShadow => AppShadows.ofFloating(this);
   List<BoxShadow> get topBarShadow => AppShadows.ofTopBar(this);
 
+  /// Fast unified radius access
+  BorderRadius get cardRadius => AppRadius.allLg;
+  BorderRadius get smallRadius => AppRadius.allSm;
+  BorderRadius get mediumRadius => AppRadius.allMd;
+  BorderRadius get pillRadius => AppRadius.allPill;
+  BorderRadius get sheetRadius => AppRadius.topBottomSheet;
+
   /// Locale check helper
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
 }
+
