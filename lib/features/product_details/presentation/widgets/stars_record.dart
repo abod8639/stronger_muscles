@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_rating_stars.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/components/rating_stars.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
