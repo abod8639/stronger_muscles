@@ -342,6 +342,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        shape: AppRadius.shapeLg,
         title: Text(intl10n.deleteAddressTitle),
         content: Text(intl10n.deleteAddressConfirmation),
         actions: [
