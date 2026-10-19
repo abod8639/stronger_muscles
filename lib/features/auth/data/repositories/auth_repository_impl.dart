@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/auth/data/datasources/auth_service.dart';
-import 'package:stronger_muscles/features/auth/data/mappers/user_mapper.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 
