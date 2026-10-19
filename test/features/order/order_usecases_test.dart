@@ -1,9 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/features/order/data/datasources/order_local_datasource.dart';
+import 'package:stronger_muscles/features/order/data/datasources/order_remote_datasource.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
+import 'package:stronger_muscles/features/order/data/repositories/order_repository_impl.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_item_entity.dart';
 import 'package:stronger_muscles/features/order/domain/repositories/order_repository.dart';
 import 'package:stronger_muscles/features/order/domain/usecases/create_order_usecase.dart';
+import 'package:stronger_muscles/features/order/domain/usecases/get_order_by_id_usecase.dart';
 import 'package:stronger_muscles/features/order/domain/usecases/get_user_orders_usecase.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 
@@ -21,6 +26,15 @@ class MockOrderRepository implements OrderRepository {
   }
 
   @override
+  Future<OrderEntity?> getOrderById(String id) async {
+    if (shouldThrow) throw Exception('Failed to fetch order');
+    return orders.cast<OrderEntity?>().firstWhere(
+          (o) => o?.id == id,
+          orElse: () => null,
+        );
+  }
+
+  @override
   Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
     if (shouldThrow) throw Exception('Failed to create order');
     return {
@@ -31,10 +45,63 @@ class MockOrderRepository implements OrderRepository {
   }
 }
 
+class FakeOrderRemoteDatasource implements OrderRemoteDatasource {
+  List<OrderModel> remoteOrders = [];
+  bool shouldThrow = false;
+
+  @override
+  Future<List<OrderModel>> getUserOrders({int? limit}) async {
+    if (shouldThrow) throw Failure(message: 'Network error');
+    if (limit != null) return remoteOrders.take(limit).toList();
+    return remoteOrders;
+  }
+
+  @override
+  Future<OrderModel?> getOrderById(String id) async {
+    if (shouldThrow) throw Failure(message: 'Network error');
+    return remoteOrders.cast<OrderModel?>().firstWhere(
+          (o) => o?.id == id,
+          orElse: () => null,
+        );
+  }
+
+  @override
+  Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
+    if (shouldThrow) throw Failure(message: 'Network error');
+    return {'status': 'success', 'order_id': 'created-123'};
+  }
+}
+
+class FakeOrderLocalDatasource implements OrderLocalDatasource {
+  List<OrderModel> cachedOrders = [];
+
+  @override
+  Future<List<OrderModel>> getCachedOrders() async => cachedOrders;
+
+  @override
+  Future<OrderModel?> getCachedOrderById(String id) async {
+    return cachedOrders.cast<OrderModel?>().firstWhere(
+          (o) => o?.id == id,
+          orElse: () => null,
+        );
+  }
+
+  @override
+  Future<void> cacheOrders(List<OrderModel> models) async {
+    cachedOrders = List.from(models);
+  }
+
+  @override
+  Future<void> clearCache() async {
+    cachedOrders.clear();
+  }
+}
+
 void main() {
   group('Order Clean Architecture Domain & UseCase Tests', () {
     late MockOrderRepository mockRepository;
     late GetUserOrdersUseCase getUserOrdersUseCase;
+    late GetOrderByIdUseCase getOrderByIdUseCase;
     late CreateOrderUseCase createOrderUseCase;
 
     const testOrderItem = OrderItemEntity(
@@ -73,6 +140,7 @@ void main() {
       mockRepository = MockOrderRepository();
       mockRepository.orders = [testOrder];
       getUserOrdersUseCase = GetUserOrdersUseCase(mockRepository);
+      getOrderByIdUseCase = GetOrderByIdUseCase(mockRepository);
       createOrderUseCase = CreateOrderUseCase(mockRepository);
     });
 
@@ -82,6 +150,15 @@ void main() {
       expect(result.length, 1);
       expect(result.first.id, 'order-1');
       expect(result.first.items?.first.productName, 'Whey Protein 1kg');
+    });
+
+    test('GetOrderByIdUseCase returns order by id or null', () async {
+      final order = await getOrderByIdUseCase('order-1');
+      expect(order, isNotNull);
+      expect(order!.id, 'order-1');
+
+      final nonExistent = await getOrderByIdUseCase('non-existent');
+      expect(nonExistent, isNull);
     });
 
     test('CreateOrderUseCase creates order and returns response map', () async {
@@ -119,7 +196,7 @@ void main() {
       final copy = testOrder.copyWith(status: 'processing');
       expect(copy.id, testOrder.id);
       expect(copy.status, 'processing');
-      expect(copy == testOrder, isTrue); // equality is based on id
+      expect(copy == testOrder, isTrue);
     });
 
     test('OrderItemEntity price getter delegates to unitPrice', () {
@@ -170,6 +247,47 @@ void main() {
       expect(reconstructedModel.paymentStatus, 'paid');
       expect(reconstructedModel.trackingNumber, 'TRK123');
       expect(reconstructedModel.items?.first.productName, 'BCAA');
+    });
+
+    test('OrderRepositoryImpl fetches from remote and caches locally', () async {
+      final remote = FakeOrderRemoteDatasource();
+      final local = FakeOrderLocalDatasource();
+      final repository = OrderRepositoryImpl(remote, local);
+
+      final model = OrderModel(
+        id: 'order-test-1',
+        userId: 'user-1',
+        addressId: 'addr-1',
+        subtotal: 100.0,
+        totalAmount: 100.0,
+      );
+      remote.remoteOrders = [model];
+
+      final result = await repository.getUserOrders();
+      expect(result.length, 1);
+      expect(result.first.id, 'order-test-1');
+      expect(local.cachedOrders.length, 1);
+      expect(local.cachedOrders.first.id, 'order-test-1');
+    });
+
+    test('OrderRepositoryImpl falls back to local cache when remote fails', () async {
+      final remote = FakeOrderRemoteDatasource();
+      final local = FakeOrderLocalDatasource();
+      final repository = OrderRepositoryImpl(remote, local);
+
+      final cachedModel = OrderModel(
+        id: 'order-cached-1',
+        userId: 'user-1',
+        addressId: 'addr-1',
+        subtotal: 80.0,
+        totalAmount: 80.0,
+      );
+      local.cachedOrders = [cachedModel];
+      remote.shouldThrow = true;
+
+      final result = await repository.getUserOrders();
+      expect(result.length, 1);
+      expect(result.first.id, 'order-cached-1');
     });
   });
 }
