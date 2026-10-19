@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/utils/components/rating_stars.dart';
+import 'package:stronger_muscles/core/components/app_rating_stars.dart';
 
 void main() {
   group('RatingStars Widget Tests', () {
