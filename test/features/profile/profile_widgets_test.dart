@@ -4,7 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/components/app_empty_state.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
@@ -125,8 +125,8 @@ void main() {
             ),
             wishlistControllerProvider.overrideWith(
               () => _FakeWishlistController([
-                const ProductModel(id: 'prod-1', price: 10),
-                const ProductModel(id: 'prod-2', price: 20),
+                const ProductEntity(id: 'prod-1', price: 10),
+                const ProductEntity(id: 'prod-2', price: 20),
               ]),
             ),
             addressControllerProvider.overrideWith(
@@ -231,11 +231,11 @@ class _FakeOrdersController extends OrdersController {
 }
 
 class _FakeWishlistController extends WishlistController {
-  final List<ProductModel> _initial;
+  final List<ProductEntity> _initial;
   _FakeWishlistController(this._initial);
 
   @override
-  List<ProductModel> build() {
+  List<ProductEntity> build() {
     return _initial;
   }
 }
