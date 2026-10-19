@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 
@@ -25,9 +26,9 @@ class PromoCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
         decoration: BoxDecoration(
-          borderRadius: AppDimens.borderRadiusLg,
+          borderRadius: AppRadius.allLg,
           color: promo.backgroundColor,
-          boxShadow: AppDimens.bannerShadow(theme.shadowColor),
+          boxShadow: AppShadows.banner(theme.shadowColor),
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
@@ -79,22 +80,21 @@ class PromoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: AppDimens.spacingLg),
                   if (promo.targetId != null)
-                    Container(
+                    AppBadge(
+                      label: promo.buttonText,
+                      color: theme.colorScheme.primary,
+                      backgroundColor: theme.colorScheme.primary,
+                      textColor: Colors.white,
+                      border: Border.all(color: Colors.transparent, width: 0),
+                      borderRadius: AppRadius.allSm,
                       padding: const EdgeInsets.symmetric(
                         horizontal: AppDimens.spacingLg,
                         vertical: AppDimens.spacingSm,
                       ),
-                      decoration: const BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: AppDimens.borderRadiusSm,
-                      ),
-                      child: Text(
-                        promo.buttonText,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
                       ),
                     ),
                 ],
