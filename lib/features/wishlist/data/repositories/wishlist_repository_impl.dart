@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/wishlist/data/datasources/wishlist_local_datasource.dart';
 import 'package:stronger_muscles/features/wishlist/domain/repositories/wishlist_repository.dart';
 
@@ -18,17 +19,17 @@ class WishlistRepositoryImpl implements WishlistRepository {
   WishlistRepositoryImpl(this._datasource);
 
   @override
-  List<ProductModel> getWishlistItems() {
-    return _datasource.getAll();
+  List<ProductEntity> getWishlistItems() {
+    return _datasource.getAll().map((m) => m.toEntity()).toList();
   }
 
   @override
-  void addToWishlist(ProductModel product) {
-    _datasource.add(product);
+  void addToWishlist(ProductEntity product) {
+    _datasource.add(ProductModel.fromEntity(product));
   }
 
   @override
-  void removeFromWishlist(ProductModel product) {
+  void removeFromWishlist(ProductEntity product) {
     _datasource.remove(product.id);
   }
 
@@ -37,3 +38,4 @@ class WishlistRepositoryImpl implements WishlistRepository {
     return _datasource.contains(productId);
   }
 }
+
