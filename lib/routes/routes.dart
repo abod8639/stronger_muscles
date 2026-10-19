@@ -23,6 +23,7 @@ import 'package:stronger_muscles/features/product/domain/entities/product_entity
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/notifications/presentation/pages/notifications_view.dart';
 import 'package:stronger_muscles/features/help_support/presentation/pages/help_support_view.dart';
+import 'package:stronger_muscles/features/product/presentation/pages/product_catalog_view.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AppRoutes {
@@ -32,6 +33,7 @@ class AppRoutes {
   static const String signUp = '/signup';
   static const String home = '/home';
   static const String cart = '/cart';
+  static const String products = '/products';
   static const String productDetails = '/product_details';
   static const String wishlist = '/wishlist';
   static const String search = '/search';
@@ -211,6 +213,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.helpSupport,
         builder: (context, state) => const HelpSupportView(),
+      ),
+      GoRoute(
+        path: AppRoutes.products,
+        builder: (context, state) {
+          final extra = state.extra;
+          final categoryId = extra is String ? extra : null;
+          return ProductCatalogView(initialCategoryId: categoryId);
+        },
       ),
     ],
   );
