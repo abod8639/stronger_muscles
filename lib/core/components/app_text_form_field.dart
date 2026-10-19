@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 
-/// A reusable modern text form field with theme support and unified borders.
-class AppTextFormField extends StatelessWidget {
+/// A reusable modern text form field with theme support, unified borders,
+/// and optional built-in password visibility toggle.
+class AppTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final String? label;
   final String? hintText;
@@ -13,7 +14,11 @@ class AppTextFormField extends StatelessWidget {
   final int minLines;
   final FormFieldValidator<String>? validator;
   final TextInputType keyboardType;
+  final TextInputAction textInputAction;
   final bool readOnly;
+  final bool autofocus;
+  final bool isPassword;
+  final bool obscureText;
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged;
 
@@ -28,23 +33,62 @@ class AppTextFormField extends StatelessWidget {
     this.minLines = 1,
     this.validator,
     this.keyboardType = TextInputType.text,
+    this.textInputAction = TextInputAction.next,
     this.readOnly = false,
+    this.autofocus = false,
+    this.isPassword = false,
+    this.obscureText = false,
     this.onTap,
     this.onChanged,
   });
+
+  @override
+  State<AppTextFormField> createState() => _AppTextFormFieldState();
+}
+
+class _AppTextFormFieldState extends State<AppTextFormField> {
+  late bool _obscured;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscured = widget.isPassword || widget.obscureText;
+  }
+
+  @override
+  void didUpdateWidget(covariant AppTextFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.obscureText != widget.obscureText ||
+        oldWidget.isPassword != widget.isPassword) {
+      _obscured = widget.isPassword || widget.obscureText;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final fillColor = isDark ? AppColors.surfaceDark : AppColors.greyLight.withValues(alpha: 0.6);
 
+    Widget? effectiveSuffix = widget.suffixIcon;
+    if (widget.isPassword && effectiveSuffix == null) {
+      effectiveSuffix = IconButton(
+        icon: Icon(
+          _obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+          color: isDark ? AppColors.grey : AppColors.greyDark,
+          size: 20.0,
+        ),
+        splashRadius: 20.0,
+        onPressed: () => setState(() => _obscured = !_obscured),
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (label != null) ...[
+        if (widget.label != null) ...[
           Text(
-            label!,
+            widget.label!,
             style: TextStyle(
               fontSize: 13.5,
               fontWeight: FontWeight.w600,
@@ -54,30 +98,33 @@ class AppTextFormField extends StatelessWidget {
           const SizedBox(height: 6.0),
         ],
         TextFormField(
-          controller: controller,
-          maxLines: maxLines,
-          minLines: minLines,
-          validator: validator,
-          keyboardType: keyboardType,
-          readOnly: readOnly,
-          onTap: onTap,
-          onChanged: onChanged,
+          controller: widget.controller,
+          maxLines: widget.isPassword ? 1 : widget.maxLines,
+          minLines: widget.minLines,
+          obscureText: _obscured,
+          validator: widget.validator,
+          keyboardType: widget.keyboardType,
+          textInputAction: widget.textInputAction,
+          readOnly: widget.readOnly,
+          autofocus: widget.autofocus,
+          onTap: widget.onTap,
+          onChanged: widget.onChanged,
           style: TextStyle(
             fontSize: 14.5,
             color: isDark ? AppColors.white : AppColors.black,
           ),
           decoration: InputDecoration(
             isDense: true,
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: TextStyle(
               fontSize: 13.5,
               color: isDark ? AppColors.grey : AppColors.greyDark,
             ),
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
+            prefixIcon: widget.prefixIcon,
+            suffixIcon: effectiveSuffix,
             filled: true,
             fillColor: fillColor,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 13.0),
             border: OutlineInputBorder(
               borderRadius: AppRadius.allMd,
               borderSide: BorderSide(
