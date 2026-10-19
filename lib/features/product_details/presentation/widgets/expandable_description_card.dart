@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
@@ -137,14 +136,14 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
                       padding: const EdgeInsets.only(top: 12),
                       child: InkWell(
                         onTap: _toggleExpanded,
-                        borderRadius: AppDimens.borderRadiusSm,
+                        borderRadius: AppRadius.allSm,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: AppDimens.borderRadiusSm,
+                            borderRadius: AppRadius.allSm,
                             border: Border.all(
                               color: AppColors.primary.withValues(alpha: 0.3),
                               width: 1,
