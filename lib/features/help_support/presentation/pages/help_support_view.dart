@@ -4,16 +4,15 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/components/app_card.dart';
-import 'package:stronger_muscles/core/utils/components/section_title.dart';
+import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/contact_channels_section.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/faq_categories_chips.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/faq_list_section.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/help_support_hero_header.dart';
+import 'package:stronger_muscles/features/help_support/presentation/widgets/my_tickets_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/submit_ticket_bottom_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_success_dialog.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class HelpSupportView extends ConsumerStatefulWidget {
@@ -41,7 +40,7 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
         required String message,
         priority = TicketPriority.normal,
       }) async {
-        final ticketId = await ref
+        final ticket = await ref
             .read(helpSupportControllerProvider.notifier)
             .submitTicket(
               subject: subject,
@@ -50,12 +49,16 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
               priority: priority,
             );
 
-        if (ticketId != null && mounted) {
-          TicketSuccessDialog.show(context, ticketId);
+        if (ticket != null && mounted) {
+          TicketSuccessDialog.show(context, ticket.ticketNumber ?? ticket.id ?? 'SM-TICKET');
         }
-        return ticketId;
+        return ticket?.id;
       },
     );
+  }
+
+  void _openMyTickets() {
+    MyTicketsSheet.show(context);
   }
 
   @override
@@ -64,6 +67,8 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
     final notifier = ref.read(helpSupportControllerProvider.notifier);
     final l10n = AppLocalizations.of(context);
     final isDark = context.isDark;
+    final hasUserTickets = state.userTickets.isNotEmpty;
+    final unreadTicketsCount = state.userTickets.where((t) => t.unreadMessagesCount > 0).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -79,6 +84,41 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
             }
           },
         ),
+        actions: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                tooltip: 'تذاكري وبلاغاتي',
+                icon: const Icon(Icons.mark_chat_unread_outlined),
+                onPressed: _openMyTickets,
+              ),
+              if (unreadTicketsCount > 0)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                    child: Text(
+                      '$unreadTicketsCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: state.isLoading && state.faqs.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -102,6 +142,73 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
                         onSearchChanged: (query) => notifier.search(query),
                       ),
                     ),
+
+                    // ── Active Tickets Banner if user has open tickets ─────────
+                    if (hasUserTickets)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+                        child: InkWell(
+                          onTap: _openMyTickets,
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            padding: const EdgeInsets.all(14.0),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: isDark
+                                    ? [const Color(0xFF2E2218), const Color(0xFF1E1712)]
+                                    : [const Color(0xFFFFF7ED), const Color(0xFFFFEDD5)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Colors.orange.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange.withValues(alpha: 0.2),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.confirmation_number_rounded,
+                                    color: Colors.orange,
+                                    size: 22,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'لديك ${state.userTickets.length} تذكرة دعم وبلاغات',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: isDark ? Colors.white : Colors.black87,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        'انقر لمتابعة حالة الشكاوى والرد على المشرفين',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: isDark ? Colors.grey[400] : Colors.grey[700],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: Colors.orange),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
 
                     // ── Contact Channels ─────────────────────────────────────
                     ContactChannelsSection(
@@ -200,10 +307,29 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 16.0),
-                            AppPrimaryButton(
-                              text: l10n?.submitTicket ?? 'إرسال تذكرة دعم',
-                              icon: Icons.edit_note_rounded,
-                              onPressed: _openTicketBottomSheet,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppPrimaryButton(
+                                    text: l10n?.submitTicket ?? 'إرسال تذكرة دعم',
+                                    icon: Icons.edit_note_rounded,
+                                    onPressed: _openTicketBottomSheet,
+                                  ),
+                                ),
+                                if (hasUserTickets) ...[
+                                  const SizedBox(width: 10),
+                                  OutlinedButton.icon(
+                                    style: OutlinedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                      side: const BorderSide(color: AppColors.primary),
+                                    ),
+                                    onPressed: _openMyTickets,
+                                    icon: const Icon(Icons.history_rounded, size: 18, color: AppColors.primary),
+                                    label: const Text('تذاكري', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ],
                             ),
                           ],
                         ),
