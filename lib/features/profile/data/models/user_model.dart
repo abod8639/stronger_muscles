@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'address_model.dart';
 
 part 'user_model.freezed.dart';
@@ -41,6 +42,15 @@ class UserModel with _$UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+
+  UserEntity toEntity() => UserEntity(
+        id: id,
+        name: name,
+        email: email,
+        phone: phone,
+        photoUrl: photoUrl,
+        token: token ?? '',
+      );
 }
 
 int _parseInt(dynamic value) {
