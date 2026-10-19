@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 /// Displays product name, effective price, and original price (if discounted).
 class WishlistProductDetails extends StatelessWidget {
@@ -11,7 +11,7 @@ class WishlistProductDetails extends StatelessWidget {
   static const double _priceFontSize = 16.0;
   static const int _maxTitleLines = 2;
 
-  final ProductModel product;
+  final ProductEntity product;
 
   @override
   Widget build(BuildContext context) {
@@ -59,3 +59,4 @@ class WishlistProductDetails extends StatelessWidget {
     );
   }
 }
+
