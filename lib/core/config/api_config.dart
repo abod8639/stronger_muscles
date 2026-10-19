@@ -49,6 +49,13 @@ class ApiConfig {
   static String markNotificationAsRead(dynamic id) => '/customer/notifications/$id/read';
   static const String markAllNotificationsAsRead = '/customer/notifications/read-all';
 
+  // Support & Complaints
+  static const String customerSupportTickets = '/customer/support/tickets';
+  static const String publicSupportTicket = '/shop/support/tickets';
+  static String customerSupportTicketDetails(dynamic id) => '/customer/support/tickets/$id';
+  static String customerSupportTicketMessages(dynamic id) => '/customer/support/tickets/$id/messages';
+  static String customerCloseSupportTicket(dynamic id) => '/customer/support/tickets/$id/close';
+
   // Legacy/Deprecated - Keep for compatibility until services are updated
   static const String usersStats = '/customer/profile';
 }
