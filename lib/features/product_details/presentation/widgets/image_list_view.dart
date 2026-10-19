@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -75,13 +76,13 @@ class ImageListView extends ConsumerWidget {
               color: isSelected ? AppColors.primary : Colors.transparent,
               width: _borderWidth,
             ),
-            borderRadius: AppDimens.borderRadiusSm,
+            borderRadius: AppRadius.allSm,
             boxShadow: isSelected
-                ? AppDimens.coloredShadow(AppColors.primary, alpha: 0.3)
+                ? AppShadows.colored(AppColors.primary, alpha: 0.3)
                 : null,
           ),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppDimens.radiusSm - _padding),
+            borderRadius: BorderRadius.circular(AppRadius.sm - _padding),
             child: _buildThumbnailImage(context, index),
           ),
         ),
