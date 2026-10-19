@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/home/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 part 'home_controller.g.dart';
 
@@ -12,14 +12,8 @@ class HomeController extends _$HomeController {
 
   @override
   FutureOr<List<ProductModel>> build() async {
-    final productRepository = ref.watch(productRepositoryProvider);
-
-    final cachedProducts = productRepository.getCachedProducts();
-    if (cachedProducts.isNotEmpty) {
-      return cachedProducts.map((p) => ProductModel.fromEntity(p)).toList();
-    }
-
-    final products = await productRepository.getProducts();
+    final getHomeProducts = ref.watch(getHomeProductsUseCaseProvider);
+    final products = await getHomeProducts();
     return products.map((p) => ProductModel.fromEntity(p)).toList();
   }
 
@@ -27,11 +21,9 @@ class HomeController extends _$HomeController {
     _selectedSectionIndex = index;
     state = const AsyncLoading();
 
-    final productRepository = ref.read(productRepositoryProvider);
+    final getHomeProducts = ref.read(getHomeProductsUseCaseProvider);
     try {
-      final fetchedProducts = await productRepository.getProducts(
-        categoryId: categoryId,
-      );
+      final fetchedProducts = await getHomeProducts(categoryId: categoryId);
       state = AsyncData(
         fetchedProducts.map((p) => ProductModel.fromEntity(p)).toList(),
       );
