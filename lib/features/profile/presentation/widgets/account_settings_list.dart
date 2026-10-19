@@ -112,7 +112,7 @@ class AccountSettingsList extends ConsumerWidget {
           _buildSettingItem(
             icon: Icons.help_outline,
             title: localizations.helpSupport,
-            onTap: () {},
+            onTap: () => context.push(AppRoutes.helpSupport),
             isDark: isDark,
           ),
           _buildDivider(isDark),
