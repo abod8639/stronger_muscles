@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/checkout_button.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/total_price_section.dart';
