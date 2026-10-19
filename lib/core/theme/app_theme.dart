@@ -1,0 +1,115 @@
+import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/constants/app_text_styles.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/app_shadows.dart';
+
+/// Central application theme definitions with unified light/dark schemes,
+/// typography, component themes, and shadows.
+class AppTheme {
+  static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.backgroundLight,
+    colorScheme: const ColorScheme.light(
+      primary: AppColors.primary,
+      secondary: AppColors.accent,
+      surface: AppColors.surfaceLight,
+      error: AppColors.error,
+      onPrimary: AppColors.white,
+      onSecondary: AppColors.white,
+      onSurface: AppColors.black,
+      onError: AppColors.white,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primary,
+      iconTheme: IconThemeData(color: AppColors.white),
+      titleTextStyle: TextStyle(
+        color: AppColors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    textTheme: const TextTheme(
+      displayLarge: AppTextStyles.h1,
+      displayMedium: AppTextStyles.h2,
+      displaySmall: AppTextStyles.h3,
+      bodyLarge: AppTextStyles.bodyLarge,
+      bodyMedium: AppTextStyles.bodyMedium,
+      bodySmall: AppTextStyles.bodySmall,
+      labelLarge: AppTextStyles.button,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        textStyle: AppTextStyles.button,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.allSm),
+      ),
+    ),
+  );
+
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: AppColors.primaryDark,
+    scaffoldBackgroundColor: AppColors.backgroundDark,
+    colorScheme: const ColorScheme.dark(
+      primary: AppColors.primaryDark,
+      secondary: AppColors.accent,
+      surface: AppColors.surfaceDark,
+      error: AppColors.error,
+      onPrimary: AppColors.white,
+      onSecondary: AppColors.white,
+      onSurface: AppColors.white,
+      onError: AppColors.white,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.primaryDark,
+      iconTheme: IconThemeData(color: AppColors.white),
+      titleTextStyle: TextStyle(
+        color: AppColors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    textTheme: TextTheme(
+      displayLarge: AppTextStyles.h1.copyWith(color: AppColors.white),
+      displayMedium: AppTextStyles.h2.copyWith(color: AppColors.white),
+      displaySmall: AppTextStyles.h3.copyWith(color: AppColors.white),
+      bodyLarge: AppTextStyles.bodyLarge.copyWith(color: AppColors.white),
+      bodyMedium: AppTextStyles.bodyMedium.copyWith(color: AppColors.white),
+      bodySmall: AppTextStyles.bodySmall.copyWith(color: AppColors.greyMedium),
+      labelLarge: AppTextStyles.button,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryDark,
+        foregroundColor: AppColors.white,
+        textStyle: AppTextStyles.button,
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.allSm),
+      ),
+    ),
+  );
+
+  // ── Unified Shadows & Radius Access via Theme ──────────────────────────
+  static List<BoxShadow> cardShadow(BuildContext context) =>
+      AppShadows.ofCard(context);
+
+  static List<BoxShadow> subtleShadow(BuildContext context) =>
+      AppShadows.ofSubtle(context);
+
+  static List<BoxShadow> bannerShadow([BuildContext? context]) =>
+      AppDimens.bannerShadow(context != null ? Theme.of(context).shadowColor : null);
+
+  static List<BoxShadow> floatingShadow([BuildContext? context]) =>
+      AppDimens.floatingShadow(context != null ? Theme.of(context).shadowColor : null);
+
+  static List<BoxShadow> coloredShadow(Color color, {double alpha = 0.3}) =>
+      AppShadows.colored(color, alpha: alpha);
+
+  static BorderRadius get radiusSm => AppRadius.allSm;
+  static BorderRadius get radiusMd => AppRadius.allMd;
+  static BorderRadius get radiusLg => AppRadius.allLg;
+  static BorderRadius get radiusXl => AppRadius.allXl;
+}
