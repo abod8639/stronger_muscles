@@ -5,6 +5,7 @@ import 'package:stronger_muscles/features/product/data/models/image_url_model.da
 import 'package:stronger_muscles/features/product/data/models/product_category_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_size_model.dart';
+import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/order/data/models/order_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
@@ -25,6 +26,7 @@ Future<void> hiveInit() async {
   Hive.registerAdapter(ImageUrlAdapter());
   Hive.registerAdapter(ProductCategoryAdapter());
   Hive.registerAdapter(ProductSizeAdapter());
+  Hive.registerAdapter(ReviewModelAdapter());
 
   // Open Boxes
   await Hive.openBox<CartItemModel>('cart');
