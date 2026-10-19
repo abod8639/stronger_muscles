@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -33,8 +34,8 @@ class _PurchaseStatsCardContent extends ConsumerWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      borderRadius: AppDimens.borderRadiusLg,
-      boxShadow: AppDimens.coloredShadow(AppColors.primary),
+      borderRadius: AppRadius.allLg,
+      boxShadow: AppShadows.colored(AppColors.primary),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
