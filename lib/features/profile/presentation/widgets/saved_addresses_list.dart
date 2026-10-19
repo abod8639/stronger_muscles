@@ -14,7 +14,6 @@ class SavedAddressesList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final addressesState = ref.watch(addressControllerProvider);
     final intl10n = AppLocalizations.of(context)!;
 
