@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/functions/update_profile.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -137,12 +136,13 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                 borderRadius: AppRadius.allMd,
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    await updateProfile(
-                      ref,
-                      nameController.text.trim(),
-                      emailController.text.trim(),
-                      phoneController.text.trim(),
-                    );
+                    await ref
+                        .read(authControllerProvider.notifier)
+                        .updateUserProfile(
+                          name: nameController.text.trim(),
+                          email: emailController.text.trim(),
+                          phone: phoneController.text.trim(),
+                        );
                   }
                 },
               ),
