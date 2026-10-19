@@ -70,5 +70,51 @@ void main() {
       expect(updated.productName, 'New Name');
       expect(updated.productPrice, 150.0);
     });
+
+    test('toEntity converts correctly to WishlistItemEntity', () {
+      final model = WishlistItemModel(
+        id: 'wish-4',
+        userId: 'user-4',
+        productId: 'prod-4',
+        productName: 'Creatine',
+        productPrice: 250.0,
+        productImageUrl: 'https://example.com/creatine.png',
+        addedAt: fixedTime,
+      );
+
+      final entity = model.toEntity();
+
+      expect(entity.id, 'wish-4');
+      expect(entity.userId, 'user-4');
+      expect(entity.productId, 'prod-4');
+      expect(entity.productName, 'Creatine');
+      expect(entity.productPrice, 250.0);
+      expect(entity.productImageUrl, 'https://example.com/creatine.png');
+      expect(entity.addedAt, fixedTime);
+    });
+
+    test('fromEntity converts correctly from WishlistItemEntity', () {
+      final modelOriginal = WishlistItemModel(
+        id: 'wish-5',
+        userId: 'user-5',
+        productId: 'prod-5',
+        productName: 'BCAA',
+        productPrice: 180.0,
+        productImageUrl: 'https://example.com/bcaa.png',
+        addedAt: fixedTime,
+      );
+      final entity = modelOriginal.toEntity();
+
+      final modelFromEntity = WishlistItemModel.fromEntity(entity);
+
+      expect(modelFromEntity.id, entity.id);
+      expect(modelFromEntity.userId, entity.userId);
+      expect(modelFromEntity.productId, entity.productId);
+      expect(modelFromEntity.productName, entity.productName);
+      expect(modelFromEntity.productPrice, entity.productPrice);
+      expect(modelFromEntity.productImageUrl, entity.productImageUrl);
+      expect(modelFromEntity.addedAt, entity.addedAt);
+    });
   });
 }
+
