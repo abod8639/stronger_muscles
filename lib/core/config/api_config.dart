@@ -30,6 +30,12 @@ class ApiConfig {
   // Categories (Public)
   static const String categories = '/shop/categories';
 
+  // Reviews (Public & Customer)
+  static String productReviews(String productId) => '/shop/products/$productId/reviews';
+  static String submitReview(String productId) => '/customer/products/$productId/reviews';
+  static String userProductReview(String productId) => '/customer/products/$productId/user-review';
+  static String deleteReview(String reviewId) => '/customer/reviews/$reviewId';
+
   // Customer (Protected)
   static const String customerProfile = '/customer/profile';
   static const String cart = '/customer/cart';
