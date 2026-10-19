@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_empty_state.dart';
 import 'package:stronger_muscles/core/components/app_section_title.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
@@ -46,7 +47,11 @@ class SavedAddressesList extends ConsumerWidget {
         ),
         addressesState.when(
           data: (addresses) => addresses.isEmpty
-              ? _buildEmptyState(theme, intl10n)
+              ? AppEmptyState(
+                  icon: Icons.location_off_outlined,
+                  title: intl10n.noAddressesSavedYet,
+                  padding: const EdgeInsets.all(40.0),
+                )
               : ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -70,28 +75,6 @@ class SavedAddressesList extends ConsumerWidget {
           error: (e, _) => Center(child: Text('${intl10n.error}: $e')),
         ),
       ],
-    );
-  }
-
-  Widget _buildEmptyState(ThemeData theme, AppLocalizations intl10n) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(40.0),
-        child: Column(
-          children: [
-            Icon(
-              Icons.location_off_outlined,
-              size: 64,
-              color: Colors.grey[300],
-            ),
-            const SizedBox(height: AppDimens.spacingLg),
-            Text(
-              intl10n.noAddressesSavedYet,
-              style: theme.textTheme.bodyLarge?.copyWith(color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
