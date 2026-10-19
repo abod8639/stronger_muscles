@@ -1,3 +1,4 @@
+import 'package:stronger_muscles/features/payment/domain/entities/payment_method_entity.dart';
 import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
 
 /// Domain contract defining payment operations.
@@ -7,5 +8,9 @@ abstract class PaymentRepository {
     String gateway = 'paymob',
     String? firstName,
     String? lastName,
+  });
+
+  Future<List<PaymentMethodEntity>> getAvailablePaymentMethods({
+    String lang = 'ar',
   });
 }
