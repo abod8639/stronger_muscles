@@ -87,23 +87,22 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                 localizations,
               ),
               const SizedBox(height: 32),
-              _buildTextField(
+              AppTextFormField(
                 controller: nameController,
                 label: localizations.fullName,
-                icon: Icons.person_outline,
+                prefixIcon: const Icon(Icons.person_outline, color: AppColors.primary),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return localizations.enterName;
                   }
                   return null;
                 },
-                isDark: isDark,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
+              AppTextFormField(
                 controller: emailController,
                 label: localizations.email,
-                icon: Icons.email_outlined,
+                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -116,13 +115,12 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                   }
                   return null;
                 },
-                isDark: isDark,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
+              AppTextFormField(
                 controller: phoneController,
                 label: localizations.phoneNumber,
-                icon: Icons.phone_outlined,
+                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty && value.length < 10) {
@@ -130,47 +128,30 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                   }
                   return null;
                 },
-                isDark: isDark,
               ),
               const SizedBox(height: 32),
-              isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          await updateProfile(
-                            ref,
-                            nameController.text.trim(),
-                            emailController.text.trim(),
-                            phoneController.text.trim(),
-                          );
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: AppDimens.borderRadiusMd,
-                        ),
-                        elevation: 2,
-                      ),
-                      child: Text(
-                        localizations.saveChanges,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+              AppPrimaryButton(
+                text: localizations.saveChanges,
+                isLoading: isLoading,
+                height: 52.0,
+                borderRadius: AppRadius.allMd,
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    await updateProfile(
+                      ref,
+                      nameController.text.trim(),
+                      emailController.text.trim(),
+                      phoneController.text.trim(),
+                    );
+                  }
+                },
+              ),
               const SizedBox(height: 16),
               OutlinedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: AppDimens.borderRadiusMd,
-                  ),
+                  shape: AppRadius.shapeMd,
                   side: BorderSide(
                     color: isDark ? AppColors.greyDark : AppColors.grey,
                   ),
@@ -205,7 +186,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(color: AppColors.primary, width: 3),
-              boxShadow: AppDimens.floatingShadow(),
+              boxShadow: AppShadows.ofFloating(context),
             ),
             child: CircleAvatar(
               radius: 58,
@@ -249,44 +230,6 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    TextInputType? keyboardType,
-    String? Function(String?)? validator,
-    required bool isDark,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      validator: validator,
-      style: TextStyle(color: isDark ? AppColors.white : AppColors.black),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, color: AppColors.primary),
-        border: OutlineInputBorder(
-          borderRadius: AppDimens.borderRadiusMd,
-          borderSide: BorderSide(
-            color: isDark ? AppColors.greyDark : AppColors.grey,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: AppDimens.borderRadiusMd,
-          borderSide: BorderSide(
-            color: isDark ? AppColors.greyDark : AppColors.grey,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: AppDimens.borderRadiusMd,
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        filled: true,
-        fillColor: isDark ? AppColors.surfaceDark : AppColors.white,
       ),
     );
   }
