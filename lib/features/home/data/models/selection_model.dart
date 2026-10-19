@@ -1,9 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
 
-class SelectionsModel {
-  final String label;
-  final IconData icon;
-  final String id;
+export 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
 
-  SelectionsModel({required this.label, required this.icon, required this.id});
+/// Data model representing a selectable category shortcut, extending domain [SelectionEntity].
+class SelectionsModel extends SelectionEntity {
+  const SelectionsModel({
+    required super.label,
+    required super.icon,
+    required super.id,
+  });
+
+  factory SelectionsModel.fromEntity(SelectionEntity entity) {
+    return SelectionsModel(
+      label: entity.label,
+      icon: entity.icon,
+      id: entity.id,
+    );
+  }
 }
