@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/components/app_card.dart';
+import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 
 class ProfileHeader extends ConsumerWidget {

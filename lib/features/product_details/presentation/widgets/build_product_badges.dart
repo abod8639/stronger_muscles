@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_badge.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/utils/components/app_badge.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
