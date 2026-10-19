@@ -186,7 +186,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Sign in to Your Account'), findsOneWidget);
-      expect(find.text('Login'), findsOneWidget);
+      expect(find.text('Login / Register'), findsOneWidget);
       expect(find.text('Sign in with Google'), findsOneWidget);
       expect(find.byType(AccountSettingsList), findsOneWidget);
     });
