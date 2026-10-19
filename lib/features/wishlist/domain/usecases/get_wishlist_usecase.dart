@@ -1,4 +1,4 @@
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/wishlist/domain/repositories/wishlist_repository.dart';
 
 class GetWishlistUseCase {
@@ -6,7 +6,7 @@ class GetWishlistUseCase {
 
   GetWishlistUseCase(this.repository);
 
-  List<ProductModel> call() {
+  List<ProductEntity> call() {
     return repository.getWishlistItems();
   }
 }
