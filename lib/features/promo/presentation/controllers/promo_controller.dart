@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
+import 'package:stronger_muscles/features/product/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 import 'package:stronger_muscles/features/promo/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/routes/routes.dart';
@@ -63,8 +63,8 @@ class PromoController extends _$PromoController {
     if (promo.targetType == 'product') {
       try {
         final product = await ref
-            .read(productRepositoryProvider)
-            .getProductById(promo.targetId!);
+            .read(getProductByIdUseCaseProvider)
+            .call(promo.targetId!);
 
         if (context.mounted) {
           context.push(AppRoutes.productDetails, extra: product);
