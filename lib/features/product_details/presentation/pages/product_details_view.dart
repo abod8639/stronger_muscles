@@ -28,35 +28,35 @@ class ProductDetailsView extends ConsumerWidget {
   static const double _mediumSpacing = 16.0;
   static const double _bottomPadding = 32.0;
 
-  final ProductModel? product;
-  final ProductEntity? productEntity;
+  final ProductEntity? product;
   final String? initialFlavor;
   final String? initialSize;
 
   const ProductDetailsView({
     super.key,
     this.product,
-    this.productEntity,
     this.initialFlavor,
     this.initialSize,
   });
 
-  const ProductDetailsView.fromEntity({
-    super.key,
-    required ProductEntity this.productEntity,
-    this.initialFlavor,
-    this.initialSize,
-  }) : product = null;
-
-  ProductModel? get _effectiveProduct =>
-      product ?? (productEntity != null ? ProductModel.fromEntity(productEntity!) : null);
+  /// Convenience constructor allowing callers with [ProductModel] to initialize cleanly.
+  factory ProductDetailsView.fromModel({
+    Key? key,
+    required ProductModel model,
+    String? initialFlavor,
+    String? initialSize,
+  }) {
+    return ProductDetailsView(
+      key: key,
+      product: model.toEntity(),
+      initialFlavor: initialFlavor,
+      initialSize: initialSize,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final effectiveProd = _effectiveProduct;
-
-    // If product is null, try to get it from arguments (though extra is preferred)
-    if (effectiveProd == null) {
+    if (product == null) {
       return Scaffold(
         body: Center(
           child: Text(
@@ -67,6 +67,7 @@ class ProductDetailsView extends ConsumerWidget {
       );
     }
 
+    final effectiveProd = ProductModel.fromEntity(product!);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final locale = Localizations.localeOf(context).languageCode;
 
