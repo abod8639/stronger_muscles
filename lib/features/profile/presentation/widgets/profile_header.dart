@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 
 class ProfileHeader extends ConsumerWidget {
@@ -19,7 +20,7 @@ class ProfileHeader extends ConsumerWidget {
     return AppCard(
       margin: const EdgeInsets.all(AppDimens.spacingLg),
       padding: const EdgeInsets.all(AppDimens.spacingXl),
-      borderRadius: AppDimens.borderRadiusLg,
+      borderRadius: AppRadius.allLg,
       gradient: LinearGradient(
         begin: Alignment.bottomLeft,
         end: Alignment.topRight,
@@ -28,7 +29,7 @@ class ProfileHeader extends ConsumerWidget {
           theme.scaffoldBackgroundColor,
         ],
       ),
-      boxShadow: AppDimens.subtleShadow(theme.shadowColor),
+      boxShadow: AppShadows.ofSubtle(context),
       child: Row(
         children: [
           Container(
