@@ -105,16 +105,22 @@ void main() {
       expect(find.text('Stevia'), findsOneWidget);
     });
 
-    testWidgets('ProductDetailsView.fromEntity initializes from pure ProductEntity', (tester) async {
+    testWidgets('ProductDetailsView accepts ProductEntity directly and fromModel factory', (tester) async {
       const entity = ProductEntity(
         id: 'entity-1',
         name: LocalizedStringEntity(en: 'Pure Whey', ar: 'واي نقي'),
         price: 150.0,
       );
 
-      const view = ProductDetailsView.fromEntity(productEntity: entity);
-      expect(view.productEntity, entity);
-      expect(view.product, isNull);
+      const viewDirect = ProductDetailsView(product: entity);
+      expect(viewDirect.product, entity);
+
+      const model = ProductModel(
+        id: 'model-1',
+        price: 150.0,
+      );
+      final viewModel = ProductDetailsView.fromModel(model: model);
+      expect(viewModel.product?.id, 'model-1');
     });
   });
 }
