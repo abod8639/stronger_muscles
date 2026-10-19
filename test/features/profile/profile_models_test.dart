@@ -127,5 +127,51 @@ void main() {
       expect(user.addresses!.first.street, 'Street A');
       expect(user.addresses!.first.isDefault, isTrue);
     });
+
+    test('toEntity converts UserModel to domain UserEntity', () {
+      const userModel = UserModel(
+        id: 7,
+        email: 'user7@test.com',
+        name: 'User Seven',
+        phone: '1234567890',
+        photoUrl: 'https://example.com/photo.png',
+        token: 'token123',
+      );
+
+      final entity = userModel.toEntity();
+      expect(entity.id, 7);
+      expect(entity.email, 'user7@test.com');
+      expect(entity.name, 'User Seven');
+      expect(entity.phone, '1234567890');
+      expect(entity.photoUrl, 'https://example.com/photo.png');
+      expect(entity.token, 'token123');
+    });
+  });
+
+  group('AddressModel to/from Entity Tests', () {
+    test('toEntity and fromEntity convert accurately', () {
+      const model = AddressModel(
+        id: 10,
+        street: 'Street B',
+        city: 'Jeddah',
+        label: 'Home',
+        fullName: 'Ali',
+        phone: '0500000000',
+        isDefault: true,
+      );
+
+      final entity = model.toEntity();
+      expect(entity.id, 10);
+      expect(entity.street, 'Street B');
+      expect(entity.city, 'Jeddah');
+      expect(entity.label, 'Home');
+      expect(entity.isDefault, isTrue);
+
+      final backToModel = AddressModel.fromEntity(entity);
+      expect(backToModel.id, model.id);
+      expect(backToModel.street, model.street);
+      expect(backToModel.city, model.city);
+      expect(backToModel.isDefault, model.isDefault);
+    });
   });
 }
