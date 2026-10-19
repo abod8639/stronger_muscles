@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/data/datasources/product_service.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/search/domain/repositories/search_repository.dart';
 
 part 'search_repository_impl.g.dart';
@@ -14,19 +14,21 @@ SearchRepository searchRepository(SearchRepositoryRef ref) {
 /// Concrete implementation of [SearchRepository].
 ///
 /// Combines remote API calls and local price-filtering logic.
+/// Translates data models to pure domain [ProductEntity].
 class SearchRepositoryImpl implements SearchRepository {
   final ProductService _productService;
 
   SearchRepositoryImpl(this._productService);
 
   @override
-  Future<List<ProductModel>> searchProducts(String query) async {
-    return await _productService.getProducts(query: query);
+  Future<List<ProductEntity>> searchProducts(String query) async {
+    final models = await _productService.getProducts(query: query);
+    return models.map((model) => model.toEntity()).toList();
   }
 
   @override
-  List<ProductModel> filterByPrice(
-    List<ProductModel> products,
+  List<ProductEntity> filterByPrice(
+    List<ProductEntity> products,
     double min,
     double max,
   ) {
@@ -34,13 +36,13 @@ class SearchRepositoryImpl implements SearchRepository {
   }
 
   @override
-  Map<String, double> calculatePriceBounds(List<ProductModel> products) {
+  Map<String, double> calculatePriceBounds(List<ProductEntity> products) {
     if (products.isEmpty) {
       return {'min': 100, 'max': 10000};
     }
     double minPrice = products.first.price;
     double maxPrice = products.first.price;
-    for (var p in products) {
+    for (final p in products) {
       minPrice = math.min(minPrice, p.price);
       maxPrice = math.max(maxPrice, p.price);
     }
