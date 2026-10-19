@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_chat_sheet.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class TicketSuccessDialog extends StatelessWidget {
@@ -86,7 +87,7 @@ class TicketSuccessDialog extends StatelessWidget {
             const SizedBox(height: 14.0),
             Text(
               l10n?.ticketSubmittedMessage ??
-                  'شكراً لتواصلك معنا. سيقوم فريق الدعم بالرد عليك في أقرب وقت.',
+                  'شكراً لتواصلك معنا. سيقوم فريق الدعم بالرد عليك في أقرب وقت وستصلك إشعارات بالرد.',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13.5,
@@ -95,10 +96,29 @@ class TicketSuccessDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24.0),
-            AppPrimaryButton(
-              text: l10n?.cancel == null ? 'إغلاق' : 'حسناً',
-              width: double.infinity,
-              onPressed: () => Navigator.of(context).pop(),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('إغلاق'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: AppPrimaryButton(
+                    text: 'متابعة التذكرة',
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      TicketChatSheet.show(context, ticketId);
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
