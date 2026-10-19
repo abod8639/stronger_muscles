@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/components/app_empty_state.dart';
 import 'package:stronger_muscles/core/components/app_section_title.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/address_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
