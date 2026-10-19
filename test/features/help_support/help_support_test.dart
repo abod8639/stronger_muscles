@@ -1,7 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/data/datasources/help_support_local_data_source.dart';
+import 'package:stronger_muscles/features/help_support/data/datasources/help_support_remote_data_source.dart';
 import 'package:stronger_muscles/features/help_support/data/models/faq_model.dart';
+import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
+import 'package:stronger_muscles/features/help_support/data/models/support_ticket_model.dart';
 import 'package:stronger_muscles/features/help_support/data/repositories/help_support_repository_impl.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
@@ -10,6 +13,54 @@ import 'package:stronger_muscles/features/help_support/domain/usecases/get_faqs_
 import 'package:stronger_muscles/features/help_support/domain/usecases/get_support_channels_usecase.dart';
 import 'package:stronger_muscles/features/help_support/domain/usecases/submit_ticket_usecase.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
+
+class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
+  @override
+  Future<SupportTicketModel> submitTicket(SupportTicketModel ticket) async =>
+      SupportTicketModel(
+        id: 'SM-123456',
+        ticketNumber: 'SM-123456',
+        subject: ticket.subject,
+        category: ticket.category,
+        message: ticket.message,
+        createdAt: ticket.createdAt,
+      );
+
+  @override
+  Future<List<SupportTicketModel>> getUserTickets() async => [];
+
+  @override
+  Future<SupportTicketModel> getTicketDetails(String ticketId) async =>
+      SupportTicketModel(
+        id: ticketId,
+        subject: 'Test',
+        category: 'Orders',
+        message: 'Message',
+        createdAt: DateTime.now(),
+      );
+
+  @override
+  Future<SupportMessageModel> sendTicketMessage(String ticketId, String message) async =>
+      SupportMessageModel(
+        id: 1,
+        ticketId: int.tryParse(ticketId) ?? 1,
+        senderType: 'user',
+        senderName: 'User',
+        message: message,
+        createdAt: DateTime.now(),
+      );
+
+  @override
+  Future<SupportTicketModel> closeTicket(String ticketId) async =>
+      SupportTicketModel(
+        id: ticketId,
+        subject: 'Test',
+        category: 'Orders',
+        message: 'Message',
+        status: 'closed',
+        createdAt: DateTime.now(),
+      );
+}
 
 void main() {
   group('Core Theme Tokens', () {
@@ -37,13 +88,15 @@ void main() {
   group('Help & Support Clean Architecture', () {
     late HelpSupportLocalDataSource dataSource;
     late HelpSupportRepositoryImpl repository;
+    late HelpSupportRemoteDataSource remoteDataSource;
     late GetFaqsUseCase getFaqsUseCase;
     late GetSupportChannelsUseCase getChannelsUseCase;
     late SubmitTicketUseCase submitTicketUseCase;
 
     setUp(() {
       dataSource = HelpSupportLocalDataSourceImpl();
-      repository = HelpSupportRepositoryImpl(dataSource);
+      remoteDataSource = MockHelpSupportRemoteDataSource();
+      repository = HelpSupportRepositoryImpl(dataSource, remoteDataSource);
       getFaqsUseCase = GetFaqsUseCase(repository);
       getChannelsUseCase = GetSupportChannelsUseCase(repository);
       submitTicketUseCase = SubmitTicketUseCase(repository);
@@ -98,6 +151,7 @@ void main() {
         getFaqsUseCase: getFaqsUseCase,
         getChannelsUseCase: getChannelsUseCase,
         submitTicketUseCase: submitTicketUseCase,
+        repository: repository,
       );
 
       // Await initial load
@@ -118,13 +172,13 @@ void main() {
       expect(notifier.state.searchQuery, 'policy');
 
       // Submit ticket through controller
-      final ticketId = await notifier.submitTicket(
+      final ticket = await notifier.submitTicket(
         subject: 'مشكلة دفع',
         category: 'الدفع والاسترجاع',
         message: 'تم خصم المبلغ مرتين من حسابي',
       );
-      expect(ticketId, isNotNull);
-      expect(notifier.state.lastSubmittedTicketId, ticketId);
+      expect(ticket, isNotNull);
+      expect(notifier.state.lastSubmittedTicketId, ticket!.id);
     });
 
     test('FaqModel toJson and fromJson match', () {
