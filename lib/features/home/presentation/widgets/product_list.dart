@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/utils/components/product_container.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
@@ -18,31 +19,17 @@ class ProductList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final homeState = ref.watch(homeControllerProvider);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return homeState.when(
       data: (products) {
         if (products.isEmpty) {
           return SliverToBoxAdapter(
-            child: Center(
-              heightFactor: 3,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.shopping_bag_outlined,
-                    size: 64.0,
-                    color: theme.colorScheme.onSurfaceVariant.withValues(
-                      alpha: 0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'No products found',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 48.0),
+              child: AppEmptyState(
+                icon: Icons.inventory_2_outlined,
+                title: l10n?.noProductsFound ?? 'No products found',
               ),
             ),
           );
@@ -92,19 +79,22 @@ class ProductList extends ConsumerWidget {
               children: [
                 Icon(
                   Icons.error_outline_rounded,
-                  size: 64.0,
-                  color: Colors.red.withValues(alpha: .5),
+                  size: 56.0,
+                  color: theme.colorScheme.error.withValues(alpha: .7),
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 12.0),
                 Text(
                   error.toString(),
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleSmall?.copyWith(
                     color: theme.colorScheme.error,
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                ElevatedButton.icon(
+                AppPrimaryButton(
+                  text: l10n?.retry ?? 'Retry',
+                  icon: Icons.refresh_rounded,
+                  height: 44.0,
                   onPressed: () => ref
                       .read(homeControllerProvider.notifier)
                       .fetchProductsForSection(
@@ -112,10 +102,6 @@ class ProductList extends ConsumerWidget {
                             .read(homeControllerProvider.notifier)
                             .selectedSectionIndex,
                       ),
-                  icon: const Icon(Icons.refresh),
-                  label: Text(
-                    AppLocalizations.of(context)?.retry ?? 'Retry',
-                  ),
                 ),
               ],
             ),
