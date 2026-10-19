@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
@@ -21,8 +22,8 @@ class LoginPromptCard extends ConsumerWidget {
     return AppCard(
       margin: const EdgeInsets.all(AppDimens.spacingLg),
       padding: const EdgeInsets.all(AppDimens.spacingXl),
-      borderRadius: AppDimens.borderRadiusXl,
-      boxShadow: AppDimens.floatingShadow(theme.shadowColor),
+      borderRadius: AppRadius.allXl,
+      boxShadow: AppShadows.ofFloating(context),
       child: Column(
         children: [
           Container(
@@ -63,9 +64,7 @@ class LoginPromptCard extends ConsumerWidget {
               backgroundColor: AppColors.primary,
               foregroundColor: AppColors.white,
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: const RoundedRectangleBorder(
-                borderRadius: AppDimens.borderRadiusMd,
-              ),
+              shape: AppRadius.shapeMd,
               elevation: AppDimens.elevationSm,
             ),
           ),
@@ -90,9 +89,7 @@ class LoginPromptCard extends ConsumerWidget {
                 horizontal: 25.0,
                 vertical: 10.0,
               ),
-              shape: const RoundedRectangleBorder(
-                borderRadius: AppDimens.borderRadiusMd,
-              ),
+              shape: AppRadius.shapeMd,
               elevation: AppDimens.elevationSm,
             ),
           ),
