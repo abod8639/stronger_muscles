@@ -112,7 +112,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: items.length,
-            separatorBuilder: (_, __) => Divider(
+            separatorBuilder: (_, _) => Divider(
               height: 1.0,
               color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
             ),
@@ -136,7 +136,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
                               width: 44.0,
                               height: 44.0,
                               fit: BoxFit.cover,
-                              errorWidget: (_, __, ___) => Container(
+                              errorWidget: (_, _, _) => Container(
                                 width: 44.0,
                                 height: 44.0,
                                 color: theme.colorScheme.surfaceContainerHighest,
