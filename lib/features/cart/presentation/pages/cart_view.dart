@@ -24,12 +24,20 @@ class CartView extends ConsumerWidget {
                 onGoShopping: () =>
                     ref.read(mainControllerProvider.notifier).changeTabIndex(0),
               )
-            : BuildCartContent(items: items),
+            : CartContentList(items: items),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('${localizations.error}: $e')),
+        error: (e, st) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              '${localizations.error}: $e',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ),
       ),
     );
   }
-
-
 }
+
