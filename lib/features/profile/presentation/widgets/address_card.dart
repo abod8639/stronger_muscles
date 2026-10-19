@@ -217,7 +217,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
-        boxShadow: AppDimens.subtleShadow(Colors.black),
+        boxShadow: AppShadows.ofSubtle(context),
       ),
       child: const Icon(
         Icons.map_outlined,
@@ -239,7 +239,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
           padding: const EdgeInsets.all(AppDimens.spacingSm),
           decoration: const BoxDecoration(
             color: AppColors.primaryLight,
-            borderRadius: AppDimens.borderRadiusSm,
+            borderRadius: AppRadius.allSm,
           ),
           child: Icon(labelIcon, color: AppColors.primary, size: 18),
         ),
@@ -261,7 +261,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         gradient: LinearGradient(
           colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
         ),
-        borderRadius: AppDimens.borderRadiusXl,
+        borderRadius: AppRadius.allPill,
       ),
       child: Text(
         intl10n.defaultBadge,
