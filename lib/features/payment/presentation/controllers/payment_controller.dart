@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/features/payment/domain/entities/payment_method_entity.dart';
 import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
 import 'package:stronger_muscles/features/payment/domain/usecases/usecase_providers.dart';
 
@@ -6,6 +7,12 @@ final paymentControllerProvider =
     StateNotifierProvider<PaymentController, AsyncValue<PaymentResultEntity?>>(
   (ref) => PaymentController(ref),
 );
+
+final availablePaymentMethodsProvider =
+    FutureProvider.family<List<PaymentMethodEntity>, String>((ref, lang) async {
+  final useCase = ref.watch(getPaymentMethodsUseCaseProvider);
+  return useCase(lang: lang);
+});
 
 class PaymentController
     extends StateNotifier<AsyncValue<PaymentResultEntity?>> {
