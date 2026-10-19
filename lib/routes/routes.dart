@@ -140,19 +140,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.productDetails,
         builder: (context, state) {
           final extra = state.extra;
-          if (extra is ProductModel) {
+          if (extra is ProductEntity) {
             return ProductDetailsView(product: extra);
-          } else if (extra is ProductEntity) {
-            return ProductDetailsView(product: ProductModel.fromEntity(extra));
+          } else if (extra is ProductModel) {
+            return ProductDetailsView.fromModel(model: extra);
           } else if (extra is Map<String, dynamic> &&
               extra.containsKey('product')) {
             final p = extra['product'];
-            final productModel = p is ProductModel
+            final productEntity = p is ProductEntity
                 ? p
-                : (p is ProductEntity ? ProductModel.fromEntity(p) : null);
-            if (productModel != null) {
+                : (p is ProductModel ? p.toEntity() : null);
+            if (productEntity != null) {
               return ProductDetailsView(
-                product: productModel,
+                product: productEntity,
                 initialFlavor: extra['selectedFlavor'] as String?,
                 initialSize: extra['selectedSize'] as String?,
               );
