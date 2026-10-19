@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/checkout_button.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/total_price_section.dart';
 
@@ -19,13 +21,7 @@ class BuildCheckoutSection extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: .05),
-            blurRadius: 10.0,
-            offset: const Offset(0, -2),
-          ),
-        ],
+        boxShadow: context.topBarShadow,
       ),
       child: const SafeArea(
         child: Row(
