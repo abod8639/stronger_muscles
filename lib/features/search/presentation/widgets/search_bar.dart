@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/features/home/presentation/widgets/price_filter_slider.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/widgets/price_filter_slider.dart';
 
 const double _horizontalPadding = 16.0;
 const double _verticalPadding = 12.0;
 const double _searchBarHeight = 48.0;
 const double _iconButtonSize = 48.0;
-
 
 class SearchBar extends StatelessWidget {
   const SearchBar({super.key, this.onTap});
@@ -52,7 +52,7 @@ Widget buildFilterButton({
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHighest,
           shape: BoxShape.circle,
-          boxShadow: AppDimens.subtleShadow(
+          boxShadow: AppShadows.subtle(
             theme.colorScheme.onSurfaceVariant,
           ),
         ),
@@ -71,10 +71,8 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Theme.of(context).colorScheme.surface,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(AppDimens.radiusBottomSheet),
-      ),
+    shape: const RoundedRectangleBorder(
+      borderRadius: AppRadius.topBottomSheet,
     ),
     builder: (context) => DraggableScrollableSheet(
       initialChildSize: 0.45,
@@ -87,7 +85,7 @@ void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Center(child: BottomSheetHandle()),
+            const Center(child: AppBottomSheetHandle()),
             const SizedBox(height: AppDimens.spacingXl),
             Text(
               l10n.filterProducts,
