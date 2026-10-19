@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/app_section_title.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
@@ -39,8 +40,8 @@ class RecentOrdersList extends ConsumerWidget {
                 height: 18,
                 decoration: BoxDecoration(
                   color: AppColors.primary,
-                  borderRadius: AppDimens.borderRadiusXs,
-                  boxShadow: AppDimens.coloredShadow(AppColors.primary, alpha: 0.3),
+                  borderRadius: AppRadius.allXs,
+                  boxShadow: AppShadows.colored(AppColors.primary, alpha: 0.3),
                 ),
               ),
               actionText: l10n.viewAll,
