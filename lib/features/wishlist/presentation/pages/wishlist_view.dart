@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/components/app_empty_state.dart';
 import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_item_card.dart';
@@ -18,7 +17,11 @@ class WishlistView extends ConsumerWidget {
     return Scaffold(
       appBar: baseAppBar(context, localizations.wishlist),
       body: wishlistItems.isEmpty
-          ? const _EmptyWishlistState()
+          ? AppEmptyState(
+              icon: Icons.favorite_border_rounded,
+              title: localizations.yourWishlistIsEmpty,
+              subtitle: localizations.startAddingFavorites,
+            )
           : ListView.builder(
               itemCount: wishlistItems.length,
               physics: const BouncingScrollPhysics(),
@@ -32,32 +35,3 @@ class WishlistView extends ConsumerWidget {
   }
 }
 
-class _EmptyWishlistState extends StatelessWidget {
-  const _EmptyWishlistState();
-
-  @override
-  Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.favorite_border,
-            size: AppDimens.iconXl,
-            color: AppColors.grey,
-          ),
-          const SizedBox(height: AppDimens.spacingLg),
-          Text(
-            localizations.yourWishlistIsEmpty,
-            style: const TextStyle(fontSize: 18.0, color: AppColors.grey),
-          ),
-          Text(
-            localizations.startAddingFavorites,
-            style: const TextStyle(fontSize: 16.0, color: AppColors.grey),
-          ),
-        ],
-      ),
-    );
-  }
-}
