@@ -13,8 +13,15 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class _FakeProductSearchController extends ProductSearchController {
   final List<ProductEntity> initialProducts;
+  final bool initialHasSearched;
 
-  _FakeProductSearchController(this.initialProducts);
+  _FakeProductSearchController(
+    this.initialProducts, {
+    this.initialHasSearched = false,
+  });
+
+  @override
+  bool get hasSearched => initialHasSearched;
 
   @override
   Future<List<ProductEntity>> build() async {
@@ -74,15 +81,11 @@ void main() {
 
     testWidgets('renders AppEmptyState when search has no results',
         (tester) async {
-      final emptyController = _FakeProductSearchController([]);
-      // simulate search performed
-      emptyController.onSearchChanged('not found');
-
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             productSearchControllerProvider.overrideWith(
-              () => emptyController,
+              () => _FakeProductSearchController([], initialHasSearched: true),
             ),
             searchHistoryProvider.overrideWith(
               () => _FakeSearchHistory(),
