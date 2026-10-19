@@ -9,18 +9,21 @@ const bool _defaultThemeIsDark = true;
 
 @riverpod
 class ThemeController extends _$ThemeController {
-  late final Box _box;
+  Box? _box;
 
   @override
   bool build() {
-    _box = Hive.box('settings');
-    return _box.get(_themeStorageKey, defaultValue: _defaultThemeIsDark);
+    if (Hive.isBoxOpen('settings')) {
+      _box = Hive.box('settings');
+      return _box?.get(_themeStorageKey, defaultValue: _defaultThemeIsDark) ?? _defaultThemeIsDark;
+    }
+    return _defaultThemeIsDark;
   }
 
   ThemeMode get themeMode => state ? ThemeMode.dark : ThemeMode.light;
 
   void toggleTheme() {
     state = !state;
-    _box.put(_themeStorageKey, state);
+    _box?.put(_themeStorageKey, state);
   }
 }
