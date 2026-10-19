@@ -4,4 +4,5 @@ import 'package:stronger_muscles/features/order/domain/entities/order_entity.dar
 abstract class OrderRepository {
   Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload);
   Future<List<OrderEntity>> getUserOrders({int? limit});
+  Future<OrderEntity?> getOrderById(String id);
 }
