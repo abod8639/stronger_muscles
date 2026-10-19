@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/features/product/data/models/review_model.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/header_with_icon_and_title.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/stars_record.dart';
@@ -69,34 +72,31 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
     final isDark = theme.brightness == Brightness.dark;
     final intl10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: isDark
-              ? [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.surface.withValues(alpha: .8),
-                ]
-              : [
-                  theme.colorScheme.surface,
-                  theme.colorScheme.primaryContainer.withValues(alpha: .1),
-                ],
-        ),
-        borderRadius: AppDimens.borderRadiusLg,
-        border: Border.all(
-          color: AppColors.primary.withValues(alpha: .05),
-          width: 0.5,
-        ),
-        boxShadow: AppDimens.cardShadow(theme.shadowColor),
+    return AppCard(
+      padding: EdgeInsets.zero,
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: isDark
+            ? [
+                theme.colorScheme.surface,
+                theme.colorScheme.surface.withValues(alpha: .8),
+              ]
+            : [
+                theme.colorScheme.surface,
+                theme.colorScheme.primaryContainer.withValues(alpha: .1),
+              ],
       ),
-
-      child: ClipRRect(
-        borderRadius: AppDimens.borderRadiusLg,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      borderRadius: AppRadius.allLg,
+      border: Border.all(
+        color: AppColors.primary.withValues(alpha: .05),
+        width: 0.5,
+      ),
+      boxShadow: AppShadows.ofCard(context),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             // Header with icon and title
             HeaderWithIconandTitle(),
 
@@ -182,7 +182,6 @@ class ExpandableDescriptionCardState extends State<ExpandableDescriptionCard>
             ),
           ],
         ),
-      ),
     );
   }
 
