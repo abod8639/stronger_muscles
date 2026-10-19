@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
@@ -74,8 +75,8 @@ class QuickActionsRow extends ConsumerWidget {
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.all(AppDimens.spacingLg),
-      borderRadius: AppDimens.borderRadiusMd,
-      boxShadow: AppDimens.subtleShadow(theme.shadowColor),
+      borderRadius: AppRadius.allMd,
+      boxShadow: AppShadows.ofSubtle(context),
       child: Column(
         children: [
           Icon(icon, color: color, size: AppDimens.iconMd),
