@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/utils/components/build_quantity_controls.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -129,9 +130,7 @@ class BottomIconsRow extends ConsumerWidget {
           fontSize: _buttonFontSize,
           fontWeight: FontWeight.bold,
         ),
-        shape: const RoundedRectangleBorder(
-          borderRadius: AppDimens.borderRadiusMd,
-        ),
+        shape: AppRadius.shapeMd,
       ),
     );
   }
@@ -148,7 +147,7 @@ class BottomIconsRow extends ConsumerWidget {
         color: isInWishlist
             ? AppColors.primary.withValues(alpha: .1)
             : theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: AppDimens.borderRadiusMd,
+        borderRadius: AppRadius.allMd,
       ),
       child: IconButton(
         icon: Icon(
