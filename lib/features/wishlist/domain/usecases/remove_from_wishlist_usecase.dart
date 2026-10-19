@@ -1,4 +1,4 @@
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/wishlist/domain/repositories/wishlist_repository.dart';
 
 class RemoveFromWishlistUseCase {
@@ -6,7 +6,7 @@ class RemoveFromWishlistUseCase {
 
   RemoveFromWishlistUseCase(this.repository);
 
-  void call(ProductModel product) {
+  void call(ProductEntity product) {
     if (repository.isInWishlist(product.id)) {
       repository.removeFromWishlist(product);
     }
