@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/core/utils/functions/handle_checkout.dart';
+import 'package:stronger_muscles/features/cart/presentation/utils/handle_checkout.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Checkout CTA button in cart using [AppPrimaryButton].

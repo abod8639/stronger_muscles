@@ -5,7 +5,7 @@ import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/core/utils/functions/show_address_form.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/address_selection_card.dart';
