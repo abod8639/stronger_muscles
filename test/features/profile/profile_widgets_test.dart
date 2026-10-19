@@ -185,7 +185,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Sign In to Your Account'), findsOneWidget);
+      expect(find.text('Sign in to Your Account'), findsOneWidget);
       expect(find.text('Login'), findsOneWidget);
       expect(find.text('Sign in with Google'), findsOneWidget);
       expect(find.byType(AccountSettingsList), findsOneWidget);
@@ -199,7 +199,7 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('Account Settings'), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
       expect(find.text('Edit Profile'), findsOneWidget);
       expect(find.text('Theme'), findsOneWidget);
       expect(find.text('Notifications'), findsOneWidget);
