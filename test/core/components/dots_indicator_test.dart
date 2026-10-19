@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/utils/components/dots_indicator.dart';
+import 'package:stronger_muscles/core/components/app_dots_indicator.dart';
 
 void main() {
   group('DotsIndicator Component Tests', () {
@@ -8,7 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: DotsIndicator(
+            body: AppDotsIndicator(
               itemCount: 4,
               currentIndex: 1,
             ),
@@ -24,7 +24,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: DotsIndicator(
+            body: AppDotsIndicator(
               itemCount: 1,
               currentIndex: 0,
             ),
