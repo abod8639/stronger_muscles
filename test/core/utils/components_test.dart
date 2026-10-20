@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
-import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
-import 'package:stronger_muscles/core/utils/components/internet_connection_banner.dart';
+import 'package:stronger_muscles/core/components/app_base_app_bar.dart';
+import 'package:stronger_muscles/core/components/app_flavor_image.dart';
+import 'package:stronger_muscles/core/components/app_internet_banner.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
 

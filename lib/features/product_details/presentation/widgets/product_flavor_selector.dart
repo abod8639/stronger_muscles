@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:stronger_muscles/core/components/app_flavor_image.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/core/utils/components/flavor_image.dart';
-
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 FlavorsModel getFlavorDetails(String flavorName) {

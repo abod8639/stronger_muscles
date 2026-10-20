@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_base_app_bar.dart';
 import 'package:stronger_muscles/core/components/app_empty_state.dart';
-import 'package:stronger_muscles/core/utils/components/base_app_bar.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';

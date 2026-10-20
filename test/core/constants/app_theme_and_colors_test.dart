@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_theme.dart';
+import 'package:stronger_muscles/core/theme/app_theme.dart';
 
 void main() {
   group('AppColors Tests', () {
