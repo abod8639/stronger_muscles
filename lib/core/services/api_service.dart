@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../features/profile/presentation/controllers/language_controller.dart';
 import '../config/api_config.dart';
 import 'storage_service.dart';
-import '../errors/failures.dart';
+import '../errors/errors.dart';
 
 part 'api_service.g.dart';
 
@@ -16,15 +16,16 @@ ApiService apiService(ApiServiceRef ref) {
 
 class ApiService {
   late final Dio _dio;
-  final Duration _timeout = const Duration(seconds: 15);
+  final Duration _defaultTimeout = const Duration(seconds: 15);
   final Ref _ref;
 
   ApiService(this._ref) {
     _dio = Dio(
       BaseOptions(
         baseUrl: ApiConfig.baseUrl,
-        connectTimeout: _timeout,
-        receiveTimeout: _timeout,
+        connectTimeout: _defaultTimeout,
+        receiveTimeout: _defaultTimeout,
+        sendTimeout: _defaultTimeout,
         responseType: ResponseType.json,
       ),
     );
@@ -64,18 +65,26 @@ class ApiService {
     String path, {
     Map<String, dynamic>? queryParameters,
     bool includeAuth = true,
+    CancelToken? cancelToken,
+    Duration? timeout,
   }) async {
     try {
+      final options = Options(
+        headers: {'includeAuth': includeAuth},
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      );
       final response = await _dio.get(
         path,
         queryParameters: queryParameters,
-        options: Options(headers: {'includeAuth': includeAuth}),
+        options: options,
+        cancelToken: cancelToken,
       );
       return response;
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    } catch (e) {
-      throw _handleGeneralError(e);
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
@@ -83,18 +92,26 @@ class ApiService {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Duration? timeout,
   }) async {
     try {
+      final options = Options(
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      );
       final response = await _dio.post(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
       );
       return response;
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    } catch (e) {
-      throw _handleGeneralError(e);
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
@@ -102,103 +119,49 @@ class ApiService {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Duration? timeout,
   }) async {
     try {
+      final options = Options(
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      );
       final response = await _dio.put(
         path,
         data: data,
         queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
       );
       return response;
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    } catch (e) {
-      throw _handleGeneralError(e);
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
-  Future<Response> delete(String path) async {
+  Future<Response> delete(
+    String path, {
+    CancelToken? cancelToken,
+    Duration? timeout,
+  }) async {
     try {
-      final response = await _dio.delete(path);
+      final options = Options(
+        sendTimeout: timeout,
+        receiveTimeout: timeout,
+      );
+      final response = await _dio.delete(
+        path,
+        options: options,
+        cancelToken: cancelToken,
+      );
       return response;
-    } on DioException catch (e) {
-      throw _handleDioError(e);
-    } catch (e) {
-      throw _handleGeneralError(e);
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
+      throw NetworkErrorHandler.handle(e, st);
     }
-  }
-
-  Failure _handleDioError(DioException e) {
-    String errorDescription = "حدث خطأ غير متوقع";
-    FailureType failureType = FailureType.unknown;
-
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.receiveTimeout:
-      case DioExceptionType.sendTimeout:
-        errorDescription = "انتهت مهلة الاتصال بالخادم";
-        failureType = FailureType.network;
-        break;
-      case DioExceptionType.badResponse:
-        return _handleHttpError(e.response!);
-      case DioExceptionType.cancel:
-        errorDescription = "تم إلغاء الطلب";
-        break;
-      case DioExceptionType.connectionError:
-        errorDescription = "تعذر الوصول إلى الخادم. تأكد من الاتصال بالشبكة";
-        failureType = FailureType.network;
-        break;
-      default:
-        errorDescription = "خطأ في الاتصال بالشبكة";
-        failureType = FailureType.network;
-    }
-
-    return Failure(message: errorDescription, type: failureType);
-  }
-
-  Failure _handleHttpError(Response response) {
-    String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
-    FailureType failureType = FailureType.server;
-
-    final dynamic data = response.data;
-    String? serverMessage = data is Map
-        ? (data['message'] ?? data['error'])
-        : null;
-
-    if (response.statusCode == 401 || response.statusCode == 403) {
-      failureType = FailureType.auth;
-      if (response.requestOptions.path.contains('login')) {
-        errorDescription =
-            serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-      } else {
-        errorDescription =
-            serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
-        StorageService.deleteToken();
-      }
-    } else if (response.statusCode == 422) {
-      if (data is Map && data['errors'] != null) {
-        final Map<String, dynamic> errors = data['errors'];
-        final List<String> allErrors = [];
-        errors.forEach((key, value) {
-          if (value is List) {
-            allErrors.addAll(value.map((e) => e.toString()));
-          } else {
-            allErrors.add(value.toString());
-          }
-        });
-        errorDescription = allErrors.isNotEmpty
-            ? allErrors.join('\n')
-            : "بيانات المدخلات غير صالحة";
-      }
-    } else {
-      errorDescription = serverMessage ?? errorDescription;
-    }
-
-    return Failure(message: errorDescription, type: failureType);
-  }
-
-  Failure _handleGeneralError(dynamic error) {
-    if (error is Failure) return error;
-    return Failure(message: "حدث خطأ غير متوقع", type: FailureType.unknown);
   }
 }
