@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
@@ -33,7 +34,9 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(helpSupportControllerProvider.notifier).loadTicketDetails(widget.ticketId);
+      ref
+          .read(helpSupportControllerProvider.notifier)
+          .loadTicketDetails(widget.ticketId);
     });
   }
 
@@ -55,7 +58,6 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
         .sendReplyMessage(widget.ticketId, text);
 
     if (success && mounted) {
-      // Scroll to bottom
       await Future.delayed(const Duration(milliseconds: 150));
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -71,7 +73,8 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   Widget build(BuildContext context) {
     // Auto-scroll when new messages arrive via WebSocket
     ref.listen<int?>(
-      helpSupportControllerProvider.select((s) => s.selectedTicket?.messages.length),
+      helpSupportControllerProvider
+          .select((s) => s.selectedTicket?.messages.length),
       (prev, next) {
         if (next != null && (prev == null || next > prev)) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -84,6 +87,26 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
             }
           });
         }
+      },
+    );
+
+    // Listen to message sending failures
+    ref.listen<AsyncValue<SupportMessageEntity?>>(
+      helpSupportControllerProvider.select((s) => s.messageState),
+      (prev, next) {
+        next.whenOrNull(
+          error: (error, _) {
+            final message =
+                error is Failure ? error.toMessage() : error.toString();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+        );
       },
     );
 
@@ -116,7 +139,8 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppColors.primary.withValues(alpha: 0.12),
                               borderRadius: BorderRadius.circular(6),
@@ -131,7 +155,10 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          _StatusBadge(status: ticket.status, label: ticket.statusArabic),
+                          _StatusBadge(
+                            status: ticket.status,
+                            label: ticket.statusArabic,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 4),
@@ -151,21 +178,27 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                 if (ticket.isOpen)
                   IconButton(
                     tooltip: 'إغلاق التذكرة',
-                    icon: const Icon(Icons.check_circle_outline_rounded, color: AppColors.grey),
+                    icon: const Icon(Icons.check_circle_outline_rounded,
+                        color: AppColors.grey),
                     onPressed: () async {
                       final confirmed = await showDialog<bool>(
                         context: context,
                         builder: (ctx) => AlertDialog(
                           title: const Text('إغلاق التذكرة'),
-                          content: const Text('هل تم حل المشكلة وتريد إغلاق هذه التذكرة؟'),
+                          content: const Text(
+                              'هل تم حل المشكلة وتريد إغلاق هذه التذكرة؟'),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(ctx, false),
                               child: const Text('إلغاء'),
                             ),
-                            TextButton(
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                              ),
                               onPressed: () => Navigator.pop(ctx, true),
-                              child: const Text('نعم، إغلاق', style: TextStyle(color: AppColors.primary)),
+                              child: const Text('نعم، إغلاق'),
                             ),
                           ],
                         ),
@@ -180,31 +213,74 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                   ),
               ],
             )
+          else if (state.selectedTicketState.isLoading)
+            const LinearProgressIndicator()
           else
-            const LinearProgressIndicator(),
+            const SizedBox.shrink(),
 
           const Divider(height: 20),
 
-          // ── Messages List ──────────────────────────────────────────────────
+          // ── Messages List with AsyncValue Fallback Handling ────────────────
           Expanded(
-            child: state.isLoadingTickets && ticket == null
-                ? const Center(child: CircularProgressIndicator())
-                : ticket == null || ticket.messages.isEmpty
-                    ? Center(
-                        child: Text(
-                          'لا توجد رسائل بعد',
-                          style: TextStyle(color: isDark ? AppColors.grey : AppColors.greyDark),
+            child: state.selectedTicketState.when(
+              data: (activeTicket) {
+                if (activeTicket == null || activeTicket.messages.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'لا توجد رسائل بعد',
+                      style: TextStyle(
+                        color: isDark ? AppColors.grey : AppColors.greyDark,
+                      ),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount: activeTicket.messages.length,
+                  itemBuilder: (context, index) {
+                    final msg = activeTicket.messages[index];
+                    return _MessageBubble(message: msg, isDark: isDark);
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline_rounded,
+                        color: AppColors.error,
+                        size: 46,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        error is Failure ? error.toMessage() : error.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: isDark ? AppColors.white : AppColors.black,
+                          fontSize: 14,
                         ),
-                      )
-                    : ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        itemCount: ticket.messages.length,
-                        itemBuilder: (context, index) {
-                          final msg = ticket.messages[index];
-                          return _MessageBubble(message: msg, isDark: isDark);
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: const Text('إعادة المحاولة'),
+                        onPressed: () {
+                          ref
+                              .read(helpSupportControllerProvider.notifier)
+                              .loadTicketDetails(widget.ticketId);
                         },
                       ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
 
           // ── Reply Input Box ────────────────────────────────────────────────
@@ -212,7 +288,8 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF3F4F6),
+                color:
+                    isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF3F4F6),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
                   color: isDark ? Colors.white12 : Colors.black12,
@@ -233,7 +310,8 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                         hintText: 'اكتب رسالتك لفريق الدعم...',
                         hintStyle: TextStyle(fontSize: 13, color: Colors.grey),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       ),
                       onSubmitted: (_) => _handleSend(),
                     ),
@@ -248,7 +326,8 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                           ),
                         )
                       : IconButton(
-                          icon: const Icon(Icons.send_rounded, color: AppColors.primary),
+                          icon: const Icon(Icons.send_rounded,
+                              color: AppColors.primary),
                           onPressed: _handleSend,
                         ),
                 ],
@@ -258,15 +337,23 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.1),
+                color: Colors.grey.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Center(
-                child: Text(
-                  'تم إغلاق هذه التذكرة. إذا كانت لديك مشكلة جديدة يرجى فتح تذكرة جديدة.',
-                  style: TextStyle(fontSize: 12.5, color: Colors.grey),
-                  textAlign: TextAlign.center,
-                ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.lock_outline_rounded,
+                      size: 18, color: Colors.grey),
+                  SizedBox(width: 8),
+                  Text(
+                    'تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة',
+                    style: TextStyle(
+                        fontSize: 12.5,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
             ),
           ],
@@ -284,59 +371,46 @@ class _MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUser = message.isUser;
-    final timeStr = DateFormat('h:mm a').format(message.createdAt);
+    final isUser = message.isFromUser;
+    final timeStr = DateFormat('hh:mm a').format(message.createdAt);
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.78,
-        ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         decoration: BoxDecoration(
           color: isUser
               ? AppColors.primary
               : isDark
-                  ? const Color(0xFF2C2C2C)
+                  ? const Color(0xFF262626)
                   : const Color(0xFFE5E7EB),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
-            bottomLeft: Radius.circular(isUser ? 16 : 2),
-            bottomRight: Radius.circular(isUser ? 2 : 16),
+            bottomLeft: Radius.circular(isUser ? 16 : 4),
+            bottomRight: Radius.circular(isUser ? 4 : 16),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-            ),
-          ],
         ),
         child: Column(
-          crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment:
+              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
-            if (!isUser) ...[
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.verified_user_rounded, size: 14, color: AppColors.primary),
-                  const SizedBox(width: 4),
-                  Text(
-                    message.senderName,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
-                    ),
+            if (!isUser)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  message.senderName,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
                   ),
-                ],
+                ),
               ),
-              const SizedBox(height: 3),
-            ],
             Text(
               message.message,
               style: TextStyle(
