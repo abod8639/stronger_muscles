@@ -1,89 +1,129 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/config/api_config.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import '../models/notification_model.dart';
 
-final notificationRemoteDataSourceProvider = Provider<NotificationRemoteDataSource>((ref) {
+/// Top-level isolate function to parse notification payload on a background thread.
+Map<String, dynamic> parseNotificationsPayloadIsolate(dynamic data) {
+  final notifications = NotificationModel.fromJsonList(data);
+
+  int unreadCount = 0;
+  if (data is Map && data['unread_count'] != null) {
+    unreadCount = (data['unread_count'] as num).toInt();
+  } else {
+    unreadCount = notifications.where((n) => !n.isRead).length;
+  }
+
+  return {
+    'notifications': notifications,
+    'unread_count': unreadCount,
+  };
+}
+
+final notificationRemoteDataSourceProvider =
+    Provider<NotificationRemoteDataSource>((ref) {
   final apiService = ref.watch(apiServiceProvider);
   return NotificationRemoteDataSourceImpl(apiService);
 });
 
 abstract class NotificationRemoteDataSource {
-  Future<Map<String, dynamic>> getNotifications({int page = 1, int perPage = 20});
-  Future<int> getUnreadCount();
-  Future<void> markAsRead(String id);
-  Future<void> markAllAsRead();
+  Future<Map<String, dynamic>> getNotifications({
+    int page = 1,
+    int perPage = 20,
+    CancelToken? cancelToken,
+  });
+
+  Future<int> getUnreadCount({CancelToken? cancelToken});
+
+  Future<void> markAsRead(String id, {CancelToken? cancelToken});
+
+  Future<void> markAllAsRead({CancelToken? cancelToken});
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   final ApiService _apiService;
+  static const Duration _timeout = Duration(seconds: 15);
 
   NotificationRemoteDataSourceImpl(this._apiService);
 
   @override
-  Future<Map<String, dynamic>> getNotifications({int page = 1, int perPage = 20}) async {
+  Future<Map<String, dynamic>> getNotifications({
+    int page = 1,
+    int perPage = 20,
+    CancelToken? cancelToken,
+  }) async {
     try {
       final response = await _apiService.get(
         ApiConfig.customerNotifications,
         queryParameters: {'page': page, 'per_page': perPage},
+        cancelToken: cancelToken,
+        timeout: _timeout,
       );
 
-      final data = response.data;
-      List<dynamic> items = [];
-      if (data is Map && data['data'] is List) {
-        items = data['data'];
-      } else if (data is List) {
-        items = data;
-      }
-
-      final notifications = items.map((json) => NotificationModel.fromJson(json)).toList();
-      final unreadCount = (data is Map && data['unread_count'] != null)
-          ? (data['unread_count'] as num).toInt()
-          : notifications.where((n) => !n.isRead).length;
-
-      return {
-        'notifications': notifications,
-        'unread_count': unreadCount,
-      };
-    } catch (e) {
+      // Offload JSON decoding and entity mapping to background isolate via compute
+      return await compute(parseNotificationsPayloadIsolate, response.data);
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
       if (e is Failure) rethrow;
-      throw Failure(message: 'تعذر جلب الإشعارات', type: FailureType.unknown);
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
   @override
-  Future<int> getUnreadCount() async {
+  Future<int> getUnreadCount({CancelToken? cancelToken}) async {
     try {
-      final response = await _apiService.get(ApiConfig.customerNotificationsUnreadCount);
+      final response = await _apiService.get(
+        ApiConfig.customerNotificationsUnreadCount,
+        cancelToken: cancelToken,
+        timeout: _timeout,
+      );
+
       final data = response.data;
       if (data is Map && data['unread_count'] != null) {
         return (data['unread_count'] as num).toInt();
       }
       return 0;
-    } catch (e) {
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
       if (e is Failure) rethrow;
-      return 0;
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
   @override
-  Future<void> markAsRead(String id) async {
+  Future<void> markAsRead(String id, {CancelToken? cancelToken}) async {
     try {
-      await _apiService.post(ApiConfig.markNotificationAsRead(id));
-    } catch (e) {
+      await _apiService.post(
+        ApiConfig.markNotificationAsRead(id),
+        cancelToken: cancelToken,
+        timeout: _timeout,
+      );
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
       if (e is Failure) rethrow;
-      throw Failure(message: 'فشل في تحديث حالة الإشعار', type: FailureType.unknown);
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 
   @override
-  Future<void> markAllAsRead() async {
+  Future<void> markAllAsRead({CancelToken? cancelToken}) async {
     try {
-      await _apiService.post(ApiConfig.markAllNotificationsAsRead);
-    } catch (e) {
+      await _apiService.post(
+        ApiConfig.markAllNotificationsAsRead,
+        cancelToken: cancelToken,
+        timeout: _timeout,
+      );
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
       if (e is Failure) rethrow;
-      throw Failure(message: 'فشل في تحديث حالة جميع الإشعارات', type: FailureType.unknown);
+      throw NetworkErrorHandler.handle(e, st);
     }
   }
 }
