@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 
 /// Local data source contract for cart storage.
@@ -9,37 +10,90 @@ abstract class CartLocalDataSource {
   Future<void> clearCart();
 }
 
-/// Hive implementation of [CartLocalDataSource].
+/// Hive implementation of [CartLocalDataSource] with self-healing box initialization
+/// and typed exception mapping.
 class CartLocalDataSourceImpl implements CartLocalDataSource {
   static const String boxName = 'cart';
-  final Box<CartItemModel> _box;
+  Box<CartItemModel>? _box;
 
-  CartLocalDataSourceImpl(this._box);
+  CartLocalDataSourceImpl([this._box]);
 
   static Future<CartLocalDataSourceImpl> init() async {
-    final box = Hive.isBoxOpen(boxName)
-        ? Hive.box<CartItemModel>(boxName)
-        : await Hive.openBox<CartItemModel>(boxName);
+    final box = await _openSafeBox();
     return CartLocalDataSourceImpl(box);
+  }
+
+  static Future<Box<CartItemModel>> _openSafeBox() async {
+    try {
+      if (Hive.isBoxOpen(boxName)) {
+        return Hive.box<CartItemModel>(boxName);
+      }
+      return await Hive.openBox<CartItemModel>(boxName);
+    } catch (e) {
+      throw ServerException(
+        message: 'فشل في تهيئة قاعدة البيانات المحلية للسلة',
+        data: e,
+      );
+    }
+  }
+
+  Future<Box<CartItemModel>> _ensureBox() async {
+    if (_box != null && _box!.isOpen) {
+      return _box!;
+    }
+    _box = await _openSafeBox();
+    return _box!;
   }
 
   @override
   Future<List<CartItemModel>> getCartItems() async {
-    return _box.values.toList();
+    try {
+      final box = await _ensureBox();
+      return box.values.toList();
+    } catch (e) {
+      throw ParsingException(
+        message: 'تعذر قراءة عناصر السلة من الذاكرة المحلية',
+        originalError: e,
+      );
+    }
   }
 
   @override
   Future<void> saveCartItem(CartItemModel item) async {
-    await _box.put(item.id, item);
+    try {
+      final box = await _ensureBox();
+      await box.put(item.id, item);
+    } catch (e) {
+      throw ServerException(
+        message: 'تعذر حفظ العنصر في السلة المحلية',
+        data: e,
+      );
+    }
   }
 
   @override
   Future<void> removeCartItem(String itemId) async {
-    await _box.delete(itemId);
+    try {
+      final box = await _ensureBox();
+      await box.delete(itemId);
+    } catch (e) {
+      throw ServerException(
+        message: 'تعذر حذف العنصر من السلة',
+        data: e,
+      );
+    }
   }
 
   @override
   Future<void> clearCart() async {
-    await _box.clear();
+    try {
+      final box = await _ensureBox();
+      await box.clear();
+    } catch (e) {
+      throw ServerException(
+        message: 'تعذر تفريغ السلة',
+        data: e,
+      );
+    }
   }
 }
