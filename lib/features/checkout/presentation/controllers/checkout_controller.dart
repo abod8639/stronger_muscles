@@ -1,54 +1,111 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
+import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
 import 'package:stronger_muscles/features/checkout/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
 import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 
 part 'checkout_controller.g.dart';
 
+@immutable
 class CheckoutState {
   final int currentStep;
   final AddressEntity? selectedAddress;
   final String selectedPaymentMethod;
   final String notes;
-  final bool isProcessing;
+  final AsyncValue<CheckoutResultEntity?> orderSubmission;
 
   const CheckoutState({
     this.currentStep = 0,
     this.selectedAddress,
     this.selectedPaymentMethod = 'cash',
     this.notes = '',
-    this.isProcessing = false,
+    this.orderSubmission = const AsyncData(null),
   });
+
+  /// True while order placement or payment initiation is executing
+  bool get isProcessing => orderSubmission.isLoading;
+
+  /// True if placing the order produced an error
+  bool get hasError => orderSubmission.hasError;
+
+  /// Safely extracts the typed [Failure] if available
+  Failure? get failure {
+    final err = orderSubmission.error;
+    if (err is Failure) return err;
+    if (err != null) return Failure(message: err.toString());
+    return null;
+  }
 
   CheckoutState copyWith({
     int? currentStep,
     AddressEntity? selectedAddress,
     String? selectedPaymentMethod,
     String? notes,
+    AsyncValue<CheckoutResultEntity?>? orderSubmission,
     bool? isProcessing,
   }) {
+    AsyncValue<CheckoutResultEntity?> newSubmission =
+        orderSubmission ?? this.orderSubmission;
+
+    if (isProcessing != null) {
+      newSubmission = isProcessing
+          ? const AsyncLoading()
+          : (this.orderSubmission.isLoading
+              ? const AsyncData(null)
+              : this.orderSubmission);
+    }
+
     return CheckoutState(
       currentStep: currentStep ?? this.currentStep,
       selectedAddress: selectedAddress ?? this.selectedAddress,
       selectedPaymentMethod:
           selectedPaymentMethod ?? this.selectedPaymentMethod,
       notes: notes ?? this.notes,
-      isProcessing: isProcessing ?? this.isProcessing,
+      orderSubmission: newSubmission,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CheckoutState &&
+          runtimeType == other.runtimeType &&
+          currentStep == other.currentStep &&
+          selectedAddress == other.selectedAddress &&
+          selectedPaymentMethod == other.selectedPaymentMethod &&
+          notes == other.notes &&
+          orderSubmission == other.orderSubmission;
+
+  @override
+  int get hashCode => Object.hash(
+        currentStep,
+        selectedAddress,
+        selectedPaymentMethod,
+        notes,
+        orderSubmission,
+      );
 }
 
 @riverpod
 class CheckoutController extends _$CheckoutController {
+  CancelToken? _cancelToken;
+
   @override
   CheckoutState build() {
+    _cancelToken = CancelToken();
+
+    // Prevent resource leakage by cancelling any in-flight order request when leaving checkout
+    ref.onDispose(() {
+      _cancelToken?.cancel('Checkout controller disposed');
+    });
+
     ref.listen<AsyncValue<List<AddressEntity>>>(addressControllerProvider, (previous, next) {
       final newAddresses = next.value ?? [];
       if (state.selectedAddress == null && newAddresses.isNotEmpty) {
@@ -102,54 +159,91 @@ class CheckoutController extends _$CheckoutController {
     state = state.copyWith(notes: notes);
   }
 
-  Future<void> placeOrder(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
+  /// Resets the error status to allow retry without dismissing whole form
+  void resetError() {
+    if (state.orderSubmission.hasError) {
+      state = state.copyWith(orderSubmission: const AsyncData(null));
+    }
+  }
+
+  /// Places order cleanly without UI dependencies or direct BuildContext manipulation.
+  /// Optional [context] parameter preserved for backward-compatibility.
+  Future<void> placeOrder([BuildContext? context]) async {
     if (state.selectedAddress == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            l10n?.pleaseSelectShippingAddress ??
-                'Please select a shipping address',
+      state = state.copyWith(
+        orderSubmission: AsyncError(
+          const ValidationFailure(
+            message: 'يرجى تحديد عنوان التوصيل أولاً قبل إتمام الطلب',
           ),
+          StackTrace.current,
         ),
       );
       return;
     }
 
-    state = state.copyWith(isProcessing: true);
+    final cartNotifier = ref.read(cartControllerProvider.notifier);
+    final cartItems = cartNotifier.cartItems;
+    if (cartItems.isEmpty) {
+      state = state.copyWith(
+        orderSubmission: AsyncError(
+          const ValidationFailure(
+            message: 'سلة المشتريات فارغة، يرجى إضافة منتجات أولاً',
+          ),
+          StackTrace.current,
+        ),
+      );
+      return;
+    }
+
+    state = state.copyWith(orderSubmission: const AsyncLoading());
 
     try {
-      final cartNotifier = ref.read(cartControllerProvider.notifier);
       final placeOrderUseCase = ref.read(placeOrderUseCaseProvider);
+
+      final checkoutItems = cartItems
+          .map((item) => CheckoutItemEntity.fromCartItem(item))
+          .toList();
 
       final params = CheckoutParams(
         addressId: state.selectedAddress!.id,
         paymentMethod: state.selectedPaymentMethod,
         notes: state.notes,
         customerName: state.selectedAddress?.fullName,
-        items: cartNotifier.cartItems
-            .map((item) => CheckoutItemEntity.fromCartItem(item))
-            .toList(),
+        items: checkoutItems,
       );
 
-      await placeOrderUseCase(params);
-
-      await cartNotifier.clearCart();
-
-      // Invalidate local product cache and refresh products provider so stock is updated
-      final productLocalDataSource = ref.read(productLocalDataSourceProvider);
-      await productLocalDataSource.clearCache();
-      ref.invalidate(productsControllerProvider);
-
-      ref.read(routerProvider).go(AppRoutes.orderSuccess);
-    } catch (e) {
-      if (!context.mounted) return;
-      final failedText = l10n?.failedToPlaceOrder ?? 'Failed to place order';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$failedText: $e')),
+      final resultEither = await placeOrderUseCase(
+        params,
+        cancelToken: _cancelToken,
       );
-    } finally {
-      state = state.copyWith(isProcessing: false);
+
+      await resultEither.fold(
+        (failure) async {
+          state = state.copyWith(
+            orderSubmission: AsyncError(
+              failure,
+              failure.stackTrace ?? StackTrace.current,
+            ),
+          );
+        },
+        (result) async {
+          // Clear cart and invalidate cache upon confirmed order
+          await cartNotifier.clearCart();
+
+          final productLocalDataSource = ref.read(productLocalDataSourceProvider);
+          await productLocalDataSource.clearCache();
+          ref.invalidate(productsControllerProvider);
+
+          state = state.copyWith(
+            orderSubmission: AsyncData(result),
+          );
+        },
+      );
+    } catch (e, stackTrace) {
+      final failure = NetworkErrorHandler.handle(e, stackTrace);
+      state = state.copyWith(
+        orderSubmission: AsyncError(failure, stackTrace),
+      );
     }
   }
 }
