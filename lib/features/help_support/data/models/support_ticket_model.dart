@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 
@@ -17,34 +18,60 @@ class SupportTicketModel extends SupportTicketEntity {
     super.messages,
   });
 
+  /// Defensive JSON deserializer with safe type fallback handling preventing NullPointer and TypeError.
   factory SupportTicketModel.fromJson(Map<String, dynamic> json) {
-    var rawMessages = json['messages'];
+    final rawMessages = json['messages'];
     List<SupportMessageModel> parsedMessages = [];
     if (rawMessages is List) {
       parsedMessages = rawMessages
-          .whereType<Map<String, dynamic>>()
-          .map((m) => SupportMessageModel.fromJson(m))
+          .whereType<Map>()
+          .map((m) => SupportMessageModel.fromJson(Map<String, dynamic>.from(m)))
           .toList();
     }
 
+    final String? idStr = json['id']?.toString();
+    final String fallbackTicketNum = idStr != null && idStr.isNotEmpty ? 'SM-$idStr' : 'SM-TICKET';
+
     return SupportTicketModel(
-      id: json['id']?.toString(),
-      ticketNumber: json['ticket_number'] as String? ?? 'SM-${json['id']}',
-      subject: json['subject'] as String? ?? '',
-      category: json['category'] as String? ?? 'general',
-      message: json['message'] as String? ?? '',
-      priority: TicketPriority.fromString(json['priority'] as String?),
-      status: json['status'] as String? ?? 'open',
+      id: idStr,
+      ticketNumber: (json['ticket_number'] ?? json['ticketNumber'] ?? fallbackTicketNum).toString(),
+      subject: (json['subject'] ?? '').toString(),
+      category: (json['category'] ?? 'general').toString(),
+      message: (json['message'] ?? '').toString(),
+      priority: TicketPriority.fromString(json['priority']?.toString()),
+      status: (json['status'] ?? 'open').toString(),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
-          : DateTime.now(),
+          : (json['createdAt'] != null
+              ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
+              : DateTime.now()),
       lastReplyAt: json['last_reply_at'] != null
           ? DateTime.tryParse(json['last_reply_at'].toString())
-          : null,
-      messagesCount: json['messages_count'] is int ? json['messages_count'] as int : parsedMessages.length,
-      unreadMessagesCount: json['unread_messages_count'] is int ? json['unread_messages_count'] as int : 0,
+          : (json['lastReplyAt'] != null
+              ? DateTime.tryParse(json['lastReplyAt'].toString())
+              : null),
+      messagesCount: json['messages_count'] is num
+          ? (json['messages_count'] as num).toInt()
+          : (json['messagesCount'] is num
+              ? (json['messagesCount'] as num).toInt()
+              : parsedMessages.length),
+      unreadMessagesCount: json['unread_messages_count'] is num
+          ? (json['unread_messages_count'] as num).toInt()
+          : (json['unreadMessagesCount'] is num
+              ? (json['unreadMessagesCount'] as num).toInt()
+              : 0),
       messages: parsedMessages,
     );
+  }
+
+  /// Parses an individual ticket asynchronously on a background isolate.
+  static Future<SupportTicketModel> fromJsonAsync(Map<String, dynamic> json) {
+    return compute(_parseTicketIsolate, json);
+  }
+
+  /// Parses a collection of tickets on a background isolate preventing UI thread blocking.
+  static Future<List<SupportTicketModel>> parseListAsync(List<dynamic> list) {
+    return compute(_parseTicketListIsolate, list);
   }
 
   Map<String, dynamic> toJson() {
@@ -76,4 +103,15 @@ class SupportTicketModel extends SupportTicketEntity {
       messages: entity.messages,
     );
   }
+}
+
+SupportTicketModel _parseTicketIsolate(Map<String, dynamic> json) {
+  return SupportTicketModel.fromJson(json);
+}
+
+List<SupportTicketModel> _parseTicketListIsolate(List<dynamic> rawList) {
+  return rawList
+      .whereType<Map>()
+      .map((item) => SupportTicketModel.fromJson(Map<String, dynamic>.from(item)))
+      .toList();
 }
