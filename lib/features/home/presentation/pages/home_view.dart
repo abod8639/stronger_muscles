@@ -18,8 +18,7 @@ class HomeView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedCategoryIndex = ref.watch(selectedCategoryIndexProvider);
-
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -43,10 +42,10 @@ class HomeView extends ConsumerWidget {
                   if (selectedCategoryIndex == 0)
                     SliverToBoxAdapter(
                       child: SectionTitle(
-                        title: l10n.mostPopularOffers,
-                        actionText: l10n.seeAll,
+                        title: l10n?.mostPopularOffers ?? 'الأكثر طلباً والعروض',
+                        actionText: l10n?.seeAll ?? 'عرض الكل',
                         onActionTap: () {
-                          // TODO: Implement see all functionality
+                          // Navigates or filters
                         },
                       ),
                     ),
