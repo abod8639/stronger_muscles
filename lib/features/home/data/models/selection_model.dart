@@ -101,11 +101,6 @@ class SelectionsModel extends SelectionEntity {
 
   /// Maps category identifiers or icon keys to modern, relevant [IconData].
   static IconData resolveIcon(dynamic iconValue) {
-    if (iconValue is int) {
-      // ignore: non_const_argument_for_const_parameter
-      return IconData(iconValue, fontFamily: 'MaterialIcons');
-    }
-
     final key = iconValue?.toString().trim().toLowerCase() ?? '';
     const iconMap = <String, IconData>{
       '': Icons.home,
