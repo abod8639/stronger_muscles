@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/google_sign_in_usecase.dart';
@@ -15,57 +18,72 @@ class MockAuthRepository implements AuthRepository {
   String? lastUpdatedPhotoUrl;
 
   @override
-  Future<UserEntity> googleSignIn({
+  Future<Either<Failure, UserEntity>> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
+    CancelToken? cancelToken,
   }) async {
     lastGoogleEmail = email;
     lastGoogleName = name;
     lastGooglePhotoUrl = photoUrl;
-    return UserEntity(
-      id: 5,
-      email: email,
-      name: name,
-      token: "testToken"
+    return Right(
+      UserEntity(
+        id: 5,
+        email: email,
+        name: name,
+        token: "testToken",
+      ),
     );
   }
 
   @override
-  Future<UserEntity> updateProfile({
+  Future<Either<Failure, UserEntity>> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? photoUrl,
+    CancelToken? cancelToken,
   }) async {
     lastUpdatedName = name;
     lastUpdatedEmail = email;
     lastUpdatedPhone = phone;
     lastUpdatedPhotoUrl = photoUrl;
-    return UserEntity(
-      id: 5,
-      email: email ?? 'orig@test.com',
-      name: name ?? 'Original Name',
-      phone: phone,
-      token: "testToken",
+    return Right(
+      UserEntity(
+        id: 5,
+        email: email ?? 'orig@test.com',
+        name: name ?? 'Original Name',
+        phone: phone,
+        token: "testToken",
+      ),
     );
   }
 
   @override
-  Future<UserEntity?> getCurrentUser() async => null;
+  Future<Either<Failure, UserEntity?>> getCurrentUser({
+    CancelToken? cancelToken,
+  }) async =>
+      const Right(null);
 
   @override
-  Future<UserEntity> login({required String email, required String password}) async =>
+  Future<Either<Failure, UserEntity>> login({
+    required String email,
+    required String password,
+    CancelToken? cancelToken,
+  }) async =>
       throw UnimplementedError();
 
   @override
-  Future<void> logout() async {}
+  Future<Either<Failure, Unit>> logout({CancelToken? cancelToken}) async =>
+      const Right(unit);
 
   @override
-  Future<UserEntity> register({
+  Future<Either<Failure, UserEntity>> register({
     required String name,
     required String email,
     required String password,
+    CancelToken? cancelToken,
   }) async =>
       throw UnimplementedError();
 }
@@ -102,29 +120,41 @@ void main() {
     test('GoogleSignInUseCase invokes repository with proper arguments', () async {
       final useCase = GoogleSignInUseCase(mockRepo);
 
-      final user = await useCase(
+      final result = await useCase(
         email: 'google_user@gmail.com',
         name: 'Google User',
         photoUrl: 'https://lh3.googleusercontent.com/photo.png',
       );
 
-      expect(user.id, 5);
-      expect(mockRepo.lastGoogleEmail, 'google_user@gmail.com');
-      expect(mockRepo.lastGoogleName, 'Google User');
-      expect(mockRepo.lastGooglePhotoUrl, 'https://lh3.googleusercontent.com/photo.png');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (user) {
+          expect(user.id, 5);
+          expect(mockRepo.lastGoogleEmail, 'google_user@gmail.com');
+          expect(mockRepo.lastGoogleName, 'Google User');
+          expect(mockRepo.lastGooglePhotoUrl, 'https://lh3.googleusercontent.com/photo.png');
+        },
+      );
     });
 
     test('UpdateProfileUseCase delegates updated parameters to repository', () async {
       final useCase = UpdateProfileUseCase(mockRepo);
 
-      final updatedUser = await useCase(
+      final result = await useCase(
         name: 'New Name',
         phone: '+966500000000',
       );
 
-      expect(updatedUser.name, 'New Name');
-      expect(mockRepo.lastUpdatedName, 'New Name');
-      expect(mockRepo.lastUpdatedPhone, '+966500000000');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (updatedUser) {
+          expect(updatedUser.name, 'New Name');
+          expect(mockRepo.lastUpdatedName, 'New Name');
+          expect(mockRepo.lastUpdatedPhone, '+966500000000');
+        },
+      );
     });
   });
 }
