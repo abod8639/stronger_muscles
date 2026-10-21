@@ -1,7 +1,6 @@
-import 'package:hive/hive.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/cart/data/datasources/cart_local_data_source.dart';
-import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
+import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/cart/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
@@ -11,36 +10,52 @@ part 'cart_controller.g.dart';
 
 @riverpod
 class CartController extends _$CartController {
+  CancelToken _cancelToken = CancelToken();
+
   @override
   FutureOr<List<CartItemEntity>> build() async {
-    if (!Hive.isBoxOpen(CartLocalDataSourceImpl.boxName)) {
-      await Hive.openBox<CartItemModel>(CartLocalDataSourceImpl.boxName);
-    }
+    _cancelToken = CancelToken();
+
+    // Cancel active operations on dispose to prevent resource leaks
+    ref.onDispose(() {
+      if (!_cancelToken.isCancelled) {
+        _cancelToken.cancel('CartController disposed');
+      }
+    });
+
     final getCartItems = ref.watch(getCartItemsUseCaseProvider);
-    return getCartItems();
+    final result = await getCartItems(cancelToken: _cancelToken);
+
+    return result.fold(
+      (failure) => throw failure,
+      (items) => items,
+    );
   }
 
   /// List of current items in the cart as domain entities.
   List<CartItemEntity> get cartItems => state.value ?? [];
 
-  ProductEntity _ensureEntity(dynamic product) {
+  /// Resets error state back to data without losing cached cart items.
+  void clearError() {
+    if (state.hasError) {
+      state = AsyncData(state.value ?? []);
+    }
+  }
+
+  ProductEntity? _resolveEntity(dynamic product) {
     if (product is ProductEntity) return product;
     if (product is ProductModel) return product.toEntity();
-    throw ArgumentError(
-      'Expected ProductEntity or ProductModel, but received: ${product.runtimeType}',
-    );
+    return null;
   }
 
-  String _extractItemId(dynamic item) {
+  String? _resolveItemId(dynamic item) {
     if (item is CartItemEntity) return item.id;
-    if (item is CartItemModel) return item.id;
     if (item is String) return item;
-    throw ArgumentError('Expected CartItemEntity, CartItemModel or String id');
+    return null;
   }
 
-  int _extractItemQuantity(dynamic item) {
+  int _resolveItemQuantity(dynamic item) {
     if (item is CartItemEntity) return item.quantity;
-    if (item is CartItemModel) return item.quantity;
     return 1;
   }
 
@@ -51,45 +66,109 @@ class CartController extends _$CartController {
     String? selectedSize,
     int quantity = 1,
   }) async {
-    final entity = _ensureEntity(product);
+    final entity = _resolveEntity(product);
+    if (entity == null) {
+      state = AsyncError(
+        const ValidationFailure(message: 'بيانات المنتج غير صالحة للإضافة إلى السلة'),
+        StackTrace.current,
+      );
+      return;
+    }
+
     final addUseCase = ref.read(addToCartUseCaseProvider);
-    await addUseCase(
+    final result = await addUseCase(
       entity,
       selectedFlavor: selectedFlavor,
       selectedSize: selectedSize,
       quantity: quantity,
+      cancelToken: _cancelToken,
     );
-    final getCartItems = ref.read(getCartItemsUseCaseProvider);
-    state = AsyncData(await getCartItems());
+
+    await result.fold(
+      (failure) async {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (_) async {
+        await _refreshCart();
+      },
+    );
   }
 
   /// Removes a cart item using [RemoveFromCartUseCase].
   Future<void> removeFromCart(dynamic item) async {
-    final itemId = _extractItemId(item);
+    final itemId = _resolveItemId(item);
+    if (itemId == null) return;
+
     final removeUseCase = ref.read(removeFromCartUseCaseProvider);
-    await removeUseCase(itemId);
-    final getCartItems = ref.read(getCartItemsUseCaseProvider);
-    state = AsyncData(await getCartItems());
+    final result = await removeUseCase(itemId, cancelToken: _cancelToken);
+
+    await result.fold(
+      (failure) async {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (_) async {
+        await _refreshCart();
+      },
+    );
   }
 
   /// Increases quantity of an item using [UpdateCartQuantityUseCase].
   Future<void> increaseQuantity(dynamic item) async {
-    final itemId = _extractItemId(item);
-    final currentQty = _extractItemQuantity(item);
+    final itemId = _resolveItemId(item);
+    if (itemId == null) return;
+    final currentQty = _resolveItemQuantity(item);
+
     final updateUseCase = ref.read(updateCartQuantityUseCaseProvider);
-    await updateUseCase(itemId, currentQty + 1);
-    final getCartItems = ref.read(getCartItemsUseCaseProvider);
-    state = AsyncData(await getCartItems());
+    final result = await updateUseCase(
+      itemId,
+      currentQty + 1,
+      cancelToken: _cancelToken,
+    );
+
+    await result.fold(
+      (failure) async {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (_) async {
+        await _refreshCart();
+      },
+    );
   }
 
-  /// Decreases quantity of an item or removes it if quantity becomes 0.
+  /// Decreases quantity of an item or removes it if quantity reaches 0.
   Future<void> decreaseQuantity(dynamic item) async {
-    final itemId = _extractItemId(item);
-    final currentQty = _extractItemQuantity(item);
+    final itemId = _resolveItemId(item);
+    if (itemId == null) return;
+    final currentQty = _resolveItemQuantity(item);
+
     final updateUseCase = ref.read(updateCartQuantityUseCaseProvider);
-    await updateUseCase(itemId, currentQty - 1);
+    final result = await updateUseCase(
+      itemId,
+      currentQty - 1,
+      cancelToken: _cancelToken,
+    );
+
+    await result.fold(
+      (failure) async {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (_) async {
+        await _refreshCart();
+      },
+    );
+  }
+
+  Future<void> _refreshCart() async {
     final getCartItems = ref.read(getCartItemsUseCaseProvider);
-    state = AsyncData(await getCartItems());
+    final freshResult = await getCartItems(cancelToken: _cancelToken);
+    freshResult.fold(
+      (failure) {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (freshItems) {
+        state = AsyncData(freshItems);
+      },
+    );
   }
 
   /// Checks if a product with matching options is already in the cart.
@@ -142,7 +221,15 @@ class CartController extends _$CartController {
   /// Clears the entire cart using [ClearCartUseCase].
   Future<void> clearCart() async {
     final clearUseCase = ref.read(clearCartUseCaseProvider);
-    await clearUseCase();
-    state = const AsyncData([]);
+    final result = await clearUseCase(cancelToken: _cancelToken);
+
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (_) {
+        state = const AsyncData([]);
+      },
+    );
   }
 }
