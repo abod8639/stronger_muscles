@@ -1,7 +1,10 @@
+import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 part 'home_controller.g.dart';
 
@@ -9,27 +12,58 @@ part 'home_controller.g.dart';
 class HomeController extends _$HomeController {
   int _selectedSectionIndex = 0;
   int get selectedSectionIndex => _selectedSectionIndex;
+  CancelToken? _cancelToken;
 
   @override
-  FutureOr<List<ProductModel>> build() async {
+  FutureOr<List<ProductEntity>> build() async {
+    _cancelToken = CancelToken();
+
+    ref.onDispose(() {
+      _cancelToken?.cancel('HomeController disposed');
+      _cancelToken = null;
+    });
+
     final getHomeProducts = ref.watch(getHomeProductsUseCaseProvider);
-    final products = await getHomeProducts();
-    return products.map((p) => ProductModel.fromEntity(p)).toList();
+    final result = await getHomeProducts(cancelToken: _cancelToken);
+
+    return result.fold(
+      (failure) {
+        if (failure is CancelFailure) {
+          return const [];
+        }
+        throw failure;
+      },
+      (products) => products,
+    );
   }
 
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     _selectedSectionIndex = index;
+
+    // Cancel in-flight network calls to prevent race conditions and wasted resources
+    _cancelToken?.cancel('Section changed');
+    _cancelToken = CancelToken();
+
     state = const AsyncLoading();
 
     final getHomeProducts = ref.read(getHomeProductsUseCaseProvider);
-    try {
-      final fetchedProducts = await getHomeProducts(categoryId: categoryId);
-      state = AsyncData(
-        fetchedProducts.map((p) => ProductModel.fromEntity(p)).toList(),
-      );
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+    final result = await getHomeProducts(
+      categoryId: categoryId,
+      cancelToken: _cancelToken,
+    );
+
+    result.fold(
+      (failure) {
+        if (failure is CancelFailure) {
+          // Ignored when explicitly cancelled by user navigation
+          return;
+        }
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (products) {
+        state = AsyncData(products);
+      },
+    );
   }
 
   Future<void> refreshHome() async {
