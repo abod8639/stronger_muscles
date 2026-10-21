@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
@@ -84,53 +85,84 @@ class MyTicketsSheet extends ConsumerWidget {
           ),
           const Divider(height: 24),
           Expanded(
-            child: state.isLoadingTickets && state.userTickets.isEmpty
-                ? const Center(child: CircularProgressIndicator())
-                : state.userTickets.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.inbox_outlined,
-                              size: 54,
-                              color: isDark ? Colors.white24 : Colors.black26,
+            child: state.ticketsState.when(
+              data: (tickets) => tickets.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.inbox_outlined,
+                            size: 54,
+                            color: isDark ? Colors.white24 : Colors.black26,
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'لا توجد لديك تذاكر دعم سابقة',
+                            style: TextStyle(
+                              fontSize: 14.5,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? AppColors.white : AppColors.black,
                             ),
-                            const SizedBox(height: 12),
-                            Text(
-                              'لا توجد لديك تذاكر دعم سابقة',
-                              style: TextStyle(
-                                fontSize: 14.5,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? AppColors.white : AppColors.black,
-                              ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'يمكنك إنشاء تذكرة جديدة وسيقوم فريق الدعم بالرد عليك',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isDark ? AppColors.grey : AppColors.greyDark,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'يمكنك إنشاء تذكرة جديدة وسيقوم فريق الدعم بالرد عليك',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: isDark ? AppColors.grey : AppColors.greyDark,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : ListView.separated(
-                        itemCount: state.userTickets.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final ticket = state.userTickets[index];
-                          return _TicketCard(
-                            ticket: ticket,
-                            isDark: isDark,
-                            onTap: () {
-                              Navigator.pop(context);
-                              TicketChatSheet.show(context, ticket.id ?? '');
-                            },
-                          );
-                        },
+                          ),
+                        ],
                       ),
+                    )
+                  : ListView.separated(
+                      itemCount: tickets.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) {
+                        final ticket = tickets[index];
+                        return _TicketCard(
+                          ticket: ticket,
+                          isDark: isDark,
+                          onTap: () {
+                            Navigator.pop(context);
+                            TicketChatSheet.show(context, ticket.id ?? '');
+                          },
+                        );
+                      },
+                    ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline_rounded,
+                        color: AppColors.error,
+                        size: 46,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        error is Failure ? error.toMessage() : error.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: isDark ? AppColors.white : AppColors.black,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.refresh, size: 18),
+                        label: const Text('إعادة المحاولة'),
+                        onPressed: () => notifier.loadUserTickets(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
