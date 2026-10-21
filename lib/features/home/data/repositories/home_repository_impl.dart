@@ -5,7 +5,6 @@ import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/home/data/datasources/home_remote_datasource.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
-import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
 import 'package:stronger_muscles/features/home/domain/repositories/home_repository.dart';
 import 'package:stronger_muscles/features/product/data/datasources/category_local_datasource.dart';
 import 'package:stronger_muscles/features/product/data/datasources/product_local_datasource.dart';
@@ -94,7 +93,7 @@ class HomeRepositoryImpl implements HomeRepository {
         );
 
         if (remoteProducts.isNotEmpty && _productLocalDataSource != null) {
-          unawaited(_productLocalDataSource!.cacheProducts(remoteProducts));
+          unawaited(_productLocalDataSource.cacheProducts(remoteProducts));
         }
 
         return remoteProducts.map((p) => p.toEntity()).toList();
@@ -130,7 +129,7 @@ class HomeRepositoryImpl implements HomeRepository {
         (cat) => SelectionEntity(
           id: cat.id,
           label: cat.getLocalizedName(locale: langCode),
-          icon: SelectionsModel.fromJson({'id': cat.id, 'label': cat.getLocalizedName()}).icon,
+          icon: SelectionsModel.resolveIcon(cat.id),
         ),
       ),
     ];
