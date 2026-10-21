@@ -12,9 +12,7 @@ export 'package:stronger_muscles/features/cart/data/repositories/cart_repository
 final cartRepositoryProvider = Provider<CartRepository>((ref) {
   final box = Hive.isBoxOpen(CartLocalDataSourceImpl.boxName)
       ? Hive.box<CartItemModel>(CartLocalDataSourceImpl.boxName)
-      : throw StateError(
-          'Hive box "${CartLocalDataSourceImpl.boxName}" must be opened before accessing CartRepository',
-        );
+      : null;
 
   return CartRepositoryImpl(
     localDataSource: CartLocalDataSourceImpl(box),
