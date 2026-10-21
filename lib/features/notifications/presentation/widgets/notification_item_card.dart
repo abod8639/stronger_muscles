@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import '../../data/models/notification_model.dart';
 import '../controllers/notification_controller.dart';
 
 class NotificationItemCard extends ConsumerWidget {
-  final NotificationModel notification;
+  final NotificationEntity notification;
 
   const NotificationItemCard({super.key, required this.notification});
 
@@ -40,10 +40,13 @@ class NotificationItemCard extends ConsumerWidget {
 
   void _handleTap(BuildContext context, WidgetRef ref) {
     if (!notification.isRead) {
-      ref.read(notificationControllerProvider.notifier).markAsRead(notification.id);
+      ref
+          .read(notificationControllerProvider.notifier)
+          .markAsRead(notification.id);
     }
 
-    if (notification.orderId != null) {
+    final orderId = notification.orderId;
+    if (orderId != null && orderId.isNotEmpty) {
       context.push(AppRoutes.orderView);
     }
   }
@@ -54,18 +57,27 @@ class NotificationItemCard extends ConsumerWidget {
     final isDark = theme.brightness == Brightness.dark;
     final typeColor = _getTypeColor(notification.type);
 
-    final dateStr = notification.createdAt != null
-        ? DateFormat('yyyy/MM/dd  •  hh:mm a').format(notification.createdAt!)
-        : '';
+    String dateStr = '';
+    if (notification.createdAt != null) {
+      try {
+        dateStr = DateFormat('yyyy/MM/dd  •  hh:mm a')
+            .format(notification.createdAt!);
+      } catch (_) {}
+    }
+
+    final surfaceColor = notification.isRead
+        ? (isDark ? theme.colorScheme.surfaceContainer : Colors.white)
+        : (isDark
+            ? (Color.lerp(
+                    theme.colorScheme.surfaceContainer, AppColors.primary, 0.08) ??
+                theme.colorScheme.surfaceContainer)
+            : (Color.lerp(Colors.white, AppColors.primary, 0.04) ??
+                Colors.white));
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: notification.isRead
-            ? (isDark ? theme.colorScheme.surfaceContainer : Colors.white)
-            : (isDark
-                ? Color.lerp(theme.colorScheme.surfaceContainer, AppColors.primary, 0.08)!
-                : Color.lerp(Colors.white, AppColors.primary, 0.04)!),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: notification.isRead
@@ -118,7 +130,9 @@ class NotificationItemCard extends ConsumerWidget {
                             child: Text(
                               notification.title,
                               style: theme.textTheme.titleSmall?.copyWith(
-                                fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
+                                fontWeight: notification.isRead
+                                    ? FontWeight.w600
+                                    : FontWeight.bold,
                                 color: theme.colorScheme.onSurface,
                               ),
                               maxLines: 1,
