@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:stronger_muscles/core/services/websocket_service.dart';
+import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
 import 'package:stronger_muscles/features/help_support/data/repositories/help_support_repository_impl.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
+import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/repositories/help_support_repository.dart';
 import 'package:stronger_muscles/features/help_support/domain/usecases/get_faqs_usecase.dart';
@@ -80,16 +84,21 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
   final GetSupportChannelsUseCase _getChannelsUseCase;
   final SubmitTicketUseCase _submitTicketUseCase;
   final HelpSupportRepository _repository;
+  final WebSocketService _webSocketService;
+  final List<StreamSubscription> _activeWsSubscriptions = [];
+  String? _activeTicketId;
 
   HelpSupportNotifier({
     required GetFaqsUseCase getFaqsUseCase,
     required GetSupportChannelsUseCase getChannelsUseCase,
     required SubmitTicketUseCase submitTicketUseCase,
     required HelpSupportRepository repository,
+    WebSocketService? webSocketService,
   })  : _getFaqsUseCase = getFaqsUseCase,
         _getChannelsUseCase = getChannelsUseCase,
         _submitTicketUseCase = submitTicketUseCase,
         _repository = repository,
+        _webSocketService = webSocketService ?? WebSocketService(),
         super(const HelpSupportState()) {
     init();
   }
@@ -135,12 +144,95 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
         selectedTicket: ticket,
         isLoadingTickets: false,
       );
+      _subscribeToTicketRealtime(ticketId);
     } catch (e) {
       state = state.copyWith(
         isLoadingTickets: false,
         error: e.toString(),
       );
     }
+  }
+
+  void _subscribeToTicketRealtime(String ticketId) {
+    if (_activeTicketId == ticketId) return;
+
+    _unsubscribeActiveTicket();
+    _activeTicketId = ticketId;
+
+    try {
+      final channel = _webSocketService.subscribeToTicket(ticketId);
+
+      // 1. Listen for new messages in this ticket
+      final subMsg = channel.bind('SupportMessageSent').listen((event) {
+        final map = event.tryGetDataAsMap();
+        if (map != null && map['message'] != null) {
+          final msgMap = map['message'] is Map ? Map<String, dynamic>.from(map['message'] as Map) : null;
+          if (msgMap != null) {
+            final newMsg = SupportMessageModel.fromJson(msgMap);
+            if (state.selectedTicket != null && state.selectedTicket!.id == ticketId) {
+              final exists = state.selectedTicket!.messages.any((m) => m.id == newMsg.id);
+              if (!exists) {
+                final updatedMsgs = List<SupportMessageEntity>.from(state.selectedTicket!.messages)..add(newMsg);
+                state = state.copyWith(
+                  selectedTicket: state.selectedTicket!.copyWith(
+                    messages: updatedMsgs,
+                    messagesCount: state.selectedTicket!.messagesCount + 1,
+                    lastReplyAt: newMsg.createdAt,
+                  ),
+                );
+              }
+            }
+          }
+        }
+      });
+
+      // 2. Listen for ticket status/priority updates
+      final subUpdate = channel.bind('SupportTicketUpdated').listen((event) {
+        final map = event.tryGetDataAsMap();
+        if (map != null && map['ticket'] != null) {
+          final ticketMap = map['ticket'] is Map ? Map<String, dynamic>.from(map['ticket'] as Map) : null;
+          if (ticketMap != null) {
+            final newStatus = ticketMap['status']?.toString();
+            final newPriority = ticketMap['priority']?.toString();
+            if (state.selectedTicket != null && state.selectedTicket!.id == ticketId) {
+              state = state.copyWith(
+                selectedTicket: state.selectedTicket!.copyWith(
+                  status: newStatus ?? state.selectedTicket!.status,
+                  priority: newPriority != null ? TicketPriority.fromString(newPriority) : state.selectedTicket!.priority,
+                ),
+              );
+            }
+            loadUserTickets();
+          }
+        }
+      });
+
+      _activeWsSubscriptions.addAll([subMsg, subUpdate]);
+    } catch (e) {
+      debugPrint('Realtime subscription error for ticket $ticketId: $e');
+    }
+  }
+
+  void _unsubscribeActiveTicket() {
+    if (_activeTicketId != null) {
+      for (final sub in _activeWsSubscriptions) {
+        sub.cancel();
+      }
+      _activeWsSubscriptions.clear();
+      _webSocketService.unsubscribeFromTicket(_activeTicketId!);
+      _activeTicketId = null;
+    }
+  }
+
+  void clearSelectedTicket() {
+    _unsubscribeActiveTicket();
+    state = state.copyWith(clearSelectedTicket: true);
+  }
+
+  @override
+  void dispose() {
+    _unsubscribeActiveTicket();
+    super.dispose();
   }
 
   Future<bool> sendReplyMessage(String ticketId, String message) async {
@@ -269,11 +361,13 @@ final helpSupportControllerProvider =
   final getChannels = ref.watch(getSupportChannelsUseCaseProvider);
   final submitTicket = ref.watch(submitTicketUseCaseProvider);
   final repo = ref.watch(helpSupportRepositoryProvider);
+  final wsService = ref.watch(webSocketServiceProvider);
 
   return HelpSupportNotifier(
     getFaqsUseCase: getFaqs,
     getChannelsUseCase: getChannels,
     submitTicketUseCase: submitTicket,
     repository: repo,
+    webSocketService: wsService,
   );
 });
