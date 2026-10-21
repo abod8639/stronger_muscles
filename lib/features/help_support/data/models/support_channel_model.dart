@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
 
 class SupportChannelModel extends SupportChannelEntity {
@@ -14,22 +15,28 @@ class SupportChannelModel extends SupportChannelEntity {
     super.isAvailable,
   });
 
+  /// Defensive JSON deserializer preventing TypeError when fields are null or unexpected types.
   factory SupportChannelModel.fromJson(Map<String, dynamic> json) {
     return SupportChannelModel(
-      id: json['id'] as String,
+      id: (json['id'] ?? '').toString(),
       type: SupportChannelType.values.firstWhere(
-        (t) => t.name == json['type'],
+        (t) => t.name == json['type']?.toString(),
         orElse: () => SupportChannelType.whatsapp,
       ),
-      titleEn: json['title_en'] as String,
-      titleAr: json['title_ar'] as String,
-      subtitleEn: json['subtitle_en'] as String,
-      subtitleAr: json['subtitle_ar'] as String,
-      actionValue: json['action_value'] as String,
-      availabilityEn: json['availability_en'] as String,
-      availabilityAr: json['availability_ar'] as String,
-      isAvailable: json['is_available'] as bool? ?? true,
+      titleEn: (json['title_en'] ?? json['titleEn'] ?? '').toString(),
+      titleAr: (json['title_ar'] ?? json['titleAr'] ?? '').toString(),
+      subtitleEn: (json['subtitle_en'] ?? json['subtitleEn'] ?? '').toString(),
+      subtitleAr: (json['subtitle_ar'] ?? json['subtitleAr'] ?? '').toString(),
+      actionValue: (json['action_value'] ?? json['actionValue'] ?? '').toString(),
+      availabilityEn: (json['availability_en'] ?? json['availabilityEn'] ?? '').toString(),
+      availabilityAr: (json['availability_ar'] ?? json['availabilityAr'] ?? '').toString(),
+      isAvailable: json['is_available'] as bool? ?? (json['isAvailable'] as bool? ?? true),
     );
+  }
+
+  /// Parses a collection of Support Channels on a background isolate.
+  static Future<List<SupportChannelModel>> parseListAsync(List<dynamic> list) {
+    return compute(_parseSupportChannelListIsolate, list);
   }
 
   Map<String, dynamic> toJson() {
@@ -61,4 +68,11 @@ class SupportChannelModel extends SupportChannelEntity {
       isAvailable: entity.isAvailable,
     );
   }
+}
+
+List<SupportChannelModel> _parseSupportChannelListIsolate(List<dynamic> rawList) {
+  return rawList
+      .whereType<Map>()
+      .map((item) => SupportChannelModel.fromJson(Map<String, dynamic>.from(item)))
+      .toList();
 }
