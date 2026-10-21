@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
@@ -16,31 +19,66 @@ class SelectedCategoryIndex extends _$SelectedCategoryIndex {
 
 @riverpod
 class CategoriesSectionsController extends _$CategoriesSectionsController {
+  CancelToken? _cancelToken;
+
   @override
   FutureOr<List<SelectionEntity>> build() async {
+    _cancelToken = CancelToken();
+
+    ref.onDispose(() {
+      _cancelToken?.cancel('CategoriesSectionsController disposed');
+      _cancelToken = null;
+    });
+
     final getHomeShortcuts = ref.watch(getHomeShortcutsUseCaseProvider);
     final locale = ref.watch(languageControllerProvider);
     final langCode = locale.languageCode;
 
-    return getHomeShortcuts(langCode: langCode);
+    final result = await getHomeShortcuts(
+      langCode: langCode,
+      cancelToken: _cancelToken,
+    );
+
+    return result.fold(
+      (failure) {
+        if (failure is CancelFailure) {
+          return const [];
+        }
+        throw failure;
+      },
+      (shortcuts) => shortcuts,
+    );
   }
 
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
 
   Future<void> fetchCategories() async {
+    _cancelToken?.cancel('Refetching categories');
+    _cancelToken = CancelToken();
+
     state = const AsyncLoading();
     final getHomeShortcuts = ref.read(getHomeShortcutsUseCaseProvider);
     final langCode = ref.read(languageControllerProvider).languageCode;
-    try {
-      final fetched = await getHomeShortcuts(langCode: langCode);
-      state = AsyncData(fetched);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+
+    final result = await getHomeShortcuts(
+      langCode: langCode,
+      cancelToken: _cancelToken,
+    );
+
+    result.fold(
+      (failure) {
+        if (failure is CancelFailure) return;
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (fetched) => state = AsyncData(fetched),
+    );
   }
 
   void updateIndex(int index) {
-    if (index >= 0 && state.hasValue && index < state.value!.length) {
+    if (state.hasValue &&
+        state.value != null &&
+        index >= 0 &&
+        index < state.value!.length) {
       ref.read(selectedCategoryIndexProvider.notifier).setIndex(index);
       final selectedId = state.value![index].id;
 
