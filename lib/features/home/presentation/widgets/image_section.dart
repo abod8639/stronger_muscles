@@ -57,6 +57,7 @@ class _ImageSectionState extends State<ImageSection> {
                       controller: _pageController,
                       itemCount: images.length,
                       onPageChanged: (index) {
+                        if (!mounted) return;
                         setState(() {
                           _selectedImageIndex = index;
                         });
@@ -65,6 +66,9 @@ class _ImageSectionState extends State<ImageSection> {
                         }
                       },
                       itemBuilder: (context, index) {
+                        if (index < 0 || index >= images.length) {
+                          return const SizedBox.shrink();
+                        }
                         return buildImage(
                           images[index].medium,
                           theme,
@@ -91,6 +95,10 @@ class _ImageSectionState extends State<ImageSection> {
   }
 
   Widget buildImage(String url, ThemeData theme, bool isBackgroundWhite) {
+    if (url.trim().isEmpty) {
+      return buildNoImage(theme);
+    }
+
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -135,7 +143,7 @@ class _ImageSectionState extends State<ImageSection> {
               ),
               const SizedBox(height: 4.0),
               Text(
-                AppLocalizations.of(context)?.noImagesFound ?? 'No images available',
+                AppLocalizations.of(context)?.noImagesFound ?? 'لا توجد صور متاحة',
                 style: theme.textTheme.labelSmall,
               ),
             ],
