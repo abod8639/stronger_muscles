@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import '../controllers/notification_controller.dart';
 import '../widgets/notification_item_card.dart';
@@ -12,16 +13,18 @@ class NotificationsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(notificationControllerProvider);
     final notifier = ref.read(notificationControllerProvider.notifier);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final theme = Theme.of(context);
+
+    final unreadCount = state.value?.unreadCount ?? 0;
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(l10n.notifications),
+        title: Text(l10n?.notifications ?? 'الإشعارات'),
         actions: [
-          if (state.unreadCount > 0)
+          if (unreadCount > 0)
             IconButton(
               tooltip: isAr ? 'تحديد الكل كمقروء' : 'Mark all as read',
               icon: const Icon(Icons.done_all_rounded, color: AppColors.primary),
@@ -29,43 +32,9 @@ class NotificationsView extends ConsumerWidget {
             ),
         ],
       ),
-      body: Builder(
-        builder: (context) {
-          if (state.isLoading && state.notifications.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state.error != null && state.notifications.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline_rounded,
-                      size: 64,
-                      color: theme.colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      '${l10n.error}: ${state.error}',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium,
-                    ),
-                    const SizedBox(height: 20),
-                    FilledButton.icon(
-                      onPressed: () => notifier.loadNotifications(),
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: Text(l10n.retry),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          if (state.notifications.isEmpty) {
+      body: state.when(
+        data: (data) {
+          if (data.notifications.isEmpty) {
             return RefreshIndicator(
               onRefresh: () => notifier.refresh(),
               child: ListView(
@@ -81,7 +50,8 @@ class NotificationsView extends ConsumerWidget {
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+                              color: theme.colorScheme.surfaceContainerHighest
+                                  .withValues(alpha: 0.5),
                             ),
                             child: Icon(
                               Icons.notifications_none_rounded,
@@ -91,7 +61,9 @@ class NotificationsView extends ConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            isAr ? 'لا توجد إشعارات حتى الآن' : 'No notifications yet',
+                            isAr
+                                ? 'لا توجد إشعارات حتى الآن'
+                                : 'No notifications yet',
                             style: theme.textTheme.titleMedium?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
@@ -119,11 +91,58 @@ class NotificationsView extends ConsumerWidget {
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 12),
-              itemCount: state.notifications.length,
+              itemCount: data.notifications.length,
               itemBuilder: (context, index) {
-                final notification = state.notifications[index];
+                if (index < 0 || index >= data.notifications.length) {
+                  return const SizedBox.shrink();
+                }
+                final notification = data.notifications[index];
                 return NotificationItemCard(notification: notification);
               },
+            ),
+          );
+        },
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        error: (error, stack) {
+          final errorMessage = error is Failure
+              ? error.toMessage()
+              : (error is String
+                  ? error
+                  : (l10n?.error ?? 'تعذر تحميل الإشعارات حالياً'));
+
+          final isConnection = error is Failure && error.isConnectionError;
+
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    isConnection
+                        ? Icons.wifi_off_rounded
+                        : Icons.error_outline_rounded,
+                    size: 64,
+                    color: theme.colorScheme.error,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    errorMessage,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  FilledButton.icon(
+                    onPressed: () => notifier.loadNotifications(),
+                    icon: const Icon(Icons.refresh_rounded),
+                    label: Text(l10n?.retry ?? 'إعادة المحاولة'),
+                  ),
+                ],
+              ),
             ),
           );
         },
