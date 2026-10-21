@@ -24,11 +24,16 @@ class ShortcutItem extends ConsumerWidget {
 
     return sectionsState.when(
       data: (selections) {
+        if (index < 0 || index >= selections.length) {
+          return const SizedBox.shrink();
+        }
+
         final item = selections[index];
         final theme = Theme.of(context);
+        final label = getLocalizedLabel(context, item.label);
 
         return Semantics(
-          label: '${getLocalizedLabel(context, item.label)} category',
+          label: '$label category',
           selected: isSelected,
           button: true,
           child: GestureDetector(
@@ -64,7 +69,7 @@ class ShortcutItem extends ConsumerWidget {
                 SizedBox(
                   width: _labelWidth,
                   child: Text(
-                    getLocalizedLabel(context, item.label),
+                    label,
                     style: TextStyle(
                       fontSize: _labelFontSize,
                       fontWeight: isSelected
@@ -90,7 +95,9 @@ class ShortcutItem extends ConsumerWidget {
   }
 
   String getLocalizedLabel(BuildContext context, String key) {
-    final localizations = AppLocalizations.of(context)!;
+    final localizations = AppLocalizations.of(context);
+    if (localizations == null) return key;
+
     switch (key) {
       case 'categoryHome':
         return localizations.categoryHome;
