@@ -1,5 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
+import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
 import 'package:stronger_muscles/features/checkout/domain/repositories/checkout_repository.dart';
 import 'package:stronger_muscles/features/checkout/domain/usecases/place_order_usecase.dart';
 
@@ -8,15 +12,21 @@ class MockCheckoutRepository implements CheckoutRepository {
   bool shouldSucceed = true;
 
   @override
-  Future<Map<String, dynamic>> placeOrder(CheckoutParams params) async {
+  Future<Either<Failure, CheckoutResultEntity>> placeOrder(
+    CheckoutParams params, {
+    CancelToken? cancelToken,
+  }) async {
     lastParams = params;
     if (!shouldSucceed) {
-      throw Exception('Payment failed');
+      return const Left(ServerFailure(message: 'Payment failed'));
     }
-    return {
-      'status': 'success',
-      'data': {'id': 'order_123'},
-    };
+    return const Right(
+      CheckoutResultEntity(
+        orderId: 'order_123',
+        status: 'success',
+        rawData: {'status': 'success', 'data': {'id': 'order_123'}},
+      ),
+    );
   }
 }
 
@@ -50,10 +60,37 @@ void main() {
 
       final result = await useCase(params);
 
-      expect(result['status'], 'success');
-      expect(result['data']['id'], 'order_123');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (failure) => fail('Expected Right, got Left: $failure'),
+        (data) {
+          expect(data.status, 'success');
+          expect(data.orderId, 'order_123');
+        },
+      );
       expect(mockRepository.lastParams, equals(params));
       expect(mockRepository.lastParams!.isOnlinePayment, isFalse);
+    });
+
+    test('PlaceOrderUseCase returns Failure when repository fails', () async {
+      mockRepository.shouldSucceed = false;
+
+      const params = CheckoutParams(
+        addressId: 'addr_1',
+        paymentMethod: 'card',
+        items: [],
+      );
+
+      final result = await useCase(params);
+
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) {
+          expect(failure, isA<ServerFailure>());
+          expect(failure.toMessage(), 'Payment failed');
+        },
+        (_) => fail('Expected Left, got Right'),
+      );
     });
 
     test('CheckoutParams identifies online payment gateways correctly', () {
@@ -104,6 +141,20 @@ void main() {
       expect(payload['items'], isA<List>());
       expect((payload['items'] as List).first['product_id'], 'p_10');
       expect((payload['items'] as List).first['quantity'], 3);
+    });
+
+    test('CheckoutResultEntity parses json safely with fallback defaults', () {
+      final emptyResult = CheckoutResultEntity.fromJson(const {});
+      expect(emptyResult.orderId, '');
+      expect(emptyResult.status, 'success');
+      expect(emptyResult.paymentUrl, isNull);
+
+      final nestedResult = CheckoutResultEntity.fromJson(const {
+        'status': 'ok',
+        'data': {'id': 9999},
+      });
+      expect(nestedResult.orderId, '9999');
+      expect(nestedResult.status, 'ok');
     });
   });
 }
