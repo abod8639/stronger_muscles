@@ -1,0 +1,82 @@
+import 'package:flutter/foundation.dart';
+
+/// Pure domain entity representing a user notification.
+@immutable
+class NotificationEntity {
+  final String id;
+  final String title;
+  final String body;
+  final String type;
+  final String targetType;
+  final String? userId;
+  final Map<String, dynamic>? data;
+  final String? imageUrl;
+  final bool isRead;
+  final DateTime? createdAt;
+
+  const NotificationEntity({
+    required this.id,
+    required this.title,
+    required this.body,
+    this.type = 'general',
+    this.targetType = 'all',
+    this.userId,
+    this.data,
+    this.imageUrl,
+    this.isRead = false,
+    this.createdAt,
+  });
+
+  NotificationEntity copyWith({
+    String? id,
+    String? title,
+    String? body,
+    String? type,
+    String? targetType,
+    String? userId,
+    Map<String, dynamic>? data,
+    String? imageUrl,
+    bool? isRead,
+    DateTime? createdAt,
+  }) {
+    return NotificationEntity(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      type: type ?? this.type,
+      targetType: targetType ?? this.targetType,
+      userId: userId ?? this.userId,
+      data: data ?? this.data,
+      imageUrl: imageUrl ?? this.imageUrl,
+      isRead: isRead ?? this.isRead,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  String? get orderId => data?['order_id']?.toString();
+  String? get promoId => data?['promo_id']?.toString();
+  String? get productId => data?['product_id']?.toString();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          isRead == other.isRead;
+
+  @override
+  int get hashCode => Object.hash(id, isRead);
+}
+
+/// Domain container for paginated notifications and total unread count.
+@immutable
+class NotificationsPayloadEntity {
+  final List<NotificationEntity> notifications;
+  final int unreadCount;
+
+  const NotificationsPayloadEntity({
+    required this.notifications,
+    required this.unreadCount,
+  });
+}
