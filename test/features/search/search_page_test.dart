@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
@@ -36,7 +35,7 @@ class _FakeSearchHistory extends SearchHistory {
 
 class _FakeHomeController extends HomeController {
   @override
-  Future<List<ProductModel>> build() async => [];
+  Future<List<ProductEntity>> build() async => [];
 }
 
 void main() {
