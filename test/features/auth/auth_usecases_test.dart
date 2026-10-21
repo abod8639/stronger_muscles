@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 import 'package:stronger_muscles/features/auth/domain/usecases/get_current_user_usecase.dart';
@@ -15,74 +18,94 @@ class FakeAuthRepository implements AuthRepository {
   String? lastRegisterName;
 
   @override
-  Future<UserEntity> login({
+  Future<Either<Failure, UserEntity>> login({
     required String email,
     required String password,
+    CancelToken? cancelToken,
   }) async {
     if (shouldThrow) {
-      throw Exception('Invalid credentials');
+      return const Left(AuthFailure(message: 'Invalid credentials'));
     }
     lastLoginEmail = email;
     lastLoginPassword = password;
-    return mockUser ??
-        UserEntity(
-          id: 1,
-          email: email,
-          name: 'Logged In User',
-          token: "testToken",
-          
-        );
-  }
-
-  @override
-  Future<UserEntity> register({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
-    if (shouldThrow) {
-      throw Exception('Email already in use');
-    }
-    lastRegisterName = name;
-    return UserEntity(
-      id: 2,
-      email: email,
-      name: name,
-      token: "testToken",
+    return Right(
+      mockUser ??
+          UserEntity(
+            id: 1,
+            email: email,
+            name: 'Logged In User',
+            token: "testToken",
+          ),
     );
   }
 
   @override
-  Future<void> logout() async {
+  Future<Either<Failure, UserEntity>> register({
+    required String name,
+    required String email,
+    required String password,
+    CancelToken? cancelToken,
+  }) async {
+    if (shouldThrow) {
+      return const Left(ServerFailure(message: 'Email already in use'));
+    }
+    lastRegisterName = name;
+    return Right(
+      UserEntity(
+        id: 2,
+        email: email,
+        name: name,
+        token: "testToken",
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, Unit>> logout({CancelToken? cancelToken}) async {
     logoutCalled = true;
+    return const Right(unit);
   }
 
   @override
-  Future<UserEntity?> getCurrentUser() async {
-    return mockUser;
+  Future<Either<Failure, UserEntity?>> getCurrentUser({
+    CancelToken? cancelToken,
+  }) async {
+    return Right(mockUser);
   }
 
   @override
-  Future<UserEntity> googleSignIn({
+  Future<Either<Failure, UserEntity>> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
+    CancelToken? cancelToken,
   }) async {
-    return UserEntity(id: 3, email: email, name: name, photoUrl: photoUrl,token: "testToken");
+    return Right(
+      UserEntity(
+        id: 3,
+        email: email,
+        name: name,
+        photoUrl: photoUrl,
+        token: "testToken",
+      ),
+    );
   }
 
   @override
-  Future<UserEntity> updateProfile({
+  Future<Either<Failure, UserEntity>> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? photoUrl,
+    CancelToken? cancelToken,
   }) async {
-    return UserEntity(
-      id: 1,
-      email: email ?? 'test@example.com',
-      name: name ?? 'Updated',
-      token: "testToken",
+    return Right(
+      UserEntity(
+        id: 1,
+        email: email ?? 'test@example.com',
+        name: name ?? 'Updated',
+        token: "testToken",
+      ),
     );
   }
 }
@@ -103,21 +126,33 @@ void main() {
         password: 'password123',
       );
 
-      expect(result.email, 'user@strongermuscles.com');
-      expect(fakeRepository.lastLoginEmail, 'user@strongermuscles.com');
-      expect(fakeRepository.lastLoginPassword, 'password123');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (failure) => fail('Expected right but got $failure'),
+        (user) {
+          expect(user.email, 'user@strongermuscles.com');
+          expect(fakeRepository.lastLoginEmail, 'user@strongermuscles.com');
+          expect(fakeRepository.lastLoginPassword, 'password123');
+        },
+      );
     });
 
-    test('LoginUseCase propagates exception on failure', () async {
+    test('LoginUseCase returns Left failure on error', () async {
       fakeRepository.shouldThrow = true;
       final loginUseCase = LoginUseCase(fakeRepository);
 
-      expect(
-        () => loginUseCase(
-          email: 'wrong@example.com',
-          password: 'wrongpassword',
-        ),
-        throwsA(isA<Exception>()),
+      final result = await loginUseCase(
+        email: 'wrong@example.com',
+        password: 'wrongpassword',
+      );
+
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) {
+          expect(failure, isA<AuthFailure>());
+          expect(failure.toMessage(), 'Invalid credentials');
+        },
+        (_) => fail('Expected Left but got Right'),
       );
     });
 
@@ -130,15 +165,22 @@ void main() {
         password: 'secretPassword',
       );
 
-      expect(result.name, 'Captain Muscle');
-      expect(fakeRepository.lastRegisterName, 'Captain Muscle');
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (failure) => fail('Expected right but got $failure'),
+        (user) {
+          expect(user.name, 'Captain Muscle');
+          expect(fakeRepository.lastRegisterName, 'Captain Muscle');
+        },
+      );
     });
 
     test('LogoutUseCase invokes repository logout', () async {
       final logoutUseCase = LogoutUseCase(fakeRepository);
 
-      await logoutUseCase();
+      final result = await logoutUseCase();
 
+      expect(result.isRight(), isTrue);
       expect(fakeRepository.logoutCalled, isTrue);
     });
 
@@ -146,8 +188,12 @@ void main() {
       final getCurrentUserUseCase = GetCurrentUserUseCase(fakeRepository);
 
       // When no user is logged in
-      var user = await getCurrentUserUseCase();
-      expect(user, isNull);
+      var result = await getCurrentUserUseCase();
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (user) => expect(user, isNull),
+      );
 
       // When user is set
       fakeRepository.mockUser = const UserEntity(
@@ -157,10 +203,16 @@ void main() {
         token: "testToken",
       );
 
-      user = await getCurrentUserUseCase();
-      expect(user, isNotNull);
-      expect(user!.id, 99);
-      expect(user.email, 'active@example.com');
+      result = await getCurrentUserUseCase();
+      expect(result.isRight(), isTrue);
+      result.fold(
+        (_) => fail('Expected Right'),
+        (user) {
+          expect(user, isNotNull);
+          expect(user!.id, 99);
+          expect(user.email, 'active@example.com');
+        },
+      );
     });
   });
 }
