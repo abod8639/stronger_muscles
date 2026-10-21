@@ -1,43 +1,108 @@
-class NotificationModel {
-  final String id;
-  final String title;
-  final String body;
-  final String type;
-  final String targetType;
-  final String? userId;
-  final Map<String, dynamic>? data;
-  final String? imageUrl;
-  final bool isRead;
-  final DateTime? createdAt;
+import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
 
+export 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
+
+/// Data model representing a notification, extending domain [NotificationEntity].
+/// Features defensive parsing and default values to prevent TypeError and NullPointer crashes.
+class NotificationModel extends NotificationEntity {
   const NotificationModel({
-    required this.id,
-    required this.title,
-    required this.body,
-    this.type = 'general',
-    this.targetType = 'all',
-    this.userId,
-    this.data,
-    this.imageUrl,
-    this.isRead = false,
-    this.createdAt,
+    required super.id,
+    required super.title,
+    required super.body,
+    super.type = 'general',
+    super.targetType = 'all',
+    super.userId,
+    super.data,
+    super.imageUrl,
+    super.isRead = false,
+    super.createdAt,
   });
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+  /// Robust, fault-tolerant JSON parser.
+  factory NotificationModel.fromJson(dynamic json) {
+    if (json is! Map) {
+      return const NotificationModel(
+        id: '',
+        title: '',
+        body: '',
+      );
+    }
+
+    final id = json['id']?.toString() ?? json['_id']?.toString() ?? '';
+    final title = json['title']?.toString() ?? json['name']?.toString() ?? '';
+    final body = json['body']?.toString() ?? json['message']?.toString() ?? '';
+    final type = json['type']?.toString().toLowerCase() ?? 'general';
+    final targetType = json['target_type']?.toString().toLowerCase() ?? 'all';
+    final userId = json['user_id']?.toString();
+
+    Map<String, dynamic>? dataMap;
+    if (json['data'] is Map) {
+      try {
+        dataMap = Map<String, dynamic>.from(json['data'] as Map);
+      } catch (_) {
+        dataMap = null;
+      }
+    }
+
+    final imageUrl = json['image_url']?.toString() ?? json['image']?.toString();
+
+    final rawRead = json['is_read'] ?? json['read'];
+    final isRead = rawRead == true ||
+        rawRead == 1 ||
+        rawRead == '1' ||
+        rawRead == 'true';
+
+    DateTime? createdAt;
+    final rawDate = json['created_at'];
+    if (rawDate != null) {
+      createdAt = DateTime.tryParse(rawDate.toString());
+    }
+
     return NotificationModel(
-      id: json['id']?.toString() ?? '',
-      title: json['title']?.toString() ?? '',
-      body: json['body']?.toString() ?? '',
-      type: json['type']?.toString() ?? 'general',
-      targetType: json['target_type']?.toString() ?? 'all',
-      userId: json['user_id']?.toString(),
-      data: json['data'] is Map ? Map<String, dynamic>.from(json['data']) : null,
-      imageUrl: json['image_url']?.toString(),
-      isRead: json['is_read'] == true || json['is_read'] == 1,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString()) : null,
+      id: id,
+      title: title,
+      body: body,
+      type: type,
+      targetType: targetType,
+      userId: userId,
+      data: dataMap,
+      imageUrl: imageUrl,
+      isRead: isRead,
+      createdAt: createdAt,
     );
   }
 
+  factory NotificationModel.fromEntity(NotificationEntity entity) {
+    return NotificationModel(
+      id: entity.id,
+      title: entity.title,
+      body: entity.body,
+      type: entity.type,
+      targetType: entity.targetType,
+      userId: entity.userId,
+      data: entity.data,
+      imageUrl: entity.imageUrl,
+      isRead: entity.isRead,
+      createdAt: entity.createdAt,
+    );
+  }
+
+  NotificationEntity toEntity() {
+    return NotificationEntity(
+      id: id,
+      title: title,
+      body: body,
+      type: type,
+      targetType: targetType,
+      userId: userId,
+      data: data,
+      imageUrl: imageUrl,
+      isRead: isRead,
+      createdAt: createdAt,
+    );
+  }
+
+  @override
   NotificationModel copyWith({
     String? id,
     String? title,
@@ -64,7 +129,30 @@ class NotificationModel {
     );
   }
 
-  String? get orderId => data?['order_id']?.toString();
-  String? get promoId => data?['promo_id']?.toString();
-  String? get productId => data?['product_id']?.toString();
+  /// Parses a raw response into a list of models safely.
+  static List<NotificationModel> fromJsonList(dynamic data) {
+    if (data == null) return const [];
+
+    List<dynamic> items = const [];
+    if (data is List) {
+      items = data;
+    } else if (data is Map) {
+      final raw = data['data'] ?? data['items'] ?? data['notifications'];
+      if (raw is List) {
+        items = raw;
+      }
+    }
+
+    final results = <NotificationModel>[];
+    for (final item in items) {
+      if (item is Map) {
+        try {
+          results.add(NotificationModel.fromJson(item));
+        } catch (_) {
+          // Drop corrupt individual notification safely
+        }
+      }
+    }
+    return results;
+  }
 }
