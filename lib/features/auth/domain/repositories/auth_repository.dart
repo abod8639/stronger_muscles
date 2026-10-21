@@ -1,23 +1,38 @@
+import 'package:dio/dio.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 
 abstract class AuthRepository {
-  Future<UserEntity> login({required String email, required String password});
-  Future<UserEntity> register({
+  Future<Either<Failure, UserEntity>> login({
+    required String email,
+    required String password,
+    CancelToken? cancelToken,
+  });
+
+  Future<Either<Failure, UserEntity>> register({
     required String name,
     required String email,
     required String password,
+    CancelToken? cancelToken,
   });
-  Future<void> logout();
-  Future<UserEntity?> getCurrentUser();
-  Future<UserEntity> googleSignIn({
+
+  Future<Either<Failure, Unit>> logout({CancelToken? cancelToken});
+
+  Future<Either<Failure, UserEntity?>> getCurrentUser({CancelToken? cancelToken});
+
+  Future<Either<Failure, UserEntity>> googleSignIn({
     required String email,
     required String name,
     String? photoUrl,
+    CancelToken? cancelToken,
   });
-  Future<UserEntity> updateProfile({
+
+  Future<Either<Failure, UserEntity>> updateProfile({
     String? name,
     String? email,
     String? phone,
     String? photoUrl,
+    CancelToken? cancelToken,
   });
 }
