@@ -41,6 +41,7 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
+    ref.read(helpSupportControllerProvider.notifier).clearSelectedTicket();
     super.dispose();
   }
 
@@ -68,6 +69,24 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
 
   @override
   Widget build(BuildContext context) {
+    // Auto-scroll when new messages arrive via WebSocket
+    ref.listen<int?>(
+      helpSupportControllerProvider.select((s) => s.selectedTicket?.messages.length),
+      (prev, next) {
+        if (next != null && (prev == null || next > prev)) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) {
+              _scrollController.animateTo(
+                _scrollController.position.maxScrollExtent,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              );
+            }
+          });
+        }
+      },
+    );
+
     final state = ref.watch(helpSupportControllerProvider);
     final ticket = state.selectedTicket;
     final isDark = context.isDark;
