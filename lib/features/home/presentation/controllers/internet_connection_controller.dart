@@ -6,31 +6,52 @@ part 'internet_connection_controller.g.dart';
 
 @Riverpod(keepAlive: true)
 class InternetConnectionController extends _$InternetConnectionController {
-  StreamSubscription? _subscription;
+  StreamSubscription<InternetStatus>? _subscription;
   late final InternetConnection _internetConnection;
+  bool _isDisposed = false;
 
   @override
   bool build() {
+    _isDisposed = false;
     _internetConnection = InternetConnection();
     _startMonitoring();
 
     ref.onDispose(() {
+      _isDisposed = true;
       _subscription?.cancel();
+      _subscription = null;
     });
 
-    return true; // Assume connected initially or check first
+    return true;
   }
 
   void _startMonitoring() {
     _checkInitialStatus();
 
-    _subscription = _internetConnection.onStatusChange.listen((status) {
-      state = (status == InternetStatus.connected);
-    });
+    _subscription = _internetConnection.onStatusChange.listen(
+      (status) {
+        if (!_isDisposed) {
+          state = (status == InternetStatus.connected);
+        }
+      },
+      onError: (_) {
+        if (!_isDisposed) {
+          state = false;
+        }
+      },
+    );
   }
 
   Future<void> _checkInitialStatus() async {
-    bool hasAccess = await _internetConnection.hasInternetAccess;
-    state = hasAccess;
+    try {
+      final hasAccess = await _internetConnection.hasInternetAccess;
+      if (!_isDisposed) {
+        state = hasAccess;
+      }
+    } catch (_) {
+      if (!_isDisposed) {
+        state = false;
+      }
+    }
   }
 }
