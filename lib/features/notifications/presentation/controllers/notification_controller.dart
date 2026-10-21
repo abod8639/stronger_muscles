@@ -1,114 +1,182 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../data/models/notification_model.dart';
-import '../../data/repositories/notification_repository.dart';
+import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/notifications/data/repositories/notification_repository.dart';
+import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
 
+part 'notification_controller.g.dart';
+
+/// Immutable UI state representing the user notifications and unread badge count.
+@immutable
 class NotificationsState {
-  final List<NotificationModel> notifications;
+  final List<NotificationEntity> notifications;
   final int unreadCount;
-  final bool isLoading;
-  final String? error;
 
   const NotificationsState({
     this.notifications = const [],
     this.unreadCount = 0,
-    this.isLoading = false,
-    this.error,
   });
 
   NotificationsState copyWith({
-    List<NotificationModel>? notifications,
+    List<NotificationEntity>? notifications,
     int? unreadCount,
-    bool? isLoading,
-    String? error,
   }) {
     return NotificationsState(
       notifications: notifications ?? this.notifications,
       unreadCount: unreadCount ?? this.unreadCount,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationsState &&
+          runtimeType == other.runtimeType &&
+          unreadCount == other.unreadCount &&
+          listEquals(notifications, other.notifications);
+
+  @override
+  int get hashCode => Object.hash(unreadCount, Object.hashAll(notifications));
 }
 
-class NotificationNotifier extends StateNotifier<NotificationsState> {
-  final NotificationRepository _repository;
+@Riverpod(keepAlive: true)
+class NotificationController extends _$NotificationController {
+  CancelToken? _cancelToken;
 
-  NotificationNotifier(this._repository) : super(const NotificationsState()) {
-    loadNotifications();
+  @override
+  FutureOr<NotificationsState> build() async {
+    _cancelToken = CancelToken();
+
+    ref.onDispose(() {
+      _cancelToken?.cancel('NotificationController disposed');
+      _cancelToken = null;
+    });
+
+    final repository = ref.watch(notificationRepositoryProvider);
+    final result = await repository.getNotifications(cancelToken: _cancelToken);
+
+    return result.fold(
+      (failure) {
+        if (failure is CancelFailure) {
+          return const NotificationsState();
+        }
+        throw failure;
+      },
+      (data) => NotificationsState(
+        notifications: data.notifications,
+        unreadCount: data.unreadCount,
+      ),
+    );
   }
 
+  /// Reloads notifications with visual loading indicator and sets AsyncError on failure.
   Future<void> loadNotifications() async {
-    state = state.copyWith(isLoading: true, error: null);
-    try {
-      final result = await _repository.getNotifications();
-      final List<NotificationModel> list = result['notifications'] ?? [];
-      final int count = result['unread_count'] ?? list.where((n) => !n.isRead).length;
+    _cancelToken?.cancel('Reloading notifications');
+    _cancelToken = CancelToken();
 
-      state = state.copyWith(
-        notifications: list,
-        unreadCount: count,
-        isLoading: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString().replaceAll('Exception: ', ''),
-      );
-    }
+    state = const AsyncLoading();
+
+    final repository = ref.read(notificationRepositoryProvider);
+    final result = await repository.getNotifications(cancelToken: _cancelToken);
+
+    result.fold(
+      (failure) {
+        if (failure is CancelFailure) return;
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (data) {
+        state = AsyncData(
+          NotificationsState(
+            notifications: data.notifications,
+            unreadCount: data.unreadCount,
+          ),
+        );
+      },
+    );
   }
 
+  /// Background refresh without flashing a blank loading screen.
   Future<void> refresh() async {
-    try {
-      final result = await _repository.getNotifications();
-      final List<NotificationModel> list = result['notifications'] ?? [];
-      final int count = result['unread_count'] ?? list.where((n) => !n.isRead).length;
+    _cancelToken?.cancel('Refreshing notifications');
+    _cancelToken = CancelToken();
 
-      state = state.copyWith(
-        notifications: list,
-        unreadCount: count,
-        error: null,
-      );
-    } catch (_) {}
+    final repository = ref.read(notificationRepositoryProvider);
+    final result = await repository.getNotifications(cancelToken: _cancelToken);
+
+    result.fold(
+      (failure) {
+        // Silently retain current data if background refresh fails
+      },
+      (data) {
+        state = AsyncData(
+          NotificationsState(
+            notifications: data.notifications,
+            unreadCount: data.unreadCount,
+          ),
+        );
+      },
+    );
   }
 
+  /// Optimistically marks a notification as read and calls the backend.
   Future<void> markAsRead(String id) async {
-    // Optimistic update
-    final updatedList = state.notifications.map((n) {
+    final current = state.value;
+    if (current == null) return;
+
+    final updatedList = current.notifications.map((n) {
       if (n.id == id && !n.isRead) {
         return n.copyWith(isRead: true);
       }
       return n;
     }).toList();
 
-    final newCount = (state.unreadCount - 1).clamp(0, 9999);
-    state = state.copyWith(notifications: updatedList, unreadCount: newCount);
+    final newCount = (current.unreadCount - 1).clamp(0, 9999);
+    state = AsyncData(current.copyWith(
+      notifications: updatedList,
+      unreadCount: newCount,
+    ));
 
-    try {
-      await _repository.markAsRead(id);
-    } catch (_) {
-      // Revert if failed
-      refresh();
-    }
+    final repository = ref.read(notificationRepositoryProvider);
+    final result = await repository.markAsRead(id);
+
+    result.fold(
+      (failure) {
+        // Revert on failure
+        refresh();
+      },
+      (_) {},
+    );
   }
 
+  /// Optimistically marks all notifications as read.
   Future<void> markAllAsRead() async {
-    // Optimistic update
-    final updatedList = state.notifications.map((n) => n.copyWith(isRead: true)).toList();
-    state = state.copyWith(notifications: updatedList, unreadCount: 0);
+    final current = state.value;
+    if (current == null) return;
 
-    try {
-      await _repository.markAllAsRead();
-    } catch (_) {
-      refresh();
-    }
+    final updatedList =
+        current.notifications.map((n) => n.copyWith(isRead: true)).toList();
+    state = AsyncData(current.copyWith(
+      notifications: updatedList,
+      unreadCount: 0,
+    ));
+
+    final repository = ref.read(notificationRepositoryProvider);
+    final result = await repository.markAllAsRead();
+
+    result.fold(
+      (failure) {
+        refresh();
+      },
+      (_) {},
+    );
   }
 }
 
-final notificationControllerProvider = StateNotifierProvider<NotificationNotifier, NotificationsState>((ref) {
-  final repo = ref.watch(notificationRepositoryProvider);
-  return NotificationNotifier(repo);
-});
-
-final unreadNotificationCountProvider = Provider<int>((ref) {
-  return ref.watch(notificationControllerProvider).unreadCount;
-});
+/// Global provider exposing the total unread notification count for badges.
+@Riverpod(keepAlive: true)
+int unreadNotificationCount(UnreadNotificationCountRef ref) {
+  final notificationState = ref.watch(notificationControllerProvider);
+  return notificationState.value?.unreadCount ?? 0;
+}
