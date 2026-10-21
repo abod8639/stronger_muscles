@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/data/datasources/help_support_local_data_source.dart';
@@ -15,22 +16,37 @@ import 'package:stronger_muscles/features/help_support/domain/usecases/submit_ti
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
 
 class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
-  @override
-  Future<SupportTicketModel> submitTicket(SupportTicketModel ticket) async =>
-      SupportTicketModel(
-        id: 'SM-123456',
-        ticketNumber: 'SM-123456',
-        subject: ticket.subject,
-        category: ticket.category,
-        message: ticket.message,
-        createdAt: ticket.createdAt,
-      );
+  bool shouldThrow = false;
 
   @override
-  Future<List<SupportTicketModel>> getUserTickets() async => [];
+  Future<SupportTicketModel> submitTicket(
+    SupportTicketModel ticket, {
+    CancelToken? cancelToken,
+  }) async {
+    if (shouldThrow) {
+      throw Exception('Server error');
+    }
+    return SupportTicketModel(
+      id: 'SM-123456',
+      ticketNumber: 'SM-123456',
+      subject: ticket.subject,
+      category: ticket.category,
+      message: ticket.message,
+      createdAt: ticket.createdAt,
+    );
+  }
 
   @override
-  Future<SupportTicketModel> getTicketDetails(String ticketId) async =>
+  Future<List<SupportTicketModel>> getUserTickets({
+    CancelToken? cancelToken,
+  }) async =>
+      [];
+
+  @override
+  Future<SupportTicketModel> getTicketDetails(
+    String ticketId, {
+    CancelToken? cancelToken,
+  }) async =>
       SupportTicketModel(
         id: ticketId,
         subject: 'Test',
@@ -40,7 +56,11 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
       );
 
   @override
-  Future<SupportMessageModel> sendTicketMessage(String ticketId, String message) async =>
+  Future<SupportMessageModel> sendTicketMessage(
+    String ticketId,
+    String message, {
+    CancelToken? cancelToken,
+  }) async =>
       SupportMessageModel(
         id: 1,
         ticketId: int.tryParse(ticketId) ?? 1,
@@ -51,7 +71,10 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
       );
 
   @override
-  Future<SupportTicketModel> closeTicket(String ticketId) async =>
+  Future<SupportTicketModel> closeTicket(
+    String ticketId, {
+    CancelToken? cancelToken,
+  }) async =>
       SupportTicketModel(
         id: ticketId,
         subject: 'Test',
@@ -88,7 +111,7 @@ void main() {
   group('Help & Support Clean Architecture', () {
     late HelpSupportLocalDataSource dataSource;
     late HelpSupportRepositoryImpl repository;
-    late HelpSupportRemoteDataSource remoteDataSource;
+    late MockHelpSupportRemoteDataSource remoteDataSource;
     late GetFaqsUseCase getFaqsUseCase;
     late GetSupportChannelsUseCase getChannelsUseCase;
     late SubmitTicketUseCase submitTicketUseCase;
@@ -102,14 +125,19 @@ void main() {
       submitTicketUseCase = SubmitTicketUseCase(repository);
     });
 
-    test('getFaqs returns list of FAQs', () async {
-      final faqs = await getFaqsUseCase();
+    test('getFaqs returns Either Right with list of FAQs', () async {
+      final result = await getFaqsUseCase();
+      expect(result.isRight(), true);
+      final faqs = result.getOrElse((_) => []);
       expect(faqs.isNotEmpty, true);
       expect(faqs.any((f) => f.category == FaqCategory.ordersShipping), true);
     });
 
     test('getFaqs filters by category correctly', () async {
-      final supplementFaqs = await getFaqsUseCase(category: FaqCategory.supplements);
+      final result =
+          await getFaqsUseCase(category: FaqCategory.supplements);
+      expect(result.isRight(), true);
+      final supplementFaqs = result.getOrElse((_) => []);
       expect(supplementFaqs.isNotEmpty, true);
       for (final faq in supplementFaqs) {
         expect(faq.category, FaqCategory.supplements);
@@ -117,13 +145,17 @@ void main() {
     });
 
     test('getFaqs searches by query correctly', () async {
-      final results = await getFaqsUseCase(query: 'تتبع');
+      final result = await getFaqsUseCase(query: 'تتبع');
+      expect(result.isRight(), true);
+      final results = result.getOrElse((_) => []);
       expect(results.isNotEmpty, true);
       expect(results.first.questionAr.contains('تتبع'), true);
     });
 
-    test('getSupportChannels returns the 4 standard channels', () async {
-      final channels = await getChannelsUseCase();
+    test('getSupportChannels returns Either Right with the 4 standard channels', () async {
+      final result = await getChannelsUseCase();
+      expect(result.isRight(), true);
+      final channels = result.getOrElse((_) => []);
       expect(channels.length, 4);
       expect(channels.any((c) => c.type == SupportChannelType.whatsapp), true);
       expect(channels.any((c) => c.type == SupportChannelType.phone), true);
@@ -141,9 +173,11 @@ void main() {
       );
 
       final result = await submitTicketUseCase(ticket);
-      expect(result.id, isNotNull);
-      expect(result.id!.startsWith('SM-'), true);
-      expect(result.subject, ticket.subject);
+      expect(result.isRight(), true);
+      final created = result.getOrElse((_) => ticket);
+      expect(created.id, isNotNull);
+      expect(created.id!.startsWith('SM-'), true);
+      expect(created.subject, ticket.subject);
     });
 
     test('HelpSupportNotifier loads initial data and filters properly', () async {
@@ -181,7 +215,7 @@ void main() {
       expect(notifier.state.lastSubmittedTicketId, ticket!.id);
     });
 
-    test('FaqModel toJson and fromJson match', () {
+    test('FaqModel toJson and fromJson match with safe null fallbacks', () {
       const model = FaqModel(
         id: 'faq_test',
         questionEn: 'Is this a test?',
@@ -199,6 +233,33 @@ void main() {
       expect(fromJson.questionEn, model.questionEn);
       expect(fromJson.questionAr, model.questionAr);
       expect(fromJson.category, model.category);
+
+      // Null handling
+      final emptyJson = FaqModel.fromJson(const {});
+      expect(emptyJson.id, '');
+      expect(emptyJson.questionEn, '');
+      expect(emptyJson.category, FaqCategory.ordersShipping);
+    });
+
+    test('SupportTicketModel handles raw map types and lists safely', () {
+      final model = SupportTicketModel.fromJson({
+        'id': 100,
+        'subject': 'Ticket 100',
+        'messages': [
+          {
+            'id': 1,
+            'ticket_id': 100,
+            'sender_type': 'user',
+            'sender_name': 'Tester',
+            'message': 'Hello',
+            'created_at': DateTime.now().toIso8601String(),
+          }
+        ],
+      });
+
+      expect(model.id, '100');
+      expect(model.messages.length, 1);
+      expect(model.messages.first.message, 'Hello');
     });
   });
 }
