@@ -39,7 +39,7 @@ class SelectionsModel extends SelectionEntity {
       safeLabel = rawLabel.toString();
     }
 
-    final safeIcon = _resolveIcon(json['icon'] ?? safeId);
+    final safeIcon = resolveIcon(json['icon'] ?? safeId);
 
     return SelectionsModel(
       id: safeId,
@@ -100,8 +100,9 @@ class SelectionsModel extends SelectionEntity {
   }
 
   /// Maps category identifiers or icon keys to modern, relevant [IconData].
-  static IconData _resolveIcon(dynamic iconValue) {
+  static IconData resolveIcon(dynamic iconValue) {
     if (iconValue is int) {
+      // ignore: non_const_argument_for_const_parameter
       return IconData(iconValue, fontFamily: 'MaterialIcons');
     }
 
