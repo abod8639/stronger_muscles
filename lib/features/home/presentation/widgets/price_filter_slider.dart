@@ -36,9 +36,11 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
     final effectiveMin = minData;
     final effectiveMax = maxData > minData ? maxData : minData + 0.1;
 
-    // Clamp values to current bounds to prevent assertion errors
-    final startValue = _currentRangeValues.start.clamp(effectiveMin, effectiveMax);
-    final endValue = _currentRangeValues.end.clamp(effectiveMin, effectiveMax);
+    // Clamp values to current bounds and guarantee start <= end to prevent assertion errors
+    final rawStart = _currentRangeValues.start.clamp(effectiveMin, effectiveMax);
+    final rawEnd = _currentRangeValues.end.clamp(effectiveMin, effectiveMax);
+    final startValue = rawStart <= rawEnd ? rawStart : rawEnd;
+    final endValue = rawEnd >= rawStart ? rawEnd : rawStart;
     final effectiveValues = RangeValues(startValue, endValue);
 
     return Column(
