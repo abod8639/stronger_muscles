@@ -18,6 +18,8 @@ class FakeApiService implements ApiService {
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Duration? timeout,
   }) async {
     lastPostPath = path;
     lastPostData = data;
@@ -34,15 +36,32 @@ class FakeApiService implements ApiService {
   }
 
   @override
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, bool includeAuth = true}) =>
+  Future<Response> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    bool includeAuth = true,
+    CancelToken? cancelToken,
+    Duration? timeout,
+  }) =>
       throw UnimplementedError();
 
   @override
-  Future<Response> put(String path, {dynamic data, Map<String, dynamic>? queryParameters}) =>
+  Future<Response> put(
+    String path, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    CancelToken? cancelToken,
+    Duration? timeout,
+  }) =>
       throw UnimplementedError();
 
   @override
-  Future<Response> delete(String path) => throw UnimplementedError();
+  Future<Response> delete(
+    String path, {
+    CancelToken? cancelToken,
+    Duration? timeout,
+  }) =>
+      throw UnimplementedError();
 }
 
 void main() {
