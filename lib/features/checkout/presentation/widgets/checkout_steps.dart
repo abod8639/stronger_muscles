@@ -3,52 +3,91 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/address_selection_card.dart';
 import 'package:stronger_muscles/features/checkout/presentation/widgets/payment_option_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Step buildAddressStep(WidgetRef ref, String title) {
   final checkoutState = ref.watch(checkoutControllerProvider);
-  final addresses = ref.watch(addressControllerProvider).value ?? [];
+  final addressState = ref.watch(addressControllerProvider);
   final l10n = AppLocalizations.of(ref.context)!;
+  final theme = Theme.of(ref.context);
 
   return Step(
     title: Text(title),
-    content: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (addresses.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Text(
-              l10n.noAddressesFound,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(ref.context).colorScheme.onSurfaceVariant),
+    content: addressState.when(
+      data: (addresses) => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (addresses.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Text(
+                l10n.noAddressesFound,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+              ),
+            )
+          else
+            Column(
+              children: addresses.map((address) {
+                return AddressSelectionCard(address: address);
+              }).toList(),
             ),
-          )
-        else
-          Column(
-            children: addresses.map((address) {
-              return AddressSelectionCard(address: address);
-            }).toList(),
+          const SizedBox(height: 12.0),
+          OutlinedButton.icon(
+            onPressed: () => showAddressForm(ref.context),
+            icon: const Icon(Icons.add_location_alt_outlined, size: 18.0),
+            label: Text(l10n.addNewAddress),
+            style: OutlinedButton.styleFrom(
+              shape: AppRadius.shapeMd,
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+            ),
           ),
-        const SizedBox(height: 12.0),
-        OutlinedButton.icon(
-          onPressed: () => showAddressForm(ref.context),
-          icon: const Icon(Icons.add_location_alt_outlined, size: 18.0),
-          label: Text(l10n.addNewAddress),
-          style: OutlinedButton.styleFrom(
-            shape: AppRadius.shapeMd,
-            padding: const EdgeInsets.symmetric(vertical: 12.0),
+        ],
+      ),
+      loading: () => const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      error: (error, _) => Container(
+        padding: const EdgeInsets.all(14.0),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
+          borderRadius: AppRadius.allMd,
+          border: Border.all(
+            color: theme.colorScheme.error.withValues(alpha: 0.3),
           ),
         ),
-      ],
+        child: Row(
+          children: [
+            Icon(Icons.error_outline, color: theme.colorScheme.error),
+            const SizedBox(width: 12.0),
+            Expanded(
+              child: Text(
+                error is Failure ? error.toMessage() : error.toString(),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.error,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              color: theme.colorScheme.error,
+              onPressed: () => ref.refresh(addressControllerProvider),
+            ),
+          ],
+        ),
+      ),
     ),
     isActive: checkoutState.currentStep >= 0,
     state: checkoutState.currentStep > 0
@@ -140,14 +179,20 @@ Step buildReviewStep(WidgetRef ref, String title) {
                                 width: 44.0,
                                 height: 44.0,
                                 color: theme.colorScheme.surfaceContainerHighest,
-                                child: const Icon(Icons.image_not_supported_outlined, size: 20.0),
+                                child: const Icon(
+                                  Icons.image_not_supported_outlined,
+                                  size: 20.0,
+                                ),
                               ),
                             )
                           : Container(
                               width: 44.0,
                               height: 44.0,
                               color: theme.colorScheme.surfaceContainerHighest,
-                              child: const Icon(Icons.image_not_supported_outlined, size: 20.0),
+                              child: const Icon(
+                                Icons.image_not_supported_outlined,
+                                size: 20.0,
+                              ),
                             ),
                     ),
                     const SizedBox(width: 12.0),
@@ -192,7 +237,35 @@ Step buildReviewStep(WidgetRef ref, String title) {
               child: CircularProgressIndicator(),
             ),
           ),
-          error: (e, _) => Text('${l10n.error}: $e'),
+          error: (error, _) => Container(
+            padding: const EdgeInsets.all(14.0),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
+              borderRadius: AppRadius.allMd,
+              border: Border.all(
+                color: theme.colorScheme.error.withValues(alpha: 0.3),
+              ),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.error_outline, color: theme.colorScheme.error),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Text(
+                    error is Failure ? error.toMessage() : error.toString(),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  color: theme.colorScheme.error,
+                  onPressed: () => ref.refresh(cartControllerProvider),
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 8.0),
         Divider(color: theme.colorScheme.outlineVariant),
