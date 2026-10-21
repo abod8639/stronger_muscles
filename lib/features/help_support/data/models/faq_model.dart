@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
 
 class FaqModel extends FaqEntity {
@@ -11,19 +12,30 @@ class FaqModel extends FaqEntity {
     super.tags,
   });
 
+  /// Defensive JSON deserializer with safe fallback defaults preventing TypeError and NullPointer.
   factory FaqModel.fromJson(Map<String, dynamic> json) {
     return FaqModel(
-      id: json['id'] as String,
-      questionEn: json['question_en'] as String,
-      questionAr: json['question_ar'] as String,
-      answerEn: json['answer_en'] as String,
-      answerAr: json['answer_ar'] as String,
+      id: (json['id'] ?? '').toString(),
+      questionEn: (json['question_en'] ?? json['questionEn'] ?? '').toString(),
+      questionAr: (json['question_ar'] ?? json['questionAr'] ?? '').toString(),
+      answerEn: (json['answer_en'] ?? json['answerEn'] ?? '').toString(),
+      answerAr: (json['answer_ar'] ?? json['answerAr'] ?? '').toString(),
       category: FaqCategory.values.firstWhere(
-        (c) => c.name == json['category'],
+        (c) => c.name == json['category']?.toString(),
         orElse: () => FaqCategory.ordersShipping,
       ),
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      tags: (json['tags'] is List)
+          ? (json['tags'] as List)
+              .map((e) => e?.toString() ?? '')
+              .where((s) => s.isNotEmpty)
+              .toList()
+          : const [],
     );
+  }
+
+  /// Parses a collection of FAQs on a background isolate to prevent UI thread freezing.
+  static Future<List<FaqModel>> parseListAsync(List<dynamic> list) {
+    return compute(_parseFaqListIsolate, list);
   }
 
   Map<String, dynamic> toJson() {
@@ -49,4 +61,11 @@ class FaqModel extends FaqEntity {
       tags: entity.tags,
     );
   }
+}
+
+List<FaqModel> _parseFaqListIsolate(List<dynamic> rawList) {
+  return rawList
+      .whereType<Map>()
+      .map((item) => FaqModel.fromJson(Map<String, dynamic>.from(item)))
+      .toList();
 }
