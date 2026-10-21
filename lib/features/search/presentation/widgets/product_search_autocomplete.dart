@@ -55,7 +55,7 @@ class _ProductSearchAutocompleteState
     final l10n = AppLocalizations.of(context)!;
     final controller = ref.watch(productSearchControllerProvider.notifier);
     final homeProducts = ref.watch(homeControllerProvider).value ?? [];
-    final homeEntities = homeProducts.map((p) => p.toEntity()).toList();
+    final homeEntities = homeProducts;
     final searchHistory = ref.watch(searchHistoryProvider);
     final locale = l10n.localeName;
 
