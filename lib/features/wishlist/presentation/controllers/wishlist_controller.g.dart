@@ -7,7 +7,7 @@ part of 'wishlist_controller.dart';
 // **************************************************************************
 
 String _$wishlistControllerHash() =>
-    r'a793f9fca8485328d7f7d79811fb41bfa553bc90';
+    r'8bc169a81a48753fa66c811e1419e393b85406ba';
 
 /// See also [WishlistController].
 @ProviderFor(WishlistController)
@@ -25,4 +25,3 @@ final wishlistControllerProvider = AutoDisposeNotifierProvider<
 typedef _$WishlistController = AutoDisposeNotifier<List<ProductEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
-
