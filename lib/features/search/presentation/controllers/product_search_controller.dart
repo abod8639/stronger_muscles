@@ -56,10 +56,9 @@ class ProductSearchController extends _$ProductSearchController {
     // Initialize with home products if they are already loaded
     final homeProducts = ref.read(homeControllerProvider).value;
     if (homeProducts != null && homeProducts.isNotEmpty) {
-      final entities = homeProducts.map((p) => p.toEntity()).toList();
-      _localProducts = entities;
-      _combinedResults = entities;
-      return entities;
+      _localProducts = homeProducts;
+      _combinedResults = homeProducts;
+      return homeProducts;
     }
 
     return [];
@@ -117,9 +116,7 @@ class ProductSearchController extends _$ProductSearchController {
 
     _hasSearched = true;
     final locale = ref.read(languageControllerProvider).languageCode;
-    final homeProducts = (ref.read(homeControllerProvider).value ?? [])
-        .map((p) => p.toEntity())
-        .toList();
+    final homeProducts = ref.read(homeControllerProvider).value ?? [];
     final source = _localProducts.isNotEmpty ? _localProducts : homeProducts;
 
     // Use prioritized local filtering
