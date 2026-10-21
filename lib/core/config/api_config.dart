@@ -12,6 +12,22 @@ class ApiConfig {
     return 'http://$ip:$port/api/v1';
   }
 
+  // WebSocket / Laravel Reverb Configuration
+  static String get wsHost {
+    final envUrl = dotenv.env['BASE_URL'];
+    if (envUrl != null) {
+      try {
+        final uri = Uri.parse(envUrl);
+        if (uri.host.isNotEmpty) return uri.host;
+      } catch (_) {}
+    }
+    return '192.168.1.17';
+  }
+
+  static const int wsPort = 8085;
+  static const String wsKey = 'r5srrlrufruxbdrppf6x';
+  static const String wsScheme = 'ws';
+
   // Auth
   static const String login = '/auth/login';
   static const String register = '/auth/register';
