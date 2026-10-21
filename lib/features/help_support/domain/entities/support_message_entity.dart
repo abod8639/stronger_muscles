@@ -18,5 +18,6 @@ class SupportMessageEntity {
   });
 
   bool get isUser => senderType == 'user';
+  bool get isFromUser => isUser;
   bool get isAdmin => senderType == 'admin';
 }
