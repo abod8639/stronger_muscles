@@ -1,9 +1,22 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
-/// Domain contract defining product data operations.
+/// Pure domain repository contract defining product operations with functional error handling.
 abstract class ProductRepository {
-  List<ProductEntity> getCachedProducts();
-  Future<List<ProductEntity>> getProducts({String? categoryId, int page = 1});
-  Future<ProductEntity> getProductById(String id);
-  Future<List<ProductEntity>> searchProducts(String query);
+  /// Returns cached products synchronously if available.
+  Either<Failure, List<ProductEntity>> getCachedProducts();
+
+  /// Fetches products from remote API (with pagination and optional category filter).
+  Future<Either<Failure, List<ProductEntity>>> getProducts({
+    String? categoryId,
+    int page = 1,
+    int limit = 20,
+  });
+
+  /// Fetches a single product by ID (cache-first or remote).
+  Future<Either<Failure, ProductEntity>> getProductById(String id);
+
+  /// Searches products matching a text query.
+  Future<Either<Failure, List<ProductEntity>>> searchProducts(String query);
 }
