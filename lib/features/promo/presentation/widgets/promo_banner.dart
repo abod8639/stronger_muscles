@@ -6,18 +6,19 @@ import 'package:stronger_muscles/features/promo/presentation/controllers/promo_c
 import 'package:stronger_muscles/features/promo/presentation/widgets/promo_card.dart';
 
 /// Clean Architecture carousel banner for promotional items.
+/// Dumb UI widget orchestrating the carousel and its indicator dots.
 class PromoBanner extends ConsumerWidget {
   const PromoBanner({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final promosAsync = ref.watch(promosProvider);
-    final promoNotifier = ref.watch(promoControllerProvider.notifier);
-    final currentIndex = ref.watch(promoControllerProvider);
 
     return promosAsync.when(
       data: (promos) {
         if (promos.isEmpty) return const SizedBox.shrink();
+
+        final promoNotifier = ref.read(promoControllerProvider.notifier);
 
         return Column(
           children: [
@@ -39,10 +40,7 @@ class PromoBanner extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: AppDimens.spacingSm),
-            AppDotsIndicator(
-              itemCount: promos.length,
-              currentIndex: currentIndex,
-            ),
+            _PromoDotsIndicator(itemCount: promos.length),
           ],
         );
       },
@@ -51,6 +49,22 @@ class PromoBanner extends ConsumerWidget {
         child: Center(child: CircularProgressIndicator()),
       ),
       error: (error, stackTrace) => const SizedBox.shrink(),
+    );
+  }
+}
+
+/// Isolated dots indicator widget to prevent rebuilding the PageView on index change.
+class _PromoDotsIndicator extends ConsumerWidget {
+  final int itemCount;
+
+  const _PromoDotsIndicator({required this.itemCount});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(promoControllerProvider);
+    return AppDotsIndicator(
+      itemCount: itemCount,
+      currentIndex: currentIndex,
     );
   }
 }
