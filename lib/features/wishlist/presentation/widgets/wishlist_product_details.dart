@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Displays product name, effective price, and original price (if discounted).
 class WishlistProductDetails extends StatelessWidget {
@@ -59,4 +59,3 @@ class WishlistProductDetails extends StatelessWidget {
     );
   }
 }
-
