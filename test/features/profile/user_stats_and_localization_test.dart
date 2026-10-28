@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
@@ -79,12 +78,12 @@ void main() {
     test('initializes with label, icon, and id', () {
       final selection = SelectionsModel(
         label: 'Categories',
-        icon: Icons.category,
+        iconKey: "Icons.category",
         id: 'cat_sel',
       );
 
       expect(selection.label, 'Categories');
-      expect(selection.icon, Icons.category);
+      expect(selection.iconKey, "Icons.category");
       expect(selection.id, 'cat_sel');
     });
   });
