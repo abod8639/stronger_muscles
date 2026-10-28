@@ -32,7 +32,7 @@ class AuthHeader extends StatelessWidget {
               end: Alignment.bottomRight,
             ),
             borderRadius: AppRadius.allXl,
-            boxShadow: AppShadows.colored(AppColors.primary, alpha: 0.35, blur: 14.0),
+            boxShadow: AppShadows.card(AppColors.primary),
           ),
           child: Icon(
             icon,
