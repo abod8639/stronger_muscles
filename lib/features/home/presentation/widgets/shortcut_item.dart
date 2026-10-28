@@ -51,11 +51,9 @@ class ShortcutItem extends ConsumerWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: theme.colorScheme.surfaceContainerHighest,
-                    boxShadow: AppShadows.colored(
-                      theme.colorScheme.primary,
-                      alpha: isSelected ? 0.35 : 0.08,
-                      blur: isSelected ? 8.0 : 4.0,
-                    ),
+                    boxShadow: isSelected
+                        ? AppShadows.soft(theme.colorScheme.primary)
+                        : null,
                   ),
                   child: Icon(
                     item.icon,
