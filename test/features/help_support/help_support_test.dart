@@ -1,17 +1,24 @@
-import 'package:dio/dio.dart';
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive/hive.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/data/datasources/help_support_local_data_source.dart';
 import 'package:stronger_muscles/features/help_support/data/datasources/help_support_remote_data_source.dart';
+import 'package:stronger_muscles/features/help_support/data/mappers/help_support_mapper.dart';
 import 'package:stronger_muscles/features/help_support/data/models/faq_model.dart';
+import 'package:stronger_muscles/features/help_support/data/models/support_channel_model.dart';
 import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
 import 'package:stronger_muscles/features/help_support/data/models/support_ticket_model.dart';
 import 'package:stronger_muscles/features/help_support/data/repositories/help_support_repository_impl.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/close_ticket_usecase.dart';
 import 'package:stronger_muscles/features/help_support/domain/usecases/get_faqs_usecase.dart';
 import 'package:stronger_muscles/features/help_support/domain/usecases/get_support_channels_usecase.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/get_ticket_details_usecase.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/get_user_tickets_usecase.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/send_ticket_message_usecase.dart';
 import 'package:stronger_muscles/features/help_support/domain/usecases/submit_ticket_usecase.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
 
@@ -19,10 +26,7 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
   bool shouldThrow = false;
 
   @override
-  Future<SupportTicketModel> submitTicket(
-    SupportTicketModel ticket, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<SupportTicketModel> submitTicket(SupportTicketModel ticket) async {
     if (shouldThrow) {
       throw Exception('Server error');
     }
@@ -37,16 +41,10 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
   }
 
   @override
-  Future<List<SupportTicketModel>> getUserTickets({
-    CancelToken? cancelToken,
-  }) async =>
-      [];
+  Future<List<SupportTicketModel>> getUserTickets() async => [];
 
   @override
-  Future<SupportTicketModel> getTicketDetails(
-    String ticketId, {
-    CancelToken? cancelToken,
-  }) async =>
+  Future<SupportTicketModel> getTicketDetails(String ticketId) async =>
       SupportTicketModel(
         id: ticketId,
         subject: 'Test',
@@ -58,9 +56,8 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
   @override
   Future<SupportMessageModel> sendTicketMessage(
     String ticketId,
-    String message, {
-    CancelToken? cancelToken,
-  }) async =>
+    String message,
+  ) async =>
       SupportMessageModel(
         id: 1,
         ticketId: int.tryParse(ticketId) ?? 1,
@@ -71,10 +68,7 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
       );
 
   @override
-  Future<SupportTicketModel> closeTicket(
-    String ticketId, {
-    CancelToken? cancelToken,
-  }) async =>
+  Future<SupportTicketModel> closeTicket(String ticketId) async =>
       SupportTicketModel(
         id: ticketId,
         subject: 'Test',
@@ -109,12 +103,29 @@ void main() {
   });
 
   group('Help & Support Clean Architecture', () {
+    late Directory tempDir;
     late HelpSupportLocalDataSource dataSource;
     late HelpSupportRepositoryImpl repository;
     late MockHelpSupportRemoteDataSource remoteDataSource;
     late GetFaqsUseCase getFaqsUseCase;
     late GetSupportChannelsUseCase getChannelsUseCase;
     late SubmitTicketUseCase submitTicketUseCase;
+    late GetUserTicketsUseCase getUserTicketsUseCase;
+    late GetTicketDetailsUseCase getTicketDetailsUseCase;
+    late SendTicketMessageUseCase sendTicketMessageUseCase;
+    late CloseTicketUseCase closeTicketUseCase;
+
+    setUpAll(() async {
+      tempDir = await Directory.systemTemp.createTemp('hive_help_support_test_');
+      Hive.init(tempDir.path);
+    });
+
+    tearDownAll(() async {
+      await Hive.close();
+      if (tempDir.existsSync()) {
+        await tempDir.delete(recursive: true);
+      }
+    });
 
     setUp(() {
       dataSource = HelpSupportLocalDataSourceImpl();
@@ -123,6 +134,10 @@ void main() {
       getFaqsUseCase = GetFaqsUseCase(repository);
       getChannelsUseCase = GetSupportChannelsUseCase(repository);
       submitTicketUseCase = SubmitTicketUseCase(repository);
+      getUserTicketsUseCase = GetUserTicketsUseCase(repository);
+      getTicketDetailsUseCase = GetTicketDetailsUseCase(repository);
+      sendTicketMessageUseCase = SendTicketMessageUseCase(repository);
+      closeTicketUseCase = CloseTicketUseCase(repository);
     });
 
     test('getFaqs returns Either Right with list of FAQs', () async {
@@ -134,8 +149,7 @@ void main() {
     });
 
     test('getFaqs filters by category correctly', () async {
-      final result =
-          await getFaqsUseCase(category: FaqCategory.supplements);
+      final result = await getFaqsUseCase(category: FaqCategory.supplements);
       expect(result.isRight(), true);
       final supplementFaqs = result.getOrElse((_) => []);
       expect(supplementFaqs.isNotEmpty, true);
@@ -185,7 +199,10 @@ void main() {
         getFaqsUseCase: getFaqsUseCase,
         getChannelsUseCase: getChannelsUseCase,
         submitTicketUseCase: submitTicketUseCase,
-        repository: repository,
+        getUserTicketsUseCase: getUserTicketsUseCase,
+        getTicketDetailsUseCase: getTicketDetailsUseCase,
+        sendTicketMessageUseCase: sendTicketMessageUseCase,
+        closeTicketUseCase: closeTicketUseCase,
       );
 
       // Await initial load
@@ -215,14 +232,32 @@ void main() {
       expect(notifier.state.lastSubmittedTicketId, ticket!.id);
     });
 
-    test('FaqModel toJson and fromJson match with safe null fallbacks', () {
+    test('HelpSupportNotifier enforces submission guard clauses', () async {
+      final notifier = HelpSupportNotifier(
+        getFaqsUseCase: getFaqsUseCase,
+        getChannelsUseCase: getChannelsUseCase,
+        submitTicketUseCase: submitTicketUseCase,
+        getUserTicketsUseCase: getUserTicketsUseCase,
+        getTicketDetailsUseCase: getTicketDetailsUseCase,
+        sendTicketMessageUseCase: sendTicketMessageUseCase,
+        closeTicketUseCase: closeTicketUseCase,
+      );
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Test message sending with empty string returns false
+      final sentEmpty = await notifier.sendReplyMessage('SM-123', '   ');
+      expect(sentEmpty, false);
+    });
+
+    test('FaqModel and FaqMapper convert bidirectionally', () {
       const model = FaqModel(
         id: 'faq_test',
         questionEn: 'Is this a test?',
         questionAr: 'هل هذا اختبار؟',
         answerEn: 'Yes, it is.',
         answerAr: 'نعم، هو كذلك.',
-        category: FaqCategory.accountGeneral,
+        category: 'accountGeneral',
         tags: ['test'],
       );
 
@@ -238,10 +273,19 @@ void main() {
       final emptyJson = FaqModel.fromJson(const {});
       expect(emptyJson.id, '');
       expect(emptyJson.questionEn, '');
-      expect(emptyJson.category, FaqCategory.ordersShipping);
+      expect(emptyJson.category, 'ordersShipping');
+
+      // Mapper test
+      final entity = model.toEntity();
+      expect(entity.id, model.id);
+      expect(entity.category, FaqCategory.accountGeneral);
+
+      final backToModel = entity.toModel();
+      expect(backToModel.id, model.id);
+      expect(backToModel.category, 'accountGeneral');
     });
 
-    test('SupportTicketModel handles raw map types and lists safely', () {
+    test('SupportTicketModel and Mapper handle raw types safely', () {
       final model = SupportTicketModel.fromJson({
         'id': 100,
         'subject': 'Ticket 100',
@@ -260,6 +304,35 @@ void main() {
       expect(model.id, '100');
       expect(model.messages.length, 1);
       expect(model.messages.first.message, 'Hello');
+
+      final entity = model.toEntity();
+      expect(entity.id, '100');
+      expect(entity.messages.first.message, 'Hello');
+
+      final backModel = entity.toModel();
+      expect(backModel.id, '100');
+      expect(backModel.messages.first.message, 'Hello');
+    });
+
+    test('SupportChannelModel and Mapper convert bidirectionally', () {
+      const channelModel = SupportChannelModel(
+        id: 'c1',
+        type: 'whatsapp',
+        titleEn: 'WhatsApp',
+        titleAr: 'واتساب',
+        subtitleEn: 'Chat',
+        subtitleAr: 'دردشة',
+        actionValue: 'https://wa.me/123',
+        availabilityEn: '24/7',
+        availabilityAr: '24/7',
+        isAvailable: true,
+      );
+
+      final entity = channelModel.toEntity();
+      expect(entity.type, SupportChannelType.whatsapp);
+
+      final backModel = entity.toModel();
+      expect(backModel.type, 'whatsapp');
     });
   });
 }
