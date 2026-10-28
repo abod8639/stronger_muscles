@@ -1,36 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import '../models/notification_model.dart';
+import 'package:stronger_muscles/features/notifications/data/models/notification_model.dart';
 
 /// Top-level isolate function to parse notification payload on a background thread.
-Map<String, dynamic> parseNotificationsPayloadIsolate(dynamic data) {
-  final notifications = NotificationModel.fromJsonList(data);
-
-  int unreadCount = 0;
-  if (data is Map && data['unread_count'] != null) {
-    unreadCount = (data['unread_count'] as num).toInt();
-  } else {
-    unreadCount = notifications.where((n) => !n.isRead).length;
-  }
-
-  return {
-    'notifications': notifications,
-    'unread_count': unreadCount,
-  };
+NotificationsPayloadModel parseNotificationsPayloadIsolate(dynamic data) {
+  return NotificationsPayloadModel.fromJson(data);
 }
 
-final notificationRemoteDataSourceProvider =
-    Provider<NotificationRemoteDataSource>((ref) {
-  final apiService = ref.watch(apiServiceProvider);
-  return NotificationRemoteDataSourceImpl(apiService);
-});
-
 abstract class NotificationRemoteDataSource {
-  Future<Map<String, dynamic>> getNotifications({
+  Future<NotificationsPayloadModel> getNotifications({
     int page = 1,
     int perPage = 20,
     CancelToken? cancelToken,
@@ -41,6 +22,8 @@ abstract class NotificationRemoteDataSource {
   Future<void> markAsRead(String id, {CancelToken? cancelToken});
 
   Future<void> markAllAsRead({CancelToken? cancelToken});
+
+  Future<void> deleteNotification(String id, {CancelToken? cancelToken});
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
@@ -50,7 +33,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   NotificationRemoteDataSourceImpl(this._apiService);
 
   @override
-  Future<Map<String, dynamic>> getNotifications({
+  Future<NotificationsPayloadModel> getNotifications({
     int page = 1,
     int perPage = 20,
     CancelToken? cancelToken,
@@ -63,7 +46,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
         timeout: _timeout,
       );
 
-      // Offload JSON decoding and entity mapping to background isolate via compute
+      // Offload JSON decoding to background isolate via compute
       return await compute(parseNotificationsPayloadIsolate, response.data);
     } on DioException catch (e, st) {
       throw NetworkErrorHandler.handleDioError(e, st);
@@ -116,6 +99,22 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
     try {
       await _apiService.post(
         ApiConfig.markAllNotificationsAsRead,
+        cancelToken: cancelToken,
+        timeout: _timeout,
+      );
+    } on DioException catch (e, st) {
+      throw NetworkErrorHandler.handleDioError(e, st);
+    } catch (e, st) {
+      if (e is Failure) rethrow;
+      throw NetworkErrorHandler.handle(e, st);
+    }
+  }
+
+  @override
+  Future<void> deleteNotification(String id, {CancelToken? cancelToken}) async {
+    try {
+      await _apiService.delete(
+        '${ApiConfig.customerNotifications}/$id',
         cancelToken: cancelToken,
         timeout: _timeout,
       );
