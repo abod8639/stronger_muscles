@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing an item inside an order.
-@immutable
+/// 100% Pure Dart with zero dependencies on Flutter UI, Dio, Hive, or 3rd-party SDKs.
 class OrderItemEntity {
   final String id;
   final String orderId;

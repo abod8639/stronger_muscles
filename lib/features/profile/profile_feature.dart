@@ -3,8 +3,9 @@
 /// External features must ONLY import this barrel file to interact with Profile.
 library;
 
-// Domain Entities
+// Domain Entities & Models
 export 'domain/entities/address_entity.dart';
+export 'data/models/address_model.dart';
 
 // Presentation Controllers
 export 'presentation/controllers/address_controller.dart'

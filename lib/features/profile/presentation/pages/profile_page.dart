@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
-import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/order/order_feature.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
