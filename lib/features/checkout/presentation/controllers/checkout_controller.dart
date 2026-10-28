@@ -123,7 +123,7 @@ class CheckoutController extends _$CheckoutController {
       }
     });
 
-    final addresses = ref.read(addressControllerProvider).value ?? [];
+    final addresses = ref.read(addressControllerProvider).valueOrNull ?? [];
 
     AddressEntity? initialAddress;
     if (addresses.isNotEmpty) {
