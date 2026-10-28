@@ -2,10 +2,11 @@ import 'package:hive/hive.dart';
 import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 
-/// Local data source contract for cart storage.
+/// Local data source contract for cart storage via Hive.
 abstract class CartLocalDataSource {
   Future<List<CartItemModel>> getCartItems();
   Future<void> saveCartItem(CartItemModel item);
+  Future<void> cacheAll(List<CartItemModel> items);
   Future<void> removeCartItem(String itemId);
   Future<void> clearCart();
 }
@@ -66,6 +67,21 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
     } catch (e) {
       throw ServerException(
         message: 'تعذر حفظ العنصر في السلة المحلية',
+        data: e,
+      );
+    }
+  }
+
+  @override
+  Future<void> cacheAll(List<CartItemModel> items) async {
+    try {
+      final box = await _ensureBox();
+      await box.clear();
+      final map = {for (final item in items) item.id: item};
+      await box.putAll(map);
+    } catch (e) {
+      throw ServerException(
+        message: 'تعذر تحديث ذاكرة السلة المحلية',
         data: e,
       );
     }
