@@ -12,7 +12,7 @@ class ProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final user = ref.watch(authControllerProvider).value;
+    final user = ref.watch(authControllerProvider).valueOrNull;
     final isDark = theme.brightness == Brightness.dark;
 
     if (user == null) return const SizedBox.shrink();
