@@ -12,13 +12,10 @@ import 'package:stronger_muscles/features/profile/presentation/pages/profile_pag
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
 import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
-
 import 'package:stronger_muscles/features/notifications/notifications_routes.dart';
 import 'package:stronger_muscles/features/help_support/help_support_routes.dart';
 import 'package:stronger_muscles/features/payment/payment_routes.dart';
-import 'package:stronger_muscles/features/product/presentation/pages/product_catalog_view.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class AppRoutes {
@@ -155,14 +152,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ...NotificationsRoutes.routes,
       ...HelpSupportRoutes.routes,
       ...PaymentRoutes.routes,
-      GoRoute(
-        path: AppRoutes.products,
-        builder: (context, state) {
-          final extra = state.extra;
-          final categoryId = extra is String ? extra : null;
-          return ProductCatalogView(initialCategoryId: categoryId);
-        },
-      ),
+      ...ProductRoutes.routes,
     ],
   );
 });
