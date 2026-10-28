@@ -31,9 +31,9 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final authState = ref.watch(authControllerProvider);
-    final currentUser = authState.value;
+    final currentUser = authState.valueOrNull;
     final isLoading = authState.isLoading;
-    final orders = ref.watch(ordersControllerProvider).value ?? [];
+    final orders = ref.watch(ordersControllerProvider).valueOrNull ?? [];
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
