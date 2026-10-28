@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/order_feature.dart';
-import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/routes/routes.dart';
+import 'package:stronger_muscles/features/wishlist/wishlist_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class QuickActionsRow extends ConsumerWidget {
   const QuickActionsRow({super.key});
@@ -17,9 +17,12 @@ class QuickActionsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final ordersCount = ref.watch(ordersControllerProvider).valueOrNull?.length ?? 0;
-    final wishlistCount = ref.watch(wishlistControllerProvider).length;
-    final addressesCount = ref.watch(addressControllerProvider).valueOrNull?.length ?? 0;
+    final ordersCount =
+        ref.watch(ordersControllerProvider.select((state) => state.valueOrNull?.length ?? 0));
+    final wishlistCount =
+        ref.watch(wishlistControllerProvider.select((items) => items.length));
+    final addressesCount =
+        ref.watch(addressControllerProvider.select((state) => state.valueOrNull?.length ?? 0));
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
