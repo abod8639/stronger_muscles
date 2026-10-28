@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Builds the product name text
 Widget buildProductName(ProductModel product) {
