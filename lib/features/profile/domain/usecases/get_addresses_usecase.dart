@@ -1,13 +1,15 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
 
-/// UseCase to retrieve saved addresses (remote or cached).
+/// Pure Dart UseCase to retrieve saved addresses (remote or cached).
 class GetAddressesUseCase {
   final AddressRepository repository;
 
   const GetAddressesUseCase(this.repository);
 
-  Future<List<AddressEntity>> call() => repository.getAddresses();
+  Future<Either<Failure, List<AddressEntity>>> call() => repository.getAddresses();
 
-  List<AddressEntity> getCached() => repository.getCachedAddresses();
+  Either<Failure, List<AddressEntity>> getCached() => repository.getCachedAddresses();
 }
