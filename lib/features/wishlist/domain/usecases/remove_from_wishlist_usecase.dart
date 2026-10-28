@@ -1,14 +1,15 @@
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/wishlist/domain/repositories/wishlist_repository.dart';
 
+/// UseCase to remove a product from the wishlist.
 class RemoveFromWishlistUseCase {
   final WishlistRepository repository;
 
-  RemoveFromWishlistUseCase(this.repository);
+  const RemoveFromWishlistUseCase(this.repository);
 
-  void call(ProductEntity product) {
-    if (repository.isInWishlist(product.id)) {
-      repository.removeFromWishlist(product);
-    }
+  Future<Either<Failure, Unit>> call(ProductEntity product) async {
+    return repository.removeFromWishlist(product);
   }
 }
