@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 
 part 'promo_model.freezed.dart';
 part 'promo_model.g.dart';
 
 @freezed
 class PromoModel with _$PromoModel {
-  // النوع 10 هو مثال، تأكد أنه غير مستخدم في موديلات أخرى لديك
   @HiveType(typeId: 10)
   const factory PromoModel({
     @HiveField(0) required int id,
@@ -27,13 +25,11 @@ class PromoModel with _$PromoModel {
     @HiveField(7) @JsonKey(name: 'target_id') String? targetId,
   }) = _PromoModel;
 
-  // ضروري للسماح بإضافة Getters داخل الكلاس
   const PromoModel._();
 
   factory PromoModel.fromJson(Map<String, dynamic> json) =>
       _$PromoModelFromJson(json);
 
-  // تحويل اللون بطريقة آمنة
   Color get backgroundColor {
     try {
       final hex = hexBackgroundColor.replaceAll('#', '');
@@ -42,28 +38,4 @@ class PromoModel with _$PromoModel {
       return Colors.white;
     }
   }
-
-  /// Maps [PromoModel] to pure domain [PromoEntity]
-  PromoEntity toEntity() => PromoEntity(
-        id: id,
-        title: title,
-        subtitle: subtitle,
-        imageUrl: imageUrl,
-        buttonText: buttonText,
-        hexBackgroundColor: hexBackgroundColor,
-        targetType: targetType,
-        targetId: targetId,
-      );
-
-  /// Creates a [PromoModel] from domain [PromoEntity]
-  factory PromoModel.fromEntity(PromoEntity entity) => PromoModel(
-        id: entity.id,
-        title: entity.title,
-        subtitle: entity.subtitle,
-        imageUrl: entity.imageUrl,
-        buttonText: entity.buttonText,
-        hexBackgroundColor: entity.hexBackgroundColor,
-        targetType: entity.targetType,
-        targetId: entity.targetId,
-      );
 }
