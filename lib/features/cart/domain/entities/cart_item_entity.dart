@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
-/// Pure domain entity representing an item in the cart.
-/// Follows Clean Architecture by decoupling business domain from storage and serialization.
-@immutable
+/// Pure Dart domain entity representing an item in the cart.
+/// Follows Clean Architecture by decoupling business domain from UI and storage frameworks.
 class CartItemEntity {
   final String id;
   final String userId;
