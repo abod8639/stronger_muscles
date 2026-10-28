@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
-import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/features/checkout/presentation/widgets/checkout_steps.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/routes/routes.dart';
+import '../../../../core/components/components.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/error/error.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
+import '../../checkout_routes.dart';
+import '../../domain/entities/checkout_result_entity.dart';
+import '../controllers/checkout_controller.dart';
+import '../widgets/checkout_steps.dart';
 
 const double _controlsPadding = 20.0;
 const double _controlsSpacing = 12.0;
@@ -19,12 +19,15 @@ class CheckoutView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final checkoutState = ref.watch(checkoutControllerProvider);
+    final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
+    final isProcessing = ref.watch(checkoutControllerProvider.select((s) => s.isProcessing));
+    final hasError = ref.watch(checkoutControllerProvider.select((s) => s.hasError));
+    final failure = ref.watch(checkoutControllerProvider.select((s) => s.failure));
     final checkoutNotifier = ref.read(checkoutControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    // Listen to reactive order submission state changes
+    // Reactive listener for order placement completion or failure
     ref.listen<AsyncValue<CheckoutResultEntity?>>(
       checkoutControllerProvider.select((s) => s.orderSubmission),
       (previous, next) {
@@ -40,16 +43,14 @@ class CheckoutView extends ConsumerWidget {
                 action: SnackBarAction(
                   label: l10n.retry,
                   textColor: Colors.white,
-                  onPressed: () {
-                    checkoutNotifier.placeOrder();
-                  },
+                  onPressed: () => checkoutNotifier.placeOrder(),
                 ),
               ),
             );
           },
           data: (result) {
             if (result != null) {
-              context.go(AppRoutes.orderSuccess);
+              context.go(CheckoutRoutes.orderSuccess);
             }
           },
         );
@@ -60,7 +61,7 @@ class CheckoutView extends ConsumerWidget {
       appBar: baseAppBar(context, l10n.checkout),
       body: Column(
         children: [
-          if (checkoutState.hasError) ...[
+          if (hasError) ...[
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               padding: const EdgeInsets.all(12.0),
@@ -77,7 +78,7 @@ class CheckoutView extends ConsumerWidget {
                   const SizedBox(width: 12.0),
                   Expanded(
                     child: Text(
-                      checkoutState.failure?.toMessage() ?? l10n.failedToPlaceOrder,
+                      failure?.toMessage() ?? l10n.failedToPlaceOrder,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.error,
                       ),
@@ -95,18 +96,16 @@ class CheckoutView extends ConsumerWidget {
           Expanded(
             child: Stepper(
               type: StepperType.horizontal,
-              currentStep: checkoutState.currentStep,
+              currentStep: currentStep,
               onStepContinue: () {
-                if (checkoutState.isProcessing) return;
-                if (checkoutState.currentStep == 2) {
+                if (isProcessing) return;
+                if (currentStep == 2) {
                   checkoutNotifier.placeOrder();
                 } else {
                   checkoutNotifier.nextStep();
                 }
               },
-              onStepCancel: checkoutState.isProcessing
-                  ? null
-                  : checkoutNotifier.previousStep,
+              onStepCancel: isProcessing ? null : checkoutNotifier.previousStep,
               controlsBuilder: (context, details) {
                 return Padding(
                   padding: const EdgeInsets.only(top: _controlsPadding),
@@ -114,21 +113,21 @@ class CheckoutView extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: AppPrimaryButton(
-                          text: checkoutState.currentStep == 2
+                          text: currentStep == 2
                               ? l10n.placeOrder
                               : l10n.next,
-                          isLoading: checkoutState.isProcessing,
-                          onPressed: checkoutState.isProcessing
+                          isLoading: isProcessing,
+                          onPressed: isProcessing
                               ? null
                               : details.onStepContinue,
                           height: 48.0,
                         ),
                       ),
-                      if (checkoutState.currentStep > 0) ...[
+                      if (currentStep > 0) ...[
                         const SizedBox(width: _controlsSpacing),
                         Expanded(
                           child: OutlinedButton(
-                            onPressed: checkoutState.isProcessing
+                            onPressed: isProcessing
                                 ? null
                                 : details.onStepCancel,
                             style: OutlinedButton.styleFrom(
