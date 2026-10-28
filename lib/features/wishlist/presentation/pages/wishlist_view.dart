@@ -6,6 +6,7 @@ import 'package:stronger_muscles/features/wishlist/presentation/controllers/wish
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
+/// Presentation page displaying customer's wishlist items with pull-to-refresh.
 class WishlistView extends ConsumerWidget {
   const WishlistView({super.key});
 
@@ -22,16 +23,21 @@ class WishlistView extends ConsumerWidget {
               title: localizations.yourWishlistIsEmpty,
               subtitle: localizations.startAddingFavorites,
             )
-          : ListView.builder(
-              itemCount: wishlistItems.length,
-              physics: const BouncingScrollPhysics(),
-              addRepaintBoundaries: true,
-              itemBuilder: (context, index) {
-                final product = wishlistItems[index];
-                return WishlistItemCard(product: product);
-              },
+          : RefreshIndicator(
+              onRefresh: () =>
+                  ref.read(wishlistControllerProvider.notifier).refresh(),
+              child: ListView.builder(
+                itemCount: wishlistItems.length,
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                addRepaintBoundaries: true,
+                itemBuilder: (context, index) {
+                  final product = wishlistItems[index];
+                  return WishlistItemCard(product: product);
+                },
+              ),
             ),
     );
   }
 }
-
