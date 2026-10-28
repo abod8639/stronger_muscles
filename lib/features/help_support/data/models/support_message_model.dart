@@ -1,15 +1,24 @@
 import 'package:flutter/foundation.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
+import '../../domain/entities/support_message_entity.dart';
 
-class SupportMessageModel extends SupportMessageEntity {
+/// Data Transfer Object for ticket messages, strictly decoupled from [SupportMessageEntity].
+class SupportMessageModel {
+  final int id;
+  final int ticketId;
+  final String senderType; // 'user', 'admin', 'system'
+  final String senderName;
+  final String message;
+  final DateTime createdAt;
+  final bool isRead;
+
   const SupportMessageModel({
-    required super.id,
-    required super.ticketId,
-    required super.senderType,
-    required super.senderName,
-    required super.message,
-    required super.createdAt,
-    super.isRead,
+    required this.id,
+    required this.ticketId,
+    required this.senderType,
+    required this.senderName,
+    required this.message,
+    required this.createdAt,
+    this.isRead = false,
   });
 
   /// Defensive JSON deserializer with safe fallback defaults preventing TypeError.
