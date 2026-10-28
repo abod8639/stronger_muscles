@@ -1,28 +1,37 @@
 import 'package:flutter/foundation.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
+import '../../domain/entities/support_channel_entity.dart';
 
-class SupportChannelModel extends SupportChannelEntity {
+/// Data Transfer Object for support contact channels, strictly decoupled from [SupportChannelEntity].
+class SupportChannelModel {
+  final String id;
+  final String type;
+  final String titleEn;
+  final String titleAr;
+  final String subtitleEn;
+  final String subtitleAr;
+  final String actionValue;
+  final String availabilityEn;
+  final String availabilityAr;
+  final bool isAvailable;
+
   const SupportChannelModel({
-    required super.id,
-    required super.type,
-    required super.titleEn,
-    required super.titleAr,
-    required super.subtitleEn,
-    required super.subtitleAr,
-    required super.actionValue,
-    required super.availabilityEn,
-    required super.availabilityAr,
-    super.isAvailable,
+    required this.id,
+    required this.type,
+    required this.titleEn,
+    required this.titleAr,
+    required this.subtitleEn,
+    required this.subtitleAr,
+    required this.actionValue,
+    required this.availabilityEn,
+    required this.availabilityAr,
+    this.isAvailable = true,
   });
 
   /// Defensive JSON deserializer preventing TypeError when fields are null or unexpected types.
   factory SupportChannelModel.fromJson(Map<String, dynamic> json) {
     return SupportChannelModel(
       id: (json['id'] ?? '').toString(),
-      type: SupportChannelType.values.firstWhere(
-        (t) => t.name == json['type']?.toString(),
-        orElse: () => SupportChannelType.whatsapp,
-      ),
+      type: (json['type'] ?? SupportChannelType.whatsapp.name).toString(),
       titleEn: (json['title_en'] ?? json['titleEn'] ?? '').toString(),
       titleAr: (json['title_ar'] ?? json['titleAr'] ?? '').toString(),
       subtitleEn: (json['subtitle_en'] ?? json['subtitleEn'] ?? '').toString(),
@@ -42,7 +51,7 @@ class SupportChannelModel extends SupportChannelEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'type': type.name,
+      'type': type,
       'title_en': titleEn,
       'title_ar': titleAr,
       'subtitle_en': subtitleEn,
@@ -52,21 +61,6 @@ class SupportChannelModel extends SupportChannelEntity {
       'availability_ar': availabilityAr,
       'is_available': isAvailable,
     };
-  }
-
-  factory SupportChannelModel.fromEntity(SupportChannelEntity entity) {
-    return SupportChannelModel(
-      id: entity.id,
-      type: entity.type,
-      titleEn: entity.titleEn,
-      titleAr: entity.titleAr,
-      subtitleEn: entity.subtitleEn,
-      subtitleAr: entity.subtitleAr,
-      actionValue: entity.actionValue,
-      availabilityEn: entity.availabilityEn,
-      availabilityAr: entity.availabilityAr,
-      isAvailable: entity.isAvailable,
-    );
   }
 }
 
