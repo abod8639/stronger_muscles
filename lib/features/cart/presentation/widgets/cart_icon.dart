@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 
 /// Reusable shopping cart icon with reactive item count badge.
+/// Employs selective listening [select] to only rebuild when the item count changes.
 class CartIcon extends ConsumerWidget {
   final Color? color;
   final double? size;
@@ -16,8 +17,10 @@ class CartIcon extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cartState = ref.watch(cartControllerProvider);
-    final itemCount = cartState.valueOrNull?.length ?? 0;
+    // Selective state listening prevents rebuilds on unrelated cart state updates
+    final itemCount = ref.watch(
+      cartControllerProvider.select((state) => state.valueOrNull?.length ?? 0),
+    );
 
     return Badge(
       backgroundColor: AppColors.primary,
