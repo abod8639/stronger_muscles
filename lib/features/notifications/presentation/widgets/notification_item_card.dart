@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
+import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
-import '../controllers/notification_controller.dart';
 
 class NotificationItemCard extends ConsumerWidget {
   final NotificationEntity notification;

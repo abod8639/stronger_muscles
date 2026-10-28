@@ -17,7 +17,7 @@ import 'package:stronger_muscles/features/profile/presentation/widgets/profile_h
 import 'package:stronger_muscles/features/profile/presentation/widgets/purchase_stats_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/quick_actions_row.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/saved_addresses_list.dart';
-import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
+import 'package:stronger_muscles/features/notifications/notifications_feature.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/controllers/wishlist_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
