@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
@@ -17,9 +16,7 @@ class MockCartRepository implements CartRepository {
   List<CartItemEntity> items = [];
 
   @override
-  Future<Either<Failure, List<CartItemEntity>>> getCartItems({
-    CancelToken? cancelToken,
-  }) async =>
+  Future<Either<Failure, List<CartItemEntity>>> getCartItems() async =>
       Right(List.from(items));
 
   @override
@@ -28,7 +25,6 @@ class MockCartRepository implements CartRepository {
     String? selectedFlavor,
     String? selectedSize,
     int quantity = 1,
-    CancelToken? cancelToken,
   }) async {
     final index = items.indexWhere(
       (i) =>
@@ -56,10 +52,7 @@ class MockCartRepository implements CartRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> removeFromCart(
-    String itemId, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<Either<Failure, Unit>> removeFromCart(String itemId) async {
     items.removeWhere((i) => i.id == itemId);
     return const Right(unit);
   }
@@ -67,9 +60,8 @@ class MockCartRepository implements CartRepository {
   @override
   Future<Either<Failure, Unit>> updateQuantity(
     String itemId,
-    int quantity, {
-    CancelToken? cancelToken,
-  }) async {
+    int quantity,
+  ) async {
     if (quantity <= 0) {
       items.removeWhere((i) => i.id == itemId);
     } else {
@@ -82,9 +74,7 @@ class MockCartRepository implements CartRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> clearCart({
-    CancelToken? cancelToken,
-  }) async {
+  Future<Either<Failure, Unit>> clearCart() async {
     items.clear();
     return const Right(unit);
   }
