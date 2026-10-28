@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing a user notification.
-@immutable
+/// 100% Pure Dart with zero dependencies on Flutter UI, Dio, or 3rd-party SDKs.
 class NotificationEntity {
   final String id;
   final String title;
@@ -63,20 +61,34 @@ class NotificationEntity {
       other is NotificationEntity &&
           runtimeType == other.runtimeType &&
           id == other.id &&
+          title == other.title &&
+          body == other.body &&
           isRead == other.isRead;
 
   @override
-  int get hashCode => Object.hash(id, isRead);
+  int get hashCode => Object.hash(id, title, body, isRead);
 }
 
-/// Domain container for paginated notifications and total unread count.
-@immutable
+/// Pure domain container for paginated notifications and total unread count.
 class NotificationsPayloadEntity {
   final List<NotificationEntity> notifications;
   final int unreadCount;
+  final bool hasMore;
 
   const NotificationsPayloadEntity({
     required this.notifications,
     required this.unreadCount,
+    this.hasMore = false,
   });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NotificationsPayloadEntity &&
+          runtimeType == other.runtimeType &&
+          unreadCount == other.unreadCount &&
+          hasMore == other.hasMore;
+
+  @override
+  int get hashCode => Object.hash(unreadCount, hasMore);
 }
