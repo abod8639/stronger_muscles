@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/features/auth/presentation/utils/auth_validators.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
+/// Purely dumb login form widget.
+///
+/// Contains zero business logic. Delegates validation to [AuthValidators]
+/// and events via callbacks. Safely manages and disposes all controllers and focus nodes.
 class LoginForm extends StatefulWidget {
   final Future<void> Function(String email, String password) onLogin;
   final VoidCallback onGoogleSignIn;
@@ -25,23 +30,29 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _passwordFocusNode;
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _emailFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
     super.dispose();
   }
 
   void _handleSubmit() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState?.validate() ?? false) {
       widget.onLogin(
         _emailController.text.trim(),
         _passwordController.text,
@@ -61,40 +72,35 @@ class _LoginFormState extends State<LoginForm> {
           // ── Email Input ──────────────────────────────────────────────────
           AppTextFormField(
             controller: _emailController,
+            // focusNode: _emailFocusNode,
             label: l10n.email,
             hintText: 'name@example.com',
             prefixIcon: const Icon(Icons.email_outlined, size: 20.0),
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return l10n.enterEmail;
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim())) {
-                return l10n.validEmail;
-              }
-              return null;
-            },
+            validator: (value) => AuthValidators.validateEmail(
+              value,
+              emptyMessage: l10n.enterEmail,
+              invalidMessage: l10n.validEmail,
+            ),
           ),
           const SizedBox(height: 16.0),
 
           // ── Password Input ───────────────────────────────────────────────
           AppTextFormField(
             controller: _passwordController,
+            // focusNode: _passwordFocusNode,
             label: l10n.password,
             hintText: '••••••••',
             prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20.0),
             isPassword: true,
             textInputAction: TextInputAction.done,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return l10n.enterPassword;
-              }
-              if (value.length < 6) {
-                return l10n.passwordLength;
-              }
-              return null;
-            },
+            onChanged: (_) => _handleSubmit(),
+            validator: (value) => AuthValidators.validatePassword(
+              value,
+              emptyMessage: l10n.enterPassword,
+              tooShortMessage: l10n.passwordLength,
+            ),
           ),
           const SizedBox(height: 10.0),
 
@@ -102,7 +108,7 @@ class _LoginFormState extends State<LoginForm> {
           Align(
             alignment: AlignmentDirectional.centerEnd,
             child: TextButton(
-              onPressed: widget.onForgotPassword,
+              onPressed: widget.isLoading ? null : widget.onForgotPassword,
               style: TextButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
