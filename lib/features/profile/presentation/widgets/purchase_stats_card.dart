@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/order/order_feature.dart';
+import 'package:stronger_muscles/features/profile/profile_providers.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class PurchaseStatsCard extends StatelessWidget {
@@ -21,9 +21,9 @@ class _PurchaseStatsCardContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orders = ref.watch(ordersControllerProvider).valueOrNull ?? [];
-    final totalSpent = orders.fold(0.0, (sum, order) => sum + order.totalAmount);
-    final deliveredOrders = orders.where((o) => o.status.toLowerCase() == 'delivered').length;
+    final stats = ref.watch(profileStatsProvider);
+    final totalSpent = stats.totalSpent;
+    final deliveredOrders = stats.deliveredOrders;
     final intl10n = AppLocalizations.of(context)!;
 
     return AppCard(
