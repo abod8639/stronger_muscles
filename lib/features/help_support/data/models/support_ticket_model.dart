@@ -1,21 +1,35 @@
 import 'package:flutter/foundation.dart';
-import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
+import '../../domain/entities/support_ticket_entity.dart';
+import 'support_message_model.dart';
 
-class SupportTicketModel extends SupportTicketEntity {
+/// Data Transfer Object for support tickets, strictly decoupled from [SupportTicketEntity].
+class SupportTicketModel {
+  final String? id;
+  final String? ticketNumber;
+  final String subject;
+  final String category;
+  final String message;
+  final String priority;
+  final String status;
+  final DateTime createdAt;
+  final DateTime? lastReplyAt;
+  final int messagesCount;
+  final int unreadMessagesCount;
+  final List<SupportMessageModel> messages;
+
   const SupportTicketModel({
-    super.id,
-    super.ticketNumber,
-    required super.subject,
-    required super.category,
-    required super.message,
-    super.priority,
-    super.status,
-    required super.createdAt,
-    super.lastReplyAt,
-    super.messagesCount,
-    super.unreadMessagesCount,
-    super.messages,
+    this.id,
+    this.ticketNumber,
+    required this.subject,
+    required this.category,
+    required this.message,
+    this.priority = 'normal',
+    this.status = 'open',
+    required this.createdAt,
+    this.lastReplyAt,
+    this.messagesCount = 1,
+    this.unreadMessagesCount = 0,
+    this.messages = const [],
   });
 
   /// Defensive JSON deserializer with safe type fallback handling preventing NullPointer and TypeError.
@@ -30,15 +44,18 @@ class SupportTicketModel extends SupportTicketEntity {
     }
 
     final String? idStr = json['id']?.toString();
-    final String fallbackTicketNum = idStr != null && idStr.isNotEmpty ? 'SM-$idStr' : 'SM-TICKET';
+    final String fallbackTicketNum =
+        idStr != null && idStr.isNotEmpty ? 'SM-$idStr' : 'SM-TICKET';
 
     return SupportTicketModel(
       id: idStr,
-      ticketNumber: (json['ticket_number'] ?? json['ticketNumber'] ?? fallbackTicketNum).toString(),
+      ticketNumber:
+          (json['ticket_number'] ?? json['ticketNumber'] ?? fallbackTicketNum)
+              .toString(),
       subject: (json['subject'] ?? '').toString(),
       category: (json['category'] ?? 'general').toString(),
       message: (json['message'] ?? '').toString(),
-      priority: TicketPriority.fromString(json['priority']?.toString()),
+      priority: (json['priority'] ?? 'normal').toString(),
       status: (json['status'] ?? 'open').toString(),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
@@ -81,27 +98,14 @@ class SupportTicketModel extends SupportTicketEntity {
       'subject': subject,
       'category': category,
       'message': message,
-      'priority': priority.toApiString(),
+      'priority': priority,
       'status': status,
       'created_at': createdAt.toIso8601String(),
+      if (lastReplyAt != null) 'last_reply_at': lastReplyAt!.toIso8601String(),
+      'messages_count': messagesCount,
+      'unread_messages_count': unreadMessagesCount,
+      'messages': messages.map((m) => m.toJson()).toList(),
     };
-  }
-
-  factory SupportTicketModel.fromEntity(SupportTicketEntity entity) {
-    return SupportTicketModel(
-      id: entity.id,
-      ticketNumber: entity.ticketNumber,
-      subject: entity.subject,
-      category: entity.category,
-      message: entity.message,
-      priority: entity.priority,
-      status: entity.status,
-      createdAt: entity.createdAt,
-      lastReplyAt: entity.lastReplyAt,
-      messagesCount: entity.messagesCount,
-      unreadMessagesCount: entity.unreadMessagesCount,
-      messages: entity.messages,
-    );
   }
 }
 
