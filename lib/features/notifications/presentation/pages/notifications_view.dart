@@ -17,7 +17,7 @@ class NotificationsView extends ConsumerWidget {
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final theme = Theme.of(context);
 
-    final unreadCount = state.value?.unreadCount ?? 0;
+    final unreadCount = state.valueOrNull?.unreadCount ?? 0;
 
     return Scaffold(
       appBar: AppBar(
