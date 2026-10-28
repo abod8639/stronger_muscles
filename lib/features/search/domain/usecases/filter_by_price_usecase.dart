@@ -1,11 +1,11 @@
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/search/domain/repositories/search_repository.dart';
 
-/// Use case for filtering products by price range.
+/// Pure domain use case for filtering products by price range.
 class FilterByPriceUseCase {
   final SearchRepository repository;
 
-  FilterByPriceUseCase(this.repository);
+  const FilterByPriceUseCase(this.repository);
 
   List<ProductEntity> call(
     List<ProductEntity> products,
