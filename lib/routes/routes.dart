@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/features/auth/presentation/pages/auth_view.dart';
-import 'package:stronger_muscles/features/auth/presentation/pages/signin_page.dart';
-import 'package:stronger_muscles/features/auth/presentation/pages/signup_page.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/cart/presentation/pages/cart_view.dart';
 import 'package:stronger_muscles/features/home/presentation/pages/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
@@ -20,7 +18,7 @@ import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_v
 import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+
 import 'package:stronger_muscles/features/notifications/presentation/pages/notifications_view.dart';
 import 'package:stronger_muscles/features/help_support/presentation/pages/help_support_view.dart';
 import 'package:stronger_muscles/features/product/presentation/pages/product_catalog_view.dart';
@@ -122,20 +120,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.home,
         redirect: (context, state) => AppRoutes.main,
       ),
-      GoRoute(
-        path: AppRoutes.auth,
-        builder: (context, state) => const AuthView(),
-      ),
-      GoRoute(
-        path: AppRoutes.signUp,
-        builder: (context, state) =>
-            SignUpPage(onSignInTap: () => context.go(AppRoutes.signIn)),
-      ),
-      GoRoute(
-        path: AppRoutes.signIn,
-        builder: (context, state) =>
-            SignInPage(onSignUpTap: () => context.go(AppRoutes.signUp)),
-      ),
+      ...AuthRoutes.routes,
       GoRoute(
         path: AppRoutes.productDetails,
         builder: (context, state) {
