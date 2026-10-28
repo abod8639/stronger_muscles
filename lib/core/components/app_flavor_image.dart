@@ -93,6 +93,22 @@ final Map<String, FlavorsModel> flavorsData = {
   ),
 };
 
+/// Global resolver for flavor details and thumbnail visuals.
+FlavorsModel getFlavorDetails(String flavorName) {
+  final key = flavorName.toLowerCase().trim();
+  final match = flavorsData.keys.firstWhere(
+    (k) => key.contains(k),
+    orElse: () => "default",
+  );
+
+  return flavorsData[match] ??
+      FlavorsModel(
+        name: flavorName,
+        color: Colors.blueGrey,
+        image: "https://via.placeholder.com/150",
+      );
+}
+
 /// A reusable flavor thumbnail/selector widget with unified [AppRadius.allMd].
 class AppFlavorImage extends StatelessWidget {
   const AppFlavorImage({
