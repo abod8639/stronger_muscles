@@ -1,26 +1,15 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
-import 'package:stronger_muscles/features/checkout/domain/usecases/usecase_providers.dart';
-import 'package:stronger_muscles/features/product/data/repositories/product_repository.dart';
-import 'package:stronger_muscles/features/product/presentation/controllers/products_controller.dart';
-import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-
-part 'checkout_controller.g.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/error/error.dart';
+import '../../../cart/cart_feature.dart';
+import '../../../profile/profile_feature.dart';
+import '../../domain/entities/checkout_params.dart';
+import '../../domain/entities/checkout_result_entity.dart';
+import '../../domain/usecases/place_order_usecase.dart';
+import 'checkout_di.dart';
 
 @immutable
 class CheckoutState {
-  final int currentStep;
-  final AddressEntity? selectedAddress;
-  final String selectedPaymentMethod;
-  final String notes;
-  final AsyncValue<CheckoutResultEntity?> orderSubmission;
-
   const CheckoutState({
     this.currentStep = 0,
     this.selectedAddress,
@@ -29,13 +18,16 @@ class CheckoutState {
     this.orderSubmission = const AsyncData(null),
   });
 
-  /// True while order placement or payment initiation is executing
+  final int currentStep;
+  final AddressEntity? selectedAddress;
+  final String selectedPaymentMethod;
+  final String notes;
+  final AsyncValue<CheckoutResultEntity?> orderSubmission;
+
   bool get isProcessing => orderSubmission.isLoading;
 
-  /// True if placing the order produced an error
   bool get hasError => orderSubmission.hasError;
 
-  /// Safely extracts the typed [Failure] if available
   Failure? get failure {
     final err = orderSubmission.error;
     if (err is Failure) return err;
@@ -49,26 +41,14 @@ class CheckoutState {
     String? selectedPaymentMethod,
     String? notes,
     AsyncValue<CheckoutResultEntity?>? orderSubmission,
-    bool? isProcessing,
   }) {
-    AsyncValue<CheckoutResultEntity?> newSubmission =
-        orderSubmission ?? this.orderSubmission;
-
-    if (isProcessing != null) {
-      newSubmission = isProcessing
-          ? const AsyncLoading()
-          : (this.orderSubmission.isLoading
-              ? const AsyncData(null)
-              : this.orderSubmission);
-    }
-
     return CheckoutState(
       currentStep: currentStep ?? this.currentStep,
       selectedAddress: selectedAddress ?? this.selectedAddress,
       selectedPaymentMethod:
           selectedPaymentMethod ?? this.selectedPaymentMethod,
       notes: notes ?? this.notes,
-      orderSubmission: newSubmission,
+      orderSubmission: orderSubmission ?? this.orderSubmission,
     );
   }
 
@@ -93,46 +73,74 @@ class CheckoutState {
       );
 }
 
-@riverpod
-class CheckoutController extends _$CheckoutController {
-  CancelToken? _cancelToken;
+final checkoutControllerProvider =
+    StateNotifierProvider<CheckoutController, CheckoutState>((ref) {
+  return CheckoutController(ref);
+});
 
-  @override
-  CheckoutState build() {
-    _cancelToken = CancelToken();
+class CheckoutController extends StateNotifier<CheckoutState> {
+  CheckoutController(this._ref)
+      : _testPlaceOrderUseCase = null,
+        _testCartItems = null,
+        _onClearCart = null,
+        super(const CheckoutState()) {
+    _initialize();
+  }
 
-    // Prevent resource leakage by cancelling any in-flight order request when leaving checkout
-    ref.onDispose(() {
-      _cancelToken?.cancel('Checkout controller disposed');
-    });
+  CheckoutController.test({
+    required PlaceOrderUseCase placeOrderUseCase,
+    AddressEntity? initialAddress,
+    List<CartItemEntity>? testCartItems,
+    Future<void> Function()? onClearCart,
+  })  : _ref = null,
+        _testPlaceOrderUseCase = placeOrderUseCase,
+        _testCartItems = testCartItems,
+        _onClearCart = onClearCart,
+        super(CheckoutState(selectedAddress: initialAddress));
 
-    ref.listen<AsyncValue<List<AddressEntity>>>(addressControllerProvider, (previous, next) {
-      final newAddresses = next.value ?? [];
-      if (state.selectedAddress == null && newAddresses.isNotEmpty) {
-        final defaultAddr = newAddresses.where((addr) => addr.isDefault).firstOrNull ?? newAddresses.first;
-        state = state.copyWith(selectedAddress: defaultAddr);
-      } else if (state.selectedAddress != null) {
-        final stillExists = newAddresses.any((addr) => addr.id == state.selectedAddress!.id);
-        if (!stillExists) {
-          final defaultAddr = newAddresses.where((addr) => addr.isDefault).firstOrNull ?? (newAddresses.isNotEmpty ? newAddresses.first : null);
+  final Ref? _ref;
+  final PlaceOrderUseCase? _testPlaceOrderUseCase;
+  final List<CartItemEntity>? _testCartItems;
+  final Future<void> Function()? _onClearCart;
+
+  PlaceOrderUseCase get _placeOrderUseCase =>
+      _testPlaceOrderUseCase ?? _ref!.read(placeOrderUseCaseProvider);
+
+  void _initialize() {
+    if (_ref == null) return;
+
+    _ref.listen<AsyncValue<List<AddressEntity>>>(
+      addressControllerProvider,
+      (previous, next) {
+        final addresses = next.valueOrNull ?? [];
+        if (state.selectedAddress == null && addresses.isNotEmpty) {
+          final defaultAddr = addresses.where((a) => a.isDefault).firstOrNull ??
+              addresses.first;
           state = state.copyWith(selectedAddress: defaultAddr);
-        } else {
-          final updatedAddr = newAddresses.firstWhere((addr) => addr.id == state.selectedAddress!.id);
-          state = state.copyWith(selectedAddress: updatedAddr);
+        } else if (state.selectedAddress != null) {
+          final exists =
+              addresses.any((a) => a.id == state.selectedAddress!.id);
+          if (!exists) {
+            final fallback = addresses.where((a) => a.isDefault).firstOrNull ??
+                (addresses.isNotEmpty ? addresses.first : null);
+            state = state.copyWith(selectedAddress: fallback);
+          } else {
+            final updated =
+                addresses.firstWhere((a) => a.id == state.selectedAddress!.id);
+            state = state.copyWith(selectedAddress: updated);
+          }
         }
-      }
-    });
+      },
+    );
 
-    final addresses = ref.read(addressControllerProvider).valueOrNull ?? [];
-
-    AddressEntity? initialAddress;
-    if (addresses.isNotEmpty) {
-      initialAddress =
-          addresses.where((addr) => addr.isDefault).firstOrNull ??
-          addresses.first;
+    final initialAddresses =
+        _ref.read(addressControllerProvider).valueOrNull ?? [];
+    if (initialAddresses.isNotEmpty) {
+      final defaultAddr =
+          initialAddresses.where((a) => a.isDefault).firstOrNull ??
+              initialAddresses.first;
+      state = state.copyWith(selectedAddress: defaultAddr);
     }
-
-    return CheckoutState(selectedAddress: initialAddress);
   }
 
   void nextStep() {
@@ -159,16 +167,17 @@ class CheckoutController extends _$CheckoutController {
     state = state.copyWith(notes: notes);
   }
 
-  /// Resets the error status to allow retry without dismissing whole form
   void resetError() {
     if (state.orderSubmission.hasError) {
       state = state.copyWith(orderSubmission: const AsyncData(null));
     }
   }
 
-  /// Places order cleanly without UI dependencies or direct BuildContext manipulation.
-  /// Optional [context] parameter preserved for backward-compatibility.
-  Future<void> placeOrder([BuildContext? context]) async {
+  /// Submits the checkout order without UI dependencies or direct BuildContext manipulation.
+  Future<void> placeOrder() async {
+    // Transaction guard: prevent duplicate submission while in flight
+    if (state.isProcessing) return;
+
     if (state.selectedAddress == null) {
       state = state.copyWith(
         orderSubmission: AsyncError(
@@ -181,8 +190,9 @@ class CheckoutController extends _$CheckoutController {
       return;
     }
 
-    final cartNotifier = ref.read(cartControllerProvider.notifier);
-    final cartItems = cartNotifier.cartItems;
+    final cartItems = _testCartItems ??
+        (_ref?.read(cartControllerProvider).valueOrNull ?? <CartItemEntity>[]);
+
     if (cartItems.isEmpty) {
       state = state.copyWith(
         orderSubmission: AsyncError(
@@ -197,53 +207,52 @@ class CheckoutController extends _$CheckoutController {
 
     state = state.copyWith(orderSubmission: const AsyncLoading());
 
-    try {
-      final placeOrderUseCase = ref.read(placeOrderUseCaseProvider);
-
-      final checkoutItems = cartItems
-          .map((item) => CheckoutItemEntity.fromCartItem(item))
-          .toList();
-
-      final params = CheckoutParams(
-        addressId: state.selectedAddress!.id,
-        paymentMethod: state.selectedPaymentMethod,
-        notes: state.notes,
-        customerName: state.selectedAddress?.fullName,
-        items: checkoutItems,
+    final checkoutItems = cartItems.map((cartItem) {
+      final unitPrice = cartItem.product.getEffectivePriceForSize(cartItem.selectedSize);
+      return CheckoutItemEntity(
+        productId: cartItem.product.id,
+        productName: cartItem.product.getLocalizedName(),
+        quantity: cartItem.quantity,
+        unitPrice: unitPrice,
+        selectedFlavor: cartItem.selectedFlavor,
+        selectedSize: cartItem.selectedSize,
+        imageUrl: cartItem.primaryImageUrl,
       );
+    }).toList();
 
-      final resultEither = await placeOrderUseCase(
-        params,
-        cancelToken: _cancelToken,
-      );
+    final params = CheckoutParams(
+      addressId: state.selectedAddress!.id,
+      paymentMethod: state.selectedPaymentMethod,
+      notes: state.notes,
+      customerName: state.selectedAddress?.fullName,
+      items: checkoutItems,
+    );
 
-      await resultEither.fold(
-        (failure) async {
-          state = state.copyWith(
-            orderSubmission: AsyncError(
-              failure,
-              failure.stackTrace ?? StackTrace.current,
-            ),
-          );
-        },
-        (result) async {
-          // Clear cart and invalidate cache upon confirmed order
-          await cartNotifier.clearCart();
+    // Functional Either handling without try-catch blocks
+    final result = await _placeOrderUseCase(params);
 
-          final productLocalDataSource = ref.read(productLocalDataSourceProvider);
-          await productLocalDataSource.clearCache();
-          ref.invalidate(productsControllerProvider);
+    await result.fold(
+      (failure) async {
+        final stackTrace = failure.stackTrace ?? StackTrace.current;
+        state = state.copyWith(
+          orderSubmission: AsyncError<CheckoutResultEntity?>(
+            failure,
+            stackTrace,
+          ),
+        );
+      },
+      (resultEntity) async {
+        // Clear cart after verified order placement
+        if (_onClearCart != null) {
+          await _onClearCart();
+        } else if (_ref != null) {
+          await _ref.read(cartControllerProvider.notifier).clearCart();
+        }
 
-          state = state.copyWith(
-            orderSubmission: AsyncData(result),
-          );
-        },
-      );
-    } catch (e, stackTrace) {
-      final failure = NetworkErrorHandler.handle(e, stackTrace);
-      state = state.copyWith(
-        orderSubmission: AsyncError(failure, stackTrace),
-      );
-    }
+        state = state.copyWith(
+          orderSubmission: AsyncData(resultEntity),
+        );
+      },
+    );
   }
 }
