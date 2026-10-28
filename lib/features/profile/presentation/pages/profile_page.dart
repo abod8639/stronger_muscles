@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/order/order_feature.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/quick_actions_row.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/purchase_stats_card.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/recent_orders_list.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/saved_addresses_list.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/login_prompt_card.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/purchase_stats_card.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/quick_actions_row.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/recent_orders_list.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/saved_addresses_list.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 const double _appBarExpandedHeight = 50.0;
@@ -60,7 +60,7 @@ class ProfilePage extends ConsumerWidget {
   Widget _buildBody(
     BuildContext context,
     WidgetRef ref,
-    dynamic currentUser,
+    UserEntity? currentUser,
     bool isLoading,
     List orders,
   ) {
