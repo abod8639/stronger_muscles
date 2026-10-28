@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/product/domain/usecases/usecase_providers.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/promo/domain/entities/promo_entity.dart';
 import 'package:stronger_muscles/features/promo/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/routes/routes.dart';
@@ -61,26 +61,29 @@ class PromoController extends _$PromoController {
     if (promo.targetId == null) return;
 
     if (promo.targetType == 'product') {
-      try {
-        final product = await ref
-            .read(getProductByIdUseCaseProvider)
-            .call(promo.targetId!);
+      final result = await ref
+          .read(getProductByIdUseCaseProvider)
+          .call(promo.targetId!);
 
-        if (context.mounted) {
-          context.push(AppRoutes.productDetails, extra: product);
-        }
-      } catch (_) {
-        if (context.mounted) {
-          final l10n = AppLocalizations.of(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n?.unableToLoadProductDetails ?? 'Unable to load product details',
+      result.fold(
+        (failure) {
+          if (context.mounted) {
+            final l10n = AppLocalizations.of(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n?.unableToLoadProductDetails ?? 'Unable to load product details',
+                ),
               ),
-            ),
-          );
-        }
-      }
+            );
+          }
+        },
+        (product) {
+          if (context.mounted) {
+            context.push(AppRoutes.productDetails, extra: product);
+          }
+        },
+      );
       return;
     }
 
