@@ -1,50 +1,44 @@
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/features/search/search_providers.dart';
 
 part 'search_history_controller.g.dart';
 
 @riverpod
 class SearchHistory extends _$SearchHistory {
-  late final Box<String> _box;
-  static const _maxItems = 10;
-
   @override
   List<String> build() {
-    _box = Hive.box<String>('search_history');
-    return _box.values.toList().reversed.toList();
+    final result = ref.watch(getSearchHistoryUseCaseProvider).call();
+    return result.fold(
+      (failure) => const [],
+      (history) => history,
+    );
   }
 
-  void add(String query) {
+  Future<void> add(String query) async {
     if (query.trim().isEmpty) return;
-    
-    final normalized = query.trim().toLowerCase();
-    
-    // Remove if already exists to move to top
-    final existingIndex = _box.values.toList().indexWhere((e) => e.toLowerCase() == normalized);
-    if (existingIndex != -1) {
-      _box.deleteAt(existingIndex);
-    }
-
-    _box.add(query.trim());
-
-    // Maintain max items
-    if (_box.length > _maxItems) {
-      _box.deleteAt(0);
-    }
-
-    state = _box.values.toList().reversed.toList();
+    final result =
+        await ref.read(addSearchTermUseCaseProvider).call(query.trim());
+    result.fold(
+      (failure) {},
+      (updated) => state = updated,
+    );
   }
 
-  void remove(String query) {
-    final index = _box.values.toList().indexWhere((e) => e == query);
-    if (index != -1) {
-      _box.deleteAt(index);
-      state = _box.values.toList().reversed.toList();
-    }
+  Future<void> remove(String query) async {
+    final result =
+        await ref.read(removeSearchTermUseCaseProvider).call(query);
+    result.fold(
+      (failure) {},
+      (updated) => state = updated,
+    );
   }
 
-  void clear() {
-    _box.clear();
-    state = [];
+  Future<void> clear() async {
+    final result =
+        await ref.read(clearSearchHistoryUseCaseProvider).call();
+    result.fold(
+      (failure) {},
+      (_) => state = const [],
+    );
   }
 }
