@@ -47,7 +47,7 @@ class AppQuantityControls extends ConsumerWidget {
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
     final entity = _productEntity;
     final item = cartNotifier.getCartItem(
-      entity,
+      entity.id,
       selectedFlavor: selectedFlavor,
       selectedSize: selectedSize,
     );
@@ -77,7 +77,13 @@ class AppQuantityControls extends ConsumerWidget {
           size: iconSize,
         ),
         onPressed: () => doubleTapPrevention(
-          () => showRemoveConfirmation(context, ref, entity),
+          () => handleDecrease(
+            context,
+            ref,
+            entity,
+            selectedFlavor: selectedFlavor,
+            selectedSize: selectedSize,
+          ),
         ),
         tooltip:
             item.quantity > 1 ? l10n.decreaseQuantity : l10n.removeFromCart,
