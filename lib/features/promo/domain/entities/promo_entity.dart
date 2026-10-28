@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ui' show Color;
 
 /// Pure domain entity representing a promotional banner.
-/// Free of external dependencies (Hive, json_serializable, etc.).
+/// Free of Flutter widget tree and external framework dependencies.
 class PromoEntity {
   final int id;
   final String? title;
