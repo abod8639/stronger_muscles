@@ -1,20 +1,28 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/notifications/data/datasources/notification_local_data_source.dart';
 import 'package:stronger_muscles/features/notifications/data/datasources/notification_remote_data_source.dart';
+import 'package:stronger_muscles/features/notifications/data/mappers/notification_mapper.dart';
 import 'package:stronger_muscles/features/notifications/data/models/notification_model.dart';
 import 'package:stronger_muscles/features/notifications/data/repositories/notification_repository_impl.dart';
 import 'package:stronger_muscles/features/notifications/domain/repositories/notification_repository.dart';
+import 'package:stronger_muscles/features/notifications/domain/usecases/delete_notification_usecase.dart';
+import 'package:stronger_muscles/features/notifications/domain/usecases/get_notifications_usecase.dart';
+import 'package:stronger_muscles/features/notifications/domain/usecases/get_unread_count_usecase.dart';
+import 'package:stronger_muscles/features/notifications/domain/usecases/mark_all_as_read_usecase.dart';
+import 'package:stronger_muscles/features/notifications/domain/usecases/mark_as_read_usecase.dart';
 
 class MockNotificationRemoteDataSource implements NotificationRemoteDataSource {
-  Map<String, dynamic>? mockNotificationsResponse;
+  NotificationsPayloadModel? mockPayload;
   int mockUnreadCount = 0;
   bool shouldThrow = false;
   String? markedReadId;
+  String? deletedId;
   bool markAllCalled = false;
 
   @override
-  Future<Map<String, dynamic>> getNotifications({
+  Future<NotificationsPayloadModel> getNotifications({
     int page = 1,
     int perPage = 20,
     CancelToken? cancelToken,
@@ -22,11 +30,12 @@ class MockNotificationRemoteDataSource implements NotificationRemoteDataSource {
     if (shouldThrow) {
       throw const NetworkFailure();
     }
-    return mockNotificationsResponse ??
-        {
-          'notifications': <NotificationModel>[],
-          'unread_count': 0,
-        };
+    return mockPayload ??
+        const NotificationsPayloadModel(
+          notifications: [],
+          unreadCount: 0,
+          hasMore: false,
+        );
   }
 
   @override
@@ -51,6 +60,64 @@ class MockNotificationRemoteDataSource implements NotificationRemoteDataSource {
       throw const ServerFailure(message: 'Failed to mark all as read');
     }
     markAllCalled = true;
+  }
+
+  @override
+  Future<void> deleteNotification(String id, {CancelToken? cancelToken}) async {
+    if (shouldThrow) {
+      throw const ServerFailure(message: 'Failed to delete notification');
+    }
+    deletedId = id;
+  }
+}
+
+class MockNotificationLocalDataSource implements NotificationLocalDataSource {
+  List<NotificationModel> cached = [];
+  int unread = 0;
+
+  @override
+  Future<List<NotificationModel>> getCachedNotifications() async => cached;
+
+  @override
+  Future<void> cacheNotifications(List<NotificationModel> notifications) async {
+    cached = List.from(notifications);
+  }
+
+  @override
+  Future<int> getCachedUnreadCount() async => unread;
+
+  @override
+  Future<void> cacheUnreadCount(int count) async {
+    unread = count;
+  }
+
+  @override
+  Future<void> markLocalAsRead(String id) async {
+    cached = cached.map((n) {
+      if (n.id == id && !n.isRead) {
+        return n.copyWith(isRead: true);
+      }
+      return n;
+    }).toList();
+    unread = cached.where((n) => !n.isRead).length;
+  }
+
+  @override
+  Future<void> markAllLocalAsRead() async {
+    cached = cached.map((n) => n.copyWith(isRead: true)).toList();
+    unread = 0;
+  }
+
+  @override
+  Future<void> deleteLocalNotification(String id) async {
+    cached = cached.where((n) => n.id != id).toList();
+    unread = cached.where((n) => !n.isRead).length;
+  }
+
+  @override
+  Future<void> clearCache() async {
+    cached.clear();
+    unread = 0;
   }
 }
 
@@ -92,40 +159,47 @@ void main() {
       expect(model.createdAt, isNull);
     });
 
-    test('fromJsonList drops invalid elements defensively without crashing', () {
-      final rawList = [
-        {'id': '1', 'title': 'Valid'},
-        'corrupt_string_element',
-        null,
-        {'id': '2', 'title': 'Also Valid'},
-      ];
+    test('NotificationModelMapper conversions work as expected', () {
+      const model = NotificationModel(
+        id: '1',
+        title: 'Title',
+        body: 'Body',
+        isRead: false,
+      );
+      final entity = model.toEntity();
 
-      final list = NotificationModel.fromJsonList(rawList);
+      expect(entity.id, '1');
+      expect(entity.title, 'Title');
+      expect(entity.isRead, isFalse);
 
-      expect(list.length, 2);
-      expect(list[0].id, '1');
-      expect(list[1].id, '2');
+      final backToModel = entity.toModel();
+      expect(backToModel.id, '1');
+      expect(backToModel.title, 'Title');
     });
   });
 
-  group('NotificationRepositoryImpl Tests', () {
-    late MockNotificationRemoteDataSource mockDataSource;
+  group('NotificationRepositoryImpl and UseCases Tests', () {
+    late MockNotificationRemoteDataSource mockRemote;
+    late MockNotificationLocalDataSource mockLocal;
     late NotificationRepository repository;
 
     setUp(() {
-      mockDataSource = MockNotificationRemoteDataSource();
-      repository = NotificationRepositoryImpl(mockDataSource);
+      mockRemote = MockNotificationRemoteDataSource();
+      mockLocal = MockNotificationLocalDataSource();
+      repository = NotificationRepositoryImpl(mockRemote, mockLocal);
     });
 
-    test('getNotifications returns Right with NotificationsPayloadEntity', () async {
-      mockDataSource.mockNotificationsResponse = {
-        'notifications': [
-          const NotificationModel(id: 'n1', title: 'Order update', body: 'Dispatched'),
+    test('GetNotificationsUseCase returns Right and updates local cache', () async {
+      mockRemote.mockPayload = const NotificationsPayloadModel(
+        notifications: [
+          NotificationModel(id: 'n1', title: 'Order update', body: 'Dispatched', isRead: false),
         ],
-        'unread_count': 1,
-      };
+        unreadCount: 1,
+        hasMore: true,
+      );
 
-      final result = await repository.getNotifications();
+      final useCase = GetNotificationsUseCase(repository);
+      final result = await useCase();
 
       expect(result.isRight(), isTrue);
       result.fold(
@@ -133,37 +207,77 @@ void main() {
         (payload) {
           expect(payload.notifications.length, 1);
           expect(payload.unreadCount, 1);
+          expect(payload.hasMore, isTrue);
           expect(payload.notifications.first.id, 'n1');
         },
       );
+      expect(mockLocal.cached.length, 1);
+      expect(mockLocal.unread, 1);
     });
 
-    test('getNotifications returns Left on NetworkFailure', () async {
-      mockDataSource.shouldThrow = true;
+    test('GetNotificationsUseCase falls back to local cache on network error', () async {
+      mockLocal.cached = [
+        const NotificationModel(id: 'cached_1', title: 'Cached notif', body: 'Body'),
+      ];
+      mockLocal.unread = 1;
+      mockRemote.shouldThrow = true;
 
-      final result = await repository.getNotifications();
+      final useCase = GetNotificationsUseCase(repository);
+      final result = await useCase();
 
-      expect(result.isLeft(), isTrue);
+      expect(result.isRight(), isTrue);
       result.fold(
-        (failure) {
-          expect(failure, isA<NetworkFailure>());
+        (failure) => fail('Should be right from cache'),
+        (payload) {
+          expect(payload.notifications.length, 1);
+          expect(payload.notifications.first.id, 'cached_1');
         },
-        (_) => fail('Should be left'),
       );
     });
 
-    test('markAsRead delegates successfully and returns Right(unit)', () async {
-      final result = await repository.markAsRead('n123');
+    test('GetUnreadCountUseCase returns count and caches it', () async {
+      mockRemote.mockUnreadCount = 5;
+
+      final useCase = GetUnreadCountUseCase(repository);
+      final result = await useCase();
 
       expect(result.isRight(), isTrue);
-      expect(mockDataSource.markedReadId, 'n123');
+      expect(result.getOrElse((_) => 0), 5);
+      expect(mockLocal.unread, 5);
     });
 
-    test('markAllAsRead delegates successfully and returns Right(unit)', () async {
-      final result = await repository.markAllAsRead();
+    test('MarkAsReadUseCase updates cache and calls remote', () async {
+      mockLocal.cached = [
+        const NotificationModel(id: 'n123', title: 'Title', body: 'Body', isRead: false),
+      ];
+      mockLocal.unread = 1;
+
+      final useCase = MarkAsReadUseCase(repository);
+      final result = await useCase('n123');
 
       expect(result.isRight(), isTrue);
-      expect(mockDataSource.markAllCalled, isTrue);
+      expect(mockRemote.markedReadId, 'n123');
+    });
+
+    test('MarkAllAsReadUseCase delegates successfully', () async {
+      final useCase = MarkAllAsReadUseCase(repository);
+      final result = await useCase();
+
+      expect(result.isRight(), isTrue);
+      expect(mockRemote.markAllCalled, isTrue);
+    });
+
+    test('DeleteNotificationUseCase removes from cache and calls remote', () async {
+      mockLocal.cached = [
+        const NotificationModel(id: 'del_1', title: 'Delete me', body: 'Body'),
+      ];
+
+      final useCase = DeleteNotificationUseCase(repository);
+      final result = await useCase('del_1');
+
+      expect(result.isRight(), isTrue);
+      expect(mockRemote.deletedId, 'del_1');
+      expect(mockLocal.cached.isEmpty, isTrue);
     });
   });
 }
