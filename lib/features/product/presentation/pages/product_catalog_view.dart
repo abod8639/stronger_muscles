@@ -9,6 +9,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 /// Clean Architecture presentation page for exploring and filtering the product catalog.
+/// Implements pagination support (`isLoadingMore`), debounced search, and responsive layout.
 class ProductCatalogView extends ConsumerStatefulWidget {
   final String? initialCategoryId;
 
@@ -20,12 +21,14 @@ class ProductCatalogView extends ConsumerStatefulWidget {
 
 class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
   late final TextEditingController _searchController;
+  late final ScrollController _scrollController;
   String _selectedCategory = '';
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _scrollController = ScrollController()..addListener(_onScroll);
     _selectedCategory = widget.initialCategoryId ?? '';
     if (_selectedCategory.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -38,8 +41,19 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (currentScroll >= maxScroll - 200) {
+      ref.read(productsControllerProvider.notifier).loadMoreProducts();
+    }
   }
 
   void _onCategorySelected(String categoryId) {
@@ -54,10 +68,7 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
   void _onSearchChanged(String query) {
     ref
         .read(productsControllerProvider.notifier)
-        .fetchProducts(
-          categoryId: _selectedCategory.isEmpty ? null : _selectedCategory,
-          query: query,
-        );
+        .searchWithDebounce(query);
   }
 
   @override
@@ -78,9 +89,11 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                 categoryId:
                     _selectedCategory.isEmpty ? null : _selectedCategory,
                 query: _searchController.text,
+                refresh: true,
               );
         },
         child: CustomScrollView(
+          controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             // Search field
@@ -91,7 +104,10 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                   controller: _searchController,
                   hintText: l10n?.searchProducts ?? 'Search products...',
                   onChanged: _onSearchChanged,
-                  onClear: () => _onSearchChanged(''),
+                  onClear: () {
+                    _searchController.clear();
+                    _onSearchChanged('');
+                  },
                 ),
               ),
             ),
@@ -202,6 +218,7 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                                     ? null
                                     : _selectedCategory,
                                 query: _searchController.text,
+                                refresh: true,
                               ),
                         ),
                       ],
@@ -210,6 +227,21 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                 ),
               ),
             ),
+
+            // Pagination loader at bottom
+            if (productsState.isLoadingMore)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 24.0,
+                      height: 24.0,
+                      child: CircularProgressIndicator(strokeWidth: 2.5),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
