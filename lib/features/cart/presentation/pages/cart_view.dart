@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/app_base_app_bar.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
@@ -8,9 +9,14 @@ import 'package:stronger_muscles/features/cart/presentation/controllers/cart_con
 import 'package:stronger_muscles/features/cart/presentation/widgets/build_cart_content.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/cart_error_view.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/empty_cart_view.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
+/// Production-ready Shopping Cart screen.
+/// Implements strictly decoupled presentation:
+/// - Zero direct controller dependencies on sibling features.
+/// - Pure declarative routing for external navigation.
+/// - Transient mutation error observation with non-intrusive snackbars.
 class CartView extends ConsumerWidget {
   const CartView({super.key});
 
@@ -53,8 +59,7 @@ class CartView extends ConsumerWidget {
       body: cartState.when(
         data: (items) => items.isEmpty
             ? EmptyCartView(
-                onGoShopping: () =>
-                    ref.read(mainControllerProvider.notifier).changeTabIndex(0),
+                onGoShopping: () => context.go(AppRoutes.home),
               )
             : CartContentList(items: items),
         loading: () => const Center(
@@ -63,8 +68,7 @@ class CartView extends ConsumerWidget {
         error: (error, stackTrace) => CartErrorView(
           error: error,
           onRetry: () => ref.refresh(cartControllerProvider),
-          onGoShopping: () =>
-              ref.read(mainControllerProvider.notifier).changeTabIndex(0),
+          onGoShopping: () => context.go(AppRoutes.home),
         ),
       ),
     );
