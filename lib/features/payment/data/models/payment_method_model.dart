@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/features/payment/domain/entities/payment_method_entity.dart';
 
-class PaymentMethodModel extends PaymentMethodEntity {
+/// Data Transfer Object representing a payment method.
+/// Pure DTO, strictly decoupled from Domain Layer Entities.
+class PaymentMethodModel {
+  final String id;
+  final String title;
+  final String? subtitle;
+  final dynamic icon;
+  final String gateway;
+  final bool isEnabled;
+
   const PaymentMethodModel({
-    required super.id,
-    required super.title,
-    super.subtitle,
-    required super.icon,
-    super.gateway,
-    super.isEnabled,
+    required this.id,
+    required this.title,
+    this.subtitle,
+    this.icon,
+    this.gateway = 'paymob',
+    this.isEnabled = true,
   });
 
   factory PaymentMethodModel.fromJson(Map<String, dynamic> json) {
-    IconData icon;
+    dynamic icon;
     switch (json['id']?.toString()) {
       case 'card':
         icon = Icons.credit_card;
@@ -49,22 +57,34 @@ class PaymentMethodModel extends PaymentMethodEntity {
     };
   }
 
-  PaymentMethodEntity toEntity() => PaymentMethodEntity(
-        id: id,
-        title: title,
-        subtitle: subtitle,
-        icon: icon,
-        gateway: gateway,
-        isEnabled: isEnabled,
-      );
+  PaymentMethodModel copyWith({
+    String? id,
+    String? title,
+    String? subtitle,
+    dynamic icon,
+    String? gateway,
+    bool? isEnabled,
+  }) {
+    return PaymentMethodModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      icon: icon ?? this.icon,
+      gateway: gateway ?? this.gateway,
+      isEnabled: isEnabled ?? this.isEnabled,
+    );
+  }
 
-  static PaymentMethodModel fromEntity(PaymentMethodEntity entity) =>
-      PaymentMethodModel(
-        id: entity.id,
-        title: entity.title,
-        subtitle: entity.subtitle,
-        icon: entity.icon,
-        gateway: entity.gateway,
-        isEnabled: entity.isEnabled,
-      );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PaymentMethodModel &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() => 'PaymentMethodModel(id: $id, title: $title)';
 }
