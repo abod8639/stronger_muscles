@@ -1,4 +1,3 @@
-// [Certain]
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,8 +7,8 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
+import 'package:stronger_muscles/features/search/search_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
@@ -23,7 +22,7 @@ Widget buildProductInfo(
   final locale = Localizations.localeOf(context).languageCode;
   final infoItems = <Widget>[];
 
-  // دالة الملاحة للبراند
+  // Navigation callback for brand
   void navigateToBrandPage(String brandName) {
     final searchNotifier = ref.read(productSearchControllerProvider.notifier);
     searchNotifier.clearSearch();
@@ -93,6 +92,7 @@ Widget buildProductInfo(
             : null,
       ),
     );
+
     if (i < dataMap.length - 1) {
       infoItems.add(
         Divider(
