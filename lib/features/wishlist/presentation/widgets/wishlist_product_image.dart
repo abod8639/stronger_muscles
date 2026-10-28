@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Displays the product thumbnail image with Hero animation for the wishlist.
 class WishlistProductImage extends StatelessWidget {
@@ -68,4 +68,3 @@ class WishlistProductImage extends StatelessWidget {
     );
   }
 }
-
