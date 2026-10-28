@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
-import 'package:stronger_muscles/features/home/domain/usecases/usecase_providers.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/home_di.dart';
+import 'package:stronger_muscles/features/profile/profile_feature.dart';
 
 part 'categories_sections_controller.g.dart';
 
@@ -19,25 +18,13 @@ class SelectedCategoryIndex extends _$SelectedCategoryIndex {
 
 @riverpod
 class CategoriesSectionsController extends _$CategoriesSectionsController {
-  CancelToken? _cancelToken;
-
   @override
   FutureOr<List<SelectionEntity>> build() async {
-    _cancelToken = CancelToken();
-
-    ref.onDispose(() {
-      _cancelToken?.cancel('CategoriesSectionsController disposed');
-      _cancelToken = null;
-    });
-
     final getHomeShortcuts = ref.watch(getHomeShortcutsUseCaseProvider);
     final locale = ref.watch(languageControllerProvider);
     final langCode = locale.languageCode;
 
-    final result = await getHomeShortcuts(
-      langCode: langCode,
-      cancelToken: _cancelToken,
-    );
+    final result = await getHomeShortcuts(langCode: langCode);
 
     return result.fold(
       (failure) {
@@ -53,17 +40,11 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
 
   Future<void> fetchCategories() async {
-    _cancelToken?.cancel('Refetching categories');
-    _cancelToken = CancelToken();
-
     state = const AsyncLoading();
     final getHomeShortcuts = ref.read(getHomeShortcutsUseCaseProvider);
     final langCode = ref.read(languageControllerProvider).languageCode;
 
-    final result = await getHomeShortcuts(
-      langCode: langCode,
-      cancelToken: _cancelToken,
-    );
+    final result = await getHomeShortcuts(langCode: langCode);
 
     result.fold(
       (failure) {
