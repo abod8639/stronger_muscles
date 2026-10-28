@@ -74,18 +74,13 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> googleSignIn({
-    required String email,
-    required String name,
-    String? photoUrl,
-    CancelToken? cancelToken,
-  }) async {
+  Future<Either<Failure, UserEntity>> googleSignIn() async {
     return Right(
       UserEntity(
         id: 3,
-        email: email,
-        name: name,
-        photoUrl: photoUrl,
+        email: "google@user.com",
+        name: "Google User",
+        photoUrl: null,
         token: "testToken",
       ),
     );
