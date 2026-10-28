@@ -8,6 +8,7 @@ library;
 export 'domain/entities/order_entity.dart';
 export 'domain/entities/order_item_entity.dart';
 export 'domain/repositories/order_repository.dart';
+export 'data/models/order_model.dart';
 
 // Domain UseCases
 export 'domain/usecases/get_user_orders_usecase.dart';
