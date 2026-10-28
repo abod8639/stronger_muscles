@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/data/models/review_model.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_reviews_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/expandable_description_card.dart';
 
