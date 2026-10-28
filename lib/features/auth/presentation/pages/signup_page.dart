@@ -56,16 +56,24 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authControllerProvider);
     final l10n = AppLocalizations.of(context)!;
+
+    // Selective state listening to prevent unnecessary full-page rebuilds
+    final isLoading = ref.watch(
+      authControllerProvider.select((state) => state.isLoading),
+    );
+    final hasError = ref.watch(
+      authControllerProvider.select((state) => state.hasError && !state.isLoading),
+    );
+    final error = hasError
+        ? ref.watch(authControllerProvider.select((state) => state.error))
+        : null;
 
     // Listen to authentication changes and errors centrally
     ref.listen(authControllerProvider, (previous, next) {
       if (next is AsyncError) {
-        final error = next.error;
-        final String message = error is Failure
-            ? error.toMessage()
-            : error.toString();
+        final err = next.error;
+        final String message = err is Failure ? err.toMessage() : err.toString();
 
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -113,9 +121,9 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
               const SizedBox(height: 20.0),
 
               // Inline Fallback UI on persistent Error State
-              if (authState.hasError && !authState.isLoading)
+              if (hasError && error != null)
                 AuthErrorCard(
-                  error: authState.error,
+                  error: error,
                   onRetry: _retryLastAction,
                   onDismiss: () =>
                       ref.read(authControllerProvider.notifier).clearError(),
@@ -123,7 +131,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
               const SizedBox(height: 12.0),
               SignUpForm(
-                isLoading: authState.isLoading,
+                isLoading: isLoading,
                 onSignUp: (name, email, password) async {
                   _onSignUp(name, email, password);
                 },
