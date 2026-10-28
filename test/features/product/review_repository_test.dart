@@ -86,8 +86,10 @@ void main() {
 
     test('GetProductReviewsUseCase returns product reviews', () async {
       final useCase = GetProductReviewsUseCase(repository);
-      final results = await useCase('prod-100');
+      final either = await useCase('prod-100');
 
+      expect(either.isRight(), isTrue);
+      final results = either.getOrElse((_) => []);
       expect(results.length, 1);
       expect(results.first.id, 'rev-1');
       expect(results.first.userName, 'Ahmed');
@@ -96,12 +98,14 @@ void main() {
 
     test('SubmitReviewUseCase submits new review successfully', () async {
       final useCase = SubmitReviewUseCase(repository);
-      final result = await useCase(
+      final either = await useCase(
         productId: 'prod-100',
         rating: 5.0,
         comment: 'Top quality product!',
       );
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => throw Exception());
       expect(result.id, 'rev-test-1');
       expect(result.rating, 5.0);
       expect(result.comment, 'Top quality product!');
@@ -111,8 +115,10 @@ void main() {
     test('GetUserProductReviewUseCase returns user review', () async {
       fakeRemoteDataSource.userReview = sampleModel;
       final useCase = GetUserProductReviewUseCase(repository);
-      final result = await useCase('prod-100');
+      final either = await useCase('prod-100');
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => null);
       expect(result, isNotNull);
       expect(result!.id, 'rev-1');
       expect(result.comment, 'Excellent flavor and results!');
@@ -120,9 +126,12 @@ void main() {
 
     test('DeleteReviewUseCase deletes review from repository', () async {
       final useCase = DeleteReviewUseCase(repository);
-      await useCase('rev-1');
+      final deleteEither = await useCase('rev-1');
+      expect(deleteEither.isRight(), isTrue);
 
-      final remaining = await repository.getProductReviews('prod-100');
+      final remainingEither = await repository.getProductReviews('prod-100');
+      expect(remainingEither.isRight(), isTrue);
+      final remaining = remainingEither.getOrElse((_) => []);
       expect(remaining, isEmpty);
     });
   });
