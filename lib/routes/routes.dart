@@ -17,6 +17,7 @@ import 'package:stronger_muscles/features/product/domain/entities/product_entity
 
 import 'package:stronger_muscles/features/notifications/notifications_routes.dart';
 import 'package:stronger_muscles/features/help_support/help_support_routes.dart';
+import 'package:stronger_muscles/features/payment/payment_routes.dart';
 import 'package:stronger_muscles/features/product/presentation/pages/product_catalog_view.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -39,6 +40,7 @@ class AppRoutes {
   static const String orderDetails = '/order_details';
   static const String notifications = '/notifications';
   static const String helpSupport = '/help_support';
+  static const String paymentGateway = '/payment_gateway';
 }
 
 class RouterNotifier extends ChangeNotifier {
@@ -152,6 +154,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ...OrderRoutes.routes,
       ...NotificationsRoutes.routes,
       ...HelpSupportRoutes.routes,
+      ...PaymentRoutes.routes,
       GoRoute(
         path: AppRoutes.products,
         builder: (context, state) {
