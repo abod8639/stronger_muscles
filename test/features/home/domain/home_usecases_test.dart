@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
@@ -7,6 +6,7 @@ import 'package:stronger_muscles/features/home/domain/entities/selection_entity.
 import 'package:stronger_muscles/features/home/domain/repositories/home_repository.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/get_home_products_usecase.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/get_home_shortcuts_usecase.dart';
+import 'package:stronger_muscles/features/home/presentation/helpers/selection_ui_mapper.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
@@ -18,7 +18,6 @@ class MockHomeRepository implements HomeRepository {
   @override
   Future<Either<Failure, List<SelectionEntity>>> getHomeShortcuts({
     required String langCode,
-    CancelToken? cancelToken,
   }) async {
     if (failureToThrow != null) return Left(failureToThrow!);
     return Right(mockShortcuts);
@@ -28,7 +27,6 @@ class MockHomeRepository implements HomeRepository {
   Future<Either<Failure, List<ProductEntity>>> getHomeProducts({
     String? categoryId,
     int page = 1,
-    CancelToken? cancelToken,
   }) async {
     if (failureToThrow != null) return Left(failureToThrow!);
     return Right(mockProducts);
@@ -44,17 +42,17 @@ void main() {
         const SelectionEntity(
           id: '',
           label: 'categoryHome',
-          icon: Icons.home,
+          iconKey: 'home',
         ),
         const SelectionEntity(
           id: 'protein',
           label: 'Protein',
-          icon: Icons.fitness_center,
+          iconKey: 'protein',
         ),
         const SelectionEntity(
           id: 'creatine',
           label: 'Creatine',
-          icon: Icons.cookie_outlined,
+          iconKey: 'creatine',
         ),
       ];
 
@@ -73,6 +71,23 @@ void main() {
           expect(shortcuts[2].id, 'creatine');
           expect(shortcuts[2].label, 'Creatine');
         },
+      );
+    });
+
+    test('GetHomeShortcutsUseCase returns Failure on Left', () async {
+      final mockRepo = MockHomeRepository();
+      mockRepo.failureToThrow = const ServerFailure(message: 'Server unavailable');
+
+      final useCase = GetHomeShortcutsUseCase(mockRepo);
+      final result = await useCase(langCode: 'en');
+
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) {
+          expect(failure, isA<ServerFailure>());
+          expect((failure as ServerFailure).message, 'Server unavailable');
+        },
+        (_) => fail('Should return failure'),
       );
     });
 
@@ -100,26 +115,51 @@ void main() {
       );
     });
 
+    test('GetHomeProductsUseCase returns Failure on Left', () async {
+      final mockRepo = MockHomeRepository();
+      mockRepo.failureToThrow = const NetworkFailure(message: 'No internet connection');
+
+      final useCase = GetHomeProductsUseCase(mockRepo);
+      final result = await useCase(page: 1);
+
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (failure) {
+          expect(failure, isA<NetworkFailure>());
+          expect((failure as NetworkFailure).message, 'No internet connection');
+        },
+        (_) => fail('Should return failure'),
+      );
+    });
+
     test('SelectionEntity equality and hashCode work as expected', () {
       const e1 = SelectionEntity(
         label: 'Protein',
-        icon: Icons.fitness_center,
+        iconKey: 'protein',
         id: '1',
       );
       const e2 = SelectionEntity(
         label: 'Protein',
-        icon: Icons.fitness_center,
+        iconKey: 'protein',
         id: '1',
       );
       const e3 = SelectionEntity(
         label: 'Creatine',
-        icon: Icons.cookie,
+        iconKey: 'creatine',
         id: '2',
       );
 
       expect(e1, equals(e2));
       expect(e1.hashCode, equals(e2.hashCode));
       expect(e1 == e3, isFalse);
+    });
+
+    test('SelectionEntityUiX maps iconKey to presentation IconData correctly', () {
+      const shortcutHome = SelectionEntity(id: '', label: 'Home', iconKey: 'home');
+      const shortcutProtein = SelectionEntity(id: 'protein', label: 'Protein', iconKey: 'protein');
+
+      expect(shortcutHome.icon, Icons.home);
+      expect(shortcutProtein.icon, Icons.fitness_center);
     });
   });
 }
