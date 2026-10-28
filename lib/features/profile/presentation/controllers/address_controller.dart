@@ -57,7 +57,7 @@ class AddressController extends _$AddressController {
       countryController.dispose();
     });
 
-    final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.value != null));
+    final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.valueOrNull != null));
     final getAddressesUseCase = ref.watch(getAddressesUseCaseProvider);
 
     if (isLoggedIn) {
@@ -86,7 +86,7 @@ class AddressController extends _$AddressController {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       await ref.read(deleteAddressUseCaseProvider).call(id);
-      final currentAddresses = state.value ?? [];
+      final currentAddresses = state.valueOrNull ?? [];
       state = AsyncData(
         currentAddresses.where((addr) => addr.id != id).toList(),
       );
@@ -106,7 +106,7 @@ class AddressController extends _$AddressController {
   }
 
   AddressEntity? get defaultAddress {
-    final addresses = state.value ?? [];
+    final addresses = state.valueOrNull ?? [];
     return addresses.where((addr) => addr.isDefault).firstOrNull ??
         (addresses.isNotEmpty ? addresses.first : null);
   }
