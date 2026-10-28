@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/features/search/search_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class PriceFilterSlider extends ConsumerStatefulWidget {

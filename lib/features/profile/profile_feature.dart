@@ -9,6 +9,8 @@ export 'domain/entities/address_entity.dart';
 // Presentation Controllers
 export 'presentation/controllers/address_controller.dart'
     show addressControllerProvider, AddressController;
+export 'presentation/controllers/language_controller.dart'
+    show languageControllerProvider, LanguageController;
 
 // Public Dialogs / Presentation Helpers
 export 'presentation/widgets/show_address_form.dart' show showAddressForm;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/features/home/home_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable alert banner shown when there is no active internet connection.

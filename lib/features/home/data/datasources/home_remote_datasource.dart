@@ -4,7 +4,7 @@ import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Top-level isolate function for processing raw category JSON data without UI thread jank.
 List<SelectionsModel> parseCategoriesIsolate(dynamic data) {

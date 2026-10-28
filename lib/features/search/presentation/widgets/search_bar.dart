@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/home/presentation/widgets/price_filter_slider.dart';
+import 'package:stronger_muscles/features/home/home_feature.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
