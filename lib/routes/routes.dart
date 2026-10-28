@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/cart/cart_routes.dart';
-import 'package:stronger_muscles/features/home/presentation/pages/home_view.dart';
+import 'package:stronger_muscles/features/home/home_routes.dart';
 import 'package:stronger_muscles/main_page.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_view.dart';
 import 'package:stronger_muscles/features/product_details/presentation/pages/product_details_view.dart';
@@ -81,14 +81,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state, navigationShell) =>
             MainPage(navigationShell: navigationShell),
         branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.main,
-                builder: (context, state) => const HomeView(),
-              ),
-            ],
-          ),
+          HomeRoutes.branch,
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -108,10 +101,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        redirect: (context, state) => AppRoutes.main,
-      ),
+      ...HomeRoutes.standaloneRoutes,
       ...AuthRoutes.routes,
       GoRoute(
         path: AppRoutes.productDetails,
