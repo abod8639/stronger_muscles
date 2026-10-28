@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
+/// Data model representing a selectable category shortcut.
+/// Decoupled from domain Entity and implements resilient, safe JSON parsing.
+class SelectionsModel {
+  final String id;
+  final String label;
+  final String? iconKey;
 
-export 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
-
-/// Data model representing a selectable category shortcut, extending domain [SelectionEntity].
-/// Implements resilient safe parsing with defensive fallbacks to eliminate TypeError and NullPointer crashes.
-class SelectionsModel extends SelectionEntity {
   const SelectionsModel({
-    required super.label,
-    required super.icon,
-    required super.id,
+    required this.id,
+    required this.label,
+    this.iconKey,
   });
 
   /// Robust, fault-tolerant JSON parser with null safety and type fallback.
@@ -18,7 +17,7 @@ class SelectionsModel extends SelectionEntity {
       return const SelectionsModel(
         id: '',
         label: '',
-        icon: Icons.category,
+        iconKey: 'home',
       );
     }
 
@@ -39,35 +38,22 @@ class SelectionsModel extends SelectionEntity {
       safeLabel = rawLabel.toString();
     }
 
-    final safeIcon = resolveIcon(json['icon'] ?? safeId);
+    final safeIconKey = json['icon']?.toString() ?? json['iconKey']?.toString() ?? safeId;
 
     return SelectionsModel(
       id: safeId,
       label: safeLabel,
-      icon: safeIcon,
+      iconKey: safeIconKey,
     );
   }
 
-  /// Converts a domain [SelectionEntity] into [SelectionsModel].
-  factory SelectionsModel.fromEntity(SelectionEntity entity) {
-    return SelectionsModel(
-      label: entity.label,
-      icon: entity.icon,
-      id: entity.id,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'label': label,
+        'iconKey': iconKey,
+      };
 
-  /// Converts this model back to pure domain [SelectionEntity].
-  SelectionEntity toEntity() {
-    return SelectionEntity(
-      id: id,
-      label: label,
-      icon: icon,
-    );
-  }
-
-  /// Safely converts a dynamic response (List, Map containing 'data', or nested)
-  /// into a typed List of [SelectionsModel].
+  /// Safely converts a dynamic response into a typed List of [SelectionsModel].
   static List<SelectionsModel> fromJsonList(dynamic data) {
     if (data == null) return const [];
 
@@ -87,42 +73,10 @@ class SelectionsModel extends SelectionEntity {
         try {
           results.add(SelectionsModel.fromJson(item));
         } catch (_) {
-          // Skip corrupt records defensively without failing the whole list
+          // Skip corrupt records defensively
         }
       }
     }
     return results;
-  }
-
-  /// Top-level/static entry point for processing category selection payloads in background isolate via [compute].
-  static List<SelectionsModel> parseSelectionsIsolate(dynamic data) {
-    return fromJsonList(data);
-  }
-
-  /// Maps category identifiers or icon keys to modern, relevant [IconData].
-  static IconData resolveIcon(dynamic iconValue) {
-    final key = iconValue?.toString().trim().toLowerCase() ?? '';
-    const iconMap = <String, IconData>{
-      '': Icons.home,
-      'home': Icons.home,
-      'categoryhome': Icons.home,
-      'protein': Icons.fitness_center,
-      'creatine': Icons.cookie_outlined,
-      'amino': Icons.local_drink,
-      'amino-acid': Icons.local_drink,
-      'vitamins': Icons.medication,
-      'preworkout': Icons.flash_on,
-      'pre-workout': Icons.flash_on,
-      'recovery': Icons.healing,
-      'fat-burner': Icons.local_fire_department_outlined,
-      'health': Icons.favorite,
-      'mass-gainers': Icons.man_3_sharp,
-      'massgainer': Icons.man_3_sharp,
-      'carb': Icons.bakery_dining_outlined,
-      'accessories': Icons.sports_tennis,
-      'bcaa': Icons.water_drop_outlined,
-    };
-
-    return iconMap[key] ?? Icons.category;
   }
 }
