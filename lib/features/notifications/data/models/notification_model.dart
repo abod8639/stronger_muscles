@@ -1,21 +1,28 @@
-import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
+/// Data model representing a notification DTO.
+/// Strictly decoupled from domain Entity and features resilient, defensive JSON parsing.
+class NotificationModel {
+  final String id;
+  final String title;
+  final String body;
+  final String type;
+  final String targetType;
+  final String? userId;
+  final Map<String, dynamic>? data;
+  final String? imageUrl;
+  final bool isRead;
+  final DateTime? createdAt;
 
-export 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
-
-/// Data model representing a notification, extending domain [NotificationEntity].
-/// Features defensive parsing and default values to prevent TypeError and NullPointer crashes.
-class NotificationModel extends NotificationEntity {
   const NotificationModel({
-    required super.id,
-    required super.title,
-    required super.body,
-    super.type = 'general',
-    super.targetType = 'all',
-    super.userId,
-    super.data,
-    super.imageUrl,
-    super.isRead = false,
-    super.createdAt,
+    required this.id,
+    required this.title,
+    required this.body,
+    this.type = 'general',
+    this.targetType = 'all',
+    this.userId,
+    this.data,
+    this.imageUrl,
+    this.isRead = false,
+    this.createdAt,
   });
 
   /// Robust, fault-tolerant JSON parser.
@@ -72,37 +79,23 @@ class NotificationModel extends NotificationEntity {
     );
   }
 
-  factory NotificationModel.fromEntity(NotificationEntity entity) {
-    return NotificationModel(
-      id: entity.id,
-      title: entity.title,
-      body: entity.body,
-      type: entity.type,
-      targetType: entity.targetType,
-      userId: entity.userId,
-      data: entity.data,
-      imageUrl: entity.imageUrl,
-      isRead: entity.isRead,
-      createdAt: entity.createdAt,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'body': body,
+        'type': type,
+        'target_type': targetType,
+        'user_id': userId,
+        'data': data,
+        'image_url': imageUrl,
+        'is_read': isRead,
+        'created_at': createdAt?.toIso8601String(),
+      };
 
-  NotificationEntity toEntity() {
-    return NotificationEntity(
-      id: id,
-      title: title,
-      body: body,
-      type: type,
-      targetType: targetType,
-      userId: userId,
-      data: data,
-      imageUrl: imageUrl,
-      isRead: isRead,
-      createdAt: createdAt,
-    );
-  }
+  String? get orderId => data?['order_id']?.toString();
+  String? get promoId => data?['promo_id']?.toString();
+  String? get productId => data?['product_id']?.toString();
 
-  @override
   NotificationModel copyWith({
     String? id,
     String? title,
@@ -154,5 +147,53 @@ class NotificationModel extends NotificationEntity {
       }
     }
     return results;
+  }
+}
+
+/// Data model representing paginated notifications response payload.
+class NotificationsPayloadModel {
+  final List<NotificationModel> notifications;
+  final int unreadCount;
+  final bool hasMore;
+
+  const NotificationsPayloadModel({
+    required this.notifications,
+    required this.unreadCount,
+    this.hasMore = false,
+  });
+
+  factory NotificationsPayloadModel.fromJson(dynamic json) {
+    if (json is! Map) {
+      return const NotificationsPayloadModel(
+        notifications: [],
+        unreadCount: 0,
+        hasMore: false,
+      );
+    }
+
+    final list = NotificationModel.fromJsonList(json);
+
+    int unread = 0;
+    if (json['unread_count'] != null) {
+      unread = (json['unread_count'] as num).toInt();
+    } else {
+      unread = list.where((n) => !n.isRead).length;
+    }
+
+    bool hasMore = false;
+    if (json['has_more'] != null) {
+      hasMore = json['has_more'] == true;
+    } else if (json['pagination'] is Map) {
+      final p = json['pagination'] as Map;
+      final current = (p['current_page'] as num?)?.toInt() ?? 1;
+      final totalPages = (p['total_pages'] as num?)?.toInt() ?? 1;
+      hasMore = current < totalPages;
+    }
+
+    return NotificationsPayloadModel(
+      notifications: list,
+      unreadCount: unread,
+      hasMore: hasMore,
+    );
   }
 }
