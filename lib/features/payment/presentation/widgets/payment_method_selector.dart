@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/features/payment/domain/entities/payment_method_entity.dart';
 
-/// Clean Architecture widget for presenting and selecting from a list
-/// of supported payment methods.
+/// Clean Architecture dumb widget for displaying and selecting from a list of payment methods.
 class PaymentMethodSelector extends StatelessWidget {
   final List<PaymentMethodEntity> methods;
   final String selectedMethodId;
@@ -17,6 +16,11 @@ class PaymentMethodSelector extends StatelessWidget {
     required this.onMethodSelected,
     this.showSecurityBadge = true,
   });
+
+  IconData _resolveIcon(dynamic icon) {
+    if (icon is IconData) return icon;
+    return Icons.payments_outlined;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +40,7 @@ class PaymentMethodSelector extends StatelessWidget {
                   : null,
               title: method.title,
               subtitle: method.subtitle,
-              leadingIcon: method.icon,
+              leadingIcon: _resolveIcon(method.icon),
               enabled: method.isEnabled,
             ),
           ),
