@@ -110,8 +110,13 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
       },
     );
 
-    final state = ref.watch(helpSupportControllerProvider);
-    final ticket = state.selectedTicket;
+    final selectedTicketState = ref.watch(
+      helpSupportControllerProvider.select((s) => s.selectedTicketState),
+    );
+    final isSendingMessage = ref.watch(
+      helpSupportControllerProvider.select((s) => s.isSendingMessage),
+    );
+    final ticket = selectedTicketState.value;
     final isDark = context.isDark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final height = MediaQuery.of(context).size.height * 0.85;
@@ -213,7 +218,7 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                   ),
               ],
             )
-          else if (state.selectedTicketState.isLoading)
+          else if (selectedTicketState.isLoading)
             const LinearProgressIndicator()
           else
             const SizedBox.shrink(),
@@ -222,7 +227,7 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
 
           // ── Messages List with AsyncValue Fallback Handling ────────────────
           Expanded(
-            child: state.selectedTicketState.when(
+            child: selectedTicketState.when(
               data: (activeTicket) {
                 if (activeTicket == null || activeTicket.messages.isEmpty) {
                   return Center(
@@ -316,7 +321,7 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
                       onSubmitted: (_) => _handleSend(),
                     ),
                   ),
-                  state.isSendingMessage
+                  isSendingMessage
                       ? const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: SizedBox(
