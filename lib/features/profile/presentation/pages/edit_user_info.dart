@@ -23,7 +23,7 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
   @override
   void initState() {
     super.initState();
-    final user = ref.read(authControllerProvider).value;
+    final user = ref.read(authControllerProvider).valueOrNull;
     final firebaseUser = FirebaseAuth.instance.currentUser;
 
     nameController = TextEditingController(
