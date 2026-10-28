@@ -17,9 +17,9 @@ class QuickActionsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final ordersCount = ref.watch(ordersControllerProvider).value?.length ?? 0;
+    final ordersCount = ref.watch(ordersControllerProvider).valueOrNull?.length ?? 0;
     final wishlistCount = ref.watch(wishlistControllerProvider).length;
-    final addressesCount = ref.watch(addressControllerProvider).value?.length ?? 0;
+    final addressesCount = ref.watch(addressControllerProvider).valueOrNull?.length ?? 0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
