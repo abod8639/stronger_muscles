@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/utils/handle_delete_from_wishlist.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -32,4 +32,3 @@ class WishlistDeleteButton extends ConsumerWidget {
     );
   }
 }
-
