@@ -1,49 +1,88 @@
-import 'package:dio/dio.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/errors/errors.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
-import 'package:stronger_muscles/features/auth/domain/usecases/usecase_providers.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/get_current_user_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/google_sign_in_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/login_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/register_usecase.dart';
+import 'package:stronger_muscles/features/auth/domain/usecases/update_profile_usecase.dart';
+import 'package:stronger_muscles/features/auth/presentation/controllers/auth_di.dart';
 
 part 'auth_controller.g.dart';
 
+/// Presentation state controller managing user authentication lifecycle.
+///
+/// Strictly enforces:
+/// - Immutable states through [AsyncValue].
+/// - Zero try-catch blocks: purely functional error handling with [Either.fold].
+/// - Pure constructor / provider dependency injection: zero hidden singletons.
 @riverpod
 class AuthController extends _$AuthController {
-  CancelToken _cancelToken = CancelToken();
+  LoginUseCase? _loginUseCaseOverride;
+  RegisterUseCase? _registerUseCaseOverride;
+  LogoutUseCase? _logoutUseCaseOverride;
+  GetCurrentUserUseCase? _getCurrentUserUseCaseOverride;
+  GoogleSignInUseCase? _googleSignInUseCaseOverride;
+  UpdateProfileUseCase? _updateProfileUseCaseOverride;
+  PushNotificationService? _pushNotificationServiceOverride;
+
+  /// Default constructor for Riverpod and production runtime.
+  AuthController();
+
+  /// Dedicated constructor enabling 100% testability via direct mock injection.
+  AuthController.test({
+    LoginUseCase? loginUseCase,
+    RegisterUseCase? registerUseCase,
+    LogoutUseCase? logoutUseCase,
+    GetCurrentUserUseCase? getCurrentUserUseCase,
+    GoogleSignInUseCase? googleSignInUseCase,
+    UpdateProfileUseCase? updateProfileUseCase,
+    PushNotificationService? pushNotificationService,
+  })  : _loginUseCaseOverride = loginUseCase,
+        _registerUseCaseOverride = registerUseCase,
+        _logoutUseCaseOverride = logoutUseCase,
+        _getCurrentUserUseCaseOverride = getCurrentUserUseCase,
+        _googleSignInUseCaseOverride = googleSignInUseCase,
+        _updateProfileUseCaseOverride = updateProfileUseCase,
+        _pushNotificationServiceOverride = pushNotificationService;
+
+  LoginUseCase get _loginUseCase =>
+      _loginUseCaseOverride ?? ref.read(loginUseCaseProvider);
+  RegisterUseCase get _registerUseCase =>
+      _registerUseCaseOverride ?? ref.read(registerUseCaseProvider);
+  LogoutUseCase get _logoutUseCase =>
+      _logoutUseCaseOverride ?? ref.read(logoutUseCaseProvider);
+  GetCurrentUserUseCase get _getCurrentUserUseCase =>
+      _getCurrentUserUseCaseOverride ?? ref.read(getCurrentUserUseCaseProvider);
+  GoogleSignInUseCase get _googleSignInUseCase =>
+      _googleSignInUseCaseOverride ?? ref.read(googleSignInUseCaseProvider);
+  UpdateProfileUseCase get _updateProfileUseCase =>
+      _updateProfileUseCaseOverride ?? ref.read(updateProfileUseCaseProvider);
+  PushNotificationService get _pushNotificationService =>
+      _pushNotificationServiceOverride ?? ref.read(pushNotificationServiceProvider);
 
   @override
   FutureOr<UserEntity?> build() async {
-    _cancelToken = CancelToken();
-
-    // Safely cancel any active requests on dispose to prevent resource leaks
-    ref.onDispose(() {
-      if (!_cancelToken.isCancelled) {
-        _cancelToken.cancel('AuthController disposed');
-      }
-    });
-
-    final getCurrentUser = ref.read(getCurrentUserUseCaseProvider);
-    final result = await getCurrentUser(cancelToken: _cancelToken);
+    final result = await _getCurrentUserUseCase();
 
     return result.fold(
       (failure) {
-        // Auth failures on startup (e.g. guest or expired token) result in null user (not crash)
         if (failure.type == FailureType.auth || failure.type == FailureType.cancel) {
           return null;
         }
-        // Surface network/server errors for fallback UI if needed
         throw failure;
       },
       (user) => user,
     );
   }
 
-  UserEntity? get currentUser => state.value;
-  bool get isLoggedIn => state.value != null;
+  UserEntity? get currentUser => state.valueOrNull;
+  bool get isLoggedIn => state.valueOrNull != null;
   bool get isLoading => state.isLoading;
 
-  /// Resets an active error state back to data
+  /// Resets an active error state back to current user data.
   void clearError() {
     if (state.hasError) {
       state = AsyncData(currentUser);
@@ -56,11 +95,9 @@ class AuthController extends _$AuthController {
   }) async {
     state = const AsyncLoading();
 
-    final login = ref.read(loginUseCaseProvider);
-    final result = await login(
+    final result = await _loginUseCase(
       email: email,
       password: password,
-      cancelToken: _cancelToken,
     );
 
     result.fold(
@@ -68,7 +105,7 @@ class AuthController extends _$AuthController {
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
       (user) {
-        ref.read(pushNotificationServiceProvider).syncDeviceToken();
+        _pushNotificationService.syncDeviceToken();
         state = AsyncData(user);
       },
     );
@@ -81,12 +118,10 @@ class AuthController extends _$AuthController {
   }) async {
     state = const AsyncLoading();
 
-    final register = ref.read(registerUseCaseProvider);
-    final result = await register(
+    final result = await _registerUseCase(
       email: email,
       password: password,
       name: name ?? '',
-      cancelToken: _cancelToken,
     );
 
     result.fold(
@@ -94,7 +129,7 @@ class AuthController extends _$AuthController {
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
       (user) {
-        ref.read(pushNotificationServiceProvider).syncDeviceToken();
+        _pushNotificationService.syncDeviceToken();
         state = AsyncData(user);
       },
     );
@@ -103,48 +138,27 @@ class AuthController extends _$AuthController {
   Future<void> signInWithGoogle() async {
     state = const AsyncLoading();
 
-    try {
-      final googleSignIn = GoogleSignIn.instance;
-      try {
-        await googleSignIn.initialize();
-      } catch (_) {
-        // Safe to ignore if already initialized
-      }
+    final result = await _googleSignInUseCase();
 
-      final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
-
-      final googleAuthUseCase = ref.read(googleSignInUseCaseProvider);
-      final result = await googleAuthUseCase(
-        email: googleUser.email,
-        name: googleUser.displayName ?? '',
-        photoUrl: googleUser.photoUrl,
-        cancelToken: _cancelToken,
-      );
-
-      result.fold(
-        (failure) {
-          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-        },
-        (user) {
-          ref.read(pushNotificationServiceProvider).syncDeviceToken();
-          state = AsyncData(user);
-        },
-      );
-    } catch (e, st) {
-      final failure = NetworkErrorHandler.handle(e, st);
-      state = AsyncError(failure, st);
-    }
+    result.fold(
+      (failure) {
+        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      },
+      (user) {
+        _pushNotificationService.syncDeviceToken();
+        state = AsyncData(user);
+      },
+    );
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
 
-    final logout = ref.read(logoutUseCaseProvider);
-    final result = await logout(cancelToken: _cancelToken);
+    final result = await _logoutUseCase();
 
     result.fold(
       (failure) {
-        // Even if remote logout fails, user local token is cleared
+        // Even if remote session revocation failed, local session is cleared
         state = const AsyncData(null);
       },
       (_) {
@@ -159,17 +173,15 @@ class AuthController extends _$AuthController {
     String? phone,
     String? photoUrl,
   }) async {
-    if (state.value == null) return;
+    if (state.valueOrNull == null) return;
 
     state = const AsyncLoading();
 
-    final updateProfile = ref.read(updateProfileUseCaseProvider);
-    final result = await updateProfile(
+    final result = await _updateProfileUseCase(
       name: name,
       email: email,
       phone: phone,
       photoUrl: photoUrl,
-      cancelToken: _cancelToken,
     );
 
     result.fold(
