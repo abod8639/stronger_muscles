@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing a product review.
-@immutable
 class ReviewEntity {
   final String id;
   final String productId;
@@ -84,5 +81,6 @@ class ReviewEntity {
       );
 
   @override
-  String toString() => 'ReviewEntity(id: $id, userName: $userName, rating: $rating)';
+  String toString() =>
+      'ReviewEntity(id: $id, userName: $userName, rating: $rating)';
 }

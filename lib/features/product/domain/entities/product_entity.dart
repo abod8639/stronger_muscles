@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/product/domain/entities/image_url_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_category_entity.dart';
@@ -6,7 +5,6 @@ import 'package:stronger_muscles/features/product/domain/entities/product_size_e
 
 /// Pure domain entity representing a product.
 /// Encapsulates all domain-level product logic and business rules.
-@immutable
 class ProductEntity {
   final String id;
   final LocalizedStringEntity? name;

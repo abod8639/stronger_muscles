@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing a product size variant with its pricing.
-@immutable
 class ProductSizeEntity {
   final String size;
   final double price;

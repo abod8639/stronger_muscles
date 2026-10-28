@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/product/domain/entities/category_entity.dart';
-import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
+import 'package:stronger_muscles/features/profile/profile_feature.dart';
 
 part 'category_model.freezed.dart';
 part 'category_model.g.dart';

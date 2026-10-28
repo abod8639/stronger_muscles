@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/features/home/home_feature.dart';
-import 'package:stronger_muscles/features/product/product_feature.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart'
+    hide SearchProductsUseCase, searchProductsUseCaseProvider;
 import 'package:stronger_muscles/features/profile/profile_feature.dart';
 import 'package:stronger_muscles/features/search/domain/usecases/calculate_price_bounds_usecase.dart';
 import 'package:stronger_muscles/features/search/domain/usecases/filter_by_price_usecase.dart';

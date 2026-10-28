@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing a localized string.
-@immutable
 class LocalizedStringEntity {
   final String? ar;
   final String? en;

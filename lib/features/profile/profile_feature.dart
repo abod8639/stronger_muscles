@@ -6,6 +6,7 @@ library;
 // Domain Entities & Models
 export 'domain/entities/address_entity.dart';
 export 'data/models/address_model.dart';
+export 'data/models/localized_string_model.dart';
 
 // Presentation Controllers
 export 'presentation/controllers/address_controller.dart'

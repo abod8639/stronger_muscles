@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing image URLs at multiple resolutions.
-@immutable
 class ImageUrlEntity {
   final String thumbnail;
   final String medium;

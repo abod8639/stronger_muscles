@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 
 /// Pure domain entity representing a product category association.
-@immutable
 class ProductCategoryEntity {
   final String id;
   final LocalizedStringEntity? name;

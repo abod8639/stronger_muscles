@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
+import 'package:stronger_muscles/features/profile/profile_feature.dart';
 import 'package:stronger_muscles/features/product/data/models/image_url_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_category_model.dart';
 import 'package:stronger_muscles/features/product/data/models/product_size_model.dart';

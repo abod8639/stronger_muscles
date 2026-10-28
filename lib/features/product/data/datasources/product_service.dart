@@ -1,15 +1,12 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/config/api_config.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import '../../../../core/config/api_config.dart';
-import '../../../../core/errors/failures.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
-part 'product_service.g.dart';
-
-@Riverpod(keepAlive: true)
-ProductService productService(ProductServiceRef ref) {
+final productServiceProvider = Provider<ProductService>((ref) {
   return ProductService(ref.watch(apiServiceProvider));
-}
+});
 
 class ProductService {
   final ApiService _apiService;
