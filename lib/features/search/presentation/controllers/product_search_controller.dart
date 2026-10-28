@@ -54,7 +54,7 @@ class ProductSearchController extends _$ProductSearchController {
     });
 
     // Initialize with home products if they are already loaded
-    final homeProducts = ref.read(homeControllerProvider).value;
+    final homeProducts = ref.read(homeControllerProvider).valueOrNull;
     if (homeProducts != null && homeProducts.isNotEmpty) {
       _localProducts = homeProducts;
       _combinedResults = homeProducts;
@@ -116,7 +116,7 @@ class ProductSearchController extends _$ProductSearchController {
 
     _hasSearched = true;
     final locale = ref.read(languageControllerProvider).languageCode;
-    final homeProducts = ref.read(homeControllerProvider).value ?? [];
+    final homeProducts = ref.read(homeControllerProvider).valueOrNull ?? [];
     final source = _localProducts.isNotEmpty ? _localProducts : homeProducts;
 
     // Use prioritized local filtering
