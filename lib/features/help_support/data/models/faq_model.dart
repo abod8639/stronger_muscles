@@ -1,15 +1,24 @@
 import 'package:flutter/foundation.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
+import '../../domain/entities/faq_entity.dart';
 
-class FaqModel extends FaqEntity {
+/// Data Transfer Object for FAQs, strictly decoupled from [FaqEntity].
+class FaqModel {
+  final String id;
+  final String questionEn;
+  final String questionAr;
+  final String answerEn;
+  final String answerAr;
+  final String category;
+  final List<String> tags;
+
   const FaqModel({
-    required super.id,
-    required super.questionEn,
-    required super.questionAr,
-    required super.answerEn,
-    required super.answerAr,
-    required super.category,
-    super.tags,
+    required this.id,
+    required this.questionEn,
+    required this.questionAr,
+    required this.answerEn,
+    required this.answerAr,
+    required this.category,
+    this.tags = const [],
   });
 
   /// Defensive JSON deserializer with safe fallback defaults preventing TypeError and NullPointer.
@@ -20,10 +29,7 @@ class FaqModel extends FaqEntity {
       questionAr: (json['question_ar'] ?? json['questionAr'] ?? '').toString(),
       answerEn: (json['answer_en'] ?? json['answerEn'] ?? '').toString(),
       answerAr: (json['answer_ar'] ?? json['answerAr'] ?? '').toString(),
-      category: FaqCategory.values.firstWhere(
-        (c) => c.name == json['category']?.toString(),
-        orElse: () => FaqCategory.ordersShipping,
-      ),
+      category: (json['category'] ?? FaqCategory.ordersShipping.name).toString(),
       tags: (json['tags'] is List)
           ? (json['tags'] as List)
               .map((e) => e?.toString() ?? '')
@@ -45,21 +51,9 @@ class FaqModel extends FaqEntity {
       'question_ar': questionAr,
       'answer_en': answerEn,
       'answer_ar': answerAr,
-      'category': category.name,
+      'category': category,
       'tags': tags,
     };
-  }
-
-  factory FaqModel.fromEntity(FaqEntity entity) {
-    return FaqModel(
-      id: entity.id,
-      questionEn: entity.questionEn,
-      questionAr: entity.questionAr,
-      answerEn: entity.answerEn,
-      answerAr: entity.answerAr,
-      category: entity.category,
-      tags: entity.tags,
-    );
   }
 }
 
