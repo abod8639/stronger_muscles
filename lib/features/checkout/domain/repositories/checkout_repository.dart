@@ -1,13 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import '../entities/checkout_params.dart';
+import '../entities/checkout_result_entity.dart';
 
-/// Domain contract for processing checkout orders and payments using the Either pattern.
+/// Abstract Pure Dart Checkout Repository contract.
+///
+/// Follows Dependency Inversion Principle (DIP). Returns [Either<Failure, T>]
+/// for functional error handling.
 abstract class CheckoutRepository {
-  Future<Either<Failure, CheckoutResultEntity>> placeOrder(
-    CheckoutParams params, {
-    CancelToken? cancelToken,
-  });
+  Future<Either<Failure, CheckoutResultEntity>> placeOrder(CheckoutParams params);
 }
