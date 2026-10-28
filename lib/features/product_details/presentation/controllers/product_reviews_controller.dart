@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/product/domain/entities/review_entity.dart';
-import 'package:stronger_muscles/features/product/domain/usecases/review_usecase_providers.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 final productReviewsControllerProvider = StateNotifierProvider.autoDispose.family<
     ProductReviewsController,
@@ -11,73 +10,80 @@ final productReviewsControllerProvider = StateNotifierProvider.autoDispose.famil
   return ProductReviewsController(ref, productId);
 });
 
-final userProductReviewProvider = FutureProvider.autoDispose.family<ReviewEntity?, String>((ref, productId) async {
+final userProductReviewProvider =
+    FutureProvider.autoDispose.family<ReviewEntity?, String>((ref, productId) async {
   final user = ref.watch(authControllerProvider).valueOrNull;
   if (user == null) return null;
 
   final getUserReviewUseCase = ref.watch(getUserProductReviewUseCaseProvider);
-  return getUserReviewUseCase(productId);
+  final either = await getUserReviewUseCase(productId);
+  return either.fold((_) => null, (review) => review);
 });
 
-class ProductReviewsController extends StateNotifier<AsyncValue<List<ReviewEntity>>> {
+class ProductReviewsController
+    extends StateNotifier<AsyncValue<List<ReviewEntity>>> {
   final Ref _ref;
   final String productId;
 
-  ProductReviewsController(this._ref, this.productId) : super(const AsyncValue.loading()) {
+  ProductReviewsController(this._ref, this.productId)
+      : super(const AsyncValue.loading()) {
     fetchReviews();
   }
 
   Future<void> fetchReviews() async {
     state = const AsyncValue.loading();
-    try {
-      final reviews = await _ref.read(getProductReviewsUseCaseProvider)(productId);
-      state = AsyncValue.data(reviews);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    final either = await _ref.read(getProductReviewsUseCaseProvider)(productId);
+    state = either.fold(
+      (failure) => AsyncValue.error(failure, StackTrace.current),
+      (reviews) => AsyncValue.data(reviews),
+    );
   }
 
   Future<bool> submitReview({
     required double rating,
     required String comment,
   }) async {
-    try {
-      final newReview = await _ref.read(submitReviewUseCaseProvider)(
-        productId: productId,
-        rating: rating,
-        comment: comment,
-      );
+    final either = await _ref.read(submitReviewUseCaseProvider)(
+      productId: productId,
+      rating: rating,
+      comment: comment,
+    );
 
-      final currentReviews = state.valueOrNull ?? [];
-      final existingIndex = currentReviews.indexWhere((r) => r.id == newReview.id || r.userId == newReview.userId);
+    return either.fold(
+      (failure) => false,
+      (newReview) {
+        final currentReviews = state.valueOrNull ?? [];
+        final existingIndex = currentReviews.indexWhere(
+          (r) => r.id == newReview.id || r.userId == newReview.userId,
+        );
 
-      List<ReviewEntity> updatedList;
-      if (existingIndex >= 0) {
-        updatedList = List.from(currentReviews);
-        updatedList[existingIndex] = newReview;
-      } else {
-        updatedList = [newReview, ...currentReviews];
-      }
+        List<ReviewEntity> updatedList;
+        if (existingIndex >= 0) {
+          updatedList = List.from(currentReviews);
+          updatedList[existingIndex] = newReview;
+        } else {
+          updatedList = [newReview, ...currentReviews];
+        }
 
-      state = AsyncValue.data(updatedList);
-      _ref.invalidate(userProductReviewProvider(productId));
-      return true;
-    } catch (e) {
-      return false;
-    }
+        state = AsyncValue.data(updatedList);
+        _ref.invalidate(userProductReviewProvider(productId));
+        return true;
+      },
+    );
   }
 
   Future<bool> deleteReview(String reviewId) async {
-    try {
-      await _ref.read(deleteReviewUseCaseProvider)(reviewId);
-      final currentReviews = state.valueOrNull ?? [];
-      state = AsyncValue.data(
-        currentReviews.where((r) => r.id != reviewId).toList(),
-      );
-      _ref.invalidate(userProductReviewProvider(productId));
-      return true;
-    } catch (e) {
-      return false;
-    }
+    final either = await _ref.read(deleteReviewUseCaseProvider)(reviewId);
+    return either.fold(
+      (failure) => false,
+      (_) {
+        final currentReviews = state.valueOrNull ?? [];
+        state = AsyncValue.data(
+          currentReviews.where((r) => r.id != reviewId).toList(),
+        );
+        _ref.invalidate(userProductReviewProvider(productId));
+        return true;
+      },
+    );
   }
 }
