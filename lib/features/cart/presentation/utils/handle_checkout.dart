@@ -1,16 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+/// Handles navigation to checkout or login screen based on auth and cart state.
 Future<void> handleCheckout(WidgetRef ref) async {
-  final cartState = ref.read(cartControllerProvider);
+  final cartItems = ref.read(cartControllerProvider).valueOrNull ?? [];
 
-  if (cartState.value == null || cartState.value!.isEmpty) {
+  if (cartItems.isEmpty) {
     return;
   }
-  if (ref.read(authControllerProvider.notifier).isLoggedIn) {
+
+  final isLoggedIn = ref.read(authControllerProvider).valueOrNull != null;
+
+  if (isLoggedIn) {
     return AppGuard.runSafe(
       ref,
       () async => ref.read(routerProvider).push(AppRoutes.checkout),
