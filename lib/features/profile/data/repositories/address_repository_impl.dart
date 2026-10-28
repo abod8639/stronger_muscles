@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:hive/hive.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_local_datasource.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_remote_datasource.dart';
 import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/data/mappers/address_mapper.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/domain/repositories/address_repository.dart';
 
@@ -11,94 +15,287 @@ part 'address_repository_impl.g.dart';
 
 @Riverpod(keepAlive: true)
 AddressRepository addressRepository(AddressRepositoryRef ref) {
-  return AddressRepositoryImpl(ref.watch(addressServiceProvider));
+  return AddressRepositoryImpl(
+    remoteDataSource: ref.watch(addressServiceProvider),
+    localDataSource: AddressLocalDataSourceImpl(),
+  );
 }
 
-/// Concrete implementation of [AddressRepository].
-/// Handles remote API synchronization and Hive caching,
-/// mapping between internal [AddressModel] and domain [AddressEntity].
+/// Single Source of Truth implementation of [AddressRepository].
+/// Coordinates between [AddressRemoteDataSource] and [AddressLocalDataSource]
+/// with functional error handling via [Either].
 class AddressRepositoryImpl implements AddressRepository {
-  final AddressService _service;
-  final Box<AddressModel> _box = Hive.box<AddressModel>('addresses');
+  final AddressRemoteDataSource _remoteDataSource;
+  final AddressLocalDataSource _localDataSource;
 
-  AddressRepositoryImpl(this._service);
+  AddressRepositoryImpl({
+    required AddressRemoteDataSource remoteDataSource,
+    AddressLocalDataSource? localDataSource,
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource ?? AddressLocalDataSourceImpl();
 
-  Completer<List<AddressEntity>>? _fetchCompleter;
+  Completer<Either<Failure, List<AddressEntity>>>? _fetchCompleter;
 
   @override
-  List<AddressEntity> getCachedAddresses() =>
-      _box.values.map((a) => a.toEntity()).toList();
+  Either<Failure, List<AddressEntity>> getCachedAddresses() {
+    try {
+      final cached = _localDataSource.getCachedAddresses();
+      return Right(cached.map((m) => m.toDomain()).toList());
+    } on HiveError catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'خطأ في قراءة العناوين المخزنة محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'فشل استرجاع العناوين المخزنة محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    }
+  }
 
   @override
-  Future<List<AddressEntity>> getAddresses() async {
+  Future<Either<Failure, List<AddressEntity>>> getAddresses() async {
     if (_fetchCompleter != null) {
       return _fetchCompleter!.future;
     }
 
-    _fetchCompleter = Completer<List<AddressEntity>>();
+    _fetchCompleter = Completer<Either<Failure, List<AddressEntity>>>();
 
     try {
-      final addresses = await _service.getAddresses();
-
-      await _box.clear();
-      for (var address in addresses) {
-        await _box.put(address.id, address);
-      }
-
-      final entities = addresses.map((a) => a.toEntity()).toList();
-      _fetchCompleter!.complete(entities);
-      return entities;
-    } on Failure catch (e) {
-      if (e.type == FailureType.network && _box.isNotEmpty) {
-        final cached = getCachedAddresses();
-        _fetchCompleter!.complete(cached);
-        return cached;
-      }
-      _fetchCompleter!.completeError(e);
-      rethrow;
-    } catch (e) {
-      _fetchCompleter!.completeError(e);
-      rethrow;
+      final models = await _remoteDataSource.getAddresses();
+      await _localDataSource.cacheAddresses(models);
+      final entities = models.map((m) => m.toDomain()).toList();
+      final result = Right<Failure, List<AddressEntity>>(entities);
+      _fetchCompleter!.complete(result);
+      return result;
+    } on Failure catch (failure) {
+      final result = _fallbackCachedOrFailure(failure);
+      _fetchCompleter!.complete(result);
+      return result;
+    } on DioException catch (e, st) {
+      final failure = _mapDioException(e, st);
+      final result = _fallbackCachedOrFailure(failure);
+      _fetchCompleter!.complete(result);
+      return result;
+    } on HiveError catch (e, st) {
+      final failure = Left<Failure, List<AddressEntity>>(
+        CacheFailure(
+          message: 'خطأ في قاعدة البيانات المحلية',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+      _fetchCompleter!.complete(failure);
+      return failure;
+    } on FormatException catch (e, st) {
+      final failure = Left<Failure, List<AddressEntity>>(
+        ParsingFailure(
+          message: 'خطأ في معالجة بيانات العناوين',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+      _fetchCompleter!.complete(failure);
+      return failure;
+    } catch (e, st) {
+      final failure = UnknownFailure(
+        message: 'حدث خطأ غير متوقع أثناء جلب العناوين',
+        originalError: e,
+        stackTrace: st,
+      );
+      final result = _fallbackCachedOrFailure(failure);
+      _fetchCompleter!.complete(result);
+      return result;
     } finally {
       _fetchCompleter = null;
     }
   }
 
-  @override
-  Future<AddressEntity> createAddress(AddressEntity address) async {
-    final model = AddressModel.fromEntity(address);
-    final newAddress = await _service.createAddress(model);
-    await _box.put(newAddress.id, newAddress);
-    return newAddress.toEntity();
-  }
-
-  @override
-  Future<AddressEntity> updateAddress(int id, AddressEntity address) async {
-    final model = AddressModel.fromEntity(address);
-    final updatedAddress = await _service.updateAddress(id, model);
-    await _box.put(updatedAddress.id, updatedAddress);
-    return updatedAddress.toEntity();
-  }
-
-  @override
-  Future<void> deleteAddress(int id) async {
-    await _service.deleteAddress(id);
-    await _box.delete(id);
-  }
-
-  @override
-  Future<AddressEntity> setDefaultAddress(int id) async {
-    final updatedAddress = await _service.setDefaultAddress(id);
-
-    final all = _box.values.toList();
-    for (var addr in all) {
-      if (addr.id == id) {
-        await _box.put(addr.id, updatedAddress);
-      } else if (addr.isDefault) {
-        await _box.put(addr.id, addr.copyWith(isDefault: false));
+  Either<Failure, List<AddressEntity>> _fallbackCachedOrFailure(
+    Failure failure,
+  ) {
+    try {
+      final cached = _localDataSource.getCachedAddresses();
+      if (cached.isNotEmpty) {
+        return Right(cached.map((m) => m.toDomain()).toList());
       }
-    }
+    } catch (_) {}
+    return Left(failure);
+  }
 
-    return updatedAddress.toEntity();
+  @override
+  Future<Either<Failure, AddressEntity>> createAddress(
+    AddressEntity address,
+  ) async {
+    try {
+      final model = address.toModel();
+      final createdModel = await _remoteDataSource.createAddress(model);
+      await _localDataSource.cacheAddress(createdModel);
+      return Right(createdModel.toDomain());
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on DioException catch (e, st) {
+      return Left(_mapDioException(e, st));
+    } on HiveError catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'خطأ في حفظ العنوان محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } on FormatException catch (e, st) {
+      return Left(
+        ParsingFailure(
+          message: 'خطأ في معالجة استجابة إضافة العنوان',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } catch (e, st) {
+      return Left(
+        UnknownFailure(
+          message: 'فشل إضافة العنوان',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddressEntity>> updateAddress(
+    int id,
+    AddressEntity address,
+  ) async {
+    try {
+      final model = address.toModel();
+      final updatedModel = await _remoteDataSource.updateAddress(id, model);
+      await _localDataSource.cacheAddress(updatedModel);
+      return Right(updatedModel.toDomain());
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on DioException catch (e, st) {
+      return Left(_mapDioException(e, st));
+    } on HiveError catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'خطأ في تحديث العنوان محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } on FormatException catch (e, st) {
+      return Left(
+        ParsingFailure(
+          message: 'خطأ في معالجة استجابة تحديث العنوان',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } catch (e, st) {
+      return Left(
+        UnknownFailure(
+          message: 'فشل تحديث العنوان',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> deleteAddress(int id) async {
+    try {
+      await _remoteDataSource.deleteAddress(id);
+      await _localDataSource.deleteAddress(id);
+      return const Right(unit);
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on DioException catch (e, st) {
+      return Left(_mapDioException(e, st));
+    } on HiveError catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'خطأ في حذف العنوان محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } catch (e, st) {
+      return Left(
+        UnknownFailure(
+          message: 'فشل حذف العنوان',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, AddressEntity>> setDefaultAddress(int id) async {
+    try {
+      final updatedModel = await _remoteDataSource.setDefaultAddress(id);
+      await _localDataSource.setDefaultAddress(id, updatedModel);
+      return Right(updatedModel.toDomain());
+    } on Failure catch (failure) {
+      return Left(failure);
+    } on DioException catch (e, st) {
+      return Left(_mapDioException(e, st));
+    } on HiveError catch (e, st) {
+      return Left(
+        CacheFailure(
+          message: 'خطأ في تعيين العنوان الافتراضي محلياً',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    } catch (e, st) {
+      return Left(
+        UnknownFailure(
+          message: 'فشل تعيين العنوان الافتراضي',
+          originalError: e,
+          stackTrace: st,
+        ),
+      );
+    }
+  }
+
+  Failure _mapDioException(DioException e, StackTrace st) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return TimeoutFailure(originalError: e, stackTrace: st);
+      case DioExceptionType.badResponse:
+        final statusCode = e.response?.statusCode;
+        final message = e.response?.data is Map<String, dynamic>
+            ? (e.response?.data['message'] as String? ?? 'خطأ في استجابة الخادم')
+            : 'خطأ في استجابة الخادم ($statusCode)';
+        return ServerFailure(
+          message: message,
+          statusCode: statusCode,
+          originalError: e,
+          stackTrace: st,
+        );
+      case DioExceptionType.cancel:
+        return CancelFailure(originalError: e, stackTrace: st);
+      case DioExceptionType.connectionError:
+        return NetworkFailure(originalError: e, stackTrace: st);
+      default:
+        return UnknownFailure(
+          message: e.message ?? 'حدث خطأ غير متوقع في الاتصال',
+          originalError: e,
+          stackTrace: st,
+        );
+    }
   }
 }
