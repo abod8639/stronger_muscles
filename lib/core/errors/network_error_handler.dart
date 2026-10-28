@@ -91,6 +91,14 @@ class NetworkErrorHandler {
       );
     }
 
+    if (error is CacheException) {
+      return CacheFailure(
+        message: error.message,
+        originalError: error,
+        stackTrace: stackTrace,
+      );
+    }
+
     return UnknownFailure(
       message: error is String ? error : 'حدث خطأ غير متوقع',
       originalError: error,
