@@ -3,7 +3,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
-import 'package:stronger_muscles/features/product/data/models/review_model.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ShowReviewsList extends StatelessWidget {
