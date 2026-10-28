@@ -23,7 +23,9 @@ class MyTicketsSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(helpSupportControllerProvider);
+    final ticketsState = ref.watch(
+      helpSupportControllerProvider.select((s) => s.ticketsState),
+    );
     final notifier = ref.read(helpSupportControllerProvider.notifier);
     final isDark = context.isDark;
     final height = MediaQuery.of(context).size.height * 0.8;
@@ -85,7 +87,7 @@ class MyTicketsSheet extends ConsumerWidget {
           ),
           const Divider(height: 24),
           Expanded(
-            child: state.ticketsState.when(
+            child: ticketsState.when(
               data: (tickets) => tickets.isEmpty
                   ? Center(
                       child: Column(
