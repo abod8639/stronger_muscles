@@ -8,6 +8,7 @@ import 'package:stronger_muscles/features/payment/domain/entities/payment_result
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+/// Presentation page for rendering online payment gateway initiation result and redirection.
 class PaymentGatewayView extends ConsumerWidget {
   final PaymentResultEntity paymentResult;
   final String? orderId;

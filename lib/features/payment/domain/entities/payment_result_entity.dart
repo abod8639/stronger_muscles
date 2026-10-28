@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing the result of a payment initiation.
-@immutable
 class PaymentResultEntity {
   final bool success;
   final String paymentUrl;

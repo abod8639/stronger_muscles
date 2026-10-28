@@ -42,6 +42,7 @@ class OrderRemoteDatasourceImpl implements OrderRemoteDatasource {
     try {
       final queryParams = <String, dynamic>{
         'page': page,
+        // ignore: use_null_aware_elements
         if (limit != null) 'limit': limit,
       };
 
