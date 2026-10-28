@@ -5,7 +5,8 @@ import 'package:stronger_muscles/core/services/api_service.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/features/payment/data/datasources/payment_remote_datasource.dart';
 import 'package:stronger_muscles/features/payment/data/models/payment_init_result.dart';
-import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
+import 'package:stronger_muscles/features/payment/data/repositories/payment_repository_impl.dart';
+import 'package:stronger_muscles/features/payment/domain/repositories/payment_repository.dart';
 
 class FakeApiService implements ApiService {
   String? lastPostPath;
@@ -25,7 +26,7 @@ class FakeApiService implements ApiService {
     lastPostData = data;
 
     if (shouldThrow) {
-      throw Failure(message: 'Network request failed', type: FailureType.network);
+      throw const Failure(message: 'Network request failed', type: FailureType.network);
     }
 
     return Response(
@@ -118,7 +119,7 @@ void main() {
         },
       };
 
-      final result = await repo.initiatePayment(
+      final either = await repo.initiatePayment(
         orderId: 45,
         gateway: 'stripe',
         firstName: 'Dexter',
@@ -131,28 +132,26 @@ void main() {
         'first_name': 'Dexter',
         'last_name': 'Morgan',
       });
+      expect(either.isRight(), true);
+      final result = either.getOrElse((_) => throw Exception('Expected Right'));
       expect(result.success, true);
       expect(result.paymentUrl, 'https://checkout.stripe.com/pay/pi_123');
       expect(result.transactionId, 'pi_123');
       expect(result.reference, '45');
     });
 
-    test('initiatePayment throws Failure on invalid server response', () async {
+    test('initiatePayment returns Left(Failure) on invalid server response', () async {
       fakeApi.mockPostResponse = {'status': 'error', 'data': null};
 
-      expect(
-        () => repo.initiatePayment(orderId: 10),
-        throwsA(isA<Failure>()),
-      );
+      final either = await repo.initiatePayment(orderId: 10);
+      expect(either.isLeft(), true);
     });
 
-    test('initiatePayment propagates Failure on network error', () async {
+    test('initiatePayment returns Left(Failure) on network error', () async {
       fakeApi.shouldThrow = true;
 
-      expect(
-        () => repo.initiatePayment(orderId: 10),
-        throwsA(isA<Failure>()),
-      );
+      final either = await repo.initiatePayment(orderId: 10);
+      expect(either.isLeft(), true);
     });
   });
 
