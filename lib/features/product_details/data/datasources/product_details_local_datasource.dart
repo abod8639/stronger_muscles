@@ -8,7 +8,7 @@ class ProductDetailsLocalDataSource {
   static const String reviewsBoxName = 'product_reviews';
 
   Box<ProductModel>? _productBox;
-  Box<List>? _reviewsBox;
+  final Box<List>? _reviewsBox;
 
   final Map<String, ProductModel> _productInMemoryFallback = {};
   final Map<String, List<ReviewModel>> _reviewsInMemoryFallback = {};
@@ -63,8 +63,9 @@ class ProductDetailsLocalDataSource {
   /// Get cached reviews for a product.
   List<ReviewModel>? getCachedReviews(String productId) {
     try {
-      if (_reviewsBox != null && _reviewsBox!.isOpen) {
-        final list = _reviewsBox!.get(productId);
+      final box = _reviewsBox;
+      if (box != null && box.isOpen) {
+        final list = box.get(productId);
         if (list != null) {
           return list.whereType<ReviewModel>().toList();
         }
@@ -79,8 +80,9 @@ class ProductDetailsLocalDataSource {
   /// Cache reviews for a product.
   Future<void> cacheReviews(String productId, List<ReviewModel> reviews) async {
     try {
-      if (_reviewsBox != null && _reviewsBox!.isOpen) {
-        await _reviewsBox!.put(productId, reviews);
+      final box = _reviewsBox;
+      if (box != null && box.isOpen) {
+        await box.put(productId, reviews);
       }
       _reviewsInMemoryFallback[productId] = reviews;
     } catch (e) {
