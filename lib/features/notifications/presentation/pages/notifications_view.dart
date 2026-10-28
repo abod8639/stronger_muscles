@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
+import 'package:stronger_muscles/features/notifications/presentation/widgets/notification_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import '../controllers/notification_controller.dart';
-import '../widgets/notification_item_card.dart';
 
 class NotificationsView extends ConsumerWidget {
   const NotificationsView({super.key});
@@ -17,7 +17,7 @@ class NotificationsView extends ConsumerWidget {
     final isAr = Localizations.localeOf(context).languageCode == 'ar';
     final theme = Theme.of(context);
 
-    final unreadCount = state.valueOrNull?.unreadCount ?? 0;
+    final unreadCount = ref.watch(unreadNotificationCountProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -86,18 +86,61 @@ class NotificationsView extends ConsumerWidget {
             );
           }
 
+          final isLoadingMore = ref.watch(
+            notificationControllerProvider.notifier.select((n) => n.isLoadingMore),
+          );
+          final hasMore = ref.watch(
+            notificationControllerProvider.notifier.select((n) => n.hasMore),
+          );
+
+          final count = data.notifications.length + (isLoadingMore ? 1 : 0);
+
           return RefreshIndicator(
             onRefresh: () => notifier.refresh(),
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(vertical: 12),
-              itemCount: data.notifications.length,
+              itemCount: count,
               itemBuilder: (context, index) {
-                if (index < 0 || index >= data.notifications.length) {
-                  return const SizedBox.shrink();
+                if (index >= data.notifications.length) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                      ),
+                    ),
+                  );
                 }
+
+                // Trigger pagination when reaching near bottom
+                if (index == data.notifications.length - 3 && hasMore && !isLoadingMore) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    notifier.loadMoreNotifications();
+                  });
+                }
+
                 final notification = data.notifications[index];
-                return NotificationItemCard(notification: notification);
+                return Dismissible(
+                  key: ValueKey(notification.id),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.error,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
+                  ),
+                  onDismissed: (_) {
+                    notifier.deleteNotification(notification.id);
+                  },
+                  child: NotificationItemCard(notification: notification),
+                );
               },
             ),
           );
