@@ -1,11 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:hive/hive.dart';
-import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
+import 'package:stronger_muscles/features/order/order_feature.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
-import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
+import 'package:stronger_muscles/features/profile/profile_providers.dart';
+import 'package:stronger_muscles/features/wishlist/wishlist_feature.dart';
 
 part 'profile_controller.g.dart';
 
@@ -29,23 +28,12 @@ class ProfileController extends _$ProfileController {
   List<AddressEntity> get addresses =>
       ref.watch(addressControllerProvider).valueOrNull ?? [];
 
-  int get wishlistCount {
-    try {
-      if (Hive.isBoxOpen('wishlist')) {
-        return Hive.box<String>('wishlist').length;
-      }
-    } catch (_) {}
-    return 0;
-  }
+  int get wishlistCount => ref.watch(wishlistControllerProvider).length;
 
   void _clearData() {
     ref.invalidate(ordersControllerProvider);
     ref.invalidate(addressControllerProvider);
-    try {
-      if (Hive.isBoxOpen('addresses')) {
-        Hive.box('addresses').clear();
-      }
-    } catch (_) {}
+    ref.read(addressLocalDataSourceProvider).clearAddresses();
   }
 
   Future<void> loadUserData() async {
