@@ -1,47 +1,41 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/home/data/datasources/home_local_data_source.dart';
 import 'package:stronger_muscles/features/home/data/datasources/home_remote_datasource.dart';
-import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
+import 'package:stronger_muscles/features/home/data/mappers/home_mapper.dart';
+import 'package:stronger_muscles/features/home/domain/entities/selection_entity.dart';
 import 'package:stronger_muscles/features/home/domain/repositories/home_repository.dart';
-import 'package:stronger_muscles/features/product/data/datasources/category_local_datasource.dart';
-import 'package:stronger_muscles/features/product/data/datasources/product_local_datasource.dart';
-import 'package:stronger_muscles/features/product/data/models/category_model.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Concrete implementation of domain [HomeRepository].
-/// Executes operations wrapped inside [NetworkErrorHandler.execute] returning [Either<Failure, T>].
-/// Features offline cache fallback and background isolate processing.
+/// Acts as the Single Source of Truth orchestrating [HomeRemoteDataSource]
+/// and [HomeLocalDataSource] with offline-first caching and functional error handling.
 class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource _remoteDataSource;
-  final CategoryLocalDataSource? _categoryLocalDataSource;
-  final ProductLocalDataSource? _productLocalDataSource;
+  final HomeLocalDataSource _localDataSource;
 
   HomeRepositoryImpl(
-    this._remoteDataSource, [
-    this._categoryLocalDataSource,
-    this._productLocalDataSource,
-  ]);
+    this._remoteDataSource,
+    this._localDataSource,
+  );
 
   @override
   Future<Either<Failure, List<SelectionEntity>>> getHomeShortcuts({
     required String langCode,
-    CancelToken? cancelToken,
   }) async {
     return NetworkErrorHandler.execute<List<SelectionEntity>>(() async {
       try {
-        final remoteCategories = await _remoteDataSource.getCategories(
-          cancelToken: cancelToken,
-        );
+        final remoteCategories = await _remoteDataSource.getCategories();
 
         if (remoteCategories.isNotEmpty) {
+          unawaited(_localDataSource.cacheShortcuts(remoteCategories));
+
           return [
             const SelectionEntity(
               id: '',
               label: 'categoryHome',
-              icon: Icons.home,
+              iconKey: 'home',
             ),
             ...remoteCategories.map((c) => c.toEntity()),
           ];
@@ -49,24 +43,45 @@ class HomeRepositoryImpl implements HomeRepository {
       } on Failure catch (failure) {
         if (failure is CancelFailure) rethrow;
 
-        final cached = _categoryLocalDataSource?.getCachedCategories();
-        if (cached != null && cached.isNotEmpty) {
-          return _buildShortcutsFromCategories(cached, langCode);
+        final cached = await _localDataSource.getCachedShortcuts();
+        if (cached.isNotEmpty) {
+          return [
+            const SelectionEntity(
+              id: '',
+              label: 'categoryHome',
+              iconKey: 'home',
+            ),
+            ...cached.map((c) => c.toEntity()),
+          ];
         }
-        rethrow;
+        // Fallback to default shortcuts if cache is also unavailable
+        return _localDataSource
+            .getDefaultShortcuts(langCode)
+            .map((c) => c.toEntity())
+            .toList();
       } catch (_) {
-        final cached = _categoryLocalDataSource?.getCachedCategories();
-        if (cached != null && cached.isNotEmpty) {
-          return _buildShortcutsFromCategories(cached, langCode);
+        final cached = await _localDataSource.getCachedShortcuts();
+        if (cached.isNotEmpty) {
+          return [
+            const SelectionEntity(
+              id: '',
+              label: 'categoryHome',
+              iconKey: 'home',
+            ),
+            ...cached.map((c) => c.toEntity()),
+          ];
         }
-        rethrow;
+        return _localDataSource
+            .getDefaultShortcuts(langCode)
+            .map((c) => c.toEntity())
+            .toList();
       }
 
-      // Predefined fallbacks if no remote categories and empty cache
-      return _buildShortcutsFromCategories(
-        PredefinedCategories.categories,
-        langCode,
-      );
+      // Default predefined fallback if remote returns empty
+      return _localDataSource
+          .getDefaultShortcuts(langCode)
+          .map((c) => c.toEntity())
+          .toList();
     });
   }
 
@@ -74,13 +89,12 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<Either<Failure, List<ProductEntity>>> getHomeProducts({
     String? categoryId,
     int page = 1,
-    CancelToken? cancelToken,
   }) async {
     return NetworkErrorHandler.execute<List<ProductEntity>>(() async {
       // Offline-first strategy: Return cache on initial load if available
       if ((categoryId == null || categoryId.isEmpty) && page == 1) {
-        final cached = _productLocalDataSource?.getCachedProducts();
-        if (cached != null && cached.isNotEmpty) {
+        final cached = await _localDataSource.getCachedProducts();
+        if (cached.isNotEmpty) {
           return cached.map((p) => p.toEntity()).toList();
         }
       }
@@ -89,11 +103,10 @@ class HomeRepositoryImpl implements HomeRepository {
         final remoteProducts = await _remoteDataSource.getProducts(
           categoryId: categoryId,
           page: page,
-          cancelToken: cancelToken,
         );
 
-        if (remoteProducts.isNotEmpty && _productLocalDataSource != null) {
-          unawaited(_productLocalDataSource.cacheProducts(remoteProducts));
+        if (remoteProducts.isNotEmpty && (categoryId == null || categoryId.isEmpty) && page == 1) {
+          unawaited(_localDataSource.cacheProducts(remoteProducts));
         }
 
         return remoteProducts.map((p) => p.toEntity()).toList();
@@ -101,37 +114,14 @@ class HomeRepositoryImpl implements HomeRepository {
         if (failure is CancelFailure) rethrow;
 
         // On network failure, fallback gracefully to cached products
-        final cached = _productLocalDataSource?.getCachedProducts();
-        if (cached != null && cached.isNotEmpty) {
-          final filtered = (categoryId != null && categoryId.isNotEmpty)
-              ? cached.where((p) => p.categoryId == categoryId).toList()
-              : cached;
-          if (filtered.isNotEmpty) {
-            return filtered.map((p) => p.toEntity()).toList();
-          }
+        final cached = await _localDataSource.getCachedProducts(
+          categoryId: categoryId,
+        );
+        if (cached.isNotEmpty) {
+          return cached.map((p) => p.toEntity()).toList();
         }
         rethrow;
       }
     });
-  }
-
-  List<SelectionEntity> _buildShortcutsFromCategories(
-    List<CategoryModel> categories,
-    String langCode,
-  ) {
-    return [
-      const SelectionEntity(
-        id: '',
-        label: 'categoryHome',
-        icon: Icons.home,
-      ),
-      ...categories.map(
-        (cat) => SelectionEntity(
-          id: cat.id,
-          label: cat.getLocalizedName(locale: langCode),
-          icon: SelectionsModel.resolveIcon(cat.id),
-        ),
-      ),
-    ];
   }
 }
