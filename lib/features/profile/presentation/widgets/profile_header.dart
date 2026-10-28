@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 
 class ProfileHeader extends ConsumerWidget {
   const ProfileHeader({super.key});
@@ -45,8 +45,8 @@ class ProfileHeader extends ConsumerWidget {
               backgroundColor: AppColors.greyLight,
               backgroundImage:
                   user.photoUrl != null && user.photoUrl!.isNotEmpty
-                  ? NetworkImage(user.photoUrl!)
-                  : null,
+                      ? NetworkImage(user.photoUrl!)
+                      : null,
               child: user.photoUrl == null || user.photoUrl!.isEmpty
                   ? const Icon(
                       Icons.person,
