@@ -1,109 +1,92 @@
-import 'dart:async';
-import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
-import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
-import 'package:stronger_muscles/features/checkout/domain/repositories/checkout_repository.dart';
-import 'package:stronger_muscles/features/order/data/repositories/order_repository.dart';
-import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
-import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
+import 'package:hive/hive.dart';
+import '../../../../core/error/error.dart';
+import '../../domain/entities/checkout_params.dart';
+import '../../domain/entities/checkout_result_entity.dart';
+import '../../domain/repositories/checkout_repository.dart';
+import '../datasources/checkout_local_data_source.dart';
+import '../datasources/checkout_remote_data_source.dart';
+import '../mappers/checkout_mapper.dart';
+import '../models/checkout_result_model.dart';
 
-/// Implementation of [CheckoutRepository] orchestrating order creation and payment initiation
-/// using centralized error handling, background compute isolation, and timeouts.
+/// Single Source of Truth Repository Implementation for Checkout.
+///
+/// Orchestrates calls between [CheckoutRemoteDataSource] and [CheckoutLocalDataSource].
+/// Pure Dart contract adherence with functional [Either<Failure, T>] error handling.
 class CheckoutRepositoryImpl implements CheckoutRepository {
-  final OrderRepository _orderRepository;
-  final PaymentRepository _paymentRepository;
+  const CheckoutRepositoryImpl({
+    required CheckoutRemoteDataSource remoteDataSource,
+    required CheckoutLocalDataSource localDataSource,
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource;
 
-  CheckoutRepositoryImpl({
-    required OrderRepository orderRepository,
-    required PaymentRepository paymentRepository,
-  })  : _orderRepository = orderRepository,
-        _paymentRepository = paymentRepository;
+  final CheckoutRemoteDataSource _remoteDataSource;
+  final CheckoutLocalDataSource _localDataSource;
 
   @override
   Future<Either<Failure, CheckoutResultEntity>> placeOrder(
-    CheckoutParams params, {
-    CancelToken? cancelToken,
-  }) {
-    return NetworkErrorHandler.execute<CheckoutResultEntity>(() async {
-      if (cancelToken?.isCancelled ?? false) {
-        throw const CancelFailure();
-      }
+    CheckoutParams params,
+  ) async {
+    try {
+      final paramsModel = params.toModel();
 
-      // Serialize payload asynchronously on a background isolate to prevent UI freezing
-      final payload = await params.toPayloadAsync();
+      // Persist draft locally before transmission
+      await _localDataSource.saveDraft(paramsModel);
 
-      if (cancelToken?.isCancelled ?? false) {
-        throw const CancelFailure();
-      }
+      // Submit order remotely
+      final orderResult = await _remoteDataSource.submitOrder(paramsModel);
 
-      // Execute order creation with a strict timeout
-      final response = await _orderRepository.createOrder(payload).timeout(
-            const Duration(seconds: 30),
-            onTimeout: () => throw const TimeoutFailure(
-              message: 'انتهت مهلة إنشاء الطلب. يرجى التحقق من اتصالك والمحاولة مرة أخرى',
-            ),
-          );
+      String? paymentUrl = orderResult.paymentUrl;
 
-      if (cancelToken?.isCancelled ?? false) {
-        throw const CancelFailure();
-      }
-
-      PaymentResultEntity? paymentResult;
-
-      if (params.isOnlinePayment) {
-        final rawData = response['data'];
-        final dynamic rawId = (rawData is Map) ? rawData['id'] : response['id'];
-        final orderId = rawId?.toString() ?? '';
-
-        if (orderId.isEmpty) {
-          throw const ServerFailure(
-            message: 'تم استلام الطلب من الخادم ولكن تعذر الحصول على رقم الطلب لبدء عملية الدفع',
-          );
-        }
-
+      // Handle online payment gateway initiation if required
+      if (params.isOnlinePayment && orderResult.orderId.isNotEmpty) {
         try {
-          paymentResult = await _paymentRepository
-              .initiatePayment(
-                orderId: orderId,
-                gateway: params.gateway,
-                firstName: params.customerName,
-              )
-              .timeout(
-                const Duration(seconds: 30),
-                onTimeout: () => throw const TimeoutFailure(
-                  message: 'انتهت مهلة الاتصال ببوابة الدفع الإلكتروني',
-                ),
-              );
-        } catch (paymentError, paymentStackTrace) {
-          // The order has already been registered on the server.
-          // Map the error through NetworkErrorHandler and inform user clearly to prevent duplicate orders.
-          final failure = NetworkErrorHandler.handle(paymentError, paymentStackTrace);
-          throw ServerFailure(
-            message: 'تم تأكيد طلبك رقم ($orderId) بنجاح، لكن حدث خطأ أثناء تجهيز الدفع: ${failure.toMessage()}',
-            originalError: paymentError,
-            stackTrace: paymentStackTrace,
+          paymentUrl = await _remoteDataSource.initiatePayment(
+            orderId: orderResult.orderId,
+            gateway: params.gateway,
+            customerName: params.customerName,
           );
+        } catch (_) {
+          // The order was already successfully recorded on the server.
+          final finalResult = CheckoutResultModel(
+            orderId: orderResult.orderId,
+            status: orderResult.status,
+            message: 'تم تأكيد طلبك رقم (${orderResult.orderId}) بنجاح، لكن تعذر إكمال الدفع الإلكتروني تلقائياً.',
+            rawData: orderResult.rawData,
+          );
+          await _localDataSource.saveLastResult(finalResult);
+          await _localDataSource.clearDraft();
+          return right(finalResult.toEntity());
         }
       }
 
-      // Defensive parse using background isolate compute
-      return CheckoutResultEntity.fromJsonAsync(
-        response,
-        paymentResult: paymentResult,
+      final finalResult = CheckoutResultModel(
+        orderId: orderResult.orderId,
+        status: orderResult.status,
+        message: orderResult.message,
+        paymentUrl: paymentUrl,
+        rawData: orderResult.rawData,
       );
-    });
+
+      // Cache confirmed result & clear temporary draft
+      await _localDataSource.saveLastResult(finalResult);
+      await _localDataSource.clearDraft();
+
+      return right(finalResult.toEntity());
+    } on ServerException catch (e) {
+      return left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    } on TimeoutAppException catch (e) {
+      return left(TimeoutFailure(message: e.message));
+    } on CancelAppException catch (e) {
+      return left(CancelFailure(message: e.message));
+    } on CacheException catch (e) {
+      return left(CacheFailure(message: e.message));
+    } on HiveError catch (e) {
+      return left(CacheFailure(message: e.message));
+    } on FormatException catch (e) {
+      return left(ServerFailure(message: 'خطأ في تنسيق استجابة الخادم: ${e.message}'));
+    } catch (e) {
+      return left(GeneralFailure(message: e.toString()));
+    }
   }
 }
-
-final checkoutRepositoryProvider = Provider<CheckoutRepository>((ref) {
-  final orderRepository = ref.watch(orderRepositoryProvider);
-  final paymentRepository = ref.watch(paymentRepositoryProvider);
-
-  return CheckoutRepositoryImpl(
-    orderRepository: orderRepository,
-    paymentRepository: paymentRepository,
-  );
-});
