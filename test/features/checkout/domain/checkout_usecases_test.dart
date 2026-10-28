@@ -1,11 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/checkout/data/mappers/checkout_mapper.dart';
+import 'package:stronger_muscles/features/checkout/data/models/checkout_result_model.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
 import 'package:stronger_muscles/features/checkout/domain/repositories/checkout_repository.dart';
 import 'package:stronger_muscles/features/checkout/domain/usecases/place_order_usecase.dart';
+import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
+import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 
 class MockCheckoutRepository implements CheckoutRepository {
   CheckoutParams? lastParams;
@@ -13,9 +16,8 @@ class MockCheckoutRepository implements CheckoutRepository {
 
   @override
   Future<Either<Failure, CheckoutResultEntity>> placeOrder(
-    CheckoutParams params, {
-    CancelToken? cancelToken,
-  }) async {
+    CheckoutParams params,
+  ) async {
     lastParams = params;
     if (!shouldSucceed) {
       return const Left(ServerFailure(message: 'Payment failed'));
@@ -39,7 +41,7 @@ void main() {
     useCase = PlaceOrderUseCase(mockRepository);
   });
 
-  group('Checkout Clean Architecture Tests', () {
+  group('Checkout Clean Architecture & Domain Tests', () {
     test('PlaceOrderUseCase executes successfully with cash payment', () async {
       const params = CheckoutParams(
         addressId: 'addr_1',
@@ -118,7 +120,7 @@ void main() {
       expect(cashParams.isOnlinePayment, isFalse);
     });
 
-    test('CheckoutParams formats payload map properly', () {
+    test('CheckoutParams formats payload map properly via extension mapper', () {
       const params = CheckoutParams(
         addressId: 'addr_abc',
         paymentMethod: 'cash',
@@ -143,18 +145,52 @@ void main() {
       expect((payload['items'] as List).first['quantity'], 3);
     });
 
-    test('CheckoutResultEntity parses json safely with fallback defaults', () {
-      final emptyResult = CheckoutResultEntity.fromJson(const {});
+    test('CheckoutResultModel parses json safely with fallback defaults and converts to entity', () {
+      final emptyResult = CheckoutResultModel.fromJson(const {}).toEntity();
       expect(emptyResult.orderId, '');
       expect(emptyResult.status, 'success');
       expect(emptyResult.paymentUrl, isNull);
 
-      final nestedResult = CheckoutResultEntity.fromJson(const {
+      final nestedResult = CheckoutResultModel.fromJson(const {
         'status': 'ok',
-        'data': {'id': 9999},
-      });
+        'data': {'id': 9999, 'payment_url': 'https://pay.example.com'},
+      }).toEntity();
       expect(nestedResult.orderId, '9999');
       expect(nestedResult.status, 'ok');
+      expect(nestedResult.paymentUrl, 'https://pay.example.com');
+    });
+
+    test('CheckoutController guards against submission with no selected address', () async {
+      final controller = CheckoutController.test(
+        placeOrderUseCase: useCase,
+        initialAddress: null,
+      );
+
+      await controller.placeOrder();
+
+      expect(controller.state.hasError, isTrue);
+      expect(controller.state.failure, isA<ValidationFailure>());
+      expect(mockRepository.lastParams, isNull);
+    });
+
+    test('CheckoutController guards against submission with empty cart', () async {
+      const address = AddressEntity(
+        id: 1,
+        street: 'Main St',
+        city: 'Cairo',
+      );
+
+      final controller = CheckoutController.test(
+        placeOrderUseCase: useCase,
+        initialAddress: address,
+        testCartItems: const [],
+      );
+
+      await controller.placeOrder();
+
+      expect(controller.state.hasError, isTrue);
+      expect(controller.state.failure, isA<ValidationFailure>());
+      expect(mockRepository.lastParams, isNull);
     });
   });
 }
