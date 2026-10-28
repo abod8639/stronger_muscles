@@ -1,83 +1,83 @@
-import 'package:flutter/foundation.dart';
-import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
+/// 100% Pure Dart Checkout Entities.
+///
+/// Contains zero framework, Flutter UI, Dio, or Hive dependencies.
+library;
 
-/// Pure domain entity representing an item included in checkout.
-@immutable
 class CheckoutItemEntity {
-  final String productId;
-  final int quantity;
-  final String? selectedFlavor;
-  final String? selectedSize;
-  final double unitPrice;
-  final String productName;
-
   const CheckoutItemEntity({
     required this.productId,
     required this.quantity,
+    this.productName = '',
+    this.unitPrice = 0.0,
     this.selectedFlavor,
     this.selectedSize,
-    this.unitPrice = 0.0,
-    this.productName = '',
+    this.imageUrl,
   });
 
-  /// Factory with defensive fallbacks preventing null or invalid values.
-  factory CheckoutItemEntity.fromCartItem(CartItemEntity item, {String locale = 'en'}) {
-    final validQty = item.quantity <= 0 ? 1 : item.quantity;
-    final validPrice = item.product.baseEffectivePrice.isNaN ? 0.0 : item.product.baseEffectivePrice;
+  final String productId;
+  final String productName;
+  final int quantity;
+  final double unitPrice;
+  final String? selectedFlavor;
+  final String? selectedSize;
+  final String? imageUrl;
 
+  double get totalPrice => unitPrice * quantity;
+
+  CheckoutItemEntity copyWith({
+    String? productId,
+    String? productName,
+    int? quantity,
+    double? unitPrice,
+    String? selectedFlavor,
+    String? selectedSize,
+    String? imageUrl,
+  }) {
     return CheckoutItemEntity(
-      productId: item.product.id,
-      quantity: validQty,
-      selectedFlavor: item.selectedFlavor,
-      selectedSize: item.selectedSize,
-      unitPrice: validPrice,
-      productName: item.product.getLocalizedName(locale: locale),
+      productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
+      quantity: quantity ?? this.quantity,
+      unitPrice: unitPrice ?? this.unitPrice,
+      selectedFlavor: selectedFlavor ?? this.selectedFlavor,
+      selectedSize: selectedSize ?? this.selectedSize,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 
-  /// Safe deserialization from JSON with default values preventing type errors.
-  factory CheckoutItemEntity.fromJson(Map<String, dynamic> json) {
-    return CheckoutItemEntity(
-      productId: (json['product_id'] ?? json['id'] ?? '').toString(),
-      quantity: (json['quantity'] is num) ? (json['quantity'] as num).toInt() : 1,
-      selectedFlavor: json['selected_flavor']?.toString(),
-      selectedSize: json['selected_size']?.toString(),
-      unitPrice: (json['unit_price'] is num) ? (json['unit_price'] as num).toDouble() : 0.0,
-      productName: (json['product_name'] ?? json['name'] ?? '').toString(),
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CheckoutItemEntity &&
+        other.productId == productId &&
+        other.productName == productName &&
+        other.quantity == quantity &&
+        other.unitPrice == unitPrice &&
+        other.selectedFlavor == selectedFlavor &&
+        other.selectedSize == selectedSize &&
+        other.imageUrl == imageUrl;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(
+      productId,
+      productName,
+      quantity,
+      unitPrice,
+      selectedFlavor,
+      selectedSize,
+      imageUrl,
     );
   }
 
-  Map<String, dynamic> toMap() => {
-        'product_id': productId,
-        'quantity': quantity,
-        if (selectedFlavor != null) 'selected_flavor': selectedFlavor,
-        if (selectedSize != null) 'selected_size': selectedSize,
-      };
-
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CheckoutItemEntity &&
-          runtimeType == other.runtimeType &&
-          productId == other.productId &&
-          quantity == other.quantity &&
-          selectedFlavor == other.selectedFlavor &&
-          selectedSize == other.selectedSize;
-
-  @override
-  int get hashCode =>
-      Object.hash(productId, quantity, selectedFlavor, selectedSize);
+  String toString() {
+    return 'CheckoutItemEntity(productId: $productId, name: $productName, quantity: $quantity, price: $unitPrice)';
+  }
 }
 
 /// Pure domain parameters object passed to process the order placement.
-@immutable
 class CheckoutParams {
-  final dynamic addressId;
-  final String paymentMethod;
-  final String notes;
-  final List<CheckoutItemEntity> items;
-  final String? customerName;
-
   const CheckoutParams({
     required this.addressId,
     required this.paymentMethod,
@@ -86,22 +86,11 @@ class CheckoutParams {
     this.customerName,
   });
 
-  /// Builds the serialized payload on the main thread.
-  Map<String, dynamic> toPayload() => {
-        'address_id': addressId,
-        'payment_method': paymentMethod,
-        'notes': notes,
-        'items': items.map((i) => i.toMap()).toList(),
-      };
-
-  /// Offloads payload serialization to a background isolate via [compute]
-  /// for larger item collections, completely avoiding UI thread freezing.
-  Future<Map<String, dynamic>> toPayloadAsync() async {
-    if (items.length > 5) {
-      return compute(_serializePayloadIsolate, this);
-    }
-    return toPayload();
-  }
+  final dynamic addressId;
+  final String paymentMethod;
+  final String notes;
+  final List<CheckoutItemEntity> items;
+  final String? customerName;
 
   bool get isOnlinePayment =>
       paymentMethod == 'card' ||
@@ -109,8 +98,45 @@ class CheckoutParams {
       paymentMethod == 'paymob';
 
   String get gateway => paymentMethod == 'stripe' ? 'stripe' : 'paymob';
-}
 
-Map<String, dynamic> _serializePayloadIsolate(CheckoutParams params) {
-  return params.toPayload();
+  double get totalAmount => items.fold(
+        0.0,
+        (sum, item) => sum + (item.unitPrice * item.quantity),
+      );
+
+  CheckoutParams copyWith({
+    dynamic addressId,
+    String? paymentMethod,
+    String? notes,
+    List<CheckoutItemEntity>? items,
+    String? customerName,
+  }) {
+    return CheckoutParams(
+      addressId: addressId ?? this.addressId,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      notes: notes ?? this.notes,
+      items: items ?? this.items,
+      customerName: customerName ?? this.customerName,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CheckoutParams &&
+        other.addressId == addressId &&
+        other.paymentMethod == paymentMethod &&
+        other.notes == notes &&
+        other.customerName == customerName;
+  }
+
+  @override
+  int get hashCode {
+    return Object.hash(addressId, paymentMethod, notes, customerName);
+  }
+
+  @override
+  String toString() {
+    return 'CheckoutParams(addressId: $addressId, paymentMethod: $paymentMethod, itemsCount: ${items.length})';
+  }
 }
