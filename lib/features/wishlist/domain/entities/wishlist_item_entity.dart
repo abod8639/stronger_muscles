@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
-
 /// Pure domain entity representing a wishlist item.
-@immutable
+/// 100% pure Dart without UI, 3rd party SDKs, or external annotations.
 class WishlistItemEntity {
   final String id;
   final String userId;
