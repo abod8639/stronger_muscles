@@ -1,36 +1,16 @@
-import 'package:dio/dio.dart';
-import 'package:stronger_muscles/core/config/api_config.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/core/services/api_service.dart';
-import 'package:stronger_muscles/core/services/storage_service.dart';
-import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
-import 'package:stronger_muscles/features/help_support/data/models/support_ticket_model.dart';
+import '../../../../core/config/api_config.dart';
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/services/api_service.dart';
+import '../../../../core/services/storage_service.dart';
+import '../models/support_message_model.dart';
+import '../models/support_ticket_model.dart';
 
 abstract class HelpSupportRemoteDataSource {
-  Future<SupportTicketModel> submitTicket(
-    SupportTicketModel ticket, {
-    CancelToken? cancelToken,
-  });
-
-  Future<List<SupportTicketModel>> getUserTickets({
-    CancelToken? cancelToken,
-  });
-
-  Future<SupportTicketModel> getTicketDetails(
-    String ticketId, {
-    CancelToken? cancelToken,
-  });
-
-  Future<SupportMessageModel> sendTicketMessage(
-    String ticketId,
-    String message, {
-    CancelToken? cancelToken,
-  });
-
-  Future<SupportTicketModel> closeTicket(
-    String ticketId, {
-    CancelToken? cancelToken,
-  });
+  Future<SupportTicketModel> submitTicket(SupportTicketModel ticket);
+  Future<List<SupportTicketModel>> getUserTickets();
+  Future<SupportTicketModel> getTicketDetails(String ticketId);
+  Future<SupportMessageModel> sendTicketMessage(String ticketId, String message);
+  Future<SupportTicketModel> closeTicket(String ticketId);
 }
 
 class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
@@ -39,10 +19,7 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
   HelpSupportRemoteDataSourceImpl(this._apiService);
 
   @override
-  Future<SupportTicketModel> submitTicket(
-    SupportTicketModel ticket, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<SupportTicketModel> submitTicket(SupportTicketModel ticket) async {
     final endpoint = StorageService.hasToken
         ? ApiConfig.customerSupportTickets
         : ApiConfig.publicSupportTicket;
@@ -53,9 +30,8 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
         'subject': ticket.subject,
         'category': ticket.category,
         'message': ticket.message,
-        'priority': ticket.priority.toApiString(),
+        'priority': ticket.priority,
       },
-      cancelToken: cancelToken,
     );
 
     final data = response.data;
@@ -68,15 +44,10 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
   }
 
   @override
-  Future<List<SupportTicketModel>> getUserTickets({
-    CancelToken? cancelToken,
-  }) async {
+  Future<List<SupportTicketModel>> getUserTickets() async {
     if (!StorageService.hasToken) return [];
 
-    final response = await _apiService.get(
-      ApiConfig.customerSupportTickets,
-      cancelToken: cancelToken,
-    );
+    final response = await _apiService.get(ApiConfig.customerSupportTickets);
     final data = response.data;
 
     if (data is Map && data['data'] is List) {
@@ -87,13 +58,9 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
   }
 
   @override
-  Future<SupportTicketModel> getTicketDetails(
-    String ticketId, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<SupportTicketModel> getTicketDetails(String ticketId) async {
     final response = await _apiService.get(
       ApiConfig.customerSupportTicketDetails(ticketId),
-      cancelToken: cancelToken,
     );
     final data = response.data;
 
@@ -108,13 +75,11 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
   @override
   Future<SupportMessageModel> sendTicketMessage(
     String ticketId,
-    String message, {
-    CancelToken? cancelToken,
-  }) async {
+    String message,
+  ) async {
     final response = await _apiService.post(
       ApiConfig.customerSupportTicketMessages(ticketId),
       data: {'message': message},
-      cancelToken: cancelToken,
     );
 
     final data = response.data;
@@ -127,13 +92,9 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
   }
 
   @override
-  Future<SupportTicketModel> closeTicket(
-    String ticketId, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<SupportTicketModel> closeTicket(String ticketId) async {
     final response = await _apiService.post(
       ApiConfig.customerCloseSupportTicket(ticketId),
-      cancelToken: cancelToken,
     );
     final data = response.data;
 
