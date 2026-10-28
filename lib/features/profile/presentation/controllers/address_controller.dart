@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/profile/data/datasources/address_service.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
-import 'package:stronger_muscles/features/profile/domain/usecases/usecase_providers.dart';
+import 'package:stronger_muscles/features/profile/profile_providers.dart';
 
 part 'address_controller.g.dart';
 
@@ -57,15 +56,22 @@ class AddressController extends _$AddressController {
       countryController.dispose();
     });
 
-    final isLoggedIn = ref.watch(authControllerProvider.select((state) => state.valueOrNull != null));
+    final isLoggedIn = ref.watch(
+      authControllerProvider.select((state) => state.valueOrNull != null),
+    );
     final getAddressesUseCase = ref.watch(getAddressesUseCaseProvider);
 
     if (isLoggedIn) {
-      final cached = getAddressesUseCase.getCached();
+      final cachedResult = getAddressesUseCase.getCached();
+      final cached = cachedResult.fold((_) => <AddressEntity>[], (list) => list);
       if (cached.isNotEmpty) {
         return cached;
       }
-      return await getAddressesUseCase();
+      final result = await getAddressesUseCase();
+      return result.fold(
+        (failure) => throw failure,
+        (addresses) => addresses,
+      );
     }
 
     return [];
@@ -74,35 +80,47 @@ class AddressController extends _$AddressController {
   Future<void> fetchAddresses() async {
     state = const AsyncLoading();
     final getAddressesUseCase = ref.read(getAddressesUseCaseProvider);
-    try {
-      final fetched = await getAddressesUseCase();
-      state = AsyncData(fetched);
-    } catch (e, st) {
-      state = AsyncError(e, st);
-    }
+    final result = await getAddressesUseCase();
+    result.fold(
+      (failure) => state = AsyncError(
+        failure,
+        failure.stackTrace ?? StackTrace.current,
+      ),
+      (addresses) => state = AsyncData(addresses),
+    );
   }
 
   Future<void> deleteAddress(int id) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    try {
-      await ref.read(deleteAddressUseCaseProvider).call(id);
-      final currentAddresses = state.valueOrNull ?? [];
-      state = AsyncData(
-        currentAddresses.where((addr) => addr.id != id).toList(),
-      );
-    } finally {
-      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-    }
+    final result = await ref.read(deleteAddressUseCaseProvider).call(id);
+    ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+    result.fold(
+      (failure) => state = AsyncError(
+        failure,
+        failure.stackTrace ?? StackTrace.current,
+      ),
+      (_) {
+        final currentAddresses = state.valueOrNull ?? [];
+        state = AsyncData(
+          currentAddresses.where((addr) => addr.id != id).toList(),
+        );
+      },
+    );
   }
 
   Future<void> setDefaultAddress(int id) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    try {
-      await ref.read(setDefaultAddressUseCaseProvider).call(id);
-      await fetchAddresses();
-    } finally {
-      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-    }
+    final result = await ref.read(setDefaultAddressUseCaseProvider).call(id);
+    ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+    result.fold(
+      (failure) => state = AsyncError(
+        failure,
+        failure.stackTrace ?? StackTrace.current,
+      ),
+      (_) async {
+        await fetchAddresses();
+      },
+    );
   }
 
   AddressEntity? get defaultAddress {
@@ -114,7 +132,9 @@ class AddressController extends _$AddressController {
   void fillForm(AddressEntity? address) {
     if (address == null) {
       clearForm();
-      ref.read(addressFormSelectedLabelProvider.notifier).setLabel(_defaultLabel);
+      ref
+          .read(addressFormSelectedLabelProvider.notifier)
+          .setLabel(_defaultLabel);
       return;
     }
     fullNameController.text = address.fullName ?? '';
@@ -124,7 +144,9 @@ class AddressController extends _$AddressController {
     stateController.text = address.state ?? '';
     postalCodeController.text = address.postalCode ?? '';
     countryController.text = address.country ?? '';
-    ref.read(addressFormSelectedLabelProvider.notifier).setLabel(address.label ?? _defaultLabel);
+    ref
+        .read(addressFormSelectedLabelProvider.notifier)
+        .setLabel(address.label ?? _defaultLabel);
     _latitude = address.latitude;
     _longitude = address.longitude;
   }
@@ -132,13 +154,13 @@ class AddressController extends _$AddressController {
   Future<void> saveAddress(int? id) async {
     final entity = AddressEntity(
       id: id ?? 0,
-      fullName: fullNameController.text,
-      phone: phoneController.text,
-      street: streetController.text,
-      city: cityController.text,
-      state: stateController.text,
-      postalCode: postalCodeController.text,
-      country: countryController.text,
+      fullName: fullNameController.text.trim(),
+      phone: phoneController.text.trim(),
+      street: streetController.text.trim(),
+      city: cityController.text.trim(),
+      state: stateController.text.trim(),
+      postalCode: postalCodeController.text.trim(),
+      country: countryController.text.trim(),
       label: ref.read(addressFormSelectedLabelProvider),
       isDefault: false,
       latitude: _latitude,
@@ -146,37 +168,53 @@ class AddressController extends _$AddressController {
     );
 
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    try {
-      await ref.read(saveAddressUseCaseProvider).call(id: id, address: entity);
-      await fetchAddresses();
-      clearForm();
-    } finally {
-      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-    }
+    final result = await ref.read(saveAddressUseCaseProvider).call(
+      id: id,
+      address: entity,
+    );
+    ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+    result.fold(
+      (failure) => state = AsyncError(
+        failure,
+        failure.stackTrace ?? StackTrace.current,
+      ),
+      (_) async {
+        await fetchAddresses();
+        clearForm();
+      },
+    );
   }
 
   Future<void> getCurrentLocation() async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    try {
-      final service = ref.read(addressServiceProvider);
-      final position = await service.getCurrentPosition();
-      final place = await service.getAddressFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-
-      if (place != null) {
-        streetController.text = place.street ?? '';
-        cityController.text = place.locality ?? '';
-        stateController.text = place.administrativeArea ?? '';
-        postalCodeController.text = place.postalCode ?? '';
-        countryController.text = place.country ?? '';
+    final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
+    final positionResult = await remoteDataSource.getCurrentPosition();
+    await positionResult.fold(
+      (failure) async {
+        ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+      },
+      (position) async {
         _latitude = position.latitude;
         _longitude = position.longitude;
-      }
-    } finally {
-      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-    }
+        final placeResult = await remoteDataSource.getAddressFromCoordinates(
+          position.latitude,
+          position.longitude,
+        );
+        placeResult.fold(
+          (failure) => null,
+          (place) {
+            if (place != null) {
+              streetController.text = place.street ?? '';
+              cityController.text = place.locality ?? '';
+              stateController.text = place.administrativeArea ?? '';
+              postalCodeController.text = place.postalCode ?? '';
+              countryController.text = place.country ?? '';
+            }
+          },
+        );
+        ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+      },
+    );
   }
 
   void clearForm() {
