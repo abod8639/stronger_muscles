@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/notifications/data/repositories/notification_repository.dart';
 import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
 
@@ -54,12 +55,19 @@ class NotificationController extends _$NotificationController {
       _cancelToken = null;
     });
 
+    // Guard: Only fetch notifications for authenticated users
+    final isLoggedIn =
+        ref.watch(authControllerProvider.select((state) => state.valueOrNull != null));
+    if (!isLoggedIn) {
+      return const NotificationsState();
+    }
+
     final repository = ref.watch(notificationRepositoryProvider);
     final result = await repository.getNotifications(cancelToken: _cancelToken);
 
     return result.fold(
       (failure) {
-        if (failure is CancelFailure) {
+        if (failure is CancelFailure || failure.type == FailureType.auth) {
           return const NotificationsState();
         }
         throw failure;
@@ -73,6 +81,13 @@ class NotificationController extends _$NotificationController {
 
   /// Reloads notifications with visual loading indicator and sets AsyncError on failure.
   Future<void> loadNotifications() async {
+    final isLoggedIn =
+        ref.read(authControllerProvider.select((state) => state.valueOrNull != null));
+    if (!isLoggedIn) {
+      state = const AsyncData(NotificationsState());
+      return;
+    }
+
     _cancelToken?.cancel('Reloading notifications');
     _cancelToken = CancelToken();
 
@@ -83,7 +98,10 @@ class NotificationController extends _$NotificationController {
 
     result.fold(
       (failure) {
-        if (failure is CancelFailure) return;
+        if (failure is CancelFailure || failure.type == FailureType.auth) {
+          state = const AsyncData(NotificationsState());
+          return;
+        }
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
       (data) {
@@ -99,6 +117,13 @@ class NotificationController extends _$NotificationController {
 
   /// Background refresh without flashing a blank loading screen.
   Future<void> refresh() async {
+    final isLoggedIn =
+        ref.read(authControllerProvider.select((state) => state.valueOrNull != null));
+    if (!isLoggedIn) {
+      state = const AsyncData(NotificationsState());
+      return;
+    }
+
     _cancelToken?.cancel('Refreshing notifications');
     _cancelToken = CancelToken();
 
@@ -107,7 +132,9 @@ class NotificationController extends _$NotificationController {
 
     result.fold(
       (failure) {
-        // Silently retain current data if background refresh fails
+        if (failure.type == FailureType.auth) {
+          state = const AsyncData(NotificationsState());
+        }
       },
       (data) {
         state = AsyncData(
@@ -122,7 +149,7 @@ class NotificationController extends _$NotificationController {
 
   /// Optimistically marks a notification as read and calls the backend.
   Future<void> markAsRead(String id) async {
-    final current = state.value;
+    final current = state.valueOrNull;
     if (current == null) return;
 
     final updatedList = current.notifications.map((n) {
@@ -143,7 +170,6 @@ class NotificationController extends _$NotificationController {
 
     result.fold(
       (failure) {
-        // Revert on failure
         refresh();
       },
       (_) {},
@@ -152,7 +178,7 @@ class NotificationController extends _$NotificationController {
 
   /// Optimistically marks all notifications as read.
   Future<void> markAllAsRead() async {
-    final current = state.value;
+    final current = state.valueOrNull;
     if (current == null) return;
 
     final updatedList =
@@ -178,5 +204,5 @@ class NotificationController extends _$NotificationController {
 @Riverpod(keepAlive: true)
 int unreadNotificationCount(UnreadNotificationCountRef ref) {
   final notificationState = ref.watch(notificationControllerProvider);
-  return notificationState.value?.unreadCount ?? 0;
+  return notificationState.valueOrNull?.unreadCount ?? 0;
 }
