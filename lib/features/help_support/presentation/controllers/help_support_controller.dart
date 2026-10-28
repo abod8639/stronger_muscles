@@ -1,20 +1,21 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/core/services/websocket_service.dart';
-import 'package:stronger_muscles/features/help_support/data/models/support_message_model.dart';
-import 'package:stronger_muscles/features/help_support/data/repositories/help_support_repository_impl.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
-import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
-import 'package:stronger_muscles/features/help_support/domain/repositories/help_support_repository.dart';
-import 'package:stronger_muscles/features/help_support/domain/usecases/get_faqs_usecase.dart';
-import 'package:stronger_muscles/features/help_support/domain/usecases/get_support_channels_usecase.dart';
-import 'package:stronger_muscles/features/help_support/domain/usecases/submit_ticket_usecase.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/services/websocket_service.dart';
+import '../../domain/entities/faq_entity.dart';
+import '../../domain/entities/support_channel_entity.dart';
+import '../../domain/entities/support_message_entity.dart';
+import '../../domain/entities/support_ticket_entity.dart';
+import '../../domain/usecases/close_ticket_usecase.dart';
+import '../../domain/usecases/get_faqs_usecase.dart';
+import '../../domain/usecases/get_support_channels_usecase.dart';
+import '../../domain/usecases/get_ticket_details_usecase.dart';
+import '../../domain/usecases/get_user_tickets_usecase.dart';
+import '../../domain/usecases/send_ticket_message_usecase.dart';
+import '../../domain/usecases/submit_ticket_usecase.dart';
+import 'help_support_di.dart';
 
 @immutable
 class HelpSupportState {
@@ -24,6 +25,7 @@ class HelpSupportState {
   final AsyncValue<SupportTicketEntity?> selectedTicketState;
   final AsyncValue<SupportTicketEntity?> submissionState;
   final AsyncValue<SupportMessageEntity?> messageState;
+  final AsyncValue<SupportTicketEntity?> closeTicketState;
 
   final FaqCategory selectedCategory;
   final String searchQuery;
@@ -37,6 +39,7 @@ class HelpSupportState {
     this.selectedTicketState = const AsyncData(null),
     this.submissionState = const AsyncData(null),
     this.messageState = const AsyncData(null),
+    this.closeTicketState = const AsyncData(null),
     this.selectedCategory = FaqCategory.all,
     this.searchQuery = '',
     this.lastSubmittedTicketId,
@@ -54,6 +57,7 @@ class HelpSupportState {
   bool get isSubmitting => submissionState.isLoading;
   bool get isLoadingTickets => ticketsState.isLoading;
   bool get isSendingMessage => messageState.isLoading;
+  bool get isClosingTicket => closeTicketState.isLoading;
 
   /// Safely extracts any active failure across the state slices
   Failure? get failure {
@@ -61,11 +65,12 @@ class HelpSupportState {
         selectedTicketState.error ??
         ticketsState.error ??
         messageState.error ??
+        closeTicketState.error ??
         faqsState.error ??
         channelsState.error;
 
     if (err is Failure) return err;
-    if (err != null) return Failure(message: err.toString());
+    if (err != null) return GeneralFailure(message: err.toString());
     return null;
   }
 
@@ -78,6 +83,7 @@ class HelpSupportState {
     AsyncValue<SupportTicketEntity?>? selectedTicketState,
     AsyncValue<SupportTicketEntity?>? submissionState,
     AsyncValue<SupportMessageEntity?>? messageState,
+    AsyncValue<SupportTicketEntity?>? closeTicketState,
     bool clearSelectedTicket = false,
     FaqCategory? selectedCategory,
     String? searchQuery,
@@ -109,8 +115,9 @@ class HelpSupportState {
       newTickets = isLoadingTickets ? const AsyncLoading() : newTickets;
     }
 
-    AsyncValue<SupportTicketEntity?> newSelectedTicket =
-        clearSelectedTicket ? const AsyncData(null) : (selectedTicketState ?? this.selectedTicketState);
+    AsyncValue<SupportTicketEntity?> newSelectedTicket = clearSelectedTicket
+        ? const AsyncData(null)
+        : (selectedTicketState ?? this.selectedTicketState);
     if (selectedTicket != null) newSelectedTicket = AsyncData(selectedTicket);
 
     AsyncValue<SupportTicketEntity?> newSubmission =
@@ -126,7 +133,7 @@ class HelpSupportState {
     }
 
     if (error != null) {
-      final f = Failure(message: error);
+      final f = GeneralFailure(message: error);
       newSubmission = AsyncError(f, StackTrace.current);
     }
 
@@ -137,6 +144,7 @@ class HelpSupportState {
       selectedTicketState: newSelectedTicket,
       submissionState: newSubmission,
       messageState: newMessage,
+      closeTicketState: closeTicketState ?? this.closeTicketState,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       searchQuery: searchQuery ?? this.searchQuery,
       lastSubmittedTicketId:
@@ -157,6 +165,7 @@ class HelpSupportState {
           selectedTicketState == other.selectedTicketState &&
           submissionState == other.submissionState &&
           messageState == other.messageState &&
+          closeTicketState == other.closeTicketState &&
           selectedCategory == other.selectedCategory &&
           searchQuery == other.searchQuery &&
           lastSubmittedTicketId == other.lastSubmittedTicketId &&
@@ -170,6 +179,7 @@ class HelpSupportState {
         selectedTicketState,
         submissionState,
         messageState,
+        closeTicketState,
         selectedCategory,
         searchQuery,
         lastSubmittedTicketId,
@@ -181,38 +191,45 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
   final GetFaqsUseCase _getFaqsUseCase;
   final GetSupportChannelsUseCase _getChannelsUseCase;
   final SubmitTicketUseCase _submitTicketUseCase;
-  final HelpSupportRepository _repository;
+  final GetUserTicketsUseCase _getUserTicketsUseCase;
+  final GetTicketDetailsUseCase _getTicketDetailsUseCase;
+  final SendTicketMessageUseCase _sendTicketMessageUseCase;
+  final CloseTicketUseCase _closeTicketUseCase;
   final WebSocketService _webSocketService;
 
   final List<StreamSubscription> _activeWsSubscriptions = [];
-  CancelToken? _cancelToken;
   String? _activeTicketId;
 
   HelpSupportNotifier({
     required GetFaqsUseCase getFaqsUseCase,
     required GetSupportChannelsUseCase getChannelsUseCase,
     required SubmitTicketUseCase submitTicketUseCase,
-    required HelpSupportRepository repository,
+    required GetUserTicketsUseCase getUserTicketsUseCase,
+    required GetTicketDetailsUseCase getTicketDetailsUseCase,
+    required SendTicketMessageUseCase sendTicketMessageUseCase,
+    required CloseTicketUseCase closeTicketUseCase,
     WebSocketService? webSocketService,
   })  : _getFaqsUseCase = getFaqsUseCase,
         _getChannelsUseCase = getChannelsUseCase,
         _submitTicketUseCase = submitTicketUseCase,
-        _repository = repository,
+        _getUserTicketsUseCase = getUserTicketsUseCase,
+        _getTicketDetailsUseCase = getTicketDetailsUseCase,
+        _sendTicketMessageUseCase = sendTicketMessageUseCase,
+        _closeTicketUseCase = closeTicketUseCase,
         _webSocketService = webSocketService ?? WebSocketService(),
         super(const HelpSupportState()) {
-    _cancelToken = CancelToken();
     init();
   }
 
-  /// Initial load of FAQs and Support Channels with Cancellation protection
+  /// Initial load of FAQs, Support Channels, and User Tickets.
   Future<void> init() async {
     state = state.copyWith(
       faqsState: const AsyncLoading(),
       channelsState: const AsyncLoading(),
     );
 
-    final faqsResult = await _getFaqsUseCase(cancelToken: _cancelToken);
-    final channelsResult = await _getChannelsUseCase(cancelToken: _cancelToken);
+    final faqsResult = await _getFaqsUseCase();
+    final channelsResult = await _getChannelsUseCase();
 
     faqsResult.fold(
       (failure) {
@@ -228,7 +245,8 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     channelsResult.fold(
       (failure) {
         state = state.copyWith(
-          channelsState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          channelsState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
       },
       (channels) {
@@ -236,20 +254,21 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       },
     );
 
-    // Concurrently load user tickets
-    loadUserTickets();
+    await loadUserTickets();
   }
 
-  /// Loads tickets submitted by the authenticated customer
+  /// Loads tickets submitted by the authenticated customer.
   Future<void> loadUserTickets() async {
+    if (state.isLoadingTickets) return;
     state = state.copyWith(ticketsState: const AsyncLoading());
 
-    final result = await _repository.getUserTickets(cancelToken: _cancelToken);
+    final result = await _getUserTicketsUseCase();
 
     result.fold(
       (failure) {
         state = state.copyWith(
-          ticketsState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          ticketsState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
       },
       (tickets) {
@@ -258,14 +277,11 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     );
   }
 
-  /// Loads full details and conversation messages of a specific ticket
+  /// Loads full details and conversation messages of a specific ticket.
   Future<void> loadTicketDetails(String ticketId) async {
     state = state.copyWith(selectedTicketState: const AsyncLoading());
 
-    final result = await _repository.getTicketDetails(
-      ticketId,
-      cancelToken: _cancelToken,
-    );
+    final result = await _getTicketDetailsUseCase(ticketId);
 
     result.fold(
       (failure) {
@@ -283,7 +299,7 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     );
   }
 
-  /// Subscribes to real-time events on WebSocket channel for streaming replies
+  /// Subscribes to real-time events on WebSocket channel for streaming replies.
   void _subscribeToTicketRealtime(String ticketId) {
     if (_activeTicketId == ticketId) return;
 
@@ -294,64 +310,66 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       final channel = _webSocketService.subscribeToTicket(ticketId);
 
       // 1. Listen for new messages in this ticket
-      final subMsg = channel.bind('SupportMessageSent').listen((event) async {
-        try {
-          final map = event.tryGetDataAsMap();
-          if (map != null && map['message'] != null) {
-            final rawMsg = map['message'];
-            if (rawMsg is Map) {
-              final newMsg = await SupportMessageModel.fromJsonAsync(
-                Map<String, dynamic>.from(rawMsg),
-              );
+      final subMsg = channel.bind('SupportMessageSent').listen((event) {
+        final map = event.tryGetDataAsMap();
+        if (map != null && map['message'] is Map) {
+          final rawMsg = Map<String, dynamic>.from(map['message'] as Map);
+          final newMsg = SupportMessageEntity(
+            id: rawMsg['id'] is int
+                ? rawMsg['id'] as int
+                : int.tryParse(rawMsg['id']?.toString() ?? '0') ?? 0,
+            ticketId: rawMsg['ticket_id'] is int
+                ? rawMsg['ticket_id'] as int
+                : int.tryParse(rawMsg['ticket_id']?.toString() ?? '0') ?? 0,
+            senderType: (rawMsg['sender_type'] ?? 'user').toString(),
+            senderName: (rawMsg['sender_name'] ?? 'مستخدم').toString(),
+            message: (rawMsg['message'] ?? '').toString(),
+            createdAt: rawMsg['created_at'] != null
+                ? DateTime.tryParse(rawMsg['created_at'].toString()) ??
+                    DateTime.now()
+                : DateTime.now(),
+            isRead: rawMsg['is_read'] == true || rawMsg['is_read'] == 1,
+          );
 
-              final current = state.selectedTicket;
-              if (current != null && current.id == ticketId) {
-                final exists = current.messages.any((m) => m.id == newMsg.id);
-                if (!exists) {
-                  final updatedMsgs = List<SupportMessageEntity>.from(current.messages)..add(newMsg);
-                  final updatedTicket = current.copyWith(
-                    messages: updatedMsgs,
-                    messagesCount: current.messagesCount + 1,
-                    lastReplyAt: newMsg.createdAt,
-                  );
-                  state = state.copyWith(
-                    selectedTicketState: AsyncData(updatedTicket),
-                  );
-                }
-              }
+          final current = state.selectedTicket;
+          if (current != null && current.id == ticketId) {
+            final exists = current.messages.any((m) => m.id == newMsg.id);
+            if (!exists) {
+              final updatedMsgs =
+                  List<SupportMessageEntity>.from(current.messages)..add(newMsg);
+              final updatedTicket = current.copyWith(
+                messages: updatedMsgs,
+                messagesCount: current.messagesCount + 1,
+                lastReplyAt: newMsg.createdAt,
+              );
+              state = state.copyWith(
+                selectedTicketState: AsyncData(updatedTicket),
+              );
             }
           }
-        } catch (e) {
-          debugPrint('Error processing realtime support message: $e');
         }
       });
 
       // 2. Listen for ticket status/priority updates
       final subUpdate = channel.bind('SupportTicketUpdated').listen((event) {
-        try {
-          final map = event.tryGetDataAsMap();
-          if (map != null && map['ticket'] != null) {
-            final rawTicket = map['ticket'];
-            if (rawTicket is Map) {
-              final newStatus = rawTicket['status']?.toString();
-              final newPriority = rawTicket['priority']?.toString();
-              final current = state.selectedTicket;
-              if (current != null && current.id == ticketId) {
-                final updatedTicket = current.copyWith(
-                  status: newStatus ?? current.status,
-                  priority: newPriority != null
-                      ? TicketPriority.fromString(newPriority)
-                      : current.priority,
-                );
-                state = state.copyWith(
-                  selectedTicketState: AsyncData(updatedTicket),
-                );
-              }
-              loadUserTickets();
-            }
+        final map = event.tryGetDataAsMap();
+        if (map != null && map['ticket'] is Map) {
+          final rawTicket = Map<String, dynamic>.from(map['ticket'] as Map);
+          final newStatus = rawTicket['status']?.toString();
+          final newPriority = rawTicket['priority']?.toString();
+          final current = state.selectedTicket;
+          if (current != null && current.id == ticketId) {
+            final updatedTicket = current.copyWith(
+              status: newStatus ?? current.status,
+              priority: newPriority != null
+                  ? TicketPriority.fromString(newPriority)
+                  : current.priority,
+            );
+            state = state.copyWith(
+              selectedTicketState: AsyncData(updatedTicket),
+            );
           }
-        } catch (e) {
-          debugPrint('Error processing realtime ticket update: $e');
+          loadUserTickets();
         }
       });
 
@@ -377,23 +395,23 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     state = state.copyWith(clearSelectedTicket: true);
   }
 
-  /// Sends a reply inside an open ticket conversation
+  /// Sends a reply inside an open ticket conversation with duplicate guard.
   Future<bool> sendReplyMessage(String ticketId, String message) async {
     final text = message.trim();
-    if (text.isEmpty) return false;
+    if (text.isEmpty || state.isSendingMessage) return false;
 
     state = state.copyWith(messageState: const AsyncLoading());
 
-    final result = await _repository.sendTicketMessage(
-      ticketId,
-      text,
-      cancelToken: _cancelToken,
+    final result = await _sendTicketMessageUseCase(
+      ticketId: ticketId,
+      message: text,
     );
 
     return result.fold(
       (failure) {
         state = state.copyWith(
-          messageState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          messageState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
         return false;
       },
@@ -406,32 +424,33 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     );
   }
 
-  /// Closes an open ticket
+  /// Closes an open ticket with duplicate guard.
   Future<bool> closeTicket(String ticketId) async {
-    final result = await _repository.closeTicket(
-      ticketId,
-      cancelToken: _cancelToken,
-    );
+    if (state.isClosingTicket) return false;
+    state = state.copyWith(closeTicketState: const AsyncLoading());
+
+    final result = await _closeTicketUseCase(ticketId);
 
     return result.fold(
       (failure) {
         state = state.copyWith(
-          selectedTicketState: AsyncError(
-            failure,
-            failure.stackTrace ?? StackTrace.current,
-          ),
+          closeTicketState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
         return false;
       },
       (closedTicket) {
-        state = state.copyWith(selectedTicketState: AsyncData(closedTicket));
+        state = state.copyWith(
+          closeTicketState: AsyncData(closedTicket),
+          selectedTicketState: AsyncData(closedTicket),
+        );
         loadUserTickets();
         return true;
       },
     );
   }
 
-  /// Filters FAQs by category
+  /// Filters FAQs by category.
   Future<void> selectCategory(FaqCategory category) async {
     if (state.selectedCategory == category) return;
     state = state.copyWith(
@@ -442,13 +461,13 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     final result = await _getFaqsUseCase(
       category: category,
       query: state.searchQuery,
-      cancelToken: _cancelToken,
     );
 
     result.fold(
       (failure) {
         state = state.copyWith(
-          faqsState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          faqsState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
       },
       (faqs) {
@@ -457,20 +476,20 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     );
   }
 
-  /// Searches FAQs by query term
+  /// Searches FAQs by query term.
   Future<void> search(String query) async {
     state = state.copyWith(searchQuery: query);
 
     final result = await _getFaqsUseCase(
       category: state.selectedCategory,
       query: query,
-      cancelToken: _cancelToken,
     );
 
     result.fold(
       (failure) {
         state = state.copyWith(
-          faqsState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          faqsState:
+              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
         );
       },
       (faqs) {
@@ -479,13 +498,15 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     );
   }
 
-  /// Submits a new support ticket
+  /// Submits a new support ticket with strict duplicate submission guard.
   Future<SupportTicketEntity?> submitTicket({
     required String subject,
     required String category,
     required String message,
     TicketPriority priority = TicketPriority.normal,
   }) async {
+    if (state.isSubmitting) return null;
+
     state = state.copyWith(submissionState: const AsyncLoading());
 
     final ticket = SupportTicketEntity(
@@ -496,10 +517,7 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       createdAt: DateTime.now(),
     );
 
-    final result = await _submitTicketUseCase(
-      ticket,
-      cancelToken: _cancelToken,
-    );
+    final result = await _submitTicketUseCase(ticket);
 
     return result.fold(
       (failure) {
@@ -524,7 +542,6 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
   }
 
   /// Launches an external communication channel decoupled from BuildContext.
-  /// Optional [context] parameter kept for backward-compatibility.
   Future<bool> launchChannel(
     dynamic contextOrChannel, [
     dynamic channelOrCallback,
@@ -562,7 +579,6 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
 
   @override
   void dispose() {
-    _cancelToken?.cancel('HelpSupportNotifier disposed');
     _unsubscribeActiveTicket();
     super.dispose();
   }
@@ -575,14 +591,20 @@ final helpSupportControllerProvider =
   final getFaqs = ref.watch(getFaqsUseCaseProvider);
   final getChannels = ref.watch(getSupportChannelsUseCaseProvider);
   final submitTicket = ref.watch(submitTicketUseCaseProvider);
-  final repo = ref.watch(helpSupportRepositoryProvider);
+  final getUserTickets = ref.watch(getUserTicketsUseCaseProvider);
+  final getTicketDetails = ref.watch(getTicketDetailsUseCaseProvider);
+  final sendTicketMessage = ref.watch(sendTicketMessageUseCaseProvider);
+  final closeTicket = ref.watch(closeTicketUseCaseProvider);
   final wsService = ref.watch(webSocketServiceProvider);
 
   final notifier = HelpSupportNotifier(
     getFaqsUseCase: getFaqs,
     getChannelsUseCase: getChannels,
     submitTicketUseCase: submitTicket,
-    repository: repo,
+    getUserTicketsUseCase: getUserTickets,
+    getTicketDetailsUseCase: getTicketDetails,
+    sendTicketMessageUseCase: sendTicketMessage,
+    closeTicketUseCase: closeTicket,
     webSocketService: wsService,
   );
 
