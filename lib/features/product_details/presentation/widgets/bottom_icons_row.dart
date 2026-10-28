@@ -75,7 +75,7 @@ class BottomIconsRow extends ConsumerWidget {
     dynamic cartState,
   ) {
     final item = cartNotifier.getCartItem(
-      product,
+      product.id,
       selectedFlavor: detailsState.selectedFlavor,
       selectedSize: detailsState.selectedSizeObject?.size,
     );
@@ -112,7 +112,7 @@ class BottomIconsRow extends ConsumerWidget {
           ? null
           : () {
               cartNotifier.addToCart(
-                product,
+                product.toEntity(),
                 selectedFlavor: detailsState.selectedFlavor,
                 selectedSize: detailsState.selectedSizeObject?.size,
               );
