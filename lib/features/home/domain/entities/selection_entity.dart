@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-
 /// Pure domain entity representing a selectable home category shortcut.
+/// 100% Pure Dart with zero dependencies on Flutter UI, Dio, or 3rd-party SDKs.
 class SelectionEntity {
-  final String label;
-  final IconData icon;
   final String id;
+  final String label;
+  final String? iconKey;
 
   const SelectionEntity({
-    required this.label,
-    required this.icon,
     required this.id,
+    required this.label,
+    this.iconKey,
   });
 
   @override
@@ -18,8 +17,9 @@ class SelectionEntity {
       other is SelectionEntity &&
           runtimeType == other.runtimeType &&
           id == other.id &&
-          label == other.label;
+          label == other.label &&
+          iconKey == other.iconKey;
 
   @override
-  int get hashCode => Object.hash(id, label);
+  int get hashCode => Object.hash(id, label, iconKey);
 }
