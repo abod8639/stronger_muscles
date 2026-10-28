@@ -1,38 +1,78 @@
-import 'dart:convert';
 import 'package:hive/hive.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
-/// Local datasource for wishlist, backed by Hive.
-class WishlistLocalDatasource {
-  final Box<String> _box;
+/// Contract for local caching of wishlist data.
+abstract class WishlistLocalDataSource {
+  /// Loads all raw stored JSON strings from local cache.
+  List<String> getAllRaw();
 
-  WishlistLocalDatasource(this._box);
+  /// Checks if a product exists in the local cache.
+  bool contains(String productId);
 
-  /// Loads all wishlist items from local storage.
-  List<ProductModel> getAll() {
-    return _box.values
-        .map((item) {
-          try {
-            return ProductModel.fromJson(jsonDecode(item));
-          } catch (_) {
-            return null;
-          }
-        })
-        .whereType<ProductModel>()
-        .toList();
+  /// Stores a product's serialized JSON string keyed by product ID.
+  void put(String productId, String jsonString);
+
+  /// Removes a product from local cache.
+  void remove(String productId);
+
+  /// Clears all items from the local cache.
+  void clear();
+}
+
+/// Hive-backed implementation of [WishlistLocalDataSource] with resilient in-memory fallback.
+class WishlistLocalDataSourceImpl implements WishlistLocalDataSource {
+  final Box<String>? _box;
+  final Map<String, String> _inMemoryFallback = {};
+
+  WishlistLocalDataSourceImpl([this._box]);
+
+  @override
+  List<String> getAllRaw() {
+    final box = _box;
+    if (box != null && box.isOpen) {
+      return box.values.toList();
+    }
+    return _inMemoryFallback.values.toList();
   }
 
-  /// Checks whether a product exists in the wishlist.
-  bool contains(String productId) => _box.containsKey(productId);
-
-  /// Adds a product to local storage.
-  void add(ProductModel product) {
-    final json = jsonEncode(product.toJson());
-    _box.put(product.id, json);
+  @override
+  bool contains(String productId) {
+    final box = _box;
+    if (box != null && box.isOpen) {
+      return box.containsKey(productId);
+    }
+    return _inMemoryFallback.containsKey(productId);
   }
 
-  /// Removes a product from local storage.
+  @override
+  void put(String productId, String jsonString) {
+    final box = _box;
+    if (box != null && box.isOpen) {
+      box.put(productId, jsonString);
+    } else {
+      _inMemoryFallback[productId] = jsonString;
+    }
+  }
+
+  @override
   void remove(String productId) {
-    _box.delete(productId);
+    final box = _box;
+    if (box != null && box.isOpen) {
+      box.delete(productId);
+    } else {
+      _inMemoryFallback.remove(productId);
+    }
+  }
+
+  @override
+  void clear() {
+    final box = _box;
+    if (box != null && box.isOpen) {
+      box.clear();
+    } else {
+      _inMemoryFallback.clear();
+    }
   }
 }
+
+/// Backwards-compatible alias for existing references.
+typedef WishlistLocalDatasource = WishlistLocalDataSourceImpl;
