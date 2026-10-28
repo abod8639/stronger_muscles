@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 
 /// Pure domain entity representing a category.
-@immutable
 class CategoryEntity {
   final String id;
   final LocalizedStringEntity? name;
@@ -78,7 +76,16 @@ class CategoryEntity {
           createdAt == other.createdAt &&
           icon == other.icon &&
           parentId == other.parentId &&
-          listEquals(children, other.children);
+          _areListsEqual(children, other.children);
+
+  static bool _areListsEqual<T>(List<T> a, List<T> b) {
+    if (identical(a, b)) return true;
+    if (a.length != b.length) return false;
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
 
   @override
   int get hashCode => Object.hash(
