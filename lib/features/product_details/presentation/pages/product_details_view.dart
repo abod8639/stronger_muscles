@@ -3,21 +3,20 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/bottom_icons_row.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_price.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/image_list_view.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/product_flavor_selector.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_description_section.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_name.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_show_reviews_list_section.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/main_image.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/build_ingredients_section.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_info.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_ingredients_section.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_name.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_price.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/build_show_reviews_list_section.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_usage_and_warnings.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/image_list_view.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/main_image.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/product_flavor_selector.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_size_selector.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -100,7 +99,8 @@ class ProductDetailsView extends ConsumerWidget {
           SliverToBoxAdapter(
             child: MainImage(
               product: effectiveProd,
-              onImageTap: (index) => _showImageViewer(context, effectiveProd, index),
+              onImageTap: (index) =>
+                  _showImageViewer(context, effectiveProd, index),
             ),
           ),
           SliverToBoxAdapter(
@@ -113,14 +113,9 @@ class ProductDetailsView extends ConsumerWidget {
                   const SizedBox(height: _smallSpacing),
                   buildProductPrice(
                     effectiveProd,
-                    alternateEffectivePrice: detailsNotifier
-                        .getDisplayEffectivePrice(effectiveProd),
-                    alternateOriginalPrice: detailsNotifier.getDisplayPrice(
-                      effectiveProd,
-                    ),
-                    alternateHasDiscount: detailsNotifier.getDisplayHasDiscount(
-                      effectiveProd,
-                    ),
+                    alternateEffectivePrice: detailsState.displayEffectivePrice,
+                    alternateOriginalPrice: detailsState.displayPrice,
+                    alternateHasDiscount: detailsState.displayHasDiscount,
                   ),
                   const SizedBox(height: _smallSpacing),
                   buildProductBadges(effectiveProd, context, .1),
@@ -169,10 +164,14 @@ class ProductDetailsView extends ConsumerWidget {
     );
   }
 
-  void _showImageViewer(BuildContext context, ProductModel currentProduct, int initialIndex) {
+  void _showImageViewer(
+    BuildContext context,
+    ProductModel currentProduct,
+    int initialIndex,
+  ) {
     if (currentProduct.imageUrls.isEmpty) return;
 
-    MultiImageProvider multiImageProvider = MultiImageProvider(
+    final multiImageProvider = MultiImageProvider(
       currentProduct.imageUrls
           .map(
             (url) => CachedNetworkImageProvider(
