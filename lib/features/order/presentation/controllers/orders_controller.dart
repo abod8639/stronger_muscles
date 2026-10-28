@@ -18,7 +18,7 @@ class OrdersController extends _$OrdersController {
   @override
   FutureOr<List<OrderEntity>> build() async {
     final isLoggedIn =
-        ref.watch(authControllerProvider.select((state) => state.value != null));
+        ref.watch(authControllerProvider.select((state) => state.valueOrNull != null));
     if (!isLoggedIn) {
       return [];
     }
@@ -57,7 +57,7 @@ class OrdersController extends _$OrdersController {
   List<OrderEntity> get cancelledOrders => _filterByStatus('cancelled');
 
   List<OrderEntity> _filterByStatus(String status) {
-    return (state.value ?? []).where((o) {
+    return (state.valueOrNull ?? []).where((o) {
       final s = o.status.toLowerCase();
       if (status == 'cancelled') {
         return s == 'cancelled' || s == 'canceled';
