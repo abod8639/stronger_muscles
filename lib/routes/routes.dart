@@ -14,8 +14,7 @@ import 'package:stronger_muscles/features/order/domain/entities/order_entity.dar
 import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
-import 'package:stronger_muscles/features/checkout/presentation/pages/checkout_view.dart';
-import 'package:stronger_muscles/features/checkout/presentation/pages/order_success_view.dart';
+import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
@@ -158,14 +157,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           return const SearchPage(isFocused: true);
         },
       ),
-      GoRoute(
-        path: AppRoutes.checkout,
-        builder: (context, state) => const CheckoutView(),
-      ),
-      GoRoute(
-        path: AppRoutes.orderSuccess,
-        builder: (context, state) => const OrderSuccessView(),
-      ),
+      ...CheckoutRoutes.routes,
       GoRoute(
         path: AppRoutes.editUserInfo,
         builder: (context, state) => const EditUserInfoView(),
