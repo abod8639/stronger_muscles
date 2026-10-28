@@ -58,7 +58,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
       items: _buildNavigationItems(
         context,
         tabIndex,
-        cartState.value?.length ?? 0,
+        cartState.valueOrNull?.length ?? 0,
       ),
     );
   }
