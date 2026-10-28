@@ -36,37 +36,82 @@ class ProductList extends ConsumerWidget {
           );
         }
 
+        final isLoadingMore = ref.watch(
+          homeControllerProvider.notifier.select((n) => n.isLoadingMore),
+        );
+        final hasMore = ref.watch(
+          homeControllerProvider.notifier.select((n) => n.hasMore),
+        );
+
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-          sliver: SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
-              childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
-                context,
-              ),
-              crossAxisSpacing: _crossAxisSpacing,
-              mainAxisSpacing: _mainAxisSpacing,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index < 0 || index >= products.length) {
-                  return const SizedBox.shrink();
-                }
-                final product = products[index];
-                return GestureDetector(
-                  onTap: () =>
-                      context.push(AppRoutes.productDetails, extra: product),
-                  child: AppProductCard.fromEntity(
-                    entity: product,
-                    showName: true,
-                    isBackgroundWhite: false,
+          sliver: SliverMainAxisGroup(
+            slivers: [
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
+                  childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
+                    context,
                   ),
-                );
-              },
-              childCount: products.length,
-              addAutomaticKeepAlives: false,
-              addRepaintBoundaries: true,
-            ),
+                  crossAxisSpacing: _crossAxisSpacing,
+                  mainAxisSpacing: _mainAxisSpacing,
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    if (index < 0 || index >= products.length) {
+                      return const SizedBox.shrink();
+                    }
+
+                    // Trigger pagination when reaching the last 4 items
+                    if (index == products.length - 4 && hasMore && !isLoadingMore) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        final selectedIndex = ref
+                            .read(homeControllerProvider.notifier)
+                            .selectedSectionIndex;
+                        final sections = ref.read(categoriesSectionsControllerProvider).valueOrNull;
+                        String? categoryId;
+                        if (sections != null &&
+                            selectedIndex >= 0 &&
+                            selectedIndex < sections.length) {
+                          final id = sections[selectedIndex].id;
+                          categoryId = id.isEmpty ? null : id;
+                        }
+                        ref
+                            .read(homeControllerProvider.notifier)
+                            .loadMoreProducts(categoryId: categoryId);
+                      });
+                    }
+
+                    final product = products[index];
+                    return GestureDetector(
+                      onTap: () =>
+                          context.push(AppRoutes.productDetails, extra: product),
+                      child: AppProductCard.fromEntity(
+                        entity: product,
+                        showName: true,
+                        isBackgroundWhite: false,
+                      ),
+                    );
+                  },
+                  childCount: products.length,
+                  addAutomaticKeepAlives: false,
+                  addRepaintBoundaries: true,
+                ),
+              ),
+              if (isLoadingMore)
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    child: Center(
+                      child: SizedBox(
+                        width: 24.0,
+                        height: 24.0,
+                        child: CircularProgressIndicator(strokeWidth: 2.5),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         );
       },
