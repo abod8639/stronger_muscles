@@ -17,21 +17,16 @@ class MockAuthRepository implements AuthRepository {
   String? lastUpdatedPhone;
   String? lastUpdatedPhotoUrl;
 
+  bool googleSignInCalled = false;
+
   @override
-  Future<Either<Failure, UserEntity>> googleSignIn({
-    required String email,
-    required String name,
-    String? photoUrl,
-    CancelToken? cancelToken,
-  }) async {
-    lastGoogleEmail = email;
-    lastGoogleName = name;
-    lastGooglePhotoUrl = photoUrl;
-    return Right(
+  Future<Either<Failure, UserEntity>> googleSignIn() async {
+    googleSignInCalled = true;
+    return const Right(
       UserEntity(
         id: 5,
-        email: email,
-        name: name,
+        email: "google_user@gmail.com",
+        name: "Google User",
         token: "testToken",
       ),
     );
@@ -117,23 +112,17 @@ void main() {
   });
 
   group('Extended Auth UseCases Tests', () {
-    test('GoogleSignInUseCase invokes repository with proper arguments', () async {
+    test('GoogleSignInUseCase invokes repository', () async {
       final useCase = GoogleSignInUseCase(mockRepo);
 
-      final result = await useCase(
-        email: 'google_user@gmail.com',
-        name: 'Google User',
-        photoUrl: 'https://lh3.googleusercontent.com/photo.png',
-      );
+      final result = await useCase();
 
       expect(result.isRight(), isTrue);
       result.fold(
         (_) => fail('Expected Right'),
         (user) {
           expect(user.id, 5);
-          expect(mockRepo.lastGoogleEmail, 'google_user@gmail.com');
-          expect(mockRepo.lastGoogleName, 'Google User');
-          expect(mockRepo.lastGooglePhotoUrl, 'https://lh3.googleusercontent.com/photo.png');
+          expect(mockRepo.googleSignInCalled, isTrue);
         },
       );
     });
