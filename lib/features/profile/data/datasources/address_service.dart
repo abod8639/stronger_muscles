@@ -1,10 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stronger_muscles/core/config/api_config.dart';
 import 'package:stronger_muscles/core/services/api_service.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:stronger_muscles/features/profile/data/models/address_model.dart';
+import 'package:stronger_muscles/features/profile/data/datasources/address_remote_datasource.dart';
 
 part 'address_service.g.dart';
 
@@ -13,121 +9,7 @@ AddressService addressService(AddressServiceRef ref) {
   return AddressService(ref.watch(apiServiceProvider));
 }
 
-class AddressService {
-  final ApiService _apiService;
-
-  AddressService(this._apiService);
-
-  Future<List<AddressModel>> getAddresses() async {
-    try {
-      final response = await _apiService.get(ApiConfig.addresses);
-      final data = response.data;
-      final List<dynamic> addressesJson = data['addresses'] ?? [];
-      return addressesJson
-          .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
-          .toList();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: 'فشل تحميل العناوين', originalError: e);
-    }
-  }
-
-  Future<AddressModel> createAddress(AddressModel address) async {
-    try {
-      final Map<String, dynamic> addressData = address.toJson();
-      _cleanAddressData(addressData);
-      final response = await _apiService.post(
-        ApiConfig.addresses,
-        data: addressData,
-      );
-      final data = response.data;
-      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: 'فشل إضافة العنوان', originalError: e);
-    }
-  }
-
-  Future<AddressModel> updateAddress(int id, AddressModel address) async {
-    try {
-      final Map<String, dynamic> addressData = address.toJson();
-      _cleanAddressData(addressData);
-      final response = await _apiService.put(
-        '${ApiConfig.addresses}/$id',
-        data: addressData,
-      );
-      final data = response.data;
-      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: 'فشل تحديث العنوان', originalError: e);
-    }
-  }
-
-  Future<void> deleteAddress(int id) async {
-    try {
-      await _apiService.delete('${ApiConfig.addresses}/$id');
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: 'فشل حذف العنوان', originalError: e);
-    }
-  }
-
-  Future<AddressModel> setDefaultAddress(int id) async {
-    try {
-      final response = await _apiService.post(
-        '${ApiConfig.addresses}/$id/set-default',
-      );
-      final data = response.data;
-      return AddressModel.fromJson(data['address'] as Map<String, dynamic>);
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw Failure(message: 'فشل تعيين العنوان الافتراضي', originalError: e);
-    }
-  }
-
-  void _cleanAddressData(Map<String, dynamic> data) {
-    data.removeWhere(
-      (key, value) =>
-          ['id', 'user_id', 'created_at', 'updated_at'].contains(key),
-    );
-  }
-
-  Future<Position> getCurrentPosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw Failure(message: 'خدمات الموقع معطلة. يرجى تفعيلها.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw Failure(message: 'تم رفض صلاحيات الموقع');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      throw Failure(message: 'صلاحيات الموقع مرفوضة بشكل دائم.');
-    }
-
-    return await Geolocator.getCurrentPosition(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
-    );
-  }
-
-  Future<Placemark?> getAddressFromCoordinates(double lat, double lng) async {
-    try {
-      List<Placemark> placemarks =
-          await Geocoding().placemarkFromCoordinates(lat, lng);
-      return placemarks.isNotEmpty ? placemarks.first : null;
-    } catch (e) {
-      return null;
-    }
-  }
+/// Backward compatible wrapper around [AddressRemoteDataSourceImpl].
+class AddressService extends AddressRemoteDataSourceImpl {
+  AddressService(super.apiService);
 }
