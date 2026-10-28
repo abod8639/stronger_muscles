@@ -1,24 +1,24 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
-import 'package:stronger_muscles/features/checkout/presentation/widgets/address_selection_card.dart';
-import 'package:stronger_muscles/features/checkout/presentation/widgets/payment_option_card.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import '../../../../core/components/components.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/error/error.dart';
+import '../../../../core/theme/theme.dart';
+import '../../../../core/utils/functions/cache_manager.dart';
+import '../../../../l10n/generated/app_localizations.dart';
+import '../../../cart/cart_feature.dart';
+import '../../../profile/profile_feature.dart';
+import '../controllers/checkout_controller.dart';
+import 'address_selection_card.dart';
+import 'payment_option_card.dart';
 
 Step buildAddressStep(WidgetRef ref, String title) {
-  final checkoutState = ref.watch(checkoutControllerProvider);
+  final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
   final addressState = ref.watch(addressControllerProvider);
-  final l10n = AppLocalizations.of(ref.context)!;
-  final theme = Theme.of(ref.context);
+  final context = ref.context;
+  final l10n = AppLocalizations.of(context)!;
+  final theme = Theme.of(context);
 
   return Step(
     title: Text(title),
@@ -43,7 +43,7 @@ Step buildAddressStep(WidgetRef ref, String title) {
             ),
           const SizedBox(height: 12.0),
           OutlinedButton.icon(
-            onPressed: () => showAddressForm(ref.context),
+            onPressed: () => showAddressForm(context),
             icon: const Icon(Icons.add_location_alt_outlined, size: 18.0),
             label: Text(l10n.addNewAddress),
             style: OutlinedButton.styleFrom(
@@ -89,15 +89,13 @@ Step buildAddressStep(WidgetRef ref, String title) {
         ),
       ),
     ),
-    isActive: checkoutState.currentStep >= 0,
-    state: checkoutState.currentStep > 0
-        ? StepState.complete
-        : StepState.editing,
+    isActive: currentStep >= 0,
+    state: currentStep > 0 ? StepState.complete : StepState.editing,
   );
 }
 
 Step buildPaymentStep(WidgetRef ref, String title) {
-  final checkoutState = ref.watch(checkoutControllerProvider);
+  final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
   final l10n = AppLocalizations.of(ref.context)!;
 
   return Step(
@@ -119,20 +117,20 @@ Step buildPaymentStep(WidgetRef ref, String title) {
         ),
       ],
     ),
-    isActive: checkoutState.currentStep >= 1,
-    state: checkoutState.currentStep > 1
-        ? StepState.complete
-        : StepState.editing,
+    isActive: currentStep >= 1,
+    state: currentStep > 1 ? StepState.complete : StepState.editing,
   );
 }
 
 Step buildReviewStep(WidgetRef ref, String title) {
-  final checkoutState = ref.watch(checkoutControllerProvider);
-  final checkoutNotifier = ref.read(checkoutControllerProvider.notifier);
+  final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
+  final selectedAddress = ref.watch(checkoutControllerProvider.select((s) => s.selectedAddress));
+  final selectedPaymentMethod = ref.watch(checkoutControllerProvider.select((s) => s.selectedPaymentMethod));
   final cartState = ref.watch(cartControllerProvider);
   final cartNotifier = ref.watch(cartControllerProvider.notifier);
-  final l10n = AppLocalizations.of(ref.context)!;
-  final theme = Theme.of(ref.context);
+  final context = ref.context;
+  final l10n = AppLocalizations.of(context)!;
+  final theme = Theme.of(context);
 
   return Step(
     title: Text(title),
@@ -157,10 +155,8 @@ Step buildReviewStep(WidgetRef ref, String title) {
             ),
             itemBuilder: (context, index) {
               final item = items[index];
-              final imageUrl = item.primaryImageUrl ??
-                  (item.product.imageUrls.isNotEmpty
-                      ? item.product.imageUrls.first.thumbnail
-                      : '');
+              final imageUrl = item.primaryImageUrl ?? '';
+              final effectivePrice = item.product.getEffectivePriceForSize(item.selectedSize);
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -210,7 +206,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
                           ),
                           const SizedBox(height: 2.0),
                           Text(
-                            '${item.quantity} x LE ${item.product.baseEffectivePrice.toStringAsFixed(2)}',
+                            '${item.quantity} x LE ${effectivePrice.toStringAsFixed(2)}',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
@@ -220,7 +216,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      'LE ${(item.product.baseEffectivePrice * item.quantity).toStringAsFixed(2)}',
+                      'LE ${item.subtotal.toStringAsFixed(2)}',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
@@ -289,7 +285,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
           ],
         ),
         const SizedBox(height: 16.0),
-        if (checkoutState.selectedAddress != null) ...[
+        if (selectedAddress != null) ...[
           Text(
             l10n.shippingTo,
             style: theme.textTheme.titleSmall?.copyWith(
@@ -298,7 +294,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
           ),
           const SizedBox(height: 4.0),
           Text(
-            checkoutState.selectedAddress!.fullAddress,
+            selectedAddress.fullAddress,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -313,7 +309,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
         ),
         const SizedBox(height: 4.0),
         Text(
-          checkoutState.selectedPaymentMethod == 'cash'
+          selectedPaymentMethod == 'cash'
               ? l10n.cashOnDelivery
               : l10n.creditCardOrOnline,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -321,19 +317,50 @@ Step buildReviewStep(WidgetRef ref, String title) {
           ),
         ),
         const SizedBox(height: 16.0),
-        AppTextFormField(
-          label: l10n.notes,
-          hintText: l10n.enterAdditionalNotes,
-          controller: TextEditingController(text: checkoutState.notes)
-            ..selection = TextSelection.fromPosition(
-              TextPosition(offset: checkoutState.notes.length),
-            ),
-          maxLines: 3,
-          onChanged: (val) => checkoutNotifier.setNotes(val),
-        ),
+        const CheckoutNotesInput(),
       ],
     ),
-    isActive: checkoutState.currentStep >= 2,
+    isActive: currentStep >= 2,
     state: StepState.editing,
   );
+}
+
+/// Lifecycle-managed text field for checkout notes, avoiding memory leaks.
+class CheckoutNotesInput extends ConsumerStatefulWidget {
+  const CheckoutNotesInput({super.key});
+
+  @override
+  ConsumerState<CheckoutNotesInput> createState() => _CheckoutNotesInputState();
+}
+
+class _CheckoutNotesInputState extends ConsumerState<CheckoutNotesInput> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialNotes = ref.read(checkoutControllerProvider).notes;
+    _controller = TextEditingController(text: initialNotes);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return AppTextFormField(
+      label: l10n.notes,
+      hintText: l10n.enterAdditionalNotes,
+      controller: _controller,
+      maxLines: 3,
+      onChanged: (val) {
+        ref.read(checkoutControllerProvider.notifier).setNotes(val);
+      },
+    );
+  }
 }
