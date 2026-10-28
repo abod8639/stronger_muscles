@@ -12,7 +12,7 @@ final productReviewsControllerProvider = StateNotifierProvider.autoDispose.famil
 });
 
 final userProductReviewProvider = FutureProvider.autoDispose.family<ReviewEntity?, String>((ref, productId) async {
-  final user = ref.watch(authControllerProvider).value;
+  final user = ref.watch(authControllerProvider).valueOrNull;
   if (user == null) return null;
 
   final getUserReviewUseCase = ref.watch(getUserProductReviewUseCaseProvider);
@@ -48,7 +48,7 @@ class ProductReviewsController extends StateNotifier<AsyncValue<List<ReviewEntit
         comment: comment,
       );
 
-      final currentReviews = state.value ?? [];
+      final currentReviews = state.valueOrNull ?? [];
       final existingIndex = currentReviews.indexWhere((r) => r.id == newReview.id || r.userId == newReview.userId);
 
       List<ReviewEntity> updatedList;
@@ -70,7 +70,7 @@ class ProductReviewsController extends StateNotifier<AsyncValue<List<ReviewEntit
   Future<bool> deleteReview(String reviewId) async {
     try {
       await _ref.read(deleteReviewUseCaseProvider)(reviewId);
-      final currentReviews = state.value ?? [];
+      final currentReviews = state.valueOrNull ?? [];
       state = AsyncValue.data(
         currentReviews.where((r) => r.id != reviewId).toList(),
       );
