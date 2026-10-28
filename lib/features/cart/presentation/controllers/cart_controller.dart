@@ -33,12 +33,12 @@ class CartController extends _$CartController {
   }
 
   /// List of current items in the cart as domain entities.
-  List<CartItemEntity> get cartItems => state.value ?? [];
+  List<CartItemEntity> get cartItems => state.valueOrNull ?? [];
 
   /// Resets error state back to data without losing cached cart items.
   void clearError() {
     if (state.hasError) {
-      state = AsyncData(state.value ?? []);
+      state = AsyncData(state.valueOrNull ?? []);
     }
   }
 
@@ -180,7 +180,7 @@ class CartController extends _$CartController {
     final id = product is ProductEntity
         ? product.id
         : (product is ProductModel ? product.id : product.toString());
-    final currentItems = state.value ?? [];
+    final currentItems = state.valueOrNull ?? [];
     return currentItems.any(
       (item) =>
           item.product.id == id &&
@@ -198,7 +198,7 @@ class CartController extends _$CartController {
     final id = product is ProductEntity
         ? product.id
         : (product is ProductModel ? product.id : product.toString());
-    final currentItems = state.value ?? [];
+    final currentItems = state.valueOrNull ?? [];
     try {
       return currentItems.firstWhere(
         (item) =>
@@ -213,10 +213,10 @@ class CartController extends _$CartController {
 
   /// Calculates total price of all items in cart.
   double get totalPrice =>
-      (state.value ?? []).fold(0.0, (sum, item) => sum + item.subtotal);
+      (state.valueOrNull ?? []).fold(0.0, (sum, item) => sum + item.subtotal);
 
   /// Number of unique items in cart.
-  int get cartCount => (state.value ?? []).length;
+  int get cartCount => (state.valueOrNull ?? []).length;
 
   /// Clears the entire cart using [ClearCartUseCase].
   Future<void> clearCart() async {
