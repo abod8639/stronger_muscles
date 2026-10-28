@@ -1,17 +1,22 @@
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Abstract repository defining the contract for wishlist data operations.
-/// Follows Clean Architecture by operating on pure domain [ProductEntity].
+/// Follows Clean Architecture and Functional Error Handling via [Either].
 abstract class WishlistRepository {
-  /// Returns the list of all products currently in the wishlist.
-  List<ProductEntity> getWishlistItems();
+  /// Fetches wishlist products orchestrating remote and local data sources.
+  Future<Either<Failure, List<ProductEntity>>> getWishlistItems();
+
+  /// Reads cached wishlist products synchronously for instant local rendering.
+  Either<Failure, List<ProductEntity>> getCachedWishlist();
 
   /// Adds a product to the wishlist.
-  void addToWishlist(ProductEntity product);
+  Future<Either<Failure, Unit>> addToWishlist(ProductEntity product);
 
   /// Removes a product from the wishlist.
-  void removeFromWishlist(ProductEntity product);
+  Future<Either<Failure, Unit>> removeFromWishlist(ProductEntity product);
 
-  /// Checks whether a product is in the wishlist.
-  bool isInWishlist(String productId);
+  /// Checks whether a product exists in the wishlist.
+  Either<Failure, bool> isInWishlist(String productId);
 }
