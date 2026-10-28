@@ -1,25 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 
+/// Pure Dart usecase for signing in via Google.
 class GoogleSignInUseCase {
-  final AuthRepository repository;
+  final AuthRepository _repository;
 
-  GoogleSignInUseCase(this.repository);
+  const GoogleSignInUseCase(this._repository);
 
-  Future<Either<Failure, UserEntity>> call({
-    required String email,
-    required String name,
-    String? photoUrl,
-    CancelToken? cancelToken,
-  }) {
-    return repository.googleSignIn(
-      email: email,
-      name: name,
-      photoUrl: photoUrl,
-      cancelToken: cancelToken,
-    );
+  Future<Either<Failure, UserEntity>> call() {
+    return _repository.googleSignIn();
   }
 }
