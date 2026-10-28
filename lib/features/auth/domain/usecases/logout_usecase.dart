@@ -1,14 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/auth/domain/repositories/auth_repository.dart';
 
+/// Pure Dart usecase for logging out the current user session.
 class LogoutUseCase {
-  final AuthRepository repository;
+  final AuthRepository _repository;
 
-  LogoutUseCase(this.repository);
+  const LogoutUseCase(this._repository);
 
-  Future<Either<Failure, Unit>> call({CancelToken? cancelToken}) {
-    return repository.logout(cancelToken: cancelToken);
+  Future<Either<Failure, Unit>> call() {
+    return _repository.logout();
   }
 }
