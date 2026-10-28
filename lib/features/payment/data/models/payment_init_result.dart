@@ -1,5 +1,5 @@
-import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
-
+/// Data Transfer Object representing the raw payment initiation response from the server.
+/// Pure DTO, strictly decoupled from Domain Layer Entities.
 class PaymentInitResult {
   final bool success;
   final String paymentUrl;
@@ -7,7 +7,7 @@ class PaymentInitResult {
   final String reference;
   final String? clientSecret;
 
-  PaymentInitResult({
+  const PaymentInitResult({
     required this.success,
     required this.paymentUrl,
     required this.transactionId,
@@ -25,20 +25,53 @@ class PaymentInitResult {
     );
   }
 
-  PaymentResultEntity toEntity() => PaymentResultEntity(
-        success: success,
-        paymentUrl: paymentUrl,
-        transactionId: transactionId,
-        reference: reference,
-        clientSecret: clientSecret,
+  Map<String, dynamic> toJson() {
+    return {
+      'success': success,
+      'payment_url': paymentUrl,
+      'transaction_id': transactionId,
+      'reference': reference,
+      if (clientSecret != null) 'client_secret': clientSecret,
+    };
+  }
+
+  PaymentInitResult copyWith({
+    bool? success,
+    String? paymentUrl,
+    String? transactionId,
+    String? reference,
+    String? clientSecret,
+  }) {
+    return PaymentInitResult(
+      success: success ?? this.success,
+      paymentUrl: paymentUrl ?? this.paymentUrl,
+      transactionId: transactionId ?? this.transactionId,
+      reference: reference ?? this.reference,
+      clientSecret: clientSecret ?? this.clientSecret,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PaymentInitResult &&
+          runtimeType == other.runtimeType &&
+          success == other.success &&
+          paymentUrl == other.paymentUrl &&
+          transactionId == other.transactionId &&
+          reference == other.reference &&
+          clientSecret == other.clientSecret;
+
+  @override
+  int get hashCode => Object.hash(
+        success,
+        paymentUrl,
+        transactionId,
+        reference,
+        clientSecret,
       );
 
-  static PaymentInitResult fromEntity(PaymentResultEntity entity) =>
-      PaymentInitResult(
-        success: entity.success,
-        paymentUrl: entity.paymentUrl,
-        transactionId: entity.transactionId,
-        reference: entity.reference,
-        clientSecret: entity.clientSecret,
-      );
+  @override
+  String toString() =>
+      'PaymentInitResult(success: $success, transactionId: $transactionId, reference: $reference)';
 }
