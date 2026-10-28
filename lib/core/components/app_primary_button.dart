@@ -41,7 +41,7 @@ class AppPrimaryButton extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: radius,
         boxShadow: onPressed != null && !isLoading
-            ? AppShadows.colored(effectiveBg, alpha: 0.28)
+            ? AppShadows.card(effectiveBg)
             : null,
       ),
       child: ElevatedButton(
