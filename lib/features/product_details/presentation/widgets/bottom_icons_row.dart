@@ -4,10 +4,10 @@ import 'package:stronger_muscles/core/components/app_quantity_controls.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
+import 'package:stronger_muscles/features/cart/cart_feature.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 const double _horizontalPadding = 16.0;
 const double _verticalPadding = 8.0;
@@ -105,7 +105,7 @@ class BottomIconsRow extends ConsumerWidget {
     AppLocalizations l10n,
     dynamic cartState,
   ) {
-    final isPriceZero = detailsNotifier.getDisplayEffectivePrice(product) <= 0;
+    final isPriceZero = detailsState.isPriceZero;
 
     return ElevatedButton.icon(
       onPressed: isPriceZero
