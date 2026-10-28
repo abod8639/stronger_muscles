@@ -21,13 +21,13 @@ class ProfileController extends _$ProfileController {
     });
   }
 
-  UserEntity? get currentUser => ref.watch(authControllerProvider).value;
+  UserEntity? get currentUser => ref.watch(authControllerProvider).valueOrNull;
   bool get isLoading => ref.watch(authControllerProvider).isLoading;
 
   List<OrderEntity> get orders =>
-      ref.watch(ordersControllerProvider).value ?? [];
+      ref.watch(ordersControllerProvider).valueOrNull ?? [];
   List<AddressEntity> get addresses =>
-      ref.watch(addressControllerProvider).value ?? [];
+      ref.watch(addressControllerProvider).valueOrNull ?? [];
 
   int get wishlistCount {
     try {
