@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
+import 'package:stronger_muscles/features/cart/cart_feature.dart';
+import 'package:stronger_muscles/features/home/home_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable application bottom navigation bar.
