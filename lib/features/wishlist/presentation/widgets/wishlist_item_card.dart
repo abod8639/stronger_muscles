@@ -3,12 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_delete_button.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_product_details.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_product_image.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+/// Card widget displaying a wishlist product item.
 class WishlistItemCard extends StatelessWidget {
   final ProductEntity product;
 
@@ -36,4 +37,3 @@ class WishlistItemCard extends StatelessWidget {
     );
   }
 }
-
