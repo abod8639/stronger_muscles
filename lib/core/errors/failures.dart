@@ -100,3 +100,22 @@ class UnknownFailure extends Failure {
     super.stackTrace,
   });
 }
+
+class CacheFailure extends Failure {
+  const CacheFailure({
+    required super.message,
+    super.type = FailureType.unknown,
+    super.originalError,
+    super.stackTrace,
+  });
+}
+
+class GeneralFailure extends Failure {
+  const GeneralFailure({
+    required super.message,
+    super.type = FailureType.unknown,
+    super.originalError,
+    super.stackTrace,
+  });
+}
+
