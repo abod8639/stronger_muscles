@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/features/auth/auth_feature.dart';
-import 'package:stronger_muscles/features/cart/presentation/pages/cart_view.dart';
+import 'package:stronger_muscles/features/cart/cart_routes.dart';
 import 'package:stronger_muscles/features/home/presentation/pages/home_view.dart';
 import 'package:stronger_muscles/main_page.dart';
 import 'package:stronger_muscles/features/order/presentation/pages/order_view.dart';
@@ -98,14 +98,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRoutes.cart,
-                builder: (context, state) => const CartView(),
-              ),
-            ],
-          ),
+          CartRoutes.branch,
           StatefulShellBranch(
             routes: [
               GoRoute(
