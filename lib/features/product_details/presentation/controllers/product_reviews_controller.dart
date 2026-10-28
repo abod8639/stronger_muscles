@@ -1,13 +1,35 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/product/product_feature.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
+import 'package:stronger_muscles/features/product/product_feature.dart'
+    hide
+        getProductReviewsUseCaseProvider,
+        getUserProductReviewUseCaseProvider,
+        submitReviewUseCaseProvider,
+        deleteReviewUseCaseProvider,
+        GetProductReviewsUseCase,
+        GetUserProductReviewUseCase,
+        SubmitReviewUseCase,
+        DeleteReviewUseCase;
+import 'package:stronger_muscles/features/product_details/domain/usecases/delete_product_review_usecase.dart';
+import 'package:stronger_muscles/features/product_details/domain/usecases/get_product_reviews_usecase.dart';
+import 'package:stronger_muscles/features/product_details/domain/usecases/submit_product_review_usecase.dart';
+import 'package:stronger_muscles/features/product_details/product_details_providers.dart';
 
 final productReviewsControllerProvider = StateNotifierProvider.autoDispose.family<
     ProductReviewsController,
     AsyncValue<List<ReviewEntity>>,
     String
 >((ref, productId) {
-  return ProductReviewsController(ref, productId);
+  return ProductReviewsController(
+    getReviewsUseCase: ref.watch(getProductReviewsUseCaseProvider),
+    submitReviewUseCase: ref.watch(submitProductReviewUseCaseProvider),
+    deleteReviewUseCase: ref.watch(deleteProductReviewUseCaseProvider),
+    productId: productId,
+    onInvalidateUserReview: () {
+      ref.invalidate(userProductReviewProvider(productId));
+    },
+  );
 });
 
 final userProductReviewProvider =
@@ -20,34 +42,55 @@ final userProductReviewProvider =
   return either.fold((_) => null, (review) => review);
 });
 
+/// Controller handling reviews state and submission guards for a product.
 class ProductReviewsController
     extends StateNotifier<AsyncValue<List<ReviewEntity>>> {
-  final Ref _ref;
+  final GetProductReviewsUseCase _getReviewsUseCase;
+  final SubmitProductReviewUseCase _submitReviewUseCase;
+  final DeleteProductReviewUseCase _deleteReviewUseCase;
   final String productId;
+  final VoidCallback? onInvalidateUserReview;
 
-  ProductReviewsController(this._ref, this.productId)
-      : super(const AsyncValue.loading()) {
+  bool _isSubmitting = false;
+  bool get isSubmitting => _isSubmitting;
+
+  ProductReviewsController({
+    required GetProductReviewsUseCase getReviewsUseCase,
+    required SubmitProductReviewUseCase submitReviewUseCase,
+    required DeleteProductReviewUseCase deleteReviewUseCase,
+    required this.productId,
+    this.onInvalidateUserReview,
+  })  : _getReviewsUseCase = getReviewsUseCase,
+        _submitReviewUseCase = submitReviewUseCase,
+        _deleteReviewUseCase = deleteReviewUseCase,
+        super(const AsyncValue.loading()) {
     fetchReviews();
   }
 
   Future<void> fetchReviews() async {
     state = const AsyncValue.loading();
-    final either = await _ref.read(getProductReviewsUseCaseProvider)(productId);
+    final either = await _getReviewsUseCase(productId);
     state = either.fold(
       (failure) => AsyncValue.error(failure, StackTrace.current),
       (reviews) => AsyncValue.data(reviews),
     );
   }
 
+  /// Submits a review with guard clauses against duplicate submissions.
   Future<bool> submitReview({
     required double rating,
     required String comment,
   }) async {
-    final either = await _ref.read(submitReviewUseCaseProvider)(
+    if (_isSubmitting) return false;
+    _isSubmitting = true;
+
+    final either = await _submitReviewUseCase(
       productId: productId,
       rating: rating,
       comment: comment,
     );
+
+    _isSubmitting = false;
 
     return either.fold(
       (failure) => false,
@@ -66,14 +109,21 @@ class ProductReviewsController
         }
 
         state = AsyncValue.data(updatedList);
-        _ref.invalidate(userProductReviewProvider(productId));
+        onInvalidateUserReview?.call();
         return true;
       },
     );
   }
 
+  /// Deletes a review by [reviewId] with guard clauses.
   Future<bool> deleteReview(String reviewId) async {
-    final either = await _ref.read(deleteReviewUseCaseProvider)(reviewId);
+    if (_isSubmitting) return false;
+    _isSubmitting = true;
+
+    final either = await _deleteReviewUseCase(reviewId);
+
+    _isSubmitting = false;
+
     return either.fold(
       (failure) => false,
       (_) {
@@ -81,7 +131,7 @@ class ProductReviewsController
         state = AsyncValue.data(
           currentReviews.where((r) => r.id != reviewId).toList(),
         );
-        _ref.invalidate(userProductReviewProvider(productId));
+        onInvalidateUserReview?.call();
         return true;
       },
     );
