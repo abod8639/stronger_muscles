@@ -18,7 +18,7 @@ import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
-import 'package:stronger_muscles/features/notifications/presentation/pages/notifications_view.dart';
+import 'package:stronger_muscles/features/notifications/notifications_routes.dart';
 import 'package:stronger_muscles/features/help_support/help_support_routes.dart';
 import 'package:stronger_muscles/features/product/presentation/pages/product_catalog_view.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -166,10 +166,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           return OrderDetailsView(order: order);
         },
       ),
-      GoRoute(
-        path: AppRoutes.notifications,
-        builder: (context, state) => const NotificationsView(),
-      ),
+      ...NotificationsRoutes.routes,
       ...HelpSupportRoutes.routes,
       GoRoute(
         path: AppRoutes.products,
