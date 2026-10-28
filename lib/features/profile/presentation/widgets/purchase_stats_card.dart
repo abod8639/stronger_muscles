@@ -21,7 +21,7 @@ class _PurchaseStatsCardContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final orders = ref.watch(ordersControllerProvider).value ?? [];
+    final orders = ref.watch(ordersControllerProvider).valueOrNull ?? [];
     final totalSpent = orders.fold(0.0, (sum, order) => sum + order.totalAmount);
     final deliveredOrders = orders.where((o) => o.status.toLowerCase() == 'delivered').length;
     final intl10n = AppLocalizations.of(context)!;
