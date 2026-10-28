@@ -75,12 +75,10 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   }
 
   void updateIndex(int index) {
-    if (state.hasValue &&
-        state.value != null &&
-        index >= 0 &&
-        index < state.value!.length) {
+    final list = state.valueOrNull;
+    if (list != null && index >= 0 && index < list.length) {
       ref.read(selectedCategoryIndexProvider.notifier).setIndex(index);
-      final selectedId = state.value![index].id;
+      final selectedId = list[index].id;
 
       ref
           .read(homeControllerProvider.notifier)
