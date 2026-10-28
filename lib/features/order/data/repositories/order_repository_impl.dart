@@ -1,63 +1,101 @@
-import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:stronger_muscles/core/services/api_service.dart';
+import 'dart:async';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/order/data/datasources/order_local_datasource.dart';
 import 'package:stronger_muscles/features/order/data/datasources/order_remote_datasource.dart';
+import 'package:stronger_muscles/features/order/data/mappers/order_mapper.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
 import 'package:stronger_muscles/features/order/domain/repositories/order_repository.dart';
 
 /// Concrete implementation of domain [OrderRepository].
-/// Handles remote operations with offline cache fallback.
+/// Acts as Single Source of Truth orchestrating [OrderRemoteDatasource]
+/// and [OrderLocalDatasource] with offline caching and functional error handling.
 class OrderRepositoryImpl implements OrderRepository {
   final OrderRemoteDatasource _remoteDatasource;
-  final OrderLocalDatasource? _localDatasource;
+  final OrderLocalDatasource _localDatasource;
 
   OrderRepositoryImpl(
-    dynamic remoteOrApiService, [
+    this._remoteDatasource,
     this._localDatasource,
-  ]) : _remoteDatasource = remoteOrApiService is OrderRemoteDatasource
-            ? remoteOrApiService
-            : OrderRemoteDatasourceImpl(remoteOrApiService as ApiService);
+  );
 
   @override
-  Future<Map<String, dynamic>> createOrder(Map<String, dynamic> payload) async {
-    return _remoteDatasource.createOrder(payload);
+  Future<Either<Failure, List<OrderEntity>>> getUserOrders({
+    int page = 1,
+    int? limit,
+  }) async {
+    return NetworkErrorHandler.execute<List<OrderEntity>>(() async {
+      try {
+        final remoteOrders = await _remoteDatasource.getUserOrders(
+          page: page,
+          limit: limit,
+        );
+
+        if (page == 1) {
+          unawaited(_localDatasource.cacheOrders(remoteOrders));
+        }
+
+        return remoteOrders.map((m) => m.toEntity()).toList();
+      } on Failure catch (failure) {
+        if (failure is CancelFailure) rethrow;
+
+        // Fallback to local cache on network or server errors
+        final cached = await _localDatasource.getCachedOrders();
+        if (cached.isNotEmpty) {
+          final list = limit != null ? cached.take(limit).toList() : cached;
+          return list.map((m) => m.toEntity()).toList();
+        }
+        rethrow;
+      }
+    });
   }
 
   @override
-  Future<List<OrderEntity>> getUserOrders({int? limit}) async {
-    try {
-      final remoteOrders = await _remoteDatasource.getUserOrders(limit: limit);
-      await _localDatasource?.cacheOrders(remoteOrders);
-      return remoteOrders.map((m) => m.toEntity()).toList();
-    } on Failure {
-      final cached = await _localDatasource?.getCachedOrders();
-      if (cached != null && cached.isNotEmpty) {
-        final list = limit != null ? cached.take(limit).toList() : cached;
-        return list.map((m) => m.toEntity()).toList();
+  Future<Either<Failure, OrderEntity?>> getOrderById(String id) async {
+    return NetworkErrorHandler.execute<OrderEntity?>(() async {
+      try {
+        final remoteOrder = await _remoteDatasource.getOrderById(id);
+        if (remoteOrder != null) {
+          unawaited(_localDatasource.updateCachedOrder(remoteOrder));
+          return remoteOrder.toEntity();
+        }
+
+        final cached = await _localDatasource.getCachedOrderById(id);
+        return cached?.toEntity();
+      } on Failure catch (failure) {
+        if (failure is CancelFailure) rethrow;
+
+        final cached = await _localDatasource.getCachedOrderById(id);
+        if (cached != null) {
+          return cached.toEntity();
+        }
+        rethrow;
       }
-      rethrow;
-    } catch (e) {
-      final cached = await _localDatasource?.getCachedOrders();
-      if (cached != null && cached.isNotEmpty) {
-        final list = limit != null ? cached.take(limit).toList() : cached;
-        return list.map((m) => m.toEntity()).toList();
-      }
-      throw Failure(message: "فشل في جلب طلباتك، يرجى المحاولة لاحقاً");
-    }
+    });
   }
 
   @override
-  Future<OrderEntity?> getOrderById(String id) async {
-    try {
-      final remoteOrder = await _remoteDatasource.getOrderById(id);
-      if (remoteOrder != null) {
-        return remoteOrder.toEntity();
+  Future<Either<Failure, Map<String, dynamic>>> createOrder(
+    Map<String, dynamic> payload,
+  ) async {
+    return NetworkErrorHandler.execute<Map<String, dynamic>>(() async {
+      final response = await _remoteDatasource.createOrder(payload);
+      return response;
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> cancelOrder(String id) async {
+    return NetworkErrorHandler.execute<Unit>(() async {
+      await _remoteDatasource.cancelOrder(id);
+
+      final cached = await _localDatasource.getCachedOrderById(id);
+      if (cached != null) {
+        final updated = cached.copyWith(status: 'cancelled');
+        unawaited(_localDatasource.updateCachedOrder(updated));
       }
-      final cached = await _localDatasource?.getCachedOrderById(id);
-      return cached?.toEntity();
-    } catch (_) {
-      final cached = await _localDatasource?.getCachedOrderById(id);
-      return cached?.toEntity();
-    }
+
+      return unit;
+    });
   }
 }
