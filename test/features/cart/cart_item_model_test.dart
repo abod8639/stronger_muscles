@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:stronger_muscles/features/cart/data/mappers/cart_mapper.dart';
 import 'package:stronger_muscles/features/cart/data/models/cart_item_model.dart';
 import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
@@ -76,7 +77,7 @@ void main() {
       expect(entity.selectedSize, '2kg');
       expect(entity.subtotal, 3600.0); // 900 * 4
 
-      final reconstructedModel = CartItemModel.fromEntity(entity);
+      final reconstructedModel = entity.toModel();
       expect(reconstructedModel.id, model.id);
       expect(reconstructedModel.userId, model.userId);
       expect(reconstructedModel.quantity, model.quantity);
