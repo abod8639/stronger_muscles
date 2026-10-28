@@ -9,7 +9,7 @@ import 'package:stronger_muscles/features/profile/profile_feature.dart';
 import 'package:stronger_muscles/features/search/domain/usecases/calculate_price_bounds_usecase.dart';
 import 'package:stronger_muscles/features/search/domain/usecases/filter_by_price_usecase.dart';
 import 'package:stronger_muscles/features/search/domain/usecases/search_products_usecase.dart';
-import 'package:stronger_muscles/features/search/domain/usecases/usecase_providers.dart';
+import 'package:stronger_muscles/features/search/search_providers.dart';
 
 part 'product_search_controller.g.dart';
 
@@ -28,6 +28,7 @@ class ProductSearchController extends _$ProductSearchController {
   double _dataMinPrice = 0.0;
   double _dataMaxPrice = 1000.0;
   bool _hasSearched = false;
+  bool _isSearching = false;
 
   double get filterMinPrice => _filterMinPrice;
   double get filterMaxPrice => _filterMaxPrice;
@@ -35,6 +36,7 @@ class ProductSearchController extends _$ProductSearchController {
   double get dataMaxPrice => _dataMaxPrice;
   String get searchQuery => _searchQuery;
   bool get hasSearched => _hasSearched;
+  bool get isSearching => _isSearching;
 
   // ── Domain UseCases ─────────────────────────────────────────────────────
   SearchProductsUseCase get _searchProductsUseCase =>
@@ -127,34 +129,38 @@ class ProductSearchController extends _$ProductSearchController {
     _applyFiltersToResults(results);
   }
 
-  /// Handles remote search with combined results
+  /// Handles remote search with combined results via fpdart Either (Rule 3 & 4)
   Future<void> _handleRemoteSearch(String query) async {
     if (query.isEmpty) return;
+    if (_isSearching) return;
 
-    try {
-      // Fetch remote results via use case
-      final List<ProductEntity> remoteResults =
-          await _searchProductsUseCase(query);
+    _isSearching = true;
+    final result = await _searchProductsUseCase(query);
+    _isSearching = false;
 
-      // Merge with current local results
-      final existingIds = _combinedResults.map((e) => e.id).toSet();
-      final List<ProductEntity> merged = List.from(_combinedResults);
-
-      for (var product in remoteResults) {
-        if (!existingIds.contains(product.id)) {
-          merged.add(product);
+    result.fold(
+      (failure) {
+        // Don't overwrite state with error if we already have local results
+        if (_combinedResults.isEmpty) {
+          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
         }
-      }
+      },
+      (remoteResults) {
+        // Merge with current local results
+        final existingIds = _combinedResults.map((e) => e.id).toSet();
+        final List<ProductEntity> merged = List.from(_combinedResults);
 
-      _combinedResults = merged;
-      _updateDataBounds();
-      _applyFiltersToResults(merged);
-    } catch (e, st) {
-      // Don't overwrite state with error if we already have local results
-      if (_combinedResults.isEmpty) {
-        state = AsyncError(e, st);
-      }
-    }
+        for (final product in remoteResults) {
+          if (!existingIds.contains(product.id)) {
+            merged.add(product);
+          }
+        }
+
+        _combinedResults = merged;
+        _updateDataBounds();
+        _applyFiltersToResults(merged);
+      },
+    );
   }
 
   /// Prioritized Local Filter: Exact > Prefix > Contains > Fuzzy
@@ -245,8 +251,8 @@ class ProductSearchController extends _$ProductSearchController {
     if (source.isEmpty) return;
 
     final bounds = _calculatePriceBoundsUseCase(source);
-    _dataMinPrice = bounds['min']!;
-    _dataMaxPrice = bounds['max']!;
+    _dataMinPrice = bounds.min;
+    _dataMaxPrice = bounds.max;
 
     _filterMinPrice = _filterMinPrice.clamp(_dataMinPrice, _dataMaxPrice);
     _filterMaxPrice = _filterMaxPrice.clamp(_dataMinPrice, _dataMaxPrice);
