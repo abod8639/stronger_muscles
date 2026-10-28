@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 
 /// Product carousel image indicator delegating to unified [AppDotsIndicator] with safe clamping.
 class ImageIndicators extends StatelessWidget {
   const ImageIndicators({
     super.key,
-    required this.product,
+    this.product,
+    this.itemCount,
     required this.selectedImageIndex,
   });
 
-  final ProductModel product;
+  final dynamic product;
+  final int? itemCount;
   final int selectedImageIndex;
 
   @override
   Widget build(BuildContext context) {
-    if (product.imageUrls.isEmpty) return const SizedBox.shrink();
+    final count = itemCount ?? (product?.imageUrls?.length as int? ?? 0);
+    if (count <= 1) return const SizedBox.shrink();
 
-    final safeIndex = selectedImageIndex.clamp(0, product.imageUrls.length - 1);
+    final safeIndex = selectedImageIndex.clamp(0, count - 1);
 
     return Positioned(
       bottom: 10.0,
       left: 0,
       right: 0,
       child: AppDotsIndicator(
-        itemCount: product.imageUrls.length,
+        itemCount: count,
         currentIndex: safeIndex,
       ),
     );
