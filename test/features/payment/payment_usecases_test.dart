@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/features/payment/data/mappers/payment_mapper.dart';
 import 'package:stronger_muscles/features/payment/data/models/payment_init_result.dart';
 import 'package:stronger_muscles/features/payment/data/models/payment_method_model.dart';
-import 'package:stronger_muscles/features/payment/data/repositories/payment_repository.dart';
 import 'package:stronger_muscles/features/payment/domain/entities/payment_method_entity.dart';
 import 'package:stronger_muscles/features/payment/domain/entities/payment_result_entity.dart';
+import 'package:stronger_muscles/features/payment/domain/repositories/payment_repository.dart';
 import 'package:stronger_muscles/features/payment/domain/usecases/get_payment_methods_usecase.dart';
 import 'package:stronger_muscles/features/payment/domain/usecases/initiate_payment_usecase.dart';
-import 'package:stronger_muscles/features/payment/presentation/controllers/payment_controller.dart';
+import 'package:stronger_muscles/features/payment/payment_providers.dart';
 
 class MockPaymentRepository implements PaymentRepository {
   PaymentResultEntity? mockResult;
@@ -16,33 +19,35 @@ class MockPaymentRepository implements PaymentRepository {
   bool shouldThrow = false;
 
   @override
-  Future<PaymentResultEntity> initiatePayment({
+  Future<Either<Failure, PaymentResultEntity>> initiatePayment({
     required dynamic orderId,
     String gateway = 'paymob',
     String? firstName,
     String? lastName,
   }) async {
     if (shouldThrow) {
-      throw Exception('Payment initiation error');
+      return const Left(Failure(message: 'Payment initiation error'));
     }
-    return mockResult ??
-        const PaymentResultEntity(
-          success: true,
-          paymentUrl: 'https://paymob.com/iframe/123',
-          transactionId: 'txn_123',
-          reference: 'ref_123',
-        );
+    return Right(
+      mockResult ??
+          const PaymentResultEntity(
+            success: true,
+            paymentUrl: 'https://paymob.com/iframe/123',
+            transactionId: 'txn_123',
+            reference: 'ref_123',
+          ),
+    );
   }
 
   @override
-  Future<List<PaymentMethodEntity>> getAvailablePaymentMethods({
+  Future<Either<Failure, List<PaymentMethodEntity>>> getAvailablePaymentMethods({
     String lang = 'ar',
   }) async {
     if (shouldThrow) {
-      throw Exception('Failed to load payment methods');
+      return const Left(Failure(message: 'Failed to load payment methods'));
     }
-    if (mockMethods.isNotEmpty) return mockMethods;
-    return const [
+    if (mockMethods.isNotEmpty) return Right(mockMethods);
+    return const Right([
       PaymentMethodEntity(
         id: 'cash',
         title: 'الدفع عند الاستلام',
@@ -53,7 +58,7 @@ class MockPaymentRepository implements PaymentRepository {
         title: 'بطاقة ائتمان',
         icon: Icons.credit_card,
       ),
-    ];
+    ]);
   }
 }
 
@@ -70,8 +75,10 @@ void main() {
     });
 
     test('InitiatePaymentUseCase returns PaymentResultEntity on success', () async {
-      final result = await initiatePaymentUseCase(orderId: 101, gateway: 'stripe');
+      final either = await initiatePaymentUseCase(orderId: 101, gateway: 'stripe');
 
+      expect(either.isRight(), true);
+      final result = either.getOrElse((_) => throw Exception('Expected Right'));
       expect(result.success, true);
       expect(result.paymentUrl, 'https://paymob.com/iframe/123');
       expect(result.hasPaymentUrl, true);
@@ -80,8 +87,10 @@ void main() {
     });
 
     test('GetPaymentMethodsUseCase returns list of PaymentMethodEntity', () async {
-      final methods = await getPaymentMethodsUseCase(lang: 'ar');
+      final either = await getPaymentMethodsUseCase(lang: 'ar');
 
+      expect(either.isRight(), true);
+      final methods = either.getOrElse((_) => throw Exception('Expected Right'));
       expect(methods.length, 2);
       expect(methods.first.id, 'cash');
       expect(methods.first.title, 'الدفع عند الاستلام');
@@ -147,7 +156,7 @@ void main() {
       expect(serialized['is_enabled'], true);
     });
 
-    test('PaymentInitResult model maps to and from PaymentResultEntity', () {
+    test('PaymentInitResult model maps to and from PaymentResultEntity via mappers', () {
       final model = PaymentInitResult(
         success: true,
         paymentUrl: 'https://example.com/pay',
@@ -162,14 +171,14 @@ void main() {
       expect(entity.transactionId, 'tx_55');
       expect(entity.clientSecret, 'secret');
 
-      final reconstructedModel = PaymentInitResult.fromEntity(entity);
+      final reconstructedModel = entity.toModel();
       expect(reconstructedModel.success, true);
       expect(reconstructedModel.paymentUrl, 'https://example.com/pay');
       expect(reconstructedModel.transactionId, 'tx_55');
       expect(reconstructedModel.clientSecret, 'secret');
     });
 
-    test('PaymentController manages AsyncValue state transitions', () async {
+    test('PaymentController manages state transitions and value access', () async {
       final container = ProviderContainer(
         overrides: [
           paymentRepositoryProvider.overrideWithValue(mockRepository),
