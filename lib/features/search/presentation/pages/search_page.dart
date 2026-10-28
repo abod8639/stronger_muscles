@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
@@ -17,7 +18,7 @@ class SearchPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchState = ref.watch(productSearchControllerProvider);
-    final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
+    final searchNotifier = ref.read(productSearchControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -43,7 +44,7 @@ class SearchPage extends ConsumerWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: _buildFilterChips(ref, l10n.searchForProducts),
+            child: _SearchFilterChip(label: l10n.searchForProducts),
           ),
           searchState.when(
             data: (products) {
@@ -100,16 +101,35 @@ class SearchPage extends ConsumerWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            error: (e, st) =>
-                SliverToBoxAdapter(child: Center(child: Text('Error: $e'))),
+            error: (e, st) {
+              final errorMessage = e is Failure ? e.toMessage() : 'Error: $e';
+              return SliverToBoxAdapter(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppDimens.spacingLg),
+                    child: Text(errorMessage),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildFilterChips(WidgetRef ref, String label) {
-    final query = ref.watch(productSearchControllerProvider.notifier).searchQuery;
+/// Isolated chip widget with selective listening to avoid rebuilding the whole page.
+class _SearchFilterChip extends ConsumerWidget {
+  final String label;
+
+  const _SearchFilterChip({required this.label});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final query = ref.watch(
+      productSearchControllerProvider.notifier.select((n) => n.searchQuery),
+    );
     if (query.isEmpty) return const SizedBox.shrink();
     return Container(
       padding: const EdgeInsets.symmetric(
