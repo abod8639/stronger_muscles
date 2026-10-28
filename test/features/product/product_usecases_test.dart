@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/product/domain/entities/category_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
@@ -16,26 +18,37 @@ class MockProductRepository implements ProductRepository {
   final List<ProductEntity> products = [];
 
   @override
-  List<ProductEntity> getCachedProducts() => products;
+  Either<Failure, List<ProductEntity>> getCachedProducts() => Right(products);
 
   @override
-  Future<List<ProductEntity>> getProducts({String? categoryId, int page = 1}) async {
+  Future<Either<Failure, List<ProductEntity>>> getProducts({
+    String? categoryId,
+    int page = 1,
+    int limit = 20,
+  }) async {
     if (categoryId != null) {
-      return products.where((p) => p.categoryId == categoryId).toList();
+      return Right(products.where((p) => p.categoryId == categoryId).toList());
     }
-    return products;
+    return Right(products);
   }
 
   @override
-  Future<ProductEntity> getProductById(String id) async {
-    return products.firstWhere((p) => p.id == id);
+  Future<Either<Failure, ProductEntity>> getProductById(String id) async {
+    final product = products.where((p) => p.id == id).firstOrNull;
+    if (product != null) {
+      return Right(product);
+    }
+    return const Left(Failure(message: 'Product not found'));
   }
 
   @override
-  Future<List<ProductEntity>> searchProducts(String query) async {
-    return products
-        .where((p) => p.getLocalizedName().toLowerCase().contains(query.toLowerCase()))
-        .toList();
+  Future<Either<Failure, List<ProductEntity>>> searchProducts(String query) async {
+    return Right(
+      products
+          .where((p) =>
+              p.getLocalizedName().toLowerCase().contains(query.toLowerCase()))
+          .toList(),
+    );
   }
 }
 
@@ -43,10 +56,12 @@ class MockCategoryRepository implements CategoryRepository {
   final List<CategoryEntity> categories = [];
 
   @override
-  List<CategoryEntity> getCachedCategories() => categories;
+  Either<Failure, List<CategoryEntity>> getCachedCategories() =>
+      Right(categories);
 
   @override
-  Future<List<CategoryEntity>> getAllCategories() async => categories;
+  Future<Either<Failure, List<CategoryEntity>>> getAllCategories() async =>
+      Right(categories);
 }
 
 void main() {
@@ -76,8 +91,10 @@ void main() {
 
     test('GetProductsUseCase returns products', () async {
       final useCase = GetProductsUseCase(mockProductRepository);
-      final result = await useCase();
+      final either = await useCase();
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => []);
       expect(result.length, 1);
       expect(result.first.id, 'prod-1');
       expect(result.first.hasDiscount, isTrue);
@@ -86,35 +103,44 @@ void main() {
 
     test('GetCachedProductsUseCase returns synchronous cached products', () {
       final useCase = GetCachedProductsUseCase(mockProductRepository);
-      final result = useCase();
+      final either = useCase();
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => []);
       expect(result.length, 1);
       expect(result.first.getLocalizedName(locale: 'en'), 'Whey Protein');
     });
 
     test('GetProductByIdUseCase returns single product by id', () async {
       final useCase = GetProductByIdUseCase(mockProductRepository);
-      final result = await useCase('prod-1');
+      final either = await useCase('prod-1');
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => throw Exception());
       expect(result.id, 'prod-1');
       expect(result.isInStock, isTrue);
     });
 
     test('SearchProductsUseCase filters products by name', () async {
       final useCase = SearchProductsUseCase(mockProductRepository);
-      final result = await useCase('Whey');
+      final either = await useCase('Whey');
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => []);
       expect(result.length, 1);
       expect(result.first.id, 'prod-1');
 
-      final emptyResult = await useCase('Creatine');
-      expect(emptyResult, isEmpty);
+      final emptyEither = await useCase('Creatine');
+      expect(emptyEither.isRight(), isTrue);
+      expect(emptyEither.getOrElse((_) => []), isEmpty);
     });
 
     test('GetAllCategoriesUseCase returns categories', () async {
       final useCase = GetAllCategoriesUseCase(mockCategoryRepository);
-      final result = await useCase();
+      final either = await useCase();
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => []);
       expect(result.length, 1);
       expect(result.first.id, 'cat-1');
       expect(result.first.getLocalizedName(locale: 'ar'), 'بروتين');
@@ -122,8 +148,10 @@ void main() {
 
     test('GetCachedCategoriesUseCase returns synchronous cached categories', () {
       final useCase = GetCachedCategoriesUseCase(mockCategoryRepository);
-      final result = useCase();
+      final either = useCase();
 
+      expect(either.isRight(), isTrue);
+      final result = either.getOrElse((_) => []);
       expect(result.length, 1);
       expect(result.first.id, 'cat-1');
     });
