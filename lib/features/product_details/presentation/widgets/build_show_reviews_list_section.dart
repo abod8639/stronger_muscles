@@ -13,9 +13,9 @@ Widget buildShowReviewsListSection(ProductModel product) {
     builder: (context, ref, child) {
       final reviewsAsync = ref.watch(productReviewsControllerProvider(product.id));
       final userReviewAsync = ref.watch(userProductReviewProvider(product.id));
-      final currentUser = ref.watch(authControllerProvider).value;
+      final currentUser = ref.watch(authControllerProvider).valueOrNull;
 
-      final existingUserReview = userReviewAsync.value;
+      final existingUserReview = userReviewAsync.valueOrNull;
       final actionText = existingUserReview != null ? 'تعديل تقييمك' : 'أضف تقييمك';
 
       void handleAddReview() {
