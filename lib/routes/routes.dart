@@ -5,13 +5,10 @@ import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/cart/cart_routes.dart';
 import 'package:stronger_muscles/features/home/home_routes.dart';
 import 'package:stronger_muscles/main_page.dart';
-import 'package:stronger_muscles/features/order/presentation/pages/order_view.dart';
+import 'package:stronger_muscles/features/order/order_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/pages/product_details_view.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
-import 'package:stronger_muscles/features/order/data/models/order_model.dart';
-import 'package:stronger_muscles/features/order/domain/entities/order_entity.dart';
-import 'package:stronger_muscles/features/order/presentation/pages/order_details_view.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
 import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
@@ -152,20 +149,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.editUserInfo,
         builder: (context, state) => const EditUserInfoView(),
       ),
-      GoRoute(
-        path: AppRoutes.orderView,
-        builder: (context, state) => const OrderView(),
-      ),
-      GoRoute(
-        path: AppRoutes.orderDetails,
-        builder: (context, state) {
-          final extra = state.extra;
-          final order = extra is OrderEntity
-              ? extra
-              : (extra as OrderModel).toEntity();
-          return OrderDetailsView(order: order);
-        },
-      ),
+      ...OrderRoutes.routes,
       ...NotificationsRoutes.routes,
       ...HelpSupportRoutes.routes,
       GoRoute(
