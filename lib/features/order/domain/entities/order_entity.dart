@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
-import 'package:intl/intl.dart';
 import 'package:stronger_muscles/features/order/domain/entities/order_item_entity.dart';
-import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
+import 'package:stronger_muscles/features/profile/profile_feature.dart';
 
 /// Pure domain entity representing an order.
-@immutable
+/// 100% Pure Dart with zero dependencies on Flutter UI, Dio, Hive, or 3rd-party SDKs.
 class OrderEntity {
   final String id;
   final String userId;
@@ -50,7 +48,8 @@ class OrderEntity {
 
   String get formattedDate {
     if (orderDate == null) return '';
-    return DateFormat('d MMMM yyyy').format(orderDate!);
+    final d = orderDate!;
+    return '${d.year}/${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}';
   }
 
   bool get isPaid => paymentStatus == 'paid';
