@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-
 /// Pure domain entity representing an available payment method.
-@immutable
 class PaymentMethodEntity {
   final String id;
   final String title;
   final String? subtitle;
-  final IconData icon;
+  final dynamic icon;
   final String gateway;
   final bool isEnabled;
 
@@ -23,7 +20,7 @@ class PaymentMethodEntity {
     String? id,
     String? title,
     String? subtitle,
-    IconData? icon,
+    dynamic icon,
     String? gateway,
     bool? isEnabled,
   }) {
