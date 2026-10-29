@@ -5,20 +5,27 @@ library;
 
 // Domain Entities
 export 'domain/entities/checkout_params.dart';
+export 'domain/entities/checkout_quote.dart';
 export 'domain/entities/checkout_result_entity.dart';
 
 // Domain Repositories (Contracts)
 export 'domain/repositories/checkout_repository.dart';
 
 // Domain UseCases
+export 'domain/usecases/get_checkout_quote_usecase.dart';
 export 'domain/usecases/place_order_usecase.dart';
 
 // Presentation State & DI
 export 'presentation/controllers/checkout_controller.dart'
-    show checkoutControllerProvider, CheckoutController, CheckoutState;
+    show
+        checkoutControllerProvider,
+        checkoutQuoteProvider,
+        CheckoutController,
+        CheckoutState;
 export 'presentation/controllers/checkout_di.dart'
     show
         checkoutRepositoryProvider,
+        getCheckoutQuoteUseCaseProvider,
         placeOrderUseCaseProvider;
 
 // Presentation Routes
