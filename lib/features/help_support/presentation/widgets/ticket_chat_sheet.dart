@@ -29,14 +29,14 @@ class TicketChatSheet extends ConsumerStatefulWidget {
 class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+  late final HelpSupportNotifier _helpSupportNotifier;
 
   @override
   void initState() {
     super.initState();
+    _helpSupportNotifier = ref.read(helpSupportControllerProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(helpSupportControllerProvider.notifier)
-          .loadTicketDetails(widget.ticketId);
+      _helpSupportNotifier.loadTicketDetails(widget.ticketId);
     });
   }
 
@@ -44,7 +44,9 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    ref.read(helpSupportControllerProvider.notifier).clearSelectedTicket();
+    Future.microtask(() {
+      _helpSupportNotifier.clearSelectedTicket();
+    });
     super.dispose();
   }
 
