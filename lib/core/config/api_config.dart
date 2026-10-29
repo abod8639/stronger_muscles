@@ -56,6 +56,7 @@ class ApiConfig {
   static const String customerProfile = '/customer/profile';
   static const String cart = '/customer/cart';
   static const String orders = '/customer/orders';
+  static const String orderQuote = '/customer/orders/quote';
   static String payOrder(dynamic orderId) => '/customer/orders/$orderId/pay';
   static const String fcmToken = '/customer/fcm-token';
 
