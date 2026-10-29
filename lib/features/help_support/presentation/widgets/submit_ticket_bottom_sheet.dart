@@ -68,16 +68,22 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSubmitting = true);
-    final ticketId = await widget.onSubmit(
-      subject: _subjectController.text.trim(),
-      category: _selectedCategory,
-      message: _messageController.text.trim(),
-      priority: _selectedPriority,
-    );
-    if (mounted) {
-      setState(() => _isSubmitting = false);
-      if (ticketId != null) {
-        Navigator.of(context).pop(ticketId);
+    try {
+      final ticketId = await widget.onSubmit(
+        subject: _subjectController.text.trim(),
+        category: _selectedCategory,
+        message: _messageController.text.trim(),
+        priority: _selectedPriority,
+      );
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+        if (ticketId != null) {
+          Navigator.of(context).pop(ticketId);
+        }
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
       }
     }
   }

@@ -63,7 +63,7 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.outOfStock,
-        color: Colors.grey,
+        color: Colors.red,
         alpha: alpha,
       ),
     );

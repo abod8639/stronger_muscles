@@ -33,8 +33,8 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
     super.dispose();
   }
 
-  void _openTicketBottomSheet() {
-    SubmitTicketBottomSheet.show(
+  Future<void> _openTicketBottomSheet() async {
+    final ticketNumber = await SubmitTicketBottomSheet.show(
       context,
       onSubmit: ({
         required String subject,
@@ -51,12 +51,7 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
               priority: priority,
             );
 
-        if (ticket != null && mounted) {
-          TicketSuccessDialog.show(
-            context,
-            ticket.ticketNumber ?? ticket.id ?? 'SM-TICKET',
-          );
-        } else if (mounted) {
+        if (ticket == null && mounted) {
           final Failure? failure =
               ref.read(helpSupportControllerProvider).failure;
           final msg = failure?.toMessage() ??
@@ -69,9 +64,16 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
             ),
           );
         }
-        return ticket?.id;
+        return ticket?.ticketNumber ?? ticket?.id;
       },
     );
+
+    if (ticketNumber != null && mounted) {
+      await TicketSuccessDialog.show(
+        context,
+        ticketNumber,
+      );
+    }
   }
 
   void _openMyTickets() {

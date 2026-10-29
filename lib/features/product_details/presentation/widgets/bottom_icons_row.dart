@@ -106,9 +106,24 @@ class BottomIconsRow extends ConsumerWidget {
     dynamic cartState,
   ) {
     final isPriceZero = detailsState.isPriceZero;
+    final isOutOfStock = !product.isInStock;
+    final isDisabled = isPriceZero || isOutOfStock;
+
+    String buttonLabel;
+    IconData buttonIcon;
+    if (isOutOfStock) {
+      buttonLabel = l10n.outOfStock;
+      buttonIcon = Icons.remove_shopping_cart_outlined;
+    } else if (isPriceZero) {
+      buttonLabel = l10n.contactUs;
+      buttonIcon = Icons.mail_outline;
+    } else {
+      buttonLabel = l10n.addToCart;
+      buttonIcon = Icons.add_shopping_cart;
+    }
 
     return ElevatedButton.icon(
-      onPressed: isPriceZero
+      onPressed: isDisabled
           ? null
           : () {
               cartNotifier.addToCart(
@@ -118,12 +133,12 @@ class BottomIconsRow extends ConsumerWidget {
               );
             },
       icon: Icon(
-        isPriceZero ? Icons.mail_outline : Icons.add_shopping_cart,
+        buttonIcon,
         size: 20,
       ),
-      label: Text(isPriceZero ? l10n.contactUs : l10n.addToCart),
+      label: Text(buttonLabel),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isPriceZero ? Colors.grey : AppColors.primary,
+        backgroundColor: isDisabled ? Colors.grey : AppColors.primary,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
         textStyle: const TextStyle(

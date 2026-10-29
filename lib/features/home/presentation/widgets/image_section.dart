@@ -35,7 +35,41 @@ class _ImageSectionState extends State<ImageSection> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final images = widget.widget.product.imageUrls;
+    final l10n = AppLocalizations.of(context);
+    final product = widget.widget.product;
+    final images = product.imageUrls;
+    final isOutOfStock = !product.isInStock;
+    final hasBadges = product.hasDiscount ||
+        product.newArrival ||
+        product.bestSeller ||
+        product.featured;
+
+    final imageWidget = images.isEmpty
+        ? buildNoImage(theme)
+        : PageView.builder(
+            allowImplicitScrolling: true,
+            controller: _pageController,
+            itemCount: images.length,
+            onPageChanged: (index) {
+              if (!mounted) return;
+              setState(() {
+                _selectedImageIndex = index;
+              });
+              if (widget.widget.onPageChanged != null) {
+                widget.widget.onPageChanged!(index);
+              }
+            },
+            itemBuilder: (context, index) {
+              if (index < 0 || index >= images.length) {
+                return const SizedBox.shrink();
+              }
+              return buildImage(
+                images[index].medium,
+                theme,
+                product.isBackgroundWhite,
+              );
+            },
+          );
 
     return GestureDetector(
       onTap: widget.widget.onTap,
@@ -50,44 +84,73 @@ class _ImageSectionState extends State<ImageSection> {
             ),
             child: ClipRRect(
               borderRadius: AppRadius.top(AppRadius.lg),
-              child: images.isEmpty
-                  ? buildNoImage(theme)
-                  : PageView.builder(
-                      allowImplicitScrolling: true,
-                      controller: _pageController,
-                      itemCount: images.length,
-                      onPageChanged: (index) {
-                        if (!mounted) return;
-                        setState(() {
-                          _selectedImageIndex = index;
-                        });
-                        if (widget.widget.onPageChanged != null) {
-                          widget.widget.onPageChanged!(index);
-                        }
-                      },
-                      itemBuilder: (context, index) {
-                        if (index < 0 || index >= images.length) {
-                          return const SizedBox.shrink();
-                        }
-                        return buildImage(
-                          images[index].medium,
-                          theme,
-                          widget.widget.product.isBackgroundWhite,
-                        );
-                      },
-                    ),
+              child: isOutOfStock
+                  ? ColorFiltered(
+                      colorFilter: const ColorFilter.matrix(<double>[
+                        0.2126, 0.7152, 0.0722, 0, 0,
+                        0.2126, 0.7152, 0.0722, 0, 0,
+                        0.2126, 0.7152, 0.0722, 0, 0,
+                        0,      0,      0,      0.65, 0,
+                      ]),
+                      child: imageWidget,
+                    )
+                  : imageWidget,
             ),
           ),
           if (images.length > 1)
             ImageIndicators(
-              product: widget.widget.product,
+              product: product,
               selectedImageIndex: _selectedImageIndex,
             ),
-          if (widget.widget.product.discountPrice != null)
-            Positioned(
-              top: 12.0,
-              right: 15.0,
-              child: buildProductBadges(widget.widget.product, context, 0.5),
+          if (hasBadges && !isOutOfStock)
+            PositionedDirectional(
+              top: 10.0,
+              end: 10.0,
+              child: buildProductBadges(product, context, 0.8),
+            ),
+          if (isOutOfStock)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.28),
+                  borderRadius: AppRadius.top(AppRadius.lg),
+                ),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 5.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.78),
+                      borderRadius: BorderRadius.circular(20.0),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.remove_shopping_cart_outlined,
+                          size: 13.0,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          l10n?.outOfStock ?? 'نفدت الكمية',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
         ],
       ),

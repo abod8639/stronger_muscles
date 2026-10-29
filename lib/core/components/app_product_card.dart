@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/home/home_feature.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable product card component built on top of [AppCard] with unified
 /// [AppRadius.allLg] and theme-adaptive [AppShadows.ofCard].
@@ -62,6 +63,8 @@ class _AppProductCardState extends State<AppProductCard>
   Widget build(BuildContext context) {
     super.build(context);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+    final isOutOfStock = !widget.product.isInStock;
 
     return AppCard(
       padding: EdgeInsets.zero,
@@ -102,11 +105,16 @@ class _AppProductCardState extends State<AppProductCard>
                             Text(
                               'LE ${widget.product.baseEffectivePrice}',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppColors.primary,
+                                color: isOutOfStock
+                                    ? theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6)
+                                    : AppColors.primary,
                                 fontWeight: FontWeight.bold,
+                                decoration: isOutOfStock
+                                    ? TextDecoration.lineThrough
+                                    : null,
                               ),
                             ),
-                            if (widget.product.baseHasDiscount)
+                            if (widget.product.baseHasDiscount && !isOutOfStock)
                               Text(
                                 'LE ${widget.product.formattedPrice}',
                                 style: theme.textTheme.bodySmall?.copyWith(
@@ -116,7 +124,30 @@ class _AppProductCardState extends State<AppProductCard>
                               ),
                           ],
                         ),
-                        if (widget.product.reviewCount > 0)
+                        if (isOutOfStock)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0,
+                              vertical: 2.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.error.withValues(alpha: 0.12),
+                              borderRadius: BorderRadius.circular(4.0),
+                              border: Border.all(
+                                color: theme.colorScheme.error.withValues(alpha: 0.3),
+                                width: 0.8,
+                              ),
+                            ),
+                            child: Text(
+                              l10n?.outOfStock ?? 'نفدت الكمية',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.error,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10.5,
+                              ),
+                            ),
+                          )
+                        else if (widget.product.reviewCount > 0)
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
