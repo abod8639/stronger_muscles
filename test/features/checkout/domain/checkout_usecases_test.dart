@@ -2,17 +2,40 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/features/checkout/data/mappers/checkout_mapper.dart';
+import 'package:stronger_muscles/features/checkout/data/models/checkout_quote_model.dart';
 import 'package:stronger_muscles/features/checkout/data/models/checkout_result_model.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_params.dart';
+import 'package:stronger_muscles/features/checkout/domain/entities/checkout_quote.dart';
 import 'package:stronger_muscles/features/checkout/domain/entities/checkout_result_entity.dart';
 import 'package:stronger_muscles/features/checkout/domain/repositories/checkout_repository.dart';
+import 'package:stronger_muscles/features/checkout/domain/usecases/get_checkout_quote_usecase.dart';
 import 'package:stronger_muscles/features/checkout/domain/usecases/place_order_usecase.dart';
 import 'package:stronger_muscles/features/checkout/presentation/controllers/checkout_controller.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 
 class MockCheckoutRepository implements CheckoutRepository {
   CheckoutParams? lastParams;
+  List<CheckoutItemEntity>? lastQuotedItems;
   bool shouldSucceed = true;
+
+  @override
+  Future<Either<Failure, CheckoutQuote>> getQuote(
+    List<CheckoutItemEntity> items,
+  ) async {
+    lastQuotedItems = items;
+    if (!shouldSucceed) {
+      return const Left(ServerFailure(message: 'Pricing failed'));
+    }
+    return const Right(
+      CheckoutQuote(
+        subtotal: 200,
+        shippingCost: 50,
+        taxAmount: 28,
+        totalAmount: 278,
+        taxRate: 14,
+      ),
+    );
+  }
 
   @override
   Future<Either<Failure, CheckoutResultEntity>> placeOrder(
@@ -191,6 +214,70 @@ void main() {
       expect(controller.state.hasError, isTrue);
       expect(controller.state.failure, isA<ValidationFailure>());
       expect(mockRepository.lastParams, isNull);
+    });
+  });
+
+  group('Checkout quote (delivery fee & tax)', () {
+    test('GetCheckoutQuoteUseCase returns the server price for the items', () async {
+      final quoteUseCase = GetCheckoutQuoteUseCase(mockRepository);
+      const items = [CheckoutItemEntity(productId: 'prod_1', quantity: 2)];
+
+      final result = await quoteUseCase(items);
+
+      expect(mockRepository.lastQuotedItems, items);
+      final quote = result.getOrElse((_) => throw StateError('expected a quote'));
+      expect(quote.shippingCost, 50);
+      expect(quote.taxAmount, 28);
+      expect(quote.totalAmount, 278);
+      expect(quote.hasFreeDelivery, isFalse);
+    });
+
+    test('GetCheckoutQuoteUseCase propagates failures', () async {
+      mockRepository.shouldSucceed = false;
+
+      final result = await GetCheckoutQuoteUseCase(mockRepository)(const []);
+
+      expect(result.isLeft(), isTrue);
+    });
+
+    test('CheckoutQuoteModel parses the API response and maps to the entity', () {
+      final model = CheckoutQuoteModel.fromJson({
+        'status': 'success',
+        'data': {
+          'subtotal': 230,
+          'shipping_cost': 0,
+          'tax_amount': 32.2,
+          'discount': 0,
+          'total_amount': 262.2,
+          'tax_rate': 14,
+          'free_delivery_threshold': 200,
+          'currency': 'EGP',
+          'is_accepting_orders': false,
+        },
+      });
+
+      final quote = model.toEntity();
+      expect(quote.subtotal, 230.0);
+      expect(quote.shippingCost, 0.0);
+      expect(quote.hasFreeDelivery, isTrue);
+      expect(quote.taxAmount, 32.2);
+      expect(quote.totalAmount, 262.2);
+      expect(quote.taxRate, 14.0);
+      expect(quote.freeDeliveryThreshold, 200.0);
+      expect(quote.isAcceptingOrders, isFalse);
+    });
+
+    test('CheckoutQuoteModel tolerates missing optional fields', () {
+      final quote = CheckoutQuoteModel.fromJson({
+        'subtotal': '100',
+        'shipping_cost': 50,
+        'total_amount': 150,
+      }).toEntity();
+
+      expect(quote.subtotal, 100.0);
+      expect(quote.taxAmount, 0.0);
+      expect(quote.isAcceptingOrders, isTrue);
+      expect(quote.currency, 'EGP');
     });
   });
 }

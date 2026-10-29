@@ -111,5 +111,20 @@ void main() {
 
       expect(item.price, 125.0);
     });
+
+    test('fromJson reads the tax charged and defaults it to 0 for older orders', () {
+      final base = {
+        'id': 'order-202',
+        'user_id': 'user-001',
+        'address_id': 'addr-01',
+        'subtotal': 100,
+        'shippingCost': 50,
+        'total_amount': 164,
+      };
+
+      expect(OrderModel.fromJson({...base, 'taxAmount': 14}).taxAmount, 14.0);
+      expect(OrderModel.fromJson(base).taxAmount, 0.0);
+    });
   });
 }
+
