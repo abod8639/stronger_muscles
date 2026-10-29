@@ -4,7 +4,9 @@ import 'package:flutter/foundation.dart';
 import '../../../../core/config/api_config.dart';
 import '../../../../core/error/error.dart';
 import '../../../../core/services/api_service.dart';
+import '../models/checkout_item_model.dart';
 import '../models/checkout_params_model.dart';
+import '../models/checkout_quote_model.dart';
 import '../models/checkout_result_model.dart';
 
 CheckoutResultModel parseCheckoutResultIsolate(Map<String, dynamic> data) {
@@ -21,6 +23,11 @@ abstract class CheckoutRemoteDataSource {
     required String orderId,
     required String gateway,
     String? customerName,
+    CancelToken? cancelToken,
+  });
+
+  Future<CheckoutQuoteModel> fetchQuote(
+    List<CheckoutItemModel> items, {
     CancelToken? cancelToken,
   });
 }
@@ -143,6 +150,69 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
       throw ServerException(
         statusCode: e.response?.statusCode,
         message: e.message ?? 'Network error initiating payment',
+      );
+    } catch (e) {
+      if (e is ServerException ||
+          e is TimeoutAppException ||
+          e is CancelAppException) {
+        rethrow;
+      }
+      throw ServerException(message: e.toString());
+    }
+  }
+
+  @override
+  Future<CheckoutQuoteModel> fetchQuote(
+    List<CheckoutItemModel> items, {
+    CancelToken? cancelToken,
+  }) async {
+    try {
+      final response = await _apiService.post(
+        ApiConfig.orderQuote,
+        data: {
+          'items': items
+              .map((i) => {
+                    'product_id': i.productId,
+                    'quantity': i.quantity,
+                    if (i.selectedSize != null) 'selected_size': i.selectedSize,
+                  })
+              .toList(),
+        },
+        cancelToken: cancelToken,
+        timeout: const Duration(seconds: 15),
+      );
+
+      final rawData = response.data;
+      if ((response.statusCode == 200 || response.statusCode == 201) &&
+          rawData is Map<String, dynamic>) {
+        return CheckoutQuoteModel.fromJson(rawData);
+      }
+
+      throw ServerException(
+        statusCode: response.statusCode,
+        message: response.statusMessage ?? 'Failed to price the order',
+        data: rawData,
+      );
+    } on Failure catch (f) {
+      if (f is TimeoutFailure) {
+        throw TimeoutAppException(message: f.message);
+      }
+      if (f is CancelFailure) {
+        throw const CancelAppException();
+      }
+      throw ServerException(message: f.message);
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        throw const CancelAppException();
+      }
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        throw const TimeoutAppException();
+      }
+      throw ServerException(
+        statusCode: e.response?.statusCode,
+        message: e.message ?? 'Network error pricing the order',
+        data: e.response?.data,
       );
     } catch (e) {
       if (e is ServerException ||
