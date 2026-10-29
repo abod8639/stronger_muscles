@@ -13,6 +13,7 @@ class OrderEntity {
   final String addressId;
   final double subtotal;
   final double shippingCost;
+  final double taxAmount;
   final double discount;
   final double totalAmount;
   final String? trackingNumber;
@@ -34,6 +35,7 @@ class OrderEntity {
     required this.addressId,
     required this.subtotal,
     this.shippingCost = 0.0,
+    this.taxAmount = 0.0,
     this.discount = 0.0,
     required this.totalAmount,
     this.trackingNumber,
@@ -66,6 +68,7 @@ class OrderEntity {
     String? addressId,
     double? subtotal,
     double? shippingCost,
+    double? taxAmount,
     double? discount,
     double? totalAmount,
     String? trackingNumber,
@@ -87,6 +90,7 @@ class OrderEntity {
       addressId: addressId ?? this.addressId,
       subtotal: subtotal ?? this.subtotal,
       shippingCost: shippingCost ?? this.shippingCost,
+      taxAmount: taxAmount ?? this.taxAmount,
       discount: discount ?? this.discount,
       totalAmount: totalAmount ?? this.totalAmount,
       trackingNumber: trackingNumber ?? this.trackingNumber,

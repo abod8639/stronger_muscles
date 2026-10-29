@@ -4,6 +4,7 @@ import '../../../../core/error/error.dart';
 import '../../../cart/cart_feature.dart';
 import '../../../profile/profile_feature.dart';
 import '../../domain/entities/checkout_params.dart';
+import '../../domain/entities/checkout_quote.dart';
 import '../../domain/entities/checkout_result_entity.dart';
 import '../../domain/usecases/place_order_usecase.dart';
 import 'checkout_di.dart';
@@ -72,6 +73,40 @@ class CheckoutState {
         orderSubmission,
       );
 }
+
+/// Converts cart lines into the items sent to the server for pricing and ordering.
+List<CheckoutItemEntity> checkoutItemsFromCart(List<CartItemEntity> cartItems) {
+  return cartItems.map((cartItem) {
+    final unitPrice =
+        cartItem.product.getEffectivePriceForSize(cartItem.selectedSize);
+    return CheckoutItemEntity(
+      productId: cartItem.product.id,
+      productName: cartItem.product.getLocalizedName(),
+      quantity: cartItem.quantity,
+      unitPrice: unitPrice,
+      selectedFlavor: cartItem.selectedFlavor,
+      selectedSize: cartItem.selectedSize,
+      imageUrl: cartItem.primaryImageUrl,
+    );
+  }).toList();
+}
+
+/// Server price for the current cart (subtotal, delivery fee, tax, total).
+///
+/// Re-fetched whenever the cart changes; `null` while the cart is empty.
+final checkoutQuoteProvider =
+    FutureProvider.autoDispose<CheckoutQuote?>((ref) async {
+  final cartItems = ref.watch(
+    cartControllerProvider.select((cart) => cart.valueOrNull),
+  );
+  if (cartItems == null || cartItems.isEmpty) return null;
+
+  final result = await ref
+      .read(getCheckoutQuoteUseCaseProvider)
+      .call(checkoutItemsFromCart(cartItems));
+
+  return result.fold((failure) => throw failure, (quote) => quote);
+});
 
 final checkoutControllerProvider =
     StateNotifierProvider<CheckoutController, CheckoutState>((ref) {
@@ -207,18 +242,7 @@ class CheckoutController extends StateNotifier<CheckoutState> {
 
     state = state.copyWith(orderSubmission: const AsyncLoading());
 
-    final checkoutItems = cartItems.map((cartItem) {
-      final unitPrice = cartItem.product.getEffectivePriceForSize(cartItem.selectedSize);
-      return CheckoutItemEntity(
-        productId: cartItem.product.id,
-        productName: cartItem.product.getLocalizedName(),
-        quantity: cartItem.quantity,
-        unitPrice: unitPrice,
-        selectedFlavor: cartItem.selectedFlavor,
-        selectedSize: cartItem.selectedSize,
-        imageUrl: cartItem.primaryImageUrl,
-      );
-    }).toList();
+    final checkoutItems = checkoutItemsFromCart(cartItems);
 
     final params = CheckoutParams(
       addressId: state.selectedAddress!.id,

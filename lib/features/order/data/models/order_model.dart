@@ -43,6 +43,10 @@ class OrderModel with _$OrderModel {
     AddressModel? shippingAddress,
     @HiveField(18) @JsonKey(name: 'phone_number') String? phoneNumber,
     @HiveField(19) @JsonKey(name: 'user_name') String? userName,
+    @HiveField(20, defaultValue: 0.0)
+    @JsonKey(name: 'taxAmount')
+    @Default(0)
+    double taxAmount,
   }) = _OrderModel;
 
   const OrderModel._();

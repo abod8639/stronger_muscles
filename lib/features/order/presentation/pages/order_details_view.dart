@@ -139,6 +139,11 @@ class OrderDetailsView extends StatelessWidget {
                     label: l10n.shippingCost,
                     amount: order.shippingCost,
                   ),
+                  if (order.taxAmount > 0)
+                    AppPriceRow(
+                      label: l10n.tax,
+                      amount: order.taxAmount,
+                    ),
                   if (order.discount > 0)
                     AppPriceRow(
                       label: l10n.discount,

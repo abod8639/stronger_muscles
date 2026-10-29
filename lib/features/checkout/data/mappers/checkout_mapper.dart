@@ -1,7 +1,9 @@
 import '../../domain/entities/checkout_params.dart';
+import '../../domain/entities/checkout_quote.dart';
 import '../../domain/entities/checkout_result_entity.dart';
 import '../models/checkout_item_model.dart';
 import '../models/checkout_params_model.dart';
+import '../models/checkout_quote_model.dart';
 import '../models/checkout_result_model.dart';
 
 /// Extension mapper to convert [CheckoutItemModel] (DTO) to [CheckoutItemEntity] (Domain).
@@ -71,6 +73,23 @@ extension CheckoutResultEntityMapper on CheckoutResultEntity {
       message: message,
       paymentUrl: paymentUrl,
       rawData: rawData,
+    );
+  }
+}
+
+/// Extension mapper to convert [CheckoutQuoteModel] (DTO) to [CheckoutQuote] (Domain).
+extension CheckoutQuoteModelMapper on CheckoutQuoteModel {
+  CheckoutQuote toEntity() {
+    return CheckoutQuote(
+      subtotal: subtotal,
+      shippingCost: shippingCost,
+      taxAmount: taxAmount,
+      discount: discount,
+      totalAmount: totalAmount,
+      taxRate: taxRate,
+      freeDeliveryThreshold: freeDeliveryThreshold,
+      currency: currency,
+      isAcceptingOrders: isAcceptingOrders,
     );
   }
 }

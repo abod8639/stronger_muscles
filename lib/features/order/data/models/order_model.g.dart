@@ -36,13 +36,14 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       shippingAddress: fields[17] as AddressModel?,
       phoneNumber: fields[18] as String?,
       userName: fields[19] as String?,
+      taxAmount: fields[20] == null ? 0.0 : fields[20] as double,
     );
   }
 
   @override
   void write(BinaryWriter writer, OrderModel obj) {
     writer
-      ..writeByte(19)
+      ..writeByte(20)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -80,7 +81,9 @@ class OrderModelAdapter extends TypeAdapter<OrderModel> {
       ..writeByte(18)
       ..write(obj.phoneNumber)
       ..writeByte(19)
-      ..write(obj.userName);
+      ..write(obj.userName)
+      ..writeByte(20)
+      ..write(obj.taxAmount);
   }
 
   @override
@@ -194,6 +197,7 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
               json['shipping_address'] as Map<String, dynamic>),
       phoneNumber: json['phone_number'] as String?,
       userName: json['user_name'] as String?,
+      taxAmount: (json['taxAmount'] as num?)?.toDouble() ?? 0,
     );
 
 Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
@@ -217,6 +221,7 @@ Map<String, dynamic> _$$OrderModelImplToJson(_$OrderModelImpl instance) =>
       'shipping_address': instance.shippingAddress?.toJson(),
       'phone_number': instance.phoneNumber,
       'user_name': instance.userName,
+      'taxAmount': instance.taxAmount,
     };
 
 _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>

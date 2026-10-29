@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:hive/hive.dart';
 import '../../../../core/error/error.dart';
 import '../../domain/entities/checkout_params.dart';
+import '../../domain/entities/checkout_quote.dart';
 import '../../domain/entities/checkout_result_entity.dart';
 import '../../domain/repositories/checkout_repository.dart';
 import '../datasources/checkout_local_data_source.dart';
@@ -85,6 +86,26 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
       return left(CacheFailure(message: e.message));
     } on FormatException catch (e) {
       return left(ServerFailure(message: 'خطأ في تنسيق استجابة الخادم: ${e.message}'));
+    } catch (e) {
+      return left(GeneralFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckoutQuote>> getQuote(
+    List<CheckoutItemEntity> items,
+  ) async {
+    try {
+      final quote = await _remoteDataSource.fetchQuote(
+        items.map((i) => i.toModel()).toList(),
+      );
+      return right(quote.toEntity());
+    } on ServerException catch (e) {
+      return left(ServerFailure(message: e.message, statusCode: e.statusCode));
+    } on TimeoutAppException catch (e) {
+      return left(TimeoutFailure(message: e.message));
+    } on CancelAppException catch (e) {
+      return left(CancelFailure(message: e.message));
     } catch (e) {
       return left(GeneralFailure(message: e.toString()));
     }

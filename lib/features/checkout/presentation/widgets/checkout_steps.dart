@@ -11,6 +11,7 @@ import '../../../cart/cart_feature.dart';
 import '../../../profile/profile_feature.dart';
 import '../controllers/checkout_controller.dart';
 import 'address_selection_card.dart';
+import 'checkout_price_summary.dart';
 import 'payment_option_card.dart';
 
 Step buildAddressStep(WidgetRef ref, String title) {
@@ -266,24 +267,7 @@ Step buildReviewStep(WidgetRef ref, String title) {
         const SizedBox(height: 8.0),
         Divider(color: theme.colorScheme.outlineVariant),
         const SizedBox(height: 4.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              l10n.totalAmount,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'LE ${cartNotifier.totalPrice.toStringAsFixed(2)}',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
-            ),
-          ],
-        ),
+        CheckoutPriceSummary(cartSubtotal: cartNotifier.totalPrice),
         const SizedBox(height: 16.0),
         if (selectedAddress != null) ...[
           Text(
