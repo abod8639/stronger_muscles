@@ -1106,6 +1106,30 @@ abstract class AppLocalizations {
   /// **'Shipping Cost'**
   String get shippingCost;
 
+  /// No description provided for @tax.
+  ///
+  /// In en, this message translates to:
+  /// **'Tax'**
+  String get tax;
+
+  /// No description provided for @freeDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get freeDelivery;
+
+  /// No description provided for @storeNotAcceptingOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'The store is not accepting orders right now, please try again later'**
+  String get storeNotAcceptingOrders;
+
+  /// No description provided for @pricingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t calculate delivery and tax, tap to retry'**
+  String get pricingUnavailable;
+
   /// No description provided for @discount.
   ///
   /// In en, this message translates to:

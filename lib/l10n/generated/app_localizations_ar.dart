@@ -517,6 +517,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shippingCost => 'تكلفة الشحن';
 
   @override
+  String get tax => 'الضريبة';
+
+  @override
+  String get freeDelivery => 'مجاني';
+
+  @override
+  String get storeNotAcceptingOrders =>
+      'المتجر لا يستقبل طلبات حالياً، يرجى المحاولة لاحقاً';
+
+  @override
+  String get pricingUnavailable =>
+      'تعذر حساب التوصيل والضريبة، اضغط لإعادة المحاولة';
+
+  @override
   String get discount => 'الخصم';
 
   @override

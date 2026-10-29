@@ -518,6 +518,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shippingCost => 'Shipping Cost';
 
   @override
+  String get tax => 'Tax';
+
+  @override
+  String get freeDelivery => 'Free';
+
+  @override
+  String get storeNotAcceptingOrders =>
+      'The store is not accepting orders right now, please try again later';
+
+  @override
+  String get pricingUnavailable =>
+      'Couldn\'t calculate delivery and tax, tap to retry';
+
+  @override
   String get discount => 'Discount';
 
   @override
