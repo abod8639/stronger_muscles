@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
+/// Promo/stock badges for a product (discount, new, best seller, featured, out of stock).
 Widget buildProductBadges(
   ProductModel product,
   BuildContext context,
@@ -19,7 +20,7 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: '${product.discountPercentage.toInt()}% ${l10n.percentOff}',
-        color: Colors.red,
+        color: AppColors.error,
         alpha: alpha,
       ),
     );
@@ -30,7 +31,7 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.newArrival,
-        color: Colors.green,
+        color: AppColors.success,
         alpha: alpha,
       ),
     );
@@ -41,7 +42,7 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.bestSeller,
-        color: Colors.orange,
+        color: AppColors.warning,
         alpha: alpha,
       ),
     );
@@ -63,7 +64,7 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.outOfStock,
-        color: Colors.red,
+        color: AppColors.error,
         alpha: alpha,
       ),
     );
