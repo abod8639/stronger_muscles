@@ -3,7 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/network/internet_connection_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/routes/routes.dart';
+
+/// Delegate triggered when user needs to authenticate.
+typedef UnauthenticatedHandler = void Function(WidgetRef ref);
+
+UnauthenticatedHandler? _onUnauthenticated;
+
+/// Registers the global navigation action to perform when authentication is required.
+void registerUnauthenticatedHandler(UnauthenticatedHandler? handler) {
+  _onUnauthenticated = handler;
+}
 
 class AppGuard {
   static Future<void> runSafe(
@@ -11,6 +20,7 @@ class AppGuard {
     Future<void> Function() action, {
     bool requireAuth = true,
     bool requireInternet = true,
+    VoidCallback? onUnauthenticated,
   }) async {
     final l10n = AppLocalizations.of(ref.context);
     if (requireInternet) {
@@ -38,7 +48,11 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
-        ref.read(routerProvider).push(AppRoutes.auth);
+        if (onUnauthenticated != null) {
+          onUnauthenticated();
+        } else {
+          _onUnauthenticated?.call(ref);
+        }
         return;
       }
     }
@@ -130,6 +144,7 @@ class AppGuard {
     WidgetRef ref,
     Future<void> Function() action, {
     bool requireAuth = true,
+    VoidCallback? onUnauthenticated,
   }) async {
     final l10n = AppLocalizations.of(ref.context);
     if (requireAuth) {
@@ -142,7 +157,11 @@ class AppGuard {
           icon: Icons.lock_person_rounded,
           isCritical: false,
         );
-        ref.read(routerProvider).push(AppRoutes.auth);
+        if (onUnauthenticated != null) {
+          onUnauthenticated();
+        } else {
+          _onUnauthenticated?.call(ref);
+        }
         return;
       }
     }
