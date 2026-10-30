@@ -15,6 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/services/crash_reporting_service.dart';
+import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/profile/profile_feature.dart';
 
@@ -37,6 +38,10 @@ Future<void> main() async {
   registerAuthStateChecker(
     (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
   );
+
+  registerUnauthenticatedHandler((ref) {
+    ref.read(routerProvider).push(AppRoutes.auth);
+  });
 
   runApp(const ProviderScope(child: MyApp()));
 }
