@@ -305,5 +305,7 @@
   "paymentReference": "الرقم المرجعي",
   "proceedToPayment": "الانتقال لبوابة الدفع",
   "paymentGatewayOpenFailed": "تعذر فتح بوابة الدفع",
-  "paymentLinkUnavailable": "رابط الدفع غير متاح حالياً، يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى"
+  "paymentLinkUnavailable": "رابط الدفع غير متاح حالياً، يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى",
+  "profileUpdated": "تم تحديث الملف الشخصي",
+  "signOutConfirm": "هل أنت متأكد أنك تريد تسجيل الخروج؟"
 }

@@ -956,4 +956,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get paymentLinkUnavailable =>
       'The payment link isn\'t available. Please try again or choose another payment method.';
+
+  @override
+  String get profileUpdated => 'Profile updated';
+
+  @override
+  String get signOutConfirm => 'Are you sure you want to sign out?';
 }

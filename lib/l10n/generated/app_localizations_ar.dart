@@ -952,4 +952,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get paymentLinkUnavailable =>
       'رابط الدفع غير متاح حالياً، يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى';
+
+  @override
+  String get profileUpdated => 'تم تحديث الملف الشخصي';
+
+  @override
+  String get signOutConfirm => 'هل أنت متأكد أنك تريد تسجيل الخروج؟';
 }
