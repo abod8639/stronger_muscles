@@ -248,6 +248,64 @@ class NotificationController extends _$NotificationController {
     );
   }
 
+  /// Optimistically marks multiple notifications as read.
+  Future<void> markNotificationsAsRead(List<String> ids) async {
+    final current = state.valueOrNull;
+    if (current == null || ids.isEmpty) return;
+
+    final unreadTargets = current.notifications
+        .where((n) => ids.contains(n.id) && !n.isRead)
+        .toList();
+    if (unreadTargets.isEmpty) return;
+
+    final updatedList = current.notifications.map((n) {
+      if (ids.contains(n.id) && !n.isRead) {
+        return n.copyWith(isRead: true);
+      }
+      return n;
+    }).toList();
+
+    final newCount = (current.unreadCount - unreadTargets.length).clamp(0, 9999);
+    state = AsyncData(
+      current.copyWith(
+        notifications: updatedList,
+        unreadCount: newCount,
+      ),
+    );
+
+    final markAsReadUseCase = ref.read(markAsReadUseCaseProvider);
+    for (final id in unreadTargets.map((e) => e.id)) {
+      await markAsReadUseCase(id);
+    }
+  }
+
+  /// Deletes multiple notifications with optimistic removal.
+  Future<void> deleteNotifications(List<String> ids) async {
+    final current = state.valueOrNull;
+    if (current == null || ids.isEmpty) return;
+
+    final targets =
+        current.notifications.where((n) => ids.contains(n.id)).toList();
+    if (targets.isEmpty) return;
+
+    final unreadCountInTargets = targets.where((n) => !n.isRead).length;
+    final updatedList =
+        current.notifications.where((n) => !ids.contains(n.id)).toList();
+    final newCount = (current.unreadCount - unreadCountInTargets).clamp(0, 9999);
+
+    state = AsyncData(
+      current.copyWith(
+        notifications: updatedList,
+        unreadCount: newCount,
+      ),
+    );
+
+    final deleteUseCase = ref.read(deleteNotificationUseCaseProvider);
+    for (final id in ids) {
+      await deleteUseCase(id);
+    }
+  }
+
   /// Deletes a specific notification with optimistic removal.
   Future<void> deleteNotification(String id) async {
     final current = state.valueOrNull;
