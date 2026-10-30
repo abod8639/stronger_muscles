@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/core/error/error.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/order/presentation/controllers/orders_controller.dart';
 import 'package:stronger_muscles/features/order/presentation/widgets/order_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -17,29 +17,26 @@ class OrderView extends ConsumerWidget {
     final ordersState = ref.watch(ordersControllerProvider);
     final notifier = ref.read(ordersControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
-    final isDark = context.isDark;
-    final isAr = context.isArabic;
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(l10n.orders),
-      ),
+      appBar: baseAppBar(context, l10n.orders),
       body: ordersState.when(
         data: (orders) {
           if (orders.isEmpty) {
             return RefreshIndicator(
-              onRefresh: () => notifier.refreshOrders(),
-              child: ListView(
+              color: AppColors.primary,
+              onRefresh: notifier.refreshOrders,
+              child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(
-                      child: AppEmptyState(
-                        icon: Icons.receipt_long_outlined,
-                        title: l10n.noOrdersFound,
-                      ),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: AppEmptyState(
+                      icon: Icons.receipt_long_outlined,
+                      title: l10n.noOrdersFound,
+                      actionText: l10n.startShopping,
+                      actionIcon: Icons.storefront_outlined,
+                      onActionTap: () => context.go(AppRoutes.main),
                     ),
                   ),
                 ],
@@ -54,25 +51,21 @@ class OrderView extends ConsumerWidget {
             ordersControllerProvider.notifier.select((n) => n.hasMore),
           );
 
-          final count = orders.length + (isLoadingMore ? 1 : 0);
-
           return RefreshIndicator(
-            onRefresh: () => notifier.refreshOrders(),
-            child: ListView.builder(
+            color: AppColors.primary,
+            onRefresh: notifier.refreshOrders,
+            child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 8.0,
-              ),
-              itemCount: count,
+              padding: const EdgeInsets.all(AppDimens.spacingLg),
+              itemCount: orders.length + (isLoadingMore ? 1 : 0),
+              separatorBuilder: (_, _) => const SizedBox(height: AppDimens.spacingMd),
               itemBuilder: (context, index) {
                 if (index >= orders.length) {
                   return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
+                    padding: EdgeInsets.symmetric(vertical: AppDimens.spacingLg),
                     child: Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
+                      child: SizedBox.square(
+                        dimension: 24.0,
                         child: CircularProgressIndicator(strokeWidth: 2.5),
                       ),
                     ),
@@ -87,47 +80,23 @@ class OrderView extends ConsumerWidget {
                 }
 
                 final order = orders[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6.0),
-                  child: OrderCard(
-                    onTap: () =>
-                        context.push(AppRoutes.orderDetails, extra: order),
-                    order: order,
-                    isDark: isDark,
-                    isAr: isAr,
-                  ),
+                return OrderCard(
+                  order: order,
+                  onTap: () => context.push(AppRoutes.orderDetails, extra: order),
                 );
               },
             ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) {
-          final errorMessage = e is Failure
-              ? e.toMessage()
-              : (e is String ? e : '${l10n.error}: $e');
-
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    errorMessage,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 16),
-                  AppPrimaryButton(
-                    text: l10n.retry,
-                    onPressed: () => notifier.refreshOrders(),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+        error: (error, _) => AppEmptyState(
+          icon: AppErrorCard.iconFor(error),
+          iconColor: AppColors.error,
+          title: AppErrorCard.messageFor(error, l10n),
+          actionText: l10n.retry,
+          actionIcon: Icons.refresh_rounded,
+          onActionTap: notifier.refreshOrders,
+        ),
       ),
     );
   }
