@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 
 class FlavorsModel {
@@ -141,7 +141,7 @@ class AppFlavorImage extends StatelessWidget {
           width: 2,
         ),
         boxShadow: isSelected
-            ? AppDimens.coloredShadow(baseColor, alpha: .4)
+            ? AppShadows.colored(baseColor, alpha: .4, blur: 12.0)
             : const [],
         image: DecorationImage(
           image: CachedNetworkImageProvider(

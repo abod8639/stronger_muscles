@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A reusable horizontal divider with a centered label (e.g. "أو" / "OR").
@@ -15,9 +14,8 @@ class AppOrDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDark;
-    final dividerColor = isDark ? Colors.white12 : AppColors.greyMedium;
-    final textColor = isDark ? AppColors.grey : AppColors.greyDark;
+    final dividerColor = context.colorScheme.outlineVariant;
+    final textColor = context.colorScheme.onSurfaceVariant;
 
     return Padding(
       padding: margin,
