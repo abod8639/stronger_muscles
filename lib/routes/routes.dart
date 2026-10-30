@@ -57,7 +57,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: routerNotifier,
     redirect: (context, state) {
       final authState = ref.read(authControllerProvider);
-      final isLoggedIn = authState.value != null;
+      final isLoggedIn = authState.valueOrNull != null;
       
       final isAuthPath = state.matchedLocation.startsWith(AppRoutes.auth) ||
           state.matchedLocation == AppRoutes.signIn ||
