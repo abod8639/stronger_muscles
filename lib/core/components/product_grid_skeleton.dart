@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/utils/responsive_helper.dart';
+import 'package:stronger_muscles/core/components/app_product_grid.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A shimmer-style skeleton grid shown while products are loading.
 /// Uses a pure Flutter animation — no external dependency needed.
@@ -39,22 +40,10 @@ class _ProductGridSkeletonState extends State<ProductGridSkeleton>
 
   @override
   Widget build(BuildContext context) {
-    final crossAxisCount = ResponsiveHelper.getGridCrossAxisCount(context);
-    final childAspectRatio =
-        ResponsiveHelper.getGridChildAspectRatio(context);
-    const hPad = 8.0;
-    const mainAxisSpacing = 12.0;
-    const crossAxisSpacing = 8.0;
-
     return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: hPad),
+      padding: AppProductGridLayout.padding,
       sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: crossAxisCount,
-          childAspectRatio: childAspectRatio,
-          crossAxisSpacing: crossAxisSpacing,
-          mainAxisSpacing: mainAxisSpacing,
-        ),
+        gridDelegate: AppProductGridLayout.delegate(context),
         delegate: SliverChildBuilderDelegate(
           (context, index) => AnimatedBuilder(
             animation: _animation,
@@ -75,7 +64,7 @@ class _SkeletonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = context.isDark;
     final baseColor =
         isDark ? const Color(0xFF2A2A2A) : const Color(0xFFE0E0E0);
     final highlightColor =
@@ -86,7 +75,7 @@ class _SkeletonCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: AppRadius.allLg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,9 +86,7 @@ class _SkeletonCard extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: color,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16.0),
-                ),
+                borderRadius: AppRadius.top(AppRadius.lg),
               ),
             ),
           ),
@@ -131,7 +118,7 @@ class _SkeletonCard extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: barColor,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: AppRadius.allXs,
       ),
     );
   }
