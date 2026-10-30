@@ -19,8 +19,15 @@ const double _iconButtonSize = 32.0;
 
 class BottomIconsRow extends ConsumerWidget {
   final ProductModel product;
+  final String? initialFlavor;
+  final String? initialSize;
 
-  const BottomIconsRow({super.key, required this.product});
+  const BottomIconsRow({
+    super.key,
+    required this.product,
+    this.initialFlavor,
+    this.initialSize,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,9 +35,19 @@ class BottomIconsRow extends ConsumerWidget {
 
     final cartState = ref.watch(cartControllerProvider);
     final cartNotifier = ref.watch(cartControllerProvider.notifier);
-    final detailsState = ref.watch(productDetailsControllerProvider(product));
+    final detailsState = ref.watch(
+      productDetailsControllerProvider(
+        product,
+        initialFlavor: initialFlavor,
+        initialSize: initialSize,
+      ),
+    );
     final detailsNotifier = ref.watch(
-      productDetailsControllerProvider(product).notifier,
+      productDetailsControllerProvider(
+        product,
+        initialFlavor: initialFlavor,
+        initialSize: initialSize,
+      ).notifier,
     );
     final l10n = AppLocalizations.of(context)!;
 
@@ -107,7 +124,8 @@ class BottomIconsRow extends ConsumerWidget {
   ) {
     final isPriceZero = detailsState.isPriceZero;
     final isOutOfStock = !product.isInStock;
-    final isDisabled = isPriceZero || isOutOfStock;
+    final isMutating = cartNotifier.isMutating;
+    final isDisabled = isPriceZero || isOutOfStock || isMutating;
 
     String buttonLabel;
     IconData buttonIcon;
@@ -132,10 +150,19 @@ class BottomIconsRow extends ConsumerWidget {
                 selectedSize: detailsState.selectedSizeObject?.size,
               );
             },
-      icon: Icon(
-        buttonIcon,
-        size: 20,
-      ),
+      icon: isMutating
+          ? const SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: Colors.white,
+              ),
+            )
+          : Icon(
+              buttonIcon,
+              size: 20,
+            ),
       label: Text(buttonLabel),
       style: ElevatedButton.styleFrom(
         backgroundColor: isDisabled ? Colors.grey : AppColors.primary,
