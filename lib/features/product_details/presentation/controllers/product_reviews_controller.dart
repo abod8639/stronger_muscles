@@ -70,8 +70,9 @@ class ProductReviewsController
   Future<void> fetchReviews() async {
     state = const AsyncValue.loading();
     final either = await _getReviewsUseCase(productId);
+    if (!mounted) return;
     state = either.fold(
-      (failure) => AsyncValue.error(failure, StackTrace.current),
+      (failure) => AsyncValue.error(failure, failure.stackTrace ?? StackTrace.current),
       (reviews) => AsyncValue.data(reviews),
     );
   }
@@ -90,11 +91,13 @@ class ProductReviewsController
       comment: comment,
     );
 
+    if (!mounted) return false;
     _isSubmitting = false;
 
     return either.fold(
       (failure) => false,
       (newReview) {
+        if (!mounted) return true;
         final currentReviews = state.valueOrNull ?? [];
         final existingIndex = currentReviews.indexWhere(
           (r) => r.id == newReview.id || r.userId == newReview.userId,
@@ -122,11 +125,13 @@ class ProductReviewsController
 
     final either = await _deleteReviewUseCase(reviewId);
 
+    if (!mounted) return false;
     _isSubmitting = false;
 
     return either.fold(
       (failure) => false,
       (_) {
+        if (!mounted) return true;
         final currentReviews = state.valueOrNull ?? [];
         state = AsyncValue.data(
           currentReviews.where((r) => r.id != reviewId).toList(),

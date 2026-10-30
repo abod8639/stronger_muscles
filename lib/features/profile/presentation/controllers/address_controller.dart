@@ -46,16 +46,6 @@ class AddressController extends _$AddressController {
 
   @override
   FutureOr<List<AddressEntity>> build() async {
-    ref.onDispose(() {
-      fullNameController.dispose();
-      phoneController.dispose();
-      streetController.dispose();
-      cityController.dispose();
-      stateController.dispose();
-      postalCodeController.dispose();
-      countryController.dispose();
-    });
-
     final isLoggedIn = ref.watch(
       authControllerProvider.select((state) => state.valueOrNull != null),
     );
@@ -152,6 +142,28 @@ class AddressController extends _$AddressController {
     _longitude = address.longitude;
   }
 
+  Future<void> saveAddressEntity({
+    int? id,
+    required AddressEntity address,
+  }) async {
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
+    final result = await ref.read(saveAddressUseCaseProvider).call(
+      id: id,
+      address: address,
+    );
+    ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+    result.fold(
+      (failure) => state = AsyncError(
+        failure,
+        failure.stackTrace ?? StackTrace.current,
+      ),
+      (_) async {
+        await fetchAddresses();
+        clearForm();
+      },
+    );
+  }
+
   Future<void> saveAddress(int? id) async {
     final entity = AddressEntity(
       id: id ?? 0,
@@ -168,54 +180,58 @@ class AddressController extends _$AddressController {
       longitude: _longitude,
     );
 
+    await saveAddressEntity(id: id, address: entity);
+  }
+
+  Future<Map<String, dynamic>?> getCurrentLocationData() async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    final result = await ref.read(saveAddressUseCaseProvider).call(
-      id: id,
-      address: entity,
-    );
-    ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-    result.fold(
-      (failure) => state = AsyncError(
-        failure,
-        failure.stackTrace ?? StackTrace.current,
-      ),
-      (_) async {
-        await fetchAddresses();
-        clearForm();
-      },
-    );
+    try {
+      final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
+      final positionResult = await remoteDataSource.getCurrentPosition();
+      return await positionResult.fold(
+        (failure) async {
+          ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+          return null;
+        },
+        (position) async {
+          _latitude = position.latitude;
+          _longitude = position.longitude;
+          final placeResult = await remoteDataSource.getAddressFromCoordinates(
+            position.latitude,
+            position.longitude,
+          );
+          ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+          final data = placeResult.fold(
+            (failure) => <String, dynamic>{
+              'latitude': position.latitude,
+              'longitude': position.longitude,
+            },
+            (place) => <String, dynamic>{
+              'latitude': position.latitude,
+              'longitude': position.longitude,
+              'street': place?.street ?? '',
+              'city': place?.locality ?? '',
+              'state': place?.administrativeArea ?? '',
+              'postalCode': place?.postalCode ?? '',
+              'country': place?.country ?? '',
+            },
+          );
+          if (data['street'] != null) streetController.text = data['street'] as String;
+          if (data['city'] != null) cityController.text = data['city'] as String;
+          if (data['state'] != null) stateController.text = data['state'] as String;
+          if (data['postalCode'] != null) postalCodeController.text = data['postalCode'] as String;
+          if (data['country'] != null) countryController.text = data['country'] as String;
+          return data;
+        },
+      );
+    } catch (_) {
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+      return null;
+    }
   }
 
   Future<void> getCurrentLocation() async {
-    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
-    final positionResult = await remoteDataSource.getCurrentPosition();
-    await positionResult.fold(
-      (failure) async {
-        ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-      },
-      (position) async {
-        _latitude = position.latitude;
-        _longitude = position.longitude;
-        final placeResult = await remoteDataSource.getAddressFromCoordinates(
-          position.latitude,
-          position.longitude,
-        );
-        placeResult.fold(
-          (failure) => null,
-          (place) {
-            if (place != null) {
-              streetController.text = place.street ?? '';
-              cityController.text = place.locality ?? '';
-              stateController.text = place.administrativeArea ?? '';
-              postalCodeController.text = place.postalCode ?? '';
-              countryController.text = place.country ?? '';
-            }
-          },
-        );
-        ref.read(addressFormLoadingProvider.notifier).setLoading(false);
-      },
-    );
+    await getCurrentLocationData();
   }
 
   void clearForm() {
