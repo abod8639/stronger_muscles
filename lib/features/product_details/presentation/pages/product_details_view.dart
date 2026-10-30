@@ -160,7 +160,11 @@ class ProductDetailsView extends ConsumerWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomIconsRow(product: effectiveProd),
+      bottomNavigationBar: BottomIconsRow(
+        product: effectiveProd,
+        initialFlavor: initialFlavor,
+        initialSize: initialSize,
+      ),
     );
   }
 
