@@ -853,4 +853,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get supportTeam => 'الدعم الفني';
+
+  @override
+  String get supportChatLoadError => 'تعذر تحميل تفاصيل تذكرة الدعم';
+
+  @override
+  String get supportChatEmpty => 'لا توجد رسائل سابقة في هذه المحادثة';
+
+  @override
+  String get supportChatEmptySubtitle =>
+      'اكتب رسالتك بالأسفل وسيرد عليك فريق الدعم قريباً';
+
+  @override
+  String get supportChatInputHint => 'اكتب رسالتك لفريق الدعم...';
+
+  @override
+  String get sendMessage => 'إرسال';
+
+  @override
+  String get ticketClosedNotice =>
+      'تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة';
 }

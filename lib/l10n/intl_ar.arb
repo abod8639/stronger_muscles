@@ -274,5 +274,11 @@
   "markAllAsRead": "تحديد الكل كمقروء",
   "noNotificationsYet": "لا توجد إشعارات حتى الآن",
   "noNotificationsSubtitle": "ستظهر هنا الإشعارات وتحديثات طلباتك وعروضنا",
-  "supportTeam": "الدعم الفني"
+  "supportTeam": "الدعم الفني",
+  "supportChatLoadError": "تعذر تحميل تفاصيل تذكرة الدعم",
+  "supportChatEmpty": "لا توجد رسائل سابقة في هذه المحادثة",
+  "supportChatEmptySubtitle": "اكتب رسالتك بالأسفل وسيرد عليك فريق الدعم قريباً",
+  "supportChatInputHint": "اكتب رسالتك لفريق الدعم...",
+  "sendMessage": "إرسال",
+  "ticketClosedNotice": "تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة"
 }

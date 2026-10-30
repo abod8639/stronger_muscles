@@ -276,5 +276,11 @@
   "markAllAsRead": "Mark all as read",
   "noNotificationsYet": "No notifications yet",
   "noNotificationsSubtitle": "Updates about your orders and offers will appear here",
-  "supportTeam": "Support team"
+  "supportTeam": "Support team",
+  "supportChatLoadError": "Couldn't load the ticket details",
+  "supportChatEmpty": "No messages in this conversation yet",
+  "supportChatEmptySubtitle": "Write your message below and our support team will reply soon",
+  "supportChatInputHint": "Write your message to the support team...",
+  "sendMessage": "Send",
+  "ticketClosedNotice": "This ticket is closed. New messages can't be sent"
 }

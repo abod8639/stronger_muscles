@@ -854,4 +854,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get supportTeam => 'Support team';
+
+  @override
+  String get supportChatLoadError => 'Couldn\'t load the ticket details';
+
+  @override
+  String get supportChatEmpty => 'No messages in this conversation yet';
+
+  @override
+  String get supportChatEmptySubtitle =>
+      'Write your message below and our support team will reply soon';
+
+  @override
+  String get supportChatInputHint =>
+      'Write your message to the support team...';
+
+  @override
+  String get sendMessage => 'Send';
+
+  @override
+  String get ticketClosedNotice =>
+      'This ticket is closed. New messages can\'t be sent';
 }

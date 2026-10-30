@@ -1741,6 +1741,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Support team'**
   String get supportTeam;
+
+  /// No description provided for @supportChatLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load the ticket details'**
+  String get supportChatLoadError;
+
+  /// No description provided for @supportChatEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages in this conversation yet'**
+  String get supportChatEmpty;
+
+  /// No description provided for @supportChatEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your message below and our support team will reply soon'**
+  String get supportChatEmptySubtitle;
+
+  /// No description provided for @supportChatInputHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your message to the support team...'**
+  String get supportChatInputHint;
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get sendMessage;
+
+  /// No description provided for @ticketClosedNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This ticket is closed. New messages can\'t be sent'**
+  String get ticketClosedNotice;
 }
 
 class _AppLocalizationsDelegate
