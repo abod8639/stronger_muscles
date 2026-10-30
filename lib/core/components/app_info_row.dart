@@ -38,13 +38,13 @@ class AppInfoRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 16.0, color: Colors.grey),
+                Icon(icon, size: 16.0, color: theme.colorScheme.onSurfaceVariant),
                 const SizedBox(width: 8.0),
               ],
               Text(
                 label,
                 style: labelStyle ??
-                    theme.textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                    theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
               ),
             ],
           ),
@@ -57,6 +57,7 @@ class AppInfoRow extends StatelessWidget {
                   style: valueStyle ??
                       theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.onSurface,
                       ),
                 ),
           ),
