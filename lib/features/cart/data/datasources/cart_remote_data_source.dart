@@ -42,7 +42,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         cancelToken: cancelToken,
       );
 
-      return await compute(parseCartItemsList, response);
+      return await compute(parseCartItemsList, response.data);
     } on DioException catch (e) {
       throw NetworkErrorHandler.handle(e);
     } catch (e) {
@@ -67,9 +67,15 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
         ApiConfig.cart,
         data: {
           'product_id': productId,
-          'flavor': ?selectedFlavor,
-          'size': ?selectedSize,
           'quantity': quantity,
+          if (selectedFlavor != null) ...{
+            'flavor': selectedFlavor,
+            'selected_flavor': selectedFlavor,
+          },
+          if (selectedSize != null) ...{
+            'size': selectedSize,
+            'selected_size': selectedSize,
+          },
         },
         cancelToken: cancelToken,
       );
