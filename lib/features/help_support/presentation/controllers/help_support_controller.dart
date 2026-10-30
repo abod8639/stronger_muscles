@@ -278,22 +278,39 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
   }
 
   /// Loads full details and conversation messages of a specific ticket.
-  Future<void> loadTicketDetails(String ticketId) async {
-    state = state.copyWith(selectedTicketState: const AsyncLoading());
+  Future<void> loadTicketDetails(
+    String ticketId, {
+    bool isSilentRefresh = false,
+  }) async {
+    if (!isSilentRefresh) {
+      state = state.copyWith(selectedTicketState: const AsyncLoading());
+    }
 
     final result = await _getTicketDetailsUseCase(ticketId);
 
     result.fold(
       (failure) {
-        state = state.copyWith(
-          selectedTicketState: AsyncError(
-            failure,
-            failure.stackTrace ?? StackTrace.current,
-          ),
-        );
+        if (!isSilentRefresh) {
+          state = state.copyWith(
+            selectedTicketState: AsyncError(
+              failure,
+              failure.stackTrace ?? StackTrace.current,
+            ),
+          );
+        }
       },
-      (ticket) {
-        state = state.copyWith(selectedTicketState: AsyncData(ticket));
+      (freshTicket) {
+        final current = state.selectedTicket;
+        if (isSilentRefresh && current != null) {
+          final hasNewMessages =
+              freshTicket.messages.length != current.messages.length;
+          final statusChanged = freshTicket.status != current.status;
+          if (hasNewMessages || statusChanged) {
+            state = state.copyWith(selectedTicketState: AsyncData(freshTicket));
+          }
+        } else {
+          state = state.copyWith(selectedTicketState: AsyncData(freshTicket));
+        }
         _subscribeToTicketRealtime(ticketId);
       },
     );
@@ -309,73 +326,84 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     try {
       final channel = _webSocketService.subscribeToTicket(ticketId);
 
-      // 1. Listen for new messages in this ticket
-      final subMsg = channel.bind('SupportMessageSent').listen((event) {
-        final map = event.tryGetDataAsMap();
-        if (map != null && map['message'] is Map) {
-          final rawMsg = Map<String, dynamic>.from(map['message'] as Map);
-          final newMsg = SupportMessageEntity(
-            id: rawMsg['id'] is int
-                ? rawMsg['id'] as int
-                : int.tryParse(rawMsg['id']?.toString() ?? '0') ?? 0,
-            ticketId: rawMsg['ticket_id'] is int
-                ? rawMsg['ticket_id'] as int
-                : int.tryParse(rawMsg['ticket_id']?.toString() ?? '0') ?? 0,
-            senderType: (rawMsg['sender_type'] ?? 'user').toString(),
-            senderName: (rawMsg['sender_name'] ?? 'مستخدم').toString(),
-            message: (rawMsg['message'] ?? '').toString(),
-            createdAt: rawMsg['created_at'] != null
-                ? DateTime.tryParse(rawMsg['created_at'].toString()) ??
-                    DateTime.now()
-                : DateTime.now(),
-            isRead: rawMsg['is_read'] == true || rawMsg['is_read'] == 1,
-          );
-
-          final current = state.selectedTicket;
-          if (current != null && current.id == ticketId) {
-            final exists = current.messages.any((m) => m.id == newMsg.id);
-            if (!exists) {
-              final updatedMsgs =
-                  List<SupportMessageEntity>.from(current.messages)..add(newMsg);
-              final updatedTicket = current.copyWith(
-                messages: updatedMsgs,
-                messagesCount: current.messagesCount + 1,
-                lastReplyAt: newMsg.createdAt,
-              );
-              state = state.copyWith(
-                selectedTicketState: AsyncData(updatedTicket),
-              );
-            }
-          }
+      // Listen to all events on this channel (handles any event naming conventions)
+      final subAll = channel.bindToAll().listen((event) {
+        final eventName = event.name;
+        if (eventName.contains('SupportMessageSent')) {
+          _handleIncomingMessageEvent(ticketId, event);
+        } else if (eventName.contains('SupportTicketUpdated')) {
+          _handleIncomingTicketUpdatedEvent(ticketId, event);
         }
       });
 
-      // 2. Listen for ticket status/priority updates
-      final subUpdate = channel.bind('SupportTicketUpdated').listen((event) {
-        final map = event.tryGetDataAsMap();
-        if (map != null && map['ticket'] is Map) {
-          final rawTicket = Map<String, dynamic>.from(map['ticket'] as Map);
-          final newStatus = rawTicket['status']?.toString();
-          final newPriority = rawTicket['priority']?.toString();
-          final current = state.selectedTicket;
-          if (current != null && current.id == ticketId) {
-            final updatedTicket = current.copyWith(
-              status: newStatus ?? current.status,
-              priority: newPriority != null
-                  ? TicketPriority.fromString(newPriority)
-                  : current.priority,
-            );
-            state = state.copyWith(
-              selectedTicketState: AsyncData(updatedTicket),
-            );
-          }
-          loadUserTickets();
-        }
-      });
-
-      _activeWsSubscriptions.addAll([subMsg, subUpdate]);
+      _activeWsSubscriptions.add(subAll);
     } catch (e) {
       debugPrint('Realtime subscription error for ticket $ticketId: $e');
+    }
+  }
+
+  void _handleIncomingMessageEvent(String ticketId, dynamic event) {
+    final map = event.tryGetDataAsMap();
+    if (map != null && map['message'] is Map) {
+      final rawMsg = Map<String, dynamic>.from(map['message'] as Map);
+      final newMsg = SupportMessageEntity(
+        id: rawMsg['id'] is int
+            ? rawMsg['id'] as int
+            : int.tryParse(rawMsg['id']?.toString() ?? '0') ?? 0,
+        ticketId: rawMsg['ticket_id'] is int
+            ? rawMsg['ticket_id'] as int
+            : int.tryParse(rawMsg['ticket_id']?.toString() ?? '0') ?? 0,
+        senderType: (rawMsg['sender_type'] ?? 'user').toString(),
+        senderName: (rawMsg['sender_name'] ?? 'مستخدم').toString(),
+        message: (rawMsg['message'] ?? '').toString(),
+        createdAt: rawMsg['created_at'] != null
+            ? DateTime.tryParse(rawMsg['created_at'].toString()) ??
+                DateTime.now()
+            : DateTime.now(),
+        isRead: rawMsg['is_read'] == true || rawMsg['is_read'] == 1,
+      );
+
+      final current = state.selectedTicket;
+      if (current != null &&
+          (current.id == ticketId || newMsg.ticketId.toString() == ticketId)) {
+        final exists = current.messages.any((m) => m.id == newMsg.id);
+        if (!exists) {
+          final updatedMsgs =
+              List<SupportMessageEntity>.from(current.messages)..add(newMsg);
+          final updatedTicket = current.copyWith(
+            messages: updatedMsgs,
+            messagesCount: current.messagesCount + 1,
+            lastReplyAt: newMsg.createdAt,
+          );
+          state = state.copyWith(
+            selectedTicketState: AsyncData(updatedTicket),
+          );
+        }
+      } else {
+        loadTicketDetails(ticketId, isSilentRefresh: true);
+      }
+    }
+  }
+
+  void _handleIncomingTicketUpdatedEvent(String ticketId, dynamic event) {
+    final map = event.tryGetDataAsMap();
+    if (map != null && map['ticket'] is Map) {
+      final rawTicket = Map<String, dynamic>.from(map['ticket'] as Map);
+      final newStatus = rawTicket['status']?.toString();
+      final newPriority = rawTicket['priority']?.toString();
+      final current = state.selectedTicket;
+      if (current != null && current.id == ticketId) {
+        final updatedTicket = current.copyWith(
+          status: newStatus ?? current.status,
+          priority: newPriority != null
+              ? TicketPriority.fromString(newPriority)
+              : current.priority,
+        );
+        state = state.copyWith(
+          selectedTicketState: AsyncData(updatedTicket),
+        );
+      }
+      loadUserTickets();
     }
   }
 
@@ -417,7 +445,7 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       },
       (sentMsg) {
         state = state.copyWith(messageState: AsyncData(sentMsg));
-        loadTicketDetails(ticketId);
+        loadTicketDetails(ticketId, isSilentRefresh: true);
         loadUserTickets();
         return true;
       },
