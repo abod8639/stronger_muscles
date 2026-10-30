@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_card.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/search_history_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
