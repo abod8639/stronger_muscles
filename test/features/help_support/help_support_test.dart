@@ -250,6 +250,32 @@ void main() {
       expect(sentEmpty, false);
     });
 
+    test('HelpSupportNotifier loadTicketDetails with isSilentRefresh preserves UI without flashing AsyncLoading', () async {
+      final notifier = HelpSupportNotifier(
+        getFaqsUseCase: getFaqsUseCase,
+        getChannelsUseCase: getChannelsUseCase,
+        submitTicketUseCase: submitTicketUseCase,
+        getUserTicketsUseCase: getUserTicketsUseCase,
+        getTicketDetailsUseCase: getTicketDetailsUseCase,
+        sendTicketMessageUseCase: sendTicketMessageUseCase,
+        closeTicketUseCase: closeTicketUseCase,
+      );
+
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // 1. Initial load sets AsyncLoading then AsyncData
+      await notifier.loadTicketDetails('SM-100');
+      expect(notifier.state.selectedTicket, isNotNull);
+      expect(notifier.state.selectedTicket!.messages.length, 0);
+
+      // 2. Silent refresh keeps state as AsyncData without resetting to AsyncLoading
+      final future = notifier.loadTicketDetails('SM-100', isSilentRefresh: true);
+      // Immediately verify that state is NOT AsyncLoading
+      expect(notifier.state.selectedTicketState.isLoading, isFalse);
+      await future;
+      expect(notifier.state.selectedTicket, isNotNull);
+    });
+
     test('FaqModel and FaqMapper convert bidirectionally', () {
       const model = FaqModel(
         id: 'faq_test',
