@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/auth/presentation/utils/auth_validators.dart';
+import 'package:stronger_muscles/core/utils/validators/app_validators.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Email field preconfigured for auth forms.
@@ -30,7 +30,7 @@ class AuthEmailField extends StatelessWidget {
       keyboardType: TextInputType.emailAddress,
       autofillHints: const [AutofillHints.email],
       onFieldSubmitted: onFieldSubmitted,
-      validator: (value) => AuthValidators.validateEmail(
+      validator: (value) => AppValidators.validateEmail(
         value,
         emptyMessage: l10n.enterEmail,
         invalidMessage: l10n.validEmail,
@@ -81,7 +81,7 @@ class AuthPasswordField extends StatelessWidget {
       autofillHints: autofillHints,
       onFieldSubmitted: onFieldSubmitted,
       validator: validator ??
-          (value) => AuthValidators.validatePassword(
+          (value) => AppValidators.validatePassword(
                 value,
                 emptyMessage: l10n.enterPassword,
                 tooShortMessage: l10n.passwordLength,

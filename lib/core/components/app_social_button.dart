@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
@@ -20,6 +21,18 @@ class AppSocialButton extends StatelessWidget {
     this.height = 50.0,
     this.borderRadius,
   });
+
+  static const String googleLogoAsset = 'assets/icon/google-icon-logo-svgrepo-com.svg';
+
+  /// "Sign in with Google" style button with the official Google logo.
+  AppSocialButton.google({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.isLoading = false,
+    this.height = 50.0,
+    this.borderRadius,
+  }) : icon = SvgPicture.asset(googleLogoAsset, width: 22, height: 22);
 
   @override
   Widget build(BuildContext context) {
