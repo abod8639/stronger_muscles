@@ -33,7 +33,7 @@ export 'presentation/controllers/address_controller.dart'
         addressFormSelectedLabelProvider;
 export 'presentation/controllers/profile_controller.dart'
     show profileControllerProvider, ProfileController;
-export 'presentation/controllers/language_controller.dart'
+export 'package:stronger_muscles/core/localization/language_controller.dart'
     show languageControllerProvider, LanguageController;
 export 'presentation/controllers/theme_controller.dart'
     show themeControllerProvider, ThemeController;
