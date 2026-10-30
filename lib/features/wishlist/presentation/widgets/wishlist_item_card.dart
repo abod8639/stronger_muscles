@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_delete_button.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/widgets/wishlist_product_details.dart';
@@ -18,18 +17,12 @@ class WishlistItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCard(
-      borderRadius: AppRadius.allMd,
-      margin: const EdgeInsets.symmetric(
-        horizontal: AppDimens.spacingLg,
-        vertical: AppDimens.spacingSm,
-      ),
       padding: const EdgeInsets.all(AppDimens.spacingMd),
       onTap: () => context.push(AppRoutes.productDetails, extra: product),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           WishlistProductImage(product: product),
-          const SizedBox(width: AppDimens.spacingLg),
+          const SizedBox(width: AppDimens.spacingMd),
           Expanded(child: WishlistProductDetails(product: product)),
           WishlistDeleteButton(product: product),
         ],
