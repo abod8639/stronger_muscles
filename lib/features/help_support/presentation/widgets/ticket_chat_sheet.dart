@@ -31,7 +31,6 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
   late final HelpSupportNotifier _helpSupportNotifier;
-  Timer? _pollingTimer;
 
   @override
   void initState() {
@@ -39,28 +38,11 @@ class _TicketChatSheetState extends ConsumerState<TicketChatSheet> {
     _helpSupportNotifier = ref.read(helpSupportControllerProvider.notifier);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _helpSupportNotifier.loadTicketDetails(widget.ticketId);
-      _startPolling();
-    });
-  }
-
-  void _startPolling() {
-    _pollingTimer?.cancel();
-    // Silently refresh ticket details every 2.5 seconds to capture new replies
-    // instantly even if WebSocket reconnects, drops, or experiences network lag.
-    _pollingTimer = Timer.periodic(const Duration(milliseconds: 2500), (_) {
-      if (mounted) {
-        _helpSupportNotifier.loadTicketDetails(
-          widget.ticketId,
-          isSilentRefresh: true,
-        );
-      }
     });
   }
 
   @override
   void dispose() {
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
     _messageController.dispose();
     _scrollController.dispose();
     Future.microtask(() {

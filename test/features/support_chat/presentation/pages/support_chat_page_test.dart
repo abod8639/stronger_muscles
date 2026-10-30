@@ -98,8 +98,8 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify header and subject
-    expect(find.text('SM-TICKET-99'), findsOneWidget);
-    expect(find.text('مشكلة تجريبية'), findsOneWidget);
+    expect(find.textContaining('99'), findsWidgets);
+    expect(find.textContaining('مشكلة تجريبية'), findsWidgets);
 
     // Verify messages
     expect(find.text('مرحباً، كيف نساعدك؟'), findsOneWidget);

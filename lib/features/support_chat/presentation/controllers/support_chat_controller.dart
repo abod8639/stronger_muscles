@@ -54,7 +54,6 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
   final WebSocketService _webSocketService;
 
   final List<StreamSubscription> _subscriptions = [];
-  Timer? _pollingTimer;
   bool _isDisposed = false;
 
   SupportChatNotifier({
@@ -74,7 +73,6 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
   Future<void> init() async {
     await loadTicketDetails();
     _subscribeToRealtime();
-    _startPolling();
   }
 
   /// Loads ticket and message history. Supports non-blocking silent refresh.
@@ -196,16 +194,6 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
     }
   }
 
-  /// Starts a silent fallback polling timer every 2.5 seconds.
-  void _startPolling() {
-    _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(const Duration(milliseconds: 2500), (_) {
-      if (!_isDisposed) {
-        loadTicketDetails(isSilentRefresh: true);
-      }
-    });
-  }
-
   /// Sends a reply inside this conversation.
   Future<bool> sendMessage(String text) async {
     final trimmed = text.trim();
@@ -271,8 +259,6 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
   @override
   void dispose() {
     _isDisposed = true;
-    _pollingTimer?.cancel();
-    _pollingTimer = null;
     for (final sub in _subscriptions) {
       sub.cancel();
     }

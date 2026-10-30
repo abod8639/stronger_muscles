@@ -42,36 +42,36 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
     );
   }
 
-  _PriorityBadgeConfig _getPriorityConfig(String? rawPriority) {
-    final p = (rawPriority ?? '').toLowerCase().trim();
-    if (p == 'urgent' || p == 'عاجلة' || p == 'عاجلة جداً' || p == 'critical') {
-      return const _PriorityBadgeConfig(
-        label: 'عاجلة جداً',
-        textColor: Color(0xFFEF5350),
-        backgroundColor: Color(0xFF381A1A),
-      );
-    }
-    if (p == 'high' || p == 'مرتفعة') {
-      return const _PriorityBadgeConfig(
-        label: 'مرتفعة',
-        textColor: Color(0xFFFFA726),
-        backgroundColor: Color(0xFF382914),
-      );
-    }
-    if (p == 'low' || p == 'منخفضة') {
-      return const _PriorityBadgeConfig(
-        label: 'منخفضة',
-        textColor: Color(0xFF9E9E9E),
-        backgroundColor: Color(0xFF26262B),
-      );
-    }
-    // Default: normal / عادية
-    return const _PriorityBadgeConfig(
-      label: 'عادية',
-      textColor: Color(0xFF4FA3FF),
-      backgroundColor: Color(0xFF14293D),
-    );
-  }
+  // _PriorityBadgeConfig _getPriorityConfig(String? rawPriority) {
+  //   final p = (rawPriority ?? '').toLowerCase().trim();
+  //   if (p == 'urgent' || p == 'عاجلة' || p == 'عاجلة جداً' || p == 'critical') {
+  //     return const _PriorityBadgeConfig(
+  //       label: 'عاجلة جداً',
+  //       textColor: Color(0xFFEF5350),
+  //       backgroundColor: Color(0xFF381A1A),
+  //     );
+  //   }
+  //   if (p == 'high' || p == 'مرتفعة') {
+  //     return const _PriorityBadgeConfig(
+  //       label: 'مرتفعة',
+  //       textColor: Color(0xFFFFA726),
+  //       backgroundColor: Color(0xFF382914),
+  //     );
+  //   }
+  //   if (p == 'low' || p == 'منخفضة') {
+  //     return const _PriorityBadgeConfig(
+  //       label: 'منخفضة',
+  //       textColor: Color(0xFF9E9E9E),
+  //       backgroundColor: Color(0xFF26262B),
+  //     );
+  //   }
+  //   // Default: normal / عادية
+  //   return const _PriorityBadgeConfig(
+  //     label: 'عادية',
+  //     textColor: Color(0xFF4FA3FF),
+  //     backgroundColor: Color(0xFF14293D),
+  //   );
+  // }
 
   _StatusBadgeConfig _getStatusConfig(String? rawStatus) {
     final s = (rawStatus ?? '').toLowerCase().trim();
@@ -131,7 +131,7 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final priorityConfig = _getPriorityConfig(item.priority);
+    // final priorityConfig = _getPriorityConfig(item.priority);
     final statusConfig = _getStatusConfig(item.status);
     final formattedDate = _formatDate(item.latestCreatedAt);
 
@@ -218,29 +218,29 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        // const SizedBox(width: 8),
 
-                        // Priority Badge
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? priorityConfig.backgroundColor
-                                : priorityConfig.backgroundColor.withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            priorityConfig.label,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: priorityConfig.textColor,
-                            ),
-                          ),
-                        ),
+                        // // Priority Badge
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(
+                        //     horizontal: 10,
+                        //     vertical: 4,
+                        //   ),
+                        //   decoration: BoxDecoration(
+                        //     color: isDark
+                        //         ? priorityConfig.backgroundColor
+                        //         : priorityConfig.backgroundColor.withValues(alpha: 0.15),
+                        //     borderRadius: BorderRadius.circular(8),
+                        //   ),
+                        //   child: Text(
+                        //     priorityConfig.label,
+                        //     style: TextStyle(
+                        //       fontSize: 12,
+                        //       fontWeight: FontWeight.w600,
+                        //       color: priorityConfig.textColor,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
 
@@ -429,17 +429,17 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
   }
 }
 
-class _PriorityBadgeConfig {
-  final String label;
-  final Color textColor;
-  final Color backgroundColor;
+// class _PriorityBadgeConfig {
+//   final String label;
+//   final Color textColor;
+//   final Color backgroundColor;
 
-  const _PriorityBadgeConfig({
-    required this.label,
-    required this.textColor,
-    required this.backgroundColor,
-  });
-}
+//   const _PriorityBadgeConfig({
+//     required this.label,
+//     required this.textColor,
+//     required this.backgroundColor,
+//   });
+// }
 
 class _StatusBadgeConfig {
   final String label;
