@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import '../controllers/support_chat_controller.dart';
 import '../controllers/support_chat_di.dart';
-import '../widgets/support_chat_input_bar.dart';
 import '../widgets/support_chat_message_bubble.dart';
+import '../widgets/support_chat_status_badge.dart';
 
 class SupportChatPage extends ConsumerStatefulWidget {
   final String ticketId;
@@ -53,41 +55,49 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
     }
   }
 
-  // Future<void> _showCloseTicketDialog() async {
-  //   final confirmed = await showDialog<bool>(
-  //     context: context,
-  //     builder: (ctx) => AlertDialog(
-  //       title: const Text('إغلاق التذكرة'),
-  //       content: const Text('هل تم حل المشكلة وتريد إغلاق تذكرة الدعم الفني هذه؟'),
-  //       actions: [
-  //         TextButton(
-  //           onPressed: () => Navigator.pop(ctx, false),
-  //           child: const Text('إلغاء'),
-  //         ),
-  //         ElevatedButton(
-  //           style: ElevatedButton.styleFrom(
-  //             backgroundColor: AppColors.primary,
-  //             foregroundColor: Colors.white,
-  //           ),
-  //           onPressed: () => Navigator.pop(ctx, true),
-  //           child: const Text('نعم، إغلاق'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
+  Widget _buildMessages(SupportChatState state, AppLocalizations l10n) {
+    final ticket = state.ticket;
 
-  //   if (confirmed == true && mounted) {
-  //     final notifier =
-  //         ref.read(supportChatControllerProvider(widget.ticketId).notifier);
-  //     await notifier.closeTicket();
-  //   }
-  // }
+    if (state.isLoading && ticket == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.ticketState.hasError && ticket == null) {
+      return AppEmptyState(
+        icon: AppErrorCard.iconFor(state.failure),
+        iconColor: AppColors.error,
+        title: l10n.supportChatLoadError,
+        subtitle: state.failure?.toMessage() ?? l10n.checkConnectionAndRetry,
+        actionText: l10n.retry,
+        actionIcon: Icons.refresh_rounded,
+        onActionTap: ref
+            .read(supportChatControllerProvider(widget.ticketId).notifier)
+            .loadTicketDetails,
+      );
+    }
+
+    if (state.messages.isEmpty) {
+      return AppEmptyState(
+        icon: Icons.forum_outlined,
+        title: l10n.supportChatEmpty,
+        subtitle: ticket?.isOpen == true ? l10n.supportChatEmptySubtitle : null,
+      );
+    }
+
+    return ListView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      itemCount: state.messages.length,
+      itemBuilder: (context, index) =>
+          SupportChatMessageBubble(message: state.messages[index]),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(supportChatControllerProvider(widget.ticketId));
     final ticket = state.ticket;
-    final isDark = context.isDark;
 
     // Auto-scroll when new messages arrive via WebSocket or polling
     ref.listen<int?>(
@@ -108,207 +118,39 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
           .select((s) => s.messageState),
       (prev, next) {
         next.whenOrNull(
-          error: (error, _) {
-            final message =
-                error is Failure ? error.toMessage() : error.toString();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          },
+          error: (error, _) => AppSnackBar.showError(
+            context,
+            AppErrorCard.messageFor(error, l10n),
+          ),
         );
       },
     );
 
     return Scaffold(
-
       appBar: baseAppBar(
-        context, 
-        'محادثة الدعم ${widget.ticketId} # ${ticket?.subject}'
-        ),
-      
-      // AppBar(
-      //   centerTitle: false,
-      //   leading: IconButton(
-      //     icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
-      //     onPressed: () {
-      //       if (context.canPop()) {
-      //         context.pop();
-      //       } else {
-      //         context.go('/help_support');
-      //       }
-      //     },
-      //   ),
-      //   title: ticket == null
-      //       ? Text(
-      //           'محادثة الدعم #${widget.ticketId}',
-      //           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      //         )
-      //       : Column(
-      //           crossAxisAlignment: CrossAxisAlignment.start,
-      //           children: [
-      //             Row(
-      //               children: [
-      //                 Container(
-      //                   padding: const EdgeInsets.symmetric(
-      //                       horizontal: 6, vertical: 2),
-      //                   decoration: BoxDecoration(
-      //                     color: AppColors.primary.withValues(alpha: 0.12),
-      //                     borderRadius: BorderRadius.circular(6),
-      //                   ),
-      //                   child: Text(
-      //                     ticket.ticketNumber ?? '#${ticket.id}',
-      //                     style: const TextStyle(
-      //                       fontSize: 11,
-      //                       fontWeight: FontWeight.bold,
-      //                       color: AppColors.primary,
-      //                     ),
-      //                   ),
-      //                 ),
-      //                 const SizedBox(width: 8),
-      //                 SupportChatStatusBadge(
-      //                   status: ticket.status,
-      //                   label: ticket.statusArabic,
-      //                 ),
-      //               ],
-      //             ),
-      //             const SizedBox(height: 2),
-      //             Text(
-      //               ticket.subject,
-      //               style: TextStyle(
-      //                 fontSize: 14.5,
-      //                 fontWeight: FontWeight.bold,
-      //                 color: isDark ? AppColors.white : AppColors.black,
-      //               ),
-      //               maxLines: 1,
-      //               overflow: TextOverflow.ellipsis,
-      //             ),
-      //           ],
-      //         ),
-      //   actions: [
-      //     if (ticket != null && ticket.isOpen)
-      //       IconButton(
-      //         tooltip: 'إغلاق التذكرة',
-      //         icon: const Icon(Icons.check_circle_outline_rounded,
-      //             color: AppColors.primary),
-      //         onPressed: _showCloseTicketDialog,
-      //       ),
-      //     const SizedBox(width: 4),
-      //   ],
-      // ),
-
+        context,
+        l10n.ticketNumberLabel(ticket?.ticketNumber ?? widget.ticketId),
+      ),
       body: Column(
         children: [
-          if (state.isLoading && ticket == null)
-            const Expanded(child: Center(child: CircularProgressIndicator()))
-          else if (state.ticketState.hasError && ticket == null)
-            Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.error_outline_rounded,
-                        color: AppColors.error,
-                        size: 48,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        state.failure?.toMessage() ??
-                            'تعذر تحميل تفاصيل تذكرة الدعم',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14.5,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? AppColors.white : AppColors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      OutlinedButton.icon(
-                        icon: const Icon(Icons.refresh, size: 18),
-                        label: const Text('إعادة المحاولة'),
-                        onPressed: () {
-                          ref
-                              .read(supportChatControllerProvider(widget.ticketId)
-                                  .notifier)
-                              .loadTicketDetails();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          else
-            Expanded(
-              child: state.messages.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.mark_chat_read_outlined,
-                            size: 52,
-                            color: isDark ? Colors.white24 : Colors.black26,
-                          ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'لا توجد رسائل سابقة في هذه المحادثة',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isDark ? AppColors.grey : AppColors.greyDark,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      itemCount: state.messages.length,
-                      itemBuilder: (context, index) {
-                        final msg = state.messages[index];
-                        return SupportChatMessageBubble(
-                          message: msg,
-                          isDark: isDark,
-                        );
-                      },
-                    ),
-            ),
-
-          // Bottom Input Bar
+          if (ticket != null) _TicketHeader(ticket: ticket),
+          Expanded(child: _buildMessages(state, l10n)),
           if (ticket != null && ticket.isOpen)
-            SupportChatInputBar(
+            AppChatComposer(
               controller: _messageController,
               isSending: state.isSending,
               onSend: _handleSend,
-              isDark: isDark,
+              hintText: l10n.supportChatInputHint,
+              sendTooltip: l10n.sendMessage,
             )
           else if (ticket != null && ticket.isClosed)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(14),
-              color: isDark ? const Color(0xFF1E1E1E) : const Color(0xFFF3F4F6),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.lock_outline_rounded,
-                      size: 18, color: Colors.grey),
-                  SizedBox(width: 8),
-                  Text(
-                    'تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
+            SafeArea(
+              top: false,
+              child: AppAlertCard(
+                color: AppColors.grey,
+                icon: Icons.lock_outline_rounded,
+                message: l10n.ticketClosedNotice,
+                margin: const EdgeInsets.all(12.0),
               ),
             ),
         ],
@@ -317,3 +159,42 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
   }
 }
 
+/// Ticket subject and current status, pinned under the app bar.
+class _TicketHeader extends StatelessWidget {
+  final SupportTicketEntity ticket;
+
+  const _TicketHeader({required this.ticket});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 12.0),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border(bottom: BorderSide(color: colorScheme.outlineVariant)),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              ticket.subject,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          SupportChatStatusBadge(
+            status: ticket.status,
+            label: ticket.statusArabic,
+          ),
+        ],
+      ),
+    );
+  }
+}

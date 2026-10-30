@@ -6,7 +6,6 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/order_feature.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
@@ -18,12 +17,8 @@ class RecentOrdersList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final ordersState = ref.watch(ordersControllerProvider);
-    final isDark = theme.brightness == Brightness.dark;
-    final locale = ref.watch(languageControllerProvider);
-    final isAr = locale.languageCode == 'ar';
 
     return ordersState.when(
       data: (orders) {
@@ -64,8 +59,6 @@ class RecentOrdersList extends ConsumerWidget {
                   onTap: () =>
                       context.push(AppRoutes.orderDetails, extra: order),
                   order: order,
-                  isDark: isDark,
-                  isAr: isAr,
                 );
               },
             ),
