@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/app_field_label.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A reusable modern text form field with theme support, unified borders,
@@ -72,15 +72,14 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDark;
-    final fillColor = isDark ? AppColors.surfaceDark : AppColors.greyLight.withValues(alpha: 0.6);
+    final mutedColor = context.colorScheme.onSurfaceVariant;
 
     Widget? effectiveSuffix = widget.suffixIcon;
     if (widget.isPassword && effectiveSuffix == null) {
       effectiveSuffix = IconButton(
         icon: Icon(
           _obscured ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-          color: isDark ? AppColors.grey : AppColors.greyDark,
+          color: mutedColor,
           size: 20.0,
         ),
         splashRadius: 20.0,
@@ -88,21 +87,12 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       );
     }
 
+    // Borders, fill and hint style come from the app's InputDecorationTheme.
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.label != null) ...[
-          Text(
-            widget.label!,
-            style: TextStyle(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w600,
-              color: isDark ? AppColors.greyLight : AppColors.greyDark,
-            ),
-          ),
-          const SizedBox(height: 6.0),
-        ],
+        if (widget.label != null) AppFieldLabel(widget.label!),
         TextFormField(
           controller: widget.controller,
           maxLines: widget.isPassword ? 1 : widget.maxLines,
@@ -118,54 +108,12 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
           onFieldSubmitted: widget.onFieldSubmitted,
           focusNode: widget.focusNode,
           autofillHints: widget.autofillHints,
-          style: TextStyle(
-            fontSize: 14.5,
-            color: isDark ? AppColors.white : AppColors.black,
-          ),
+          style: context.textTheme.bodyMedium?.copyWith(fontSize: 14.5),
           decoration: InputDecoration(
-            isDense: true,
             hintText: widget.hintText,
-            hintStyle: TextStyle(
-              fontSize: 13.5,
-              color: isDark ? AppColors.grey : AppColors.greyDark,
-            ),
             prefixIcon: widget.prefixIcon,
+            prefixIconColor: mutedColor,
             suffixIcon: effectiveSuffix,
-            filled: true,
-            fillColor: fillColor,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 13.0),
-            border: OutlineInputBorder(
-              borderRadius: AppRadius.allMd,
-              borderSide: BorderSide(
-                color: isDark ? Colors.white12 : AppColors.greyMedium,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.allMd,
-              borderSide: BorderSide(
-                color: isDark ? Colors.white12 : AppColors.greyMedium.withValues(alpha: 0.8),
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: AppRadius.allMd,
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 1.5,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: AppRadius.allMd,
-              borderSide: const BorderSide(
-                color: AppColors.error,
-              ),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: AppRadius.allMd,
-              borderSide: const BorderSide(
-                color: AppColors.error,
-                width: 1.5,
-              ),
-            ),
           ),
         ),
       ],
