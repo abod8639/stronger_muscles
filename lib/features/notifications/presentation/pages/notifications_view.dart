@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/features/notifications/domain/entities/notification_feed_item.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
+import 'package:stronger_muscles/features/notifications/presentation/widgets/grouped_ticket_notification_card.dart';
 import 'package:stronger_muscles/features/notifications/presentation/widgets/notification_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -34,7 +36,9 @@ class NotificationsView extends ConsumerWidget {
       ),
       body: state.when(
         data: (data) {
-          if (data.notifications.isEmpty) {
+          final feedItems = data.feedItems;
+
+          if (feedItems.isEmpty) {
             return RefreshIndicator(
               onRefresh: () => notifier.refresh(),
               child: ListView(
@@ -93,7 +97,7 @@ class NotificationsView extends ConsumerWidget {
             notificationControllerProvider.notifier.select((n) => n.hasMore),
           );
 
-          final count = data.notifications.length + (isLoadingMore ? 1 : 0);
+          final count = feedItems.length + (isLoadingMore ? 1 : 0);
 
           return RefreshIndicator(
             onRefresh: () => notifier.refresh(),
@@ -102,7 +106,7 @@ class NotificationsView extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 12),
               itemCount: count,
               itemBuilder: (context, index) {
-                if (index >= data.notifications.length) {
+                if (index >= feedItems.length) {
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Center(
@@ -116,31 +120,58 @@ class NotificationsView extends ConsumerWidget {
                 }
 
                 // Trigger pagination when reaching near bottom
-                if (index == data.notifications.length - 3 && hasMore && !isLoadingMore) {
+                if (index == feedItems.length - 3 && hasMore && !isLoadingMore) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     notifier.loadMoreNotifications();
                   });
                 }
 
-                final notification = data.notifications[index];
-                return Dismissible(
-                  key: ValueKey(notification.id),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.error,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: const Icon(Icons.delete_outline_rounded, color: Colors.white),
-                  ),
-                  onDismissed: (_) {
-                    notifier.deleteNotification(notification.id);
-                  },
-                  child: NotificationItemCard(notification: notification),
-                );
+                final item = feedItems[index];
+                switch (item) {
+                  case SingleNotificationFeedItem(:final notification):
+                    return Dismissible(
+                      key: ValueKey('notification_${notification.id}'),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.error,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(Icons.delete_outline_rounded,
+                            color: Colors.white),
+                      ),
+                      onDismissed: (_) {
+                        notifier.deleteNotification(notification.id);
+                      },
+                      child: NotificationItemCard(notification: notification),
+                    );
+
+                  case GroupedTicketNotificationFeedItem():
+                    return Dismissible(
+                      key: ValueKey('ticket_group_${item.ticketId}_${item.ticketNumber}'),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.error,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Icon(Icons.delete_outline_rounded,
+                            color: Colors.white),
+                      ),
+                      onDismissed: (_) {
+                        notifier.deleteNotifications(item.allNotificationIds);
+                      },
+                      child: GroupedTicketNotificationCard(item: item),
+                    );
+                }
               },
             ),
           );
