@@ -92,5 +92,25 @@ void main() {
     expect(pushedRoute, AppRoutes.supportChat);
     expect(pushedExtra, {'ticket_id': '6'});
   });
-}
 
+  testWidgets('GroupedTicketNotificationCard maps status aliases to labels', (tester) async {
+    final item = GroupedTicketNotificationFeedItem(
+      ticketId: '7',
+      ticketNumber: 'SM-ALIAS',
+      status: 'waiting_admin',
+      totalMessagesCount: 1,
+      unreadCount: 0,
+      latestMessage: 'hello',
+      notifications: const [],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        child: MaterialApp(home: Scaffold(body: GroupedTicketNotificationCard(item: item))),
+      ),
+    );
+
+    expect(find.text('بانتظار الدعم'), findsOneWidget);
+    expect(find.byIcon(Icons.support_agent_rounded), findsOneWidget);
+  });
+}
