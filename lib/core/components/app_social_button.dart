@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A reusable social authentication or outlined action button (e.g. Google, Apple).
@@ -36,18 +35,17 @@ class AppSocialButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = context.isDark;
     final radius = borderRadius ?? AppRadius.allLg;
-    final borderColor = isDark ? Colors.white24 : AppColors.greyMedium;
-    final textColor = isDark ? AppColors.white : AppColors.black;
-    final bgColor = isDark ? AppColors.surfaceDark : AppColors.white;
+    final borderColor = context.colorScheme.outlineVariant;
+    final textColor = context.colorScheme.onSurface;
+    final bgColor = context.colorScheme.surface;
 
     return Container(
       height: height,
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: radius,
-        boxShadow: isDark ? null : AppShadows.subtle(),
+        boxShadow: context.subtleShadow,
       ),
       child: OutlinedButton(
         onPressed: isLoading ? null : onPressed,

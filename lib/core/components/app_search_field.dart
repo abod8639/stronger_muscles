@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/core/theme/app_shadows.dart';
 
 /// A reusable search text field component with theme-aware styling,
 /// unified shadows, clear button, and prefix icon.
@@ -67,17 +66,16 @@ class _AppSearchFieldState extends State<AppSearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? AppColors.surfaceDark : AppColors.white;
+    final colorScheme = context.colorScheme;
 
     return Container(
       margin: widget.margin,
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: colorScheme.surface,
         borderRadius: AppRadius.allLg,
-        boxShadow: isDark ? AppShadows.ofSubtle(context) : AppShadows.subtle(),
+        boxShadow: context.subtleShadow,
         border: Border.all(
-          color: isDark ? Colors.white10 : AppColors.greyMedium.withValues(alpha: 0.5),
+          color: colorScheme.outlineVariant,
           width: 1,
         ),
       ),
@@ -91,17 +89,12 @@ class _AppSearchFieldState extends State<AppSearchField> {
         onSubmitted: widget.onSubmitted,
         textInputAction: TextInputAction.search,
         textAlignVertical: TextAlignVertical.center,
-        style: TextStyle(
-          fontSize: 15,
-          color: isDark ? AppColors.white : AppColors.black,
-        ),
+        style: context.textTheme.bodyLarge?.copyWith(fontSize: 15),
         decoration: InputDecoration(
           isDense: true,
           hintText: widget.hintText,
-          hintStyle: TextStyle(
-            fontSize: 14,
-            color: isDark ? AppColors.grey : AppColors.greyDark,
-          ),
+          hintStyle: context.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+          filled: false,
           prefixIcon: const Icon(
             Icons.search_rounded,
             color: AppColors.primary,
@@ -113,10 +106,10 @@ class _AppSearchFieldState extends State<AppSearchField> {
               if (_showClear && !widget.readOnly)
                 IconButton(
                   splashRadius: 18,
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.close_rounded,
                     size: 18,
-                    color: AppColors.greyDark,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                   onPressed: () {
                     _controller.clear();

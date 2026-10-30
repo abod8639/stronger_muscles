@@ -41,19 +41,14 @@ class AppSelectableCard<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final effectiveRadius = borderRadius ?? AppRadius.allMd;
 
-    final selectedBg = isDark
-        ? AppColors.primary.withValues(alpha: 0.15)
-        : AppColors.primary.withValues(alpha: 0.06);
+    final selectedBg = AppColors.primary.withValues(alpha: context.isDark ? 0.15 : 0.06);
 
     final unselectedBg = theme.colorScheme.surface;
 
     final selectedBorderColor = AppColors.primary;
-    final unselectedBorderColor = isDark
-        ? Colors.white12
-        : theme.colorScheme.outlineVariant;
+    final unselectedBorderColor = theme.colorScheme.outlineVariant;
 
     final effectiveTextColor = enabled
         ? theme.colorScheme.onSurface
@@ -90,7 +85,7 @@ class AppSelectableCard<T> extends StatelessWidget {
                     leadingIcon,
                     color: enabled
                         ? (isSelected ? AppColors.primary : theme.colorScheme.onSurfaceVariant)
-                        : Colors.grey,
+                        : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                     size: 24.0,
                   ),
                   const SizedBox(width: 12.0),
