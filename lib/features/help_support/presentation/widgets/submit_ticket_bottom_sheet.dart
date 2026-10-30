@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -119,7 +118,7 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
                   : null,
             ),
             const SizedBox(height: AppDimens.spacingLg),
-            _FieldLabel(l10n?.ticketCategory ?? 'نوع الاستفسار'),
+            AppFieldLabel(l10n?.ticketCategory ?? 'نوع الاستفسار'),
             AppChoiceChips<String>(
               scrollable: false,
               items: _categories,
@@ -128,7 +127,7 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
               onSelected: (category) => setState(() => _selectedCategory = category),
             ),
             const SizedBox(height: AppDimens.spacingLg),
-            _FieldLabel(l10n?.ticketPriority ?? 'الأهمية'),
+            AppFieldLabel(l10n?.ticketPriority ?? 'الأهمية'),
             AppChoiceChips<TicketPriority>(
               scrollable: false,
               items: const [TicketPriority.normal, TicketPriority.urgent],
@@ -172,27 +171,6 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
               onPressed: _handleSubmit,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FieldLabel extends StatelessWidget {
-  final String text;
-
-  const _FieldLabel(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6.0),
-      child: Text(
-        text,
-        style: context.textTheme.bodyMedium?.copyWith(
-          fontSize: 13.5,
-          fontWeight: FontWeight.w600,
-          color: context.colorScheme.onSurfaceVariant,
         ),
       ),
     );

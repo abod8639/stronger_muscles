@@ -1,12 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
-import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 
+/// Swipeable hero image carousel with page dots; tapping opens the viewer.
 class MainImage extends ConsumerStatefulWidget {
   final ProductModel product;
   final Function(int)? onImageTap;
@@ -18,6 +17,8 @@ class MainImage extends ConsumerStatefulWidget {
 }
 
 class _MainImageState extends ConsumerState<MainImage> {
+  static const double _height = 380.0;
+
   late final PageController _pageController;
 
   @override
@@ -56,16 +57,39 @@ class _MainImageState extends ConsumerState<MainImage> {
       }
     });
 
+    final images = widget.product.imageUrls;
+    final selectedIndex = ref.watch(
+      productDetailsControllerProvider(widget.product).select((s) => s.selectedImageIndex),
+    );
+
     return SizedBox(
-      height: 400,
+      height: _height,
       width: double.infinity,
-      child: widget.product.imageUrls.isEmpty
-          ? _buildEmptyState(context)
-          : _buildImageSlider(context),
+      child: images.isEmpty
+          ? const AppNetworkImage(
+              imageUrl: null,
+              borderRadius: BorderRadius.zero,
+              errorIconSize: 64.0,
+            )
+          : Stack(
+              children: [
+                Positioned.fill(child: _buildImageSlider()),
+                if (images.length > 1)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 12.0,
+                    child: AppDotsIndicator(
+                      itemCount: images.length,
+                      currentIndex: selectedIndex.clamp(0, images.length - 1),
+                    ),
+                  ),
+              ],
+            ),
     );
   }
 
-  Widget _buildImageSlider(BuildContext context) {
+  Widget _buildImageSlider() {
     return PageView.builder(
       allowImplicitScrolling: true,
       controller: _pageController,
@@ -74,73 +98,21 @@ class _MainImageState extends ConsumerState<MainImage> {
           .read(productDetailsControllerProvider(widget.product).notifier)
           .selectImage(index),
       physics: const BouncingScrollPhysics(),
-      itemBuilder: (context, index) {
-        final imageUrl = widget.product.imageUrls[index];
-        return GestureDetector(
-          onTap: () => widget.onImageTap?.call(index),
-          child: Hero(
-            tag: 'product_image_${widget.product.id}_$index',
-            child: Container(
-              decoration: BoxDecoration(
-                color: widget.product.isBackgroundWhite
-                    ? Colors.white
-                    : Colors.transparent,
-              ),
-              child: CachedNetworkImage(
-                cacheManager: CustomCacheManager.instance,
-                imageUrl: imageUrl.medium,
-                fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    const Center(child: CircularProgressIndicator.adaptive()),
-                errorWidget: (context, url, error) =>
-                    _buildErrorWidget(context),
-              ),
+      itemBuilder: (context, index) => GestureDetector(
+        onTap: () => widget.onImageTap?.call(index),
+        child: Hero(
+          tag: 'product_image_${widget.product.id}_$index',
+          child: ColoredBox(
+            color: widget.product.isBackgroundWhite ? AppColors.white : Colors.transparent,
+            child: AppNetworkImage(
+              imageUrl: widget.product.imageUrls[index].medium,
+              fit: BoxFit.contain,
+              borderRadius: BorderRadius.zero,
+              errorIcon: Icons.broken_image_outlined,
+              errorIconSize: 48.0,
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildErrorWidget(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.broken_image_outlined,
-            size: 48,
-            color: Theme.of(context).colorScheme.error,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.failedToLoadImage,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(
-          context,
-        ).colorScheme.surfaceContainerHighest.withValues(alpha: .3),
-        borderRadius: AppRadius.allLg,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            Icons.image_not_supported_outlined,
-            size: 64,
-            color: Colors.grey,
-          ),
-          const SizedBox(height: 16),
-          Text(AppLocalizations.of(context)!.noImagesAvailable),
-        ],
+        ),
       ),
     );
   }
