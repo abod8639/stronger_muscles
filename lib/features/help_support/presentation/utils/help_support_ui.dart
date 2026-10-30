@@ -23,13 +23,17 @@ extension FaqCategoryUi on FaqCategory {
       };
 }
 
+/// Badge color for a canonical ticket status
+/// (`open`, `in_progress`, `waiting_user`, `resolved`, `closed`).
+Color ticketStatusColor(String status) => switch (status) {
+      'open' => AppColors.warning,
+      'in_progress' => AppColors.info,
+      'waiting_user' => Colors.deepPurple,
+      'resolved' => AppColors.success,
+      _ => AppColors.grey,
+    };
+
 /// Badge color for a support ticket's status.
 extension SupportTicketUi on SupportTicketEntity {
-  Color get statusColor => switch (status) {
-        'open' => AppColors.warning,
-        'in_progress' => AppColors.info,
-        'waiting_user' => Colors.deepPurple,
-        'resolved' => AppColors.success,
-        _ => AppColors.grey,
-      };
+  Color get statusColor => ticketStatusColor(status);
 }
