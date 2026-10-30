@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/components/components.dart';
 import '../../../../core/constants/app_dimens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import 'payment_option_card.dart';
+import '../../../payment/payment_feature.dart';
+import '../controllers/checkout_controller.dart';
 
 /// Step 2: choose the payment method.
-class CheckoutPaymentStep extends StatelessWidget {
+class CheckoutPaymentStep extends ConsumerWidget {
   const CheckoutPaymentStep({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final selectedMethod = ref.watch(
+      checkoutControllerProvider.select((s) => s.selectedPaymentMethod),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -19,20 +24,23 @@ class CheckoutPaymentStep extends StatelessWidget {
           title: l10n.paymentMethod,
           padding: const EdgeInsets.only(bottom: AppDimens.spacingSm),
         ),
-        PaymentOptionCard(
-          value: 'cash',
-          title: l10n.cashOnDelivery,
-          icon: Icons.payments_outlined,
+        PaymentMethodSelector(
+          selectedMethodId: selectedMethod,
+          onMethodSelected: ref.read(checkoutControllerProvider.notifier).setPaymentMethod,
+          methods: [
+            PaymentMethodEntity(
+              id: 'cash',
+              title: l10n.cashOnDelivery,
+              icon: Icons.payments_outlined,
+            ),
+            PaymentMethodEntity(
+              id: 'card',
+              title: l10n.creditCardOrOnline,
+              subtitle: l10n.paySecurelyStripe,
+              icon: Icons.credit_card_outlined,
+            ),
+          ],
         ),
-        const SizedBox(height: AppDimens.spacingSm),
-        PaymentOptionCard(
-          value: 'card',
-          title: l10n.creditCardOrOnline,
-          icon: Icons.credit_card_outlined,
-          subtitle: l10n.paySecurelyStripe,
-        ),
-        const SizedBox(height: AppDimens.spacingLg),
-        const AppSecureBadge(),
       ],
     );
   }
