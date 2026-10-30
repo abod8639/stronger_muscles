@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/app_snack_bar.dart';
 import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/cart/presentation/controllers/cart_controller.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
@@ -48,22 +48,15 @@ void showRemoveConfirmation(
       : '$itemName removed from cart.';
   final undoLabel = l10n?.undo ?? 'UNDO';
 
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(message),
-      duration: const Duration(seconds: 3),
-      action: SnackBarAction(
-        label: undoLabel,
-        textColor: AppColors.primary,
-        onPressed: () {
-          cartNotifier.addToCart(
-            cartItem.product,
-            selectedFlavor: cartItem.selectedFlavor,
-            selectedSize: cartItem.selectedSize,
-            quantity: 1,
-          );
-        },
-      ),
+  AppSnackBar.showInfo(
+    context,
+    message,
+    actionLabel: undoLabel,
+    onAction: () => cartNotifier.addToCart(
+      cartItem.product,
+      selectedFlavor: cartItem.selectedFlavor,
+      selectedSize: cartItem.selectedSize,
+      quantity: 1,
     ),
   );
 }

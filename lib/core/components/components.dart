@@ -18,6 +18,8 @@ export 'app_error_card.dart';
 export 'app_hero_header.dart';
 export 'app_link_button.dart';
 export 'app_snack_bar.dart';
+export 'app_price_text.dart';
+export 'app_network_image.dart';
 export 'app_rating_stars.dart';
 export 'app_section_title.dart';
 export 'app_product_card.dart';

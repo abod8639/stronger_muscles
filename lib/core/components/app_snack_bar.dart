@@ -29,11 +29,19 @@ class AppSnackBar {
         onAction: onAction,
       );
 
-  static void showInfo(BuildContext context, String message) => _show(
+  static void showInfo(
+    BuildContext context,
+    String message, {
+    String? actionLabel,
+    VoidCallback? onAction,
+  }) =>
+      _show(
         context,
         message: message,
         icon: Icons.info_outline_rounded,
         color: AppColors.greyDark,
+        actionLabel: actionLabel,
+        onAction: onAction,
       );
 
   static void _show(
