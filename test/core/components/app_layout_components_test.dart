@@ -145,4 +145,50 @@ void main() {
       expect(deleted, isTrue);
     });
   });
+
+  group('AppAvatar', () {
+    testWidgets('shows the initial when there is a name but no photo', (tester) async {
+      await tester.pumpWidget(_wrap(const AppAvatar(name: 'sara')));
+      expect(find.text('S'), findsOneWidget);
+    });
+
+    testWidgets('falls back to the icon without name or photo', (tester) async {
+      await tester.pumpWidget(_wrap(const AppAvatar()));
+      expect(find.byIcon(Icons.person), findsOneWidget);
+    });
+  });
+
+  group('AppListTile & AppStatCard', () {
+    testWidgets('AppListTile reports taps and shows a chevron', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        _wrap(AppListTile(icon: Icons.language, title: 'Language', onTap: () => taps++)),
+      );
+      await tester.tap(find.text('Language'));
+      expect(taps, 1);
+      expect(find.byIcon(Icons.chevron_right_rounded), findsOneWidget);
+    });
+
+    testWidgets('AppStatCard shows value and label', (tester) async {
+      await tester.pumpWidget(
+        _wrap(const AppStatCard(icon: Icons.favorite, value: '7', label: 'Wishlist', color: Colors.red)),
+      );
+      expect(find.text('7'), findsOneWidget);
+      expect(find.text('Wishlist'), findsOneWidget);
+    });
+  });
+
+  group('AppShimmer', () {
+    testWidgets('skeleton boxes animate under one shimmer', (tester) async {
+      await tester.pumpWidget(
+        _wrap(const AppShimmer(child: AppSkeletonBox(width: 50, height: 10))),
+      );
+      Color colorNow() => ((tester.widget<Container>(find.byType(Container).last).decoration
+              as BoxDecoration)
+          .color)!;
+      final first = colorNow();
+      await tester.pump(const Duration(milliseconds: 600));
+      expect(colorNow(), isNot(first));
+    });
+  });
 }
