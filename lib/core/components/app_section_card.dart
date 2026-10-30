@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/app_icon_tile.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
@@ -36,14 +36,7 @@ class AppSectionCard extends StatelessWidget {
           Row(
             children: [
               if (icon != null) ...[
-                Container(
-                  padding: const EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: AppRadius.allSm,
-                  ),
-                  child: Icon(icon, size: 18.0, color: AppColors.primary),
-                ),
+                AppIconTile(icon: icon!, iconSize: 18.0, padding: 6.0),
                 const SizedBox(width: AppDimens.spacingSm),
               ],
               Expanded(
