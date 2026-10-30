@@ -10,7 +10,6 @@ import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/bottom_icons_row.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/image_list_view.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/main_image.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_detail_sections.dart';
