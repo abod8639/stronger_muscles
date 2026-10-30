@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/cart/domain/usecases/add_to_cart_usecase.dart';
 import 'package:stronger_muscles/features/cart/domain/usecases/clear_cart_usecase.dart';
@@ -23,8 +24,6 @@ class CartController extends _$CartController {
   final RemoveFromCartUseCase? _testRemoveFromCartUseCase;
   final UpdateCartQuantityUseCase? _testUpdateCartQuantityUseCase;
   final ClearCartUseCase? _testClearCartUseCase;
-
-  bool _isMutating = false;
 
   CartController()
       : _testGetCartItemsUseCase = null,
@@ -84,7 +83,7 @@ class CartController extends _$CartController {
   int get cartCount => (state.valueOrNull ?? []).length;
 
   /// Whether a mutation is currently in progress.
-  bool get isMutating => _isMutating;
+  bool get isMutating => state.isLoading;
 
   /// Resets error state back to data without losing cached cart items.
   void clearError() {
@@ -93,16 +92,60 @@ class CartController extends _$CartController {
     }
   }
 
-  /// Adds a product to the cart with duplicate submission guard.
+  /// Adds a product to the cart instantly (optimistic UI), then persists locally & syncs remotely.
   Future<void> addToCart(
     ProductEntity product, {
     String? selectedFlavor,
     String? selectedSize,
     int quantity = 1,
   }) async {
-    if (_isMutating) return;
-    _isMutating = true;
+    final previousItems = state.valueOrNull ?? [];
 
+    final existingIndex = previousItems.indexWhere(
+      (m) =>
+          m.product.id == product.id &&
+          m.selectedFlavor == selectedFlavor &&
+          m.selectedSize == selectedSize,
+    );
+
+    if (product.stockQuantity > 0) {
+      final currentQty =
+          existingIndex != -1 ? previousItems[existingIndex].quantity : 0;
+      if (currentQty + quantity > product.stockQuantity) {
+        state = AsyncError(
+          ValidationFailure(
+            message:
+                'الكمية المطلوبة تتجاوز المخزون المتوفر (${product.stockQuantity})',
+          ),
+          StackTrace.current,
+        );
+        return;
+      }
+    }
+
+    final List<CartItemEntity> optimisticItems;
+    if (existingIndex != -1) {
+      optimisticItems = List<CartItemEntity>.from(previousItems);
+      final existing = optimisticItems[existingIndex];
+      optimisticItems[existingIndex] =
+          existing.copyWith(quantity: existing.quantity + quantity);
+    } else {
+      final newItem = CartItemEntity(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        userId: '',
+        product: product,
+        quantity: quantity,
+        selectedFlavor: selectedFlavor,
+        selectedSize: selectedSize,
+        addedAt: DateTime.now(),
+      );
+      optimisticItems = [...previousItems, newItem];
+    }
+
+    // 1. Instant optimistic UI response (0ms delay)
+    state = AsyncData(optimisticItems);
+
+    // 2. Persist locally and sync in background
     final result = await _addToCartUseCase(
       product,
       selectedFlavor: selectedFlavor,
@@ -112,39 +155,51 @@ class CartController extends _$CartController {
 
     result.fold(
       (failure) {
-        _isMutating = false;
+        state = AsyncData(previousItems);
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
-      (_) async {
-        await _refreshCart();
-        _isMutating = false;
-      },
+      (_) {},
     );
   }
 
-  /// Removes an item from the cart by its ID.
+  /// Removes an item from the cart instantly (optimistic UI), then persists changes.
   Future<void> removeFromCart(String itemId) async {
-    if (_isMutating) return;
-    _isMutating = true;
+    final previousItems = state.valueOrNull ?? [];
+    final optimisticItems = previousItems.where((i) => i.id != itemId).toList();
+    state = AsyncData(optimisticItems);
 
     final result = await _removeFromCartUseCase(itemId);
 
     result.fold(
       (failure) {
-        _isMutating = false;
+        state = AsyncData(previousItems);
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
-      (_) async {
-        await _refreshCart();
-        _isMutating = false;
-      },
+      (_) {},
     );
   }
 
-  /// Increases quantity of an item by 1.
+  /// Increases quantity of an item by 1 instantly with optimistic UI response.
   Future<void> increaseQuantity(CartItemEntity item) async {
-    if (_isMutating) return;
-    _isMutating = true;
+    final previousItems = state.valueOrNull ?? [];
+    final itemIndex = previousItems.indexWhere((i) => i.id == item.id);
+    if (itemIndex == -1) return;
+
+    if (item.product.stockQuantity > 0 &&
+        item.quantity + 1 > item.product.stockQuantity) {
+      state = AsyncError(
+        ValidationFailure(
+          message:
+              'الكمية المطلوبة تتجاوز المخزون المتوفر (${item.product.stockQuantity})',
+        ),
+        StackTrace.current,
+      );
+      return;
+    }
+
+    final optimisticItems = List<CartItemEntity>.from(previousItems);
+    optimisticItems[itemIndex] = item.copyWith(quantity: item.quantity + 1);
+    state = AsyncData(optimisticItems);
 
     final result = await _updateCartQuantityUseCase(
       item.id,
@@ -153,20 +208,26 @@ class CartController extends _$CartController {
 
     result.fold(
       (failure) {
-        _isMutating = false;
+        state = AsyncData(previousItems);
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
-      (_) async {
-        await _refreshCart();
-        _isMutating = false;
-      },
+      (_) {},
     );
   }
 
-  /// Decreases quantity of an item by 1, or removes it if quantity drops below 1.
+  /// Decreases quantity of an item by 1 instantly, or removes it if quantity drops below 1.
   Future<void> decreaseQuantity(CartItemEntity item) async {
-    if (_isMutating) return;
-    _isMutating = true;
+    final previousItems = state.valueOrNull ?? [];
+    final itemIndex = previousItems.indexWhere((i) => i.id == item.id);
+    if (itemIndex == -1) return;
+
+    final optimisticItems = List<CartItemEntity>.from(previousItems);
+    if (item.quantity - 1 <= 0) {
+      optimisticItems.removeAt(itemIndex);
+    } else {
+      optimisticItems[itemIndex] = item.copyWith(quantity: item.quantity - 1);
+    }
+    state = AsyncData(optimisticItems);
 
     final result = await _updateCartQuantityUseCase(
       item.id,
@@ -175,32 +236,26 @@ class CartController extends _$CartController {
 
     result.fold(
       (failure) {
-        _isMutating = false;
+        state = AsyncData(previousItems);
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
-      (_) async {
-        await _refreshCart();
-        _isMutating = false;
-      },
+      (_) {},
     );
   }
 
-  /// Clears the entire cart with duplicate submission guard.
+  /// Clears the entire cart instantly with optimistic UI response.
   Future<void> clearCart() async {
-    if (_isMutating) return;
-    _isMutating = true;
+    final previousItems = state.valueOrNull ?? [];
+    state = const AsyncData([]);
 
     final result = await _clearCartUseCase();
 
     result.fold(
       (failure) {
-        _isMutating = false;
+        state = AsyncData(previousItems);
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
-      (_) {
-        _isMutating = false;
-        state = const AsyncData([]);
-      },
+      (_) {},
     );
   }
 
@@ -234,7 +289,7 @@ class CartController extends _$CartController {
     ).firstOrNull;
   }
 
-  Future<void> _refreshCart() async {
+  Future<void> refreshCart() async {
     final result = await _getCartItemsUseCase();
     result.fold(
       (failure) {
