@@ -122,4 +122,27 @@ void main() {
       expect(selected, 'b');
     });
   });
+
+  group('AppSwipeToDelete', () {
+    testWidgets('calls onDeleted after swiping end to start', (tester) async {
+      var deleted = false;
+      await tester.pumpWidget(
+        _wrap(
+          ListView(
+            children: [
+              AppSwipeToDelete(
+                dismissKey: const ValueKey('row'),
+                onDeleted: () => deleted = true,
+                child: const SizedBox(height: 60, child: Text('row')),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      await tester.drag(find.text('row'), const Offset(-500, 0));
+      await tester.pumpAndSettle();
+      expect(deleted, isTrue);
+    });
+  });
 }
