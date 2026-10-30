@@ -1,61 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/auth/auth_feature.dart';
 
+/// Signed-in user card (avatar, name, email). Tapping opens [onTap].
 class ProfileHeader extends ConsumerWidget {
-  const ProfileHeader({super.key});
+  final VoidCallback? onTap;
+
+  const ProfileHeader({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
     final user = ref.watch(authControllerProvider).valueOrNull;
-    final isDark = theme.brightness == Brightness.dark;
-
     if (user == null) return const SizedBox.shrink();
+
+    final textTheme = context.textTheme;
 
     return AppCard(
       margin: const EdgeInsets.all(AppDimens.spacingLg),
-      padding: const EdgeInsets.all(AppDimens.spacingXl),
-      borderRadius: AppRadius.allLg,
+      padding: const EdgeInsets.all(AppDimens.spacingLg + 4),
+      onTap: onTap,
       gradient: LinearGradient(
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
+        begin: AlignmentDirectional.topStart,
+        end: AlignmentDirectional.bottomEnd,
         colors: [
-          AppColors.primary.withAlpha(30),
-          theme.scaffoldBackgroundColor,
+          AppColors.primary.withValues(alpha: context.isDark ? 0.18 : 0.1),
+          context.colorScheme.surface,
         ],
       ),
-      boxShadow: AppShadows.ofSubtle(context),
+      boxShadow: context.subtleShadow,
       child: Row(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.primary,
-                width: 2.0,
-              ),
-            ),
-            child: CircleAvatar(
-              radius: 35.0,
-              backgroundColor: AppColors.greyLight,
-              backgroundImage:
-                  user.photoUrl != null && user.photoUrl!.isNotEmpty
-                      ? NetworkImage(user.photoUrl!)
-                      : null,
-              child: user.photoUrl == null || user.photoUrl!.isEmpty
-                  ? const Icon(
-                      Icons.person,
-                      size: 35.0,
-                      color: AppColors.greyDark,
-                    )
-                  : null,
-            ),
-          ),
+          AppAvatar(imageUrl: user.photoUrl, size: 68.0, showBorder: true),
           const SizedBox(width: AppDimens.spacingLg),
           Expanded(
             child: Column(
@@ -63,27 +42,25 @@ class ProfileHeader extends ConsumerWidget {
               children: [
                 Text(
                   user.name,
-                  style: theme.textTheme.titleLarge?.copyWith(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppColors.white : AppColors.black,
+                    color: context.colorScheme.onSurface,
                   ),
-                  semanticsLabel: user.name,
                 ),
                 const SizedBox(height: AppDimens.spacingXs),
                 Text(
                   user.email,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant.withValues(
-                      alpha: .8,
-                    ),
-                    fontWeight: FontWeight.bold,
-                  ),
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  semanticsLabel: user.email,
+                  style: textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
           ),
+          if (onTap != null)
+            AppIconTile(icon: Icons.edit_outlined, iconSize: 18.0, padding: 8.0, circular: true),
         ],
       ),
     );
