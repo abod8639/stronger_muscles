@@ -13,6 +13,7 @@ void main() {
       description: LocalizedString(en: 'Pure protein powder', ar: 'مسحوق بروتين نقي'),
       price: 250.0,
       discountPrice: 200.0,
+      stockQuantity: 10,
       averageRating: 4.5,
       reviewCount: 12,
     );
@@ -37,7 +38,7 @@ void main() {
 
       // Verify name and pricing
       expect(find.text('Whey Isolate'), findsOneWidget);
-      expect(find.text('LE 200.0'), findsOneWidget);
+      expect(find.text('LE 200.00'), findsOneWidget);
       expect(find.text('LE 250.00'), findsOneWidget);
       expect(find.text('4.5'), findsOneWidget);
       expect(find.text(' (12)'), findsOneWidget);
@@ -64,7 +65,7 @@ void main() {
       );
 
       expect(find.text('Whey Isolate'), findsOneWidget);
-      expect(find.text('LE 200.0'), findsOneWidget);
+      expect(find.text('LE 200.00'), findsOneWidget);
     });
   });
 }
