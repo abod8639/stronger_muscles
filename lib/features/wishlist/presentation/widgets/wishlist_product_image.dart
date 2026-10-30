@@ -15,15 +15,17 @@ class WishlistProductImage extends StatelessWidget {
     final imageUrl = product.primaryImageUrl ??
         (product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : null);
 
+    final cacheSize = (AppDimens.thumbnailSize * MediaQuery.devicePixelRatioOf(context)).round();
+
     return Hero(
       tag: 'wishlist_product_${product.id}',
       child: AppNetworkImage(
         imageUrl: imageUrl,
         width: AppDimens.thumbnailSize,
         height: AppDimens.thumbnailSize,
-        borderRadius: AppRadius.allSm,
-        memCacheWidth: 120,
-        memCacheHeight: 120,
+        borderRadius: AppRadius.allMd,
+        memCacheWidth: cacheSize,
+        memCacheHeight: cacheSize,
         errorIconSize: AppDimens.iconLg,
       ),
     );
