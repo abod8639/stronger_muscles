@@ -6,7 +6,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/notifications/notifications_feature.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/core/localization/language_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
