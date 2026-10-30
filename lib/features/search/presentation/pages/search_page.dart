@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/core/components/product_grid_skeleton.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar_inline.dart';
@@ -47,9 +48,7 @@ class SearchPage extends ConsumerWidget {
           ),
           searchState.when(
             data: (products) {
-              final displayedProducts = products;
-
-              if (searchNotifier.hasSearched && displayedProducts.isEmpty) {
+              if (searchNotifier.hasSearched && products.isEmpty) {
                 return SliverFillRemaining(
                   hasScrollBody: false,
                   child: AppEmptyState(
@@ -61,7 +60,7 @@ class SearchPage extends ConsumerWidget {
               }
 
               return AppProductGrid(
-                products: displayedProducts,
+                products: products,
                 query: searchNotifier.searchQuery,
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimens.spacingSm,
@@ -71,23 +70,18 @@ class SearchPage extends ConsumerWidget {
                     context.push(AppRoutes.productDetails, extra: product),
               );
             },
-            loading: () => const SliverToBoxAdapter(
-              child: Center(
-                heightFactor: 3,
-                child: CircularProgressIndicator(),
+            loading: () => const ProductGridSkeleton(itemCount: 6),
+            error: (error, _) => SliverFillRemaining(
+              hasScrollBody: false,
+              child: AppEmptyState(
+                icon: AppErrorCard.iconFor(error),
+                iconColor: AppColors.error,
+                title: AppErrorCard.messageFor(error, l10n),
+                actionText: l10n.retry,
+                actionIcon: Icons.refresh_rounded,
+                onActionTap: () => searchNotifier.onSearchChanged(searchNotifier.searchQuery),
               ),
             ),
-            error: (e, st) {
-              final errorMessage = e is Failure ? e.toMessage() : 'Error: $e';
-              return SliverToBoxAdapter(
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppDimens.spacingLg),
-                    child: Text(errorMessage),
-                  ),
-                ),
-              );
-            },
           ),
         ],
       ),
@@ -107,17 +101,23 @@ class _SearchFilterChip extends ConsumerWidget {
       productSearchControllerProvider.notifier.select((n) => n.searchQuery),
     );
     if (query.isEmpty) return const SizedBox.shrink();
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppDimens.spacingLg,
         vertical: AppDimens.spacingSm,
       ),
-      alignment: Alignment.centerRight,
-      child: Chip(
-        shape: AppRadius.shapePill,
-        label: Text('$label $query'),
-        onDeleted: () =>
-            ref.read(productSearchControllerProvider.notifier).clearSearch(),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: InputChip(
+          avatar: const Icon(Icons.search_rounded, size: 18, color: AppColors.primary),
+          label: Text('$label: $query'),
+          labelStyle: context.textTheme.labelLarge?.copyWith(color: AppColors.primary),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.08),
+          side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
+          shape: AppRadius.shapePill,
+          deleteIconColor: AppColors.primary,
+          onDeleted: () => ref.read(productSearchControllerProvider.notifier).clearSearch(),
+        ),
       ),
     );
   }
