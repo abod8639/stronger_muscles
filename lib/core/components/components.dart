@@ -30,6 +30,7 @@ export 'app_choice_chips.dart';
 export 'app_rating_stars.dart';
 export 'app_section_title.dart';
 export 'app_product_card.dart';
+export 'app_product_card_image.dart';
 export 'app_bottom_sheet_handle.dart';
 export 'app_expandable_text.dart';
 export 'app_highlight_text.dart';

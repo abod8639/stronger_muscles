@@ -24,8 +24,5 @@ export 'presentation/pages/home_view.dart';
 // Presentation Helpers
 export 'presentation/helpers/selection_ui_mapper.dart';
 
-// Shared Presentation Widgets (used by core components)
-export 'presentation/widgets/image_section.dart';
-export 'presentation/widgets/image_indicators.dart';
-export 'presentation/widgets/title_and_description.dart';
+// Shared Presentation Widgets
 export 'presentation/widgets/price_filter_slider.dart';
