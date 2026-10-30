@@ -875,4 +875,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ticketClosedNotice =>
       'This ticket is closed. New messages can\'t be sent';
+
+  @override
+  String get allProducts => 'All Products';
+
+  @override
+  String get clearFilters => 'Clear filters';
 }

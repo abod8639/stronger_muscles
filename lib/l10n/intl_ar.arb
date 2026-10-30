@@ -280,5 +280,7 @@
   "supportChatEmptySubtitle": "اكتب رسالتك بالأسفل وسيرد عليك فريق الدعم قريباً",
   "supportChatInputHint": "اكتب رسالتك لفريق الدعم...",
   "sendMessage": "إرسال",
-  "ticketClosedNotice": "تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة"
+  "ticketClosedNotice": "تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة",
+  "allProducts": "كل المنتجات",
+  "clearFilters": "مسح الفلاتر"
 }

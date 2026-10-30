@@ -282,5 +282,7 @@
   "supportChatEmptySubtitle": "Write your message below and our support team will reply soon",
   "supportChatInputHint": "Write your message to the support team...",
   "sendMessage": "Send",
-  "ticketClosedNotice": "This ticket is closed. New messages can't be sent"
+  "ticketClosedNotice": "This ticket is closed. New messages can't be sent",
+  "allProducts": "All Products",
+  "clearFilters": "Clear filters"
 }

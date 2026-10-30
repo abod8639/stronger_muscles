@@ -873,4 +873,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get ticketClosedNotice =>
       'تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة';
+
+  @override
+  String get allProducts => 'كل المنتجات';
+
+  @override
+  String get clearFilters => 'مسح الفلاتر';
 }
