@@ -12,5 +12,3 @@ export 'presentation/controllers/categories_sections_controller.dart'
         SelectedCategoryIndex;
 export 'presentation/controllers/main_controller.dart'
     show mainControllerProvider, MainController;
-export 'presentation/controllers/internet_connection_controller.dart'
-    show internetConnectionControllerProvider, InternetConnectionController;
