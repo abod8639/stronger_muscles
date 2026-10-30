@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/components/components.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_dimens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../domain/entities/checkout_quote.dart';
 import '../controllers/checkout_controller.dart';
@@ -25,10 +25,11 @@ class CheckoutPriceSummary extends ConsumerWidget {
           ? const SizedBox.shrink()
           : _QuoteRows(quote: quote),
       loading: () => Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppPriceRow(label: l10n.subtotal, amount: cartSubtotal),
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
+            padding: EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
             child: LinearProgressIndicator(minHeight: 2.0),
           ),
         ],
@@ -37,30 +38,13 @@ class CheckoutPriceSummary extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AppPriceRow(label: l10n.subtotal, amount: cartSubtotal),
-          InkWell(
-            borderRadius: AppRadius.allSm,
-            onTap: () => ref.invalidate(checkoutQuoteProvider),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.refresh,
-                    size: 18.0,
-                    color: Theme.of(context).colorScheme.error,
-                  ),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: Text(
-                      l10n.pricingUnavailable,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.error,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          const SizedBox(height: AppDimens.spacingSm),
+          AppAlertCard(
+            color: AppColors.error,
+            icon: Icons.cloud_off_rounded,
+            message: l10n.pricingUnavailable,
+            actionLabel: l10n.retry,
+            onAction: () => ref.invalidate(checkoutQuoteProvider),
           ),
         ],
       ),
@@ -76,51 +60,24 @@ class _QuoteRows extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (!quote.isAcceptingOrders)
-          Container(
-            margin: const EdgeInsets.only(bottom: 8.0),
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
-              borderRadius: AppRadius.allMd,
-            ),
-            child: Text(
-              l10n.storeNotAcceptingOrders,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.error,
-              ),
-            ),
+          AppAlertCard(
+            color: AppColors.warning,
+            icon: Icons.storefront_outlined,
+            message: l10n.storeNotAcceptingOrders,
+            margin: const EdgeInsets.only(bottom: AppDimens.spacingSm),
           ),
         AppPriceRow(label: l10n.subtotal, amount: quote.subtotal),
-        if (quote.hasFreeDelivery)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n.shippingCost,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
-                ),
-                Text(
-                  l10n.freeDelivery,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          )
-        else
-          AppPriceRow(label: l10n.shippingCost, amount: quote.shippingCost),
+        AppPriceRow(
+          label: l10n.shippingCost,
+          amount: quote.shippingCost,
+          valueText: quote.hasFreeDelivery ? l10n.freeDelivery : null,
+          valueColor: quote.hasFreeDelivery ? AppColors.success : null,
+        ),
         if (quote.taxAmount > 0)
           AppPriceRow(
             label: '${l10n.tax} (${_formatRate(quote.taxRate)}%)',
@@ -132,7 +89,7 @@ class _QuoteRows extends StatelessWidget {
             amount: quote.discount,
             isDiscount: true,
           ),
-        const Divider(height: 16.0),
+        const Divider(height: AppDimens.spacingLg),
         AppPriceRow(
           label: l10n.totalAmount,
           amount: quote.totalAmount,
