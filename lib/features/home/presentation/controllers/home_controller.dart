@@ -21,6 +21,10 @@ class HomeController extends _$HomeController {
   bool _hasMore = true;
   bool get hasMore => _hasMore;
 
+  /// True while a section switch fetch is in-flight (but old data is still visible).
+  bool _isSectionSwitching = false;
+  bool get isSectionSwitching => _isSectionSwitching;
+
   static const int _pageSize = 20;
 
   @override
@@ -29,6 +33,7 @@ class HomeController extends _$HomeController {
     _currentPage = 1;
     _isLoadingMore = false;
     _hasMore = true;
+    _isSectionSwitching = false;
 
     final getHomeProducts = ref.watch(getHomeProductsUseCaseProvider);
     final result = await getHomeProducts(page: 1);
@@ -49,20 +54,31 @@ class HomeController extends _$HomeController {
     );
   }
 
-  /// Fetches products filtered for a specific category section with reset pagination.
+  /// Fetches products for a specific section using an optimistic strategy:
+  /// keeps the current products visible while the new ones load in the background,
+  /// then swaps them out — no full-screen loading spinner.
   Future<void> fetchProductsForSection(int index, {String? categoryId}) async {
     _selectedSectionIndex = index;
     _currentPage = 1;
     _isLoadingMore = false;
     _hasMore = true;
 
-    state = const AsyncLoading();
+    // Keep old products visible; signal a lightweight in-progress state.
+    _isSectionSwitching = true;
+    // Notify listeners about isSectionSwitching change without wiping data.
+    if (state.hasValue) {
+      state = AsyncData(state.valueOrNull ?? const []);
+    } else {
+      state = const AsyncLoading();
+    }
 
     final getHomeProducts = ref.read(getHomeProductsUseCaseProvider);
     final result = await getHomeProducts(
       categoryId: categoryId,
       page: 1,
     );
+
+    _isSectionSwitching = false;
 
     result.fold(
       (failure) {
