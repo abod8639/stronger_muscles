@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_badge.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/components/app_highlight_text.dart';
 import 'package:stronger_muscles/core/components/app_price_text.dart';
+import 'package:stronger_muscles/core/components/app_product_card_image.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/core/theme/app_shadows.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
-import 'package:stronger_muscles/features/home/home_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable product card component built on top of [AppCard] with unified
 /// [AppRadius.allLg] and theme-adaptive [AppShadows.ofCard].
 ///
 /// Supports both [ProductModel] and [ProductEntity] through factory constructors.
+/// The whole card is tappable via [onTap].
 class AppProductCard extends StatefulWidget {
   const AppProductCard({
     super.key,
@@ -63,23 +65,26 @@ class _AppProductCardState extends State<AppProductCard>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final isOutOfStock = !widget.product.isInStock;
+    final product = widget.product;
+    final isOutOfStock = !product.isInStock;
+    final locale = Localizations.localeOf(context).languageCode;
 
     return AppCard(
       padding: EdgeInsets.zero,
       borderRadius: AppRadius.allLg,
-      boxShadow: AppShadows.ofCard(context),
-      clipBehavior: Clip.antiAlias,
+      onTap: widget.onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Section
-          Expanded(flex: 3, child: ImageSection(widget: widget)),
-
-          // Details Section
-          if (widget.showName != null && widget.showName == true)
+          Expanded(
+            flex: 3,
+            child: AppProductCardImage(
+              product: product,
+              onPageChanged: widget.onPageChanged,
+            ),
+          ),
+          if (widget.showName ?? false)
             Expanded(
               flex: 2,
               child: Padding(
@@ -88,89 +93,36 @@ class _AppProductCardState extends State<AppProductCard>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TitleAndDescription(
-                      product: widget.product,
+                    _ProductTitle(
+                      name: product.getLocalizedName(locale: locale),
+                      description: product.getLocalizedDescription(locale: locale),
                       query: widget.query,
                     ),
-
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       spacing: 8.0,
                       runSpacing: 4.0,
                       children: [
-                        Wrap(
-                          spacing: 6,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Text(
-                              AppPriceText.format(widget.product.baseEffectivePrice),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: isOutOfStock
-                                    ? theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6)
-                                    : AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                decoration: isOutOfStock
-                                    ? TextDecoration.lineThrough
-                                    : null,
-                              ),
-                            ),
-                            if (widget.product.baseHasDiscount && !isOutOfStock)
-                              Text(
-                                AppPriceText.format(widget.product.basePrice),
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.grey,
-                                  decoration: TextDecoration.lineThrough,
-                                ),
-                              ),
-                          ],
+                        AppPriceText(
+                          price: product.baseEffectivePrice,
+                          originalPrice: !isOutOfStock && product.baseHasDiscount
+                              ? product.basePrice
+                              : null,
+                          fontSize: 13.0,
+                          color: isOutOfStock ? context.colorScheme.onSurfaceVariant : null,
                         ),
                         if (isOutOfStock)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6.0,
-                              vertical: 2.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.error.withValues(alpha: 0.12),
-                              borderRadius: BorderRadius.circular(4.0),
-                              border: Border.all(
-                                color: theme.colorScheme.error.withValues(alpha: 0.3),
-                                width: 0.8,
-                              ),
-                            ),
-                            child: Text(
-                              l10n?.outOfStock ?? 'نفدت الكمية',
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: theme.colorScheme.error,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 10.5,
-                              ),
-                            ),
+                          AppBadge(
+                            label: l10n?.outOfStock ?? 'نفدت الكمية',
+                            color: AppColors.error,
+                            alpha: 0.12,
+                            borderRadius: AppRadius.allXs,
                           )
-                        else if (widget.product.reviewCount > 0)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.star_rounded,
-                                size: 16.0,
-                                color: Colors.amber,
-                              ),
-                              const SizedBox(width: 4.0),
-                              Text(
-                                widget.product.averageRating.toStringAsFixed(1),
-                                style: theme.textTheme.labelMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                ' (${widget.product.reviewCount})',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            ],
+                        else if (product.reviewCount > 0)
+                          _CompactRating(
+                            rating: product.averageRating,
+                            count: product.reviewCount,
                           ),
                       ],
                     ),
@@ -180,6 +132,75 @@ class _AppProductCardState extends State<AppProductCard>
             ),
         ],
       ),
+    );
+  }
+}
+
+class _ProductTitle extends StatelessWidget {
+  final String name;
+  final String description;
+  final String? query;
+
+  const _ProductTitle({required this.name, required this.description, this.query});
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = context.textTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        HighlightText(
+          text: name,
+          query: query ?? '',
+          style: textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.bold,
+            height: 1.15,
+            color: context.colorScheme.onSurface,
+          ),
+        ),
+        if (description.isNotEmpty) ...[
+          const SizedBox(height: 4.0),
+          Text(
+            description,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.75),
+              height: 1.25,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _CompactRating extends StatelessWidget {
+  final double rating;
+  final int count;
+
+  const _CompactRating({required this.rating, required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.star_rounded, size: 16.0, color: AppColors.warning),
+        const SizedBox(width: 2.0),
+        Text(
+          rating.toStringAsFixed(1),
+          style: context.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
+        Text(
+          ' ($count)',
+          style: context.textTheme.labelSmall?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
     );
   }
 }

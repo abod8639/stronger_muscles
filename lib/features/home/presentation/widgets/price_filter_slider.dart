@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/search/search_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -27,7 +30,6 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final currency = l10n?.currency ?? 'LE';
     final searchNotifier = ref.watch(productSearchControllerProvider.notifier);
     final minData = searchNotifier.dataMinPrice;
     final maxData = searchNotifier.dataMaxPrice;
@@ -42,14 +44,16 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
     final startValue = rawStart <= rawEnd ? rawStart : rawEnd;
     final endValue = rawEnd >= rawStart ? rawEnd : rawStart;
     final effectiveValues = RangeValues(startValue, endValue);
+    String format(double value) => AppPriceText.format(value, decimals: 0);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${effectiveValues.start.toStringAsFixed(0)} $currency'),
-            Text('${effectiveValues.end.toStringAsFixed(0)} $currency'),
+            AppBadge(label: format(effectiveValues.start), color: AppColors.primary),
+            AppBadge(label: format(effectiveValues.end), color: AppColors.primary),
           ],
         ),
         if (maxData > minData)
@@ -57,31 +61,26 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
             values: effectiveValues,
             min: effectiveMin,
             max: effectiveMax,
+            activeColor: AppColors.primary,
             divisions: (effectiveMax - effectiveMin) >= 1
                 ? (effectiveMax - effectiveMin).toInt()
                 : 1,
-            labels: RangeLabels(
-              '${effectiveValues.start.toStringAsFixed(0)} $currency',
-              '${effectiveValues.end.toStringAsFixed(0)} $currency',
-            ),
-            onChanged: (RangeValues values) {
-              setState(() {
-                _currentRangeValues = values;
-              });
-            },
+            labels: RangeLabels(format(effectiveValues.start), format(effectiveValues.end)),
+            onChanged: (values) => setState(() => _currentRangeValues = values),
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingLg + 4),
             child: Text(
-              '${l10n?.price ?? 'Price'}: ${minData.toStringAsFixed(0)} $currency',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              '${l10n?.price ?? 'Price'}: ${format(minData)}',
+              textAlign: TextAlign.center,
+              style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-        const SizedBox(height: 24.0),
+        const SizedBox(height: AppDimens.spacingXl),
         AppPrimaryButton(
           text: l10n?.apply ?? 'Apply',
-          width: double.infinity,
+          icon: Icons.check_rounded,
           onPressed: () {
             ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
                   effectiveValues.start,
