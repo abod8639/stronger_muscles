@@ -13,7 +13,13 @@ List<CartItemModel> parseCartItemsList(dynamic rawData) {
   if (rawData == null) return [];
 
   dynamic targetData = rawData;
-  if (rawData is String) {
+  if (rawData is! String && rawData is! Map && rawData is! List) {
+    try {
+      targetData = (rawData as dynamic).data ?? rawData;
+    } catch (_) {}
+  }
+
+  if (targetData is String) {
     try {
       targetData = jsonDecode(rawData);
     } catch (e) {
