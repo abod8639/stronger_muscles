@@ -20,6 +20,9 @@ class NotificationItemCard extends ConsumerWidget {
         return AppColors.primary;
       case 'system':
         return Colors.redAccent;
+      case 'support':
+      case 'support_ticket':
+        return Colors.lightBlueAccent;
       default:
         return Colors.tealAccent;
     }
@@ -33,6 +36,9 @@ class NotificationItemCard extends ConsumerWidget {
         return Icons.local_shipping_outlined;
       case 'system':
         return Icons.security_outlined;
+      case 'support':
+      case 'support_ticket':
+        return Icons.support_agent_outlined;
       default:
         return Icons.campaign_outlined;
     }
@@ -45,9 +51,38 @@ class NotificationItemCard extends ConsumerWidget {
           .markAsRead(notification.id);
     }
 
+    // 1. Support & ticket notifications navigation
+    final ticketId = notification.ticketId;
+    final isSupport = notification.isSupport;
+
+    if (isSupport) {
+      context.push(
+        AppRoutes.helpSupport,
+        extra: {
+          if (ticketId != null && ticketId.isNotEmpty) 'ticket_id': ticketId,
+          if (notification.ticketNumber != null)
+            'ticket_number': notification.ticketNumber,
+          'open_active_ticket': true,
+        },
+      );
+      return;
+    }
+
+    // 2. Orders navigation
     final orderId = notification.orderId;
     if (orderId != null && orderId.isNotEmpty) {
       context.push(AppRoutes.orderView);
+      return;
+    }
+
+    // 3. Products navigation
+    final productId = notification.productId;
+    if (productId != null && productId.isNotEmpty) {
+      context.push(
+        AppRoutes.productDetails,
+        extra: {'productId': productId},
+      );
+      return;
     }
   }
 
