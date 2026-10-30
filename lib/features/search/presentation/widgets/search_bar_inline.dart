@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/product_search_autocomplete.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _searchBarHeight = 48.0;
-const double _spacing = 12.0;
+/// Search page header: live autocomplete field + filter button.
+class SearchBarInline extends StatelessWidget {
+  static const double _height = 48.0;
 
-class SearchBarInline extends ConsumerWidget {
   final bool isFocused;
   const SearchBarInline({super.key, required this.isFocused});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.watch(productSearchControllerProvider.notifier);
-    final l10n = AppLocalizations.of(context)!;
-
+  Widget build(BuildContext context) {
     return SizedBox(
-      height: _searchBarHeight,
+      height: _height,
       child: Row(
         children: [
-          Expanded(
-            child: ProductSearchAutocomplete(
-              readOnly: false,
-              autofocus: isFocused,
-            ),
-          ),
-          const SizedBox(width: _spacing),
-          buildFilterButton(
-            controller: controller,
-            l10n: l10n,
-            onTap: () => showFilterBottomSheet(context, l10n),
+          Expanded(child: ProductSearchAutocomplete(autofocus: isFocused)),
+          const SizedBox(width: AppDimens.spacingMd),
+          AppCircleIconButton(
+            icon: Icons.tune_rounded,
+            tooltip: AppLocalizations.of(context)!.filter,
+            onPressed: () => showFilterBottomSheet(context),
           ),
         ],
       ),
