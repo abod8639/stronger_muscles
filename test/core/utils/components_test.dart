@@ -5,7 +5,7 @@ import 'package:stronger_muscles/core/components/app_base_app_bar.dart';
 import 'package:stronger_muscles/core/components/app_flavor_image.dart';
 import 'package:stronger_muscles/core/components/app_internet_banner.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/core/network/internet_connection_controller.dart';
 
 class FakeInternetConnectedNotifier extends InternetConnectionController {
   @override
@@ -55,7 +55,7 @@ void main() {
       );
 
       expect(find.text('لا يوجد اتصال بالإنترنت'), findsNothing);
-      expect(find.byIcon(Icons.wifi_off), findsNothing);
+      expect(find.byIcon(Icons.wifi_off_rounded), findsNothing);
     });
 
     testWidgets('renders alert banner with title and wifi_off icon when disconnected', (tester) async {
@@ -73,7 +73,7 @@ void main() {
       );
 
       expect(find.text('لا يوجد اتصال بالإنترنت'), findsOneWidget);
-      expect(find.byIcon(Icons.wifi_off), findsOneWidget);
+      expect(find.byIcon(Icons.wifi_off_rounded), findsOneWidget);
     });
   });
 
