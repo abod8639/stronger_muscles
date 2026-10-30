@@ -24,5 +24,3 @@ export 'presentation/pages/home_view.dart';
 // Presentation Helpers
 export 'presentation/helpers/selection_ui_mapper.dart';
 
-// Shared Presentation Widgets
-export 'presentation/widgets/price_filter_slider.dart';
