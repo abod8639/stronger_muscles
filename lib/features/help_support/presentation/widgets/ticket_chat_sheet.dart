@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/components/app_bottom_sheet_handle.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -8,6 +9,7 @@ import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class TicketChatSheet extends ConsumerStatefulWidget {
   final String ticketId;
@@ -15,11 +17,9 @@ class TicketChatSheet extends ConsumerStatefulWidget {
   const TicketChatSheet({super.key, required this.ticketId});
 
   static Future<void> show(BuildContext context, String ticketId) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => TicketChatSheet(ticketId: ticketId),
+    return context.push(
+      AppRoutes.supportChat,
+      extra: {'ticket_id': ticketId},
     );
   }
 
