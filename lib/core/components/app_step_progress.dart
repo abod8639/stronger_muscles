@@ -9,7 +9,7 @@ class AppStepProgress extends StatelessWidget {
   final bool isCancelled;
   final String? cancelledLabel;
   final Color activeColor;
-  final Color inactiveColor;
+  final Color? inactiveColor;
 
   const AppStepProgress({
     super.key,
@@ -18,12 +18,14 @@ class AppStepProgress extends StatelessWidget {
     this.isCancelled = false,
     this.cancelledLabel,
     this.activeColor = AppColors.primary,
-    this.inactiveColor = const Color(0xFFE0E0E0),
+    this.inactiveColor,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final inactiveColor = this.inactiveColor ?? theme.colorScheme.outlineVariant;
+    final mutedColor = theme.colorScheme.onSurfaceVariant;
 
     if (isCancelled) {
       return Row(
@@ -31,7 +33,7 @@ class AppStepProgress extends StatelessWidget {
           const Icon(Icons.cancel, color: AppColors.error),
           const SizedBox(width: 12.0),
           Text(
-            cancelledLabel ?? 'ملغي',
+            cancelledLabel ?? 'Cancelled',
             style: theme.textTheme.titleMedium?.copyWith(
               color: AppColors.error,
               fontWeight: FontWeight.bold,
@@ -87,7 +89,7 @@ class AppStepProgress extends StatelessWidget {
                                   shape: BoxShape.circle,
                                   color: i == activeIndex
                                       ? Colors.white
-                                      : Colors.grey[400],
+                                      : inactiveColor,
                                 ),
                               ),
                       ),
@@ -107,7 +109,7 @@ class AppStepProgress extends StatelessWidget {
                 Text(
                   steps[i],
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: i <= activeIndex ? activeColor : Colors.grey,
+                    color: i <= activeIndex ? activeColor : mutedColor,
                     fontWeight: i == activeIndex
                         ? FontWeight.bold
                         : FontWeight.normal,
