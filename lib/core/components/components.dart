@@ -40,3 +40,4 @@ export 'app_bottom_nav_bar.dart';
 export 'app_flavor_image.dart';
 export 'app_internet_banner.dart';
 export 'app_quantity_controls.dart';
+export 'app_chat_composer.dart';

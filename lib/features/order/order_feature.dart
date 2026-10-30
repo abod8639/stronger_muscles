@@ -33,7 +33,5 @@ export 'presentation/controllers/orders_controller.dart'
 export 'presentation/pages/order_view.dart';
 export 'presentation/pages/order_details_view.dart';
 export 'presentation/widgets/order_card.dart';
-export 'presentation/widgets/build_order_item.dart';
-export 'presentation/widgets/build_product_image.dart';
-export 'presentation/widgets/build_status_tracker.dart';
-export 'presentation/widgets/order_status_timeline.dart';
+export 'presentation/widgets/order_status_tracker.dart';
+export 'presentation/utils/order_status_ui.dart';
