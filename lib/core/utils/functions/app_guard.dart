@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/features/auth/auth_feature.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/network/internet_connection_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
@@ -29,7 +29,7 @@ class AppGuard {
     }
 
     if (requireAuth) {
-      final isLoggedIn = ref.read(authControllerProvider.notifier).isLoggedIn;
+      final isLoggedIn = ref.read(authStateProvider);
       if (!isLoggedIn) {
         _showError(
           ref.context,
@@ -133,7 +133,7 @@ class AppGuard {
   }) async {
     final l10n = AppLocalizations.of(ref.context);
     if (requireAuth) {
-      final isLoggedIn = ref.read(authControllerProvider.notifier).isLoggedIn;
+      final isLoggedIn = ref.read(authStateProvider);
       if (!isLoggedIn) {
         _showError(
           ref.context,
