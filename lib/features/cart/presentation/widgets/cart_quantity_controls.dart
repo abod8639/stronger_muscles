@@ -12,9 +12,9 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 const double _defaultQuantityFontSize = 16.0;
 const double _defaultIconSize = 28.0;
 
-/// Reusable quantity controls widget supporting vertical and horizontal layouts,
-/// unified border radius from [AppRadius], and theme-adaptive colors.
-class AppQuantityControls extends ConsumerWidget {
+/// +/- quantity stepper for an item already in the cart (decrease on the last
+/// unit offers removal). Horizontal or vertical; renders nothing if not in cart.
+class CartQuantityControls extends ConsumerWidget {
   final dynamic product;
   final String? selectedFlavor;
   final String? selectedSize;
@@ -23,7 +23,7 @@ class AppQuantityControls extends ConsumerWidget {
   final double quantityFontSize;
   final BorderRadius? borderRadius;
 
-  const AppQuantityControls({
+  const CartQuantityControls({
     super.key,
     required this.product,
     this.selectedFlavor,
@@ -73,7 +73,7 @@ class AppQuantityControls extends ConsumerWidget {
           item.quantity > 1
               ? Icons.remove_circle_outline
               : Icons.delete_outline_rounded,
-          color: item.quantity > 1 ? AppColors.primary : Colors.redAccent,
+          color: item.quantity > 1 ? AppColors.primary : AppColors.error,
           size: iconSize,
         ),
         onPressed: () => doubleTapPrevention(
@@ -118,7 +118,7 @@ class AppQuantityControls extends ConsumerWidget {
       child: IconButton(
         icon: Icon(
           Icons.add_circle_outline,
-          color: canIncrease ? AppColors.primary : Colors.grey,
+          color: canIncrease ? AppColors.primary : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
           size: iconSize,
         ),
         onPressed: canIncrease ? () => cartNotifier.increaseQuantity(item) : null,
@@ -161,6 +161,3 @@ class AppQuantityControls extends ConsumerWidget {
     );
   }
 }
-
-/// Backward compatibility alias
-typedef QuantityControls = AppQuantityControls;
