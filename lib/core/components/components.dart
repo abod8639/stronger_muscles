@@ -38,6 +38,7 @@ export 'app_shimmer.dart';
 export 'app_avatar.dart';
 export 'app_list_tile.dart';
 export 'app_stat_card.dart';
+export 'app_circle_icon_button.dart';
 export 'app_bottom_sheet_handle.dart';
 export 'app_expandable_text.dart';
 export 'app_highlight_text.dart';
