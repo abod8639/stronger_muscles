@@ -1,50 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 
+/// A single chat message: brand-colored for the user, neutral surface with
+/// the agent's name for support replies.
 class SupportChatMessageBubble extends StatelessWidget {
   final SupportMessageEntity message;
-  final bool isDark;
 
-  const SupportChatMessageBubble({
-    super.key,
-    required this.message,
-    required this.isDark,
-  });
+  const SupportChatMessageBubble({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
     final isUser = message.isFromUser;
     final timeStr = DateFormat('hh:mm a').format(message.createdAt);
+    final foreground = isUser ? AppColors.white : colorScheme.onSurface;
+    final metaColor = isUser
+        ? AppColors.white.withValues(alpha: 0.75)
+        : colorScheme.onSurfaceVariant;
 
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.76,
+          maxWidth: MediaQuery.sizeOf(context).width * 0.76,
         ),
         decoration: BoxDecoration(
-          color: isUser
-              ? AppColors.primary
-              : isDark
-                  ? const Color(0xFF262626)
-                  : const Color(0xFFE5E7EB),
+          color: isUser ? AppColors.primary : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: Radius.circular(isUser ? 16 : 4),
-            bottomRight: Radius.circular(isUser ? 4 : 16),
+            topLeft: AppRadius.rLg,
+            topRight: AppRadius.rLg,
+            bottomLeft: isUser ? AppRadius.rLg : AppRadius.rXs,
+            bottomRight: isUser ? AppRadius.rXs : AppRadius.rLg,
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          boxShadow: context.subtleShadow,
         ),
         child: Column(
           crossAxisAlignment:
@@ -52,20 +46,19 @@ class SupportChatMessageBubble extends StatelessWidget {
           children: [
             if (!isUser)
               Padding(
-                padding: const EdgeInsets.only(bottom: 4),
+                padding: const EdgeInsets.only(bottom: 4.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(
                       Icons.support_agent_rounded,
-                      size: 14,
+                      size: 14.0,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(width: 4),
+                    const SizedBox(width: 4.0),
                     Text(
                       message.senderName,
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
                       ),
@@ -75,39 +68,28 @@ class SupportChatMessageBubble extends StatelessWidget {
               ),
             Text(
               message.message,
-              style: TextStyle(
-                fontSize: 14,
-                color: isUser
-                    ? Colors.white
-                    : isDark
-                        ? Colors.white
-                        : Colors.black87,
+              style: textTheme.bodyMedium?.copyWith(
+                color: foreground,
                 height: 1.35,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 4.0),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   timeStr,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: isUser
-                        ? Colors.white.withValues(alpha: 0.75)
-                        : isDark
-                            ? Colors.grey[400]
-                            : Colors.grey[600],
+                  style: textTheme.labelSmall?.copyWith(
+                    fontSize: 10.0,
+                    color: metaColor,
                   ),
                 ),
                 if (isUser) ...[
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 4.0),
                   Icon(
-                    message.isRead
-                        ? Icons.done_all_rounded
-                        : Icons.done_rounded,
-                    size: 13,
-                    color: Colors.white.withValues(alpha: 0.75),
+                    message.isRead ? Icons.done_all_rounded : Icons.done_rounded,
+                    size: 13.0,
+                    color: metaColor,
                   ),
                 ],
               ],
@@ -118,4 +100,3 @@ class SupportChatMessageBubble extends StatelessWidget {
     );
   }
 }
-
