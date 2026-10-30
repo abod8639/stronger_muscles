@@ -782,4 +782,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pleaseFillAllFields => 'Please fill in all required fields';
+
+  @override
+  String get cartLoadError => 'Couldn\'t load your cart';
 }

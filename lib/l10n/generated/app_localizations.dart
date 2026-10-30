@@ -1615,6 +1615,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please fill in all required fields'**
   String get pleaseFillAllFields;
+
+  /// No description provided for @cartLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load your cart'**
+  String get cartLoadError;
 }
 
 class _AppLocalizationsDelegate

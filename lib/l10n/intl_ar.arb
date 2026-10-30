@@ -253,5 +253,6 @@
   "tryDifferentKeywords": "جرب استخدام كلمات بحث مختلفة أو تواصل معنا مباشرة",
   "channelAvailable": "متصل الآن",
   "copiedToClipboard": "تم النسخ إلى الحافظة",
-  "pleaseFillAllFields": "يرجى تعبئة جميع الحقول المطلوبة"
+  "pleaseFillAllFields": "يرجى تعبئة جميع الحقول المطلوبة",
+  "cartLoadError": "تعذر عرض السلة"
 }

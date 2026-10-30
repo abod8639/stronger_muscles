@@ -781,4 +781,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pleaseFillAllFields => 'يرجى تعبئة جميع الحقول المطلوبة';
+
+  @override
+  String get cartLoadError => 'تعذر عرض السلة';
 }

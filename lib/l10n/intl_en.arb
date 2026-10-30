@@ -253,5 +253,6 @@
   "tryDifferentKeywords": "Try different search terms or contact support directly",
   "channelAvailable": "Online Now",
   "copiedToClipboard": "Copied to clipboard",
-  "pleaseFillAllFields": "Please fill in all required fields"
+  "pleaseFillAllFields": "Please fill in all required fields",
+  "cartLoadError": "Couldn't load your cart"
 }
