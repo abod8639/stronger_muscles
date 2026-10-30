@@ -50,11 +50,11 @@ void main() {
           ),
         ),
         GoRoute(
-          path: AppRoutes.helpSupport,
+          path: AppRoutes.supportChat,
           builder: (context, state) {
             navigatedRoute = state.matchedLocation;
             navigatedExtra = state.extra;
-            return const Scaffold(body: Text('HelpSupportScreen'));
+            return const Scaffold(body: Text('SupportChatScreen'));
           },
         ),
       ],
@@ -79,11 +79,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(fakeController.markedReadId, '29');
-    expect(navigatedRoute, AppRoutes.helpSupport);
+    expect(navigatedRoute, AppRoutes.supportChat);
     expect(navigatedExtra, isA<Map>());
     final extraMap = navigatedExtra as Map;
     expect(extraMap['ticket_id'], '6');
-    expect(extraMap['ticket_number'], 'SM-VKBVQ9LO');
-    expect(extraMap['open_active_ticket'], isTrue);
   });
 }

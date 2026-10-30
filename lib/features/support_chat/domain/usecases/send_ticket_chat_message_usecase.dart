@@ -15,3 +15,4 @@ class SendTicketChatMessageUseCase {
     return _repository.sendMessage(ticketId: ticketId, message: message);
   }
 }
+

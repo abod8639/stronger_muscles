@@ -281,3 +281,4 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
     super.dispose();
   }
 }
+

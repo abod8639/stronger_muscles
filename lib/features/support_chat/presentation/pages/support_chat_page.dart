@@ -310,3 +310,4 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
     );
   }
 }
+

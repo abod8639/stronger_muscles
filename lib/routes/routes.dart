@@ -14,6 +14,7 @@ import 'package:stronger_muscles/features/search/presentation/pages/search_page.
 import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
 import 'package:stronger_muscles/features/notifications/notifications_routes.dart';
 import 'package:stronger_muscles/features/help_support/help_support_routes.dart';
+import 'package:stronger_muscles/features/support_chat/support_chat_routes.dart';
 import 'package:stronger_muscles/features/payment/payment_routes.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -37,6 +38,7 @@ class AppRoutes {
   static const String orderDetails = '/order_details';
   static const String notifications = '/notifications';
   static const String helpSupport = '/help_support';
+  static const String supportChat = '/support_chat';
   static const String paymentGateway = '/payment_gateway';
 }
 
@@ -151,6 +153,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ...OrderRoutes.routes,
       ...NotificationsRoutes.routes,
       ...HelpSupportRoutes.routes,
+      ...SupportChatRoutes.routes,
       ...PaymentRoutes.routes,
       ...ProductRoutes.routes,
     ],
