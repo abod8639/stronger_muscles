@@ -5,7 +5,7 @@ import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A reusable empty / error state widget with icon, title, subtitle,
-/// an optional primary CTA and an optional secondary link action.
+/// optional [extra] content, a primary CTA and a secondary link action.
 class AppEmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -16,7 +16,12 @@ class AppEmptyState extends StatelessWidget {
   final String? secondaryActionText;
   final VoidCallback? onSecondaryActionTap;
   final Color? iconColor;
+  final Widget? extra;
   final EdgeInsetsGeometry padding;
+
+  /// Center vertically in all available height (pages). Set false inside
+  /// dialogs and cards so the widget only takes the height it needs.
+  final bool fillHeight;
 
   const AppEmptyState({
     super.key,
@@ -29,7 +34,9 @@ class AppEmptyState extends StatelessWidget {
     this.secondaryActionText,
     this.onSecondaryActionTap,
     this.iconColor,
+    this.extra,
     this.padding = const EdgeInsets.all(32.0),
+    this.fillHeight = true,
   });
 
   @override
@@ -38,6 +45,7 @@ class AppEmptyState extends StatelessWidget {
     final textTheme = context.textTheme;
 
     return Center(
+      heightFactor: fillHeight ? null : 1.0,
       child: SingleChildScrollView(
         padding: padding,
         child: Column(
@@ -74,6 +82,10 @@ class AppEmptyState extends StatelessWidget {
                   color: context.colorScheme.onSurfaceVariant,
                 ),
               ),
+            ],
+            if (extra != null) ...[
+              const SizedBox(height: 16.0),
+              extra!,
             ],
             if (actionText != null && onActionTap != null) ...[
               const SizedBox(height: 28.0),
