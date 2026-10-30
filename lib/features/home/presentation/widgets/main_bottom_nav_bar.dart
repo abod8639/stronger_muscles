@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/features/cart/cart_feature.dart';
-import 'package:stronger_muscles/features/home/home_feature.dart';
+import 'package:stronger_muscles/features/home/presentation/controllers/main_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-/// Reusable application bottom navigation bar.
-class AppBottomNavigationBar extends ConsumerWidget {
+/// App shell bottom navigation (home, wishlist, cart with count badge, profile).
+class MainBottomNavigationBar extends ConsumerWidget {
   static const double _elevation = 8.0;
   static const double _iconSize = 24.0;
   static const double _selectedFontSize = 12.0;
@@ -16,7 +16,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
 
   final StatefulNavigationShell? navigationShell;
 
-  const AppBottomNavigationBar({super.key, this.navigationShell});
+  const MainBottomNavigationBar({super.key, this.navigationShell});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,7 +91,7 @@ class AppBottomNavigationBar extends ConsumerWidget {
           isLabelVisible: cartCount > 0,
           label: Text('$cartCount'),
           backgroundColor: AppColors.primary,
-          textColor: Colors.white,
+          textColor: AppColors.white,
           child: Icon(
             currentIndex == 2
                 ? Icons.shopping_cart
@@ -114,5 +114,3 @@ class AppBottomNavigationBar extends ConsumerWidget {
   }
 }
 
-/// Backward compatibility alias
-typedef MyBottomNavigationBar = AppBottomNavigationBar;
