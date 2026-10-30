@@ -46,6 +46,9 @@ void main() {
 
   setUp(() {
     currentTrigger = null;
+    registerUnauthenticatedHandler((ref) {
+      ref.read(routerProvider).push(AppRoutes.auth);
+    });
     testRouter = GoRouter(
       initialLocation: '/',
       routes: [
@@ -161,6 +164,35 @@ void main() {
 
       expect(actionExecuted, isFalse);
       expect(find.text('Auth Screen'), findsOneWidget);
+    });
+
+    testWidgets('triggers custom onUnauthenticated callback when unauthenticated', (tester) async {
+      bool actionExecuted = false;
+      bool customRedirectTriggered = false;
+
+      currentTrigger = (ref) => AppGuard.runSafe(
+        ref,
+        () async {
+          actionExecuted = true;
+        },
+        onUnauthenticated: () {
+          customRedirectTriggered = true;
+        },
+      );
+
+      await tester.pumpWidget(
+        buildAppGuardTester(
+          internetNotifierBuilder: () => MockOnlineNotifier(),
+          authNotifierBuilder: () => MockLoggedOutAuthNotifier(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('guard_trigger_button')));
+      await tester.pumpAndSettle();
+
+      expect(actionExecuted, isFalse);
+      expect(customRedirectTriggered, isTrue);
     });
   });
 
