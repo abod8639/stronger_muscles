@@ -17,6 +17,12 @@ class AppNetworkImage extends StatelessWidget {
   final IconData errorIcon;
   final double? errorIconSize;
 
+  /// Color behind the placeholder / fallback (defaults to the theme's container color).
+  final Color? backgroundColor;
+
+  /// Show a spinner while loading; when false the placeholder is a plain color box.
+  final bool showLoadingIndicator;
+
   const AppNetworkImage({
     super.key,
     required this.imageUrl,
@@ -28,6 +34,8 @@ class AppNetworkImage extends StatelessWidget {
     this.memCacheHeight,
     this.errorIcon = Icons.image_not_supported_outlined,
     this.errorIconSize,
+    this.backgroundColor,
+    this.showLoadingIndicator = true,
   });
 
   @override
@@ -48,15 +56,17 @@ class AppNetworkImage extends StatelessWidget {
               memCacheHeight: memCacheHeight,
               placeholder: (context, _) => _buildBox(
                 context,
-                const Center(
-                  child: SizedBox.square(
-                    dimension: 20,
-                    child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                      strokeWidth: 2.0,
-                    ),
-                  ),
-                ),
+                showLoadingIndicator
+                    ? const Center(
+                        child: SizedBox.square(
+                          dimension: 20,
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                            strokeWidth: 2.0,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
               ),
               errorWidget: (context, _, _) => _buildFallback(context),
             ),
@@ -76,7 +86,7 @@ class AppNetworkImage extends StatelessWidget {
   Widget _buildBox(BuildContext context, Widget child) => Container(
         width: width,
         height: height,
-        color: context.colorScheme.surfaceContainerHighest,
+        color: backgroundColor ?? context.colorScheme.surfaceContainerHighest,
         alignment: Alignment.center,
         child: child,
       );
