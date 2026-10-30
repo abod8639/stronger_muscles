@@ -4,6 +4,7 @@ import 'package:stronger_muscles/core/components/app_empty_state.dart';
 import 'package:stronger_muscles/core/components/app_section_title.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/address_card.dart';
@@ -67,10 +68,7 @@ class SavedAddressesList extends ConsumerWidget {
                     return AddressCard(address: address);
                   },
                 ),
-          loading: () => const Padding(
-            padding: EdgeInsets.all(AppDimens.spacingXl),
-            child: Center(child: CircularProgressIndicator()),
-          ),
+          loading: () => const AddressesListSkeleton(),
           error: (e, _) => Center(child: Text('${intl10n.error}: $e')),
         ),
       ],
