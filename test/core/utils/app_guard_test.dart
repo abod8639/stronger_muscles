@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/home/presentation/controllers/internet_connection_controller.dart';
+import 'package:stronger_muscles/core/network/internet_connection_controller.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
 class MockOnlineNotifier extends InternetConnectionController {
