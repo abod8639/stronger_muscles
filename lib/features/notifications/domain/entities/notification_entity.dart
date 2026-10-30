@@ -57,9 +57,48 @@ class NotificationEntity {
   String? get ticketId =>
       data?['ticket_id']?.toString() ??
       data?['ticketId']?.toString();
-  String? get ticketNumber =>
-      data?['ticket_number']?.toString() ??
-      data?['ticketNumber']?.toString();
+
+  String? get ticketNumber {
+    final explicit = data?['ticket_number']?.toString() ??
+        data?['ticketNumber']?.toString();
+    if (explicit != null && explicit.isNotEmpty) return explicit;
+
+    final match = RegExp(r'#([A-Za-z0-9_-]+)').firstMatch(title);
+    if (match != null) return match.group(1);
+    return null;
+  }
+
+  String? get ticketPriority =>
+      data?['priority']?.toString() ??
+      data?['ticket_priority']?.toString();
+
+  String? get ticketStatus =>
+      data?['status']?.toString() ??
+      data?['ticket_status']?.toString();
+
+  String? get ticketCategory =>
+      data?['category']?.toString() ??
+      data?['ticket_category']?.toString();
+
+  String? get ticketSenderName =>
+      data?['user_name']?.toString() ??
+      data?['admin_name']?.toString() ??
+      data?['sender_name']?.toString() ??
+      data?['name']?.toString();
+
+  String? get ticketSenderAvatar =>
+      data?['user_avatar']?.toString() ??
+      data?['admin_avatar']?.toString() ??
+      data?['avatar']?.toString() ??
+      imageUrl;
+
+  int? get ticketMessagesCount {
+    final count = data?['messages_count'] ?? data?['messagesCount'];
+    if (count is int) return count;
+    if (count != null) return int.tryParse(count.toString());
+    return null;
+  }
+
   bool get isSupport =>
       type == 'support' ||
       type == 'support_ticket' ||
