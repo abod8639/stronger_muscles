@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
@@ -41,7 +41,7 @@ class _PurchaseStatsCardContent extends ConsumerWidget {
         children: [
           _buildStatItem(
             intl10n.totalSpent,
-            'LE ${totalSpent.toStringAsFixed(0)}',
+            AppPriceText.format(totalSpent, decimals: 0),
             Icons.payments_outlined,
           ),
           Container(
