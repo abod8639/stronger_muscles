@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/components/app_price_text.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
@@ -103,7 +104,7 @@ class _AppProductCardState extends State<AppProductCard>
                           crossAxisAlignment: WrapCrossAlignment.center,
                           children: [
                             Text(
-                              'LE ${widget.product.baseEffectivePrice}',
+                              AppPriceText.format(widget.product.baseEffectivePrice),
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: isOutOfStock
                                     ? theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6)
@@ -116,7 +117,7 @@ class _AppProductCardState extends State<AppProductCard>
                             ),
                             if (widget.product.baseHasDiscount && !isOutOfStock)
                               Text(
-                                'LE ${widget.product.formattedPrice}',
+                                AppPriceText.format(widget.product.basePrice),
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: Colors.grey,
                                   decoration: TextDecoration.lineThrough,
