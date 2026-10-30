@@ -1,228 +1,150 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/notifications/notifications_feature.dart';
-import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/controllers/theme_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+/// App & account settings: profile, theme, notifications, language, help, about.
 class AccountSettingsList extends ConsumerWidget {
-  const AccountSettingsList({super.key});
+  /// Hide "Edit profile" when nobody is signed in.
+  final bool showEditProfile;
+
+  const AccountSettingsList({super.key, this.showEditProfile = true});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final isDarkMode = ref.watch(themeControllerProvider);
-    final themeNotifier = ref.watch(themeControllerProvider.notifier);
-    final languageNotifier = ref.watch(languageControllerProvider.notifier);
-    final currentLocale = ref.watch(languageControllerProvider);
-    final isDark = theme.brightness == Brightness.dark;
-    final localizations = AppLocalizations.of(context)!;
-    final unreadNotificationCount = ref.watch(unreadNotificationCountProvider);
+    final themeNotifier = ref.read(themeControllerProvider.notifier);
+    ref.watch(languageControllerProvider);
+    final languageName = ref.read(languageControllerProvider.notifier).currentLanguageName;
+    final unreadNotifications = ref.watch(unreadNotificationCountProvider);
+
+    final tiles = <Widget>[
+      if (showEditProfile)
+        AppListTile(
+          icon: Icons.person_outline_rounded,
+          title: l10n.editProfile,
+          onTap: () => context.push(AppRoutes.editUserInfo),
+        ),
+      AppListTile(
+        icon: isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+        title: l10n.theme,
+        showChevron: false,
+        onTap: themeNotifier.toggleTheme,
+        trailing: Switch(
+          value: isDarkMode,
+          onChanged: (_) => themeNotifier.toggleTheme(),
+          activeThumbColor: AppColors.primary,
+        ),
+      ),
+      AppListTile(
+        icon: Icons.notifications_outlined,
+        title: l10n.notifications,
+        onTap: () => context.push(AppRoutes.notifications),
+        trailing: unreadNotifications > 0
+            ? AppBadge(
+                label: '$unreadNotifications',
+                color: AppColors.primary,
+                backgroundColor: AppColors.primary,
+                textColor: AppColors.white,
+                borderRadius: AppRadius.allPill,
+              )
+            : null,
+      ),
+      AppListTile(
+        icon: Icons.language_outlined,
+        title: l10n.language,
+        onTap: () => _showLanguagePicker(context, ref),
+        trailing: Text(
+          languageName,
+          style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
+        ),
+      ),
+      AppListTile(
+        icon: Icons.help_outline_rounded,
+        title: l10n.helpSupport,
+        onTap: () => context.push(AppRoutes.helpSupport),
+      ),
+      AppListTile(
+        icon: Icons.info_outline_rounded,
+        title: l10n.about,
+        onTap: () => showAboutDialog(
+          context: context,
+          applicationName: l10n.appTitle,
+          applicationIcon: const AppIconTile(icon: Icons.fitness_center_rounded),
+        ),
+      ),
+    ];
 
     return AppCard(
       margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
       padding: EdgeInsets.zero,
-      borderRadius: AppRadius.allLg,
-      boxShadow: AppShadows.ofCard(context),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(AppDimens.spacingXl),
-            child: Text(
-              localizations.accountSettings,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: isDark ? AppColors.white : AppColors.black,
+          AppSectionTitle(
+            title: l10n.accountSettings,
+            padding: const EdgeInsets.fromLTRB(
+              AppDimens.spacingLg,
+              AppDimens.spacingLg,
+              AppDimens.spacingLg,
+              AppDimens.spacingXs,
+            ),
+          ),
+          for (final (index, tile) in tiles.indexed) ...[
+            if (index > 0)
+              Divider(
+                height: 1,
+                indent: AppDimens.spacingLg,
+                endIndent: AppDimens.spacingLg,
+                color: context.colorScheme.outlineVariant.withValues(alpha: 0.4),
               ),
-            ),
-          ),
-          _buildSettingItem(
-            icon: Icons.person_outline,
-            title: localizations.editProfile,
-            onTap: () => context.push(AppRoutes.editUserInfo),
-            isDark: isDark,
-          ),
-          _buildDivider(isDark),
-          _buildSettingItem(
-            icon: isDarkMode
-                ? Icons.dark_mode_outlined
-                : Icons.light_mode_outlined,
-            title: localizations.theme,
-            trailing: Switch(
-              value: isDarkMode,
-              onChanged: (val) => themeNotifier.toggleTheme(),
-              activeThumbColor: AppColors.primary,
-            ),
-            onTap: () => themeNotifier.toggleTheme(),
-            isDark: isDark,
-          ),
-          _buildDivider(isDark),
-          _buildSettingItem(
-            icon: Icons.notifications_outlined,
-            title: localizations.notifications,
-            trailing: unreadNotificationCount > 0
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimens.spacingSm,
-                          vertical: 2,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: AppRadius.allSm,
-                        ),
-                        child: Text(
-                          '$unreadNotificationCount',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: AppDimens.spacingSm),
-                      const Icon(Icons.chevron_right, color: AppColors.greyDark),
-                    ],
-                  )
-                : null,
-            onTap: () => context.push(AppRoutes.notifications),
-            isDark: isDark,
-          ),
-          _buildDivider(isDark),
-          _buildSettingItem(
-            icon: Icons.language_outlined,
-            title: localizations.language,
-            trailing: Text(
-              languageNotifier.currentLanguageName,
-              style: const TextStyle(color: AppColors.greyDark),
-            ),
-            onTap: () =>
-                _showLanguageDialog(context, ref, currentLocale, localizations),
-            isDark: isDark,
-          ),
-          _buildDivider(isDark),
-          _buildSettingItem(
-            icon: Icons.help_outline,
-            title: localizations.helpSupport,
-            onTap: () => context.push(AppRoutes.helpSupport),
-            isDark: isDark,
-          ),
-          _buildDivider(isDark),
-          _buildSettingItem(
-            icon: Icons.info_outline,
-            title: localizations.about,
-            onTap: () {},
-            isLast: true,
-            isDark: isDark,
-          ),
+            tile,
+          ],
         ],
       ),
     );
   }
 
-  void _showLanguageDialog(
-    BuildContext context,
-    WidgetRef ref,
-    Locale currentLocale,
-    AppLocalizations l10n,
-  ) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: AppRadius.shapeLg,
-        title: Text(l10n.language),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: Text(l10n.english),
-              value: 'en',
-              groupValue: currentLocale.languageCode,
-              onChanged: (value) {
-                ref
-                    .read(languageControllerProvider.notifier)
-                    .changeLanguage(const Locale('en'));
-                Navigator.pop(context);
-              },
-            ),
-            RadioListTile<String>(
-              title: Text(l10n.arabic),
-              value: 'ar',
-              groupValue: currentLocale.languageCode,
-              onChanged: (value) {
-                ref
-                    .read(languageControllerProvider.notifier)
-                    .changeLanguage(const Locale('ar'));
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  void _showLanguagePicker(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
 
-  Widget _buildSettingItem({
-    required IconData icon,
-    required String title,
-    Widget? trailing,
-    required VoidCallback onTap,
-    bool isLast = false,
-    required bool isDark,
-  }) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.vertical(
-          bottom: isLast ? AppRadius.rLg : Radius.zero,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimens.spacingXl,
-            vertical: AppDimens.spacingLg,
-          ),
-          child: Row(
+    AppBottomSheetScaffold.show<void>(
+      context,
+      (sheetContext) {
+        final current = ref.read(languageControllerProvider).languageCode;
+        void select(String code) {
+          ref.read(languageControllerProvider.notifier).changeLanguage(Locale(code));
+          Navigator.pop(sheetContext);
+        }
+
+        return AppBottomSheetScaffold(
+          icon: Icons.language_outlined,
+          title: l10n.language,
+          child: Column(
             children: [
-              Icon(icon, color: AppColors.primary, size: AppDimens.iconMd),
-              const SizedBox(width: AppDimens.spacingLg),
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: isDark ? AppColors.white : AppColors.black,
-                  ),
+              for (final (code, name) in [('en', l10n.english), ('ar', l10n.arabic)])
+                AppSelectableCard<String>(
+                  value: code,
+                  groupValue: current,
+                  title: name,
+                  leadingIcon: Icons.translate_rounded,
+                  onChanged: (value) {
+                    if (value != null) select(value);
+                  },
                 ),
-              ),
-              trailing ??
-                  const Icon(Icons.chevron_right, color: AppColors.greyDark),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDivider(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingXl),
-      child: Divider(
-        height: 1,
-        color: isDark
-            ? AppColors.greyDark.withValues(alpha: 0.3)
-            : AppColors.greyMedium.withValues(alpha: 0.3),
-      ),
+        );
+      },
     );
   }
 }

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/core/utils/validators/app_validators.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -15,10 +17,10 @@ class EditUserInfoView extends ConsumerStatefulWidget {
 }
 
 class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
-  late TextEditingController nameController;
-  late TextEditingController emailController;
-  late TextEditingController phoneController;
-  final formKey = GlobalKey<FormState>();
+  late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _phoneController;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -26,210 +28,138 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
     final user = ref.read(authControllerProvider).valueOrNull;
     final firebaseUser = FirebaseAuth.instance.currentUser;
 
-    nameController = TextEditingController(
-      text: user?.name ?? firebaseUser?.displayName ?? '',
-    );
-    emailController = TextEditingController(
-      text: user?.email ?? firebaseUser?.email ?? '',
-    );
-    phoneController = TextEditingController(
-      text: user?.phone ?? firebaseUser?.phoneNumber ?? '',
-    );
+    _nameController = TextEditingController(text: user?.name ?? firebaseUser?.displayName ?? '');
+    _emailController = TextEditingController(text: user?.email ?? firebaseUser?.email ?? '');
+    _phoneController = TextEditingController(text: user?.phone ?? firebaseUser?.phoneNumber ?? '');
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    phoneController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
+  }
+
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    FocusScope.of(context).unfocus();
+
+    await ref.read(authControllerProvider.notifier).updateUserProfile(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          phone: _phoneController.text.trim(),
+        );
+
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final result = ref.read(authControllerProvider);
+    if (result.hasError) {
+      AppSnackBar.showError(context, AppErrorCard.messageFor(result.error, l10n));
+    } else {
+      AppSnackBar.showSuccess(context, l10n.profileUpdated);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(authControllerProvider);
-    final user = userState.value;
-    final isLoading = userState.isLoading;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final localizations = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
+    const gap = SizedBox(height: AppDimens.spacingLg);
 
-    // Update if user data changes
-    ref.listen(authControllerProvider, (previous, next) {
-      final user = next.value;
-      if (user != null) {
-        if (nameController.text.isEmpty) nameController.text = user.name;
-        if (emailController.text.isEmpty) emailController.text = user.email;
-        if (phoneController.text.isEmpty && user.phone != null) {
-          phoneController.text = user.phone!;
-        }
-      }
+    // Fill empty fields once the user loads.
+    ref.listen(authControllerProvider, (_, next) {
+      final user = next.valueOrNull;
+      if (user == null) return;
+      if (_nameController.text.isEmpty) _nameController.text = user.name;
+      if (_emailController.text.isEmpty) _emailController.text = user.email;
+      if (_phoneController.text.isEmpty && user.phone != null) _phoneController.text = user.phone!;
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.editProfile),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
-      ),
+      appBar: baseAppBar(context, l10n.editProfile),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(AppDimens.spacingXl),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Form(
-          key: formKey,
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildPhotoSection(
-                context,
-                user?.photoUrl,
-                isDark,
-                localizations,
-              ),
-              const SizedBox(height: 32),
-              AppTextFormField(
-                controller: nameController,
-                label: localizations.fullName,
-                prefixIcon: const Icon(Icons.person_outline, color: AppColors.primary),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return localizations.enterName;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              AppTextFormField(
-                controller: emailController,
-                label: localizations.email,
-                prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primary),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return localizations.enterEmail;
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return localizations.validEmail;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              AppTextFormField(
-                controller: phoneController,
-                label: localizations.phoneNumber,
-                prefixIcon: const Icon(Icons.phone_outlined, color: AppColors.primary),
-                keyboardType: TextInputType.phone,
-                validator: (value) {
-                  if (value != null && value.isNotEmpty && value.length < 10) {
-                    return localizations.pleaseEnterValidPhone;
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 32),
-              AppPrimaryButton(
-                text: localizations.saveChanges,
-                isLoading: isLoading,
-                height: 52.0,
-                borderRadius: AppRadius.allMd,
-                onPressed: () async {
-                  if (formKey.currentState!.validate()) {
-                    await ref
-                        .read(authControllerProvider.notifier)
-                        .updateUserProfile(
-                          name: nameController.text.trim(),
-                          email: emailController.text.trim(),
-                          phone: phoneController.text.trim(),
-                        );
-                  }
-                },
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: AppRadius.shapeMd,
-                  side: BorderSide(
-                    color: isDark ? AppColors.greyDark : AppColors.grey,
-                  ),
+              Center(
+                child: Stack(
+                  children: [
+                    AppAvatar(
+                      imageUrl: userState.valueOrNull?.photoUrl,
+                      size: 112.0,
+                      showBorder: true,
+                    ),
+                    PositionedDirectional(
+                      bottom: 0,
+                      end: 0,
+                      child: Material(
+                        color: AppColors.primary,
+                        shape: CircleBorder(side: BorderSide(color: context.colorScheme.surface, width: 3)),
+                        child: IconButton(
+                          tooltip: l10n.changePhotoComingSoon,
+                          icon: const Icon(Icons.camera_alt_rounded, color: AppColors.white, size: 20),
+                          onPressed: () => AppSnackBar.showInfo(context, l10n.changePhotoComingSoon),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  localizations.cancel,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: isDark ? AppColors.white : AppColors.black,
-                  ),
+              ),
+              const SizedBox(height: AppDimens.spacingXl + 8),
+              AppTextFormField(
+                controller: _nameController,
+                label: l10n.fullName,
+                prefixIcon: const Icon(Icons.person_outline_rounded, size: AppDimens.iconSm),
+                keyboardType: TextInputType.name,
+                validator: (value) => AppValidators.validateName(value, emptyMessage: l10n.enterName),
+              ),
+              gap,
+              AppTextFormField(
+                controller: _emailController,
+                label: l10n.email,
+                prefixIcon: const Icon(Icons.email_outlined, size: AppDimens.iconSm),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) => AppValidators.validateEmail(
+                  value,
+                  emptyMessage: l10n.enterEmail,
+                  invalidMessage: l10n.validEmail,
+                ),
+              ),
+              gap,
+              AppTextFormField(
+                controller: _phoneController,
+                label: l10n.phoneNumber,
+                prefixIcon: const Icon(Icons.phone_outlined, size: AppDimens.iconSm),
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.done,
+                validator: (value) => value != null && value.isNotEmpty && value.length < 10
+                    ? l10n.pleaseEnterValidPhone
+                    : null,
+              ),
+              const SizedBox(height: AppDimens.spacingXl + 8),
+              AppPrimaryButton(
+                text: l10n.saveChanges,
+                icon: Icons.check_rounded,
+                isLoading: userState.isLoading,
+                height: 52.0,
+                onPressed: _save,
+              ),
+              const SizedBox(height: AppDimens.spacingSm),
+              Center(
+                child: AppLinkButton(
+                  text: l10n.cancel,
+                  color: context.colorScheme.onSurfaceVariant,
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildPhotoSection(
-    BuildContext context,
-    String? photoUrl,
-    bool isDark,
-    AppLocalizations localizations,
-  ) {
-    return Center(
-      child: Stack(
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.primary, width: 3),
-              boxShadow: AppShadows.ofFloating(context),
-            ),
-            child: CircleAvatar(
-              radius: 58,
-              backgroundColor: AppColors.greyLight,
-              backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
-              child: photoUrl == null
-                  ? const Icon(
-                      Icons.person,
-                      size: 50,
-                      color: AppColors.greyDark,
-                    )
-                  : null,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isDark ? AppColors.backgroundDark : AppColors.white,
-                  width: 3,
-                ),
-              ),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.camera_alt,
-                  color: AppColors.white,
-                  size: 20,
-                ),
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(localizations.changePhotoComingSoon),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
