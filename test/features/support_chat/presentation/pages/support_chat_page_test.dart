@@ -8,6 +8,7 @@ import 'package:stronger_muscles/features/help_support/domain/entities/support_t
 import 'package:stronger_muscles/features/support_chat/domain/repositories/support_chat_repository.dart';
 import 'package:stronger_muscles/features/support_chat/presentation/controllers/support_chat_di.dart';
 import 'package:stronger_muscles/features/support_chat/presentation/pages/support_chat_page.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class FakeSupportChatRepository implements SupportChatRepository {
   String? sentText;
@@ -89,8 +90,11 @@ void main() {
         overrides: [
           supportChatRepositoryProvider.overrideWithValue(fakeRepo),
         ],
-        child: const MaterialApp(
-          home: SupportChatPage(ticketId: '99'),
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const SupportChatPage(ticketId: '99'),
         ),
       ),
     );
