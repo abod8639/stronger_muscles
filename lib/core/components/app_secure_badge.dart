@@ -24,6 +24,7 @@ class AppSecureBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+
     return AppAlertCard(
       color: AppColors.success,
       icon: icon,
