@@ -31,3 +31,4 @@ export 'presentation/widgets/search_bar.dart';
 export 'presentation/widgets/search_bar_inline.dart';
 export 'presentation/widgets/search_input_group.dart';
 export 'presentation/widgets/product_search_autocomplete.dart';
+export 'presentation/widgets/price_filter_slider.dart';
