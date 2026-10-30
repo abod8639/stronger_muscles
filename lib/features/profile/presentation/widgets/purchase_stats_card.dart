@@ -7,78 +7,76 @@ import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/profile/profile_providers.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-class PurchaseStatsCard extends StatelessWidget {
+/// Brand-gradient summary of total spent and completed orders.
+class PurchaseStatsCard extends ConsumerWidget {
   const PurchaseStatsCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const _PurchaseStatsCardContent();
-  }
-}
-
-class _PurchaseStatsCardContent extends ConsumerWidget {
-  const _PurchaseStatsCardContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stats = ref.watch(profileStatsProvider);
-    final totalSpent = stats.totalSpent;
-    final deliveredOrders = stats.deliveredOrders;
-    final intl10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     return AppCard(
       margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
       padding: const EdgeInsets.all(AppDimens.spacingXl),
       gradient: const LinearGradient(
         colors: [AppColors.primary, AppColors.primaryDark],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+        begin: AlignmentDirectional.topStart,
+        end: AlignmentDirectional.bottomEnd,
       ),
-      borderRadius: AppRadius.allLg,
       boxShadow: AppShadows.colored(AppColors.primary),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(
-            intl10n.totalSpent,
-            AppPriceText.format(totalSpent, decimals: 0),
-            Icons.payments_outlined,
+          Expanded(
+            child: _StatItem(
+              label: l10n.totalSpent,
+              value: AppPriceText.format(stats.totalSpent, decimals: 0),
+              icon: Icons.payments_outlined,
+            ),
           ),
-          Container(
-            height: 50.0,
-            width: 1.0,
-            color: AppColors.white.withValues(alpha: 0.3),
-          ),
-          _buildStatItem(
-            intl10n.completed,
-            '$deliveredOrders',
-            Icons.check_circle_outline,
+          Container(height: 56.0, width: 1.0, color: AppColors.white.withValues(alpha: 0.3)),
+          Expanded(
+            child: _StatItem(
+              label: l10n.completed,
+              value: '${stats.deliveredOrders}',
+              icon: Icons.check_circle_outline_rounded,
+            ),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildStatItem(String label, String value, IconData icon) {
+class _StatItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+
+  const _StatItem({required this.label, required this.value, required this.icon});
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: AppColors.white, size: AppDimens.iconMd),
+        AppIconTile(
+          icon: icon,
+          color: AppColors.white,
+          backgroundColor: AppColors.white.withValues(alpha: 0.15),
+          iconSize: 22.0,
+          circular: true,
+        ),
         const SizedBox(height: AppDimens.spacingSm),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 22.0,
+          style: context.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.white,
           ),
         ),
-        const SizedBox(height: AppDimens.spacingXs),
         Text(
           label,
-          style: TextStyle(
-            fontSize: 12.0,
-            color: AppColors.white.withValues(alpha: 0.9),
-          ),
+          style: context.textTheme.bodySmall?.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
         ),
       ],
     );
