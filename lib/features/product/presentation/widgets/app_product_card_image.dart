@@ -4,8 +4,8 @@ import 'package:stronger_muscles/core/components/app_dots_indicator.dart';
 import 'package:stronger_muscles/core/components/app_network_image.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/product/product_feature.dart';
-import 'package:stronger_muscles/features/product_details/product_details_feature.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/product_badges.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Swipeable image area of [AppProductCard]: image pager with dots,
