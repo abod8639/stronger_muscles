@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/auth/presentation/utils/auth_validators.dart';
+import 'package:stronger_muscles/core/utils/validators/app_validators.dart';
 import 'package:stronger_muscles/features/auth/presentation/widgets/auth_fields.dart';
 import 'package:stronger_muscles/features/auth/presentation/widgets/auth_submit_actions.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Purely dumb registration form widget.
 ///
-/// Contains zero business logic. Delegates validation to [AuthValidators]
+/// Contains zero business logic. Delegates validation to [AppValidators]
 /// and events via callbacks. Safely manages and disposes all controllers and focus nodes.
 class SignUpForm extends StatefulWidget {
   final void Function(String name, String email, String password) onSignUp;
@@ -77,7 +77,7 @@ class _SignUpFormState extends State<SignUpForm> {
               keyboardType: TextInputType.name,
               autofillHints: const [AutofillHints.name],
               onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
-              validator: (value) => AuthValidators.validateName(
+              validator: (value) => AppValidators.validateName(
                 value,
                 emptyMessage: l10n.enterName,
               ),
@@ -104,7 +104,7 @@ class _SignUpFormState extends State<SignUpForm> {
               icon: Icons.lock_reset_rounded,
               autofillHints: const [AutofillHints.newPassword],
               onFieldSubmitted: (_) => _handleSubmit(),
-              validator: (value) => AuthValidators.validateConfirmPassword(
+              validator: (value) => AppValidators.validateConfirmPassword(
                 value,
                 _passwordController.text,
                 emptyMessage: l10n.confirmYourPassword,
