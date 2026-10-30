@@ -53,7 +53,7 @@ class BottomIconsRow extends ConsumerWidget {
             child: isInCart
                 ? SizedBox(
                     height: _height,
-                    child: AppQuantityControls(
+                    child: CartQuantityControls(
                       product: product,
                       selectedFlavor: selectedFlavor,
                       selectedSize: selectedSize,
