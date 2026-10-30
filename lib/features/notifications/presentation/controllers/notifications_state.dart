@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:stronger_muscles/features/notifications/domain/entities/notification_entity.dart';
+import 'package:stronger_muscles/features/notifications/domain/entities/notification_feed_item.dart';
 
 /// Immutable UI state representing the user notifications and unread badge count.
 @immutable
@@ -21,6 +22,11 @@ class NotificationsState {
     this.currentPage = 1,
     this.errorMessage,
   });
+
+  /// Groups notifications dynamically, consolidating multiple updates for the same
+  /// ticket into a single professional ticket card.
+  List<NotificationFeedItem> get feedItems =>
+      groupNotificationsIntoFeedItems(notifications);
 
   NotificationsState copyWith({
     List<NotificationEntity>? notifications,
