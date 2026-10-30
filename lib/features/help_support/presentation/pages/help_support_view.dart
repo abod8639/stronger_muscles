@@ -14,11 +14,21 @@ import 'package:stronger_muscles/features/help_support/presentation/widgets/faq_
 import 'package:stronger_muscles/features/help_support/presentation/widgets/help_support_hero_header.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/my_tickets_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/submit_ticket_bottom_sheet.dart';
+import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_chat_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_success_dialog.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class HelpSupportView extends ConsumerStatefulWidget {
-  const HelpSupportView({super.key});
+  final String? initialTicketId;
+  final String? initialTicketNumber;
+  final bool openActiveTicket;
+
+  const HelpSupportView({
+    super.key,
+    this.initialTicketId,
+    this.initialTicketNumber,
+    this.openActiveTicket = false,
+  });
 
   @override
   ConsumerState<HelpSupportView> createState() => _HelpSupportViewState();
@@ -26,6 +36,67 @@ class HelpSupportView extends ConsumerStatefulWidget {
 
 class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
   final _searchController = TextEditingController();
+  bool _hasHandledInitialTicket = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndOpenInitialTicket();
+    });
+  }
+
+  void _checkAndOpenInitialTicket() {
+    if (!mounted || _hasHandledInitialTicket) return;
+
+    // 1. If explicit ticketId is provided, open its chat immediately
+    if (widget.initialTicketId != null && widget.initialTicketId!.isNotEmpty) {
+      _hasHandledInitialTicket = true;
+      TicketChatSheet.show(context, widget.initialTicketId!);
+      return;
+    }
+
+    // 2. Open active or matching ticket if already loaded in memory
+    if (widget.initialTicketNumber != null || widget.openActiveTicket) {
+      final tickets = ref.read(helpSupportControllerProvider).userTickets;
+      if (tickets.isNotEmpty) {
+        _openMatchingOrActiveTicket(tickets);
+      }
+    }
+  }
+
+  void _openMatchingOrActiveTicket(List<SupportTicketEntity> tickets) {
+    if (_hasHandledInitialTicket || !mounted) return;
+
+    SupportTicketEntity? target;
+    if (widget.initialTicketNumber != null &&
+        widget.initialTicketNumber!.isNotEmpty) {
+      for (final t in tickets) {
+        if (t.ticketNumber == widget.initialTicketNumber) {
+          target = t;
+          break;
+        }
+      }
+    }
+
+    if (target == null && widget.openActiveTicket) {
+      for (final t in tickets) {
+        if (t.isOpen) {
+          target = t;
+          break;
+        }
+      }
+      target ??= tickets.isNotEmpty ? tickets.first : null;
+    }
+
+    if (target != null && target.id != null && target.id!.isNotEmpty) {
+      _hasHandledInitialTicket = true;
+      TicketChatSheet.show(context, target.id!);
+    } else if (widget.openActiveTicket) {
+      _hasHandledInitialTicket = true;
+      MyTicketsSheet.show(context);
+    }
+  }
 
   @override
   void dispose() {
@@ -82,6 +153,20 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AsyncValue<List<SupportTicketEntity>>>(
+      helpSupportControllerProvider.select((s) => s.ticketsState),
+      (prev, next) {
+        next.whenData((tickets) {
+          if (!_hasHandledInitialTicket &&
+              (widget.initialTicketNumber != null || widget.openActiveTicket)) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _openMatchingOrActiveTicket(tickets);
+            });
+          }
+        });
+      },
+    );
+
     final state = ref.watch(helpSupportControllerProvider);
     final notifier = ref.read(helpSupportControllerProvider.notifier);
     final l10n = AppLocalizations.of(context);
