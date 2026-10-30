@@ -24,3 +24,5 @@ export 'presentation/pages/home_view.dart';
 // Presentation Helpers
 export 'presentation/helpers/selection_ui_mapper.dart';
 
+// App shell navigation
+export 'presentation/widgets/main_bottom_nav_bar.dart';
