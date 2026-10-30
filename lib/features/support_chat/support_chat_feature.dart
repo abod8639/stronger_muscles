@@ -6,3 +6,4 @@ export 'presentation/controllers/support_chat_controller.dart';
 export 'presentation/controllers/support_chat_di.dart';
 export 'presentation/pages/support_chat_page.dart';
 export 'support_chat_routes.dart';
+
