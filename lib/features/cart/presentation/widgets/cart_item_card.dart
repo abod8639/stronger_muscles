@@ -5,6 +5,7 @@ import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/cart/domain/entities/cart_item_entity.dart';
 import 'package:stronger_muscles/features/cart/presentation/widgets/cart_item_details.dart';
+import 'package:stronger_muscles/features/cart/presentation/widgets/cart_quantity_controls.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
@@ -78,7 +79,7 @@ class CartItemCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    AppQuantityControls(
+                    CartQuantityControls(
                       product: product,
                       selectedFlavor: item.selectedFlavor,
                       selectedSize: item.selectedSize,
