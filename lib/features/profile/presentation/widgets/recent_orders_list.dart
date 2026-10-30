@@ -7,6 +7,7 @@ import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/order/order_feature.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/language_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
@@ -72,7 +73,7 @@ class RecentOrdersList extends ConsumerWidget {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const OrdersListSkeleton(itemCount: 2),
       error: (e, _) => Center(child: Text('${l10n.error}: $e')),
     );
   }
