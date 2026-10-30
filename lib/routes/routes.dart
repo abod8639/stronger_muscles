@@ -70,6 +70,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         return AppRoutes.profile;
       }
 
+      // If not logged in and attempting to open support chat / ticket, redirect to auth
+      if (!isLoggedIn && state.matchedLocation.startsWith(AppRoutes.supportChat)) {
+        return AppRoutes.auth;
+      }
+
       // No redirect
       return null;
     },

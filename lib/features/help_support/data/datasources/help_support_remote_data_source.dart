@@ -20,12 +20,12 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
 
   @override
   Future<SupportTicketModel> submitTicket(SupportTicketModel ticket) async {
-    final endpoint = StorageService.hasToken
-        ? ApiConfig.customerSupportTickets
-        : ApiConfig.publicSupportTicket;
+    if (!StorageService.hasToken) {
+      throw const AuthException(message: 'يجب تسجيل الدخول لفتح تذكرة دعم');
+    }
 
     final response = await _apiService.post(
-      endpoint,
+      ApiConfig.customerSupportTickets,
       data: {
         'subject': ticket.subject,
         'category': ticket.category,

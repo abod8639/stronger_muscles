@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_controller.dart';
@@ -49,6 +51,9 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
 
   void _checkAndOpenInitialTicket() {
     if (!mounted || _hasHandledInitialTicket) return;
+
+    final isLoggedIn = ref.read(authStateProvider);
+    if (!isLoggedIn) return;
 
     // 1. If explicit ticketId is provided, open its chat immediately
     if (widget.initialTicketId != null && widget.initialTicketId!.isNotEmpty) {
@@ -112,36 +117,46 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
   }
 
   Future<void> _openTicketBottomSheet() async {
-    final ticket = await SubmitTicketBottomSheet.show(
-      context,
-      onSubmit: ({
-        required String subject,
-        required String category,
-        required String message,
-        priority = TicketPriority.normal,
-      }) async {
-        final ticket = await ref
-            .read(helpSupportControllerProvider.notifier)
-            .submitTicket(
-              subject: subject,
-              category: category,
-              message: message,
-              priority: priority,
-            );
-        // Surface the controller's failure inline in the sheet.
-        final failure = ref.read(helpSupportControllerProvider).failure;
-        if (ticket == null && failure != null) throw failure;
-        return ticket;
+    await AppGuard.runSafeAuth(
+      ref,
+      () async {
+        final ticket = await SubmitTicketBottomSheet.show(
+          context,
+          onSubmit: ({
+            required String subject,
+            required String category,
+            required String message,
+            priority = TicketPriority.normal,
+          }) async {
+            final ticket = await ref
+                .read(helpSupportControllerProvider.notifier)
+                .submitTicket(
+                  subject: subject,
+                  category: category,
+                  message: message,
+                  priority: priority,
+                );
+            // Surface the controller's failure inline in the sheet.
+            final failure = ref.read(helpSupportControllerProvider).failure;
+            if (ticket == null && failure != null) throw failure;
+            return ticket;
+          },
+        );
+
+        if (ticket != null && mounted) {
+          await TicketSuccessDialog.show(context, ticket);
+        }
       },
     );
-
-    if (ticket != null && mounted) {
-      await TicketSuccessDialog.show(context, ticket);
-    }
   }
 
   void _openMyTickets() {
-    MyTicketsSheet.show(context);
+    AppGuard.runSafeAuth(
+      ref,
+      () async {
+        MyTicketsSheet.show(context);
+      },
+    );
   }
 
   Future<void> _onChannelTap(SupportChannelEntity channel) async {
@@ -165,6 +180,9 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
     ref.listen<AsyncValue<List<SupportTicketEntity>>>(
       helpSupportControllerProvider.select((s) => s.ticketsState),
       (prev, next) {
+        final isLoggedIn = ref.read(authStateProvider);
+        if (!isLoggedIn) return;
+
         next.whenData((tickets) {
           if (!_hasHandledInitialTicket &&
               (widget.initialTicketNumber != null || widget.openActiveTicket)) {

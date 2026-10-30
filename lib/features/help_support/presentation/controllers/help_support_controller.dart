@@ -636,9 +636,5 @@ final helpSupportControllerProvider =
     webSocketService: wsService,
   );
 
-  ref.onDispose(() {
-    notifier.dispose();
-  });
-
   return notifier;
 });

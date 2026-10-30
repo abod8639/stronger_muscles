@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
+import 'package:stronger_muscles/core/errors/failures.dart';
+import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/faq_entity.dart';
+import 'package:stronger_muscles/features/help_support/domain/entities/support_channel_entity.dart';
+import 'package:stronger_muscles/features/help_support/domain/entities/support_message_entity.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
+import 'package:stronger_muscles/features/help_support/domain/repositories/help_support_repository.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/get_faqs_usecase.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/get_support_channels_usecase.dart';
+import 'package:stronger_muscles/features/help_support/domain/usecases/get_user_tickets_usecase.dart';
+import 'package:stronger_muscles/features/help_support/presentation/controllers/help_support_di.dart';
+import 'package:stronger_muscles/features/help_support/presentation/pages/help_support_view.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/faq_list_section.dart';
+import 'package:stronger_muscles/features/help_support/presentation/widgets/my_tickets_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/still_need_help_card.dart';
+import 'package:stronger_muscles/features/help_support/presentation/widgets/submit_ticket_bottom_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/support_ticket_card.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_success_dialog.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -87,4 +103,98 @@ void main() {
     expect(find.text('Ticket #TK-100'), findsOneWidget);
     expect(find.text('Open Ticket'), findsOneWidget);
   });
+
+  testWidgets('HelpSupportView prevents unauthenticated user from opening a ticket', (tester) async {
+    bool unauthTriggered = false;
+    registerAuthStateChecker((_) => false);
+    registerUnauthenticatedHandler((_) => unauthTriggered = true);
+
+    final router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => const HelpSupportView(),
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          authStateProvider.overrideWithValue(false),
+          getFaqsUseCaseProvider.overrideWithValue(GetFaqsUseCase(FakeHelpSupportRepository())),
+          getSupportChannelsUseCaseProvider.overrideWithValue(GetSupportChannelsUseCase(FakeHelpSupportRepository())),
+          getUserTicketsUseCaseProvider.overrideWithValue(GetUserTicketsUseCase(FakeHelpSupportRepository())),
+        ],
+        child: MaterialApp.router(
+          routerConfig: router,
+          locale: const Locale('en'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Tap the Support Ticket channel
+    final ticketChannel = find.text('Support Ticket');
+    expect(ticketChannel, findsOneWidget);
+    await tester.tap(ticketChannel);
+    await tester.pump();
+
+    // Verify unauthenticated handler was triggered and bottom sheet was NOT opened
+    expect(unauthTriggered, isTrue);
+    expect(find.byType(SubmitTicketBottomSheet), findsNothing);
+
+    // Reset flag and test MyTickets button in AppBar
+    unauthTriggered = false;
+    final myTicketsIcon = find.byTooltip('My Tickets');
+    expect(myTicketsIcon, findsOneWidget);
+    await tester.tap(myTicketsIcon);
+    await tester.pump();
+
+    expect(unauthTriggered, isTrue);
+    expect(find.byType(MyTicketsSheet), findsNothing);
+  });
+}
+
+class FakeHelpSupportRepository implements HelpSupportRepository {
+  @override
+  Future<Either<Failure, List<FaqEntity>>> getFaqs({FaqCategory? category, String? query}) async =>
+      const Right(<FaqEntity>[]);
+  @override
+  Future<Either<Failure, List<SupportChannelEntity>>> getSupportChannels() async =>
+      const Right(<SupportChannelEntity>[
+        SupportChannelEntity(
+          id: '1',
+          type: SupportChannelType.ticket,
+          titleAr: 'تذكرة دعم',
+          titleEn: 'Support Ticket',
+          subtitleAr: 'فريق الدعم الفني',
+          subtitleEn: 'Technical Support',
+          actionValue: '',
+          availabilityAr: 'متاح دائماً',
+          availabilityEn: '24/7',
+        ),
+      ]);
+  @override
+  Future<Either<Failure, SupportTicketEntity>> submitTicket(SupportTicketEntity ticket) async =>
+      Right(ticket);
+  @override
+  Future<Either<Failure, List<SupportTicketEntity>>> getUserTickets() async =>
+      const Right(<SupportTicketEntity>[]);
+  @override
+  Future<Either<Failure, SupportTicketEntity>> getTicketDetails(String ticketId) async =>
+      Right(_ticket);
+  @override
+  Future<Either<Failure, SupportMessageEntity>> sendTicketMessage({
+    required String ticketId,
+    required String message,
+  }) async =>
+      throw UnimplementedError();
+  @override
+  Future<Either<Failure, SupportTicketEntity>> closeTicket(String ticketId) async =>
+      throw UnimplementedError();
 }
