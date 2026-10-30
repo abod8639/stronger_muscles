@@ -78,7 +78,8 @@ class AddressController extends _$AddressController {
   }
 
   Future<void> fetchAddresses() async {
-    state = const AsyncLoading();
+    // Avoid wiping the existing list with AsyncLoading — keep data visible
+    // and only replace it when the new result arrives.
     final getAddressesUseCase = ref.read(getAddressesUseCaseProvider);
     final result = await getAddressesUseCase();
     result.fold(
