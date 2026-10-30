@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/error/error.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/notifications/domain/entities/notification_feed_item.dart';
 import 'package:stronger_muscles/features/notifications/presentation/controllers/notification_controller.dart';
 import 'package:stronger_muscles/features/notifications/presentation/widgets/grouped_ticket_notification_card.dart';
+import 'package:stronger_muscles/features/notifications/presentation/widgets/notification_card_frame.dart';
 import 'package:stronger_muscles/features/notifications/presentation/widgets/notification_item_card.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
@@ -15,22 +17,19 @@ class NotificationsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(notificationControllerProvider);
     final notifier = ref.read(notificationControllerProvider.notifier);
-    final l10n = AppLocalizations.of(context);
-    final isAr = Localizations.localeOf(context).languageCode == 'ar';
-    final theme = Theme.of(context);
-
+    final l10n = AppLocalizations.of(context)!;
     final unreadCount = ref.watch(unreadNotificationCountProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(l10n?.notifications ?? 'الإشعارات'),
+      appBar: baseAppBar(
+        context,
+        l10n.notifications,
         actions: [
           if (unreadCount > 0)
             IconButton(
-              tooltip: isAr ? 'تحديد الكل كمقروء' : 'Mark all as read',
+              tooltip: l10n.markAllAsRead,
               icon: const Icon(Icons.done_all_rounded, color: AppColors.primary),
-              onPressed: () => notifier.markAllAsRead(),
+              onPressed: notifier.markAllAsRead,
             ),
         ],
       ),
@@ -40,49 +39,17 @@ class NotificationsView extends ConsumerWidget {
 
           if (feedItems.isEmpty) {
             return RefreshIndicator(
-              onRefresh: () => notifier.refresh(),
-              child: ListView(
+              color: AppColors.primary,
+              onRefresh: notifier.refresh,
+              child: CustomScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: theme.colorScheme.surfaceContainerHighest
-                                  .withValues(alpha: 0.5),
-                            ),
-                            child: Icon(
-                              Icons.notifications_none_rounded,
-                              size: 56,
-                              color: theme.colorScheme.outline,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            isAr
-                                ? 'لا توجد إشعارات حتى الآن'
-                                : 'No notifications yet',
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            isAr
-                                ? 'ستظهر هنا الإشعارات وتحديثات طلباتك وعروضنا'
-                                : 'Updates about orders and offers will appear here',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.outline,
-                            ),
-                          ),
-                        ],
-                      ),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: AppEmptyState(
+                      icon: Icons.notifications_none_rounded,
+                      title: l10n.noNotificationsYet,
+                      subtitle: l10n.noNotificationsSubtitle,
                     ),
                   ),
                 ],
@@ -97,22 +64,20 @@ class NotificationsView extends ConsumerWidget {
             notificationControllerProvider.notifier.select((n) => n.hasMore),
           );
 
-          final count = feedItems.length + (isLoadingMore ? 1 : 0);
-
           return RefreshIndicator(
-            onRefresh: () => notifier.refresh(),
+            color: AppColors.primary,
+            onRefresh: notifier.refresh,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              itemCount: count,
+              padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingMd),
+              itemCount: feedItems.length + (isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index >= feedItems.length) {
                   return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(vertical: AppDimens.spacingLg),
                     child: Center(
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
+                      child: SizedBox.square(
+                        dimension: 24.0,
                         child: CircularProgressIndicator(strokeWidth: 2.5),
                       ),
                     ),
@@ -126,100 +91,33 @@ class NotificationsView extends ConsumerWidget {
                   });
                 }
 
-                final item = feedItems[index];
-                switch (item) {
-                  case SingleNotificationFeedItem(:final notification):
-                    return Dismissible(
-                      key: ValueKey('notification_${notification.id}'),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.error,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(Icons.delete_outline_rounded,
-                            color: Colors.white),
-                      ),
-                      onDismissed: (_) {
-                        notifier.deleteNotification(notification.id);
-                      },
+                return switch (feedItems[index]) {
+                  SingleNotificationFeedItem(:final notification) => AppSwipeToDelete(
+                      dismissKey: ValueKey('notification_${notification.id}'),
+                      margin: NotificationCardFrame.margin,
+                      onDeleted: () => notifier.deleteNotification(notification.id),
                       child: NotificationItemCard(notification: notification),
-                    );
-
-                  case GroupedTicketNotificationFeedItem():
-                    return Dismissible(
-                      key: ValueKey('ticket_group_${item.ticketId}_${item.ticketNumber}'),
-                      direction: DismissDirection.endToStart,
-                      background: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.error,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Icon(Icons.delete_outline_rounded,
-                            color: Colors.white),
-                      ),
-                      onDismissed: (_) {
-                        notifier.deleteNotifications(item.allNotificationIds);
-                      },
+                    ),
+                  final GroupedTicketNotificationFeedItem item => AppSwipeToDelete(
+                      dismissKey: ValueKey('ticket_group_${item.ticketId}_${item.ticketNumber}'),
+                      margin: NotificationCardFrame.margin,
+                      onDeleted: () => notifier.deleteNotifications(item.allNotificationIds),
                       child: GroupedTicketNotificationCard(item: item),
-                    );
-                }
+                    ),
+                };
               },
             ),
           );
         },
-        loading: () => const Center(
-          child: CircularProgressIndicator(),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, _) => AppEmptyState(
+          icon: AppErrorCard.iconFor(error),
+          iconColor: AppColors.error,
+          title: AppErrorCard.messageFor(error, l10n),
+          actionText: l10n.retry,
+          actionIcon: Icons.refresh_rounded,
+          onActionTap: notifier.loadNotifications,
         ),
-        error: (error, stack) {
-          final errorMessage = error is Failure
-              ? error.toMessage()
-              : (error is String
-                  ? error
-                  : (l10n?.error ?? 'تعذر تحميل الإشعارات حالياً'));
-
-          final isConnection = error is Failure && error.isConnectionError;
-
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    isConnection
-                        ? Icons.wifi_off_rounded
-                        : Icons.error_outline_rounded,
-                    size: 64,
-                    color: theme.colorScheme.error,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    errorMessage,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  FilledButton.icon(
-                    onPressed: () => notifier.loadNotifications(),
-                    icon: const Icon(Icons.refresh_rounded),
-                    label: Text(l10n?.retry ?? 'إعادة المحاولة'),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
       ),
     );
   }
