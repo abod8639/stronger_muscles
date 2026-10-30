@@ -3,10 +3,11 @@ import 'package:stronger_muscles/core/components/app_badge.dart';
 import 'package:stronger_muscles/core/components/app_card.dart';
 import 'package:stronger_muscles/core/components/app_highlight_text.dart';
 import 'package:stronger_muscles/core/components/app_price_text.dart';
-import 'package:stronger_muscles/core/components/app_product_card_image.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_card_image.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/product/product_feature.dart';
+import 'package:stronger_muscles/features/product/data/models/product_model.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable product card component built on top of [AppCard] with unified
