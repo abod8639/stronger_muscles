@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
 import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
@@ -80,6 +81,9 @@ void main() {
       overrides: [
         internetConnectionControllerProvider.overrideWith(internetNotifierBuilder),
         authControllerProvider.overrideWith(authNotifierBuilder),
+        authStateProvider.overrideWith(
+          (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
+        ),
         routerProvider.overrideWithValue(testRouter),
       ],
       child: MaterialApp.router(
