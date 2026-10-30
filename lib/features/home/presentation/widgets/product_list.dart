@@ -5,7 +5,6 @@ import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/components/product_grid_skeleton.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -13,10 +12,6 @@ import 'package:stronger_muscles/routes/routes.dart';
 
 /// Paginated product grid for the selected home section.
 class ProductList extends ConsumerWidget {
-  static const double _horizontalPadding = 8.0;
-  static const double _mainAxisSpacing = 12.0;
-  static const double _crossAxisSpacing = 8.0;
-
   const ProductList({super.key});
 
   /// Category id of the currently selected section (`null` = all products).
@@ -71,49 +66,16 @@ class ProductList extends ConsumerWidget {
             // without hiding any product cards.
             if (isSwitching)
               const SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2.5)),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-              sliver: SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
-                  childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(context),
-                  crossAxisSpacing: _crossAxisSpacing,
-                  mainAxisSpacing: _mainAxisSpacing,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    // Trigger pagination when reaching the last 4 items
-                    if (index == products.length - 4 && hasMore && !isLoadingMore) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ref
-                            .read(homeControllerProvider.notifier)
-                            .loadMoreProducts(categoryId: _selectedCategoryId(ref));
-                      });
-                    }
-
-                    final product = products[index];
-                    return AppProductCard.fromEntity(
-                      entity: product,
-                      onTap: () => context.push(AppRoutes.productDetails, extra: product),
-                    );
-                  },
-                  childCount: products.length,
-                  addAutomaticKeepAlives: false,
-                ),
-              ),
+            AppProductGrid(
+              products: products,
+              isLoadingMore: isLoadingMore,
+              onNearEnd: hasMore
+                  ? () => ref
+                      .read(homeControllerProvider.notifier)
+                      .loadMoreProducts(categoryId: _selectedCategoryId(ref))
+                  : null,
+              onProductTap: (product) => context.push(AppRoutes.productDetails, extra: product),
             ),
-            if (isLoadingMore)
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: AppDimens.spacingLg),
-                  child: Center(
-                    child: SizedBox.square(
-                      dimension: 24.0,
-                      child: CircularProgressIndicator(strokeWidth: 2.5),
-                    ),
-                  ),
-                ),
-              ),
           ],
         );
       },
