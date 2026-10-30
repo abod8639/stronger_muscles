@@ -47,6 +47,7 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
   String _selectedCategory = 'الطلبات والتوصيل';
   TicketPriority _selectedPriority = TicketPriority.normal;
   bool _isSubmitting = false;
+  String? _errorMessage;
 
   final List<String> _categories = const [
     'الطلبات والتوصيل',
@@ -65,9 +66,15 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
   }
 
   Future<void> _handleSubmit() async {
+    // Clear any previous error before a new attempt
+    if (_errorMessage != null) {
+      setState(() => _errorMessage = null);
+    }
+
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isSubmitting = true);
+
     try {
       final ticketId = await widget.onSubmit(
         subject: _subjectController.text.trim(),
@@ -75,16 +82,26 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
         message: _messageController.text.trim(),
         priority: _selectedPriority,
       );
-      if (mounted) {
-        setState(() => _isSubmitting = false);
-        if (ticketId != null) {
-          Navigator.of(context).pop(ticketId);
-        }
+
+      if (!mounted) return;
+      setState(() => _isSubmitting = false);
+
+      if (ticketId != null) {
+        // Success: close sheet and return the ticket ID to the caller
+        Navigator.of(context).pop(ticketId);
+      } else {
+        // onSubmit returned null — the caller already showed a SnackBar,
+        // but show an inline error so the user knows without dismissing the sheet.
+        setState(() {
+          _errorMessage = 'تعذر إرسال التذكرة. يرجى المحاولة مجدداً.';
+        });
       }
-    } catch (_) {
-      if (mounted) {
-        setState(() => _isSubmitting = false);
-      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isSubmitting = false;
+        _errorMessage = e.toString().replaceFirst('Exception: ', '');
+      });
     }
   }
 
@@ -265,6 +282,52 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
                   return null;
                 },
               ),
+
+              // ── Inline Error Banner ───────────────────────────────────────
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 12.0),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14.0,
+                    vertical: 10.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.error.withValues(alpha: 0.08),
+                    borderRadius: AppRadius.allMd,
+                    border: Border.all(
+                      color: AppColors.error.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.error_outline_rounded,
+                        color: AppColors.error,
+                        size: 18.0,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Expanded(
+                        child: Text(
+                          _errorMessage!,
+                          style: const TextStyle(
+                            fontSize: 13.0,
+                            color: AppColors.error,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() => _errorMessage = null),
+                        child: const Icon(
+                          Icons.close_rounded,
+                          color: AppColors.error,
+                          size: 16.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+
               const SizedBox(height: 24.0),
 
               // ── Submit Button ────────────────────────────────────────────
@@ -272,7 +335,7 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
                 text: l10n?.submitTicket ?? 'إرسال تذكرة دعم',
                 width: double.infinity,
                 isLoading: _isSubmitting,
-                onPressed: _handleSubmit,
+                onPressed: _isSubmitting ? null : _handleSubmit,
               ),
             ],
           ),
