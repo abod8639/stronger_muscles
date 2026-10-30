@@ -1717,6 +1717,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t submit the ticket. Please try again.'**
   String get ticketSubmitFailed;
+
+  /// No description provided for @markAllAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get markAllAsRead;
+
+  /// No description provided for @noNotificationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications yet'**
+  String get noNotificationsYet;
+
+  /// No description provided for @noNotificationsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Updates about your orders and offers will appear here'**
+  String get noNotificationsSubtitle;
+
+  /// No description provided for @supportTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Support team'**
+  String get supportTeam;
 }
 
 class _AppLocalizationsDelegate

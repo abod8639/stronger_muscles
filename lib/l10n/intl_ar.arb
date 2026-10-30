@@ -270,5 +270,9 @@
   "couldNotOpenChannel": "تعذر فتح قناة التواصل",
   "helpLoadError": "تعذر تحميل بيانات المساعدة والدعم",
   "checkConnectionAndRetry": "يرجى التحقق من اتصالك بالإنترنت ثم إعادة المحاولة",
-  "ticketSubmitFailed": "تعذر إرسال التذكرة. يرجى المحاولة مجدداً."
+  "ticketSubmitFailed": "تعذر إرسال التذكرة. يرجى المحاولة مجدداً.",
+  "markAllAsRead": "تحديد الكل كمقروء",
+  "noNotificationsYet": "لا توجد إشعارات حتى الآن",
+  "noNotificationsSubtitle": "ستظهر هنا الإشعارات وتحديثات طلباتك وعروضنا",
+  "supportTeam": "الدعم الفني"
 }

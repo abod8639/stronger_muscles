@@ -840,4 +840,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ticketSubmitFailed => 'تعذر إرسال التذكرة. يرجى المحاولة مجدداً.';
+
+  @override
+  String get markAllAsRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get noNotificationsYet => 'لا توجد إشعارات حتى الآن';
+
+  @override
+  String get noNotificationsSubtitle =>
+      'ستظهر هنا الإشعارات وتحديثات طلباتك وعروضنا';
+
+  @override
+  String get supportTeam => 'الدعم الفني';
 }

@@ -841,4 +841,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ticketSubmitFailed =>
       'Couldn\'t submit the ticket. Please try again.';
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
+
+  @override
+  String get noNotificationsYet => 'No notifications yet';
+
+  @override
+  String get noNotificationsSubtitle =>
+      'Updates about your orders and offers will appear here';
+
+  @override
+  String get supportTeam => 'Support team';
 }

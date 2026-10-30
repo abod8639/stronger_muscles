@@ -272,5 +272,9 @@
   "couldNotOpenChannel": "Couldn't open this contact channel",
   "helpLoadError": "Couldn't load help & support",
   "checkConnectionAndRetry": "Check your internet connection and try again",
-  "ticketSubmitFailed": "Couldn't submit the ticket. Please try again."
+  "ticketSubmitFailed": "Couldn't submit the ticket. Please try again.",
+  "markAllAsRead": "Mark all as read",
+  "noNotificationsYet": "No notifications yet",
+  "noNotificationsSubtitle": "Updates about your orders and offers will appear here",
+  "supportTeam": "Support team"
 }
