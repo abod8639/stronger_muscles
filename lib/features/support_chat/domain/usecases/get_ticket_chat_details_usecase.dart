@@ -12,3 +12,4 @@ class GetTicketChatDetailsUseCase {
     return _repository.getTicketDetails(ticketId);
   }
 }
+
