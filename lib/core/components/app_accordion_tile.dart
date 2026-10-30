@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/core/theme/app_shadows.dart';
 
 /// A reusable expandable accordion tile with smooth rotation,
 /// unified shadows, and border radius.
@@ -73,18 +72,17 @@ class _AppAccordionTileState extends State<AppAccordionTile>
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
+    final colorScheme = context.colorScheme;
     final borderColor = _isExpanded
         ? AppColors.primary.withValues(alpha: 0.35)
-        : (isDark ? Colors.white10 : AppColors.greyMedium.withValues(alpha: 0.5));
+        : colorScheme.outlineVariant;
 
     return Container(
       margin: widget.margin ?? const EdgeInsets.symmetric(vertical: 6.0),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: colorScheme.surface,
         borderRadius: AppRadius.allLg,
-        boxShadow: isDark ? AppShadows.ofSubtle(context) : AppShadows.soft(),
+        boxShadow: context.subtleShadow,
         border: Border.all(color: borderColor, width: 1.2),
       ),
       clipBehavior: Clip.antiAlias,
@@ -115,10 +113,10 @@ class _AppAccordionTileState extends State<AppAccordionTile>
                           ],
                           Text(
                             widget.title,
-                            style: TextStyle(
+                            style: context.textTheme.titleSmall?.copyWith(
                               fontSize: 15.0,
                               fontWeight: _isExpanded ? FontWeight.bold : FontWeight.w600,
-                              color: isDark ? AppColors.white : AppColors.black,
+                              color: colorScheme.onSurface,
                               height: 1.35,
                             ),
                           ),
@@ -143,7 +141,7 @@ class _AppAccordionTileState extends State<AppAccordionTile>
                             Icons.keyboard_arrow_down_rounded,
                             color: _isExpanded
                                 ? AppColors.primary
-                                : (isDark ? AppColors.grey : AppColors.greyDark),
+                                : colorScheme.onSurfaceVariant,
                             size: 22.0,
                           ),
                         ),
@@ -161,7 +159,7 @@ class _AppAccordionTileState extends State<AppAccordionTile>
                 Divider(
                   height: 1,
                   thickness: 1,
-                  color: isDark ? Colors.white10 : AppColors.greyLight,
+                  color: colorScheme.outlineVariant,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),

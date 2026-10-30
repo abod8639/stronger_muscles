@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
 
@@ -34,11 +33,10 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     final effectiveColor = color ??
         (gradient == null
-            ? (isDark ? AppColors.surfaceDark : AppColors.surfaceLight)
+            ? theme.colorScheme.surface
             : null);
     final effectiveBorderRadius = borderRadius ?? AppRadius.allLg;
     final effectiveShadow = boxShadow ?? AppShadows.ofCard(context);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/core/components/app_bottom_nav_bar.dart';
+import 'package:stronger_muscles/features/home/home_feature.dart';
 
 class MainPage extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -11,7 +11,7 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: MyBottomNavigationBar(
+      bottomNavigationBar: MainBottomNavigationBar(
         navigationShell: navigationShell,
       ),
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
-import 'package:stronger_muscles/core/theme/app_shadows.dart';
 
 /// A reusable action card for contact methods, quick actions, and settings.
 class AppActionCard extends StatelessWidget {
@@ -32,18 +31,17 @@ class AppActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final cardColor = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
+    final colorScheme = context.colorScheme;
     final defaultIconBg = (iconColor ?? AppColors.primary).withValues(alpha: 0.12);
 
     return Container(
       margin: margin ?? const EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: colorScheme.surface,
         borderRadius: AppRadius.allLg,
-        boxShadow: isDark ? AppShadows.ofSubtle(context) : AppShadows.soft(),
+        boxShadow: context.subtleShadow,
         border: Border.all(
-          color: isDark ? Colors.white10 : AppColors.greyMedium.withValues(alpha: 0.4),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.6),
           width: 1.0,
         ),
       ),
@@ -80,10 +78,10 @@ class AppActionCard extends StatelessWidget {
                           Flexible(
                             child: Text(
                               title,
-                              style: TextStyle(
+                              style: context.textTheme.titleSmall?.copyWith(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? AppColors.white : AppColors.black,
+                                color: colorScheme.onSurface,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -98,9 +96,9 @@ class AppActionCard extends StatelessWidget {
                         const SizedBox(height: 3.0),
                         Text(
                           subtitle!,
-                          style: TextStyle(
+                          style: context.textTheme.bodySmall?.copyWith(
                             fontSize: 12.5,
-                            color: isDark ? AppColors.grey : AppColors.greyDark,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -115,7 +113,7 @@ class AppActionCard extends StatelessWidget {
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 16.0,
-                    color: isDark ? AppColors.grey : AppColors.greyDark,
+                    color: colorScheme.onSurfaceVariant,
                   ),
               ],
             ),
