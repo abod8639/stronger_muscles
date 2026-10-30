@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/components/product_grid_skeleton.dart';
 import 'package:stronger_muscles/core/error/error.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
@@ -24,7 +25,14 @@ class ProductList extends ConsumerWidget {
 
     return homeState.when(
       data: (products) {
-        if (products.isEmpty) {
+        // Optimistic loading: old products stay visible while new section loads.
+        // isSectionSwitching = true means fetch is in-flight but data is still shown.
+        final isSwitching = ref.watch(
+          homeControllerProvider.notifier.select((n) => n.isSectionSwitching),
+        );
+
+        // Empty state only when truly empty and not in the middle of a switch
+        if (products.isEmpty && !isSwitching) {
           return SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 48.0),
@@ -36,6 +44,11 @@ class ProductList extends ConsumerWidget {
           );
         }
 
+        // During a section switch with no stale products yet — show skeleton grid
+        if (products.isEmpty && isSwitching) {
+          return const ProductGridSkeleton(itemCount: 6);
+        }
+
         final isLoadingMore = ref.watch(
           homeControllerProvider.notifier.select((n) => n.isLoadingMore),
         );
@@ -43,84 +56,102 @@ class ProductList extends ConsumerWidget {
           homeControllerProvider.notifier.select((n) => n.hasMore),
         );
 
-        return SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-          sliver: SliverMainAxisGroup(
-            slivers: [
-              SliverGrid(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(context),
-                  childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
-                    context,
-                  ),
-                  crossAxisSpacing: _crossAxisSpacing,
-                  mainAxisSpacing: _mainAxisSpacing,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (index < 0 || index >= products.length) {
-                      return const SizedBox.shrink();
-                    }
-
-                    // Trigger pagination when reaching the last 4 items
-                    if (index == products.length - 4 && hasMore && !isLoadingMore) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        final selectedIndex = ref
-                            .read(homeControllerProvider.notifier)
-                            .selectedSectionIndex;
-                        final sections = ref.read(categoriesSectionsControllerProvider).valueOrNull;
-                        String? categoryId;
-                        if (sections != null &&
-                            selectedIndex >= 0 &&
-                            selectedIndex < sections.length) {
-                          final id = sections[selectedIndex].id;
-                          categoryId = id.isEmpty ? null : id;
-                        }
-                        ref
-                            .read(homeControllerProvider.notifier)
-                            .loadMoreProducts(categoryId: categoryId);
-                      });
-                    }
-
-                    final product = products[index];
-                    return GestureDetector(
-                      onTap: () =>
-                          context.push(AppRoutes.productDetails, extra: product),
-                      child: AppProductCard.fromEntity(
-                        entity: product,
-                        showName: true,
-                        isBackgroundWhite: false,
-                      ),
-                    );
-                  },
-                  childCount: products.length,
-                  addAutomaticKeepAlives: false,
-                  addRepaintBoundaries: true,
-                ),
+        return SliverMainAxisGroup(
+          slivers: [
+            // A thin progress bar hints that a section switch is loading,
+            // without hiding any product cards.
+            if (isSwitching)
+              const SliverToBoxAdapter(
+                child: LinearProgressIndicator(minHeight: 2.5),
               ),
-              if (isLoadingMore)
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Center(
-                      child: SizedBox(
-                        width: 24.0,
-                        height: 24.0,
-                        child: CircularProgressIndicator(strokeWidth: 2.5),
-                      ),
+
+            SliverPadding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+              sliver: SliverMainAxisGroup(
+                slivers: [
+                  SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount:
+                          ResponsiveHelper.getGridCrossAxisCount(context),
+                      childAspectRatio:
+                          ResponsiveHelper.getGridChildAspectRatio(context),
+                      crossAxisSpacing: _crossAxisSpacing,
+                      mainAxisSpacing: _mainAxisSpacing,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        if (index < 0 || index >= products.length) {
+                          return const SizedBox.shrink();
+                        }
+
+                        // Trigger pagination when reaching the last 4 items
+                        if (index == products.length - 4 &&
+                            hasMore &&
+                            !isLoadingMore) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            final selectedIndex = ref
+                                .read(homeControllerProvider.notifier)
+                                .selectedSectionIndex;
+                            final sections = ref
+                                .read(
+                                  categoriesSectionsControllerProvider,
+                                )
+                                .valueOrNull;
+                            String? categoryId;
+                            if (sections != null &&
+                                selectedIndex >= 0 &&
+                                selectedIndex < sections.length) {
+                              final id = sections[selectedIndex].id;
+                              categoryId = id.isEmpty ? null : id;
+                            }
+                            ref
+                                .read(homeControllerProvider.notifier)
+                                .loadMoreProducts(categoryId: categoryId);
+                          });
+                        }
+
+                        final product = products[index];
+                        return GestureDetector(
+                          onTap: () => context.push(
+                            AppRoutes.productDetails,
+                            extra: product,
+                          ),
+                          child: AppProductCard.fromEntity(
+                            entity: product,
+                            showName: true,
+                            isBackgroundWhite: false,
+                          ),
+                        );
+                      },
+                      childCount: products.length,
+                      addAutomaticKeepAlives: false,
+                      addRepaintBoundaries: true,
                     ),
                   ),
-                ),
-            ],
-          ),
+                  if (isLoadingMore)
+                    const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                        child: Center(
+                          child: SizedBox(
+                            width: 24.0,
+                            height: 24.0,
+                            child: CircularProgressIndicator(strokeWidth: 2.5),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
         );
       },
-      loading: () => const SliverToBoxAdapter(
-        child: Center(
-          heightFactor: 3,
-          child: CircularProgressIndicator(),
-        ),
-      ),
+
+      // First-time load: show skeleton grid instead of a full-screen spinner.
+      loading: () => const ProductGridSkeleton(itemCount: 6),
+
       error: (error, stack) {
         final errorMessage = error is Failure
             ? error.toMessage()
@@ -168,8 +199,10 @@ class ProductList extends ConsumerWidget {
                       String? categoryId;
                       if (sectionsState.hasValue &&
                           selectedIndex >= 0 &&
-                          selectedIndex < (sectionsState.value?.length ?? 0)) {
-                        final id = sectionsState.value![selectedIndex].id;
+                          selectedIndex <
+                              (sectionsState.value?.length ?? 0)) {
+                        final id =
+                            sectionsState.value![selectedIndex].id;
                         categoryId = id.isEmpty ? null : id;
                       }
                       ref
