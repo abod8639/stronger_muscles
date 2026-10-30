@@ -10,6 +10,7 @@ import 'package:stronger_muscles/features/profile/presentation/controllers/profi
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/login_prompt_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/profile_header.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/purchase_stats_card.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/quick_actions_row.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/recent_orders_list.dart';
@@ -64,11 +65,8 @@ class ProfilePage extends ConsumerWidget {
     bool isLoading,
     List orders,
   ) {
-    if (isLoading && orders.isEmpty) {
-      return const SizedBox(
-        height: 400,
-        child: Center(child: CircularProgressIndicator()),
-      );
+    if (isLoading && currentUser == null) {
+      return const ProfilePageSkeleton();
     }
 
     if (currentUser == null) {
