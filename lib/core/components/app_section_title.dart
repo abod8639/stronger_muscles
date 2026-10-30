@@ -13,6 +13,7 @@ class AppSectionTitle extends StatelessWidget {
   final VoidCallback? onActionTap;
   final Widget? actionWidget;
   final Widget? leading;
+  final EdgeInsetsGeometry padding;
 
   const AppSectionTitle({
     super.key,
@@ -21,6 +22,11 @@ class AppSectionTitle extends StatelessWidget {
     this.onActionTap,
     this.actionWidget,
     this.leading,
+    this.padding = const EdgeInsets.only(
+      left: _horizontalPadding,
+      right: _horizontalPadding,
+      bottom: _verticalPadding,
+    ),
   });
 
   @override
@@ -28,12 +34,7 @@ class AppSectionTitle extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.only(
-        left: _horizontalPadding,
-        right: _horizontalPadding,
-        bottom: _verticalPadding,
-        top: 0,
-      ),
+      padding: padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
