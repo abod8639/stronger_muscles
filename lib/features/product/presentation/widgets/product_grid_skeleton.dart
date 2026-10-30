@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/components/app_product_grid.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_grid.dart';
 import 'package:stronger_muscles/core/components/app_shimmer.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 
