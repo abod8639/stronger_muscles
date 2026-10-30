@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
@@ -62,41 +63,29 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceDark : AppColors.white,
-        borderRadius: AppRadius.allLg,
-        border: address.isDefault
-            ? Border.all(
-                color: AppColors.primary.withValues(alpha: .5),
-                width: 1.5,
-              )
-            : Border.all(color: Colors.transparent),
-        boxShadow: AppShadows.ofCard(context),
+    return AppCard(
+      padding: EdgeInsets.zero,
+      border: Border.all(
+        color: address.isDefault ? AppColors.primary.withValues(alpha: 0.5) : Colors.transparent,
+        width: 1.5,
       ),
-      child: ClipRRect(
-        borderRadius: AppRadius.allLg,
-        child: Column(
-          children: [
-            _buildMapPreview(),
-            Padding(
-              padding: const EdgeInsets.all(AppDimens.spacingLg),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildCardTopRow(context),
-                  const SizedBox(height: AppDimens.spacingMd),
-                  _buildAddressDetails(theme),
-                  const Divider(height: 24.0, thickness: 0.5),
-                  _buildActionButtons(context, ref),
-                ],
-              ),
+      child: Column(
+        children: [
+          _buildMapPreview(),
+          Padding(
+            padding: const EdgeInsets.all(AppDimens.spacingLg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildCardTopRow(context),
+                const SizedBox(height: AppDimens.spacingMd),
+                _buildAddressDetails(context),
+                Divider(height: AppDimens.spacingXl, color: context.colorScheme.outlineVariant.withValues(alpha: 0.5)),
+                _buildActionButtons(context, ref),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -158,9 +147,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
               child: Container(color: Colors.transparent),
             ),
           ),
-          Positioned(
+          PositionedDirectional(
             top: 12,
-            right: 12,
+            end: 12,
             child: _buildMapIcon(),
           ),
         ],
@@ -171,54 +160,36 @@ class _AddressCardState extends ConsumerState<AddressCard> {
   Widget _buildMapLoading() {
     return Container(
       height: _mapHeight,
-      color: Colors.grey[100],
-      child: const Center(
-        child: CircularProgressIndicator(strokeWidth: 2),
-      ),
+      color: context.colorScheme.surfaceContainerHighest,
+      alignment: Alignment.center,
+      child: const CircularProgressIndicator(strokeWidth: 2),
     );
   }
 
   Widget _buildMapPlaceholder() {
-    return Builder(
-      builder: (context) {
-        final intl10n = AppLocalizations.of(context)!;
-        final isDark = Theme.of(context).brightness == Brightness.dark;
-        return Container(
-          height: _mapHeight,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1E1E26) : const Color(0xFFF2F4F8),
+    final mutedColor = context.colorScheme.onSurfaceVariant;
+
+    return Container(
+      height: _mapHeight,
+      width: double.infinity,
+      color: context.colorScheme.surfaceContainerHighest,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppIconTile(
+            icon: Icons.map_outlined,
+            color: mutedColor,
+            iconSize: 28.0,
+            padding: 12.0,
+            circular: true,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isDark
-                      ? Colors.white.withValues(alpha: 0.05)
-                      : Colors.black.withValues(alpha: 0.04),
-                ),
-                child: Icon(
-                  Icons.map_outlined,
-                  color: isDark ? Colors.white38 : Colors.grey[500],
-                  size: 28,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                intl10n.mapUnavailable,
-                style: TextStyle(
-                  color: isDark ? Colors.white54 : Colors.grey[600],
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+          const SizedBox(height: AppDimens.spacingSm),
+          Text(
+            AppLocalizations.of(context)!.mapUnavailable,
+            style: context.textTheme.bodySmall?.copyWith(color: mutedColor, fontWeight: FontWeight.w500),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 
@@ -226,9 +197,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return Container(
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.colorScheme.surface,
         shape: BoxShape.circle,
-        boxShadow: AppShadows.ofSubtle(context),
+        boxShadow: context.subtleShadow,
       ),
       child: const Icon(
         Icons.map_outlined,
@@ -239,72 +210,58 @@ class _AddressCardState extends ConsumerState<AddressCard> {
   }
 
   Widget _buildCardTopRow(BuildContext context) {
-    final intl10n = AppLocalizations.of(context)!;
-    IconData labelIcon = Icons.location_on_rounded;
-    if (address.label?.toLowerCase() == intl10n.home) labelIcon = Icons.home_rounded;
-    if (address.label?.toLowerCase() == intl10n.work) labelIcon = Icons.work_rounded;
+    final l10n = AppLocalizations.of(context)!;
+    final label = address.label?.toLowerCase();
+    final labelIcon = label == l10n.home.toLowerCase()
+        ? Icons.home_rounded
+        : label == l10n.work.toLowerCase()
+            ? Icons.work_rounded
+            : Icons.location_on_rounded;
 
     return Row(
       children: [
-        Container(
-          padding: const EdgeInsets.all(AppDimens.spacingSm),
-          decoration: const BoxDecoration(
-            color: AppColors.primaryLight,
-            borderRadius: AppRadius.allSm,
-          ),
-          child: Icon(labelIcon, color: AppColors.primary, size: 18),
-        ),
+        AppIconTile(icon: labelIcon, iconSize: 18.0, padding: AppDimens.spacingSm),
         const SizedBox(width: AppDimens.spacingMd),
-        Text(
-          address.label ?? intl10n.other,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        Expanded(
+          child: Text(
+            address.label ?? l10n.other,
+            style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
-        const Spacer(),
-        if (address.isDefault) _buildDefaultBadge(intl10n),
+        if (address.isDefault)
+          AppBadge(
+            label: l10n.defaultBadge,
+            color: AppColors.primary,
+            backgroundColor: AppColors.primary,
+            textColor: AppColors.white,
+            borderRadius: AppRadius.allPill,
+          ),
       ],
     );
   }
 
-  Widget _buildDefaultBadge(AppLocalizations intl10n) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withValues(alpha: .7)],
-        ),
-        borderRadius: AppRadius.allPill,
-      ),
-      child: Text(
-        intl10n.defaultBadge,
-        style: const TextStyle(
-          fontSize: 9,
-          fontWeight: FontWeight.w900,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+  Widget _buildAddressDetails(BuildContext context) {
+    final mutedColor = context.colorScheme.onSurfaceVariant;
 
-  Widget _buildAddressDetails(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          address.fullName ?? '',
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
+        if (address.fullName?.isNotEmpty ?? false)
+          Text(
+            address.fullName!,
+            style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+          ),
         const SizedBox(height: AppDimens.spacingSm),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.directions_outlined, size: 14, color: Colors.grey),
-            const SizedBox(width: 4),
+            Icon(Icons.directions_outlined, size: 16, color: mutedColor),
+            const SizedBox(width: AppDimens.spacingXs),
             Expanded(
               child: Text(
                 address.fullAddress,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 13,
+                style: context.textTheme.bodySmall?.copyWith(
+                  color: mutedColor,
                   height: _adapterTextLineHeight,
                 ),
               ),
@@ -317,32 +274,26 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
   Widget _buildActionButtons(BuildContext context, WidgetRef ref) {
     final controller = ref.read(addressControllerProvider.notifier);
-    final intl10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       children: [
-        const Expanded(child: SizedBox.shrink()),
         if (!address.isDefault)
-          Expanded(
-            child: TextButton(
-              onPressed: () => controller.setDefaultAddress(address.id),
-              child: Text(intl10n.setDefault, style: TextStyle(fontSize: 13)),
-            ),
+          AppLinkButton(
+            text: l10n.setDefault,
+            fontSize: 13.0,
+            onPressed: () => controller.setDefaultAddress(address.id),
           ),
+        const Spacer(),
         IconButton(
+          tooltip: l10n.editAddress,
           onPressed: () => showAddressForm(context, address: address),
-          icon: const Icon(
-            Icons.edit_outlined,
-            size: 20,
-            color: Colors.blueGrey,
-          ),
+          icon: Icon(Icons.edit_outlined, size: 20, color: context.colorScheme.onSurfaceVariant),
         ),
         IconButton(
+          tooltip: l10n.delete,
           onPressed: () => _confirmDelete(context, controller),
-          icon: Icon(
-            Icons.delete_outline_rounded,
-            size: 20,
-            color: Theme.of(context).colorScheme.error,
-          ),
+          icon: const Icon(Icons.delete_outline_rounded, size: 20, color: AppColors.error),
         ),
       ],
     );
@@ -368,7 +319,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
             },
             child: Text(
               intl10n.delete,
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
         ],

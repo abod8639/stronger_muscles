@@ -1,109 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/components/app_card.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/profile_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/account_settings_list.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+/// Signed-out profile: sign-in prompt plus the app settings.
 class LoginPromptCard extends ConsumerWidget {
   const LoginPromptCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context)!;
 
-    return AppCard(
-      margin: const EdgeInsets.all(AppDimens.spacingLg),
-      padding: const EdgeInsets.all(AppDimens.spacingXl),
-      borderRadius: AppRadius.allXl,
-      boxShadow: AppShadows.ofFloating(context),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(AppDimens.spacingLg),
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: .1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.shopping_bag_outlined,
-              size: 60.0,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(height: AppDimens.spacingXl),
-          Text(
-            l10n.signInToYourAccount,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: isDark ? AppColors.white : AppColors.black,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppDimens.spacingMd),
-          Text(
-            l10n.loginMessage,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppColors.grey,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppDimens.spacingLg),
-          ElevatedButton.icon(
-            onPressed: () => _handleLogin(context, ref),
-            icon: const Icon(Icons.login),
-            label: Text(l10n.loginButtonLabel),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: AppRadius.shapeMd,
-              elevation: AppDimens.elevationSm,
-            ),
-          ),
-          const SizedBox(height: AppDimens.spacingLg),
-          ElevatedButton.icon(
-            onPressed: () async {
-              AppGuard.runSafeInternet(ref, () async {
-                await ref
-                    .read(profileControllerProvider.notifier)
-                    .signInWithGoogle();
-              });
-            },
-            icon: const Icon(
-              Icons.g_mobiledata_outlined,
-              size: 35.0,
-            ),
-            label: Text(l10n.signInWithGoogle),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.white,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 25.0,
-                vertical: 10.0,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        AppCard(
+          margin: const EdgeInsets.all(AppDimens.spacingLg),
+          padding: const EdgeInsets.all(AppDimens.spacingXl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AppHeroHeader(
+                icon: Icons.shopping_bag_outlined,
+                title: l10n.signInToYourAccount,
+                subtitle: l10n.loginMessage,
               ),
-              shape: AppRadius.shapeMd,
-              elevation: AppDimens.elevationSm,
-            ),
+              const SizedBox(height: AppDimens.spacingXl),
+              AppPrimaryButton(
+                text: l10n.loginButtonLabel,
+                icon: Icons.login_rounded,
+                height: 52.0,
+                onPressed: () => AppGuard.runSafeInternet(
+                  ref,
+                  () async => ref.read(routerProvider).push(AppRoutes.auth),
+                ),
+              ),
+              AppOrDivider(label: l10n.or),
+              AppSocialButton.google(
+                label: l10n.signInWithGoogle,
+                onPressed: () => AppGuard.runSafeInternet(
+                  ref,
+                  () => ref.read(profileControllerProvider.notifier).signInWithGoogle(),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: AppDimens.spacingLg),
-          const AccountSettingsList(),
-          const SizedBox(height: AppDimens.spacingLg),
-        ],
-      ),
+        ),
+        const AccountSettingsList(showEditProfile: false),
+      ],
     );
-  }
-
-  Future<void> _handleLogin(BuildContext context, WidgetRef ref) async {
-    return AppGuard.runSafeInternet(ref, () async {
-      ref.read(routerProvider).push(AppRoutes.auth);
-    });
   }
 }
