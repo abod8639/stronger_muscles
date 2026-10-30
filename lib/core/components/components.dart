@@ -27,6 +27,7 @@ export 'app_icon_tile.dart';
 export 'app_bottom_sheet_scaffold.dart';
 export 'app_gradient_banner.dart';
 export 'app_choice_chips.dart';
+export 'app_swipe_to_delete.dart';
 export 'app_rating_stars.dart';
 export 'app_section_title.dart';
 export 'app_product_card.dart';
