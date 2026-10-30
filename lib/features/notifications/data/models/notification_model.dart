@@ -95,6 +95,16 @@ class NotificationModel {
   String? get orderId => data?['order_id']?.toString();
   String? get promoId => data?['promo_id']?.toString();
   String? get productId => data?['product_id']?.toString();
+  String? get ticketId =>
+      data?['ticket_id']?.toString() ??
+      data?['ticketId']?.toString();
+  String? get ticketNumber =>
+      data?['ticket_number']?.toString() ??
+      data?['ticketNumber']?.toString();
+  bool get isSupport =>
+      type == 'support' ||
+      type == 'support_ticket' ||
+      (ticketId != null && ticketId!.isNotEmpty);
 
   NotificationModel copyWith({
     String? id,
