@@ -21,3 +21,6 @@ export 'presentation/controllers/cart_di.dart';
 export 'cart_routes.dart';
 export 'presentation/pages/cart_view.dart';
 export 'presentation/widgets/cart_icon.dart';
+
+// Shared cart widgets
+export 'presentation/widgets/cart_quantity_controls.dart';
