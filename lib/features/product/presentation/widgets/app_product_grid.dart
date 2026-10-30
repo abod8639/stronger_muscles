@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/components/app_product_card.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_card.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/utils/responsive_helper.dart';
-import 'package:stronger_muscles/features/product/product_feature.dart';
+import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
 /// Shared grid metrics for product grids and their loading skeleton.
 class AppProductGridLayout {
