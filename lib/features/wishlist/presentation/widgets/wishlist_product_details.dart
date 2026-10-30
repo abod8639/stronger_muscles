@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 
@@ -37,24 +37,13 @@ class WishlistProductDetails extends StatelessWidget {
         ),
         const SizedBox(height: AppDimens.spacingSm),
 
-        // Product Price
-        Text(
-          'LE ${product.baseEffectivePrice.toStringAsFixed(2)}',
-          style: theme.textTheme.titleSmall?.copyWith(
-            fontSize: _priceFontSize,
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600,
-          ),
+        // Product Price (with struck-through original if discounted)
+        AppPriceText(
+          price: product.baseEffectivePrice,
+          originalPrice: product.hasDiscount ? product.price : null,
+          fontSize: _priceFontSize,
+          direction: Axis.vertical,
         ),
-        // Original price if on discount
-        if (product.hasDiscount)
-          Text(
-            'LE ${product.price.toStringAsFixed(2)}',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: Colors.grey,
-              decoration: TextDecoration.lineThrough,
-            ),
-          ),
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/app_alert_card.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
+import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable trust & security indicator badge for checkout, payment,
 /// and authentication screens.
@@ -23,21 +23,16 @@ class AppSecureBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAr = context.isArabic;
-
+    final l10n = AppLocalizations.of(context);
     return AppAlertCard(
       color: AppColors.success,
       icon: icon,
       padding: padding,
       borderRadius: borderRadius,
-      title: title ??
-          (isAr
-              ? 'مدفوعات آمنة ومشفرة بنسبة 100%'
-              : '100% Secure & Encrypted Payments'),
+      title: title ?? l10n?.securePaymentsTitle ?? '100% Secure & Encrypted Payments',
       message: subtitle ??
-          (isAr
-              ? 'بياناتك المالية محمية بتقنية التشفير البنكي المعتمد (256-bit SSL)'
-              : 'Your financial data is protected with 256-bit SSL encryption'),
+          l10n?.securePaymentsSubtitle ??
+          'Your financial data is protected with 256-bit SSL encryption',
     );
   }
 }
