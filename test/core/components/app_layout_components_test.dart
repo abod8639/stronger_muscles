@@ -191,4 +191,24 @@ void main() {
       expect(colorNow(), isNot(first));
     });
   });
+
+  group('AppCircleIconButton & AppSearchField', () {
+    testWidgets('circle button shows a capped badge and reports taps', (tester) async {
+      var taps = 0;
+      await tester.pumpWidget(
+        _wrap(AppCircleIconButton(icon: Icons.notifications, badgeCount: 120, onPressed: () => taps++)),
+      );
+      expect(find.text('99+'), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.notifications));
+      expect(taps, 1);
+    });
+
+    testWidgets('search field forwards submitted text', (tester) async {
+      String? submitted;
+      await tester.pumpWidget(_wrap(AppSearchField(onSubmitted: (v) => submitted = v)));
+      await tester.enterText(find.byType(TextField), 'whey');
+      await tester.testTextInput.receiveAction(TextInputAction.search);
+      expect(submitted, 'whey');
+    });
+  });
 }
