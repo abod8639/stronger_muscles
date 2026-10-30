@@ -2,157 +2,96 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/components/components.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/error/error.dart';
-import '../../../../core/theme/theme.dart';
+import '../../../../core/constants/app_dimens.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../checkout_routes.dart';
 import '../../domain/entities/checkout_result_entity.dart';
 import '../controllers/checkout_controller.dart';
-import '../widgets/checkout_steps.dart';
-
-const double _controlsPadding = 20.0;
-const double _controlsSpacing = 12.0;
+import '../widgets/checkout_address_step.dart';
+import '../widgets/checkout_payment_step.dart';
+import '../widgets/checkout_review_step.dart';
+import '../widgets/checkout_step_controls.dart';
 
 class CheckoutView extends ConsumerWidget {
   const CheckoutView({super.key});
 
+  static const List<Widget> _steps = [
+    CheckoutAddressStep(),
+    CheckoutPaymentStep(),
+    CheckoutReviewStep(),
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
     final isProcessing = ref.watch(checkoutControllerProvider.select((s) => s.isProcessing));
-    final hasError = ref.watch(checkoutControllerProvider.select((s) => s.hasError));
-    final failure = ref.watch(checkoutControllerProvider.select((s) => s.failure));
-    final checkoutNotifier = ref.read(checkoutControllerProvider.notifier);
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
+    final failure = ref.watch(
+      checkoutControllerProvider.select((s) => s.hasError ? s.orderSubmission.error : null),
+    );
+    final notifier = ref.read(checkoutControllerProvider.notifier);
 
-    // Reactive listener for order placement completion or failure
+    // Navigate once the order is placed; failures are shown inline by [AppErrorCard].
     ref.listen<AsyncValue<CheckoutResultEntity?>>(
       checkoutControllerProvider.select((s) => s.orderSubmission),
       (previous, next) {
-        next.whenOrNull(
-          error: (error, _) {
-            final message = error is Failure ? error.toMessage() : error.toString();
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(message),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-                action: SnackBarAction(
-                  label: l10n.retry,
-                  textColor: Colors.white,
-                  onPressed: () => checkoutNotifier.placeOrder(),
-                ),
-              ),
-            );
-          },
-          data: (result) {
-            if (result != null) {
-              context.go(CheckoutRoutes.orderSuccess);
-            }
-          },
-        );
+        if (next.valueOrNull != null) {
+          context.go(CheckoutRoutes.orderSuccess);
+        }
       },
     );
 
-    return Scaffold(
-      appBar: baseAppBar(context, l10n.checkout),
-      body: Column(
-        children: [
-          if (hasError) ...[
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.errorContainer.withValues(alpha: 0.3),
-                borderRadius: AppRadius.allMd,
-                border: Border.all(
-                  color: theme.colorScheme.error.withValues(alpha: 0.4),
-                ),
+    return PopScope(
+      // System back walks back through the steps before leaving checkout.
+      canPop: currentStep == 0 && !isProcessing,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && !isProcessing) notifier.previousStep();
+      },
+      child: Scaffold(
+        appBar: baseAppBar(context, l10n.checkout),
+        bottomNavigationBar: const CheckoutStepControls(),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                AppDimens.spacingLg,
+                AppDimens.spacingLg,
+                AppDimens.spacingLg,
+                AppDimens.spacingSm,
               ),
-              child: Row(
-                children: [
-                  Icon(Icons.error_outline, color: theme.colorScheme.error),
-                  const SizedBox(width: 12.0),
-                  Expanded(
-                    child: Text(
-                      failure?.toMessage() ?? l10n.failedToPlaceOrder,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.error,
+              child: AppStepProgress(
+                steps: [l10n.address, l10n.payment, l10n.review],
+                activeIndex: currentStep,
+              ),
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOut,
+              child: failure == null
+                  ? const SizedBox(width: double.infinity)
+                  : AppErrorCard(
+                      error: failure,
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: AppDimens.spacingLg,
+                        vertical: AppDimens.spacingSm,
                       ),
+                      onRetry: notifier.placeOrder,
+                      onDismiss: notifier.resetError,
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 18.0),
-                    color: theme.colorScheme.error,
-                    onPressed: checkoutNotifier.resetError,
-                  ),
-                ],
+            ),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: SingleChildScrollView(
+                  key: ValueKey(currentStep),
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.all(AppDimens.spacingLg),
+                  child: _steps[currentStep],
+                ),
               ),
             ),
           ],
-          Expanded(
-            child: Stepper(
-              type: StepperType.horizontal,
-              currentStep: currentStep,
-              onStepContinue: () {
-                if (isProcessing) return;
-                if (currentStep == 2) {
-                  checkoutNotifier.placeOrder();
-                } else {
-                  checkoutNotifier.nextStep();
-                }
-              },
-              onStepCancel: isProcessing ? null : checkoutNotifier.previousStep,
-              controlsBuilder: (context, details) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: _controlsPadding),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: AppPrimaryButton(
-                          text: currentStep == 2
-                              ? l10n.placeOrder
-                              : l10n.next,
-                          isLoading: isProcessing,
-                          onPressed: isProcessing
-                              ? null
-                              : details.onStepContinue,
-                          height: 48.0,
-                        ),
-                      ),
-                      if (currentStep > 0) ...[
-                        const SizedBox(width: _controlsSpacing),
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: isProcessing
-                                ? null
-                                : details.onStepCancel,
-                            style: OutlinedButton.styleFrom(
-                              shape: AppRadius.shapeMd,
-                              minimumSize: const Size.fromHeight(48.0),
-                            ),
-                            child: Text(
-                              l10n.back,
-                              style: const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                );
-              },
-              steps: [
-                buildAddressStep(ref, l10n.address),
-                buildPaymentStep(ref, l10n.payment),
-                buildReviewStep(ref, l10n.review),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
