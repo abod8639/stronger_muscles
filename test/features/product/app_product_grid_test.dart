@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/components/app_product_grid.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_grid.dart';
 import 'package:stronger_muscles/features/product/domain/entities/localized_string_entity.dart';
 import 'package:stronger_muscles/features/product/domain/entities/product_entity.dart';
 
