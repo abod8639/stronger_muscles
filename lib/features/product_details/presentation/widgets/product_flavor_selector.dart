@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:stronger_muscles/core/components/app_flavor_image.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-FlavorsModel getFlavorDetails(String flavorName) {
-  final key = flavorName.toLowerCase().trim();
-  final match = flavorsData.keys.firstWhere(
-    (k) => key.contains(k),
-    orElse: () => "default",
-  );
-
-  return flavorsData[match] ??
-      FlavorsModel(
-        name: flavorName,
-        color: Colors.blueGrey,
-        image: "https://via.placeholder.com/150",
-      );
-}
-
+/// Flavor swatches for a product; uses the shared [getFlavorDetails] lookup.
 class ProductFlavorSelector extends StatelessWidget {
   final ProductModel product;
   final String selectedFlavor;
@@ -40,16 +26,10 @@ class ProductFlavorSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n?.chooseYourFlavor ?? "CHOOSE YOUR FLAVOR",
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-            fontStyle: FontStyle.italic,
-          ),
+        AppFieldLabel(
+          l10n?.chooseYourFlavor ?? 'Choose your flavor',
+          padding: const EdgeInsets.only(bottom: 10.0),
         ),
-        const SizedBox(height: 12),
         Wrap(
           spacing: 10,
           runSpacing: 12,
