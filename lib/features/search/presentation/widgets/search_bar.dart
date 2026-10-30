@@ -1,24 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/price_filter_slider.dart';
-import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _horizontalPadding = 16.0;
-const double _verticalPadding = 12.0;
-const double _searchBarHeight = 48.0;
-const double _iconButtonSize = 48.0;
-
+/// Floating home search bar (search field + filter + notifications).
 class SearchBar extends StatelessWidget {
+  static const double _searchBarHeight = 48.0;
+  static const double _verticalPadding = 12.0;
+
   const SearchBar({super.key, this.onTap});
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(
+    return const SliverAppBar(
       floating: true,
       snap: true,
       pinned: false,
@@ -26,8 +23,8 @@ class SearchBar extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       toolbarHeight: _searchBarHeight + _verticalPadding * 2,
-      titleSpacing: _horizontalPadding,
-      title: const Hero(
+      titleSpacing: AppDimens.spacingLg,
+      title: Hero(
         tag: 'searchBar',
         child: Material(
           color: Colors.transparent,
@@ -38,73 +35,21 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-Widget buildFilterButton({
-  required ProductSearchController controller,
-  required AppLocalizations l10n,
-  Function()? onTap,
-}) {
-  return Builder(
-    builder: (context) {
-      final theme = Theme.of(context);
-      return Container(
-        width: _iconButtonSize,
-        height: _iconButtonSize,
-        decoration: BoxDecoration(
-          color: theme.colorScheme.surfaceContainerHighest,
-          shape: BoxShape.circle,
-          boxShadow: AppShadows.subtle(
-            theme.colorScheme.onSurfaceVariant,
-          ),
-        ),
-        child: IconButton(
-          icon: Icon(Icons.tune, color: theme.colorScheme.onSurfaceVariant),
-          onPressed: onTap,
-          tooltip: l10n.filter,
-        ),
-      );
-    },
-  );
-}
+/// Opens the product filter sheet (price range).
+Future<void> showFilterBottomSheet(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
 
-void showFilterBottomSheet(BuildContext context, AppLocalizations l10n) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: AppRadius.topBottomSheet,
-    ),
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.45,
-      minChildSize: 0.3,
-      maxChildSize: 0.9,
-      expand: false,
-      builder: (context, scrollController) => SingleChildScrollView(
-        controller: scrollController,
-        padding: const EdgeInsets.all(AppDimens.spacingXl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Center(child: AppBottomSheetHandle()),
-            const SizedBox(height: AppDimens.spacingXl),
-            Text(
-              l10n.filterProducts,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 32),
-            Text(
-              l10n.price,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: AppDimens.spacingLg),
-            const PriceFilterSlider(),
-            const SizedBox(height: 32),
-          ],
-        ),
+  return AppBottomSheetScaffold.show<void>(
+    context,
+    (_) => AppBottomSheetScaffold(
+      icon: Icons.tune_rounded,
+      title: l10n.filterProducts,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppFieldLabel(l10n.price, padding: const EdgeInsets.only(bottom: AppDimens.spacingMd)),
+          const PriceFilterSlider(),
+        ],
       ),
     ),
   );
