@@ -149,7 +149,7 @@ void main() {
       expect(find.byType(PromoCard), findsWidgets);
     });
 
-    testWidgets('renders loading indicator when promos are loading',
+    testWidgets('renders shimmer placeholder when promos are loading',
         (tester) async {
       await tester.pumpWidget(
         ProviderScope(
@@ -166,7 +166,8 @@ void main() {
       );
 
       await tester.pump();
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(AppShimmer), findsOneWidget);
+      expect(find.byType(PageView), findsNothing);
     });
   });
 }
