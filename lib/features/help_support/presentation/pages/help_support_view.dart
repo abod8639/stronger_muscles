@@ -14,9 +14,9 @@ import 'package:stronger_muscles/features/help_support/presentation/widgets/faq_
 import 'package:stronger_muscles/features/help_support/presentation/widgets/help_support_hero_header.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/my_tickets_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/submit_ticket_bottom_sheet.dart';
-import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_chat_sheet.dart';
 import 'package:stronger_muscles/features/help_support/presentation/widgets/ticket_success_dialog.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/routes/routes.dart';
 
 class HelpSupportView extends ConsumerStatefulWidget {
   final String? initialTicketId;
@@ -52,7 +52,10 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
     // 1. If explicit ticketId is provided, open its chat immediately
     if (widget.initialTicketId != null && widget.initialTicketId!.isNotEmpty) {
       _hasHandledInitialTicket = true;
-      TicketChatSheet.show(context, widget.initialTicketId!);
+      context.push(
+        AppRoutes.supportChat,
+        extra: {'ticket_id': widget.initialTicketId!},
+      );
       return;
     }
 
@@ -91,7 +94,10 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
 
     if (target != null && target.id != null && target.id!.isNotEmpty) {
       _hasHandledInitialTicket = true;
-      TicketChatSheet.show(context, target.id!);
+      context.push(
+        AppRoutes.supportChat,
+        extra: {'ticket_id': target.id!},
+      );
     } else if (widget.openActiveTicket) {
       _hasHandledInitialTicket = true;
       MyTicketsSheet.show(context);
