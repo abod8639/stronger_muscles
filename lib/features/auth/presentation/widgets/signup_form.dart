@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/components/components.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/auth/presentation/utils/auth_validators.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_fields.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_submit_actions.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Purely dumb registration form widget.
@@ -9,7 +11,7 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 /// Contains zero business logic. Delegates validation to [AuthValidators]
 /// and events via callbacks. Safely manages and disposes all controllers and focus nodes.
 class SignUpForm extends StatefulWidget {
-  final Future<void> Function(String name, String email, String password) onSignUp;
+  final void Function(String name, String email, String password) onSignUp;
   final VoidCallback onGoogleSignIn;
   final bool isLoading;
 
@@ -26,27 +28,13 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nameController;
-  late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
-  late final TextEditingController _confirmPasswordController;
-  late final FocusNode _nameFocusNode;
-  late final FocusNode _emailFocusNode;
-  late final FocusNode _passwordFocusNode;
-  late final FocusNode _confirmPasswordFocusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confirmPasswordController = TextEditingController();
-    _nameFocusNode = FocusNode();
-    _emailFocusNode = FocusNode();
-    _passwordFocusNode = FocusNode();
-    _confirmPasswordFocusNode = FocusNode();
-  }
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -54,7 +42,6 @@ class _SignUpFormState extends State<SignUpForm> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _nameFocusNode.dispose();
     _emailFocusNode.dispose();
     _passwordFocusNode.dispose();
     _confirmPasswordFocusNode.dispose();
@@ -62,6 +49,7 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   void _handleSubmit() {
+    FocusScope.of(context).unfocus();
     if (_formKey.currentState?.validate() ?? false) {
       widget.onSignUp(
         _nameController.text.trim(),
@@ -75,97 +63,63 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ── Full Name ────────────────────────────────────────────────────
-          AppTextFormField(
-            controller: _nameController,
-            // focusNode: _nameFocusNode,
-            label: l10n.fullName,
-            hintText: 'John Doe',
-            prefixIcon: const Icon(Icons.person_outline_rounded, size: 20.0),
-            textInputAction: TextInputAction.next,
-            validator: (value) => AuthValidators.validateName(
-              value,
-              emptyMessage: l10n.enterName,
+    return AutofillGroup(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppTextFormField(
+              controller: _nameController,
+              label: l10n.fullName,
+              hintText: 'John Doe',
+              prefixIcon: const Icon(Icons.person_outline_rounded, size: AppDimens.iconSm),
+              keyboardType: TextInputType.name,
+              autofillHints: const [AutofillHints.name],
+              onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),
+              validator: (value) => AuthValidators.validateName(
+                value,
+                emptyMessage: l10n.enterName,
+              ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-
-          // ── Email Input ──────────────────────────────────────────────────
-          AppTextFormField(
-            controller: _emailController,
-            // focusNode: _emailFocusNode,
-            label: l10n.email,
-            hintText: 'name@example.com',
-            prefixIcon: const Icon(Icons.email_outlined, size: 20.0),
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            validator: (value) => AuthValidators.validateEmail(
-              value,
-              emptyMessage: l10n.enterEmail,
-              invalidMessage: l10n.validEmail,
+            const SizedBox(height: 16.0),
+            AuthEmailField(
+              controller: _emailController,
+              focusNode: _emailFocusNode,
+              onFieldSubmitted: (_) => _passwordFocusNode.requestFocus(),
             ),
-          ),
-          const SizedBox(height: 16.0),
-
-          // ── Password Input ───────────────────────────────────────────────
-          AppTextFormField(
-            controller: _passwordController,
-            // focusNode: _passwordFocusNode,
-            label: l10n.password,
-            hintText: '••••••••',
-            prefixIcon: const Icon(Icons.lock_outline_rounded, size: 20.0),
-            isPassword: true,
-            textInputAction: TextInputAction.next,
-            validator: (value) => AuthValidators.validatePassword(
-              value,
-              emptyMessage: l10n.enterPassword,
-              tooShortMessage: l10n.passwordLength,
+            const SizedBox(height: 16.0),
+            AuthPasswordField(
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              textInputAction: TextInputAction.next,
+              autofillHints: const [AutofillHints.newPassword],
+              onFieldSubmitted: (_) => _confirmPasswordFocusNode.requestFocus(),
             ),
-          ),
-          const SizedBox(height: 16.0),
-
-          // ── Confirm Password Input ───────────────────────────────────────
-          AppTextFormField(
-            controller: _confirmPasswordController,
-            // focusNode: _confirmPasswordFocusNode,
-            label: l10n.confirmPassword,
-            hintText: '••••••••',
-            prefixIcon: const Icon(Icons.lock_reset_rounded, size: 20.0),
-            isPassword: true,
-            textInputAction: TextInputAction.done,
-            onChanged: (_) => _handleSubmit(),
-            validator: (value) => AuthValidators.validateConfirmPassword(
-              value,
-              _passwordController.text,
-              emptyMessage: l10n.confirmYourPassword,
-              mismatchMessage: l10n.passwordsDoNotMatch,
+            const SizedBox(height: 16.0),
+            AuthPasswordField(
+              controller: _confirmPasswordController,
+              focusNode: _confirmPasswordFocusNode,
+              label: l10n.confirmPassword,
+              icon: Icons.lock_reset_rounded,
+              autofillHints: const [AutofillHints.newPassword],
+              onFieldSubmitted: (_) => _handleSubmit(),
+              validator: (value) => AuthValidators.validateConfirmPassword(
+                value,
+                _passwordController.text,
+                emptyMessage: l10n.confirmYourPassword,
+                mismatchMessage: l10n.passwordsDoNotMatch,
+              ),
             ),
-          ),
-          const SizedBox(height: 24.0),
-
-          // ── Submit Button ────────────────────────────────────────────────
-          AppPrimaryButton(
-            text: l10n.signUp,
-            isLoading: widget.isLoading,
-            onPressed: widget.isLoading ? null : _handleSubmit,
-          ),
-          const SizedBox(height: 4.0),
-
-          // ── OR Divider ───────────────────────────────────────────────────
-          AppOrDivider(label: l10n.or),
-
-          // ── Google Sign In Button ────────────────────────────────────────
-          AppSocialButton(
-            onPressed: widget.isLoading ? null : widget.onGoogleSignIn,
-            icon: const Icon(Icons.g_mobiledata_rounded, size: 28, color: AppColors.primary),
-            label: l10n.signInWithGoogle,
-          ),
-        ],
+            const SizedBox(height: AppDimens.spacingXl),
+            AuthSubmitActions(
+              submitText: l10n.signUp,
+              isLoading: widget.isLoading,
+              onSubmit: _handleSubmit,
+              onGoogleSignIn: widget.onGoogleSignIn,
+            ),
+          ],
+        ),
       ),
     );
   }
