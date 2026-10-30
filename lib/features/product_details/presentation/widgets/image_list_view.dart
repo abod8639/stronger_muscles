@@ -1,17 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/theme/app_radius.dart';
 import 'package:stronger_muscles/core/theme/app_shadows.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
-import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 
+/// Horizontal thumbnail strip that selects the main image.
 class ImageListView extends ConsumerWidget {
-  static const double _listHeight = 100.0;
-  static const double _thumbnailSize = 90.0;
+  static const double _listHeight = 88.0;
+  static const double _thumbnailSize = 72.0;
   static const double _horizontalMargin = 8.0;
   static const double _padding = 4.0;
   static const double _borderWidth = 3.0;
@@ -76,55 +76,21 @@ class ImageListView extends ConsumerWidget {
               color: isSelected ? AppColors.primary : Colors.transparent,
               width: _borderWidth,
             ),
-            borderRadius: AppRadius.allSm,
+            borderRadius: AppRadius.allMd,
             boxShadow: isSelected
                 ? AppShadows.colored(AppColors.primary, alpha: 0.3)
                 : null,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.sm - _padding),
-            child: _buildThumbnailImage(context, index),
-          ),
+          child: _buildThumbnailImage(index),
         ),
       ),
     );
   }
 
-  Widget _buildThumbnailImage(BuildContext context, int index) {
-    final imageUrlModel = product.imageUrls[index];
-    final theme = Theme.of(context);
-
-    return CachedNetworkImage(
-      cacheManager: CustomCacheManager.instance,
-      imageUrl: imageUrlModel.thumbnail,
-      fit: BoxFit.cover,
-      width: _thumbnailSize,
-      height: _thumbnailSize,
-      placeholder: (context, url) => Container(
+  Widget _buildThumbnailImage(int index) => AppNetworkImage(
+        imageUrl: product.imageUrls[index].thumbnail,
         width: _thumbnailSize,
         height: _thumbnailSize,
-        color: theme.colorScheme.surfaceContainerHighest,
-        child: const Center(
-          child: SizedBox(
-            width: 20.0,
-            height: 20.0,
-            child: CircularProgressIndicator(
-              strokeWidth: 2.0,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-      ),
-      errorWidget: (context, url, error) => Container(
-        width: _thumbnailSize,
-        height: _thumbnailSize,
-        color: theme.colorScheme.surfaceContainerHighest,
-        child: const Icon(
-          Icons.image_not_supported_outlined,
-          color: AppColors.primary,
-          size: 32.0,
-        ),
-      ),
-    );
-  }
+        borderRadius: AppRadius.allSm,
+      );
 }

@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/components/app_quantity_controls.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/cart/cart_feature.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-const double _horizontalPadding = 16.0;
-const double _verticalPadding = 8.0;
-const double _buttonVerticalPadding = 12.0;
-const double _buttonFontSize = 16.0;
-const double _quantityFontSize = 18.0;
-const double _spacing = AppDimens.spacingMd;
-const double _iconButtonSize = 32.0;
-
+/// Sticky product actions: add to cart (or quantity controls once in the
+/// cart) and the wishlist toggle.
 class BottomIconsRow extends ConsumerWidget {
+  static const double _height = 52.0;
+
   final ProductModel product;
   final String? initialFlavor;
   final String? initialSize;
@@ -31,175 +27,124 @@ class BottomIconsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+    final provider = productDetailsControllerProvider(
+      product,
+      initialFlavor: initialFlavor,
+      initialSize: initialSize,
+    );
+    final detailsState = ref.watch(provider);
+    final detailsNotifier = ref.read(provider.notifier);
+    // Rebuild when the cart changes so the add button swaps to quantity controls.
+    ref.watch(cartControllerProvider);
+    final cartNotifier = ref.read(cartControllerProvider.notifier);
+    final selectedFlavor = detailsState.selectedFlavor;
+    final selectedSize = detailsState.selectedSizeObject?.size;
+    final isInCart = cartNotifier.getCartItem(
+          product.id,
+          selectedFlavor: selectedFlavor,
+          selectedSize: selectedSize,
+        ) !=
+        null;
 
-    final cartState = ref.watch(cartControllerProvider);
-    final cartNotifier = ref.watch(cartControllerProvider.notifier);
-    final detailsState = ref.watch(
-      productDetailsControllerProvider(
-        product,
-        initialFlavor: initialFlavor,
-        initialSize: initialSize,
+    return AppBottomActionBar(
+      child: Row(
+        children: [
+          Expanded(
+            child: isInCart
+                ? SizedBox(
+                    height: _height,
+                    child: AppQuantityControls(
+                      product: product,
+                      selectedFlavor: selectedFlavor,
+                      selectedSize: selectedSize,
+                      axis: Axis.horizontal,
+                      iconSize: 30.0,
+                      quantityFontSize: 18.0,
+                    ),
+                  )
+                : _AddToCartButton(
+                    product: product,
+                    isPriceZero: detailsState.isPriceZero,
+                    isMutating: cartNotifier.isMutating,
+                    onAdd: () => cartNotifier.addToCart(
+                      product.toEntity(),
+                      selectedFlavor: selectedFlavor,
+                      selectedSize: selectedSize,
+                    ),
+                  ),
+          ),
+          const SizedBox(width: AppDimens.spacingMd),
+          _WishlistButton(
+            isInWishlist: detailsState.isInWishlist,
+            onPressed: () => detailsNotifier.toggleWishlist(product),
+          ),
+        ],
       ),
     );
-    final detailsNotifier = ref.watch(
-      productDetailsControllerProvider(
-        product,
-        initialFlavor: initialFlavor,
-        initialSize: initialSize,
-      ).notifier,
-    );
+  }
+}
+
+class _AddToCartButton extends StatelessWidget {
+  final ProductModel product;
+  final bool isPriceZero;
+  final bool isMutating;
+  final VoidCallback onAdd;
+
+  const _AddToCartButton({
+    required this.product,
+    required this.isPriceZero,
+    required this.isMutating,
+    required this.onAdd,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-
-    return BottomAppBar(
-      elevation: 10.0,
-      height: 85,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: _horizontalPadding,
-          vertical: _verticalPadding,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: _buildCartActionArea(
-                context,
-                ref,
-                theme,
-                cartNotifier,
-                detailsState,
-                detailsNotifier,
-                l10n,
-                cartState,
-              ),
-            ),
-            const SizedBox(width: _spacing),
-            _buildWishlistButton(theme, detailsState, detailsNotifier),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCartActionArea(
-    BuildContext context,
-    WidgetRef ref,
-    ThemeData theme,
-    CartController cartNotifier,
-    ProductDetailsState detailsState,
-    ProductDetailsController detailsNotifier,
-    AppLocalizations l10n,
-    dynamic cartState,
-  ) {
-    final item = cartNotifier.getCartItem(
-      product.id,
-      selectedFlavor: detailsState.selectedFlavor,
-      selectedSize: detailsState.selectedSizeObject?.size,
-    );
-
-    return item != null
-        ? QuantityControls(
-            product: product,
-            selectedFlavor: detailsState.selectedFlavor,
-            selectedSize: detailsState.selectedSizeObject?.size,
-            axis: Axis.horizontal,
-            iconSize: _iconButtonSize,
-            quantityFontSize: _quantityFontSize,
-          )
-        : _buildAddToCartButton(
-            detailsState,
-            detailsNotifier,
-            cartNotifier,
-            l10n,
-            cartState,
-          );
-  }
-
-  Widget _buildAddToCartButton(
-    ProductDetailsState detailsState,
-    ProductDetailsController detailsNotifier,
-    CartController cartNotifier,
-    AppLocalizations l10n,
-    dynamic cartState,
-  ) {
-    final isPriceZero = detailsState.isPriceZero;
     final isOutOfStock = !product.isInStock;
-    final isMutating = cartNotifier.isMutating;
-    final isDisabled = isPriceZero || isOutOfStock || isMutating;
 
-    String buttonLabel;
-    IconData buttonIcon;
-    if (isOutOfStock) {
-      buttonLabel = l10n.outOfStock;
-      buttonIcon = Icons.remove_shopping_cart_outlined;
-    } else if (isPriceZero) {
-      buttonLabel = l10n.contactUs;
-      buttonIcon = Icons.mail_outline;
-    } else {
-      buttonLabel = l10n.addToCart;
-      buttonIcon = Icons.add_shopping_cart;
-    }
+    final (label, icon) = isOutOfStock
+        ? (l10n.outOfStock, Icons.remove_shopping_cart_outlined)
+        : isPriceZero
+            ? (l10n.contactUs, Icons.mail_outline)
+            : (l10n.addToCart, Icons.add_shopping_cart_rounded);
 
-    return ElevatedButton.icon(
-      onPressed: isDisabled
-          ? null
-          : () {
-              cartNotifier.addToCart(
-                product.toEntity(),
-                selectedFlavor: detailsState.selectedFlavor,
-                selectedSize: detailsState.selectedSizeObject?.size,
-              );
-            },
-      icon: isMutating
-          ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                color: Colors.white,
-              ),
-            )
-          : Icon(
-              buttonIcon,
-              size: 20,
-            ),
-      label: Text(buttonLabel),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isDisabled ? Colors.grey : AppColors.primary,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(vertical: _buttonVerticalPadding),
-        textStyle: const TextStyle(
-          fontSize: _buttonFontSize,
-          fontWeight: FontWeight.bold,
-        ),
-        shape: AppRadius.shapeMd,
-      ),
+    return AppPrimaryButton(
+      text: label,
+      icon: icon,
+      height: BottomIconsRow._height,
+      isLoading: isMutating,
+      backgroundColor: isOutOfStock || isPriceZero ? AppColors.greyDark : null,
+      onPressed: isOutOfStock || isPriceZero ? null : onAdd,
     );
   }
+}
 
-  Widget _buildWishlistButton(
-    ThemeData theme,
-    ProductDetailsState detailsState,
-    ProductDetailsController detailsNotifier,
-  ) {
-    final isInWishlist = detailsState.isInWishlist;
+class _WishlistButton extends StatelessWidget {
+  final bool isInWishlist;
+  final VoidCallback onPressed;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: isInWishlist
-            ? AppColors.primary.withValues(alpha: .1)
-            : theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: AppRadius.allMd,
+  const _WishlistButton({required this.isInWishlist, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onPressed,
+      style: IconButton.styleFrom(
+        fixedSize: const Size.square(BottomIconsRow._height),
+        shape: AppRadius.shapeLg,
+        backgroundColor: isInWishlist
+            ? AppColors.primary.withValues(alpha: 0.1)
+            : context.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
       ),
-      child: IconButton(
-        icon: Icon(
-          isInWishlist ? Icons.favorite : Icons.favorite_outline,
-          color: isInWishlist
-              ? AppColors.primary
-              : theme.colorScheme.onSurfaceVariant,
-          size: 28,
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+        child: Icon(
+          isInWishlist ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+          key: ValueKey(isInWishlist),
+          size: 26.0,
+          color: isInWishlist ? AppColors.primary : context.colorScheme.onSurfaceVariant,
         ),
-        onPressed: () => detailsNotifier.toggleWishlist(product),
       ),
     );
   }
