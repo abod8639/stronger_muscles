@@ -56,38 +56,32 @@ class WishlistController extends _$WishlistController {
     _isMutating = false;
   }
 
-  /// Removes a product from the wishlist with mutation guard and immutable state update.
+  /// Removes a product from the wishlist optimistically: it leaves the list
+  /// immediately (a swipe-dismissed row cannot stay in the tree) and is put
+  /// back at the same position if the removal fails.
   Future<void> removeFromWishlist(dynamic product) async {
-    if (_isMutating) return;
-    _isMutating = true;
-
     final String id = product is ProductEntity
         ? product.id
         : (product is ProductModel ? product.id : product.toString());
 
+    final index = state.indexWhere((item) => item.id == id);
     final ProductEntity entity = product is ProductEntity
         ? product
         : (product is ProductModel
             ? product.toEntity()
-            : state.firstWhere(
-                (item) => item.id == id,
-                orElse: () => ProductEntity(id: id),
-              ));
+            : (index >= 0 ? state[index] : ProductEntity(id: id)));
 
-    final removeUseCase = ref.read(removeFromWishlistUseCaseProvider);
-    final result = await removeUseCase(entity);
+    state = state.where((item) => item.id != id).toList();
+
+    final result = await ref.read(removeFromWishlistUseCaseProvider)(entity);
 
     result.fold(
       (failure) {
-        // Handled via functional Either without throwing
+        if (index < 0 || state.any((item) => item.id == id)) return;
+        state = [...state]..insert(index.clamp(0, state.length), entity);
       },
-      (_) {
-        // Enforce immutable state update
-        state = state.where((item) => item.id != id).toList();
-      },
+      (_) {},
     );
-
-    _isMutating = false;
   }
 
   /// Checks if a product exists in the wishlist using UseCase and local state fallback.
