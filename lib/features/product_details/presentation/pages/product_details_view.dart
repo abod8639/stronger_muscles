@@ -2,30 +2,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
+import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/core/utils/functions/cache_manager.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 import 'package:stronger_muscles/features/product_details/presentation/controllers/product_details_controller.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/bottom_icons_row.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_description_section.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_ingredients_section.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_badges.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_info.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_name.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_product_price.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_show_reviews_list_section.dart';
-import 'package:stronger_muscles/features/product_details/presentation/widgets/build_usage_and_warnings.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/image_list_view.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/main_image.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/product_detail_sections.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_flavor_selector.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/product_price.dart';
+import 'package:stronger_muscles/features/product_details/presentation/widgets/product_reviews_section.dart';
 import 'package:stronger_muscles/features/product_details/presentation/widgets/product_size_selector.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductDetailsView extends ConsumerWidget {
-  static const double _contentPadding = 16.0;
-  static const double _sectionSpacing = 24.0;
-  static const double _smallSpacing = 8.0;
-  static const double _mediumSpacing = 16.0;
-  static const double _bottomPadding = 32.0;
 
   final ProductEntity? product;
   final String? initialFlavor;
@@ -55,115 +50,95 @@ class ProductDetailsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (product == null) {
       return Scaffold(
-        body: Center(
-          child: Text(
-            AppLocalizations.of(context)?.productNotFound ??
-                "Product not found",
-          ),
-        ),
+        appBar: AppBar(),
+        body: AppEmptyState(icon: Icons.inventory_2_outlined, title: l10n.productNotFound),
       );
     }
 
     final effectiveProd = ProductModel.fromEntity(product!);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final locale = Localizations.localeOf(context).languageCode;
-
-    final detailsState = ref.watch(
-      productDetailsControllerProvider(
-        effectiveProd,
-        initialFlavor: initialFlavor,
-        initialSize: initialSize,
-      ),
+    final provider = productDetailsControllerProvider(
+      effectiveProd,
+      initialFlavor: initialFlavor,
+      initialSize: initialSize,
     );
-    final detailsNotifier = ref.watch(
-      productDetailsControllerProvider(
-        effectiveProd,
-        initialFlavor: initialFlavor,
-        initialSize: initialSize,
-      ).notifier,
-    );
+    final detailsState = ref.watch(provider);
+    final detailsNotifier = ref.read(provider.notifier);
+    final name = effectiveProd.getLocalizedName(locale: locale);
+    const smallGap = SizedBox(height: AppDimens.spacingSm);
+    const gap = SizedBox(height: AppDimens.spacingLg);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(effectiveProd.getLocalizedName(locale: locale)),
-        elevation: 0,
-      ),
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
-        ),
-        slivers: [
-          SliverToBoxAdapter(
-            child: MainImage(
-              product: effectiveProd,
-              onImageTap: (index) =>
-                  _showImageViewer(context, effectiveProd, index),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(_contentPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  buildProductName(effectiveProd),
-                  const SizedBox(height: _smallSpacing),
-                  buildProductPrice(
-                    effectiveProd,
-                    alternateEffectivePrice: detailsState.displayEffectivePrice,
-                    alternateOriginalPrice: detailsState.displayPrice,
-                    alternateHasDiscount: detailsState.displayHasDiscount,
-                  ),
-                  const SizedBox(height: _smallSpacing),
-                  buildProductBadges(effectiveProd, context, .1),
-                  const SizedBox(height: _mediumSpacing),
-                  ImageListView(product: effectiveProd),
-                  const SizedBox(height: _mediumSpacing),
-                  if (effectiveProd.flavors.isNotEmpty) ...[
-                    ProductFlavorSelector(
-                      product: effectiveProd,
-                      selectedFlavor: detailsState.selectedFlavor,
-                      onFlavorSelected: (selectedFlavor) {
-                        detailsNotifier.updateFlavor(selectedFlavor);
-                      },
-                    ),
-                    const SizedBox(height: _mediumSpacing),
-                  ],
-                  if (effectiveProd.productSizes.isNotEmpty) ...[
-                    ProductSizeSelector(
-                      product: effectiveProd,
-                      initialSize: detailsState.selectedSizeObject?.size,
-                      onSizeSelected: (selectedSize) {
-                        detailsNotifier.updateSize(effectiveProd, selectedSize);
-                      },
-                    ),
-                    const SizedBox(height: _mediumSpacing),
-                  ],
-                  if (effectiveProd.imageUrls.length > 1)
-                    const SizedBox(height: _sectionSpacing),
-                  buildDescriptionSection(effectiveProd),
-                  const SizedBox(height: _sectionSpacing),
-                  buildProductInfo(effectiveProd, isDark, context, ref),
-                  const SizedBox(height: _sectionSpacing),
-                  buildIngredientsSection(effectiveProd, isDark),
-                  const SizedBox(height: _sectionSpacing),
-                  buildUsageAndWarnings(effectiveProd, isDark),
-                  const SizedBox(height: _sectionSpacing),
-                  buildShowReviewsListSection(effectiveProd),
-                  const SizedBox(height: _bottomPadding),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      appBar: baseAppBar(context, name),
       bottomNavigationBar: BottomIconsRow(
         product: effectiveProd,
         initialFlavor: initialFlavor,
         initialSize: initialSize,
+      ),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        slivers: [
+          SliverToBoxAdapter(
+            child: MainImage(
+              product: effectiveProd,
+              onImageTap: (index) => _showImageViewer(context, effectiveProd, index),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(AppDimens.spacingLg),
+            sliver: SliverList.list(
+              children: [
+                Text(
+                  name,
+                  style: context.textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: context.colorScheme.onSurface,
+                  ),
+                ),
+                smallGap,
+                ProductPrice(
+                  price: detailsState.displayEffectivePrice,
+                  originalPrice: detailsState.displayHasDiscount ? detailsState.displayPrice : null,
+                ),
+                smallGap,
+                buildProductBadges(effectiveProd, context, 0.1),
+                gap,
+                ImageListView(product: effectiveProd),
+                if (effectiveProd.flavors.isNotEmpty) ...[
+                  gap,
+                  ProductFlavorSelector(
+                    product: effectiveProd,
+                    selectedFlavor: detailsState.selectedFlavor,
+                    onFlavorSelected: detailsNotifier.updateFlavor,
+                  ),
+                ],
+                if (effectiveProd.productSizes.isNotEmpty) ...[
+                  gap,
+                  ProductSizeSelector(
+                    product: effectiveProd,
+                    initialSize: detailsState.selectedSizeObject?.size,
+                    onSizeSelected: (size) => detailsNotifier.updateSize(effectiveProd, size),
+                  ),
+                ],
+                gap,
+                ProductDescriptionSection(product: effectiveProd),
+                gap,
+                ProductInfoSection(product: effectiveProd),
+                gap,
+                ProductIngredientsSection(product: effectiveProd),
+                gap,
+                ProductUsageSection(product: effectiveProd),
+                gap,
+                ProductReviewsSection(productId: effectiveProd.id),
+                const SizedBox(height: AppDimens.spacingXl),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -194,8 +169,8 @@ class ProductDetailsView extends ConsumerWidget {
       swipeDismissible: true,
       doubleTapZoomable: true,
       immersive: false,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      closeButtonColor: Theme.of(context).primaryColor,
+      backgroundColor: context.colorScheme.surface,
+      closeButtonColor: AppColors.primary,
     );
   }
 }
