@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:stronger_muscles/core/components/app_product_card.dart';
+import 'package:stronger_muscles/features/product/presentation/widgets/app_product_card.dart';
 import 'package:stronger_muscles/features/product/data/models/product_model.dart';
 import 'package:stronger_muscles/features/profile/data/models/localized_string_model.dart';
 
