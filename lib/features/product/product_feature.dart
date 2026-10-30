@@ -49,6 +49,11 @@ export 'presentation/controllers/products_state.dart';
 // Public UI
 export 'presentation/pages/product_catalog_view.dart';
 export 'presentation/widgets/category_chip_selector.dart';
+export 'presentation/widgets/app_product_card.dart';
+export 'presentation/widgets/app_product_card_image.dart';
+export 'presentation/widgets/app_product_grid.dart';
+export 'presentation/widgets/product_badges.dart';
+export 'presentation/widgets/product_grid_skeleton.dart';
 
 // Modular Routes
 export 'product_routes.dart';
