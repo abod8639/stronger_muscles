@@ -85,5 +85,37 @@ void main() {
       expect(reconstructedModel.selectedSize, model.selectedSize);
       expect(reconstructedModel.subtotal, model.subtotal);
     });
+
+    test('safeFromJson normalizes string price and image_urls seamlessly', () {
+      final json = {
+        'id': 'cart-99',
+        'user_id': 'user-1',
+        'quantity': '2',
+        'product': {
+          'id': 'PROD-100',
+          'name': {'ar': 'منتج', 'en': 'Product'},
+          'price': '1500.00',
+          'discount_price': '1200.00',
+          'stock_quantity': '10',
+          'image_urls': [
+            {
+              'thumbnail': 'https://example.com/thumb.jpg',
+              'medium': 'https://example.com/med.jpg',
+              'original': 'https://example.com/orig.jpg',
+            }
+          ],
+        },
+      };
+
+      final parsed = CartItemModel.safeFromJson(json);
+      expect(parsed.id, 'cart-99');
+      expect(parsed.quantity, 2);
+      expect(parsed.product.price, 1500.0);
+      expect(parsed.product.discountPrice, 1200.0);
+      expect(parsed.product.stockQuantity, 10);
+      expect(parsed.product.imageUrls.length, 1);
+      expect(parsed.product.imageUrls.first.medium, 'https://example.com/med.jpg');
+      expect(parsed.subtotal, 2400.0);
+    });
   });
 }
