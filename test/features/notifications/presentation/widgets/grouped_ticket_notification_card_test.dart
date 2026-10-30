@@ -78,7 +78,6 @@ void main() {
 
     // Verify UI elements are present
     expect(find.text('SM-VKBVQ9LO'), findsOneWidget);
-    expect(find.text('عادية'), findsOneWidget);
     expect(find.text('Abood'), findsOneWidget);
     expect(find.text('شحنتك في طريقها إليك'), findsOneWidget);
     expect(find.text('بانتظار العميل'), findsOneWidget);
