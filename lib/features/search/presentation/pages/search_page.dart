@@ -5,7 +5,6 @@ import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/core/utils/responsive_helper.dart';
 import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_bar_inline.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -61,38 +60,15 @@ class SearchPage extends ConsumerWidget {
                 );
               }
 
-              return SliverPadding(
+              return AppProductGrid(
+                products: displayedProducts,
+                query: searchNotifier.searchQuery,
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppDimens.spacingSm,
                   vertical: AppDimens.spacingLg,
                 ),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: ResponsiveHelper.getGridCrossAxisCount(
-                      context,
-                    ),
-                    childAspectRatio: ResponsiveHelper.getGridChildAspectRatio(
-                      context,
-                    ),
-                    crossAxisSpacing: AppDimens.spacingSm,
-                    mainAxisSpacing: AppDimens.spacingMd,
-                  ),
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final product = displayedProducts[index];
-                    return GestureDetector(
-                      onTap: () => context.push(
-                        AppRoutes.productDetails,
-                        extra: product,
-                      ),
-                      child: AppProductCard.fromEntity(
-                        showName: true,
-                        entity: product,
-                        isBackgroundWhite: false,
-                        query: searchNotifier.searchQuery,
-                      ),
-                    );
-                  }, childCount: displayedProducts.length),
-                ),
+                onProductTap: (product) =>
+                    context.push(AppRoutes.productDetails, extra: product),
               );
             },
             loading: () => const SliverToBoxAdapter(
