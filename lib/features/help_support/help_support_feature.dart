@@ -43,3 +43,6 @@ export 'help_support_routes.dart';
 
 // Public UI Pages
 export 'presentation/pages/help_support_view.dart';
+
+// Presentation Helpers (ticket status colors, FAQ category labels)
+export 'presentation/utils/help_support_ui.dart';
