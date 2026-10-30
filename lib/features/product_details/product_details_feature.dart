@@ -28,7 +28,6 @@ export 'presentation/controllers/product_reviews_controller.dart'
 
 // ── Public Pages & Top-level Widgets ─────────────────────────────────────────
 export 'presentation/pages/product_details_view.dart';
-export 'presentation/widgets/build_product_badges.dart';
 
 // ── Modular Routes ───────────────────────────────────────────────────────────
 export 'product_details_routes.dart';
