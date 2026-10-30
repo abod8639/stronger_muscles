@@ -15,6 +15,7 @@ class AppNetworkImage extends StatelessWidget {
   final int? memCacheWidth;
   final int? memCacheHeight;
   final IconData errorIcon;
+  final double? errorIconSize;
 
   const AppNetworkImage({
     super.key,
@@ -26,6 +27,7 @@ class AppNetworkImage extends StatelessWidget {
     this.memCacheWidth,
     this.memCacheHeight,
     this.errorIcon = Icons.image_not_supported_outlined,
+    this.errorIconSize,
   });
 
   @override
@@ -66,7 +68,8 @@ class AppNetworkImage extends StatelessWidget {
         Icon(
           errorIcon,
           color: context.colorScheme.onSurfaceVariant,
-          size: (width ?? 48.0) * 0.4,
+          size: errorIconSize ??
+              (width != null && width!.isFinite ? width! * 0.4 : 40.0),
         ),
       );
 
