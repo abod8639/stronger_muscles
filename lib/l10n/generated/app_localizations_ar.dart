@@ -879,4 +879,38 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clearFilters => 'مسح الفلاتر';
+
+  @override
+  String get addYourReview => 'أضف تقييمك';
+
+  @override
+  String get editYourReview => 'تعديل تقييمك';
+
+  @override
+  String get loginToReview => 'يرجى تسجيل الدخول أولاً لإضافة تقييم';
+
+  @override
+  String get reviewsLoadError => 'تعذر تحميل التقييمات';
+
+  @override
+  String get reviewUpdated => 'تم تحديث التقييم بنجاح';
+
+  @override
+  String get reviewAdded => 'تمت إضافة التقييم بنجاح';
+
+  @override
+  String get reviewSaveFailed =>
+      'حدث خطأ أثناء حفظ التقييم، يرجى المحاولة مرة أخرى';
+
+  @override
+  String get writeYourExperience => 'اكتب تجربتك مع هذا المنتج...';
+
+  @override
+  String get reviewCommentRequired => 'يرجى كتابة تعليق لوصف تجربتك';
+
+  @override
+  String get updateReview => 'تحديث التقييم';
+
+  @override
+  String get submitReview => 'إرسال التقييم';
 }

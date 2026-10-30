@@ -284,5 +284,16 @@
   "sendMessage": "Send",
   "ticketClosedNotice": "This ticket is closed. New messages can't be sent",
   "allProducts": "All Products",
-  "clearFilters": "Clear filters"
+  "clearFilters": "Clear filters",
+  "addYourReview": "Add your review",
+  "editYourReview": "Edit your review",
+  "loginToReview": "Please sign in first to add a review",
+  "reviewsLoadError": "Couldn't load reviews",
+  "reviewUpdated": "Review updated",
+  "reviewAdded": "Review added",
+  "reviewSaveFailed": "Couldn't save your review. Please try again.",
+  "writeYourExperience": "Tell others about your experience with this product...",
+  "reviewCommentRequired": "Please write a comment describing your experience",
+  "updateReview": "Update review",
+  "submitReview": "Submit review"
 }

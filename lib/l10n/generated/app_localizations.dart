@@ -1789,6 +1789,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear filters'**
   String get clearFilters;
+
+  /// No description provided for @addYourReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your review'**
+  String get addYourReview;
+
+  /// No description provided for @editYourReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit your review'**
+  String get editYourReview;
+
+  /// No description provided for @loginToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in first to add a review'**
+  String get loginToReview;
+
+  /// No description provided for @reviewsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load reviews'**
+  String get reviewsLoadError;
+
+  /// No description provided for @reviewUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Review updated'**
+  String get reviewUpdated;
+
+  /// No description provided for @reviewAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Review added'**
+  String get reviewAdded;
+
+  /// No description provided for @reviewSaveFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save your review. Please try again.'**
+  String get reviewSaveFailed;
+
+  /// No description provided for @writeYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell others about your experience with this product...'**
+  String get writeYourExperience;
+
+  /// No description provided for @reviewCommentRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write a comment describing your experience'**
+  String get reviewCommentRequired;
+
+  /// No description provided for @updateReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Update review'**
+  String get updateReview;
+
+  /// No description provided for @submitReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit review'**
+  String get submitReview;
 }
 
 class _AppLocalizationsDelegate

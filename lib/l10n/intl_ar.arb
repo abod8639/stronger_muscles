@@ -282,5 +282,16 @@
   "sendMessage": "إرسال",
   "ticketClosedNotice": "تم إغلاق هذه التذكرة. لا يمكن إرسال رسائل جديدة",
   "allProducts": "كل المنتجات",
-  "clearFilters": "مسح الفلاتر"
+  "clearFilters": "مسح الفلاتر",
+  "addYourReview": "أضف تقييمك",
+  "editYourReview": "تعديل تقييمك",
+  "loginToReview": "يرجى تسجيل الدخول أولاً لإضافة تقييم",
+  "reviewsLoadError": "تعذر تحميل التقييمات",
+  "reviewUpdated": "تم تحديث التقييم بنجاح",
+  "reviewAdded": "تمت إضافة التقييم بنجاح",
+  "reviewSaveFailed": "حدث خطأ أثناء حفظ التقييم، يرجى المحاولة مرة أخرى",
+  "writeYourExperience": "اكتب تجربتك مع هذا المنتج...",
+  "reviewCommentRequired": "يرجى كتابة تعليق لوصف تجربتك",
+  "updateReview": "تحديث التقييم",
+  "submitReview": "إرسال التقييم"
 }

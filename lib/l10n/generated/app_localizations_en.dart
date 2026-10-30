@@ -881,4 +881,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearFilters => 'Clear filters';
+
+  @override
+  String get addYourReview => 'Add your review';
+
+  @override
+  String get editYourReview => 'Edit your review';
+
+  @override
+  String get loginToReview => 'Please sign in first to add a review';
+
+  @override
+  String get reviewsLoadError => 'Couldn\'t load reviews';
+
+  @override
+  String get reviewUpdated => 'Review updated';
+
+  @override
+  String get reviewAdded => 'Review added';
+
+  @override
+  String get reviewSaveFailed =>
+      'Couldn\'t save your review. Please try again.';
+
+  @override
+  String get writeYourExperience =>
+      'Tell others about your experience with this product...';
+
+  @override
+  String get reviewCommentRequired =>
+      'Please write a comment describing your experience';
+
+  @override
+  String get updateReview => 'Update review';
+
+  @override
+  String get submitReview => 'Submit review';
 }
