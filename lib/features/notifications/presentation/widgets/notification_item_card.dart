@@ -56,15 +56,21 @@ class NotificationItemCard extends ConsumerWidget {
     final isSupport = notification.isSupport;
 
     if (isSupport) {
-      context.push(
-        AppRoutes.helpSupport,
-        extra: {
-          if (ticketId != null && ticketId.isNotEmpty) 'ticket_id': ticketId,
-          if (notification.ticketNumber != null)
-            'ticket_number': notification.ticketNumber,
-          'open_active_ticket': true,
-        },
-      );
+      if (ticketId != null && ticketId.isNotEmpty) {
+        context.push(
+          AppRoutes.supportChat,
+          extra: {'ticket_id': ticketId},
+        );
+      } else {
+        context.push(
+          AppRoutes.helpSupport,
+          extra: {
+            if (notification.ticketNumber != null)
+              'ticket_number': notification.ticketNumber,
+            'open_active_ticket': true,
+          },
+        );
+      }
       return;
     }
 
