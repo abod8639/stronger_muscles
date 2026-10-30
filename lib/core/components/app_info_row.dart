@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stronger_muscles/core/components/app_price_text.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Reusable two-column key-value row for displaying metadata, orders,
 /// address attributes, and specifications.
@@ -66,12 +66,16 @@ class AppInfoRow extends StatelessWidget {
   }
 }
 
-/// Reusable price breakdown row (Subtotal, Shipping, Discount, Total)
-/// with currency localization and styling states.
+/// Reusable price breakdown row (Subtotal, Shipping, Discount, Total).
+///
+/// Amounts use the app-wide [AppPriceText.format] unless [currency] is given.
+/// [valueText] replaces the amount entirely (e.g. "Free delivery").
 class AppPriceRow extends StatelessWidget {
   final String label;
   final double amount;
   final String? currency;
+  final String? valueText;
+  final Color? valueColor;
   final bool isTotal;
   final bool isDiscount;
   final EdgeInsetsGeometry padding;
@@ -79,8 +83,10 @@ class AppPriceRow extends StatelessWidget {
   const AppPriceRow({
     super.key,
     required this.label,
-    required this.amount,
+    this.amount = 0,
     this.currency,
+    this.valueText,
+    this.valueColor,
     this.isTotal = false,
     this.isDiscount = false,
     this.padding = const EdgeInsets.symmetric(vertical: 4.0),
@@ -89,35 +95,35 @@ class AppPriceRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isAr = Localizations.localeOf(context).languageCode == 'ar';
-    final effectiveCurrency = currency ??
-        AppLocalizations.of(context)?.currency ??
-        (isAr ? 'ج.م' : 'EGP');
 
     final effectiveLabelStyle = theme.textTheme.bodyMedium?.copyWith(
-      color: isTotal ? null : Colors.grey,
+      color: isTotal ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant,
       fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
       fontSize: isTotal ? 16.0 : 14.0,
     );
 
     final effectivePriceStyle = theme.textTheme.bodyMedium?.copyWith(
-      color: isDiscount
-          ? AppColors.success
-          : (isTotal ? AppColors.primary : null),
+      color: valueColor ??
+          (isDiscount
+              ? AppColors.success
+              : (isTotal ? AppColors.primary : theme.colorScheme.onSurface)),
       fontWeight: isTotal ? FontWeight.w900 : FontWeight.w600,
       fontSize: isTotal ? 18.0 : 14.0,
     );
 
-    final prefix = isDiscount ? '- ' : '';
+    final formatted = currency != null
+        ? '${amount.toStringAsFixed(2)} $currency'
+        : AppPriceText.format(amount);
 
     return Padding(
       padding: padding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: effectiveLabelStyle),
+          Flexible(child: Text(label, style: effectiveLabelStyle)),
+          const SizedBox(width: 12.0),
           Text(
-            '$prefix${amount.toStringAsFixed(2)} $effectiveCurrency',
+            valueText ?? '${isDiscount ? '- ' : ''}$formatted',
             style: effectivePriceStyle,
           ),
         ],
