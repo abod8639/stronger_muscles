@@ -1,75 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stronger_muscles/core/components/app_empty_state.dart';
-import 'package:stronger_muscles/core/components/app_section_title.dart';
+import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
-import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
 import 'package:stronger_muscles/features/profile/presentation/widgets/address_card.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/profile_skeleton.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/show_address_form.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
+/// Saved delivery addresses with an "Add new" action.
 class SavedAddressesList extends ConsumerWidget {
   const SavedAddressesList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final addressesState = ref.watch(addressControllerProvider);
-    final intl10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SectionTitle(
-          title: intl10n.savedAddresses,
-          actionWidget: OutlinedButton.icon(
-            onPressed: () => showAddressForm(context),
-            style: OutlinedButton.styleFrom(
-              foregroundColor: AppColors.primary,
-              side: BorderSide(
-                color: AppColors.primary.withValues(alpha: .5),
-                width: 1.5,
-              ),
-              backgroundColor: AppColors.primary.withValues(alpha: .05),
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.spacingMd,
-                vertical: AppDimens.spacingSm,
-              ),
-              shape: const StadiumBorder(),
-            ),
-            icon: const Icon(Icons.add_rounded, size: AppDimens.iconSm),
-            label: Text(
-              intl10n.addNew,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
+        AppSectionTitle(
+          title: l10n.savedAddresses,
+          actionText: l10n.addNew,
+          onActionTap: () => showAddressForm(context),
         ),
         addressesState.when(
           data: (addresses) => addresses.isEmpty
               ? AppEmptyState(
+                  fillHeight: false,
                   icon: Icons.location_off_outlined,
-                  title: intl10n.noAddressesSavedYet,
-                  padding: const EdgeInsets.all(40.0),
-                )
-              : ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  addRepaintBoundaries: true,
+                  title: l10n.noAddressesSavedYet,
+                  actionText: l10n.addNewAddress,
+                  actionIcon: Icons.add_location_alt_outlined,
+                  onActionTap: () => showAddressForm(context),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppDimens.spacingLg,
-                    vertical: AppDimens.spacingSm,
+                    horizontal: AppDimens.spacingXl,
+                    vertical: AppDimens.spacingLg,
                   ),
-                  itemCount: addresses.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: AppDimens.spacingLg),
-                  itemBuilder: (context, index) {
-                    final address = addresses[index];
-                    return AddressCard(address: address);
-                  },
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
+                  child: Column(
+                    children: [
+                      for (final (index, address) in addresses.indexed) ...[
+                        if (index > 0) const SizedBox(height: AppDimens.spacingLg),
+                        AddressCard(address: address),
+                      ],
+                    ],
+                  ),
                 ),
           loading: () => const AddressesListSkeleton(),
-          error: (e, _) => Center(child: Text('${intl10n.error}: $e')),
+          error: (error, _) => AppAlertCard(
+            color: AppColors.error,
+            icon: AppErrorCard.iconFor(error),
+            message: AppErrorCard.messageFor(error, l10n),
+            margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
+            actionLabel: l10n.retry,
+            onAction: ref.read(addressControllerProvider.notifier).fetchAddresses,
+          ),
         ),
       ],
     );
