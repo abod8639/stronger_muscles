@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/errors/failures.dart';
-import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
-import 'package:stronger_muscles/features/auth/presentation/controllers/auth_controller.dart';
-import 'package:stronger_muscles/features/auth/presentation/widgets/auth_error_card.dart';
-import 'package:stronger_muscles/features/auth/presentation/widgets/auth_header.dart';
-import 'package:stronger_muscles/features/auth/presentation/widgets/auth_switch_prompt.dart';
+import 'package:stronger_muscles/features/auth/presentation/utils/auth_actions_mixin.dart';
+import 'package:stronger_muscles/features/auth/presentation/widgets/auth_page_scaffold.dart';
 import 'package:stronger_muscles/features/auth/presentation/widgets/signup_form.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
-import 'package:stronger_muscles/routes/routes.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   final VoidCallback? onSignInTap;
@@ -21,131 +14,30 @@ class SignUpPage extends ConsumerStatefulWidget {
   ConsumerState<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends ConsumerState<SignUpPage> {
-  String? _lastName;
-  String? _lastEmail;
-  String? _lastPassword;
-
-  void _onSignUp(String name, String email, String password) {
-    _lastName = name;
-    _lastEmail = email;
-    _lastPassword = password;
-
-    AppGuard.runSafeInternet(ref, () async {
-      await ref.read(authControllerProvider.notifier).signUpWithEmail(
-            name: name,
-            email: email,
-            password: password,
-          );
-    });
-  }
-
-  void _onGoogleSignIn() {
-    AppGuard.runSafeInternet(ref, () async {
-      await ref.read(authControllerProvider.notifier).signInWithGoogle();
-    });
-  }
-
-  void _retryLastAction() {
-    if (_lastName != null && _lastEmail != null && _lastPassword != null) {
-      _onSignUp(_lastName!, _lastEmail!, _lastPassword!);
-    } else {
-      ref.read(authControllerProvider.notifier).clearError();
-    }
-  }
-
+class _SignUpPageState extends ConsumerState<SignUpPage> with AuthActionsMixin {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // Selective state listening to prevent unnecessary full-page rebuilds
-    final isLoading = ref.watch(
-      authControllerProvider.select((state) => state.isLoading),
-    );
-    final hasError = ref.watch(
-      authControllerProvider.select((state) => state.hasError && !state.isLoading),
-    );
-    final error = hasError
-        ? ref.watch(authControllerProvider.select((state) => state.error))
-        : null;
-
-    // Listen to authentication changes and errors centrally
-    ref.listen(authControllerProvider, (previous, next) {
-      if (next is AsyncError) {
-        final err = next.error;
-        final String message = err is Failure ? err.toMessage() : err.toString();
-
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(message),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-            action: SnackBarAction(
-              label: 'إعادة المحاولة',
-              textColor: Colors.white,
-              onPressed: _retryLastAction,
-            ),
-          ),
-        );
-      } else if (next is AsyncData &&
-          next.value != null &&
-          previous is AsyncLoading) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.signUpSuccess),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        context.go(AppRoutes.profile);
-      }
-    });
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AuthHeader(
-                title: l10n.createAccount,
-                subtitle: l10n.signUpToGetStarted,
-                icon: Icons.person_add_alt_1_rounded,
-              ),
-              const SizedBox(height: 20.0),
-
-              // Inline Fallback UI on persistent Error State
-              if (hasError && error != null)
-                AuthErrorCard(
-                  error: error,
-                  onRetry: _retryLastAction,
-                  onDismiss: () =>
-                      ref.read(authControllerProvider.notifier).clearError(),
-                ),
-
-              const SizedBox(height: 12.0),
-              SignUpForm(
-                isLoading: isLoading,
-                onSignUp: (name, email, password) async {
-                  _onSignUp(name, email, password);
-                },
-                onGoogleSignIn: _onGoogleSignIn,
-              ),
-              const SizedBox(height: 24.0),
-              AuthSwitchPrompt(
-                promptText: l10n.alreadyHaveAccount,
-                actionText: l10n.login,
-                onActionTap: widget.onSignInTap,
-              ),
-            ],
+    return AuthPageScaffold(
+      title: l10n.createAccount,
+      subtitle: l10n.signUpToGetStarted,
+      icon: Icons.person_add_alt_1_rounded,
+      successMessage: l10n.signUpSuccess,
+      onRetry: retryLastAction,
+      switchPromptText: l10n.alreadyHaveAccount,
+      switchActionText: l10n.login,
+      onSwitchTap: widget.onSignInTap,
+      formBuilder: (isLoading) => SignUpForm(
+        isLoading: isLoading,
+        onSignUp: (name, email, password) => runAuthAction(
+          () => authController.signUpWithEmail(
+            name: name,
+            email: email,
+            password: password,
           ),
         ),
+        onGoogleSignIn: signInWithGoogle,
       ),
     );
   }

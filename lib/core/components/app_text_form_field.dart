@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
-import 'package:stronger_muscles/core/theme/app_radius.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 
 /// A reusable modern text form field with theme support, unified borders,
 /// and optional built-in password visibility toggle.
@@ -21,6 +21,9 @@ class AppTextFormField extends StatefulWidget {
   final bool obscureText;
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
+  final FocusNode? focusNode;
+  final Iterable<String>? autofillHints;
 
   const AppTextFormField({
     super.key,
@@ -40,6 +43,9 @@ class AppTextFormField extends StatefulWidget {
     this.obscureText = false,
     this.onTap,
     this.onChanged,
+    this.onFieldSubmitted,
+    this.focusNode,
+    this.autofillHints,
   });
 
   @override
@@ -66,7 +72,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final isDark = context.isDark;
     final fillColor = isDark ? AppColors.surfaceDark : AppColors.greyLight.withValues(alpha: 0.6);
 
     Widget? effectiveSuffix = widget.suffixIcon;
@@ -109,6 +115,9 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
           autofocus: widget.autofocus,
           onTap: widget.onTap,
           onChanged: widget.onChanged,
+          onFieldSubmitted: widget.onFieldSubmitted,
+          focusNode: widget.focusNode,
+          autofillHints: widget.autofillHints,
           style: TextStyle(
             fontSize: 14.5,
             color: isDark ? AppColors.white : AppColors.black,
