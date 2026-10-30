@@ -182,27 +182,38 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return Builder(
       builder: (context) {
         final intl10n = AppLocalizations.of(context)!;
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return Container(
           height: _mapHeight,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: Colors.grey[100],
-            image: const DecorationImage(
-              image: NetworkImage(
-                'https://maps.googleapis.com/maps/api/staticmap?center=30.0444,31.2357&zoom=10&size=400x150&scale=2',
-              ),
-              fit: BoxFit.cover,
-              opacity: 0.3,
-            ),
+            color: isDark ? const Color(0xFF1E1E26) : const Color(0xFFF2F4F8),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.location_off_outlined, color: Colors.grey[400], size: 32),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : Colors.black.withValues(alpha: 0.04),
+                ),
+                child: Icon(
+                  Icons.map_outlined,
+                  color: isDark ? Colors.white38 : Colors.grey[500],
+                  size: 28,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 intl10n.mapUnavailable,
-                style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                style: TextStyle(
+                  color: isDark ? Colors.white54 : Colors.grey[600],
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),

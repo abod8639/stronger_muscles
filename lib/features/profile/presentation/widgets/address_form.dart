@@ -18,20 +18,118 @@ class AddressForm extends ConsumerStatefulWidget {
 class _AddressFormState extends ConsumerState<AddressForm> {
   final _formKey = GlobalKey<FormState>();
 
+  late final TextEditingController _fullNameController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _streetController;
+  late final TextEditingController _cityController;
+  late final TextEditingController _stateController;
+  late final TextEditingController _postalCodeController;
+  late final TextEditingController _countryController;
+
+  late String _selectedLabel;
+  double? _latitude;
+  double? _longitude;
+  bool _isLocating = false;
+
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(addressControllerProvider.notifier).fillForm(widget.address);
-    });
+    final a = widget.address;
+    _fullNameController = TextEditingController(text: a?.fullName ?? '');
+    _phoneController = TextEditingController(text: a?.phone ?? '');
+    _streetController = TextEditingController(text: a?.street ?? '');
+    _cityController = TextEditingController(text: a?.city ?? '');
+    _stateController = TextEditingController(text: a?.state ?? '');
+    _postalCodeController = TextEditingController(text: a?.postalCode ?? '');
+    _countryController = TextEditingController(text: a?.country ?? '');
+    _selectedLabel = a?.label ?? 'Home';
+    _latitude = a?.latitude;
+    _longitude = a?.longitude;
+  }
+
+  @override
+  void dispose() {
+    _fullNameController.dispose();
+    _phoneController.dispose();
+    _streetController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _postalCodeController.dispose();
+    _countryController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleGetCurrentLocation() async {
+    setState(() => _isLocating = true);
+    final data = await ref
+        .read(addressControllerProvider.notifier)
+        .getCurrentLocationData();
+    if (data != null && mounted) {
+      setState(() {
+        _latitude = data['latitude'] as double?;
+        _longitude = data['longitude'] as double?;
+        if (data['street'] != null && (data['street'] as String).isNotEmpty) {
+          _streetController.text = data['street'] as String;
+        }
+        if (data['city'] != null && (data['city'] as String).isNotEmpty) {
+          _cityController.text = data['city'] as String;
+        }
+        if (data['state'] != null && (data['state'] as String).isNotEmpty) {
+          _stateController.text = data['state'] as String;
+        }
+        if (data['postalCode'] != null &&
+            (data['postalCode'] as String).isNotEmpty) {
+          _postalCodeController.text = data['postalCode'] as String;
+        }
+        if (data['country'] != null && (data['country'] as String).isNotEmpty) {
+          _countryController.text = data['country'] as String;
+        }
+        _isLocating = false;
+      });
+      final intl10n = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(intl10n.addressUpdatedSuccessfully),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else if (mounted) {
+      setState(() => _isLocating = false);
+    }
+  }
+
+  Future<void> _handleSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final entity = AddressEntity(
+      id: widget.address?.id ?? 0,
+      fullName: _fullNameController.text.trim(),
+      phone: _phoneController.text.trim(),
+      street: _streetController.text.trim(),
+      city: _cityController.text.trim(),
+      state: _stateController.text.trim(),
+      postalCode: _postalCodeController.text.trim(),
+      country: _countryController.text.trim(),
+      label: _selectedLabel,
+      isDefault: widget.address?.isDefault ?? false,
+      latitude: _latitude,
+      longitude: _longitude,
+    );
+
+    await ref.read(addressControllerProvider.notifier).saveAddressEntity(
+          id: widget.address?.id,
+          address: entity,
+        );
+
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = ref.watch(addressControllerProvider.notifier);
-    final isLoading = ref.watch(addressFormLoadingProvider);
-    final selectedLabel = ref.watch(addressFormSelectedLabelProvider);
+    final isLoading = ref.watch(addressFormLoadingProvider) || _isLocating;
     final intl10n = AppLocalizations.of(context)!;
 
     return SingleChildScrollView(
@@ -43,27 +141,15 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             const BottomSheetHandle(),
             const SizedBox(height: AppDimens.spacingMd),
             Text(
-              widget.address == null ? intl10n.addNewAddress : intl10n.editAddress,
+              widget.address == null
+                  ? intl10n.addNewAddress
+                  : intl10n.editAddress,
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 20),
             // button to get current location
             OutlinedButton.icon(
-              onPressed: isLoading
-                  ? null
-                  : () async {
-                      setState(() {}); // Start loading
-                      await controller.getCurrentLocation();
-                      if (context.mounted) {
-                        setState(() {}); // End loading
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(intl10n.addressUpdatedSuccessfully),
-                            backgroundColor: Colors.green,
-                          ),
-                        );
-                      }
-                    },
+              onPressed: isLoading ? null : _handleGetCurrentLocation,
               icon: isLoading
                   ? const SizedBox(
                       width: 20,
@@ -77,24 +163,24 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               label: Text(intl10n.useCurrentLocation),
             ),
             const SizedBox(height: AppDimens.spacingXl),
-            _buildField(controller.fullNameController, intl10n.fullName),
+            _buildField(_fullNameController, intl10n.fullName),
             const SizedBox(height: AppDimens.spacingLg),
             _buildField(
-              controller.phoneController,
+              _phoneController,
               intl10n.phoneNumber,
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: AppDimens.spacingLg),
-            _buildField(controller.streetController, intl10n.streetAddress),
+            _buildField(_streetController, intl10n.streetAddress),
             const SizedBox(height: AppDimens.spacingLg),
             Row(
               children: [
                 Expanded(
-                  child: _buildField(controller.cityController, intl10n.city),
+                  child: _buildField(_cityController, intl10n.city),
                 ),
                 const SizedBox(width: AppDimens.spacingLg),
                 Expanded(
-                  child: _buildField(controller.stateController, intl10n.state),
+                  child: _buildField(_stateController, intl10n.state),
                 ),
               ],
             ),
@@ -103,20 +189,20 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               children: [
                 Expanded(
                   child: _buildField(
-                    controller.postalCodeController,
+                    _postalCodeController,
                     intl10n.postalCode,
                   ),
                 ),
                 const SizedBox(width: AppDimens.spacingLg),
                 Expanded(
-                  child: _buildField(controller.countryController, intl10n.country),
+                  child: _buildField(_countryController, intl10n.country),
                 ),
               ],
             ),
             const SizedBox(height: AppDimens.spacingXl),
-            _buildLabelSelector(controller, selectedLabel, context),
+            _buildLabelSelector(context),
             const SizedBox(height: 32),
-            _buildSubmitButton(controller, isLoading),
+            _buildSubmitButton(isLoading),
             const SizedBox(height: AppDimens.spacingLg),
           ],
         ),
@@ -145,11 +231,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     );
   }
 
-  Widget _buildLabelSelector(
-    AddressController controller,
-    String selectedLabel,
-    BuildContext context,
-  ) {
+  Widget _buildLabelSelector(BuildContext context) {
     final intl10n = AppLocalizations.of(context)!;
     return Row(
       children: [intl10n.home, intl10n.work, intl10n.other]
@@ -158,11 +240,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
                 label: Text(label),
-                selected: selectedLabel == label,
+                selected: _selectedLabel == label,
                 onSelected: (val) {
                   if (val) {
                     setState(() {
-                      controller.selectedLabel = label;
+                      _selectedLabel = label;
                     });
                   }
                 },
@@ -173,7 +255,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     );
   }
 
-  Widget _buildSubmitButton(AddressController controller, bool isLoading) {
+  Widget _buildSubmitButton(bool isLoading) {
     final intl10n = AppLocalizations.of(context)!;
     return SizedBox(
       width: double.infinity,
@@ -182,18 +264,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
           shape: AppRadius.shapeMd,
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
-        onPressed: isLoading
-            ? null
-            : () async {
-                if (_formKey.currentState!.validate()) {
-                  setState(() {}); // Trigger loading state
-                  await controller.saveAddress(widget.address?.id);
-                  if (mounted) {
-                    setState(() {}); // Clear loading state if not popped
-                    Navigator.of(context).pop();
-                  }
-                }
-              },
+        onPressed: isLoading ? null : _handleSubmit,
         child: isLoading
             ? const SizedBox(
                 width: 20,
