@@ -1927,6 +1927,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The payment link isn\'t available. Please try again or choose another payment method.'**
   String get paymentLinkUnavailable;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdated;
+
+  /// No description provided for @signOutConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get signOutConfirm;
 }
 
 class _AppLocalizationsDelegate
