@@ -12,3 +12,4 @@ class CloseTicketChatUseCase {
     return _repository.closeTicket(ticketId);
   }
 }
+
