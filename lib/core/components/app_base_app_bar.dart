@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 /// Standard, reusable base app bar with centered title.
-AppBar baseAppBar(BuildContext context, String title) {
+AppBar baseAppBar(
+  BuildContext context,
+  String title, {
+  Widget? leading,
+  List<Widget>? actions,
+}) {
   return AppBar(
     backgroundColor: Theme.of(context).colorScheme.surface,
     title: Text(
@@ -9,5 +14,7 @@ AppBar baseAppBar(BuildContext context, String title) {
       style: Theme.of(context).textTheme.titleLarge,
     ),
     centerTitle: true,
+    leading: leading,
+    actions: actions,
   );
 }
