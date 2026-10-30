@@ -1621,6 +1621,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Couldn\'t load your cart'**
   String get cartLoadError;
+
+  /// No description provided for @myTickets.
+  ///
+  /// In en, this message translates to:
+  /// **'My Tickets'**
+  String get myTickets;
+
+  /// No description provided for @myTicketsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your requests and replies from our support team'**
+  String get myTicketsSubtitle;
+
+  /// No description provided for @noTicketsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no support tickets yet'**
+  String get noTicketsYet;
+
+  /// No description provided for @noTicketsYetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a ticket and our support team will get back to you'**
+  String get noTicketsYetSubtitle;
+
+  /// No description provided for @activeTicketsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'You have {count} support tickets'**
+  String activeTicketsCount(int count);
+
+  /// No description provided for @activeTicketsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to follow up and reply to our team'**
+  String get activeTicketsSubtitle;
+
+  /// No description provided for @ticketNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket #{number}'**
+  String ticketNumberLabel(String number);
+
+  /// No description provided for @followTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Ticket'**
+  String get followTicket;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @newReply.
+  ///
+  /// In en, this message translates to:
+  /// **'New reply'**
+  String get newReply;
+
+  /// No description provided for @resetSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset search'**
+  String get resetSearch;
+
+  /// No description provided for @ticketMessageTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Please write at least 10 characters'**
+  String get ticketMessageTooShort;
+
+  /// No description provided for @couldNotOpenChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open this contact channel'**
+  String get couldNotOpenChannel;
+
+  /// No description provided for @helpLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load help & support'**
+  String get helpLoadError;
+
+  /// No description provided for @checkConnectionAndRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Check your internet connection and try again'**
+  String get checkConnectionAndRetry;
+
+  /// No description provided for @ticketSubmitFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t submit the ticket. Please try again.'**
+  String get ticketSubmitFailed;
 }
 
 class _AppLocalizationsDelegate

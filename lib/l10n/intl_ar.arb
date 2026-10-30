@@ -254,5 +254,21 @@
   "channelAvailable": "متصل الآن",
   "copiedToClipboard": "تم النسخ إلى الحافظة",
   "pleaseFillAllFields": "يرجى تعبئة جميع الحقول المطلوبة",
-  "cartLoadError": "تعذر عرض السلة"
+  "cartLoadError": "تعذر عرض السلة",
+  "myTickets": "تذاكري وبلاغاتي",
+  "myTicketsSubtitle": "متابعة حالة الشكاوى والردود المباشرة من فريق الدعم",
+  "noTicketsYet": "لا توجد لديك تذاكر دعم سابقة",
+  "noTicketsYetSubtitle": "يمكنك إنشاء تذكرة جديدة وسيقوم فريق الدعم بالرد عليك",
+  "activeTicketsCount": "لديك {count} تذكرة دعم وبلاغات",
+  "activeTicketsSubtitle": "انقر لمتابعة حالة الشكاوى والرد على المشرفين",
+  "ticketNumberLabel": "رقم التذكرة: {number}",
+  "followTicket": "متابعة التذكرة",
+  "close": "إغلاق",
+  "newReply": "رد جديد",
+  "resetSearch": "إعادة ضبط البحث",
+  "ticketMessageTooShort": "يرجى كتابة وصف لا يقل عن 10 أحرف",
+  "couldNotOpenChannel": "تعذر فتح قناة التواصل",
+  "helpLoadError": "تعذر تحميل بيانات المساعدة والدعم",
+  "checkConnectionAndRetry": "يرجى التحقق من اتصالك بالإنترنت ثم إعادة المحاولة",
+  "ticketSubmitFailed": "تعذر إرسال التذكرة. يرجى المحاولة مجدداً."
 }

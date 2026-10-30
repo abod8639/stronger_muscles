@@ -785,4 +785,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartLoadError => 'Couldn\'t load your cart';
+
+  @override
+  String get myTickets => 'My Tickets';
+
+  @override
+  String get myTicketsSubtitle =>
+      'Track your requests and replies from our support team';
+
+  @override
+  String get noTicketsYet => 'You have no support tickets yet';
+
+  @override
+  String get noTicketsYetSubtitle =>
+      'Create a ticket and our support team will get back to you';
+
+  @override
+  String activeTicketsCount(int count) {
+    return 'You have $count support tickets';
+  }
+
+  @override
+  String get activeTicketsSubtitle => 'Tap to follow up and reply to our team';
+
+  @override
+  String ticketNumberLabel(String number) {
+    return 'Ticket #$number';
+  }
+
+  @override
+  String get followTicket => 'Open Ticket';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get newReply => 'New reply';
+
+  @override
+  String get resetSearch => 'Reset search';
+
+  @override
+  String get ticketMessageTooShort => 'Please write at least 10 characters';
+
+  @override
+  String get couldNotOpenChannel => 'Couldn\'t open this contact channel';
+
+  @override
+  String get helpLoadError => 'Couldn\'t load help & support';
+
+  @override
+  String get checkConnectionAndRetry =>
+      'Check your internet connection and try again';
+
+  @override
+  String get ticketSubmitFailed =>
+      'Couldn\'t submit the ticket. Please try again.';
 }

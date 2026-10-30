@@ -784,4 +784,60 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cartLoadError => 'تعذر عرض السلة';
+
+  @override
+  String get myTickets => 'تذاكري وبلاغاتي';
+
+  @override
+  String get myTicketsSubtitle =>
+      'متابعة حالة الشكاوى والردود المباشرة من فريق الدعم';
+
+  @override
+  String get noTicketsYet => 'لا توجد لديك تذاكر دعم سابقة';
+
+  @override
+  String get noTicketsYetSubtitle =>
+      'يمكنك إنشاء تذكرة جديدة وسيقوم فريق الدعم بالرد عليك';
+
+  @override
+  String activeTicketsCount(int count) {
+    return 'لديك $count تذكرة دعم وبلاغات';
+  }
+
+  @override
+  String get activeTicketsSubtitle =>
+      'انقر لمتابعة حالة الشكاوى والرد على المشرفين';
+
+  @override
+  String ticketNumberLabel(String number) {
+    return 'رقم التذكرة: $number';
+  }
+
+  @override
+  String get followTicket => 'متابعة التذكرة';
+
+  @override
+  String get close => 'إغلاق';
+
+  @override
+  String get newReply => 'رد جديد';
+
+  @override
+  String get resetSearch => 'إعادة ضبط البحث';
+
+  @override
+  String get ticketMessageTooShort => 'يرجى كتابة وصف لا يقل عن 10 أحرف';
+
+  @override
+  String get couldNotOpenChannel => 'تعذر فتح قناة التواصل';
+
+  @override
+  String get helpLoadError => 'تعذر تحميل بيانات المساعدة والدعم';
+
+  @override
+  String get checkConnectionAndRetry =>
+      'يرجى التحقق من اتصالك بالإنترنت ثم إعادة المحاولة';
+
+  @override
+  String get ticketSubmitFailed => 'تعذر إرسال التذكرة. يرجى المحاولة مجدداً.';
 }
