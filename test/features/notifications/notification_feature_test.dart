@@ -159,6 +159,33 @@ void main() {
       expect(model.createdAt, isNull);
     });
 
+    test('NotificationModel and NotificationEntity parse support ticket data correctly', () {
+      final json = {
+        'id': '29',
+        'title': 'رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)',
+        'body': 'zz',
+        'type': 'support',
+        'target_type': 'user',
+        'user_id': '2',
+        'data': {
+          'ticket_id': 6,
+          'ticket_number': 'SM-VKBVQ9LO',
+        },
+      };
+
+      final model = NotificationModel.fromJson(json);
+      expect(model.id, '29');
+      expect(model.ticketId, '6');
+      expect(model.ticketNumber, 'SM-VKBVQ9LO');
+      expect(model.isSupport, isTrue);
+
+      final entity = model.toEntity();
+      expect(entity.id, '29');
+      expect(entity.ticketId, '6');
+      expect(entity.ticketNumber, 'SM-VKBVQ9LO');
+      expect(entity.isSupport, isTrue);
+    });
+
     test('NotificationModelMapper conversions work as expected', () {
       const model = NotificationModel(
         id: '1',
