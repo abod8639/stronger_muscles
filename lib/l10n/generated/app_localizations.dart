@@ -1855,6 +1855,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit review'**
   String get submitReview;
+
+  /// No description provided for @securePaymentsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'100% Secure & Encrypted Payments'**
+  String get securePaymentsTitle;
+
+  /// No description provided for @securePaymentsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your financial data is protected with 256-bit SSL encryption'**
+  String get securePaymentsSubtitle;
+
+  /// No description provided for @paymentGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Gateway'**
+  String get paymentGateway;
+
+  /// No description provided for @paymentSessionReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Session Ready'**
+  String get paymentSessionReady;
+
+  /// No description provided for @paymentSessionReadySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue to the secure payment portal to complete your transaction'**
+  String get paymentSessionReadySubtitle;
+
+  /// No description provided for @transactionDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Details'**
+  String get transactionDetails;
+
+  /// No description provided for @amountDue.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount Due'**
+  String get amountDue;
+
+  /// No description provided for @transactionId.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction ID'**
+  String get transactionId;
+
+  /// No description provided for @paymentReference.
+  ///
+  /// In en, this message translates to:
+  /// **'Reference'**
+  String get paymentReference;
+
+  /// No description provided for @proceedToPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Proceed to Payment'**
+  String get proceedToPayment;
+
+  /// No description provided for @paymentGatewayOpenFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open the payment gateway'**
+  String get paymentGatewayOpenFailed;
+
+  /// No description provided for @paymentLinkUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The payment link isn\'t available. Please try again or choose another payment method.'**
+  String get paymentLinkUnavailable;
 }
 
 class _AppLocalizationsDelegate

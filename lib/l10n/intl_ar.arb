@@ -293,5 +293,17 @@
   "writeYourExperience": "اكتب تجربتك مع هذا المنتج...",
   "reviewCommentRequired": "يرجى كتابة تعليق لوصف تجربتك",
   "updateReview": "تحديث التقييم",
-  "submitReview": "إرسال التقييم"
+  "submitReview": "إرسال التقييم",
+  "securePaymentsTitle": "مدفوعات آمنة ومشفرة بنسبة 100%",
+  "securePaymentsSubtitle": "بياناتك المالية محمية بتقنية التشفير البنكي المعتمد (256-bit SSL)",
+  "paymentGateway": "بوابة الدفع الإلكتروني",
+  "paymentSessionReady": "تم تجهيز جلسة الدفع بنجاح",
+  "paymentSessionReadySubtitle": "يرجى الانتقال لبوابة الدفع الآمنة لإتمام المعاملة",
+  "transactionDetails": "تفاصيل المعاملة",
+  "amountDue": "المبلغ المستحق",
+  "transactionId": "رقم المعاملة",
+  "paymentReference": "الرقم المرجعي",
+  "proceedToPayment": "الانتقال لبوابة الدفع",
+  "paymentGatewayOpenFailed": "تعذر فتح بوابة الدفع",
+  "paymentLinkUnavailable": "رابط الدفع غير متاح حالياً، يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى"
 }

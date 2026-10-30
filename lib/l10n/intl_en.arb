@@ -295,5 +295,17 @@
   "writeYourExperience": "Tell others about your experience with this product...",
   "reviewCommentRequired": "Please write a comment describing your experience",
   "updateReview": "Update review",
-  "submitReview": "Submit review"
+  "submitReview": "Submit review",
+  "securePaymentsTitle": "100% Secure & Encrypted Payments",
+  "securePaymentsSubtitle": "Your financial data is protected with 256-bit SSL encryption",
+  "paymentGateway": "Payment Gateway",
+  "paymentSessionReady": "Payment Session Ready",
+  "paymentSessionReadySubtitle": "Continue to the secure payment portal to complete your transaction",
+  "transactionDetails": "Transaction Details",
+  "amountDue": "Amount Due",
+  "transactionId": "Transaction ID",
+  "paymentReference": "Reference",
+  "proceedToPayment": "Proceed to Payment",
+  "paymentGatewayOpenFailed": "Couldn't open the payment gateway",
+  "paymentLinkUnavailable": "The payment link isn't available. Please try again or choose another payment method."
 }

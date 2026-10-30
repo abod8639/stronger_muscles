@@ -913,4 +913,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get submitReview => 'إرسال التقييم';
+
+  @override
+  String get securePaymentsTitle => 'مدفوعات آمنة ومشفرة بنسبة 100%';
+
+  @override
+  String get securePaymentsSubtitle =>
+      'بياناتك المالية محمية بتقنية التشفير البنكي المعتمد (256-bit SSL)';
+
+  @override
+  String get paymentGateway => 'بوابة الدفع الإلكتروني';
+
+  @override
+  String get paymentSessionReady => 'تم تجهيز جلسة الدفع بنجاح';
+
+  @override
+  String get paymentSessionReadySubtitle =>
+      'يرجى الانتقال لبوابة الدفع الآمنة لإتمام المعاملة';
+
+  @override
+  String get transactionDetails => 'تفاصيل المعاملة';
+
+  @override
+  String get amountDue => 'المبلغ المستحق';
+
+  @override
+  String get transactionId => 'رقم المعاملة';
+
+  @override
+  String get paymentReference => 'الرقم المرجعي';
+
+  @override
+  String get proceedToPayment => 'الانتقال لبوابة الدفع';
+
+  @override
+  String get paymentGatewayOpenFailed => 'تعذر فتح بوابة الدفع';
+
+  @override
+  String get paymentLinkUnavailable =>
+      'رابط الدفع غير متاح حالياً، يرجى المحاولة مرة أخرى أو اختيار طريقة دفع أخرى';
 }

@@ -917,4 +917,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get submitReview => 'Submit review';
+
+  @override
+  String get securePaymentsTitle => '100% Secure & Encrypted Payments';
+
+  @override
+  String get securePaymentsSubtitle =>
+      'Your financial data is protected with 256-bit SSL encryption';
+
+  @override
+  String get paymentGateway => 'Payment Gateway';
+
+  @override
+  String get paymentSessionReady => 'Payment Session Ready';
+
+  @override
+  String get paymentSessionReadySubtitle =>
+      'Continue to the secure payment portal to complete your transaction';
+
+  @override
+  String get transactionDetails => 'Transaction Details';
+
+  @override
+  String get amountDue => 'Amount Due';
+
+  @override
+  String get transactionId => 'Transaction ID';
+
+  @override
+  String get paymentReference => 'Reference';
+
+  @override
+  String get proceedToPayment => 'Proceed to Payment';
+
+  @override
+  String get paymentGatewayOpenFailed => 'Couldn\'t open the payment gateway';
+
+  @override
+  String get paymentLinkUnavailable =>
+      'The payment link isn\'t available. Please try again or choose another payment method.';
 }
