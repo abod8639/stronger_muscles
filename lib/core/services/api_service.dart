@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../features/profile/presentation/controllers/language_controller.dart';
+import '../localization/language_controller.dart';
 import '../config/api_config.dart';
 import 'storage_service.dart';
 import '../errors/errors.dart';
