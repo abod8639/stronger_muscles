@@ -72,9 +72,11 @@ class CartItemModel with _$CartItemModel {
     final rawProduct = json['product'] ?? json['product_details'];
     final ProductModel parsedProduct;
     if (rawProduct is Map<String, dynamic>) {
-      parsedProduct = ProductModel.fromJson(rawProduct);
+      parsedProduct = ProductModel.fromJson(_normalizeProductJson(rawProduct));
     } else if (rawProduct is Map) {
-      parsedProduct = ProductModel.fromJson(Map<String, dynamic>.from(rawProduct));
+      parsedProduct = ProductModel.fromJson(
+        _normalizeProductJson(Map<String, dynamic>.from(rawProduct)),
+      );
     } else {
       throw const ParsingException(message: 'بيانات المنتج في السلة غير متوفرة أو تالفة');
     }
@@ -93,6 +95,68 @@ class CartItemModel with _$CartItemModel {
       selectedFlavor: json['selected_flavor']?.toString() ?? json['flavor']?.toString(),
       selectedSize: json['selected_size']?.toString() ?? json['size']?.toString(),
     );
+  }
+
+  static Map<String, dynamic> _normalizeProductJson(Map<String, dynamic> map) {
+    final cleanMap = Map<String, dynamic>.from(map);
+
+    if (cleanMap['price'] is String) {
+      cleanMap['price'] = double.tryParse(cleanMap['price'] as String) ?? 0.0;
+    } else if (cleanMap['price'] is num) {
+      cleanMap['price'] = (cleanMap['price'] as num).toDouble();
+    }
+
+    if (cleanMap['discount_price'] is String) {
+      cleanMap['discount_price'] =
+          double.tryParse(cleanMap['discount_price'] as String);
+    } else if (cleanMap['discount_price'] is num) {
+      cleanMap['discount_price'] =
+          (cleanMap['discount_price'] as num).toDouble();
+    }
+
+    if (cleanMap['stock_quantity'] is String) {
+      cleanMap['stock_quantity'] =
+          int.tryParse(cleanMap['stock_quantity'] as String) ?? 0;
+    }
+
+    if (cleanMap['average_rating'] is String) {
+      cleanMap['average_rating'] =
+          double.tryParse(cleanMap['average_rating'] as String) ?? 0.0;
+    }
+
+    if (cleanMap['review_count'] is String) {
+      cleanMap['review_count'] =
+          int.tryParse(cleanMap['review_count'] as String) ?? 0;
+    }
+
+    if (cleanMap['name'] is String) {
+      final nameStr = cleanMap['name'] as String;
+      cleanMap['name'] = {'ar': nameStr, 'en': nameStr};
+    }
+
+    if (cleanMap['imageUrls'] == null && cleanMap['image_urls'] != null) {
+      final rawImages = cleanMap['image_urls'];
+      if (rawImages is List) {
+        cleanMap['imageUrls'] = rawImages.map((img) {
+          if (img is Map) {
+            return {
+              'thumbnail': img['thumbnail'] ?? img['original'] ?? img['medium'] ?? '',
+              'medium': img['medium'] ?? img['original'] ?? img['thumbnail'] ?? '',
+              'original': img['original'] ?? img['medium'] ?? img['thumbnail'] ?? '',
+            };
+          } else if (img is String) {
+            return {
+              'thumbnail': img,
+              'medium': img,
+              'original': img,
+            };
+          }
+          return {'thumbnail': '', 'medium': '', 'original': ''};
+        }).toList();
+      }
+    }
+
+    return cleanMap;
   }
 
   double get subtotal =>
