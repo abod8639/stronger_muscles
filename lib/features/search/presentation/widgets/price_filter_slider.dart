@@ -4,9 +4,10 @@ import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
-import 'package:stronger_muscles/features/search/search_feature.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
+/// Price range filter shown in the search filter sheet.
 class PriceFilterSlider extends ConsumerStatefulWidget {
   const PriceFilterSlider({super.key});
 
