@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/errors/failures.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/features/auth/domain/entities/user_entity.dart';
@@ -29,7 +30,11 @@ class AuthController extends _$AuthController {
   PushNotificationService? _pushNotificationServiceOverride;
 
   /// Default constructor for Riverpod and production runtime.
-  AuthController();
+  AuthController() {
+    registerAuthStateChecker(
+      (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
+    );
+  }
 
   /// Dedicated constructor enabling 100% testability via direct mock injection.
   AuthController.test({
@@ -46,7 +51,11 @@ class AuthController extends _$AuthController {
         _getCurrentUserUseCaseOverride = getCurrentUserUseCase,
         _googleSignInUseCaseOverride = googleSignInUseCase,
         _updateProfileUseCaseOverride = updateProfileUseCase,
-        _pushNotificationServiceOverride = pushNotificationService;
+        _pushNotificationServiceOverride = pushNotificationService {
+    registerAuthStateChecker(
+      (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
+    );
+  }
 
   LoginUseCase get _loginUseCase =>
       _loginUseCaseOverride ?? ref.read(loginUseCaseProvider);
