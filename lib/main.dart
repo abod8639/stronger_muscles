@@ -8,12 +8,14 @@ import 'package:stronger_muscles/core/components/app_internet_banner.dart';
 import 'package:stronger_muscles/core/services/firebase_options.dart';
 import 'package:stronger_muscles/core/services/push_notification_service.dart';
 import 'package:stronger_muscles/core/theme/app_theme.dart';
-import 'package:stronger_muscles/core/utils/functions/hive_init.dart';
+import 'package:stronger_muscles/bootstrap/hive_init.dart';
 import 'package:stronger_muscles/features/notifications/notifications_feature.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
+import 'package:stronger_muscles/core/auth/auth_state_provider.dart';
 import 'package:stronger_muscles/core/services/crash_reporting_service.dart';
+import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/profile/profile_feature.dart';
 
 Future<void> main() async {
@@ -31,6 +33,10 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   await hiveInit();
+
+  registerAuthStateChecker(
+    (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
+  );
 
   runApp(const ProviderScope(child: MyApp()));
 }
