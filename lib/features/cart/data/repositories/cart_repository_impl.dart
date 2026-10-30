@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:fpdart/fpdart.dart';
 import 'package:stronger_muscles/core/errors/errors.dart';
 import 'package:stronger_muscles/features/cart/data/datasources/cart_local_data_source.dart';
@@ -25,11 +26,16 @@ class CartRepositoryImpl implements CartRepository {
         _remoteDataSource = remoteDataSource,
         _getUserId = getUserId;
 
+  bool get _isAuthenticated {
+    final uid = _getUserId?.call();
+    return uid != null && uid.trim().isNotEmpty;
+  }
+
   @override
   Future<Either<Failure, List<CartItemEntity>>> getCartItems() {
     return NetworkErrorHandler.execute(() async {
-      // 1. Attempt fetching from remote data source if available
-      if (_remoteDataSource != null) {
+      // 1. Attempt fetching from remote data source if available and authenticated
+      if (_remoteDataSource != null && _isAuthenticated) {
         try {
           final remoteModels = await _remoteDataSource.getCartItems();
           // Cache fresh data locally
@@ -40,7 +46,7 @@ class CartRepositoryImpl implements CartRepository {
         }
       }
 
-      // 2. Fallback to local cache (offline-first support)
+      // 2. Fallback to local cache (offline-first & guest support)
       final localModels = await _localDataSource.getCartItems();
       return localModels.map((m) => m.toEntity()).toList();
     });
@@ -78,13 +84,13 @@ class CartRepositoryImpl implements CartRepository {
         final updated = existing.copyWith(quantity: newQuantity);
         await _localDataSource.saveCartItem(updated);
 
-        // Sync with remote if connected
-        if (_remoteDataSource != null) {
-          try {
-            await _remoteDataSource.updateQuantity(updated.id, newQuantity);
-          } catch (_) {
-            // Keep local mutation even if remote background sync fails
-          }
+        // Sync with remote asynchronously in background
+        if (_remoteDataSource != null && _isAuthenticated) {
+          unawaited(
+            _remoteDataSource
+                .updateQuantity(updated.id, newQuantity)
+                .catchError((_) {}),
+          );
         }
       } else {
         if (product.stockQuantity > 0 && quantity > product.stockQuantity) {
@@ -106,18 +112,18 @@ class CartRepositoryImpl implements CartRepository {
 
         await _localDataSource.saveCartItem(newItem);
 
-        // Sync with remote if connected
-        if (_remoteDataSource != null) {
-          try {
-            await _remoteDataSource.addToCart(
-              productId: product.id,
-              selectedFlavor: selectedFlavor,
-              selectedSize: selectedSize,
-              quantity: quantity,
-            );
-          } catch (_) {
-            // Optimistic update retained locally
-          }
+        // Sync with remote asynchronously in background
+        if (_remoteDataSource != null && _isAuthenticated) {
+          unawaited(
+            _remoteDataSource
+                .addToCart(
+                  productId: product.id,
+                  selectedFlavor: selectedFlavor,
+                  selectedSize: selectedSize,
+                  quantity: quantity,
+                )
+                .catchError((_) {}),
+          );
         }
       }
 
@@ -130,12 +136,10 @@ class CartRepositoryImpl implements CartRepository {
     return NetworkErrorHandler.execute(() async {
       await _localDataSource.removeCartItem(itemId);
 
-      if (_remoteDataSource != null) {
-        try {
-          await _remoteDataSource.removeFromCart(itemId);
-        } catch (_) {
-          // Ignored for offline tolerance
-        }
+      if (_remoteDataSource != null && _isAuthenticated) {
+        unawaited(
+          _remoteDataSource.removeFromCart(itemId).catchError((_) {}),
+        );
       }
 
       return unit;
@@ -147,10 +151,10 @@ class CartRepositoryImpl implements CartRepository {
     return NetworkErrorHandler.execute(() async {
       if (quantity <= 0) {
         await _localDataSource.removeCartItem(itemId);
-        if (_remoteDataSource != null) {
-          try {
-            await _remoteDataSource.removeFromCart(itemId);
-          } catch (_) {}
+        if (_remoteDataSource != null && _isAuthenticated) {
+          unawaited(
+            _remoteDataSource.removeFromCart(itemId).catchError((_) {}),
+          );
         }
         return unit;
       }
@@ -173,10 +177,12 @@ class CartRepositoryImpl implements CartRepository {
       final updated = item.copyWith(quantity: quantity);
       await _localDataSource.saveCartItem(updated);
 
-      if (_remoteDataSource != null) {
-        try {
-          await _remoteDataSource.updateQuantity(itemId, quantity);
-        } catch (_) {}
+      if (_remoteDataSource != null && _isAuthenticated) {
+        unawaited(
+          _remoteDataSource
+              .updateQuantity(itemId, quantity)
+              .catchError((_) {}),
+        );
       }
 
       return unit;
@@ -188,10 +194,10 @@ class CartRepositoryImpl implements CartRepository {
     return NetworkErrorHandler.execute(() async {
       await _localDataSource.clearCart();
 
-      if (_remoteDataSource != null) {
-        try {
-          await _remoteDataSource.clearCart();
-        } catch (_) {}
+      if (_remoteDataSource != null && _isAuthenticated) {
+        unawaited(
+          _remoteDataSource.clearCart().catchError((_) {}),
+        );
       }
 
       return unit;
