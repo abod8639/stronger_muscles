@@ -8,6 +8,7 @@ import 'package:stronger_muscles/core/theme/app_shadows.dart';
 class AppSearchField extends StatefulWidget {
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
   final VoidCallback? onClear;
   final VoidCallback? onTap;
   final String hintText;
@@ -21,6 +22,7 @@ class AppSearchField extends StatefulWidget {
     super.key,
     this.controller,
     this.onChanged,
+    this.onSubmitted,
     this.onClear,
     this.onTap,
     this.hintText = 'بحث...',
@@ -56,6 +58,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
 
   @override
   void dispose() {
+    _controller.removeListener(_handleTextChanged);
     if (widget.controller == null) {
       _controller.dispose();
     }
@@ -85,6 +88,8 @@ class _AppSearchFieldState extends State<AppSearchField> {
         autofocus: widget.autofocus,
         onTap: widget.onTap,
         onChanged: widget.onChanged,
+        onSubmitted: widget.onSubmitted,
+        textInputAction: TextInputAction.search,
         textAlignVertical: TextAlignVertical.center,
         style: TextStyle(
           fontSize: 15,
