@@ -2,9 +2,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiConfig {
   static String get baseUrl {
-    final envUrl = dotenv.env['BASE_URL'];
-    if (envUrl != null) {
-      return envUrl.endsWith('/api/v1') ? envUrl : '$envUrl/api/v1';
+    if (dotenv.isInitialized) {
+      final envUrl = dotenv.env['BASE_URL'];
+      if (envUrl != null) {
+        return envUrl.endsWith('/api/v1') ? envUrl : '$envUrl/api/v1';
+      }
     }
     const String port = '8080';
     const String ip = '192.168.1.17';
@@ -14,12 +16,14 @@ class ApiConfig {
 
   // WebSocket / Laravel Reverb Configuration
   static String get wsHost {
-    final envUrl = dotenv.env['BASE_URL'];
-    if (envUrl != null) {
-      try {
-        final uri = Uri.parse(envUrl);
-        if (uri.host.isNotEmpty) return uri.host;
-      } catch (_) {}
+    if (dotenv.isInitialized) {
+      final envUrl = dotenv.env['BASE_URL'];
+      if (envUrl != null) {
+        try {
+          final uri = Uri.parse(envUrl);
+          if (uri.host.isNotEmpty) return uri.host;
+        } catch (_) {}
+      }
     }
     return '192.168.1.17';
   }
