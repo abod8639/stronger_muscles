@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fuzzy/fuzzy.dart';
@@ -13,10 +12,14 @@ import 'package:stronger_muscles/features/search/presentation/controllers/search
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 import 'package:stronger_muscles/routes/routes.dart';
 
+/// Search field with instant suggestions: recent searches when empty,
+/// otherwise ranked (exact → prefix → contains → fuzzy) product matches.
+///
+/// With [readOnly] it is just a tappable field (e.g. on the home header).
 class ProductSearchAutocomplete extends ConsumerStatefulWidget {
   final bool autofocus;
   final bool readOnly;
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   const ProductSearchAutocomplete({
     super.key,
@@ -26,20 +29,14 @@ class ProductSearchAutocomplete extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ProductSearchAutocomplete> createState() =>
-      _ProductSearchAutocompleteState();
+  ConsumerState<ProductSearchAutocomplete> createState() => _ProductSearchAutocompleteState();
 }
 
-class _ProductSearchAutocompleteState
-    extends ConsumerState<ProductSearchAutocomplete> {
-  late FocusNode _focusNode;
-  final _textController = TextEditingController();
+class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocomplete> {
+  static const double _maxOptionsHeight = 400.0;
 
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-  }
+  final _focusNode = FocusNode();
+  final _textController = TextEditingController();
 
   @override
   void dispose() {
@@ -48,306 +45,228 @@ class _ProductSearchAutocompleteState
     super.dispose();
   }
 
+  List<Object> _suggestions(String rawQuery, List<ProductEntity> products, String locale) {
+    final query = rawQuery.toLowerCase().trim();
+    if (query.isEmpty) return ref.read(searchHistoryProvider);
+
+    final exactMatches = <ProductEntity>[];
+    final prefixMatches = <ProductEntity>[];
+    final containsMatches = <ProductEntity>[];
+
+    for (final product in products) {
+      final fields = [
+        product.getLocalizedName(locale: locale).toLowerCase(),
+        (product.brand ?? '').toLowerCase(),
+        (product.category?.getLocalizedName(locale: locale) ?? '').toLowerCase(),
+      ];
+      if (fields.any((f) => f == query)) {
+        exactMatches.add(product);
+      } else if (fields.any((f) => f.startsWith(query))) {
+        prefixMatches.add(product);
+      } else if (fields.any((f) => f.contains(query))) {
+        containsMatches.add(product);
+      }
+    }
+
+    final results = [...exactMatches, ...prefixMatches, ...containsMatches];
+    if (results.isNotEmpty) return results.take(15).toList();
+
+    // No structural match: fall back to fuzzy matching on name and brand.
+    final fuse = Fuzzy<ProductEntity>(
+      products,
+      options: FuzzyOptions(
+        keys: [
+          WeightedKey(name: 'name', getter: (p) => p.getLocalizedName(locale: locale), weight: 1.0),
+          WeightedKey(name: 'brand', getter: (p) => p.brand ?? '', weight: 0.7),
+        ],
+        threshold: 0.35,
+      ),
+    );
+    return fuse.search(query).take(5).map((r) => r.item).toList();
+  }
+
+  void _onSelected(Object selection, String locale) {
+    final controller = ref.read(productSearchControllerProvider.notifier);
+    final history = ref.read(searchHistoryProvider.notifier);
+
+    if (selection is ProductEntity) {
+      final name = selection.getLocalizedName(locale: locale);
+      history.add(name);
+      controller.onSearchChanged(name);
+      context.push(AppRoutes.productDetails, extra: selection);
+    } else if (selection is String) {
+      _textController.text = selection;
+      controller.onSearchChanged(selection);
+      history.add(selection);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final controller = ref.watch(productSearchControllerProvider.notifier);
-    final homeProducts = ref.watch(homeControllerProvider).valueOrNull ?? [];
-    final homeEntities = homeProducts;
-    final searchHistory = ref.watch(searchHistoryProvider);
     final locale = l10n.localeName;
 
-    Widget searchContainer(Widget field) => Container(
-          height: 48.0,
-          padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingMd),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: AppRadius.allXl,
-            boxShadow: AppShadows.subtle(
-              theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.search,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: AppDimens.spacingSm),
-              Expanded(child: field),
-              if (_textController.text.isNotEmpty && !widget.readOnly)
-                IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    _textController.clear();
-                    controller.onSearchChanged("");
-                    setState(() {});
-                  },
-                  icon: Icon(
-                    Icons.clear,
-                    size: 18,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-            ],
-          ),
-        );
-
     if (widget.readOnly) {
-      return searchContainer(
-        TextField(
-          readOnly: widget.readOnly,
-          autofocus: widget.autofocus,
-          textInputAction: TextInputAction.search,
-          onTap: widget.onTap,
-          decoration: InputDecoration.collapsed(
-            hintText: l10n.searchProducts,
-          ),
-        ),
+      return AppSearchField(
+        readOnly: true,
+        hintText: l10n.searchProducts,
+        onTap: widget.onTap,
       );
     }
 
+    final products = ref.watch(homeControllerProvider).valueOrNull ?? const <ProductEntity>[];
+    ref.watch(searchHistoryProvider);
+    final controller = ref.read(productSearchControllerProvider.notifier);
+
     return LayoutBuilder(
       builder: (context, constraints) => RawAutocomplete<Object>(
-        displayStringForOption: (option) {
-          if (option is ProductEntity) {
-            return option.getLocalizedName(locale: locale);
-          }
-          if (option is ProductModel) {
-            return option.getLocalizedName(locale: locale);
-          }
-          if (option is String) return option;
-          return "";
-        },
         textEditingController: _textController,
         focusNode: _focusNode,
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          final query = textEditingValue.text.toLowerCase().trim();
-
-          // If query is empty, show search history
-          if (query.isEmpty) {
-            return searchHistory;
-          }
-
-          // Search Logic: Intelligent Filtering & Ranking
-          final List<ProductEntity> exactMatches = [];
-          final List<ProductEntity> prefixMatches = [];
-          final List<ProductEntity> containsMatches = [];
-
-          for (final product in homeEntities) {
-            final name = product.getLocalizedName(locale: locale).toLowerCase();
-            final brand = (product.brand ?? "").toLowerCase();
-            final category =
-                (product.category?.getLocalizedName(locale: locale) ?? "")
-                    .toLowerCase();
-
-            if (name == query || brand == query || category == query) {
-              exactMatches.add(product);
-            } else if (name.startsWith(query) ||
-                brand.startsWith(query) ||
-                category.startsWith(query)) {
-              prefixMatches.add(product);
-            } else if (name.contains(query) ||
-                brand.contains(query) ||
-                category.contains(query)) {
-              containsMatches.add(product);
-            }
-          }
-
-          final results = [
-            ...exactMatches,
-            ...prefixMatches,
-            ...containsMatches,
-          ];
-
-          // If no structural matches, try Fuzzy as fallback
-          if (results.isEmpty) {
-            final fuse = Fuzzy<ProductEntity>(
-              homeEntities,
-              options: FuzzyOptions(
-                keys: [
-                  WeightedKey(
-                    name: 'name',
-                    getter: (p) => p.getLocalizedName(locale: locale),
-                    weight: 1.0,
-                  ),
-                  WeightedKey(
-                    name: 'brand',
-                    getter: (p) => p.brand ?? "",
-                    weight: 0.7,
-                  ),
-                ],
-                threshold: 0.35,
-              ),
-            );
-            return fuse.search(query).take(5).map((r) => r.item).toList();
-          }
-
-          return results.take(15).toList();
-        },
-        onSelected: (selection) {
-          if (selection is ProductEntity) {
-            final name = selection.getLocalizedName(locale: locale);
-            ref.read(searchHistoryProvider.notifier).add(name);
-            controller.onSearchChanged(name);
-            context.push(AppRoutes.productDetails, extra: selection);
-          } else if (selection is ProductModel) {
-            final name = selection.getLocalizedName(locale: locale);
-            ref.read(searchHistoryProvider.notifier).add(name);
-            controller.onSearchChanged(name);
-            context.push(AppRoutes.productDetails, extra: selection.toEntity());
-          } else if (selection is String) {
-            _textController.text = selection;
-            controller.onSearchChanged(selection);
-            ref.read(searchHistoryProvider.notifier).add(selection);
-          }
-        },
-        fieldViewBuilder:
-            (context, textEditingController, focusNode, onFieldSubmitted) {
-          return searchContainer(
-            TextField(
-              controller: textEditingController,
-              focusNode: focusNode,
-              onChanged: (val) {
-                controller.onSearchChanged(val);
-                setState(() {}); // For clear button
-              },
-              readOnly: widget.readOnly,
-              autofocus: widget.autofocus,
-              textInputAction: TextInputAction.search,
-              onSubmitted: (val) {
-                ref.read(searchHistoryProvider.notifier).add(val);
-                onFieldSubmitted();
-              },
-              onTap: widget.onTap,
-              decoration: InputDecoration.collapsed(
-                hintText: l10n.searchProducts,
-              ),
-            ),
-          );
-        },
-        optionsViewBuilder: (context, onSelected, options) {
-          return Align(
-            alignment: Alignment.topLeft,
+        displayStringForOption: (option) =>
+            option is ProductEntity ? option.getLocalizedName(locale: locale) : '$option',
+        optionsBuilder: (value) => _suggestions(value.text, products, locale),
+        onSelected: (selection) => _onSelected(selection, locale),
+        fieldViewBuilder: (context, textController, focusNode, onFieldSubmitted) => AppSearchField(
+          controller: textController,
+          focusNode: focusNode,
+          autofocus: widget.autofocus,
+          hintText: l10n.searchProducts,
+          onTap: widget.onTap,
+          onChanged: controller.onSearchChanged,
+          onSubmitted: (value) {
+            ref.read(searchHistoryProvider.notifier).add(value);
+            onFieldSubmitted();
+          },
+        ),
+        optionsViewBuilder: (context, onSelected, options) => Align(
+          alignment: AlignmentDirectional.topStart,
+          child: Padding(
+            padding: const EdgeInsets.only(top: AppDimens.spacingXs),
             child: Material(
               elevation: AppDimens.elevationMd,
               borderRadius: AppRadius.allLg,
-              color: theme.colorScheme.surface,
+              color: context.colorScheme.surface,
+              clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 400,
-                  maxWidth: constraints.maxWidth,
+                constraints: BoxConstraints(maxHeight: _maxOptionsHeight, maxWidth: constraints.maxWidth),
+                child: ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
+                  shrinkWrap: true,
+                  itemCount: options.length,
+                  separatorBuilder: (_, _) => Divider(
+                    height: 1,
+                    indent: AppDimens.spacingLg,
+                    endIndent: AppDimens.spacingLg,
+                    color: context.colorScheme.outlineVariant.withValues(alpha: 0.4),
+                  ),
+                  itemBuilder: (context, index) {
+                    final option = options.elementAt(index);
+                    return option is ProductEntity
+                        ? _ProductSuggestion(
+                            product: option,
+                            query: _textController.text,
+                            locale: locale,
+                            onTap: () => onSelected(option),
+                          )
+                        : _HistorySuggestion(
+                            term: '$option',
+                            onTap: () => onSelected(option),
+                            onRemove: () => ref.read(searchHistoryProvider.notifier).remove('$option'),
+                          );
+                  },
                 ),
-                child: productsList(options, onSelected, theme, locale),
               ),
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }
+}
 
-  ListView productsList(
-    Iterable<Object> options,
-    AutocompleteOnSelected<Object> onSelected,
-    ThemeData theme,
-    String locale,
-  ) {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
-      shrinkWrap: true,
-      itemCount: options.length,
-      separatorBuilder: (context, index) =>
-          const Divider(height: 1, indent: AppDimens.spacingLg),
-      itemBuilder: (context, index) {
-        final option = options.elementAt(index);
+class _HistorySuggestion extends StatelessWidget {
+  final String term;
+  final VoidCallback onTap;
+  final VoidCallback onRemove;
 
-        // Search History Item UI
-        if (option is String) {
-          return ListTile(
-            leading: const Icon(Icons.history, size: AppDimens.iconSm),
-            title: Text(option),
-            trailing: IconButton(
-              icon: const Icon(Icons.close, size: 16),
-              onPressed: () =>
-                  ref.read(searchHistoryProvider.notifier).remove(option),
+  const _HistorySuggestion({required this.term, required this.onTap, required this.onRemove});
+
+  @override
+  Widget build(BuildContext context) {
+    final mutedColor = context.colorScheme.onSurfaceVariant;
+
+    return ListTile(
+      dense: true,
+      leading: Icon(Icons.history_rounded, size: AppDimens.iconSm, color: mutedColor),
+      title: Text(term, style: context.textTheme.bodyMedium),
+      trailing: IconButton(
+        icon: Icon(Icons.close_rounded, size: 16, color: mutedColor),
+        onPressed: onRemove,
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class _ProductSuggestion extends StatelessWidget {
+  static const double _thumbSize = 48.0;
+
+  final ProductEntity product;
+  final String query;
+  final String locale;
+  final VoidCallback onTap;
+
+  const _ProductSuggestion({
+    required this.product,
+    required this.query,
+    required this.locale,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = context.textTheme;
+    final brand = product.brand;
+
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimens.spacingLg,
+          vertical: AppDimens.spacingMd,
+        ),
+        child: Row(
+          children: [
+            AppNetworkImage(
+              imageUrl: product.primaryThumbnailUrl,
+              width: _thumbSize,
+              height: _thumbSize,
+              borderRadius: AppRadius.allSm,
             ),
-            onTap: () => onSelected(option),
-          );
-        }
-
-        // Product Item UI (Domain ProductEntity)
-        final product = option is ProductEntity
-            ? option
-            : (option as ProductModel).toEntity();
-        final query = _textController.text;
-
-        return InkWell(
-          onTap: () => onSelected(product),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimens.spacingLg,
-              vertical: AppDimens.spacingMd,
-            ),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: AppRadius.allSm,
-                  child: CachedNetworkImage(
-                    imageUrl: product.primaryThumbnailUrl ?? '',
-                    width: 48,
-                    height: 48,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      child: const Icon(Icons.image, size: AppDimens.iconSm),
-                    ),
+            const SizedBox(width: AppDimens.spacingMd),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppHighlightText(
+                    text: product.getLocalizedName(locale: locale),
+                    query: query,
+                    style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(width: AppDimens.spacingMd),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AppHighlightText(
-                        text: product.getLocalizedName(locale: locale),
-                        query: query,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (product.brand != null)
-                        Text(
-                          product.brand!,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: AppDimens.spacingSm),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+                  if (brand != null && brand.isNotEmpty)
                     Text(
-                      '${product.price.toStringAsFixed(2)} LE',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      brand,
+                      style: textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
                     ),
-                    const Icon(Icons.north_west, size: 14, color: Colors.grey),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            const SizedBox(width: AppDimens.spacingSm),
+            AppPriceText(price: product.baseEffectivePrice, fontSize: 13.0),
+          ],
+        ),
+      ),
     );
   }
 }
