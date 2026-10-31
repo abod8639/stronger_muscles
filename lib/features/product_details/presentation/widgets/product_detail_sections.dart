@@ -43,8 +43,13 @@ class ProductDescriptionSection extends StatelessWidget {
 /// Key/value product specs (brand links to a brand search).
 class ProductInfoSection extends ConsumerWidget {
   final ProductModel product;
+  final dynamic selectedSize;
 
-  const ProductInfoSection({super.key, required this.product});
+  const ProductInfoSection({
+    super.key,
+    required this.product,
+    this.selectedSize,
+  });
 
   void _searchBrand(BuildContext context, WidgetRef ref, String brand) {
     final searchNotifier = ref.read(productSearchControllerProvider.notifier);
@@ -61,12 +66,21 @@ class ProductInfoSection extends ConsumerWidget {
     final brand = product.brand;
     final category = product.category;
 
+    final customServingSize = selectedSize?.weight as String?;
+    final customServings = selectedSize?.servings as int?;
+    final displayServingSize = customServingSize ?? product.servingSize;
+    final displayServings = customServings ??
+        (product.servingsPerContainer != 0
+            ? product.servingsPerContainer
+            : null);
+
     final rows = <({String label, String value})>[
       if (category?.name != null) (label: l10n.category, value: category!.getLocalizedName(locale: locale)),
       if (product.sku != null) (label: l10n.sku, value: product.sku!),
-      if (product.servingSize != null) (label: l10n.servingSize, value: product.servingSize!),
-      (label: l10n.servingsPerContainer, value: '${product.servingsPerContainer}'),
-      if (product.weight != null) (label: l10n.weight, value: '${product.weight} ${l10n.kg}'),
+      if (displayServingSize != null) (label: l10n.servingSize, value: displayServingSize),
+      if (displayServings != null) (label: l10n.servingsPerContainer, value: '$displayServings'),
+      if (product.weight != null && product.weight.toString() != displayServingSize)
+        (label: l10n.weight, value: '${product.weight} ${l10n.kg}'),
       if (product.manufacturer != null) (label: l10n.manufacturer, value: product.manufacturer!),
       if (product.countryOfOrigin != null) (label: l10n.countryOfOrigin, value: product.countryOfOrigin!),
     ];
