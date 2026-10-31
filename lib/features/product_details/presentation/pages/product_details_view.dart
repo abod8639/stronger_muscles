@@ -111,6 +111,7 @@ class ProductDetailsView extends ConsumerWidget {
                   gap,
                   ProductFlavorSelector(
                     product: effectiveProd,
+                    flavors: detailsNotifier.getCurrentFlavors(effectiveProd),
                     selectedFlavor: detailsState.selectedFlavor,
                     onFlavorSelected: detailsNotifier.updateFlavor,
                   ),
@@ -126,7 +127,10 @@ class ProductDetailsView extends ConsumerWidget {
                 gap,
                 ProductDescriptionSection(product: effectiveProd),
                 gap,
-                ProductInfoSection(product: effectiveProd),
+                ProductInfoSection(
+                  product: effectiveProd,
+                  selectedSize: detailsState.selectedSizeObject,
+                ),
                 gap,
                 ProductIngredientsSection(product: effectiveProd),
                 gap,
