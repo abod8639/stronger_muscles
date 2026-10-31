@@ -95,15 +95,35 @@ final Map<String, FlavorsModel> flavorsData = {
 
 /// Global resolver for flavor details and thumbnail visuals.
 FlavorsModel getFlavorDetails(String flavorName) {
-  final key = flavorName.toLowerCase().trim();
+  String name = flavorName.trim();
+  String? customImage;
+
+  if (flavorName.contains('|')) {
+    final parts = flavorName.split('|');
+    name = parts.first.trim();
+    if (parts.length > 1 && parts[1].trim().isNotEmpty) {
+      customImage = parts.sublist(1).join('|').trim();
+    }
+  }
+
+  final key = name.toLowerCase().trim();
   final match = flavorsData.keys.firstWhere(
     (k) => key.contains(k),
     orElse: () => "default",
   );
 
-  return flavorsData[match] ??
+  final base = flavorsData[match];
+  if (customImage != null && customImage.isNotEmpty) {
+    return FlavorsModel(
+      name: name,
+      color: base?.color ?? Colors.blueGrey,
+      image: customImage,
+    );
+  }
+
+  return base ??
       FlavorsModel(
-        name: flavorName,
+        name: name,
         color: Colors.blueGrey,
         image: "https://via.placeholder.com/150",
       );
