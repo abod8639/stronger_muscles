@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart' as ll;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/config/map_config.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
@@ -73,7 +74,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
       ),
       child: Column(
         children: [
-          _buildMapPreview(),
+          _buildMapPreview(context),
           Padding(
             padding: const EdgeInsets.all(AppDimens.spacingLg),
             child: Column(
@@ -92,9 +93,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     );
   }
 
-  Widget _buildMapPreview() {
+  Widget _buildMapPreview(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     if (address.latitude != null && address.longitude != null) {
-      return _buildMapWidget(ll.LatLng(address.latitude!, address.longitude!));
+      return _buildMapWidget(ll.LatLng(address.latitude!, address.longitude!), locale);
     }
 
     // Try to geocode the address if coordinates are missing
@@ -107,7 +109,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           final loc = snapshot.data!.first;
-          return _buildMapWidget(ll.LatLng(loc.latitude, loc.longitude));
+          return _buildMapWidget(ll.LatLng(loc.latitude, loc.longitude), locale);
         }
 
         return _buildMapPlaceholder();
@@ -115,14 +117,14 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     );
   }
 
-  Widget _buildMapWidget(ll.LatLng position) {
+  Widget _buildMapWidget(ll.LatLng position, Locale locale) {
     return SizedBox(
       height: _mapHeight,
       width: double.infinity,
       child: Stack(
         children: [
           FlutterMap(
-            key: ValueKey('map_${address.id}_${position.latitude}_${position.longitude}'),
+            key: ValueKey('map_${address.id}_${position.latitude}_${position.longitude}_${locale.languageCode}'),
             options: MapOptions(
               initialCenter: position,
               initialZoom: _mapZoom,
@@ -131,10 +133,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
               ),
             ),
             children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.example.stronger_muscles',
-              ),
+              MapConfig.buildTileLayer(locale),
               MarkerLayer(
                 markers: [
                   Marker(
