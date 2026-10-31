@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:fpdart/fpdart.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,8 +17,9 @@ abstract class AddressRemoteDataSource {
   Future<Either<Failure, Position>> getCurrentPosition();
   Future<Either<Failure, Placemark?>> getAddressFromCoordinates(
     double lat,
-    double lng,
-  );
+    double lng, {
+    Locale? locale,
+  });
 }
 
 /// Dio-backed implementation of [AddressRemoteDataSource].
@@ -120,11 +122,16 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
   @override
   Future<Either<Failure, Placemark?>> getAddressFromCoordinates(
     double lat,
-    double lng,
-  ) async {
+    double lng, {
+    Locale? locale,
+  }) async {
     try {
-      List<Placemark> placemarks =
-          await Geocoding().placemarkFromCoordinates(lat, lng);
+      final List<Placemark> placemarks =
+          await Geocoding(locale: locale).placemarkFromCoordinates(
+        lat,
+        lng,
+        locale: locale,
+      );
       return Right(placemarks.isNotEmpty ? placemarks.first : null);
     } catch (e, st) {
       return Left(
