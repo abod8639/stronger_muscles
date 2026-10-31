@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stronger_muscles/core/localization/language_controller.dart';
 import 'package:stronger_muscles/features/auth/auth_feature.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/profile_providers.dart';
@@ -183,7 +184,7 @@ class AddressController extends _$AddressController {
     await saveAddressEntity(id: id, address: entity);
   }
 
-  Future<Map<String, dynamic>?> getCurrentLocationData() async {
+  Future<Map<String, dynamic>?> getCurrentLocationData({Locale? locale}) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
@@ -196,9 +197,11 @@ class AddressController extends _$AddressController {
         (position) async {
           _latitude = position.latitude;
           _longitude = position.longitude;
+          final effectiveLocale = locale ?? ref.read(languageControllerProvider);
           final placeResult = await remoteDataSource.getAddressFromCoordinates(
             position.latitude,
             position.longitude,
+            locale: effectiveLocale,
           );
           ref.read(addressFormLoadingProvider.notifier).setLoading(false);
           final data = placeResult.fold(
@@ -232,12 +235,18 @@ class AddressController extends _$AddressController {
 
   Future<Map<String, dynamic>?> getLocationDataFromCoordinates(
     double lat,
-    double lng,
-  ) async {
+    double lng, {
+    Locale? locale,
+  }) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
     try {
       final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
-      final placeResult = await remoteDataSource.getAddressFromCoordinates(lat, lng);
+      final effectiveLocale = locale ?? ref.read(languageControllerProvider);
+      final placeResult = await remoteDataSource.getAddressFromCoordinates(
+        lat,
+        lng,
+        locale: effectiveLocale,
+      );
       ref.read(addressFormLoadingProvider.notifier).setLoading(false);
       _latitude = lat;
       _longitude = lng;
