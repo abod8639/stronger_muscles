@@ -9,17 +9,21 @@ class ProductFlavorSelector extends StatelessWidget {
   final ProductModel product;
   final String selectedFlavor;
   final Function(String) onFlavorSelected;
+  final List<String>? flavors;
 
   const ProductFlavorSelector({
     super.key,
     required this.product,
     required this.selectedFlavor,
     required this.onFlavorSelected,
+    this.flavors,
   });
 
   @override
   Widget build(BuildContext context) {
-    final flavorsList = product.flavors;
+    final flavorsList = (flavors != null && flavors!.isNotEmpty)
+        ? flavors!
+        : product.flavors;
     if (flavorsList.isEmpty) return const SizedBox.shrink();
 
     final l10n = AppLocalizations.of(context);
@@ -34,14 +38,15 @@ class ProductFlavorSelector extends StatelessWidget {
           spacing: 10,
           runSpacing: 12,
           children: flavorsList.map((flavor) {
-            final isSelected = selectedFlavor == flavor;
             final details = getFlavorDetails(flavor);
+            final isSelected =
+                selectedFlavor == details.name || selectedFlavor == flavor;
             final baseColor = details.color;
 
             return GestureDetector(
               onTap: () {
                 HapticFeedback.lightImpact();
-                onFlavorSelected(flavor);
+                onFlavorSelected(details.name);
               },
               child: FlavorImage(
                 shadow: true,
