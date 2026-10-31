@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart' as ll;
 import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
+import 'package:stronger_muscles/features/profile/presentation/widgets/map_location_picker_sheet.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Add / edit address sheet (open it with `showAddressForm`).
@@ -86,6 +91,42 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     }
   }
 
+  Future<void> _handleSelectOnMap() async {
+    final picked = await MapLocationPickerSheet.show(
+      context,
+      initialLatitude: _latitude,
+      initialLongitude: _longitude,
+    );
+    if (picked == null || !mounted) return;
+
+    setState(() => _isLocating = true);
+    final data = await ref
+        .read(addressControllerProvider.notifier)
+        .getLocationDataFromCoordinates(picked.latitude, picked.longitude);
+    if (!mounted) return;
+
+    setState(() {
+      _isLocating = false;
+      _latitude = picked.latitude;
+      _longitude = picked.longitude;
+      if (data == null) return;
+      void fill(TextEditingController controller, String key) {
+        final value = data[key];
+        if (value is String && value.isNotEmpty) controller.text = value;
+      }
+
+      fill(_streetController, 'street');
+      fill(_cityController, 'city');
+      fill(_stateController, 'state');
+      fill(_postalCodeController, 'postalCode');
+      fill(_countryController, 'country');
+    });
+
+    if (data != null) {
+      AppSnackBar.showSuccess(context, AppLocalizations.of(context)!.addressUpdatedSuccessfully);
+    }
+  }
+
   Future<void> _handleSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -136,12 +177,106 @@ class _AddressFormState extends ConsumerState<AddressForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppSocialButton(
-              icon: const Icon(Icons.my_location_rounded, size: AppDimens.iconSm),
-              label: l10n.useCurrentLocation,
-              isLoading: _isLocating,
-              onPressed: isBusy ? null : _handleGetCurrentLocation,
+            Row(
+              children: [
+                Expanded(
+                  child: AppSocialButton(
+                    icon: const Icon(Icons.my_location_rounded, size: AppDimens.iconSm),
+                    label: l10n.useCurrentLocation,
+                    isLoading: _isLocating,
+                    onPressed: isBusy ? null : _handleGetCurrentLocation,
+                  ),
+                ),
+                hGap,
+                Expanded(
+                  child: AppSocialButton(
+                    icon: const Icon(Icons.map_outlined, size: AppDimens.iconSm),
+                    label: l10n.selectOnMap,
+                    isLoading: false,
+                    onPressed: isBusy ? null : _handleSelectOnMap,
+                  ),
+                ),
+              ],
             ),
+            if (_latitude != null && _longitude != null) ...[
+              const SizedBox(height: AppDimens.spacingMd),
+              ClipRRect(
+                borderRadius: AppRadius.allMd,
+                child: SizedBox(
+                  height: 120,
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      FlutterMap(
+                        key: ValueKey('preview_${_latitude}_$_longitude'),
+                        options: MapOptions(
+                          initialCenter: ll.LatLng(_latitude!, _longitude!),
+                          initialZoom: 15.0,
+                          interactionOptions: const InteractionOptions(
+                            flags: InteractiveFlag.none,
+                          ),
+                        ),
+                        children: [
+                          TileLayer(
+                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.stronger_muscles',
+                          ),
+                          MarkerLayer(
+                            markers: [
+                              Marker(
+                                point: ll.LatLng(_latitude!, _longitude!),
+                                width: 32,
+                                height: 32,
+                                alignment: Alignment.topCenter,
+                                child: const Icon(
+                                  Icons.location_on,
+                                  color: AppColors.primary,
+                                  size: 32,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: isBusy ? null : _handleSelectOnMap,
+                          ),
+                        ),
+                      ),
+                      PositionedDirectional(
+                        top: 8,
+                        end: 8,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: context.colorScheme.surface.withValues(alpha: 0.85),
+                            borderRadius: AppRadius.allPill,
+                            boxShadow: context.subtleShadow,
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.edit_location_alt_outlined, size: 14, color: AppColors.primary),
+                              const SizedBox(width: 4),
+                              Text(
+                                l10n.editAddress,
+                                style: context.textTheme.labelSmall?.copyWith(
+                                  color: context.colorScheme.onSurface,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: AppDimens.spacingXl),
             field(_fullNameController, l10n.fullName),
             gap,
