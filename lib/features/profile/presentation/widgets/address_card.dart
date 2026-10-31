@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart' as ll;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
@@ -92,7 +94,7 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
   Widget _buildMapPreview() {
     if (address.latitude != null && address.longitude != null) {
-      return _buildMapWidget(LatLng(address.latitude!, address.longitude!));
+      return _buildMapWidget(ll.LatLng(address.latitude!, address.longitude!));
     }
 
     // Try to geocode the address if coordinates are missing
@@ -102,10 +104,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return _buildMapLoading();
         }
-        
+
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           final loc = snapshot.data!.first;
-          return _buildMapWidget(LatLng(loc.latitude, loc.longitude));
+          return _buildMapWidget(ll.LatLng(loc.latitude, loc.longitude));
         }
 
         return _buildMapPlaceholder();
@@ -113,38 +115,49 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     );
   }
 
-  Widget _buildMapWidget(LatLng position) {
+  Widget _buildMapWidget(ll.LatLng position) {
     return SizedBox(
       height: _mapHeight,
       width: double.infinity,
       child: Stack(
         children: [
-          GoogleMap(
-
-            key: ValueKey('map_${address.id}_${position.latitude}'),
-            initialCameraPosition: CameraPosition(
-              target: position,
-              zoom: _mapZoom,
-            ),
-            liteModeEnabled: true,
-            zoomControlsEnabled: false,
-            myLocationButtonEnabled: false,
-            compassEnabled: false,
-            mapToolbarEnabled: false,
-            markers: {
-              Marker(
-                markerId: MarkerId(address.id.toString()),
-                position: position,
-                icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueAzure,
-                ),
+          FlutterMap(
+            key: ValueKey('map_${address.id}_${position.latitude}_${position.longitude}'),
+            options: MapOptions(
+              initialCenter: position,
+              initialZoom: _mapZoom,
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.none,
               ),
-            },
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.example.stronger_muscles',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    point: position,
+                    width: 36,
+                    height: 36,
+                    alignment: Alignment.topCenter,
+                    child: const Icon(
+                      Icons.location_on,
+                      color: AppColors.primary,
+                      size: 36,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
           Positioned.fill(
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(color: Colors.transparent),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _openInMaps(position),
+              ),
             ),
           ),
           PositionedDirectional(
@@ -155,6 +168,21 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         ],
       ),
     );
+  }
+
+  Future<void> _openInMaps(ll.LatLng position) async {
+    final uri = Uri.parse(
+      'geo:${position.latitude},${position.longitude}?q=${position.latitude},${position.longitude}',
+    );
+    final webUri = Uri.parse(
+      'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
+    );
+
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else if (await canLaunchUrl(webUri)) {
+      await launchUrl(webUri, mode: LaunchMode.externalApplication);
+    }
   }
 
   Widget _buildMapLoading() {
