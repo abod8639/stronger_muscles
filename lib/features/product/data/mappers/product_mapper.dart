@@ -102,6 +102,9 @@ extension ProductSizeModelMapper on ProductSize {
         size: size,
         price: price,
         discountPrice: discountPrice,
+        servings: servings,
+        weight: weight,
+        stockQuantity: stockQuantity,
       );
 }
 
