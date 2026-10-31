@@ -91,6 +91,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get useCurrentLocation => 'Use Current Location';
 
   @override
+  String get selectOnMap => 'Select on Map';
+
+  @override
+  String get confirmLocation => 'Confirm Location';
+
+  @override
   String get phoneNumber => 'Phone Number';
 
   @override
