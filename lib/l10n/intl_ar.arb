@@ -28,6 +28,8 @@
   "editAddress": "تعديل العنوان",
   "addressUpdatedSuccessfully": "تم تحديث العنوان بنجاح",
   "useCurrentLocation": "استخدم موقعي الحالي",
+  "selectOnMap": "تحديد على الخريطة",
+  "confirmLocation": "تأكيد الموقع",
   "phoneNumber": "رقم الهاتف",
   "streetAddress": "عنوان الشارع",
   "city": "المدينة",

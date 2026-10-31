@@ -91,6 +91,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get useCurrentLocation => 'استخدم موقعي الحالي';
 
   @override
+  String get selectOnMap => 'تحديد على الخريطة';
+
+  @override
+  String get confirmLocation => 'تأكيد الموقع';
+
+  @override
   String get phoneNumber => 'رقم الهاتف';
 
   @override

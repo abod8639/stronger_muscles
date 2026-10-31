@@ -27,6 +27,8 @@
   "editAddress": "Edit Address",
   "addressUpdatedSuccessfully": "Address updated successfully",
   "useCurrentLocation": "Use Current Location",
+  "selectOnMap": "Select on Map",
+  "confirmLocation": "Confirm Location",
   "phoneNumber": "Phone Number",
   "streetAddress": "Street Address",
   "city": "City",

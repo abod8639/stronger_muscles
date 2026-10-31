@@ -260,6 +260,18 @@ abstract class AppLocalizations {
   /// **'Use Current Location'**
   String get useCurrentLocation;
 
+  /// No description provided for @selectOnMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Select on Map'**
+  String get selectOnMap;
+
+  /// No description provided for @confirmLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Location'**
+  String get confirmLocation;
+
   /// No description provided for @phoneNumber.
   ///
   /// In en, this message translates to:
