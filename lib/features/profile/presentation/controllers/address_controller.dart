@@ -230,6 +230,44 @@ class AddressController extends _$AddressController {
     }
   }
 
+  Future<Map<String, dynamic>?> getLocationDataFromCoordinates(
+    double lat,
+    double lng,
+  ) async {
+    ref.read(addressFormLoadingProvider.notifier).setLoading(true);
+    try {
+      final remoteDataSource = ref.read(addressRemoteDataSourceProvider);
+      final placeResult = await remoteDataSource.getAddressFromCoordinates(lat, lng);
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+      _latitude = lat;
+      _longitude = lng;
+      final data = placeResult.fold(
+        (failure) => <String, dynamic>{
+          'latitude': lat,
+          'longitude': lng,
+        },
+        (place) => <String, dynamic>{
+          'latitude': lat,
+          'longitude': lng,
+          'street': place?.street ?? '',
+          'city': place?.locality ?? '',
+          'state': place?.administrativeArea ?? '',
+          'postalCode': place?.postalCode ?? '',
+          'country': place?.country ?? '',
+        },
+      );
+      if (data['street'] != null) streetController.text = data['street'] as String;
+      if (data['city'] != null) cityController.text = data['city'] as String;
+      if (data['state'] != null) stateController.text = data['state'] as String;
+      if (data['postalCode'] != null) postalCodeController.text = data['postalCode'] as String;
+      if (data['country'] != null) countryController.text = data['country'] as String;
+      return data;
+    } catch (_) {
+      ref.read(addressFormLoadingProvider.notifier).setLoading(false);
+      return null;
+    }
+  }
+
   Future<void> getCurrentLocation() async {
     await getCurrentLocationData();
   }
