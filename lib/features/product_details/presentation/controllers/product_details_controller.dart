@@ -94,9 +94,6 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
     String? initialFlavor,
     String? initialSize,
   }) {
-    final flavors = _getFlavors(product);
-    final flavor = initialFlavor ?? (flavors.isNotEmpty ? flavors.first : '');
-
     final sizes = _getProductSizes(product);
     dynamic sizeObj;
     if (sizes.isNotEmpty) {
@@ -107,6 +104,9 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
         sizeObj = sizes.first;
       }
     }
+
+    final flavors = _getFlavors(product, sizeObj);
+    final flavor = initialFlavor ?? (flavors.isNotEmpty ? flavors.first : '');
 
     bool inWishlist = false;
     final productId = product?.id?.toString() ?? '';
@@ -172,8 +172,15 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
       final effectivePrice = _computeEffectivePrice(target, sizeObj?.size);
       final hasDiscount = _computeHasDiscount(target, sizeObj?.size);
 
+      final sizeFlavors = _getFlavors(target, sizeObj);
+      String selectedFlavor = state.selectedFlavor;
+      if (sizeFlavors.isNotEmpty && !sizeFlavors.contains(selectedFlavor)) {
+        selectedFlavor = sizeFlavors.first;
+      }
+
       state = state.copyWith(
         selectedSizeObject: sizeObj,
+        selectedFlavor: selectedFlavor,
         displayPrice: price,
         displayEffectivePrice: effectivePrice,
         displayHasDiscount: hasDiscount,
@@ -191,8 +198,20 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
   bool getDisplayHasDiscount(dynamic prod) =>
       _computeHasDiscount(prod ?? product, state.selectedSizeObject?.size);
 
+  List<String> getCurrentFlavors([dynamic prod]) =>
+      _getFlavors(prod ?? product, state.selectedSizeObject);
+
   // Helper calculation logic moved out of UI widgets
-  static List<String> _getFlavors(dynamic prod) {
+  static List<String> _getFlavors(dynamic prod, [dynamic sizeObj]) {
+    if (sizeObj != null) {
+      try {
+        final sizeFlavors =
+            (sizeObj.flavors as List?)?.map((e) => e.toString()).toList();
+        if (sizeFlavors != null && sizeFlavors.isNotEmpty) {
+          return sizeFlavors;
+        }
+      } catch (_) {}
+    }
     if (prod == null) return const [];
     if (prod is ProductModel) return prod.flavors;
     if (prod is ProductEntity) return prod.flavors;
