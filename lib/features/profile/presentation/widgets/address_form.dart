@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart' as ll;
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/core/config/map_config.dart';
 import 'package:stronger_muscles/core/theme/theme.dart';
 import 'package:stronger_muscles/features/profile/domain/entities/address_entity.dart';
 import 'package:stronger_muscles/features/profile/presentation/controllers/address_controller.dart';
@@ -66,7 +67,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
 
   Future<void> _handleGetCurrentLocation() async {
     setState(() => _isLocating = true);
-    final data = await ref.read(addressControllerProvider.notifier).getCurrentLocationData();
+    final locale = Localizations.localeOf(context);
+    final data = await ref
+        .read(addressControllerProvider.notifier)
+        .getCurrentLocationData(locale: locale);
     if (!mounted) return;
 
     setState(() {
@@ -100,9 +104,14 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     if (picked == null || !mounted) return;
 
     setState(() => _isLocating = true);
+    final locale = Localizations.localeOf(context);
     final data = await ref
         .read(addressControllerProvider.notifier)
-        .getLocationDataFromCoordinates(picked.latitude, picked.longitude);
+        .getLocationDataFromCoordinates(
+          picked.latitude,
+          picked.longitude,
+          locale: locale,
+        );
     if (!mounted) return;
 
     setState(() {
@@ -208,7 +217,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   child: Stack(
                     children: [
                       FlutterMap(
-                        key: ValueKey('preview_${_latitude}_$_longitude'),
+                        key: ValueKey('preview_${_latitude}_${_longitude}_${l10n.localeName}'),
                         options: MapOptions(
                           initialCenter: ll.LatLng(_latitude!, _longitude!),
                           initialZoom: 15.0,
@@ -217,10 +226,7 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                           ),
                         ),
                         children: [
-                          TileLayer(
-                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'com.example.stronger_muscles',
-                          ),
+                          MapConfig.buildTileLayer(Localizations.localeOf(context)),
                           MarkerLayer(
                             markers: [
                               Marker(
