@@ -27,17 +27,24 @@ class ProductLocalDataSource {
     }
   }
 
-  List<ProductModel> getCachedProducts() {
+  List<ProductModel> getCachedProducts({String? categoryId}) {
+    List<ProductModel> products;
     try {
       final box = _getBoxSafe();
       if (box != null && box.isOpen) {
-        return box.values.toList();
+        products = box.values.toList();
+      } else {
+        products = _inMemoryFallback.values.toList();
       }
-      return _inMemoryFallback.values.toList();
     } catch (e) {
       debugPrint('[ProductLocalDataSource] Error getting cached products: $e');
-      return _inMemoryFallback.values.toList();
+      products = _inMemoryFallback.values.toList();
     }
+
+    if (categoryId != null && categoryId.isNotEmpty) {
+      return products.where((p) => p.categoryId == categoryId).toList();
+    }
+    return products;
   }
 
   Future<void> cacheProducts(List<ProductModel> products) async {
