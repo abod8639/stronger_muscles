@@ -14,14 +14,22 @@ import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 class _FakeProductSearchController extends ProductSearchController {
   final List<ProductEntity> initialProducts;
   final bool initialHasSearched;
+  final String? initialBrand;
 
   _FakeProductSearchController(
     this.initialProducts, {
     this.initialHasSearched = false,
+    this.initialBrand,
   });
 
   @override
   bool get hasSearched => initialHasSearched;
+
+  @override
+  String? get selectedBrand => initialBrand;
+
+  @override
+  String get searchQuery => initialBrand ?? '';
 
   @override
   Future<List<ProductEntity>> build() async {
@@ -105,6 +113,38 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(AppEmptyState), findsOneWidget);
+    });
+
+    testWidgets('renders brand filter chip when brand search is active',
+        (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            productSearchControllerProvider.overrideWith(
+              () => _FakeProductSearchController(
+                [sampleProduct],
+                initialHasSearched: true,
+                initialBrand: 'Optimum Nutrition',
+              ),
+            ),
+            searchHistoryProvider.overrideWith(
+              () => _FakeSearchHistory(),
+            ),
+            homeControllerProvider.overrideWith(
+              () => _FakeHomeController(),
+            ),
+          ],
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: SearchPage(),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('Optimum Nutrition'), findsWidgets);
     });
   });
 }
