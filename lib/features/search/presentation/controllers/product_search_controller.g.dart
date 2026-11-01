@@ -7,11 +7,11 @@ part of 'product_search_controller.dart';
 // **************************************************************************
 
 String _$productSearchControllerHash() =>
-    r'19a75e961697775b410d42e528fd037f6a627ba9';
+    r'5fcca6d7d909f7f665a6e3ac5655182f0fe6511c';
 
 /// See also [ProductSearchController].
 @ProviderFor(ProductSearchController)
-final productSearchControllerProvider = AutoDisposeAsyncNotifierProvider<
+final productSearchControllerProvider = AsyncNotifierProvider<
     ProductSearchController, List<ProductEntity>>.internal(
   ProductSearchController.new,
   name: r'productSearchControllerProvider',
@@ -22,7 +22,6 @@ final productSearchControllerProvider = AutoDisposeAsyncNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$ProductSearchController
-    = AutoDisposeAsyncNotifier<List<ProductEntity>>;
+typedef _$ProductSearchController = AsyncNotifier<List<ProductEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
