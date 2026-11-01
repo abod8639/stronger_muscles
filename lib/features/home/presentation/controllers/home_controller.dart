@@ -43,6 +43,10 @@ class HomeController extends _$HomeController {
         if (failure is CancelFailure) {
           return const [];
         }
+        final cached = ref.read(productLocalDataSourceProvider).getCachedProducts();
+        if (cached.isNotEmpty) {
+          return cached.map((p) => p.toEntity()).toList();
+        }
         throw failure;
       },
       (products) {
@@ -83,6 +87,27 @@ class HomeController extends _$HomeController {
     result.fold(
       (failure) {
         if (failure is CancelFailure) return;
+
+        // Try getting cached products for this category
+        final localDataSource = ref.read(productLocalDataSourceProvider);
+        final cached = localDataSource.getCachedProducts(categoryId: categoryId);
+        if (cached.isNotEmpty) {
+          state = AsyncData(cached.map((p) => p.toEntity()).toList());
+          return;
+        }
+
+        // If we already have products in memory, keep them visible!
+        if (state.hasValue && (state.value?.isNotEmpty ?? false)) {
+          return;
+        }
+
+        // Check if any general cached products exist at all
+        final allCached = localDataSource.getCachedProducts();
+        if (allCached.isNotEmpty) {
+          state = AsyncData(allCached.map((p) => p.toEntity()).toList());
+          return;
+        }
+
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
       (products) {
