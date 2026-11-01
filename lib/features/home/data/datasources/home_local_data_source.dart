@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
+import 'package:stronger_muscles/features/product/data/datasources/product_local_datasource.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Local data source contract for Home feature caching.
@@ -15,17 +16,23 @@ abstract class HomeLocalDataSource {
   Future<void> clearCache();
 }
 
-/// Concrete Hive implementation of [HomeLocalDataSource] with robust in-memory fallback.
+/// Concrete Hive implementation of [HomeLocalDataSource] with robust in-memory fallback
+/// and delegation to [ProductLocalDataSource] for product caching.
 class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   static const String boxName = 'home_box';
   static const String _shortcutsKey = 'cached_shortcuts';
-  static const String _productsKey = 'cached_products';
 
   Box? _box;
   final Map<String, dynamic> _inMemoryFallback = {};
   bool _hiveFailed = false;
+  final ProductLocalDataSource _productLocalDataSource;
 
-  HomeLocalDataSourceImpl([Box? box]) : _box = box;
+  HomeLocalDataSourceImpl([
+    Box? box,
+    ProductLocalDataSource? productLocalDataSource,
+  ])  : _box = box,
+        _productLocalDataSource =
+            productLocalDataSource ?? ProductLocalDataSource();
 
   Future<Box?> _getBoxSafe() async {
     if (_box != null && _box!.isOpen) return _box;
@@ -86,52 +93,12 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
 
   @override
   Future<List<ProductModel>> getCachedProducts({String? categoryId}) async {
-    try {
-      final box = await _getBoxSafe();
-      dynamic raw;
-      if (box != null) {
-        raw = box.get(_productsKey);
-      } else {
-        raw = _inMemoryFallback[_productsKey];
-      }
-
-      if (raw is List) {
-        final products = <ProductModel>[];
-        for (final item in raw) {
-          if (item is ProductModel) {
-            products.add(item);
-          } else if (item is Map) {
-            try {
-              products.add(ProductModel.fromJson(Map<String, dynamic>.from(item)));
-            } catch (_) {}
-          }
-        }
-
-        if (categoryId != null && categoryId.isNotEmpty) {
-          return products.where((p) => p.categoryId == categoryId).toList();
-        }
-        return products;
-      }
-      return const [];
-    } catch (e) {
-      debugPrint('[HomeLocalDataSource] Error getting cached products: $e');
-      return const [];
-    }
+    return _productLocalDataSource.getCachedProducts(categoryId: categoryId);
   }
 
   @override
   Future<void> cacheProducts(List<ProductModel> products) async {
-    try {
-      final serialized = products.map((p) => p.toJson()).toList();
-      final box = await _getBoxSafe();
-      if (box != null) {
-        await box.put(_productsKey, serialized);
-      }
-      _inMemoryFallback[_productsKey] = serialized;
-    } catch (e) {
-      debugPrint('[HomeLocalDataSource] Error caching products: $e');
-      _inMemoryFallback[_productsKey] = products.map((p) => p.toJson()).toList();
-    }
+    await _productLocalDataSource.cacheProducts(products);
   }
 
   @override
@@ -155,9 +122,9 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       final box = await _getBoxSafe();
       if (box != null) {
         await box.delete(_shortcutsKey);
-        await box.delete(_productsKey);
       }
       _inMemoryFallback.clear();
+      await _productLocalDataSource.clearCache();
     } catch (e) {
       debugPrint('[HomeLocalDataSource] Error clearing cache: $e');
       _inMemoryFallback.clear();
