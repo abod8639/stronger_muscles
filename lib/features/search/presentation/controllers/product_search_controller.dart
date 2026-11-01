@@ -13,16 +13,18 @@ import 'package:stronger_muscles/features/search/search_providers.dart';
 
 part 'product_search_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class ProductSearchController extends _$ProductSearchController {
   final TextEditingController textController = TextEditingController();
 
   Timer? _debounceTimer;
+  int _searchRequestId = 0;
 
   List<ProductEntity> _localProducts = [];
   List<ProductEntity> _combinedResults = [];
 
   String _searchQuery = "";
+  String? _selectedBrand;
   double _filterMinPrice = 0.0;
   double _filterMaxPrice = 1000.0;
   double _dataMinPrice = 0.0;
@@ -35,8 +37,26 @@ class ProductSearchController extends _$ProductSearchController {
   double get dataMinPrice => _dataMinPrice;
   double get dataMaxPrice => _dataMaxPrice;
   String get searchQuery => _searchQuery;
+  String? get selectedBrand => _selectedBrand;
   bool get hasSearched => _hasSearched;
   bool get isSearching => _isSearching;
+
+  bool get isPriceFilterActive =>
+      _dataMaxPrice > _dataMinPrice &&
+      (_filterMinPrice > _dataMinPrice || _filterMaxPrice < _dataMaxPrice);
+
+  List<String> get availableBrands {
+    final source =
+        _combinedResults.isNotEmpty ? _combinedResults : _localProducts;
+    final brands = source
+        .map((p) => p.brand?.trim())
+        .where((b) => b != null && b.isNotEmpty)
+        .cast<String>()
+        .toSet()
+        .toList();
+    brands.sort();
+    return brands;
+  }
 
   // ── Domain UseCases ─────────────────────────────────────────────────────
   SearchProductsUseCase get _searchProductsUseCase =>
@@ -55,11 +75,29 @@ class ProductSearchController extends _$ProductSearchController {
       _debounceTimer?.cancel();
     });
 
+    // Listen to home products if they finish loading later
+    ref.listen(homeControllerProvider, (previous, next) {
+      final products = next.valueOrNull;
+      if (products != null && products.isNotEmpty && _localProducts.isEmpty) {
+        _localProducts = products;
+        if (!_hasSearched) {
+          _combinedResults = products;
+          _updateDataBounds();
+          _filterMinPrice = _dataMinPrice;
+          _filterMaxPrice = _dataMaxPrice;
+          state = AsyncData(products);
+        }
+      }
+    });
+
     // Initialize with home products if they are already loaded
     final homeProducts = ref.read(homeControllerProvider).valueOrNull;
     if (homeProducts != null && homeProducts.isNotEmpty) {
       _localProducts = homeProducts;
       _combinedResults = homeProducts;
+      _updateDataBounds();
+      _filterMinPrice = _dataMinPrice;
+      _filterMaxPrice = _dataMaxPrice;
       return homeProducts;
     }
 
@@ -81,15 +119,45 @@ class ProductSearchController extends _$ProductSearchController {
 
   void onSearchChanged(String query) {
     _searchQuery = query.trim();
+    if (_selectedBrand != null &&
+        _searchQuery.toLowerCase() != _selectedBrand!.toLowerCase()) {
+      _selectedBrand = null;
+    }
 
     // 1. Instant local search for immediate feedback
     _performLocalSearchOnly(_searchQuery);
 
     // 2. Debounce remote search
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+    _debounceTimer = Timer(const Duration(milliseconds: 400), () {
       _handleRemoteSearch(_searchQuery);
     });
+  }
+
+  /// Direct search by brand (e.g. from product details or banner tap)
+  void searchByBrand(String brand) {
+    _debounceTimer?.cancel();
+    _searchRequestId++;
+    final trimmed = brand.trim();
+    _selectedBrand = trimmed;
+    _searchQuery = trimmed;
+    _hasSearched = true;
+    textController.text = trimmed;
+
+    // 1. Instant local search prioritizing exact brand
+    _performLocalSearchOnly(trimmed);
+
+    // 2. Immediate remote search for this brand (no debounce needed for direct click)
+    _handleRemoteSearch(trimmed);
+  }
+
+  void clearBrandFilter() {
+    _selectedBrand = null;
+    if (_searchQuery.isNotEmpty) {
+      _performLocalSearchOnly(_searchQuery);
+    } else {
+      clearSearch();
+    }
   }
 
   /// Alias for onSearchChanged to maintain backward compatibility
@@ -99,11 +167,16 @@ class ProductSearchController extends _$ProductSearchController {
 
   void clearSearch() {
     _debounceTimer?.cancel();
+    _searchRequestId++;
     _searchQuery = "";
+    _selectedBrand = null;
     _hasSearched = false;
+    _isSearching = false;
     textController.clear();
     _combinedResults = _localProducts;
     _updateDataBounds();
+    _filterMinPrice = _dataMinPrice;
+    _filterMaxPrice = _dataMaxPrice;
     state = AsyncData(_localProducts);
   }
 
@@ -131,11 +204,24 @@ class ProductSearchController extends _$ProductSearchController {
 
   /// Handles remote search with combined results via fpdart Either (Rule 3 & 4)
   Future<void> _handleRemoteSearch(String query) async {
-    if (query.isEmpty) return;
-    if (_isSearching) return;
+    final trimmed = query.trim();
+    if (trimmed.isEmpty) return;
 
+    final currentRequestId = ++_searchRequestId;
     _isSearching = true;
-    final result = await _searchProductsUseCase(query);
+
+    // Notify UI that a background search is in progress
+    if (state.hasValue) {
+      state = AsyncData(state.value!);
+    }
+
+    final result = await _searchProductsUseCase(trimmed);
+
+    // If query has changed or a newer search was started while this was in flight, discard!
+    if (currentRequestId != _searchRequestId || _searchQuery.trim() != trimmed) {
+      return;
+    }
+
     _isSearching = false;
 
     result.fold(
@@ -143,48 +229,67 @@ class ProductSearchController extends _$ProductSearchController {
         // Don't overwrite state with error if we already have local results
         if (_combinedResults.isEmpty) {
           state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+        } else {
+          state = AsyncData(state.value ?? _combinedResults);
         }
       },
       (remoteResults) {
-        // Merge with current local results
+        final locale = ref.read(languageControllerProvider).languageCode;
         final existingIds = _combinedResults.map((e) => e.id).toSet();
-        final List<ProductEntity> merged = List.from(_combinedResults);
+        final List<ProductEntity> newRemote = [];
 
         for (final product in remoteResults) {
           if (!existingIds.contains(product.id)) {
-            merged.add(product);
+            newRemote.add(product);
           }
         }
 
-        _combinedResults = merged;
+        final allAvailable = [..._combinedResults, ...newRemote];
+        final filtered = _prioritizedLocalFilter(trimmed, allAvailable, locale);
+
+        _combinedResults = filtered;
         _updateDataBounds();
-        _applyFiltersToResults(merged);
+        _applyFiltersToResults(filtered);
       },
     );
   }
 
-  /// Prioritized Local Filter: Exact > Prefix > Contains > Fuzzy
+  /// Prioritized Local Filter: Brand Match > Exact Name > Prefix > Contains > Multi-token > Fuzzy
   List<ProductEntity> _prioritizedLocalFilter(
     String query,
     List<ProductEntity> products,
     String locale,
   ) {
-    final lowerQuery = query.toLowerCase();
+    final lowerQuery = query.toLowerCase().trim();
+    if (lowerQuery.isEmpty) return products;
 
-    final List<ProductEntity> exact = [];
+    final tokens = lowerQuery
+        .split(RegExp(r'\s+'))
+        .where((t) => t.isNotEmpty)
+        .toList();
+
+    final List<ProductEntity> exactBrand = [];
+    final List<ProductEntity> exactNameOrCat = [];
     final List<ProductEntity> prefix = [];
     final List<ProductEntity> contains = [];
+    final List<ProductEntity> tokenMatches = [];
     final List<ProductEntity> others = [];
 
     for (var p in products) {
       final name = p.getLocalizedName(locale: locale).toLowerCase();
-      final brand = (p.brand ?? "").toLowerCase();
+      final brand = (p.brand ?? "").toLowerCase().trim();
       final category =
           (p.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
       final tags = p.tags.map((t) => t.toLowerCase()).toList();
 
-      if (name == lowerQuery || brand == lowerQuery || category == lowerQuery) {
-        exact.add(p);
+      final isExactBrand = brand == lowerQuery ||
+          (_selectedBrand != null &&
+              brand == _selectedBrand!.toLowerCase().trim());
+
+      if (isExactBrand) {
+        exactBrand.add(p);
+      } else if (name == lowerQuery || category == lowerQuery) {
+        exactNameOrCat.add(p);
       } else if (name.startsWith(lowerQuery) ||
           brand.startsWith(lowerQuery) ||
           category.startsWith(lowerQuery)) {
@@ -194,12 +299,25 @@ class ProductSearchController extends _$ProductSearchController {
           category.contains(lowerQuery) ||
           tags.any((t) => t.contains(lowerQuery))) {
         contains.add(p);
+      } else if (tokens.length > 1) {
+        final searchable = '$name $brand $category ${tags.join(' ')}';
+        if (tokens.every((token) => searchable.contains(token))) {
+          tokenMatches.add(p);
+        } else {
+          others.add(p);
+        }
       } else {
         others.add(p);
       }
     }
 
-    final combined = [...exact, ...prefix, ...contains];
+    final combined = [
+      ...exactBrand,
+      ...exactNameOrCat,
+      ...prefix,
+      ...contains,
+      ...tokenMatches,
+    ];
 
     // If we have few results, use fuzzy as fallback
     if (combined.length < 5) {
@@ -261,6 +379,14 @@ class ProductSearchController extends _$ProductSearchController {
   void applyPriceFilter(double min, double max) {
     _filterMinPrice = min;
     _filterMaxPrice = max;
+    _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched
+        ? _localProducts
+        : _combinedResults);
+  }
+
+  void resetPriceFilter() {
+    _filterMinPrice = _dataMinPrice;
+    _filterMaxPrice = _dataMaxPrice;
     _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched
         ? _localProducts
         : _combinedResults);
