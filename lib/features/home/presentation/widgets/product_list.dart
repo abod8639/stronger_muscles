@@ -30,6 +30,38 @@ class ProductList extends ConsumerWidget {
     final homeState = ref.watch(homeControllerProvider);
     final l10n = AppLocalizations.of(context);
 
+    // If products are already available in memory/cache, ALWAYS render them
+    // so offline errors never wipe out the products list.
+    final currentProducts = homeState.valueOrNull;
+    if (currentProducts != null && currentProducts.isNotEmpty) {
+      final isSwitching = ref.watch(
+        homeControllerProvider.notifier.select((n) => n.isSectionSwitching),
+      );
+      final isLoadingMore = ref.watch(
+        homeControllerProvider.notifier.select((n) => n.isLoadingMore),
+      );
+      final hasMore = ref.watch(
+        homeControllerProvider.notifier.select((n) => n.hasMore),
+      );
+
+      return SliverMainAxisGroup(
+        slivers: [
+          if (isSwitching)
+            const SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2.5)),
+          AppProductGrid(
+            products: currentProducts,
+            isLoadingMore: isLoadingMore,
+            onNearEnd: hasMore
+                ? () => ref
+                    .read(homeControllerProvider.notifier)
+                    .loadMoreProducts(categoryId: _selectedCategoryId(ref))
+                : null,
+            onProductTap: (product) => context.push(AppRoutes.productDetails, extra: product),
+          ),
+        ],
+      );
+    }
+
     return homeState.when(
       data: (products) {
         // Optimistic loading: old products stay visible while new section loads.
