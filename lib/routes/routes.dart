@@ -10,7 +10,7 @@ import 'package:stronger_muscles/features/product_details/presentation/pages/pro
 import 'package:stronger_muscles/features/profile/presentation/pages/edit_user_info.dart';
 import 'package:stronger_muscles/features/profile/presentation/pages/profile_page.dart';
 import 'package:stronger_muscles/features/wishlist/presentation/pages/wishlist_view.dart';
-import 'package:stronger_muscles/features/search/presentation/pages/search_page.dart';
+import 'package:stronger_muscles/features/search/search_routes.dart';
 import 'package:stronger_muscles/features/checkout/checkout_routes.dart';
 import 'package:stronger_muscles/features/notifications/notifications_routes.dart';
 import 'package:stronger_muscles/features/help_support/help_support_routes.dart';
@@ -139,17 +139,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           );
         },
       ),
-      GoRoute(
-        
-        path: AppRoutes.search,
-        builder: (context, state) {
-          final extra = state.extra;
-          if (extra is bool) {
-            return SearchPage(isFocused: extra);
-          }
-          return const SearchPage(isFocused: true);
-        },
-      ),
+      ...SearchRoutes.routes,
       ...CheckoutRoutes.routes,
       GoRoute(
         path: AppRoutes.editUserInfo,
