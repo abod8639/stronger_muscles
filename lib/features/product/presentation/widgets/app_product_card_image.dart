@@ -97,7 +97,7 @@ class _AppProductCardImageState extends State<AppProductCardImage> {
           PositionedDirectional(
             top: 1.0,
             end: 3.5,
-            child: buildProductBadges(product, context, 0.2),
+            child: buildProductBadges(product, context, 0.4),
           ),
         if (isOutOfStock)
           Positioned.fill(
