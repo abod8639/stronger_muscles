@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:stronger_muscles/core/components/components.dart';
 import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
-import 'package:stronger_muscles/core/utils/functions/app_guard.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/home_controller.dart';
 import 'package:stronger_muscles/features/home/presentation/controllers/categories_sections_controller.dart';
 import 'package:stronger_muscles/features/search/search_feature.dart';
@@ -31,10 +30,7 @@ class HomeView extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: _maxContentWidth),
             child: RefreshIndicator(
               color: AppColors.primary,
-              onRefresh: () => AppGuard.runSafeInternet(
-                ref,
-                () => ref.read(homeControllerProvider.notifier).refreshHome(),
-              ),
+              onRefresh: () => ref.read(homeControllerProvider.notifier).refreshHome(),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
