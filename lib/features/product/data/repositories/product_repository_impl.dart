@@ -45,7 +45,7 @@ class ProductRepositoryImpl implements ProductRepository {
         categoryId: categoryId,
         page: page,
       );
-      if (page == 1 && (categoryId == null || categoryId.isEmpty)) {
+      if (page == 1 && models.isNotEmpty) {
         await _localDataSource.cacheProducts(models);
       }
       return Right(models.map((m) => m.toEntity()).toList());
@@ -118,12 +118,17 @@ class ProductRepositoryImpl implements ProductRepository {
     String? categoryId,
   }) {
     try {
-      var cached = _localDataSource.getCachedProducts();
-      if (categoryId != null && categoryId.isNotEmpty) {
-        cached = cached.where((p) => p.categoryId == categoryId).toList();
-      }
+      var cached = _localDataSource.getCachedProducts(categoryId: categoryId);
       if (cached.isNotEmpty) {
         return Right(cached.map((m) => m.toEntity()).toList());
+      }
+      final allCached = _localDataSource.getCachedProducts();
+      if (allCached.isNotEmpty) {
+        if (categoryId != null && categoryId.isNotEmpty) {
+          final filtered = allCached.where((p) => p.categoryId == categoryId).toList();
+          return Right(filtered.map((m) => m.toEntity()).toList());
+        }
+        return Right(allCached.map((m) => m.toEntity()).toList());
       }
       return Left(failure);
     } catch (_) {
