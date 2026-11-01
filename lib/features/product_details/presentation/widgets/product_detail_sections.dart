@@ -52,11 +52,15 @@ class ProductInfoSection extends ConsumerWidget {
   });
 
   void _searchBrand(BuildContext context, WidgetRef ref, String brand) {
-    final searchNotifier = ref.read(productSearchControllerProvider.notifier);
-    searchNotifier.clearSearch();
-    searchNotifier.textController.text = brand;
-    searchNotifier.updateSearchQuery(brand);
-    context.push(AppRoutes.search, extra: false);
+    ref.read(productSearchControllerProvider.notifier).searchByBrand(brand);
+    context.push(
+      AppRoutes.search,
+      extra: <String, dynamic>{
+        'brand': brand,
+        'query': brand,
+        'isFocused': false,
+      },
+    );
   }
 
   @override
@@ -66,8 +70,18 @@ class ProductInfoSection extends ConsumerWidget {
     final brand = product.brand;
     final category = product.category;
 
-    final customServingSize = selectedSize?.weight as String?;
-    final customServings = selectedSize?.servings as int?;
+    final customServingSize = selectedSize is ProductSize
+        ? selectedSize.weight
+        : (selectedSize is ProductSizeEntity
+            ? selectedSize.weight
+            : (selectedSize?.weight?.toString()));
+    final customServings = selectedSize is ProductSize
+        ? selectedSize.servings
+        : (selectedSize is ProductSizeEntity
+            ? selectedSize.servings
+            : (selectedSize?.servings is int
+                ? selectedSize.servings as int
+                : int.tryParse(selectedSize?.servings?.toString() ?? '')));
     final displayServingSize = customServingSize ?? product.servingSize;
     final displayServings = customServings ??
         (product.servingsPerContainer != 0
