@@ -36,6 +36,9 @@ export 'data/models/product_model.dart';
 export 'data/models/product_size_model.dart';
 export 'data/models/review_model.dart';
 
+// Data Sources
+export 'data/datasources/product_local_datasource.dart';
+
 // Scoped DI Providers
 export 'product_providers.dart';
 
