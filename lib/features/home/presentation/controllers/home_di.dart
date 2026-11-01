@@ -6,11 +6,13 @@ import 'package:stronger_muscles/features/home/data/repositories/home_repository
 import 'package:stronger_muscles/features/home/domain/repositories/home_repository.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/get_home_products_usecase.dart';
 import 'package:stronger_muscles/features/home/domain/usecases/get_home_shortcuts_usecase.dart';
+import 'package:stronger_muscles/features/product/product_providers.dart';
 
 // ── Data Layer Providers ─────────────────────────────────────────────────────
 
 final homeLocalDataSourceProvider = Provider<HomeLocalDataSource>((ref) {
-  return HomeLocalDataSourceImpl();
+  final productLocal = ref.watch(productLocalDataSourceProvider);
+  return HomeLocalDataSourceImpl(null, productLocal);
 });
 
 final homeRemoteDataSourceProvider = Provider<HomeRemoteDataSource>((ref) {
