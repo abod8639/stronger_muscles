@@ -35,8 +35,17 @@ class ProductSearchAutocomplete extends ConsumerStatefulWidget {
 class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocomplete> {
   static const double _maxOptionsHeight = 400.0;
 
-  final _focusNode = FocusNode();
-  final _textController = TextEditingController();
+  late final FocusNode _focusNode;
+  late final TextEditingController _textController;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+    final initialQuery =
+        ref.read(productSearchControllerProvider.notifier).searchQuery;
+    _textController = TextEditingController(text: initialQuery);
+  }
 
   @override
   void dispose() {
@@ -114,7 +123,27 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
       );
     }
 
-    final products = ref.watch(homeControllerProvider).valueOrNull ?? const <ProductEntity>[];
+    // Synchronize text field when search query changes externally (e.g. brand tap, clear, promo)
+    ref.listen<String>(
+      productSearchControllerProvider.notifier.select((n) => n.searchQuery),
+      (prev, next) {
+        if (_textController.text != next) {
+          _textController.text = next;
+          _textController.selection = TextSelection.fromPosition(
+            TextPosition(offset: next.length),
+          );
+        }
+      },
+    );
+
+    final searchProducts =
+        ref.watch(productSearchControllerProvider).valueOrNull;
+    final homeProducts =
+        ref.watch(homeControllerProvider).valueOrNull ?? const <ProductEntity>[];
+    final products = (searchProducts != null && searchProducts.isNotEmpty)
+        ? searchProducts
+        : homeProducts;
+
     ref.watch(searchHistoryProvider);
     final controller = ref.read(productSearchControllerProvider.notifier);
 
@@ -133,8 +162,13 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
           hintText: l10n.searchProducts,
           onTap: widget.onTap,
           onChanged: controller.onSearchChanged,
+          onClear: () {
+            controller.clearSearch();
+          },
           onSubmitted: (value) {
-            ref.read(searchHistoryProvider.notifier).add(value);
+            if (value.trim().isNotEmpty) {
+              ref.read(searchHistoryProvider.notifier).add(value.trim());
+            }
             onFieldSubmitted();
           },
         ),
