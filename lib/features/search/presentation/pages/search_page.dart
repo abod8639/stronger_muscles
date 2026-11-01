@@ -59,12 +59,12 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ),
         slivers: [
           SliverAppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: context.colorScheme.surface,
             surfaceTintColor: Colors.transparent,
             elevation: 0,
-            pinned: false,
-            floating: true,
-            snap: true,
+            pinned: true,
+            floating: false,
+            snap: false,
             centerTitle: true,
             title: Hero(
               tag: 'searchBar',
