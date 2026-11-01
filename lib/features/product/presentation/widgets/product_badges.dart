@@ -20,7 +20,8 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: '${product.discountPercentage.toInt()}% ${l10n.percentOff}',
-        color: AppColors.error,
+        color: AppColors.error.withValues(alpha: alpha),
+        textColor: Theme.of(context).colorScheme.onPrimary,
         alpha: alpha,
       ),
     );
@@ -31,7 +32,9 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.newArrival,
-        color: AppColors.success,
+        color: AppColors.success.withValues(alpha: alpha),
+        textColor: Theme.of(context).colorScheme.onPrimary,
+
         alpha: alpha,
       ),
     );
@@ -42,7 +45,9 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.bestSeller,
-        color: AppColors.warning,
+        color: AppColors.warning.withValues(alpha: alpha),
+        textColor: Theme.of(context).colorScheme.onPrimary,
+
         alpha: alpha,
       ),
     );
@@ -53,7 +58,9 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.featured,
-        color: AppColors.primary,
+        color: AppColors.primary.withValues(alpha: alpha),
+        textColor: Theme.of(context).colorScheme.onPrimary,
+
         alpha: alpha,
       ),
     );
@@ -64,7 +71,9 @@ Widget buildProductBadges(
     badges.add(
       AppBadge(
         label: l10n.outOfStock,
-        color: AppColors.error,
+        color: AppColors.error.withValues(alpha: alpha),
+        textColor: Theme.of(context).colorScheme.onPrimary,
+
         alpha: alpha,
       ),
     );
