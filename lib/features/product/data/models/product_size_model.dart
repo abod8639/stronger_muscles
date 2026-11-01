@@ -8,7 +8,17 @@ part 'product_size_model.g.dart';
 final Expando<Map<String, dynamic>> _sizeMetaExpando =
     Expando<Map<String, dynamic>>();
 
-extension ProductSizeMetaExtension on ProductSize {
+@freezed
+@HiveType(typeId: 10, adapterName: 'ProductSizeAdapter')
+class ProductSize with _$ProductSize {
+  const factory ProductSize({
+    @HiveField(0) @JsonKey(name: 'size') required String size,
+    @HiveField(1) @JsonKey(name: 'price') required double price,
+    @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice,
+  }) = _ProductSize;
+
+  const ProductSize._();
+
   int? get servings => _sizeMetaExpando[this]?['servings'] as int?;
   set servings(int? value) {
     final meta = _sizeMetaExpando[this] ?? <String, dynamic>{};
@@ -37,18 +47,6 @@ extension ProductSizeMetaExtension on ProductSize {
     meta['flavors'] = value;
     _sizeMetaExpando[this] = meta;
   }
-}
-
-@freezed
-@HiveType(typeId: 10, adapterName: 'ProductSizeAdapter')
-class ProductSize with _$ProductSize {
-  const factory ProductSize({
-    @HiveField(0) @JsonKey(name: 'size') required String size,
-    @HiveField(1) @JsonKey(name: 'price') required double price,
-    @HiveField(2) @JsonKey(name: 'discount_price') double? discountPrice,
-  }) = _ProductSize;
-
-  const ProductSize._();
 
   factory ProductSize.fromJson(Map<String, dynamic> json) {
     final size = _$ProductSizeFromJson(json);
