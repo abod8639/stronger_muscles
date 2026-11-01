@@ -118,20 +118,45 @@ class ProductSearchController extends _$ProductSearchController {
   }
 
   void onSearchChanged(String query) {
-    _searchQuery = query.trim();
+    final trimmed = query.trim();
+    _searchQuery = trimmed;
+
     if (_selectedBrand != null &&
-        _searchQuery.toLowerCase() != _selectedBrand!.toLowerCase()) {
+        trimmed.toLowerCase() != _selectedBrand!.toLowerCase()) {
       _selectedBrand = null;
     }
 
-    // 1. Instant local search for immediate feedback
-    _performLocalSearchOnly(_searchQuery);
+    if (trimmed.isEmpty) {
+      clearSearch();
+      return;
+    }
 
-    // 2. Debounce remote search
+    // Debounce both local and remote search so typing is smooth and uninterrupted
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 400), () {
-      _handleRemoteSearch(_searchQuery);
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      executeSearch(trimmed);
     });
+  }
+
+  /// Executes immediate search (used by debounce completion, enter key press, or suggestion tap)
+  void executeSearch(String query) {
+    _debounceTimer?.cancel();
+    final trimmed = query.trim();
+    _searchQuery = trimmed;
+
+    if (trimmed.isEmpty) {
+      clearSearch();
+      return;
+    }
+
+    _hasSearched = true;
+    textController.text = trimmed;
+
+    // 1. Instant local search
+    _performLocalSearchOnly(trimmed);
+
+    // 2. Remote search
+    _handleRemoteSearch(trimmed);
   }
 
   /// Direct search by brand (e.g. from product details or banner tap)
