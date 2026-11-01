@@ -87,8 +87,12 @@ class SupportChatMessageBubble extends StatelessWidget {
                 if (isUser) ...[
                   const SizedBox(width: 4.0),
                   Icon(
-                    message.isRead ? Icons.done_all_rounded : Icons.done_rounded,
-                    size: 13.0,
+                    message.id < 0
+                        ? Icons.access_time_rounded
+                        : (message.isRead
+                            ? Icons.done_all_rounded
+                            : Icons.done_rounded),
+                    size: message.id < 0 ? 11.0 : 13.0,
                     color: metaColor,
                   ),
                 ],
