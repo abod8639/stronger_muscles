@@ -10,10 +10,26 @@ class SearchRoutes {
           path: AppRoutes.search,
           builder: (context, state) {
             final extra = state.extra;
+            bool isFocused = true;
+            String? initialQuery = state.uri.queryParameters['q'];
+            String? initialBrand = state.uri.queryParameters['brand'];
+
             if (extra is bool) {
-              return SearchPage(isFocused: extra);
+              isFocused = extra;
+            } else if (extra is String) {
+              initialQuery = extra;
+              isFocused = false;
+            } else if (extra is Map<String, dynamic>) {
+              isFocused = extra['isFocused'] as bool? ?? false;
+              initialQuery = extra['query'] as String?;
+              initialBrand = extra['brand'] as String?;
             }
-            return const SearchPage(isFocused: true);
+
+            return SearchPage(
+              isFocused: isFocused,
+              initialQuery: initialQuery,
+              initialBrand: initialBrand,
+            );
           },
         ),
       ];
