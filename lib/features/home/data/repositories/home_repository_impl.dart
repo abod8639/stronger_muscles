@@ -104,8 +104,7 @@ class HomeRepositoryImpl implements HomeRepository {
                 categoryId: categoryId,
                 page: 1,
               );
-              if (fresh.isNotEmpty &&
-                  (categoryId == null || categoryId.isEmpty)) {
+              if (fresh.isNotEmpty) {
                 unawaited(_localDataSource.cacheProducts(fresh));
               }
             } catch (_) {}
@@ -120,9 +119,7 @@ class HomeRepositoryImpl implements HomeRepository {
           page: page,
         );
 
-        if (remoteProducts.isNotEmpty &&
-            (categoryId == null || categoryId.isEmpty) &&
-            page == 1) {
+        if (remoteProducts.isNotEmpty && page == 1) {
           unawaited(_localDataSource.cacheProducts(remoteProducts));
         }
 
@@ -137,6 +134,19 @@ class HomeRepositoryImpl implements HomeRepository {
         if (cached.isNotEmpty) {
           return cached.map((p) => p.toEntity()).toList();
         }
+
+        // If general cached products exist in memory/storage, return them or empty category results
+        // so the UI remains intact and lets the global offline banner inform the user.
+        final allCached = await _localDataSource.getCachedProducts();
+        if (allCached.isNotEmpty) {
+          if (categoryId == null || categoryId.isEmpty) {
+            return allCached.map((p) => p.toEntity()).toList();
+          }
+          // Filter from all cached products if category-specific fetch didn't find any
+          final filtered = allCached.where((p) => p.categoryId == categoryId).toList();
+          return filtered.map((p) => p.toEntity()).toList();
+        }
+
         rethrow;
       }
     });
