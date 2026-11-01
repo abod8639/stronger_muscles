@@ -101,11 +101,11 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
     if (selection is ProductEntity) {
       final name = selection.getLocalizedName(locale: locale);
       history.add(name);
-      controller.onSearchChanged(name);
+      controller.executeSearch(name);
       context.push(AppRoutes.productDetails, extra: selection);
     } else if (selection is String) {
       _textController.text = selection;
-      controller.onSearchChanged(selection);
+      controller.executeSearch(selection);
       history.add(selection);
     }
   }
@@ -123,26 +123,24 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
       );
     }
 
-    // Synchronize text field when search query changes externally (e.g. brand tap, clear, promo)
+    // Synchronize text field when search query changes externally (e.g. brand tap, clear, promo).
+    // NEVER overwrite while the user is actively typing in the focused field!
     ref.listen<String>(
       productSearchControllerProvider.notifier.select((n) => n.searchQuery),
       (prev, next) {
-        if (_textController.text != next) {
-          _textController.text = next;
-          _textController.selection = TextSelection.fromPosition(
-            TextPosition(offset: next.length),
-          );
+        if (!_focusNode.hasFocus || next.isEmpty) {
+          if (_textController.text != next) {
+            _textController.text = next;
+            _textController.selection = TextSelection.fromPosition(
+              TextPosition(offset: next.length),
+            );
+          }
         }
       },
     );
 
-    final searchProducts =
-        ref.watch(productSearchControllerProvider).valueOrNull;
-    final homeProducts =
+    final products =
         ref.watch(homeControllerProvider).valueOrNull ?? const <ProductEntity>[];
-    final products = (searchProducts != null && searchProducts.isNotEmpty)
-        ? searchProducts
-        : homeProducts;
 
     ref.watch(searchHistoryProvider);
     final controller = ref.read(productSearchControllerProvider.notifier);
@@ -166,8 +164,10 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
             controller.clearSearch();
           },
           onSubmitted: (value) {
-            if (value.trim().isNotEmpty) {
-              ref.read(searchHistoryProvider.notifier).add(value.trim());
+            final trimmed = value.trim();
+            if (trimmed.isNotEmpty) {
+              ref.read(searchHistoryProvider.notifier).add(trimmed);
+              controller.executeSearch(trimmed);
             }
             onFieldSubmitted();
           },
