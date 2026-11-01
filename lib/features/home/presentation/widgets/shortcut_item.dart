@@ -38,6 +38,8 @@ class ShortcutItem extends ConsumerWidget {
       selected: isSelected,
       button: true,
       child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         borderRadius: AppRadius.allMd,
         onTap: () => ref.read(categoriesSectionsControllerProvider.notifier).updateIndex(index),
         child: Column(
