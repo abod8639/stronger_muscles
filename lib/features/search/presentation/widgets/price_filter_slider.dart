@@ -63,9 +63,11 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
             min: effectiveMin,
             max: effectiveMax,
             activeColor: AppColors.primary,
-            divisions: (effectiveMax - effectiveMin) >= 1
-                ? (effectiveMax - effectiveMin).toInt()
-                : 1,
+            divisions: (effectiveMax - effectiveMin) > 50
+                ? 50
+                : ((effectiveMax - effectiveMin) >= 1
+                    ? (effectiveMax - effectiveMin).toInt()
+                    : 1),
             labels: RangeLabels(format(effectiveValues.start), format(effectiveValues.end)),
             onChanged: (values) => setState(() => _currentRangeValues = values),
           )
@@ -79,16 +81,41 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
             ),
           ),
         const SizedBox(height: AppDimens.spacingXl),
-        AppPrimaryButton(
-          text: l10n?.apply ?? 'Apply',
-          icon: Icons.check_rounded,
-          onPressed: () {
-            ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
-                  effectiveValues.start,
-                  effectiveValues.end,
-                );
-            Navigator.pop(context);
-          },
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingMd),
+                  side: BorderSide(color: context.colorScheme.outlineVariant),
+                  shape: AppRadius.shapeMd,
+                ),
+                onPressed: () {
+                  ref.read(productSearchControllerProvider.notifier).resetPriceFilter();
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  l10n?.clearFilters ?? 'Reset',
+                  style: TextStyle(color: context.colorScheme.onSurface),
+                ),
+              ),
+            ),
+            const SizedBox(width: AppDimens.spacingMd),
+            Expanded(
+              flex: 2,
+              child: AppPrimaryButton(
+                text: l10n?.apply ?? 'Apply',
+                icon: Icons.check_rounded,
+                onPressed: () {
+                  ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
+                        effectiveValues.start,
+                        effectiveValues.end,
+                      );
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );
