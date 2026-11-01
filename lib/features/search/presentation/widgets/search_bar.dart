@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stronger_muscles/core/components/components.dart';
+import 'package:stronger_muscles/core/constants/app_colors.dart';
 import 'package:stronger_muscles/core/constants/app_dimens.dart';
+import 'package:stronger_muscles/features/search/presentation/controllers/product_search_controller.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/price_filter_slider.dart';
 import 'package:stronger_muscles/features/search/presentation/widgets/search_input_group.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
@@ -35,7 +38,7 @@ class SearchBar extends StatelessWidget {
   }
 }
 
-/// Opens the product filter sheet (price range).
+/// Opens the product filter sheet (brand selection + price range).
 Future<void> showFilterBottomSheet(BuildContext context) {
   final l10n = AppLocalizations.of(context)!;
 
@@ -44,12 +47,58 @@ Future<void> showFilterBottomSheet(BuildContext context) {
     (_) => AppBottomSheetScaffold(
       icon: Icons.tune_rounded,
       title: l10n.filterProducts,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          AppFieldLabel(l10n.price, padding: const EdgeInsets.only(bottom: AppDimens.spacingMd)),
-          const PriceFilterSlider(),
-        ],
+      child: Consumer(
+        builder: (context, ref, _) {
+          final notifier = ref.read(productSearchControllerProvider.notifier);
+          final brands = ref.watch(
+            productSearchControllerProvider.notifier
+                .select((n) => n.availableBrands),
+          );
+          final selectedBrand = ref.watch(
+            productSearchControllerProvider.notifier
+                .select((n) => n.selectedBrand),
+          );
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (brands.isNotEmpty) ...[
+                AppFieldLabel(
+                  l10n.brand,
+                  padding: const EdgeInsets.only(bottom: AppDimens.spacingSm),
+                ),
+                Wrap(
+                  spacing: AppDimens.spacingSm,
+                  runSpacing: AppDimens.spacingSm,
+                  children: [
+                    for (final brand in brands)
+                      FilterChip(
+                        selected: selectedBrand != null &&
+                            selectedBrand.toLowerCase() == brand.toLowerCase(),
+                        label: Text(brand),
+                        selectedColor:
+                            AppColors.primary.withValues(alpha: 0.15),
+                        checkmarkColor: AppColors.primary,
+                        onSelected: (selected) {
+                          if (selected) {
+                            notifier.searchByBrand(brand);
+                          } else {
+                            notifier.clearBrandFilter();
+                          }
+                        },
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppDimens.spacingLg),
+              ],
+              AppFieldLabel(
+                l10n.price,
+                padding: const EdgeInsets.only(bottom: AppDimens.spacingMd),
+              ),
+              const PriceFilterSlider(),
+            ],
+          );
+        },
       ),
     ),
   );
