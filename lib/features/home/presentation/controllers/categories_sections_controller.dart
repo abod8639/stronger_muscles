@@ -40,7 +40,6 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
 
   Future<void> fetchCategories() async {
-    state = const AsyncLoading();
     final getHomeShortcuts = ref.read(getHomeShortcutsUseCaseProvider);
     final langCode = ref.read(languageControllerProvider).languageCode;
 
@@ -49,6 +48,7 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
     result.fold(
       (failure) {
         if (failure is CancelFailure) return;
+        if (state.hasValue && (state.value?.isNotEmpty ?? false)) return;
         state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
       },
       (fetched) => state = AsyncData(fetched),
