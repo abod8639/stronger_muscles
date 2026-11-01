@@ -100,9 +100,16 @@ class PromoController extends _$PromoController {
         final brandName = promo.targetId!;
         ref
             .read(productSearchControllerProvider.notifier)
-            .updateSearchQuery(brandName);
+            .searchByBrand(brandName);
         if (context.mounted) {
-          context.push(AppRoutes.search);
+          context.push(
+            AppRoutes.search,
+            extra: <String, dynamic>{
+              'brand': brandName,
+              'query': brandName,
+              'isFocused': false,
+            },
+          );
         }
         return;
       }
