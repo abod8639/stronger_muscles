@@ -20,6 +20,7 @@ class CartItemDetails extends StatelessWidget {
     final size = item.selectedSize;
     final productName = item.product.getLocalizedName(locale: l10n.localeName);
 
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -48,16 +49,9 @@ class CartItemDetails extends StatelessWidget {
         ),
         if ((flavor?.isNotEmpty ?? false) || (size?.isNotEmpty ?? false)) ...[
           const SizedBox(height: AppDimens.spacingSm),
-          Wrap(
-            spacing: AppDimens.spacingXs,
-            runSpacing: AppDimens.spacingXs,
-            children: [
-              if (flavor != null && flavor.isNotEmpty)
-                _VariantChip(label: '${l10n.flavor}: $flavor'),
-              if (size != null && size.isNotEmpty)
-                _VariantChip(label: '${l10n.size}: $size'),
-            ],
-          ),
+          if (size != null && size.isNotEmpty)
+            _VariantChip(label: '${l10n.size}: $size'),
+            
         ],
       ],
     );
