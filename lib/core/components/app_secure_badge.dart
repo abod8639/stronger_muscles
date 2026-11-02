@@ -30,8 +30,12 @@ class AppSecureBadge extends StatelessWidget {
       icon: icon,
       padding: padding,
       borderRadius: borderRadius,
-      title: title ?? l10n?.securePaymentsTitle ?? '100% Secure & Encrypted Payments',
-      message: subtitle ??
+      title:
+          title ??
+          l10n?.securePaymentsTitle ??
+          '100% Secure & Encrypted Payments',
+      message:
+          subtitle ??
           l10n?.securePaymentsSubtitle ??
           'Your financial data is protected with 256-bit SSL encryption',
     );
