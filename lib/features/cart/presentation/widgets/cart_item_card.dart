@@ -23,6 +23,19 @@ class CartItemCard extends StatelessWidget {
     final product = item.product;
     final cacheSize = (_imageSize * MediaQuery.devicePixelRatioOf(context))
         .round();
+    final flavor = item.selectedFlavor;
+
+            final flavorDetails = (flavor != null && flavor.isNotEmpty)
+        ? ((item.selectedFlavorImage != null &&
+                item.selectedFlavorImage!.isNotEmpty &&
+                item.selectedFlavorImage != 'null')
+            ? FlavorsModel(
+                name: flavor,
+                color: getFlavorDetails(flavor).color,
+                image: item.selectedFlavorImage!,
+              )
+            : getFlavorDetails(flavor))
+        : null;
 
     return AppCard(
       padding: const EdgeInsets.all(AppDimens.spacingMd),
@@ -38,19 +51,33 @@ class CartItemCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Hero(
-            tag: 'cart_product_${item.id}',
-            child: AppNetworkImage(
-              imageUrl:
-                  item.primaryImageUrl ??
-                  (product.imageUrls.isNotEmpty
-                      ? product.imageUrls.first.thumbnail
-                      : null),
-              width: _imageSize,
-              height: _imageSize,
-              memCacheWidth: cacheSize,
-              memCacheHeight: cacheSize,
-            ),
+          Column(
+            children: [
+              Hero(
+                tag: 'cart_product_${item.id}',
+                child: AppNetworkImage(
+                  imageUrl:
+                      item.primaryImageUrl ??
+                      (product.imageUrls.isNotEmpty
+                          ? product.imageUrls.first.thumbnail
+                          : null),
+                  width: _imageSize,
+                  height: _imageSize,
+                  memCacheWidth: cacheSize,
+                  memCacheHeight: cacheSize,
+                ),
+              ),
+             const SizedBox(height: 5),
+              if (flavorDetails != null)
+                FlavorImage(
+                  width: _imageSize,
+                  height: _imageSize/2.5,
+                  shadow: false,
+                  isSelected: false,
+                  baseColor: Colors.transparent,
+                  details: flavorDetails,
+                ),
+            ],
           ),
           const SizedBox(width: AppDimens.spacingMd),
           Expanded(
@@ -89,8 +116,8 @@ class CartItemCard extends StatelessWidget {
                       selectedFlavor: item.selectedFlavor,
                       selectedSize: item.selectedSize,
                       axis: Axis.horizontal,
-                      iconSize: 22.0,
-                      quantityFontSize: 14.0,
+                      iconSize: 25.0,
+                      quantityFontSize: 16.0,
                       borderRadius: AppRadius.allPill,
                     ),
                   ],
