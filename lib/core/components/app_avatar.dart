@@ -24,7 +24,9 @@ class AppAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = imageUrl;
-    final initial = (name?.trim().isNotEmpty ?? false) ? name!.trim()[0].toUpperCase() : null;
+    final initial = (name?.trim().isNotEmpty ?? false)
+        ? name!.trim()[0].toUpperCase()
+        : null;
 
     final Widget content;
     if (url != null && url.isNotEmpty) {
@@ -61,10 +63,16 @@ class AppAvatar extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(2.5),
-      decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColors.primary),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.primary,
+      ),
       child: Container(
         padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: context.colorScheme.surface),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: context.colorScheme.surface,
+        ),
         child: content,
       ),
     );
