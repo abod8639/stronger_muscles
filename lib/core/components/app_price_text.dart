@@ -35,8 +35,9 @@ class AppPriceText extends StatelessWidget {
     return Wrap(
       direction: direction,
       spacing: isHorizontal ? 8.0 : 0.0,
-      crossAxisAlignment:
-          isHorizontal ? WrapCrossAlignment.center : WrapCrossAlignment.start,
+      crossAxisAlignment: isHorizontal
+          ? WrapCrossAlignment.center
+          : WrapCrossAlignment.start,
       children: [
         Text(
           format(price, decimals: decimals),
