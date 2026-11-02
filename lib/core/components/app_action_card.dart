@@ -32,7 +32,9 @@ class AppActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final defaultIconBg = (iconColor ?? AppColors.primary).withValues(alpha: 0.12);
+    final defaultIconBg = (iconColor ?? AppColors.primary).withValues(
+      alpha: 0.12,
+    );
 
     return Container(
       margin: margin ?? const EdgeInsets.symmetric(vertical: 4.0),
