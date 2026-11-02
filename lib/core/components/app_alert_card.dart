@@ -54,8 +54,9 @@ class AppAlertCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(
-            crossAxisAlignment:
-                hasTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+            crossAxisAlignment: hasTitle
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(6.0),
@@ -116,8 +117,10 @@ class AppAlertCard extends StatelessWidget {
                 onPressed: isActionLoading ? null : onAction,
                 style: TextButton.styleFrom(
                   foregroundColor: color,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 6.0,
+                  ),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 icon: isActionLoading
