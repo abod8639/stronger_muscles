@@ -78,7 +78,9 @@ class AppBottomSheetScaffold extends StatelessWidget {
     );
 
     return Container(
-      height: heightFactor == null ? null : mediaQuery.size.height * heightFactor!,
+      height: heightFactor == null
+          ? null
+          : mediaQuery.size.height * heightFactor!,
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: AppRadius.topBottomSheet,
@@ -96,7 +98,10 @@ class AppBottomSheetScaffold extends StatelessWidget {
           const Center(child: BottomSheetHandle()),
           const SizedBox(height: AppDimens.spacingMd),
           header,
-          Divider(height: AppDimens.spacingXl, color: context.colorScheme.outlineVariant),
+          Divider(
+            height: AppDimens.spacingXl,
+            color: context.colorScheme.outlineVariant,
+          ),
           if (heightFactor == null)
             Flexible(child: SingleChildScrollView(child: child))
           else
