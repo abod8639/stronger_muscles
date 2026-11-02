@@ -83,7 +83,9 @@ class _ChoiceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = isSelected ? AppColors.white : context.colorScheme.onSurface;
+    final foreground = isSelected
+        ? AppColors.white
+        : context.colorScheme.onSurface;
 
     return Material(
       color: Colors.transparent,
@@ -97,9 +99,7 @@ class _ChoiceChip extends StatelessWidget {
             color: isSelected ? color : context.colorScheme.surface,
             borderRadius: AppRadius.allPill,
             border: Border.all(
-              color: isSelected
-                  ? color
-                  : context.colorScheme.outlineVariant,
+              color: isSelected ? color : context.colorScheme.outlineVariant,
             ),
             boxShadow: isSelected
                 ? AppShadows.colored(color, alpha: 0.28, blur: 8.0)
@@ -112,7 +112,9 @@ class _ChoiceChip extends StatelessWidget {
                 Icon(
                   icon,
                   size: 16.0,
-                  color: isSelected ? AppColors.white : context.colorScheme.onSurfaceVariant,
+                  color: isSelected
+                      ? AppColors.white
+                      : context.colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 6.0),
               ],
