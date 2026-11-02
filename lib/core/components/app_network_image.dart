@@ -74,20 +74,21 @@ class AppNetworkImage extends StatelessWidget {
   }
 
   Widget _buildFallback(BuildContext context) => _buildBox(
-        context,
-        Icon(
-          errorIcon,
-          color: context.colorScheme.onSurfaceVariant,
-          size: errorIconSize ??
-              (width != null && width!.isFinite ? width! * 0.4 : 40.0),
-        ),
-      );
+    context,
+    Icon(
+      errorIcon,
+      color: context.colorScheme.onSurfaceVariant,
+      size:
+          errorIconSize ??
+          (width != null && width!.isFinite ? width! * 0.4 : 40.0),
+    ),
+  );
 
   Widget _buildBox(BuildContext context, Widget child) => Container(
-        width: width,
-        height: height,
-        color: backgroundColor ?? context.colorScheme.surfaceContainerHighest,
-        alignment: Alignment.center,
-        child: child,
-      );
+    width: width,
+    height: height,
+    color: backgroundColor ?? context.colorScheme.surfaceContainerHighest,
+    alignment: Alignment.center,
+    child: child,
+  );
 }
