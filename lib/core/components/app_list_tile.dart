@@ -52,13 +52,17 @@ class AppListTile extends StatelessWidget {
                     title,
                     style: textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: color == AppColors.primary ? context.colorScheme.onSurface : color,
+                      color: color == AppColors.primary
+                          ? context.colorScheme.onSurface
+                          : color,
                     ),
                   ),
                   if (subtitle != null)
                     Text(
                       subtitle!,
-                      style: textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                 ],
               ),
@@ -68,7 +72,10 @@ class AppListTile extends StatelessWidget {
               trailing!,
             ],
             if (showChevron && onTap != null)
-              Icon(Icons.chevron_right_rounded, color: context.colorScheme.onSurfaceVariant),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: context.colorScheme.onSurfaceVariant,
+              ),
           ],
         ),
       ),
