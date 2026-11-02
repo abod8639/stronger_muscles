@@ -17,7 +17,8 @@ class AppInternetConnectionBanner extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final displayTitle = title ??
+    final displayTitle =
+        title ??
         AppLocalizations.of(context)?.noInternetConnection ??
         'No internet connection';
 
@@ -31,7 +32,11 @@ class AppInternetConnectionBanner extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.wifi_off_rounded, color: AppColors.white, size: 22),
+            const Icon(
+              Icons.wifi_off_rounded,
+              color: AppColors.white,
+              size: 22,
+            ),
             const SizedBox(width: 8),
             Flexible(
               child: Text(
