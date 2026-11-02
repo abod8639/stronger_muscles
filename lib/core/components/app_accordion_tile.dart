@@ -95,8 +95,12 @@ class _AppAccordionTileState extends State<AppAccordionTile>
               onTap: _handleTap,
               borderRadius: AppRadius.allLg,
               child: Padding(
-                padding: widget.padding ??
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                padding:
+                    widget.padding ??
+                    const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 14.0,
+                    ),
                 child: Row(
                   children: [
                     if (widget.leading != null) ...[
@@ -115,7 +119,9 @@ class _AppAccordionTileState extends State<AppAccordionTile>
                             widget.title,
                             style: context.textTheme.titleSmall?.copyWith(
                               fontSize: 15.0,
-                              fontWeight: _isExpanded ? FontWeight.bold : FontWeight.w600,
+                              fontWeight: _isExpanded
+                                  ? FontWeight.bold
+                                  : FontWeight.w600,
                               color: colorScheme.onSurface,
                               height: 1.35,
                             ),
@@ -162,7 +168,10 @@ class _AppAccordionTileState extends State<AppAccordionTile>
                   color: colorScheme.outlineVariant,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 14.0,
+                  ),
                   child: widget.content,
                 ),
               ],
