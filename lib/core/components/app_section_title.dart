@@ -42,10 +42,7 @@ class AppSectionTitle extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (leading != null) ...[
-                  leading!,
-                  const SizedBox(width: 8.0),
-                ],
+                if (leading != null) ...[leading!, const SizedBox(width: 8.0)],
                 Flexible(
                   child: Text(
                     title,
@@ -62,10 +59,7 @@ class AppSectionTitle extends StatelessWidget {
           if (actionWidget != null)
             actionWidget!
           else if (actionText != null)
-            TextButton(
-              onPressed: onActionTap,
-              child: Text(actionText!),
-            ),
+            TextButton(onPressed: onActionTap, child: Text(actionText!)),
         ],
       ),
     );
