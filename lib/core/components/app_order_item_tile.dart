@@ -33,7 +33,8 @@ class AppOrderItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
     final mutedColor = context.colorScheme.onSurfaceVariant;
-    final cacheSize = (imageSize * MediaQuery.devicePixelRatioOf(context)).round();
+    final cacheSize = (imageSize * MediaQuery.devicePixelRatioOf(context))
+        .round();
 
     return Padding(
       padding: padding,
@@ -56,7 +57,9 @@ class AppOrderItemTile extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                  style: textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 if (subtitle != null && subtitle!.isNotEmpty)
                   Text(
