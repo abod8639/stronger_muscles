@@ -66,7 +66,8 @@ class _AppExpandableTextState extends State<AppExpandableText> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
-    final effectiveStyle = widget.style ??
+    final effectiveStyle =
+        widget.style ??
         theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
           height: 1.5,
@@ -89,10 +90,7 @@ class _AppExpandableTextState extends State<AppExpandableText> {
             overflow: TextOverflow.ellipsis,
             style: effectiveStyle,
           ),
-          secondChild: Text(
-            widget.text,
-            style: effectiveStyle,
-          ),
+          secondChild: Text(widget.text, style: effectiveStyle),
           crossFadeState: _isExpanded
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
