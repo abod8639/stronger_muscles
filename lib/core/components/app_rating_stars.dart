@@ -52,7 +52,8 @@ class AppRatingStars extends StatelessWidget {
                 if (showValue) clampedRating.toStringAsFixed(1),
                 if (suffixText != null) suffixText,
               ].join(' '),
-              style: textStyle ??
+              style:
+                  textStyle ??
                   theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
