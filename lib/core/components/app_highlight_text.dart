@@ -27,12 +27,7 @@ class AppHighlightText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (query.isEmpty) {
-      return Text(
-        text,
-        style: style,
-        maxLines: maxLines,
-        overflow: overflow,
-      );
+      return Text(text, style: style, maxLines: maxLines, overflow: overflow);
     }
 
     final theme = Theme.of(context);
@@ -53,10 +48,12 @@ class AppHighlightText extends StatelessWidget {
       if (indexOfMatch > start) {
         spans.add(TextSpan(text: text.substring(start, indexOfMatch)));
       }
-      spans.add(TextSpan(
-        text: text.substring(indexOfMatch, indexOfMatch + query.length),
-        style: highlightStyle ?? defaultHighlightStyle,
-      ));
+      spans.add(
+        TextSpan(
+          text: text.substring(indexOfMatch, indexOfMatch + query.length),
+          style: highlightStyle ?? defaultHighlightStyle,
+        ),
+      );
       start = indexOfMatch + query.length;
     }
 
