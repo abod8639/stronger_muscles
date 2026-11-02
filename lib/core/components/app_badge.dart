@@ -34,13 +34,15 @@ class AppBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBgColor = backgroundColor ??
+    final effectiveBgColor =
+        backgroundColor ??
         (gradient == null ? color.withValues(alpha: alpha) : null);
     final effectiveBorderRadius = borderRadius ?? AppRadius.allSm;
     final effectiveTextColor = textColor ?? color;
 
     return Container(
-      padding: padding ??
+      padding:
+          padding ??
           const EdgeInsets.symmetric(
             horizontal: AppDimens.spacingSm,
             vertical: AppDimens.spacingXs,
@@ -49,7 +51,8 @@ class AppBadge extends StatelessWidget {
         color: effectiveBgColor,
         gradient: gradient,
         borderRadius: effectiveBorderRadius,
-        border: border ??
+        border:
+            border ??
             (gradient == null
                 ? Border.all(color: color.withValues(alpha: 0.4), width: 1.0)
                 : null),
@@ -64,7 +67,8 @@ class AppBadge extends StatelessWidget {
           ],
           Text(
             label,
-            style: textStyle ??
+            style:
+                textStyle ??
                 TextStyle(
                   color: effectiveTextColor,
                   fontSize: 11.0,
