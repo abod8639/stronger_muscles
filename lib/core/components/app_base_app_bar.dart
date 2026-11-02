@@ -9,10 +9,7 @@ AppBar baseAppBar(
 }) {
   return AppBar(
     backgroundColor: Theme.of(context).colorScheme.surface,
-    title: Text(
-      title,
-      style: Theme.of(context).textTheme.titleLarge,
-    ),
+    title: Text(title, style: Theme.of(context).textTheme.titleLarge),
     centerTitle: true,
     leading: leading,
     actions: actions,
