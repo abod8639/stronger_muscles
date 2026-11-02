@@ -150,6 +150,13 @@ class AppFlavorImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final validImageUrl = (details.image.isNotEmpty &&
+            details.image != 'null' &&
+            (details.image.startsWith('http://') ||
+                details.image.startsWith('https://')))
+        ? details.image
+        : getFlavorDetails(details.name).image;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       width: width ?? 110,
@@ -165,7 +172,7 @@ class AppFlavorImage extends StatelessWidget {
             : const [],
         image: DecorationImage(
           image: CachedNetworkImageProvider(
-            details.image,
+            validImageUrl,
             cacheManager: CustomCacheManager.instance,
           ),
           fit: BoxFit.cover,
