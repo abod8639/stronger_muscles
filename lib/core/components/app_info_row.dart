@@ -38,23 +38,32 @@ class AppInfoRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 16.0, color: theme.colorScheme.onSurfaceVariant),
+                Icon(
+                  icon,
+                  size: 16.0,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
                 const SizedBox(width: 8.0),
               ],
               Text(
                 label,
-                style: labelStyle ??
-                    theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                style:
+                    labelStyle ??
+                    theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
               ),
             ],
           ),
           const SizedBox(width: 16.0),
           Expanded(
-            child: valueWidget ??
+            child:
+                valueWidget ??
                 Text(
                   value,
                   textAlign: TextAlign.end,
-                  style: valueStyle ??
+                  style:
+                      valueStyle ??
                       theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
@@ -98,13 +107,16 @@ class AppPriceRow extends StatelessWidget {
     final theme = Theme.of(context);
 
     final effectiveLabelStyle = theme.textTheme.bodyMedium?.copyWith(
-      color: isTotal ? theme.colorScheme.onSurface : theme.colorScheme.onSurfaceVariant,
+      color: isTotal
+          ? theme.colorScheme.onSurface
+          : theme.colorScheme.onSurfaceVariant,
       fontWeight: isTotal ? FontWeight.bold : FontWeight.normal,
       fontSize: isTotal ? 16.0 : 14.0,
     );
 
     final effectivePriceStyle = theme.textTheme.bodyMedium?.copyWith(
-      color: valueColor ??
+      color:
+          valueColor ??
           (isDiscount
               ? AppColors.success
               : (isTotal ? AppColors.primary : theme.colorScheme.onSurface)),
