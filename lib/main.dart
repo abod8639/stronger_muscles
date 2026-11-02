@@ -58,11 +58,13 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(pushNotificationServiceProvider).initialize(
-        onForegroundMessage: (message) {
-          ref.read(notificationControllerProvider.notifier).refresh();
-        },
-      );
+      ref
+          .read(pushNotificationServiceProvider)
+          .initialize(
+            onForegroundMessage: (message) {
+              ref.read(notificationControllerProvider.notifier).refresh();
+            },
+          );
     });
   }
 
