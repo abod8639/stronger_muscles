@@ -74,10 +74,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
         color: colorScheme.surface,
         borderRadius: AppRadius.allLg,
         boxShadow: context.subtleShadow,
-        border: Border.all(
-          color: colorScheme.outlineVariant,
-          width: 1,
-        ),
+        border: Border.all(color: colorScheme.outlineVariant, width: 1),
       ),
       child: TextField(
         controller: _controller,
@@ -93,7 +90,9 @@ class _AppSearchFieldState extends State<AppSearchField> {
         decoration: InputDecoration(
           isDense: true,
           hintText: widget.hintText,
-          hintStyle: context.textTheme.bodyMedium?.copyWith(color: colorScheme.onSurfaceVariant),
+          hintStyle: context.textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
           filled: false,
           prefixIcon: const Icon(
             Icons.search_rounded,
@@ -121,7 +120,10 @@ class _AppSearchFieldState extends State<AppSearchField> {
             ],
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
         ),
       ),
     );
