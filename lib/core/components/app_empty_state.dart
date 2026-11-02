@@ -58,7 +58,10 @@ class AppEmptyState extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
-                border: Border.all(color: color.withValues(alpha: 0.15), width: 6.0),
+                border: Border.all(
+                  color: color.withValues(alpha: 0.15),
+                  width: 6.0,
+                ),
               ),
               child: Icon(icon, size: 44.0, color: color),
             ),
@@ -83,10 +86,7 @@ class AppEmptyState extends StatelessWidget {
                 ),
               ),
             ],
-            if (extra != null) ...[
-              const SizedBox(height: 16.0),
-              extra!,
-            ],
+            if (extra != null) ...[const SizedBox(height: 16.0), extra!],
             if (actionText != null && onActionTap != null) ...[
               const SizedBox(height: 28.0),
               AppPrimaryButton(
@@ -96,7 +96,8 @@ class AppEmptyState extends StatelessWidget {
                 borderRadius: AppRadius.allLg,
               ),
             ],
-            if (secondaryActionText != null && onSecondaryActionTap != null) ...[
+            if (secondaryActionText != null &&
+                onSecondaryActionTap != null) ...[
               const SizedBox(height: 12.0),
               AppLinkButton(
                 text: secondaryActionText!,
