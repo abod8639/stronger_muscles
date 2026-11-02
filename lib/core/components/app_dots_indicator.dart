@@ -37,7 +37,8 @@ class AppDotsIndicator extends StatelessWidget {
 
     final theme = Theme.of(context);
     final effectiveActiveColor = activeColor ?? theme.colorScheme.primary;
-    final effectiveInactiveColor = inactiveColor ??
+    final effectiveInactiveColor =
+        inactiveColor ??
         (theme.brightness == Brightness.dark
             ? AppColors.greyDark
             : theme.colorScheme.primary.withAlpha(100));
@@ -45,22 +46,19 @@ class AppDotsIndicator extends StatelessWidget {
     return Row(
       mainAxisAlignment: alignment,
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        itemCount,
-        (index) {
-          final isActive = currentIndex == index;
-          return AnimatedContainer(
-            duration: duration,
-            margin: margin,
-            height: dotHeight,
-            width: isActive ? activeDotWidth : inactiveDotWidth,
-            decoration: BoxDecoration(
-              color: isActive ? effectiveActiveColor : effectiveInactiveColor,
-              borderRadius: borderRadius,
-            ),
-          );
-        },
-      ),
+      children: List.generate(itemCount, (index) {
+        final isActive = currentIndex == index;
+        return AnimatedContainer(
+          duration: duration,
+          margin: margin,
+          height: dotHeight,
+          width: isActive ? activeDotWidth : inactiveDotWidth,
+          decoration: BoxDecoration(
+            color: isActive ? effectiveActiveColor : effectiveInactiveColor,
+            borderRadius: borderRadius,
+          ),
+        );
+      }),
     );
   }
 }
