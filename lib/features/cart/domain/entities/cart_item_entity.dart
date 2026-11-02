@@ -10,6 +10,7 @@ class CartItemEntity {
   final DateTime? addedAt;
   final String? selectedFlavor;
   final String? selectedSize;
+  final String? selectedFlavorImage;
 
   const CartItemEntity({
     required this.id,
@@ -19,6 +20,7 @@ class CartItemEntity {
     this.addedAt,
     this.selectedFlavor,
     this.selectedSize,
+    this.selectedFlavorImage,
   });
 
   /// Subtotal for this cart item based on the selected size's effective price.
@@ -36,6 +38,7 @@ class CartItemEntity {
     DateTime? addedAt,
     String? selectedFlavor,
     String? selectedSize,
+    String? selectedFlavorImage,
   }) {
     return CartItemEntity(
       id: id ?? this.id,
@@ -45,6 +48,7 @@ class CartItemEntity {
       addedAt: addedAt ?? this.addedAt,
       selectedFlavor: selectedFlavor ?? this.selectedFlavor,
       selectedSize: selectedSize ?? this.selectedSize,
+      selectedFlavorImage: selectedFlavorImage ?? this.selectedFlavorImage,
     );
   }
 
@@ -56,12 +60,13 @@ class CartItemEntity {
           id == other.id &&
           quantity == other.quantity &&
           selectedFlavor == other.selectedFlavor &&
-          selectedSize == other.selectedSize;
+          selectedSize == other.selectedSize &&
+          selectedFlavorImage == other.selectedFlavorImage;
 
   @override
-  int get hashCode => Object.hash(id, quantity, selectedFlavor, selectedSize);
+  int get hashCode => Object.hash(id, quantity, selectedFlavor, selectedSize, selectedFlavorImage);
 
   @override
   String toString() =>
-      'CartItemEntity(id: $id, userId: $userId, product: ${product.id}, quantity: $quantity, flavor: $selectedFlavor, size: $selectedSize)';
+      'CartItemEntity(id: $id, userId: $userId, product: ${product.id}, quantity: $quantity, flavor: $selectedFlavor, size: $selectedSize, selectedFlavorImage: $selectedFlavorImage)';
 }
