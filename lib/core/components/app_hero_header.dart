@@ -38,7 +38,11 @@ class AppHeroHeader extends StatelessWidget {
               end: AlignmentDirectional.bottomEnd,
             ),
             borderRadius: AppRadius.allXl,
-            boxShadow: AppShadows.colored(gradientColors.last, alpha: 0.35, blur: 20),
+            boxShadow: AppShadows.colored(
+              gradientColors.last,
+              alpha: 0.35,
+              blur: 20,
+            ),
           ),
           child: Icon(icon, color: AppColors.white, size: iconTileSize * 0.48),
         ),
