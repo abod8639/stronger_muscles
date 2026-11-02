@@ -100,7 +100,6 @@ class CartQuantityControls extends ConsumerWidget {
     final quantityBadge = Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: .1),
         borderRadius: AppRadius.allXs,
       ),
       child: Text(
