@@ -5,23 +5,16 @@ class SelectionsModel {
   final String label;
   final String? iconKey;
 
-  const SelectionsModel({
-    required this.id,
-    required this.label,
-    this.iconKey,
-  });
+  const SelectionsModel({required this.id, required this.label, this.iconKey});
 
   /// Robust, fault-tolerant JSON parser with null safety and type fallback.
   factory SelectionsModel.fromJson(dynamic json) {
     if (json is! Map) {
-      return const SelectionsModel(
-        id: '',
-        label: '',
-        iconKey: 'home',
-      );
+      return const SelectionsModel(id: '', label: '', iconKey: 'home');
     }
 
-    final safeId = json['id']?.toString() ??
+    final safeId =
+        json['id']?.toString() ??
         json['_id']?.toString() ??
         json['slug']?.toString() ??
         '';
@@ -30,7 +23,8 @@ class SelectionsModel {
     String safeLabel = '';
     final rawLabel = json['label'] ?? json['name'] ?? json['title'];
     if (rawLabel is Map) {
-      safeLabel = rawLabel['ar']?.toString() ??
+      safeLabel =
+          rawLabel['ar']?.toString() ??
           rawLabel['en']?.toString() ??
           rawLabel.values.firstOrNull?.toString() ??
           '';
@@ -38,20 +32,17 @@ class SelectionsModel {
       safeLabel = rawLabel.toString();
     }
 
-    final safeIconKey = json['icon']?.toString() ?? json['iconKey']?.toString() ?? safeId;
+    final safeIconKey =
+        json['icon']?.toString() ?? json['iconKey']?.toString() ?? safeId;
 
-    return SelectionsModel(
-      id: safeId,
-      label: safeLabel,
-      iconKey: safeIconKey,
-    );
+    return SelectionsModel(id: safeId, label: safeLabel, iconKey: safeIconKey);
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'label': label,
-        'iconKey': iconKey,
-      };
+    'id': id,
+    'label': label,
+    'iconKey': iconKey,
+  };
 
   /// Safely converts a dynamic response into a typed List of [SelectionsModel].
   static List<SelectionsModel> fromJsonList(dynamic data) {

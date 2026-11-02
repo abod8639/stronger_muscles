@@ -24,10 +24,8 @@ class ProductCategory with _$ProductCategory {
     return name?.getValue(locale: locale) ?? '';
   }
 
-  ProductCategoryEntity toEntity() => ProductCategoryEntity(
-        id: id,
-        name: name?.toEntity(),
-      );
+  ProductCategoryEntity toEntity() =>
+      ProductCategoryEntity(id: id, name: name?.toEntity());
 
   static ProductCategory fromEntity(ProductCategoryEntity entity) =>
       ProductCategory(

@@ -26,10 +26,26 @@ class AppProductCardImage extends StatefulWidget {
 
 class _AppProductCardImageState extends State<AppProductCardImage> {
   static const ColorFilter _greyscale = ColorFilter.matrix(<double>[
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0.2126, 0.7152, 0.0722, 0, 0,
-    0, 0, 0, 0.65, 0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0.2126,
+    0.7152,
+    0.0722,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0.65,
+    0,
   ]);
 
   int _selectedIndex = 0;
@@ -41,7 +57,10 @@ class _AppProductCardImageState extends State<AppProductCardImage> {
     final images = product.imageUrls;
     final isOutOfStock = !product.isInStock;
     final hasBadges =
-        product.hasDiscount || product.newArrival || product.bestSeller || product.featured;
+        product.hasDiscount ||
+        product.newArrival ||
+        product.bestSeller ||
+        product.featured;
     final radius = AppRadius.top(AppRadius.lg);
 
     Widget pager = images.isEmpty
@@ -112,7 +131,9 @@ class _AppProductCardImageState extends State<AppProductCardImage> {
                   label: l10n?.outOfStock ?? 'نفدت الكمية',
                   color: AppColors.white,
                   backgroundColor: Colors.black.withValues(alpha: 0.78),
-                  border: Border.all(color: AppColors.white.withValues(alpha: 0.4)),
+                  border: Border.all(
+                    color: AppColors.white.withValues(alpha: 0.4),
+                  ),
                   borderRadius: AppRadius.allPill,
                 ),
               ),

@@ -73,32 +73,45 @@ class ProductInfoSection extends ConsumerWidget {
     final customServingSize = selectedSize is ProductSize
         ? selectedSize.weight
         : (selectedSize is ProductSizeEntity
-            ? selectedSize.weight
-            : (selectedSize?.weight?.toString()));
+              ? selectedSize.weight
+              : (selectedSize?.weight?.toString()));
     final customServings = selectedSize is ProductSize
         ? selectedSize.servings
         : (selectedSize is ProductSizeEntity
-            ? selectedSize.servings
-            : (selectedSize?.servings is int
-                ? selectedSize.servings as int
-                : int.tryParse(selectedSize?.servings?.toString() ?? '')));
+              ? selectedSize.servings
+              : (selectedSize?.servings is int
+                    ? selectedSize.servings as int
+                    : int.tryParse(selectedSize?.servings?.toString() ?? '')));
     final displayServingSize = customServingSize ?? product.servingSize;
-    final displayServings = customServings ??
+    final displayServings =
+        customServings ??
         (product.servingsPerContainer != 0
             ? product.servingsPerContainer
             : null);
 
     final rows = <({String label, String value})>[
-      if (category?.name != null) (label: l10n.category, value: category!.getLocalizedName(locale: locale)),
+      if (category?.name != null)
+        (
+          label: l10n.category,
+          value: category!.getLocalizedName(locale: locale),
+        ),
       if (product.sku != null) (label: l10n.sku, value: product.sku!),
-      if (displayServingSize != null) (label: l10n.servingSize, value: displayServingSize),
-      if (displayServings != null) (label: l10n.servingsPerContainer, value: '$displayServings'),
-      if (product.weight != null && product.weight.toString() != displayServingSize)
+      if (displayServingSize != null)
+        (label: l10n.servingSize, value: displayServingSize),
+      if (displayServings != null)
+        (label: l10n.servingsPerContainer, value: '$displayServings'),
+      if (product.weight != null &&
+          product.weight.toString() != displayServingSize)
         (label: l10n.weight, value: '${product.weight} ${l10n.kg}'),
-      if (product.manufacturer != null) (label: l10n.manufacturer, value: product.manufacturer!),
-      if (product.countryOfOrigin != null) (label: l10n.countryOfOrigin, value: product.countryOfOrigin!),
+      if (product.manufacturer != null)
+        (label: l10n.manufacturer, value: product.manufacturer!),
+      if (product.countryOfOrigin != null)
+        (label: l10n.countryOfOrigin, value: product.countryOfOrigin!),
     ];
-    final divider = Divider(height: AppDimens.spacingLg, color: context.colorScheme.outlineVariant.withValues(alpha: 0.5));
+    final divider = Divider(
+      height: AppDimens.spacingLg,
+      color: context.colorScheme.outlineVariant.withValues(alpha: 0.5),
+    );
 
     return AppSectionCard(
       title: l10n.productInfo,
@@ -155,7 +168,10 @@ class ProductIngredientsSection extends StatelessWidget {
               color: mutedColor,
               alpha: 0.08,
               borderRadius: AppRadius.allPill,
-              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 6.0,
+              ),
               textStyle: context.textTheme.bodySmall?.copyWith(
                 color: context.colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
@@ -197,7 +213,8 @@ class ProductUsageSection extends StatelessWidget {
               ),
             ),
           ),
-        if (hasUsage && hasWarnings) const SizedBox(height: AppDimens.spacingMd),
+        if (hasUsage && hasWarnings)
+          const SizedBox(height: AppDimens.spacingMd),
         if (hasWarnings)
           AppSectionCard(
             title: l10n.warnings,
@@ -209,7 +226,9 @@ class ProductUsageSection extends StatelessWidget {
                     color: AppColors.error,
                     icon: Icons.warning_amber_rounded,
                     message: warning,
-                    margin: EdgeInsets.only(top: index == 0 ? 0 : AppDimens.spacingSm),
+                    margin: EdgeInsets.only(
+                      top: index == 0 ? 0 : AppDimens.spacingSm,
+                    ),
                   ),
               ],
             ),

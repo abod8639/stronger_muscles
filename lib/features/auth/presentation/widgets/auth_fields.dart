@@ -80,12 +80,13 @@ class AuthPasswordField extends StatelessWidget {
       textInputAction: textInputAction,
       autofillHints: autofillHints,
       onFieldSubmitted: onFieldSubmitted,
-      validator: validator ??
+      validator:
+          validator ??
           (value) => AppValidators.validatePassword(
-                value,
-                emptyMessage: l10n.enterPassword,
-                tooShortMessage: l10n.passwordLength,
-              ),
+            value,
+            emptyMessage: l10n.enterPassword,
+            tooShortMessage: l10n.passwordLength,
+          ),
     );
   }
 }

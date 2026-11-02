@@ -14,14 +14,14 @@ import 'package:stronger_muscles/features/notifications/domain/usecases/mark_as_
 
 final notificationLocalDataSourceProvider =
     Provider<NotificationLocalDataSource>((ref) {
-  return NotificationLocalDataSourceImpl();
-});
+      return NotificationLocalDataSourceImpl();
+    });
 
 final notificationRemoteDataSourceProvider =
     Provider<NotificationRemoteDataSource>((ref) {
-  final apiService = ref.watch(apiServiceProvider);
-  return NotificationRemoteDataSourceImpl(apiService);
-});
+      final apiService = ref.watch(apiServiceProvider);
+      return NotificationRemoteDataSourceImpl(apiService);
+    });
 
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
   final remoteDataSource = ref.watch(notificationRemoteDataSourceProvider);
@@ -31,7 +31,9 @@ final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
 
 // ── Domain UseCase Providers ─────────────────────────────────────────────────
 
-final getNotificationsUseCaseProvider = Provider<GetNotificationsUseCase>((ref) {
+final getNotificationsUseCaseProvider = Provider<GetNotificationsUseCase>((
+  ref,
+) {
   final repository = ref.watch(notificationRepositoryProvider);
   return GetNotificationsUseCase(repository);
 });
@@ -51,7 +53,9 @@ final markAllAsReadUseCaseProvider = Provider<MarkAllAsReadUseCase>((ref) {
   return MarkAllAsReadUseCase(repository);
 });
 
-final deleteNotificationUseCaseProvider = Provider<DeleteNotificationUseCase>((ref) {
+final deleteNotificationUseCaseProvider = Provider<DeleteNotificationUseCase>((
+  ref,
+) {
   final repository = ref.watch(notificationRepositoryProvider);
   return DeleteNotificationUseCase(repository);
 });

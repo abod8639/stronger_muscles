@@ -14,16 +14,17 @@ import '../../domain/usecases/submit_ticket_usecase.dart';
 
 // ── Data Layer Providers ─────────────────────────────────────────────────────
 
-final helpSupportLocalDataSourceProvider =
-    Provider<HelpSupportLocalDataSource>((ref) {
-  return HelpSupportLocalDataSourceImpl();
-});
+final helpSupportLocalDataSourceProvider = Provider<HelpSupportLocalDataSource>(
+  (ref) {
+    return HelpSupportLocalDataSourceImpl();
+  },
+);
 
 final helpSupportRemoteDataSourceProvider =
     Provider<HelpSupportRemoteDataSource>((ref) {
-  final apiService = ref.watch(apiServiceProvider);
-  return HelpSupportRemoteDataSourceImpl(apiService);
-});
+      final apiService = ref.watch(apiServiceProvider);
+      return HelpSupportRemoteDataSourceImpl(apiService);
+    });
 
 final helpSupportRepositoryProvider = Provider<HelpSupportRepository>((ref) {
   final localDataSource = ref.watch(helpSupportLocalDataSourceProvider);
@@ -38,8 +39,9 @@ final getFaqsUseCaseProvider = Provider<GetFaqsUseCase>((ref) {
   return GetFaqsUseCase(repository);
 });
 
-final getSupportChannelsUseCaseProvider =
-    Provider<GetSupportChannelsUseCase>((ref) {
+final getSupportChannelsUseCaseProvider = Provider<GetSupportChannelsUseCase>((
+  ref,
+) {
   final repository = ref.watch(helpSupportRepositoryProvider);
   return GetSupportChannelsUseCase(repository);
 });
@@ -54,14 +56,16 @@ final getUserTicketsUseCaseProvider = Provider<GetUserTicketsUseCase>((ref) {
   return GetUserTicketsUseCase(repository);
 });
 
-final getTicketDetailsUseCaseProvider =
-    Provider<GetTicketDetailsUseCase>((ref) {
+final getTicketDetailsUseCaseProvider = Provider<GetTicketDetailsUseCase>((
+  ref,
+) {
   final repository = ref.watch(helpSupportRepositoryProvider);
   return GetTicketDetailsUseCase(repository);
 });
 
-final sendTicketMessageUseCaseProvider =
-    Provider<SendTicketMessageUseCase>((ref) {
+final sendTicketMessageUseCaseProvider = Provider<SendTicketMessageUseCase>((
+  ref,
+) {
   final repository = ref.watch(helpSupportRepositoryProvider);
   return SendTicketMessageUseCase(repository);
 });

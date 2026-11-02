@@ -44,15 +44,19 @@ class WishlistView extends ConsumerWidget {
                 ],
               )
             : ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                physics: const AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
                 padding: const EdgeInsets.all(AppDimens.spacingLg),
                 itemCount: wishlistItems.length,
-                separatorBuilder: (_, _) => const SizedBox(height: AppDimens.spacingMd),
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: AppDimens.spacingMd),
                 itemBuilder: (context, index) {
                   final product = wishlistItems[index];
                   return AppSwipeToDelete(
                     dismissKey: ValueKey('wishlist_${product.id}'),
-                    onDeleted: () => handleDeleteFromWishlist(context, ref, product),
+                    onDeleted: () =>
+                        handleDeleteFromWishlist(context, ref, product),
                     child: WishlistItemCard(product: product),
                   );
                 },

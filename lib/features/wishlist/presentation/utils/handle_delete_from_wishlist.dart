@@ -6,7 +6,11 @@ import 'package:stronger_muscles/features/wishlist/presentation/controllers/wish
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 /// Removes [product] from the wishlist and offers an undo snackbar.
-void handleDeleteFromWishlist(BuildContext context, WidgetRef ref, ProductEntity product) {
+void handleDeleteFromWishlist(
+  BuildContext context,
+  WidgetRef ref,
+  ProductEntity product,
+) {
   final wishlistNotifier = ref.read(wishlistControllerProvider.notifier);
   final l10n = AppLocalizations.of(context);
 
@@ -15,7 +19,9 @@ void handleDeleteFromWishlist(BuildContext context, WidgetRef ref, ProductEntity
   final itemName = product.getLocalizedName(locale: l10n?.localeName ?? 'en');
   AppSnackBar.showInfo(
     context,
-    l10n != null ? '$itemName ${l10n.removedFromWishlist}' : '$itemName removed from wishlist',
+    l10n != null
+        ? '$itemName ${l10n.removedFromWishlist}'
+        : '$itemName removed from wishlist',
     actionLabel: l10n?.undo ?? 'UNDO',
     onAction: () => wishlistNotifier.addToWishlist(product),
   );

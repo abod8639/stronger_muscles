@@ -26,7 +26,9 @@ class SearchInputGroup extends ConsumerWidget {
 
     return Row(
       children: [
-        Expanded(child: ProductSearchAutocomplete(readOnly: true, onTap: openSearch)),
+        Expanded(
+          child: ProductSearchAutocomplete(readOnly: true, onTap: openSearch),
+        ),
         const SizedBox(width: AppDimens.spacingSm + 2),
         AppCircleIconButton(
           icon: Icons.tune_rounded,

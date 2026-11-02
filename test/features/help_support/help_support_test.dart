@@ -57,15 +57,14 @@ class MockHelpSupportRemoteDataSource implements HelpSupportRemoteDataSource {
   Future<SupportMessageModel> sendTicketMessage(
     String ticketId,
     String message,
-  ) async =>
-      SupportMessageModel(
-        id: 1,
-        ticketId: int.tryParse(ticketId) ?? 1,
-        senderType: 'user',
-        senderName: 'User',
-        message: message,
-        createdAt: DateTime.now(),
-      );
+  ) async => SupportMessageModel(
+    id: 1,
+    ticketId: int.tryParse(ticketId) ?? 1,
+    senderType: 'user',
+    senderName: 'User',
+    message: message,
+    createdAt: DateTime.now(),
+  );
 
   @override
   Future<SupportTicketModel> closeTicket(String ticketId) async =>
@@ -116,7 +115,9 @@ void main() {
     late CloseTicketUseCase closeTicketUseCase;
 
     setUpAll(() async {
-      tempDir = await Directory.systemTemp.createTemp('hive_help_support_test_');
+      tempDir = await Directory.systemTemp.createTemp(
+        'hive_help_support_test_',
+      );
       Hive.init(tempDir.path);
     });
 
@@ -166,16 +167,22 @@ void main() {
       expect(results.first.questionAr.contains('تتبع'), true);
     });
 
-    test('getSupportChannels returns Either Right with the 4 standard channels', () async {
-      final result = await getChannelsUseCase();
-      expect(result.isRight(), true);
-      final channels = result.getOrElse((_) => []);
-      expect(channels.length, 4);
-      expect(channels.any((c) => c.type == SupportChannelType.whatsapp), true);
-      expect(channels.any((c) => c.type == SupportChannelType.phone), true);
-      expect(channels.any((c) => c.type == SupportChannelType.email), true);
-      expect(channels.any((c) => c.type == SupportChannelType.ticket), true);
-    });
+    test(
+      'getSupportChannels returns Either Right with the 4 standard channels',
+      () async {
+        final result = await getChannelsUseCase();
+        expect(result.isRight(), true);
+        final channels = result.getOrElse((_) => []);
+        expect(channels.length, 4);
+        expect(
+          channels.any((c) => c.type == SupportChannelType.whatsapp),
+          true,
+        );
+        expect(channels.any((c) => c.type == SupportChannelType.phone), true);
+        expect(channels.any((c) => c.type == SupportChannelType.email), true);
+        expect(channels.any((c) => c.type == SupportChannelType.ticket), true);
+      },
+    );
 
     test('submitTicket creates and returns a ticket with valid id', () async {
       final ticket = SupportTicketEntity(
@@ -194,43 +201,46 @@ void main() {
       expect(created.subject, ticket.subject);
     });
 
-    test('HelpSupportNotifier loads initial data and filters properly', () async {
-      final notifier = HelpSupportNotifier(
-        getFaqsUseCase: getFaqsUseCase,
-        getChannelsUseCase: getChannelsUseCase,
-        submitTicketUseCase: submitTicketUseCase,
-        getUserTicketsUseCase: getUserTicketsUseCase,
-        getTicketDetailsUseCase: getTicketDetailsUseCase,
-        sendTicketMessageUseCase: sendTicketMessageUseCase,
-        closeTicketUseCase: closeTicketUseCase,
-      );
+    test(
+      'HelpSupportNotifier loads initial data and filters properly',
+      () async {
+        final notifier = HelpSupportNotifier(
+          getFaqsUseCase: getFaqsUseCase,
+          getChannelsUseCase: getChannelsUseCase,
+          submitTicketUseCase: submitTicketUseCase,
+          getUserTicketsUseCase: getUserTicketsUseCase,
+          getTicketDetailsUseCase: getTicketDetailsUseCase,
+          sendTicketMessageUseCase: sendTicketMessageUseCase,
+          closeTicketUseCase: closeTicketUseCase,
+        );
 
-      // Await initial load
-      await Future.delayed(const Duration(milliseconds: 300));
-      expect(notifier.state.isLoading, false);
-      expect(notifier.state.faqs.isNotEmpty, true);
-      expect(notifier.state.channels.isNotEmpty, true);
+        // Await initial load
+        await Future.delayed(const Duration(milliseconds: 300));
+        expect(notifier.state.isLoading, false);
+        expect(notifier.state.faqs.isNotEmpty, true);
+        expect(notifier.state.channels.isNotEmpty, true);
 
-      // Change category
-      await notifier.selectCategory(FaqCategory.paymentRefunds);
-      expect(notifier.state.selectedCategory, FaqCategory.paymentRefunds);
-      for (final f in notifier.state.faqs) {
-        expect(f.category, FaqCategory.paymentRefunds);
-      }
+        // Change category
+        await notifier.selectCategory(FaqCategory.paymentRefunds);
+        expect(notifier.state.selectedCategory, FaqCategory.paymentRefunds);
+        for (final f in notifier.state.faqs) {
+          expect(f.category, FaqCategory.paymentRefunds);
+        }
 
-      // Search
-      await notifier.search('policy');
-      expect(notifier.state.searchQuery, 'policy');
+        // Search
+        await notifier.search('policy');
+        expect(notifier.state.searchQuery, 'policy');
 
-      // Submit ticket through controller
-      final ticket = await notifier.submitTicket(
-        subject: 'مشكلة دفع',
-        category: 'الدفع والاسترجاع',
-        message: 'تم خصم المبلغ مرتين من حسابي',
-      );
-      expect(ticket, isNotNull);
-      expect(notifier.state.lastSubmittedTicketId, ticket!.id);
-    });
+        // Submit ticket through controller
+        final ticket = await notifier.submitTicket(
+          subject: 'مشكلة دفع',
+          category: 'الدفع والاسترجاع',
+          message: 'تم خصم المبلغ مرتين من حسابي',
+        );
+        expect(ticket, isNotNull);
+        expect(notifier.state.lastSubmittedTicketId, ticket!.id);
+      },
+    );
 
     test('HelpSupportNotifier enforces submission guard clauses', () async {
       final notifier = HelpSupportNotifier(
@@ -250,31 +260,37 @@ void main() {
       expect(sentEmpty, false);
     });
 
-    test('HelpSupportNotifier loadTicketDetails with isSilentRefresh preserves UI without flashing AsyncLoading', () async {
-      final notifier = HelpSupportNotifier(
-        getFaqsUseCase: getFaqsUseCase,
-        getChannelsUseCase: getChannelsUseCase,
-        submitTicketUseCase: submitTicketUseCase,
-        getUserTicketsUseCase: getUserTicketsUseCase,
-        getTicketDetailsUseCase: getTicketDetailsUseCase,
-        sendTicketMessageUseCase: sendTicketMessageUseCase,
-        closeTicketUseCase: closeTicketUseCase,
-      );
+    test(
+      'HelpSupportNotifier loadTicketDetails with isSilentRefresh preserves UI without flashing AsyncLoading',
+      () async {
+        final notifier = HelpSupportNotifier(
+          getFaqsUseCase: getFaqsUseCase,
+          getChannelsUseCase: getChannelsUseCase,
+          submitTicketUseCase: submitTicketUseCase,
+          getUserTicketsUseCase: getUserTicketsUseCase,
+          getTicketDetailsUseCase: getTicketDetailsUseCase,
+          sendTicketMessageUseCase: sendTicketMessageUseCase,
+          closeTicketUseCase: closeTicketUseCase,
+        );
 
-      await Future.delayed(const Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
 
-      // 1. Initial load sets AsyncLoading then AsyncData
-      await notifier.loadTicketDetails('SM-100');
-      expect(notifier.state.selectedTicket, isNotNull);
-      expect(notifier.state.selectedTicket!.messages.length, 0);
+        // 1. Initial load sets AsyncLoading then AsyncData
+        await notifier.loadTicketDetails('SM-100');
+        expect(notifier.state.selectedTicket, isNotNull);
+        expect(notifier.state.selectedTicket!.messages.length, 0);
 
-      // 2. Silent refresh keeps state as AsyncData without resetting to AsyncLoading
-      final future = notifier.loadTicketDetails('SM-100', isSilentRefresh: true);
-      // Immediately verify that state is NOT AsyncLoading
-      expect(notifier.state.selectedTicketState.isLoading, isFalse);
-      await future;
-      expect(notifier.state.selectedTicket, isNotNull);
-    });
+        // 2. Silent refresh keeps state as AsyncData without resetting to AsyncLoading
+        final future = notifier.loadTicketDetails(
+          'SM-100',
+          isSilentRefresh: true,
+        );
+        // Immediately verify that state is NOT AsyncLoading
+        expect(notifier.state.selectedTicketState.isLoading, isFalse);
+        await future;
+        expect(notifier.state.selectedTicket, isNotNull);
+      },
+    );
 
     test('FaqModel and FaqMapper convert bidirectionally', () {
       const model = FaqModel(
@@ -323,7 +339,7 @@ void main() {
             'sender_name': 'Tester',
             'message': 'Hello',
             'created_at': DateTime.now().toIso8601String(),
-          }
+          },
         ],
       });
 

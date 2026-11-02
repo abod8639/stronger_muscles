@@ -40,7 +40,7 @@ void main() {
             'subtotal': 150.0,
             'total_amount': 150.0,
             'status': 'delivered',
-          }
+          },
         ],
       };
 
@@ -63,7 +63,7 @@ void main() {
             'has_ordered': false,
             'orders_count': 0,
             'orders': [],
-          }
+          },
         ],
       };
 

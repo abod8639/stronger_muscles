@@ -60,7 +60,9 @@ class ReviewCard extends StatelessWidget {
                   ),
                   Text(
                     DateFormat.yMMMd(locale).format(review.createdAt),
-                    style: textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                    style: textTheme.bodySmall?.copyWith(
+                      color: context.colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ],
               ),

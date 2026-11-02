@@ -15,7 +15,8 @@ class ThemeController extends _$ThemeController {
   bool build() {
     if (Hive.isBoxOpen('settings')) {
       _box = Hive.box('settings');
-      return _box?.get(_themeStorageKey, defaultValue: _defaultThemeIsDark) ?? _defaultThemeIsDark;
+      return _box?.get(_themeStorageKey, defaultValue: _defaultThemeIsDark) ??
+          _defaultThemeIsDark;
     }
     return _defaultThemeIsDark;
   }

@@ -25,13 +25,17 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
     String? query,
   }) async {
     return NetworkErrorHandler.execute<List<FaqEntity>>(() async {
-      final models = await _localDataSource.getFaqs(category: category, query: query);
+      final models = await _localDataSource.getFaqs(
+        category: category,
+        query: query,
+      );
       return models.map((m) => m.toEntity()).toList();
     });
   }
 
   @override
-  Future<Either<Failure, List<SupportChannelEntity>>> getSupportChannels() async {
+  Future<Either<Failure, List<SupportChannelEntity>>>
+  getSupportChannels() async {
     return NetworkErrorHandler.execute<List<SupportChannelEntity>>(() async {
       final models = await _localDataSource.getSupportChannels();
       return models.map((m) => m.toEntity()).toList();
@@ -45,7 +49,9 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
     return NetworkErrorHandler.execute<SupportTicketEntity>(() async {
       final model = ticket.toModel();
       try {
-        final remoteModel = await _remoteDataSource.submitTicket(model).timeout(
+        final remoteModel = await _remoteDataSource
+            .submitTicket(model)
+            .timeout(
               const Duration(seconds: 25),
               onTimeout: () => throw const TimeoutFailure(
                 message: 'انتهت مهلة إرسال تذكرة الدعم، يرجى المحاولة لاحقاً',
@@ -54,7 +60,10 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
         // Cache created ticket locally
         await _localDataSource.cacheTicketDetails(remoteModel);
         final currentTickets = await _localDataSource.getUserTickets();
-        await _localDataSource.cacheUserTickets([remoteModel, ...currentTickets]);
+        await _localDataSource.cacheUserTickets([
+          remoteModel,
+          ...currentTickets,
+        ]);
         return remoteModel.toEntity();
       } catch (error, stackTrace) {
         final failure = NetworkErrorHandler.handle(error, stackTrace);
@@ -73,11 +82,11 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
     return NetworkErrorHandler.execute<List<SupportTicketEntity>>(() async {
       try {
         final remoteModels = await _remoteDataSource.getUserTickets().timeout(
-              const Duration(seconds: 20),
-              onTimeout: () => throw const TimeoutFailure(
-                message: 'انتهت مهلة تحميل قائمة تذاكر الدعم',
-              ),
-            );
+          const Duration(seconds: 20),
+          onTimeout: () => throw const TimeoutFailure(
+            message: 'انتهت مهلة تحميل قائمة تذاكر الدعم',
+          ),
+        );
         await _localDataSource.cacheUserTickets(remoteModels);
         return remoteModels.map((m) => m.toEntity()).toList();
       } catch (error) {
@@ -97,13 +106,14 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
   ) {
     return NetworkErrorHandler.execute<SupportTicketEntity>(() async {
       try {
-        final remoteModel =
-            await _remoteDataSource.getTicketDetails(ticketId).timeout(
-                  const Duration(seconds: 20),
-                  onTimeout: () => throw const TimeoutFailure(
-                    message: 'انتهت مهلة تحميل تفاصيل التذكرة',
-                  ),
-                );
+        final remoteModel = await _remoteDataSource
+            .getTicketDetails(ticketId)
+            .timeout(
+              const Duration(seconds: 20),
+              onTimeout: () => throw const TimeoutFailure(
+                message: 'انتهت مهلة تحميل تفاصيل التذكرة',
+              ),
+            );
         await _localDataSource.cacheTicketDetails(remoteModel);
         return remoteModel.toEntity();
       } catch (error) {
@@ -126,26 +136,23 @@ class HelpSupportRepositoryImpl implements HelpSupportRepository {
           .sendTicketMessage(ticketId, message)
           .timeout(
             const Duration(seconds: 20),
-            onTimeout: () => throw const TimeoutFailure(
-              message: 'انتهت مهلة إرسال الرسالة',
-            ),
+            onTimeout: () =>
+                throw const TimeoutFailure(message: 'انتهت مهلة إرسال الرسالة'),
           );
       return remoteMsg.toEntity();
     });
   }
 
   @override
-  Future<Either<Failure, SupportTicketEntity>> closeTicket(
-    String ticketId,
-  ) {
+  Future<Either<Failure, SupportTicketEntity>> closeTicket(String ticketId) {
     return NetworkErrorHandler.execute<SupportTicketEntity>(() async {
-      final remoteTicket =
-          await _remoteDataSource.closeTicket(ticketId).timeout(
-                const Duration(seconds: 20),
-                onTimeout: () => throw const TimeoutFailure(
-                  message: 'انتهت مهلة إغلاق التذكرة',
-                ),
-              );
+      final remoteTicket = await _remoteDataSource
+          .closeTicket(ticketId)
+          .timeout(
+            const Duration(seconds: 20),
+            onTimeout: () =>
+                throw const TimeoutFailure(message: 'انتهت مهلة إغلاق التذكرة'),
+          );
       await _localDataSource.cacheTicketDetails(remoteTicket);
       return remoteTicket.toEntity();
     });

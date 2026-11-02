@@ -92,7 +92,9 @@ class ProductRepositoryImpl implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> searchProducts(String query) async {
+  Future<Either<Failure, List<ProductEntity>>> searchProducts(
+    String query,
+  ) async {
     try {
       final models = await _remoteDataSource.getProductsFromApi(query: query);
       return Right(models.map((m) => m.toEntity()).toList());
@@ -125,7 +127,9 @@ class ProductRepositoryImpl implements ProductRepository {
       final allCached = _localDataSource.getCachedProducts();
       if (allCached.isNotEmpty) {
         if (categoryId != null && categoryId.isNotEmpty) {
-          final filtered = allCached.where((p) => p.categoryId == categoryId).toList();
+          final filtered = allCached
+              .where((p) => p.categoryId == categoryId)
+              .toList();
           return Right(filtered.map((m) => m.toEntity()).toList());
         }
         return Right(allCached.map((m) => m.toEntity()).toList());
@@ -165,7 +169,8 @@ class ProductRepositoryImpl implements ProductRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم',
       statusCode: e.response?.statusCode,

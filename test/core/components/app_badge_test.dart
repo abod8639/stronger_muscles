@@ -8,10 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: AppBadge(
-              label: 'Sale',
-              color: Colors.red,
-            ),
+            body: AppBadge(label: 'Sale', color: Colors.red),
           ),
         ),
       );

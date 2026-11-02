@@ -31,7 +31,8 @@ class CategoryChipSelector extends ConsumerWidget {
 
         final names = {
           '': l10n?.allCategories ?? 'All',
-          for (final category in categories) category.id: category.getLocalizedName(locale: locale),
+          for (final category in categories)
+            category.id: category.getLocalizedName(locale: locale),
         };
 
         return Padding(

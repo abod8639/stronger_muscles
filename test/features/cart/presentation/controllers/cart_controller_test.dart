@@ -49,7 +49,10 @@ class FakeCartRepository implements CartRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> updateQuantity(String itemId, int quantity) async {
+  Future<Either<Failure, Unit>> updateQuantity(
+    String itemId,
+    int quantity,
+  ) async {
     final idx = items.indexWhere((i) => i.id == itemId);
     if (idx != -1) {
       if (quantity <= 0) {
@@ -85,9 +88,7 @@ void main() {
     setUp(() async {
       fakeRepo = FakeCartRepository();
       container = ProviderContainer(
-        overrides: [
-          cartRepositoryProvider.overrideWithValue(fakeRepo),
-        ],
+        overrides: [cartRepositoryProvider.overrideWithValue(fakeRepo)],
       );
       controller = container.read(cartControllerProvider.notifier);
       await container.read(cartControllerProvider.future);
@@ -97,25 +98,28 @@ void main() {
       container.dispose();
     });
 
-    test('addToCart updates state INSTANTLY before async operation finishes', () async {
-      fakeRepo.delayCompleter = Completer<void>();
+    test(
+      'addToCart updates state INSTANTLY before async operation finishes',
+      () async {
+        fakeRepo.delayCompleter = Completer<void>();
 
-      // Call addToCart without awaiting completion
-      final future = controller.addToCart(sampleProduct, quantity: 1);
+        // Call addToCart without awaiting completion
+        final future = controller.addToCart(sampleProduct, quantity: 1);
 
-      // Verify that state is updated IMMEDIATELY synchronously
-      expect(controller.state.hasValue, isTrue);
-      expect(controller.cartCount, 1);
-      expect(controller.cartItems.first.product.id, 'prod-1');
-      expect(controller.isInCart('prod-1'), isTrue);
+        // Verify that state is updated IMMEDIATELY synchronously
+        expect(controller.state.hasValue, isTrue);
+        expect(controller.cartCount, 1);
+        expect(controller.cartItems.first.product.id, 'prod-1');
+        expect(controller.isInCart('prod-1'), isTrue);
 
-      // Complete the background operation
-      fakeRepo.delayCompleter!.complete();
-      await future;
+        // Complete the background operation
+        fakeRepo.delayCompleter!.complete();
+        await future;
 
-      // State is still present and valid
-      expect(controller.cartCount, 1);
-    });
+        // State is still present and valid
+        expect(controller.cartCount, 1);
+      },
+    );
 
     test('increaseQuantity updates quantity instantly', () async {
       final initialItem = CartItemEntity(
@@ -131,19 +135,22 @@ void main() {
       expect(controller.cartItems.first.quantity, 2);
     });
 
-    test('decreaseQuantity updates quantity instantly and removes when reaches 0', () async {
-      final initialItem = CartItemEntity(
-        id: 'cart-1',
-        userId: 'u1',
-        product: sampleProduct,
-        quantity: 1,
-      );
-      controller.state = AsyncData([initialItem]);
+    test(
+      'decreaseQuantity updates quantity instantly and removes when reaches 0',
+      () async {
+        final initialItem = CartItemEntity(
+          id: 'cart-1',
+          userId: 'u1',
+          product: sampleProduct,
+          quantity: 1,
+        );
+        controller.state = AsyncData([initialItem]);
 
-      await controller.decreaseQuantity(initialItem);
+        await controller.decreaseQuantity(initialItem);
 
-      expect(controller.cartCount, 0);
-    });
+        expect(controller.cartCount, 0);
+      },
+    );
 
     test('removeFromCart removes item instantly', () async {
       final initialItem = CartItemEntity(

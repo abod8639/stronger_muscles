@@ -78,13 +78,13 @@ class ProductsState {
 
   @override
   int get hashCode => Object.hash(
-        Object.hashAll(products),
-        isLoading,
-        isLoadingMore,
-        hasMore,
-        page,
-        selectedCategoryId,
-        searchQuery,
-        errorMessage,
-      );
+    Object.hashAll(products),
+    isLoading,
+    isLoadingMore,
+    hasMore,
+    page,
+    selectedCategoryId,
+    searchQuery,
+    errorMessage,
+  );
 }

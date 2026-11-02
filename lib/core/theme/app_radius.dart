@@ -46,8 +46,9 @@ class AppRadius {
       BorderRadius.vertical(bottom: Radius.circular(radius));
 
   /// Standard bottom sheet top radius
-  static const BorderRadius topBottomSheet =
-      BorderRadius.vertical(top: rBottomSheet);
+  static const BorderRadius topBottomSheet = BorderRadius.vertical(
+    top: rBottomSheet,
+  );
 
   /// Custom directional corners
   static BorderRadius only({
@@ -55,30 +56,34 @@ class AppRadius {
     double topRight = 0,
     double bottomLeft = 0,
     double bottomRight = 0,
-  }) =>
-      BorderRadius.only(
-        topLeft: Radius.circular(topLeft),
-        topRight: Radius.circular(topRight),
-        bottomLeft: Radius.circular(bottomLeft),
-        bottomRight: Radius.circular(bottomRight),
-      );
+  }) => BorderRadius.only(
+    topLeft: Radius.circular(topLeft),
+    topRight: Radius.circular(topRight),
+    bottomLeft: Radius.circular(bottomLeft),
+    bottomRight: Radius.circular(bottomRight),
+  );
 
   // ── Shape Borders (for Buttons, Cards, Dialogs) ───────────────────────────
 
-  static RoundedRectangleBorder shapeSm =
-      const RoundedRectangleBorder(borderRadius: allSm);
+  static RoundedRectangleBorder shapeSm = const RoundedRectangleBorder(
+    borderRadius: allSm,
+  );
 
-  static RoundedRectangleBorder shapeMd =
-      const RoundedRectangleBorder(borderRadius: allMd);
+  static RoundedRectangleBorder shapeMd = const RoundedRectangleBorder(
+    borderRadius: allMd,
+  );
 
-  static RoundedRectangleBorder shapeLg =
-      const RoundedRectangleBorder(borderRadius: allLg);
+  static RoundedRectangleBorder shapeLg = const RoundedRectangleBorder(
+    borderRadius: allLg,
+  );
 
-  static RoundedRectangleBorder shapeXl =
-      const RoundedRectangleBorder(borderRadius: allXl);
+  static RoundedRectangleBorder shapeXl = const RoundedRectangleBorder(
+    borderRadius: allXl,
+  );
 
-  static RoundedRectangleBorder shapePill =
-      const RoundedRectangleBorder(borderRadius: allPill);
+  static RoundedRectangleBorder shapePill = const RoundedRectangleBorder(
+    borderRadius: allPill,
+  );
 
   static RoundedRectangleBorder rounded(double radius) =>
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius));

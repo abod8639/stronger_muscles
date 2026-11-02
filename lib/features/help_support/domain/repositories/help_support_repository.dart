@@ -31,7 +31,5 @@ abstract class HelpSupportRepository {
     required String message,
   });
 
-  Future<Either<Failure, SupportTicketEntity>> closeTicket(
-    String ticketId,
-  );
+  Future<Either<Failure, SupportTicketEntity>> closeTicket(String ticketId);
 }

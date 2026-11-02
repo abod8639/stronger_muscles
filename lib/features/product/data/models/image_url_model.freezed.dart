@@ -12,7 +12,8 @@ part of 'image_url_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ImageUrl _$ImageUrlFromJson(Map<String, dynamic> json) {
   return _ImageUrl.fromJson(json);
@@ -41,10 +42,11 @@ abstract class $ImageUrlCopyWith<$Res> {
   factory $ImageUrlCopyWith(ImageUrl value, $Res Function(ImageUrl) then) =
       _$ImageUrlCopyWithImpl<$Res, ImageUrl>;
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'thumbnail') String thumbnail,
-      @HiveField(1) @JsonKey(name: 'medium') String medium,
-      @HiveField(2) @JsonKey(name: 'original') String original});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'thumbnail') String thumbnail,
+    @HiveField(1) @JsonKey(name: 'medium') String medium,
+    @HiveField(2) @JsonKey(name: 'original') String original,
+  });
 }
 
 /// @nodoc
@@ -64,20 +66,23 @@ class _$ImageUrlCopyWithImpl<$Res, $Val extends ImageUrl>
     Object? medium = null,
     Object? original = null,
   }) {
-    return _then(_value.copyWith(
-      thumbnail: null == thumbnail
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String,
-      medium: null == medium
-          ? _value.medium
-          : medium // ignore: cast_nullable_to_non_nullable
-              as String,
-      original: null == original
-          ? _value.original
-          : original // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            thumbnail: null == thumbnail
+                ? _value.thumbnail
+                : thumbnail // ignore: cast_nullable_to_non_nullable
+                      as String,
+            medium: null == medium
+                ? _value.medium
+                : medium // ignore: cast_nullable_to_non_nullable
+                      as String,
+            original: null == original
+                ? _value.original
+                : original // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -85,14 +90,16 @@ class _$ImageUrlCopyWithImpl<$Res, $Val extends ImageUrl>
 abstract class _$$ImageUrlImplCopyWith<$Res>
     implements $ImageUrlCopyWith<$Res> {
   factory _$$ImageUrlImplCopyWith(
-          _$ImageUrlImpl value, $Res Function(_$ImageUrlImpl) then) =
-      __$$ImageUrlImplCopyWithImpl<$Res>;
+    _$ImageUrlImpl value,
+    $Res Function(_$ImageUrlImpl) then,
+  ) = __$$ImageUrlImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) @JsonKey(name: 'thumbnail') String thumbnail,
-      @HiveField(1) @JsonKey(name: 'medium') String medium,
-      @HiveField(2) @JsonKey(name: 'original') String original});
+  $Res call({
+    @HiveField(0) @JsonKey(name: 'thumbnail') String thumbnail,
+    @HiveField(1) @JsonKey(name: 'medium') String medium,
+    @HiveField(2) @JsonKey(name: 'original') String original,
+  });
 }
 
 /// @nodoc
@@ -100,8 +107,9 @@ class __$$ImageUrlImplCopyWithImpl<$Res>
     extends _$ImageUrlCopyWithImpl<$Res, _$ImageUrlImpl>
     implements _$$ImageUrlImplCopyWith<$Res> {
   __$$ImageUrlImplCopyWithImpl(
-      _$ImageUrlImpl _value, $Res Function(_$ImageUrlImpl) _then)
-      : super(_value, _then);
+    _$ImageUrlImpl _value,
+    $Res Function(_$ImageUrlImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -110,31 +118,33 @@ class __$$ImageUrlImplCopyWithImpl<$Res>
     Object? medium = null,
     Object? original = null,
   }) {
-    return _then(_$ImageUrlImpl(
-      thumbnail: null == thumbnail
-          ? _value.thumbnail
-          : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String,
-      medium: null == medium
-          ? _value.medium
-          : medium // ignore: cast_nullable_to_non_nullable
-              as String,
-      original: null == original
-          ? _value.original
-          : original // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+    return _then(
+      _$ImageUrlImpl(
+        thumbnail: null == thumbnail
+            ? _value.thumbnail
+            : thumbnail // ignore: cast_nullable_to_non_nullable
+                  as String,
+        medium: null == medium
+            ? _value.medium
+            : medium // ignore: cast_nullable_to_non_nullable
+                  as String,
+        original: null == original
+            ? _value.original
+            : original // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ImageUrlImpl extends _ImageUrl {
-  const _$ImageUrlImpl(
-      {@HiveField(0) @JsonKey(name: 'thumbnail') required this.thumbnail,
-      @HiveField(1) @JsonKey(name: 'medium') required this.medium,
-      @HiveField(2) @JsonKey(name: 'original') required this.original})
-      : super._();
+  const _$ImageUrlImpl({
+    @HiveField(0) @JsonKey(name: 'thumbnail') required this.thumbnail,
+    @HiveField(1) @JsonKey(name: 'medium') required this.medium,
+    @HiveField(2) @JsonKey(name: 'original') required this.original,
+  }) : super._();
 
   factory _$ImageUrlImpl.fromJson(Map<String, dynamic> json) =>
       _$$ImageUrlImplFromJson(json);
@@ -181,21 +191,16 @@ class _$ImageUrlImpl extends _ImageUrl {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ImageUrlImplToJson(
-      this,
-    );
+    return _$$ImageUrlImplToJson(this);
   }
 }
 
 abstract class _ImageUrl extends ImageUrl {
-  const factory _ImageUrl(
-      {@HiveField(0)
-      @JsonKey(name: 'thumbnail')
-      required final String thumbnail,
-      @HiveField(1) @JsonKey(name: 'medium') required final String medium,
-      @HiveField(2)
-      @JsonKey(name: 'original')
-      required final String original}) = _$ImageUrlImpl;
+  const factory _ImageUrl({
+    @HiveField(0) @JsonKey(name: 'thumbnail') required final String thumbnail,
+    @HiveField(1) @JsonKey(name: 'medium') required final String medium,
+    @HiveField(2) @JsonKey(name: 'original') required final String original,
+  }) = _$ImageUrlImpl;
   const _ImageUrl._() : super._();
 
   factory _ImageUrl.fromJson(Map<String, dynamic> json) =

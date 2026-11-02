@@ -27,12 +27,16 @@ void main() {
     });
 
     test('baseUrl appends /api/v1 if not already present in BASE_URL', () {
-      dotenv.loadFromString(envString: 'BASE_URL=https://api.strongermuscles.com');
+      dotenv.loadFromString(
+        envString: 'BASE_URL=https://api.strongermuscles.com',
+      );
       expect(ApiConfig.baseUrl, 'https://api.strongermuscles.com/api/v1');
     });
 
     test('baseUrl preserves /api/v1 when already present in BASE_URL', () {
-      dotenv.loadFromString(envString: 'BASE_URL=https://api.strongermuscles.com/api/v1');
+      dotenv.loadFromString(
+        envString: 'BASE_URL=https://api.strongermuscles.com/api/v1',
+      );
       expect(ApiConfig.baseUrl, 'https://api.strongermuscles.com/api/v1');
     });
   });

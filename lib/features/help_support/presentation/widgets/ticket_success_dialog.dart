@@ -42,7 +42,9 @@ class TicketSuccessDialog extends StatelessWidget {
           color: AppColors.primary,
           borderRadius: AppRadius.allMd,
         ),
-        actionText: ticketId == null || ticketId.isEmpty ? null : l10n.followTicket,
+        actionText: ticketId == null || ticketId.isEmpty
+            ? null
+            : l10n.followTicket,
         actionIcon: Icons.forum_outlined,
         onActionTap: () {
           Navigator.of(context).pop();

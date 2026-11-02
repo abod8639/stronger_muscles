@@ -43,12 +43,7 @@ class SearchRepositoryImpl implements SearchRepository {
         ),
       );
     } on FormatException catch (e, st) {
-      return Left(
-        ParsingFailure(
-          originalError: e,
-          stackTrace: st,
-        ),
-      );
+      return Left(ParsingFailure(originalError: e, stackTrace: st));
     } catch (e, st) {
       return _fallbackCachedOrFailure(
         query,
@@ -173,7 +168,8 @@ class SearchRepositoryImpl implements SearchRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم أثناء البحث عن المنتجات',
       statusCode: e.response?.statusCode,

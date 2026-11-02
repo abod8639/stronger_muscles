@@ -12,9 +12,6 @@ class SendTicketMessageUseCase {
     required String ticketId,
     required String message,
   }) {
-    return _repository.sendTicketMessage(
-      ticketId: ticketId,
-      message: message,
-    );
+    return _repository.sendTicketMessage(ticketId: ticketId, message: message);
   }
 }

@@ -26,4 +26,3 @@ extension AppThemeContextExtension on BuildContext {
   /// Locale check helper
   bool get isArabic => Localizations.localeOf(this).languageCode == 'ar';
 }
-

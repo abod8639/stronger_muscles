@@ -26,11 +26,14 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
   final _searchController = TextEditingController();
   late String _selectedCategory = widget.initialCategoryId ?? '';
 
-  ProductsController get _notifier => ref.read(productsControllerProvider.notifier);
+  ProductsController get _notifier =>
+      ref.read(productsControllerProvider.notifier);
 
-  String? get _categoryFilter => _selectedCategory.isEmpty ? null : _selectedCategory;
+  String? get _categoryFilter =>
+      _selectedCategory.isEmpty ? null : _selectedCategory;
 
-  bool get _hasFilters => _selectedCategory.isNotEmpty || _searchController.text.isNotEmpty;
+  bool get _hasFilters =>
+      _selectedCategory.isNotEmpty || _searchController.text.isNotEmpty;
 
   @override
   void initState() {
@@ -49,10 +52,10 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
   }
 
   Future<void> _reload() => _notifier.fetchProducts(
-        categoryId: _categoryFilter,
-        query: _searchController.text,
-        refresh: true,
-      );
+    categoryId: _categoryFilter,
+    query: _searchController.text,
+    refresh: true,
+  );
 
   void _onCategorySelected(String categoryId) {
     setState(() => _selectedCategory = categoryId);
@@ -112,16 +115,22 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                         icon: Icons.inventory_2_outlined,
                         title: l10n.noProductsFound,
                         subtitle: l10n.searchForProducts,
-                        secondaryActionText: _hasFilters ? l10n.clearFilters : null,
-                        onSecondaryActionTap: _hasFilters ? _clearFilters : null,
+                        secondaryActionText: _hasFilters
+                            ? l10n.clearFilters
+                            : null,
+                        onSecondaryActionTap: _hasFilters
+                            ? _clearFilters
+                            : null,
                       ),
                     )
                   : AppProductGrid(
                       products: products,
                       isLoadingMore: productsState.isLoadingMore,
                       onNearEnd: _notifier.loadMoreProducts,
-                      onProductTap: (product) =>
-                          context.push(AppRoutes.productDetails, extra: product),
+                      onProductTap: (product) => context.push(
+                        AppRoutes.productDetails,
+                        extra: product,
+                      ),
                     ),
               loading: () => const ProductGridSkeleton(itemCount: 6),
               error: (error, _) => SliverFillRemaining(
@@ -136,7 +145,9 @@ class _ProductCatalogViewState extends ConsumerState<ProductCatalogView> {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: AppDimens.spacingLg)),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: AppDimens.spacingLg),
+            ),
           ],
         ),
       ),

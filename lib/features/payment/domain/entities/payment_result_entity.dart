@@ -44,13 +44,8 @@ class PaymentResultEntity {
           clientSecret == other.clientSecret;
 
   @override
-  int get hashCode => Object.hash(
-        success,
-        paymentUrl,
-        transactionId,
-        reference,
-        clientSecret,
-      );
+  int get hashCode =>
+      Object.hash(success, paymentUrl, transactionId, reference, clientSecret);
 
   @override
   String toString() =>

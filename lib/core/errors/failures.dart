@@ -1,4 +1,13 @@
-enum FailureType { network, server, auth, validation, parsing, timeout, cancel, unknown }
+enum FailureType {
+  network,
+  server,
+  auth,
+  validation,
+  parsing,
+  timeout,
+  cancel,
+  unknown,
+}
 
 class Failure {
   final String message;
@@ -118,4 +127,3 @@ class GeneralFailure extends Failure {
     super.stackTrace,
   });
 }
-

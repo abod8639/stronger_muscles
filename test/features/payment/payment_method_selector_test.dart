@@ -20,7 +20,9 @@ void main() {
       ),
     ];
 
-    testWidgets('renders all payment methods and security badge', (tester) async {
+    testWidgets('renders all payment methods and security badge', (
+      tester,
+    ) async {
       String? selected;
 
       await tester.pumpWidget(

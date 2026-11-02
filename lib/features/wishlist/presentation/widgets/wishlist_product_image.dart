@@ -12,10 +12,13 @@ class WishlistProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageUrl = product.primaryImageUrl ??
+    final imageUrl =
+        product.primaryImageUrl ??
         (product.imageUrls.isNotEmpty ? product.imageUrls.first.medium : null);
 
-    final cacheSize = (AppDimens.thumbnailSize * MediaQuery.devicePixelRatioOf(context)).round();
+    final cacheSize =
+        (AppDimens.thumbnailSize * MediaQuery.devicePixelRatioOf(context))
+            .round();
 
     return Hero(
       tag: 'wishlist_product_${product.id}',

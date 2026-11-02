@@ -68,20 +68,17 @@ class WishlistController extends _$WishlistController {
     final ProductEntity entity = product is ProductEntity
         ? product
         : (product is ProductModel
-            ? product.toEntity()
-            : (index >= 0 ? state[index] : ProductEntity(id: id)));
+              ? product.toEntity()
+              : (index >= 0 ? state[index] : ProductEntity(id: id)));
 
     state = state.where((item) => item.id != id).toList();
 
     final result = await ref.read(removeFromWishlistUseCaseProvider)(entity);
 
-    result.fold(
-      (failure) {
-        if (index < 0 || state.any((item) => item.id == id)) return;
-        state = [...state]..insert(index.clamp(0, state.length), entity);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      if (index < 0 || state.any((item) => item.id == id)) return;
+      state = [...state]..insert(index.clamp(0, state.length), entity);
+    }, (_) {});
   }
 
   /// Checks if a product exists in the wishlist using UseCase and local state fallback.

@@ -8,10 +8,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: AppHighlightText(
-              text: 'Gold Standard Whey',
-              query: '',
-            ),
+            body: AppHighlightText(text: 'Gold Standard Whey', query: ''),
           ),
         ),
       );

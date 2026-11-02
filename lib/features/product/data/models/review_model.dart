@@ -136,28 +136,28 @@ class ReviewModel extends HiveObject {
   }
 
   ReviewEntity toEntity() => ReviewEntity(
-        id: id,
-        productId: productId,
-        userId: userId,
-        userName: userName,
-        userPhotoUrl: userPhotoUrl,
-        comment: comment,
-        rating: rating,
-        isVerifiedPurchase: isVerifiedPurchase,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    id: id,
+    productId: productId,
+    userId: userId,
+    userName: userName,
+    userPhotoUrl: userPhotoUrl,
+    comment: comment,
+    rating: rating,
+    isVerifiedPurchase: isVerifiedPurchase,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 
   static ReviewModel fromEntity(ReviewEntity entity) => ReviewModel(
-        id: entity.id,
-        productId: entity.productId,
-        userId: entity.userId,
-        userName: entity.userName,
-        userPhotoUrl: entity.userPhotoUrl,
-        comment: entity.comment,
-        rating: entity.rating,
-        isVerifiedPurchase: entity.isVerifiedPurchase,
-        createdAt: entity.createdAt,
-        updatedAt: entity.updatedAt,
-      );
+    id: entity.id,
+    productId: entity.productId,
+    userId: entity.userId,
+    userName: entity.userName,
+    userPhotoUrl: entity.userPhotoUrl,
+    comment: entity.comment,
+    rating: entity.rating,
+    isVerifiedPurchase: entity.isVerifiedPurchase,
+    createdAt: entity.createdAt,
+    updatedAt: entity.updatedAt,
+  );
 }

@@ -16,16 +16,19 @@ class HelpSupportRoutes {
         if (extra is String) {
           ticketId = extra;
         } else if (extra is Map) {
-          ticketId = extra['ticket_id']?.toString() ??
-              extra['ticketId']?.toString();
-          ticketNumber = extra['ticket_number']?.toString() ??
+          ticketId =
+              extra['ticket_id']?.toString() ?? extra['ticketId']?.toString();
+          ticketNumber =
+              extra['ticket_number']?.toString() ??
               extra['ticketNumber']?.toString();
           openActiveTicket = extra['open_active_ticket'] == true;
         }
 
-        ticketId ??= state.uri.queryParameters['ticket_id'] ??
+        ticketId ??=
+            state.uri.queryParameters['ticket_id'] ??
             state.uri.queryParameters['ticketId'];
-        ticketNumber ??= state.uri.queryParameters['ticket_number'] ??
+        ticketNumber ??=
+            state.uri.queryParameters['ticket_number'] ??
             state.uri.queryParameters['ticketNumber'];
 
         return HelpSupportView(

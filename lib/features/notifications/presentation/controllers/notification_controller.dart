@@ -124,7 +124,8 @@ class NotificationController extends _$NotificationController {
         // Retain existing notification list on pagination failure
       },
       (data) {
-        if (data.notifications.isEmpty || data.notifications.length < _pageSize) {
+        if (data.notifications.isEmpty ||
+            data.notifications.length < _pageSize) {
           _hasMore = false;
         } else {
           _hasMore = data.hasMore;
@@ -199,22 +200,16 @@ class NotificationController extends _$NotificationController {
 
     final newCount = (current.unreadCount - 1).clamp(0, 9999);
     state = AsyncData(
-      current.copyWith(
-        notifications: updatedList,
-        unreadCount: newCount,
-      ),
+      current.copyWith(notifications: updatedList, unreadCount: newCount),
     );
 
     final markAsReadUseCase = ref.read(markAsReadUseCaseProvider);
     final result = await markAsReadUseCase(id);
 
-    result.fold(
-      (failure) {
-        // Rollback on failure
-        refresh();
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      // Rollback on failure
+      refresh();
+    }, (_) {});
   }
 
   /// Optimistically marks all notifications as read with guard clause.
@@ -226,13 +221,11 @@ class NotificationController extends _$NotificationController {
 
     _isMutating = true;
 
-    final updatedList =
-        current.notifications.map((n) => n.copyWith(isRead: true)).toList();
+    final updatedList = current.notifications
+        .map((n) => n.copyWith(isRead: true))
+        .toList();
     state = AsyncData(
-      current.copyWith(
-        notifications: updatedList,
-        unreadCount: 0,
-      ),
+      current.copyWith(notifications: updatedList, unreadCount: 0),
     );
 
     final markAllUseCase = ref.read(markAllAsReadUseCaseProvider);
@@ -240,12 +233,9 @@ class NotificationController extends _$NotificationController {
 
     _isMutating = false;
 
-    result.fold(
-      (failure) {
-        refresh();
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      refresh();
+    }, (_) {});
   }
 
   /// Optimistically marks multiple notifications as read.
@@ -265,12 +255,12 @@ class NotificationController extends _$NotificationController {
       return n;
     }).toList();
 
-    final newCount = (current.unreadCount - unreadTargets.length).clamp(0, 9999);
+    final newCount = (current.unreadCount - unreadTargets.length).clamp(
+      0,
+      9999,
+    );
     state = AsyncData(
-      current.copyWith(
-        notifications: updatedList,
-        unreadCount: newCount,
-      ),
+      current.copyWith(notifications: updatedList, unreadCount: newCount),
     );
 
     final markAsReadUseCase = ref.read(markAsReadUseCaseProvider);
@@ -284,20 +274,22 @@ class NotificationController extends _$NotificationController {
     final current = state.valueOrNull;
     if (current == null || ids.isEmpty) return;
 
-    final targets =
-        current.notifications.where((n) => ids.contains(n.id)).toList();
+    final targets = current.notifications
+        .where((n) => ids.contains(n.id))
+        .toList();
     if (targets.isEmpty) return;
 
     final unreadCountInTargets = targets.where((n) => !n.isRead).length;
-    final updatedList =
-        current.notifications.where((n) => !ids.contains(n.id)).toList();
-    final newCount = (current.unreadCount - unreadCountInTargets).clamp(0, 9999);
+    final updatedList = current.notifications
+        .where((n) => !ids.contains(n.id))
+        .toList();
+    final newCount = (current.unreadCount - unreadCountInTargets).clamp(
+      0,
+      9999,
+    );
 
     state = AsyncData(
-      current.copyWith(
-        notifications: updatedList,
-        unreadCount: newCount,
-      ),
+      current.copyWith(notifications: updatedList, unreadCount: newCount),
     );
 
     final deleteUseCase = ref.read(deleteNotificationUseCaseProvider);
@@ -321,21 +313,15 @@ class NotificationController extends _$NotificationController {
         : current.unreadCount;
 
     state = AsyncData(
-      current.copyWith(
-        notifications: updatedList,
-        unreadCount: newCount,
-      ),
+      current.copyWith(notifications: updatedList, unreadCount: newCount),
     );
 
     final deleteUseCase = ref.read(deleteNotificationUseCaseProvider);
     final result = await deleteUseCase(id);
 
-    result.fold(
-      (failure) {
-        refresh();
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      refresh();
+    }, (_) {});
   }
 }
 

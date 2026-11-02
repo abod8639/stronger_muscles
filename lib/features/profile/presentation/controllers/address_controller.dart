@@ -54,15 +54,15 @@ class AddressController extends _$AddressController {
 
     if (isLoggedIn) {
       final cachedResult = getAddressesUseCase.getCached();
-      final cached = cachedResult.fold((_) => <AddressEntity>[], (list) => list);
+      final cached = cachedResult.fold(
+        (_) => <AddressEntity>[],
+        (list) => list,
+      );
       if (cached.isNotEmpty) {
         return cached;
       }
       final result = await getAddressesUseCase();
-      return result.fold(
-        (failure) => throw failure,
-        (addresses) => addresses,
-      );
+      return result.fold((failure) => throw failure, (addresses) => addresses);
     }
 
     return [];
@@ -74,10 +74,8 @@ class AddressController extends _$AddressController {
     final getAddressesUseCase = ref.read(getAddressesUseCaseProvider);
     final result = await getAddressesUseCase();
     result.fold(
-      (failure) => state = AsyncError(
-        failure,
-        failure.stackTrace ?? StackTrace.current,
-      ),
+      (failure) =>
+          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current),
       (addresses) => state = AsyncData(addresses),
     );
   }
@@ -87,10 +85,8 @@ class AddressController extends _$AddressController {
     final result = await ref.read(deleteAddressUseCaseProvider).call(id);
     ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     result.fold(
-      (failure) => state = AsyncError(
-        failure,
-        failure.stackTrace ?? StackTrace.current,
-      ),
+      (failure) =>
+          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current),
       (_) {
         final currentAddresses = state.valueOrNull ?? [];
         state = AsyncData(
@@ -105,10 +101,8 @@ class AddressController extends _$AddressController {
     final result = await ref.read(setDefaultAddressUseCaseProvider).call(id);
     ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     result.fold(
-      (failure) => state = AsyncError(
-        failure,
-        failure.stackTrace ?? StackTrace.current,
-      ),
+      (failure) =>
+          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current),
       (_) async {
         await fetchAddresses();
       },
@@ -148,16 +142,13 @@ class AddressController extends _$AddressController {
     required AddressEntity address,
   }) async {
     ref.read(addressFormLoadingProvider.notifier).setLoading(true);
-    final result = await ref.read(saveAddressUseCaseProvider).call(
-      id: id,
-      address: address,
-    );
+    final result = await ref
+        .read(saveAddressUseCaseProvider)
+        .call(id: id, address: address);
     ref.read(addressFormLoadingProvider.notifier).setLoading(false);
     result.fold(
-      (failure) => state = AsyncError(
-        failure,
-        failure.stackTrace ?? StackTrace.current,
-      ),
+      (failure) =>
+          state = AsyncError(failure, failure.stackTrace ?? StackTrace.current),
       (_) async {
         await fetchAddresses();
         clearForm();
@@ -197,7 +188,8 @@ class AddressController extends _$AddressController {
         (position) async {
           _latitude = position.latitude;
           _longitude = position.longitude;
-          final effectiveLocale = locale ?? ref.read(languageControllerProvider);
+          final effectiveLocale =
+              locale ?? ref.read(languageControllerProvider);
           final placeResult = await remoteDataSource.getAddressFromCoordinates(
             position.latitude,
             position.longitude,
@@ -219,11 +211,16 @@ class AddressController extends _$AddressController {
               'country': place?.country ?? '',
             },
           );
-          if (data['street'] != null) streetController.text = data['street'] as String;
-          if (data['city'] != null) cityController.text = data['city'] as String;
-          if (data['state'] != null) stateController.text = data['state'] as String;
-          if (data['postalCode'] != null) postalCodeController.text = data['postalCode'] as String;
-          if (data['country'] != null) countryController.text = data['country'] as String;
+          if (data['street'] != null)
+            streetController.text = data['street'] as String;
+          if (data['city'] != null)
+            cityController.text = data['city'] as String;
+          if (data['state'] != null)
+            stateController.text = data['state'] as String;
+          if (data['postalCode'] != null)
+            postalCodeController.text = data['postalCode'] as String;
+          if (data['country'] != null)
+            countryController.text = data['country'] as String;
           return data;
         },
       );
@@ -251,10 +248,7 @@ class AddressController extends _$AddressController {
       _latitude = lat;
       _longitude = lng;
       final data = placeResult.fold(
-        (failure) => <String, dynamic>{
-          'latitude': lat,
-          'longitude': lng,
-        },
+        (failure) => <String, dynamic>{'latitude': lat, 'longitude': lng},
         (place) => <String, dynamic>{
           'latitude': lat,
           'longitude': lng,
@@ -265,11 +259,14 @@ class AddressController extends _$AddressController {
           'country': place?.country ?? '',
         },
       );
-      if (data['street'] != null) streetController.text = data['street'] as String;
+      if (data['street'] != null)
+        streetController.text = data['street'] as String;
       if (data['city'] != null) cityController.text = data['city'] as String;
       if (data['state'] != null) stateController.text = data['state'] as String;
-      if (data['postalCode'] != null) postalCodeController.text = data['postalCode'] as String;
-      if (data['country'] != null) countryController.text = data['country'] as String;
+      if (data['postalCode'] != null)
+        postalCodeController.text = data['postalCode'] as String;
+      if (data['country'] != null)
+        countryController.text = data['country'] as String;
       return data;
     } catch (_) {
       ref.read(addressFormLoadingProvider.notifier).setLoading(false);

@@ -12,7 +12,9 @@ import 'package:stronger_muscles/features/wishlist/domain/usecases/remove_from_w
 
 // --- DataSources ---
 
-final wishlistLocalDataSourceProvider = Provider<WishlistLocalDataSource>((ref) {
+final wishlistLocalDataSourceProvider = Provider<WishlistLocalDataSource>((
+  ref,
+) {
   Box<String>? box;
   try {
     if (Hive.isBoxOpen('wishlist')) {
@@ -24,7 +26,9 @@ final wishlistLocalDataSourceProvider = Provider<WishlistLocalDataSource>((ref) 
   return WishlistLocalDataSourceImpl(box);
 });
 
-final wishlistRemoteDataSourceProvider = Provider<WishlistRemoteDataSource>((ref) {
+final wishlistRemoteDataSourceProvider = Provider<WishlistRemoteDataSource>((
+  ref,
+) {
   return WishlistRemoteDataSourceImpl(ref.watch(apiServiceProvider));
 });
 
@@ -47,7 +51,9 @@ final addToWishlistUseCaseProvider = Provider<AddToWishlistUseCase>((ref) {
   return AddToWishlistUseCase(ref.watch(wishlistRepositoryProvider));
 });
 
-final removeFromWishlistUseCaseProvider = Provider<RemoveFromWishlistUseCase>((ref) {
+final removeFromWishlistUseCaseProvider = Provider<RemoveFromWishlistUseCase>((
+  ref,
+) {
   return RemoveFromWishlistUseCase(ref.watch(wishlistRepositoryProvider));
 });
 

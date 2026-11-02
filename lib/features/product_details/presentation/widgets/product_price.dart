@@ -24,6 +24,10 @@ class ProductPrice extends StatelessWidget {
       );
     }
 
-    return AppPriceText(price: price, originalPrice: originalPrice, fontSize: 22.0);
+    return AppPriceText(
+      price: price,
+      originalPrice: originalPrice,
+      fontSize: 22.0,
+    );
   }
 }

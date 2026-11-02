@@ -21,7 +21,8 @@ class CheckoutParamsModel {
       addressId: json['address_id'],
       paymentMethod: (json['payment_method'] ?? 'cash').toString(),
       notes: (json['notes'] ?? '').toString(),
-      items: (json['items'] as List<dynamic>?)
+      items:
+          (json['items'] as List<dynamic>?)
               ?.whereType<Map<String, dynamic>>()
               .map(CheckoutItemModel.fromJson)
               .toList() ??

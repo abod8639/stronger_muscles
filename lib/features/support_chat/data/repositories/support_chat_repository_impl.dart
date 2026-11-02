@@ -28,7 +28,10 @@ class SupportChatRepositoryImpl implements SupportChatRepository {
     required String message,
   }) {
     return NetworkErrorHandler.execute<SupportMessageEntity>(() async {
-      final model = await _remoteDataSource.sendTicketMessage(ticketId, message);
+      final model = await _remoteDataSource.sendTicketMessage(
+        ticketId,
+        message,
+      );
       return model.toEntity();
     });
   }
@@ -41,4 +44,3 @@ class SupportChatRepositoryImpl implements SupportChatRepository {
     });
   }
 }
-

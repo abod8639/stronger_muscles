@@ -23,10 +23,7 @@ export 'domain/usecases/submit_ticket_usecase.dart';
 
 // Presentation State & DI
 export 'presentation/controllers/help_support_controller.dart'
-    show
-        helpSupportControllerProvider,
-        HelpSupportNotifier,
-        HelpSupportState;
+    show helpSupportControllerProvider, HelpSupportNotifier, HelpSupportState;
 export 'presentation/controllers/help_support_di.dart'
     show
         helpSupportRepositoryProvider,

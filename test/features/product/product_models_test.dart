@@ -17,10 +17,7 @@ void main() {
       expect(sizeWithDiscount.hasDiscount, isTrue);
       expect(sizeWithDiscount.discountPercentage, 20.0);
 
-      const sizeNoDiscount = ProductSize(
-        size: '2kg',
-        price: 180.0,
-      );
+      const sizeNoDiscount = ProductSize(size: '2kg', price: 180.0);
 
       expect(sizeNoDiscount.effectivePrice, 180.0);
       expect(sizeNoDiscount.hasDiscount, isFalse);
@@ -28,11 +25,7 @@ void main() {
     });
 
     test('fromJson and toJson maintain ProductSize integrity', () {
-      final json = {
-        'size': '5lb',
-        'price': 250.0,
-        'discount_price': 200.0,
-      };
+      final json = {'size': '5lb', 'price': 250.0, 'discount_price': 200.0};
 
       final size = ProductSize.fromJson(json);
       expect(size.size, '5lb');
@@ -47,23 +40,26 @@ void main() {
   });
 
   group('ImageUrl Tests', () {
-    test('fromJson and toJson map thumbnail, medium, and original correctly', () {
-      final json = {
-        'thumbnail': 'https://example.com/thumb.jpg',
-        'medium': 'https://example.com/med.jpg',
-        'original': 'https://example.com/orig.jpg',
-      };
+    test(
+      'fromJson and toJson map thumbnail, medium, and original correctly',
+      () {
+        final json = {
+          'thumbnail': 'https://example.com/thumb.jpg',
+          'medium': 'https://example.com/med.jpg',
+          'original': 'https://example.com/orig.jpg',
+        };
 
-      final image = ImageUrl.fromJson(json);
-      expect(image.thumbnail, 'https://example.com/thumb.jpg');
-      expect(image.medium, 'https://example.com/med.jpg');
-      expect(image.original, 'https://example.com/orig.jpg');
+        final image = ImageUrl.fromJson(json);
+        expect(image.thumbnail, 'https://example.com/thumb.jpg');
+        expect(image.medium, 'https://example.com/med.jpg');
+        expect(image.original, 'https://example.com/orig.jpg');
 
-      final serialized = image.toJson();
-      expect(serialized['thumbnail'], 'https://example.com/thumb.jpg');
-      expect(serialized['medium'], 'https://example.com/med.jpg');
-      expect(serialized['original'], 'https://example.com/orig.jpg');
-    });
+        final serialized = image.toJson();
+        expect(serialized['thumbnail'], 'https://example.com/thumb.jpg');
+        expect(serialized['medium'], 'https://example.com/med.jpg');
+        expect(serialized['original'], 'https://example.com/orig.jpg');
+      },
+    );
   });
 
   group('ProductCategory Tests', () {

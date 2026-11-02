@@ -12,10 +12,7 @@ class FakeAddressRepository implements AddressRepository {
   List<AddressEntity> addresses;
   Failure? failure;
 
-  FakeAddressRepository({
-    this.addresses = const [],
-    this.failure,
-  });
+  FakeAddressRepository({this.addresses = const [], this.failure});
 
   @override
   Either<Failure, List<AddressEntity>> getCachedAddresses() {
@@ -30,14 +27,19 @@ class FakeAddressRepository implements AddressRepository {
   }
 
   @override
-  Future<Either<Failure, AddressEntity>> createAddress(AddressEntity address) async {
+  Future<Either<Failure, AddressEntity>> createAddress(
+    AddressEntity address,
+  ) async {
     if (failure != null) return Left(failure!);
     addresses = [...addresses, address];
     return Right(address);
   }
 
   @override
-  Future<Either<Failure, AddressEntity>> updateAddress(int id, AddressEntity address) async {
+  Future<Either<Failure, AddressEntity>> updateAddress(
+    int id,
+    AddressEntity address,
+  ) async {
     if (failure != null) return Left(failure!);
     addresses = addresses.map((a) => a.id == id ? address : a).toList();
     return Right(address);
@@ -102,10 +104,13 @@ void main() {
       expect(sample2.shortAddress, 'Jeddah, KSA');
     });
 
-    test('hasCoordinates returns true when latitude and longitude are non-null', () {
-      expect(sample1.hasCoordinates, isTrue);
-      expect(sample2.hasCoordinates, isFalse);
-    });
+    test(
+      'hasCoordinates returns true when latitude and longitude are non-null',
+      () {
+        expect(sample1.hasCoordinates, isTrue);
+        expect(sample2.hasCoordinates, isFalse);
+      },
+    );
 
     test('copyWith preserves unmodified attributes', () {
       final updated = sample1.copyWith(label: 'Vacation', isDefault: false);
@@ -164,7 +169,10 @@ void main() {
 
     test('call propagates failure when repository fails', () async {
       final repo = FakeAddressRepository(
-        failure: const Failure(message: 'Error fetching', type: FailureType.network),
+        failure: const Failure(
+          message: 'Error fetching',
+          type: FailureType.network,
+        ),
       );
       final useCase = GetAddressesUseCase(repo);
 
@@ -218,20 +226,23 @@ void main() {
   });
 
   group('SetDefaultAddressUseCase Tests', () {
-    test('marks specified address as default and others as non-default', () async {
-      final repo = FakeAddressRepository(addresses: [sample1, sample2]);
-      final useCase = SetDefaultAddressUseCase(repo);
+    test(
+      'marks specified address as default and others as non-default',
+      () async {
+        final repo = FakeAddressRepository(addresses: [sample1, sample2]);
+        final useCase = SetDefaultAddressUseCase(repo);
 
-      final result = await useCase(2);
+        final result = await useCase(2);
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected Right'),
-        (updatedDefault) => expect(updatedDefault.isDefault, isTrue),
-      );
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected Right'),
+          (updatedDefault) => expect(updatedDefault.isDefault, isTrue),
+        );
 
-      expect(repo.addresses.firstWhere((a) => a.id == 1).isDefault, isFalse);
-      expect(repo.addresses.firstWhere((a) => a.id == 2).isDefault, isTrue);
-    });
+        expect(repo.addresses.firstWhere((a) => a.id == 1).isDefault, isFalse);
+        expect(repo.addresses.firstWhere((a) => a.id == 2).isDefault, isTrue);
+      },
+    );
   });
 }

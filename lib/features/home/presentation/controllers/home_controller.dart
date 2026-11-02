@@ -43,7 +43,9 @@ class HomeController extends _$HomeController {
         if (failure is CancelFailure) {
           return const [];
         }
-        final cached = ref.read(productLocalDataSourceProvider).getCachedProducts();
+        final cached = ref
+            .read(productLocalDataSourceProvider)
+            .getCachedProducts();
         if (cached.isNotEmpty) {
           return cached.map((p) => p.toEntity()).toList();
         }
@@ -77,10 +79,7 @@ class HomeController extends _$HomeController {
     }
 
     final getHomeProducts = ref.read(getHomeProductsUseCaseProvider);
-    final result = await getHomeProducts(
-      categoryId: categoryId,
-      page: 1,
-    );
+    final result = await getHomeProducts(categoryId: categoryId, page: 1);
 
     _isSectionSwitching = false;
 
@@ -90,7 +89,9 @@ class HomeController extends _$HomeController {
 
         // Try getting cached products for this category
         final localDataSource = ref.read(productLocalDataSourceProvider);
-        final cached = localDataSource.getCachedProducts(categoryId: categoryId);
+        final cached = localDataSource.getCachedProducts(
+          categoryId: categoryId,
+        );
         if (cached.isNotEmpty) {
           state = AsyncData(cached.map((p) => p.toEntity()).toList());
           return;

@@ -19,17 +19,20 @@ void main() {
       ],
     );
 
-    test('calculates subtotal using base effective price when no size selected', () {
-      final cartItem = CartItemModel(
-        id: 'cart-1',
-        userId: 'user-1',
-        product: sampleProduct,
-        quantity: 2,
-      );
+    test(
+      'calculates subtotal using base effective price when no size selected',
+      () {
+        final cartItem = CartItemModel(
+          id: 'cart-1',
+          userId: 'user-1',
+          product: sampleProduct,
+          quantity: 2,
+        );
 
-      // sampleProduct base effective price is 1000.0 (discountPrice)
-      expect(cartItem.subtotal, 2000.0);
-    });
+        // sampleProduct base effective price is 1000.0 (discountPrice)
+        expect(cartItem.subtotal, 2000.0);
+      },
+    );
 
     test('calculates subtotal using size variant price when size selected', () {
       final cartItemWithSize = CartItemModel(
@@ -57,34 +60,37 @@ void main() {
       expect(updated.subtotal, 3000.0);
     });
 
-    test('toEntity and fromEntity convert properly between model and entity', () {
-      final model = CartItemModel(
-        id: 'cart-10',
-        userId: 'user-10',
-        product: sampleProduct,
-        quantity: 4,
-        selectedFlavor: 'Chocolate',
-        selectedSize: '2kg',
-        addedAt: DateTime(2026, 1, 1),
-      );
+    test(
+      'toEntity and fromEntity convert properly between model and entity',
+      () {
+        final model = CartItemModel(
+          id: 'cart-10',
+          userId: 'user-10',
+          product: sampleProduct,
+          quantity: 4,
+          selectedFlavor: 'Chocolate',
+          selectedSize: '2kg',
+          addedAt: DateTime(2026, 1, 1),
+        );
 
-      final entity = model.toEntity();
-      expect(entity, isA<CartItemEntity>());
-      expect(entity.id, 'cart-10');
-      expect(entity.userId, 'user-10');
-      expect(entity.quantity, 4);
-      expect(entity.selectedFlavor, 'Chocolate');
-      expect(entity.selectedSize, '2kg');
-      expect(entity.subtotal, 3600.0); // 900 * 4
+        final entity = model.toEntity();
+        expect(entity, isA<CartItemEntity>());
+        expect(entity.id, 'cart-10');
+        expect(entity.userId, 'user-10');
+        expect(entity.quantity, 4);
+        expect(entity.selectedFlavor, 'Chocolate');
+        expect(entity.selectedSize, '2kg');
+        expect(entity.subtotal, 3600.0); // 900 * 4
 
-      final reconstructedModel = entity.toModel();
-      expect(reconstructedModel.id, model.id);
-      expect(reconstructedModel.userId, model.userId);
-      expect(reconstructedModel.quantity, model.quantity);
-      expect(reconstructedModel.selectedFlavor, model.selectedFlavor);
-      expect(reconstructedModel.selectedSize, model.selectedSize);
-      expect(reconstructedModel.subtotal, model.subtotal);
-    });
+        final reconstructedModel = entity.toModel();
+        expect(reconstructedModel.id, model.id);
+        expect(reconstructedModel.userId, model.userId);
+        expect(reconstructedModel.quantity, model.quantity);
+        expect(reconstructedModel.selectedFlavor, model.selectedFlavor);
+        expect(reconstructedModel.selectedSize, model.selectedSize);
+        expect(reconstructedModel.subtotal, model.subtotal);
+      },
+    );
 
     test('safeFromJson normalizes string price and image_urls seamlessly', () {
       final json = {
@@ -102,7 +108,7 @@ void main() {
               'thumbnail': 'https://example.com/thumb.jpg',
               'medium': 'https://example.com/med.jpg',
               'original': 'https://example.com/orig.jpg',
-            }
+            },
           ],
         },
       };
@@ -114,7 +120,10 @@ void main() {
       expect(parsed.product.discountPrice, 1200.0);
       expect(parsed.product.stockQuantity, 10);
       expect(parsed.product.imageUrls.length, 1);
-      expect(parsed.product.imageUrls.first.medium, 'https://example.com/med.jpg');
+      expect(
+        parsed.product.imageUrls.first.medium,
+        'https://example.com/med.jpg',
+      );
       expect(parsed.subtotal, 2400.0);
     });
   });

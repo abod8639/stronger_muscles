@@ -7,7 +7,8 @@ import 'package:stronger_muscles/features/auth/presentation/controllers/auth_con
 mixin AuthActionsMixin<T extends ConsumerStatefulWidget> on ConsumerState<T> {
   Future<void> Function()? _lastAction;
 
-  AuthController get authController => ref.read(authControllerProvider.notifier);
+  AuthController get authController =>
+      ref.read(authControllerProvider.notifier);
 
   void runAuthAction(Future<void> Function() action) {
     _lastAction = action;

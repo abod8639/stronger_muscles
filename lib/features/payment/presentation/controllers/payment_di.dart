@@ -11,13 +11,13 @@ import 'package:stronger_muscles/features/payment/presentation/controllers/payme
 import 'package:stronger_muscles/features/payment/presentation/controllers/payment_state.dart';
 
 // --- Data Sources ---
-final paymentLocalDataSourceProvider =
-    Provider<PaymentLocalDataSource>((ref) {
+final paymentLocalDataSourceProvider = Provider<PaymentLocalDataSource>((ref) {
   return PaymentLocalDataSourceImpl();
 });
 
-final paymentRemoteDataSourceProvider =
-    Provider<PaymentRemoteDataSource>((ref) {
+final paymentRemoteDataSourceProvider = Provider<PaymentRemoteDataSource>((
+  ref,
+) {
   final apiService = ref.watch(apiServiceProvider);
   return PaymentRemoteDataSourceImpl(apiService);
 });
@@ -30,14 +30,14 @@ final paymentRepositoryProvider = Provider<PaymentRepository>((ref) {
 });
 
 // --- Use Cases ---
-final initiatePaymentUseCaseProvider =
-    Provider<InitiatePaymentUseCase>((ref) {
+final initiatePaymentUseCaseProvider = Provider<InitiatePaymentUseCase>((ref) {
   final repository = ref.watch(paymentRepositoryProvider);
   return InitiatePaymentUseCase(repository);
 });
 
-final getPaymentMethodsUseCaseProvider =
-    Provider<GetPaymentMethodsUseCase>((ref) {
+final getPaymentMethodsUseCaseProvider = Provider<GetPaymentMethodsUseCase>((
+  ref,
+) {
   final repository = ref.watch(paymentRepositoryProvider);
   return GetPaymentMethodsUseCase(repository);
 });
@@ -45,14 +45,14 @@ final getPaymentMethodsUseCaseProvider =
 // --- Controller & Presentation Providers ---
 final paymentControllerProvider =
     StateNotifierProvider<PaymentController, PaymentState>((ref) {
-  final initiateUseCase = ref.watch(initiatePaymentUseCaseProvider);
-  final getMethodsUseCase = ref.watch(getPaymentMethodsUseCaseProvider);
-  return PaymentController(initiateUseCase, getMethodsUseCase);
-});
+      final initiateUseCase = ref.watch(initiatePaymentUseCaseProvider);
+      final getMethodsUseCase = ref.watch(getPaymentMethodsUseCaseProvider);
+      return PaymentController(initiateUseCase, getMethodsUseCase);
+    });
 
 final availablePaymentMethodsProvider =
     FutureProvider.family<List<PaymentMethodEntity>, String>((ref, lang) async {
-  final useCase = ref.watch(getPaymentMethodsUseCaseProvider);
-  final result = await useCase(lang: lang);
-  return result.getOrElse((_) => const []);
-});
+      final useCase = ref.watch(getPaymentMethodsUseCaseProvider);
+      final result = await useCase(lang: lang);
+      return result.getOrElse((_) => const []);
+    });

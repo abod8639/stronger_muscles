@@ -31,52 +31,65 @@ void main() {
   }
 
   group('Product Details Widgets Tests', () {
-    testWidgets('ProductDescriptionSection renders the titled description card', (tester) async {
-      const product = ProductModel(
-        id: 'test-0',
-        price: 10,
-        description: LocalizedString(en: 'Fast absorbing protein.', ar: 'بروتين سريع الامتصاص.'),
-      );
-
-      await tester.pumpWidget(createTestWidget(const ProductDescriptionSection(product: product)));
-      await tester.pumpAndSettle();
-
-      expect(find.byIcon(Icons.description_outlined), findsOneWidget);
-      expect(find.text('Fast absorbing protein.'), findsWidgets);
-    });
-
-    testWidgets('ProductSizeSelector renders sizes and invokes callback on selection', (tester) async {
-      String? selected;
-      const product = ProductModel(
-        id: 'test-1',
-        price: 100,
-        productSizes: [
-          ProductSize(size: '1 kg', price: 100),
-          ProductSize(size: '2 kg', price: 190),
-        ],
-      );
-
-      await tester.pumpWidget(
-        createTestWidget(
-          ProductSizeSelector(
-            product: product,
-            initialSize: '1 kg',
-            onSizeSelected: (size) => selected = size,
+    testWidgets(
+      'ProductDescriptionSection renders the titled description card',
+      (tester) async {
+        const product = ProductModel(
+          id: 'test-0',
+          price: 10,
+          description: LocalizedString(
+            en: 'Fast absorbing protein.',
+            ar: 'بروتين سريع الامتصاص.',
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
 
-      expect(find.text('1 kg'), findsOneWidget);
-      expect(find.text('2 kg'), findsOneWidget);
+        await tester.pumpWidget(
+          createTestWidget(const ProductDescriptionSection(product: product)),
+        );
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.text('2 kg'));
-      await tester.pumpAndSettle();
+        expect(find.byIcon(Icons.description_outlined), findsOneWidget);
+        expect(find.text('Fast absorbing protein.'), findsWidgets);
+      },
+    );
 
-      expect(selected, '2 kg');
-    });
+    testWidgets(
+      'ProductSizeSelector renders sizes and invokes callback on selection',
+      (tester) async {
+        String? selected;
+        const product = ProductModel(
+          id: 'test-1',
+          price: 100,
+          productSizes: [
+            ProductSize(size: '1 kg', price: 100),
+            ProductSize(size: '2 kg', price: 190),
+          ],
+        );
 
-    testWidgets('ProductUsageSection renders usage instructions and warnings', (tester) async {
+        await tester.pumpWidget(
+          createTestWidget(
+            ProductSizeSelector(
+              product: product,
+              initialSize: '1 kg',
+              onSizeSelected: (size) => selected = size,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(find.text('1 kg'), findsOneWidget);
+        expect(find.text('2 kg'), findsOneWidget);
+
+        await tester.tap(find.text('2 kg'));
+        await tester.pumpAndSettle();
+
+        expect(selected, '2 kg');
+      },
+    );
+
+    testWidgets('ProductUsageSection renders usage instructions and warnings', (
+      tester,
+    ) async {
       const product = ProductModel(
         id: 'test-2',
         price: 50,
@@ -85,9 +98,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          const ProductUsageSection(product: product),
-        ),
+        createTestWidget(const ProductUsageSection(product: product)),
       );
       await tester.pumpAndSettle();
 
@@ -96,7 +107,9 @@ void main() {
       expect(find.text('Do not exceed dose.'), findsOneWidget);
     });
 
-    testWidgets('ProductIngredientsSection renders ingredient tags', (tester) async {
+    testWidgets('ProductIngredientsSection renders ingredient tags', (
+      tester,
+    ) async {
       const product = ProductModel(
         id: 'test-3',
         price: 80,
@@ -104,9 +117,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          const ProductIngredientsSection(product: product),
-        ),
+        createTestWidget(const ProductIngredientsSection(product: product)),
       );
       await tester.pumpAndSettle();
 
@@ -115,26 +126,30 @@ void main() {
       expect(find.text('Stevia'), findsOneWidget);
     });
 
-    testWidgets('ProductDetailsView accepts ProductEntity directly and fromModel factory', (tester) async {
-      const entity = ProductEntity(
-        id: 'entity-1',
-        name: LocalizedStringEntity(en: 'Pure Whey', ar: 'واي نقي'),
-        price: 150.0,
+    testWidgets(
+      'ProductDetailsView accepts ProductEntity directly and fromModel factory',
+      (tester) async {
+        const entity = ProductEntity(
+          id: 'entity-1',
+          name: LocalizedStringEntity(en: 'Pure Whey', ar: 'واي نقي'),
+          price: 150.0,
+        );
+
+        const viewDirect = ProductDetailsView(product: entity);
+        expect(viewDirect.product, entity);
+
+        const model = ProductModel(id: 'model-1', price: 150.0);
+        final viewModel = ProductDetailsView.fromModel(model: model);
+        expect(viewModel.product?.id, 'model-1');
+      },
+    );
+
+    testWidgets('ProductPrice shows discount or price on request', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        createTestWidget(const ProductPrice(price: 90, originalPrice: 120)),
       );
-
-      const viewDirect = ProductDetailsView(product: entity);
-      expect(viewDirect.product, entity);
-
-      const model = ProductModel(
-        id: 'model-1',
-        price: 150.0,
-      );
-      final viewModel = ProductDetailsView.fromModel(model: model);
-      expect(viewModel.product?.id, 'model-1');
-    });
-
-    testWidgets('ProductPrice shows discount or price on request', (tester) async {
-      await tester.pumpWidget(createTestWidget(const ProductPrice(price: 90, originalPrice: 120)));
       expect(find.text('LE 90.00'), findsOneWidget);
       expect(find.text('LE 120.00'), findsOneWidget);
 
@@ -143,7 +158,9 @@ void main() {
       expect(find.text('LE 0.00'), findsNothing);
     });
 
-    testWidgets('ReviewCard shows name initial, rating and comment', (tester) async {
+    testWidgets('ReviewCard shows name initial, rating and comment', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         createTestWidget(
           ReviewCard(
@@ -165,11 +182,20 @@ void main() {
       expect(find.text('Great taste'), findsOneWidget);
     });
 
-    testWidgets('ProductInfoSection lists specs with a brand link', (tester) async {
-      const product = ProductModel(id: 'test-4', price: 10, brand: 'Optimum', sku: 'SKU-1');
+    testWidgets('ProductInfoSection lists specs with a brand link', (
+      tester,
+    ) async {
+      const product = ProductModel(
+        id: 'test-4',
+        price: 10,
+        brand: 'Optimum',
+        sku: 'SKU-1',
+      );
 
       await tester.pumpWidget(
-        ProviderScope(child: createTestWidget(const ProductInfoSection(product: product))),
+        ProviderScope(
+          child: createTestWidget(const ProductInfoSection(product: product)),
+        ),
       );
 
       expect(find.widgetWithText(TextButton, 'Optimum'), findsOneWidget);

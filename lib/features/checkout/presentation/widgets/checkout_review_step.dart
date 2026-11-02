@@ -16,8 +16,12 @@ class CheckoutReviewStep extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final selectedAddress = ref.watch(checkoutControllerProvider.select((s) => s.selectedAddress));
-    final paymentMethod = ref.watch(checkoutControllerProvider.select((s) => s.selectedPaymentMethod));
+    final selectedAddress = ref.watch(
+      checkoutControllerProvider.select((s) => s.selectedAddress),
+    );
+    final paymentMethod = ref.watch(
+      checkoutControllerProvider.select((s) => s.selectedPaymentMethod),
+    );
     final cartState = ref.watch(cartControllerProvider);
     final mutedStyle = context.textTheme.bodyMedium?.copyWith(
       color: context.colorScheme.onSurfaceVariant,
@@ -37,18 +41,28 @@ class CheckoutReviewStep extends ConsumerWidget {
                 for (final item in items)
                   AppOrderItemTile(
                     imageUrl: item.primaryImageUrl,
-                    title: item.product.getLocalizedName(locale: l10n.localeName),
+                    title: item.product.getLocalizedName(
+                      locale: l10n.localeName,
+                    ),
                     subtitle: [item.selectedFlavor, item.selectedSize]
                         .whereType<String>()
                         .where((v) => v.isNotEmpty)
                         .join(' • '),
                     quantity: item.quantity,
-                    unitPrice: item.product.getEffectivePriceForSize(item.selectedSize),
+                    unitPrice: item.product.getEffectivePriceForSize(
+                      item.selectedSize,
+                    ),
                     total: item.subtotal,
                   ),
-                Divider(height: AppDimens.spacingXl, color: context.colorScheme.outlineVariant),
+                Divider(
+                  height: AppDimens.spacingXl,
+                  color: context.colorScheme.outlineVariant,
+                ),
                 CheckoutPriceSummary(
-                  cartSubtotal: items.fold(0.0, (sum, item) => sum + item.subtotal),
+                  cartSubtotal: items.fold(
+                    0.0,
+                    (sum, item) => sum + item.subtotal,
+                  ),
                 ),
               ],
             ),
@@ -73,9 +87,13 @@ class CheckoutReviewStep extends ConsumerWidget {
         ],
         AppSectionCard(
           title: l10n.paymentMethod,
-          icon: paymentMethod == 'cash' ? Icons.payments_outlined : Icons.credit_card_outlined,
+          icon: paymentMethod == 'cash'
+              ? Icons.payments_outlined
+              : Icons.credit_card_outlined,
           child: Text(
-            paymentMethod == 'cash' ? l10n.cashOnDelivery : l10n.creditCardOrOnline,
+            paymentMethod == 'cash'
+                ? l10n.cashOnDelivery
+                : l10n.creditCardOrOnline,
             style: mutedStyle,
           ),
         ),

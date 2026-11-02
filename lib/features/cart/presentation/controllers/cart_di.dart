@@ -60,8 +60,9 @@ final removeFromCartUseCaseProvider = Provider<RemoveFromCartUseCase>((ref) {
   return RemoveFromCartUseCase(repository);
 });
 
-final updateCartQuantityUseCaseProvider =
-    Provider<UpdateCartQuantityUseCase>((ref) {
+final updateCartQuantityUseCaseProvider = Provider<UpdateCartQuantityUseCase>((
+  ref,
+) {
   final repository = ref.watch(cartRepositoryProvider);
   return UpdateCartQuantityUseCase(repository);
 });

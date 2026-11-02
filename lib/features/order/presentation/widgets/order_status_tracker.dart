@@ -18,7 +18,10 @@ class OrderStatusTracker extends StatelessWidget {
     return AppSectionCard(
       title: l10n.orderTracking,
       icon: Icons.local_shipping_outlined,
-      trailing: AppBadge(label: order.statusLabel(l10n), color: order.statusColor),
+      trailing: AppBadge(
+        label: order.statusLabel(l10n),
+        color: order.statusColor,
+      ),
       child: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: AppStepProgress(

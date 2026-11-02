@@ -69,7 +69,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     return AppCard(
       padding: EdgeInsets.zero,
       border: Border.all(
-        color: address.isDefault ? AppColors.primary.withValues(alpha: 0.5) : Colors.transparent,
+        color: address.isDefault
+            ? AppColors.primary.withValues(alpha: 0.5)
+            : Colors.transparent,
         width: 1.5,
       ),
       child: Column(
@@ -83,7 +85,12 @@ class _AddressCardState extends ConsumerState<AddressCard> {
                 _buildCardTopRow(context),
                 const SizedBox(height: AppDimens.spacingMd),
                 _buildAddressDetails(context),
-                Divider(height: AppDimens.spacingXl, color: context.colorScheme.outlineVariant.withValues(alpha: 0.5)),
+                Divider(
+                  height: AppDimens.spacingXl,
+                  color: context.colorScheme.outlineVariant.withValues(
+                    alpha: 0.5,
+                  ),
+                ),
                 _buildActionButtons(context, ref),
               ],
             ),
@@ -96,7 +103,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
   Widget _buildMapPreview(BuildContext context) {
     final locale = Localizations.localeOf(context);
     if (address.latitude != null && address.longitude != null) {
-      return _buildMapWidget(ll.LatLng(address.latitude!, address.longitude!), locale);
+      return _buildMapWidget(
+        ll.LatLng(address.latitude!, address.longitude!),
+        locale,
+      );
     }
 
     // Try to geocode the address if coordinates are missing
@@ -109,7 +119,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
 
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           final loc = snapshot.data!.first;
-          return _buildMapWidget(ll.LatLng(loc.latitude, loc.longitude), locale);
+          return _buildMapWidget(
+            ll.LatLng(loc.latitude, loc.longitude),
+            locale,
+          );
         }
 
         return _buildMapPlaceholder();
@@ -124,7 +137,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
       child: Stack(
         children: [
           FlutterMap(
-            key: ValueKey('map_${address.id}_${position.latitude}_${position.longitude}_${locale.languageCode}'),
+            key: ValueKey(
+              'map_${address.id}_${position.latitude}_${position.longitude}_${locale.languageCode}',
+            ),
             options: MapOptions(
               initialCenter: position,
               initialZoom: _mapZoom,
@@ -154,16 +169,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
           Positioned.fill(
             child: Material(
               color: Colors.transparent,
-              child: InkWell(
-                onTap: () => _openInMaps(position),
-              ),
+              child: InkWell(onTap: () => _openInMaps(position)),
             ),
           ),
-          PositionedDirectional(
-            top: 12,
-            end: 12,
-            child: _buildMapIcon(),
-          ),
+          PositionedDirectional(top: 12, end: 12, child: _buildMapIcon()),
         ],
       ),
     );
@@ -213,7 +222,10 @@ class _AddressCardState extends ConsumerState<AddressCard> {
           const SizedBox(height: AppDimens.spacingSm),
           Text(
             AppLocalizations.of(context)!.mapUnavailable,
-            style: context.textTheme.bodySmall?.copyWith(color: mutedColor, fontWeight: FontWeight.w500),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: mutedColor,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -242,17 +254,23 @@ class _AddressCardState extends ConsumerState<AddressCard> {
     final labelIcon = label == l10n.home.toLowerCase()
         ? Icons.home_rounded
         : label == l10n.work.toLowerCase()
-            ? Icons.work_rounded
-            : Icons.location_on_rounded;
+        ? Icons.work_rounded
+        : Icons.location_on_rounded;
 
     return Row(
       children: [
-        AppIconTile(icon: labelIcon, iconSize: 18.0, padding: AppDimens.spacingSm),
+        AppIconTile(
+          icon: labelIcon,
+          iconSize: 18.0,
+          padding: AppDimens.spacingSm,
+        ),
         const SizedBox(width: AppDimens.spacingMd),
         Expanded(
           child: Text(
             address.label ?? l10n.other,
-            style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            style: context.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         if (address.isDefault)
@@ -276,7 +294,9 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         if (address.fullName?.isNotEmpty ?? false)
           Text(
             address.fullName!,
-            style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: context.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
         const SizedBox(height: AppDimens.spacingSm),
         Row(
@@ -315,12 +335,20 @@ class _AddressCardState extends ConsumerState<AddressCard> {
         IconButton(
           tooltip: l10n.editAddress,
           onPressed: () => showAddressForm(context, address: address),
-          icon: Icon(Icons.edit_outlined, size: 20, color: context.colorScheme.onSurfaceVariant),
+          icon: Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: context.colorScheme.onSurfaceVariant,
+          ),
         ),
         IconButton(
           tooltip: l10n.delete,
           onPressed: () => _confirmDelete(context, controller),
-          icon: const Icon(Icons.delete_outline_rounded, size: 20, color: AppColors.error),
+          icon: const Icon(
+            Icons.delete_outline_rounded,
+            size: 20,
+            color: AppColors.error,
+          ),
         ),
       ],
     );

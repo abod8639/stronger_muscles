@@ -8,19 +8,19 @@ class WishlistRoutes {
 
   /// Dedicated [StatefulShellBranch] for shell bottom navigation.
   static StatefulShellBranch get branch => StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: wishlistPath,
-            builder: (context, state) => const WishlistView(),
-          ),
-        ],
-      );
+    routes: [
+      GoRoute(
+        path: wishlistPath,
+        builder: (context, state) => const WishlistView(),
+      ),
+    ],
+  );
 
   /// Standalone [GoRoute] if accessed outside the shell.
   static GoRoute get route => GoRoute(
-        path: wishlistPath,
-        builder: (context, state) => const WishlistView(),
-      );
+    path: wishlistPath,
+    builder: (context, state) => const WishlistView(),
+  );
 
   /// Route base collection for modular router registration.
   static List<RouteBase> get routes => [route];

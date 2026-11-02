@@ -89,17 +89,17 @@ class CategoryEntity {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        name,
-        description,
-        imageUrl,
-        sortOrder,
-        isActive,
-        createdAt,
-        icon,
-        parentId,
-        Object.hashAll(children),
-      );
+    id,
+    name,
+    description,
+    imageUrl,
+    sortOrder,
+    isActive,
+    createdAt,
+    icon,
+    parentId,
+    Object.hashAll(children),
+  );
 
   @override
   String toString() => 'CategoryEntity(id: $id, name: $name)';

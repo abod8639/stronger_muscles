@@ -65,7 +65,9 @@ class CategoriesShortcutsRow extends ConsumerWidget {
         message: AppErrorCard.messageFor(error, l10n),
         margin: _padding,
         actionLabel: l10n?.retry ?? 'إعادة المحاولة',
-        onAction: () => ref.read(categoriesSectionsControllerProvider.notifier).fetchCategories(),
+        onAction: () => ref
+            .read(categoriesSectionsControllerProvider.notifier)
+            .fetchCategories(),
       ),
     );
   }

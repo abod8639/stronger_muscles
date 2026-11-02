@@ -110,23 +110,27 @@ void main() {
       clearCartUseCase = ClearCartUseCase(repository);
     });
 
-    test('AddToCartUseCase adds new item and GetCartItemsUseCase retrieves it', () async {
-      final addResult = await addToCartUseCase(sampleProduct, selectedFlavor: 'Vanilla', quantity: 2);
-      expect(addResult.isRight(), isTrue);
+    test(
+      'AddToCartUseCase adds new item and GetCartItemsUseCase retrieves it',
+      () async {
+        final addResult = await addToCartUseCase(
+          sampleProduct,
+          selectedFlavor: 'Vanilla',
+          quantity: 2,
+        );
+        expect(addResult.isRight(), isTrue);
 
-      final result = await getCartItemsUseCase();
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (items) {
+        final result = await getCartItemsUseCase();
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected Right'), (items) {
           expect(items.length, 1);
           expect(items.first.product.id, 'p1');
           expect(items.first.selectedFlavor, 'Vanilla');
           expect(items.first.quantity, 2);
           expect(items.first.subtotal, 2600.0);
-        },
-      );
-    });
+        });
+      },
+    );
 
     test('AddToCartUseCase increments existing item quantity', () async {
       await addToCartUseCase(sampleProduct, selectedSize: '1kg', quantity: 1);
@@ -134,13 +138,10 @@ void main() {
 
       final result = await getCartItemsUseCase();
       expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (items) {
-          expect(items.length, 1);
-          expect(items.first.quantity, 3);
-        },
-      );
+      result.fold((_) => fail('Expected Right'), (items) {
+        expect(items.length, 1);
+        expect(items.first.quantity, 3);
+      });
     });
 
     test('UpdateCartQuantityUseCase updates quantity correctly', () async {
@@ -152,30 +153,36 @@ void main() {
       expect(updateResult.isRight(), isTrue);
 
       final itemsAfterResult = await getCartItemsUseCase();
-      itemsAfterResult.fold(
-        (_) => fail('Expected Right'),
-        (itemsAfter) {
-          expect(itemsAfter.first.quantity, 5);
-          expect(itemsAfter.first.subtotal, 6500.0);
-        },
-      );
+      itemsAfterResult.fold((_) => fail('Expected Right'), (itemsAfter) {
+        expect(itemsAfter.first.quantity, 5);
+        expect(itemsAfter.first.subtotal, 6500.0);
+      });
     });
 
-    test('UpdateCartQuantityUseCase with zero quantity removes the item', () async {
-      await addToCartUseCase(sampleProduct, quantity: 1);
-      final itemId = (await getCartItemsUseCase()).getOrElse((_) => []).first.id;
+    test(
+      'UpdateCartQuantityUseCase with zero quantity removes the item',
+      () async {
+        await addToCartUseCase(sampleProduct, quantity: 1);
+        final itemId = (await getCartItemsUseCase())
+            .getOrElse((_) => [])
+            .first
+            .id;
 
-      await updateCartQuantityUseCase(itemId, 0);
-      final itemsAfterResult = await getCartItemsUseCase();
-      itemsAfterResult.fold(
-        (_) => fail('Expected Right'),
-        (itemsAfter) => expect(itemsAfter.isEmpty, isTrue),
-      );
-    });
+        await updateCartQuantityUseCase(itemId, 0);
+        final itemsAfterResult = await getCartItemsUseCase();
+        itemsAfterResult.fold(
+          (_) => fail('Expected Right'),
+          (itemsAfter) => expect(itemsAfter.isEmpty, isTrue),
+        );
+      },
+    );
 
     test('RemoveFromCartUseCase removes specified item', () async {
       await addToCartUseCase(sampleProduct, selectedFlavor: 'Chocolate');
-      final itemId = (await getCartItemsUseCase()).getOrElse((_) => []).first.id;
+      final itemId = (await getCartItemsUseCase())
+          .getOrElse((_) => [])
+          .first
+          .id;
 
       final removeResult = await removeFromCartUseCase(itemId);
       expect(removeResult.isRight(), isTrue);

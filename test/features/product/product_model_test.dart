@@ -8,7 +8,10 @@ void main() {
     const pWithDiscount = ProductModel(
       id: 'p-1',
       name: LocalizedString(en: 'Protein Powder', ar: 'بودرة بروتين'),
-      description: LocalizedString(en: 'High quality whey', ar: 'واي عالي الجودة'),
+      description: LocalizedString(
+        en: 'High quality whey',
+        ar: 'واي عالي الجودة',
+      ),
       price: 200.0,
       discountPrice: 150.0,
     );
@@ -26,7 +29,10 @@ void main() {
 
     test('hasDiscount and discountPercentage calculate correctly', () {
       expect(pWithDiscount.hasDiscount, true);
-      expect(pWithDiscount.discountPercentage, 25); // (200 - 150) / 200 * 100 = 25%
+      expect(
+        pWithDiscount.discountPercentage,
+        25,
+      ); // (200 - 150) / 200 * 100 = 25%
       expect(pWithDiscount.baseEffectivePrice, 150.0);
 
       expect(pWithoutDiscount.hasDiscount, false);

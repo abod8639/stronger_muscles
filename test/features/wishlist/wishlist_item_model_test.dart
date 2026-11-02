@@ -5,21 +5,24 @@ void main() {
   group('WishlistItemModel Tests', () {
     final fixedTime = DateTime(2025, 3, 15, 10, 30);
 
-    test('constructor assigns defaults correctly when addedAt is not provided', () {
-      final before = DateTime.now().subtract(const Duration(seconds: 1));
-      final item = WishlistItemModel(
-        id: 'wish-1',
-        userId: 'user-1',
-        productId: 'prod-1',
-      );
-      final after = DateTime.now().add(const Duration(seconds: 1));
+    test(
+      'constructor assigns defaults correctly when addedAt is not provided',
+      () {
+        final before = DateTime.now().subtract(const Duration(seconds: 1));
+        final item = WishlistItemModel(
+          id: 'wish-1',
+          userId: 'user-1',
+          productId: 'prod-1',
+        );
+        final after = DateTime.now().add(const Duration(seconds: 1));
 
-      expect(item.id, 'wish-1');
-      expect(item.userId, 'user-1');
-      expect(item.productId, 'prod-1');
-      expect(item.addedAt.isAfter(before), isTrue);
-      expect(item.addedAt.isBefore(after), isTrue);
-    });
+        expect(item.id, 'wish-1');
+        expect(item.userId, 'user-1');
+        expect(item.productId, 'prod-1');
+        expect(item.addedAt.isAfter(before), isTrue);
+        expect(item.addedAt.isBefore(after), isTrue);
+      },
+    );
 
     test('fromJson and toJson maintain consistent data', () {
       final json = {
@@ -117,4 +120,3 @@ void main() {
     });
   });
 }
-

@@ -20,7 +20,6 @@ import 'package:stronger_muscles/features/product_details/presentation/widgets/p
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 class ProductDetailsView extends ConsumerWidget {
-
   final ProductEntity? product;
   final String? initialFlavor;
   final String? initialSize;
@@ -54,7 +53,10 @@ class ProductDetailsView extends ConsumerWidget {
     if (product == null) {
       return Scaffold(
         appBar: AppBar(),
-        body: AppEmptyState(icon: Icons.inventory_2_outlined, title: l10n.productNotFound),
+        body: AppEmptyState(
+          icon: Icons.inventory_2_outlined,
+          title: l10n.productNotFound,
+        ),
       );
     }
 
@@ -79,12 +81,15 @@ class ProductDetailsView extends ConsumerWidget {
         initialSize: initialSize,
       ),
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
         slivers: [
           SliverToBoxAdapter(
             child: MainImage(
               product: effectiveProd,
-              onImageTap: (index) => _showImageViewer(context, effectiveProd, index),
+              onImageTap: (index) =>
+                  _showImageViewer(context, effectiveProd, index),
             ),
           ),
           SliverPadding(
@@ -101,7 +106,9 @@ class ProductDetailsView extends ConsumerWidget {
                 smallGap,
                 ProductPrice(
                   price: detailsState.displayEffectivePrice,
-                  originalPrice: detailsState.displayHasDiscount ? detailsState.displayPrice : null,
+                  originalPrice: detailsState.displayHasDiscount
+                      ? detailsState.displayPrice
+                      : null,
                 ),
                 smallGap,
                 buildProductBadges(effectiveProd, context, 0.1),
@@ -121,7 +128,8 @@ class ProductDetailsView extends ConsumerWidget {
                   ProductSizeSelector(
                     product: effectiveProd,
                     initialSize: detailsState.selectedSizeObject?.size,
-                    onSizeSelected: (size) => detailsNotifier.updateSize(effectiveProd, size),
+                    onSizeSelected: (size) =>
+                        detailsNotifier.updateSize(effectiveProd, size),
                   ),
                 ],
                 gap,

@@ -51,12 +51,7 @@ class FakeAuthRepository implements AuthRepository {
     }
     lastRegisterName = name;
     return Right(
-      UserEntity(
-        id: 2,
-        email: email,
-        name: name,
-        token: "testToken",
-      ),
+      UserEntity(id: 2, email: email, name: name, token: "testToken"),
     );
   }
 
@@ -113,24 +108,26 @@ void main() {
   });
 
   group('Auth Domain UseCases Tests', () {
-    test('LoginUseCase delegates credentials to repository and returns user', () async {
-      final loginUseCase = LoginUseCase(fakeRepository);
+    test(
+      'LoginUseCase delegates credentials to repository and returns user',
+      () async {
+        final loginUseCase = LoginUseCase(fakeRepository);
 
-      final result = await loginUseCase(
-        email: 'user@strongermuscles.com',
-        password: 'password123',
-      );
+        final result = await loginUseCase(
+          email: 'user@strongermuscles.com',
+          password: 'password123',
+        );
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected right but got $failure'),
-        (user) {
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Expected right but got $failure'), (
+          user,
+        ) {
           expect(user.email, 'user@strongermuscles.com');
           expect(fakeRepository.lastLoginEmail, 'user@strongermuscles.com');
           expect(fakeRepository.lastLoginPassword, 'password123');
-        },
-      );
-    });
+        });
+      },
+    );
 
     test('LoginUseCase returns Left failure on error', () async {
       fakeRepository.shouldThrow = true;
@@ -142,13 +139,10 @@ void main() {
       );
 
       expect(result.isLeft(), isTrue);
-      result.fold(
-        (failure) {
-          expect(failure, isA<AuthFailure>());
-          expect(failure.toMessage(), 'Invalid credentials');
-        },
-        (_) => fail('Expected Left but got Right'),
-      );
+      result.fold((failure) {
+        expect(failure, isA<AuthFailure>());
+        expect(failure.toMessage(), 'Invalid credentials');
+      }, (_) => fail('Expected Left but got Right'));
     });
 
     test('RegisterUseCase passes correct registration parameters', () async {
@@ -161,13 +155,10 @@ void main() {
       );
 
       expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected right but got $failure'),
-        (user) {
-          expect(user.name, 'Captain Muscle');
-          expect(fakeRepository.lastRegisterName, 'Captain Muscle');
-        },
-      );
+      result.fold((failure) => fail('Expected right but got $failure'), (user) {
+        expect(user.name, 'Captain Muscle');
+        expect(fakeRepository.lastRegisterName, 'Captain Muscle');
+      });
     });
 
     test('LogoutUseCase invokes repository logout', () async {
@@ -200,14 +191,11 @@ void main() {
 
       result = await getCurrentUserUseCase();
       expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (user) {
-          expect(user, isNotNull);
-          expect(user!.id, 99);
-          expect(user.email, 'active@example.com');
-        },
-      );
+      result.fold((_) => fail('Expected Right'), (user) {
+        expect(user, isNotNull);
+        expect(user!.id, 99);
+        expect(user.email, 'active@example.com');
+      });
     });
   });
 }

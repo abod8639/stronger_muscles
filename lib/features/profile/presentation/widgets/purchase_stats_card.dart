@@ -34,7 +34,11 @@ class PurchaseStatsCard extends ConsumerWidget {
               icon: Icons.payments_outlined,
             ),
           ),
-          Container(height: 56.0, width: 1.0, color: AppColors.white.withValues(alpha: 0.3)),
+          Container(
+            height: 56.0,
+            width: 1.0,
+            color: AppColors.white.withValues(alpha: 0.3),
+          ),
           Expanded(
             child: _StatItem(
               label: l10n.completed,
@@ -53,7 +57,11 @@ class _StatItem extends StatelessWidget {
   final String value;
   final IconData icon;
 
-  const _StatItem({required this.label, required this.value, required this.icon});
+  const _StatItem({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +84,9 @@ class _StatItem extends StatelessWidget {
         ),
         Text(
           label,
-          style: context.textTheme.bodySmall?.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
+          style: context.textTheme.bodySmall?.copyWith(
+            color: AppColors.white.withValues(alpha: 0.9),
+          ),
         ),
       ],
     );

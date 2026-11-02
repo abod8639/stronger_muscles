@@ -148,43 +148,46 @@ void main() {
       expect(model.createdAt, isNotNull);
     });
 
-    test('fromJson handles null, corrupt, or missing fields with fallbacks', () {
-      final model = NotificationModel.fromJson(null);
+    test(
+      'fromJson handles null, corrupt, or missing fields with fallbacks',
+      () {
+        final model = NotificationModel.fromJson(null);
 
-      expect(model.id, '');
-      expect(model.title, '');
-      expect(model.body, '');
-      expect(model.type, 'general');
-      expect(model.isRead, isFalse);
-      expect(model.createdAt, isNull);
-    });
+        expect(model.id, '');
+        expect(model.title, '');
+        expect(model.body, '');
+        expect(model.type, 'general');
+        expect(model.isRead, isFalse);
+        expect(model.createdAt, isNull);
+      },
+    );
 
-    test('NotificationModel and NotificationEntity parse support ticket data correctly', () {
-      final json = {
-        'id': '29',
-        'title': 'رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)',
-        'body': 'zz',
-        'type': 'support',
-        'target_type': 'user',
-        'user_id': '2',
-        'data': {
-          'ticket_id': 6,
-          'ticket_number': 'SM-VKBVQ9LO',
-        },
-      };
+    test(
+      'NotificationModel and NotificationEntity parse support ticket data correctly',
+      () {
+        final json = {
+          'id': '29',
+          'title': 'رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)',
+          'body': 'zz',
+          'type': 'support',
+          'target_type': 'user',
+          'user_id': '2',
+          'data': {'ticket_id': 6, 'ticket_number': 'SM-VKBVQ9LO'},
+        };
 
-      final model = NotificationModel.fromJson(json);
-      expect(model.id, '29');
-      expect(model.ticketId, '6');
-      expect(model.ticketNumber, 'SM-VKBVQ9LO');
-      expect(model.isSupport, isTrue);
+        final model = NotificationModel.fromJson(json);
+        expect(model.id, '29');
+        expect(model.ticketId, '6');
+        expect(model.ticketNumber, 'SM-VKBVQ9LO');
+        expect(model.isSupport, isTrue);
 
-      final entity = model.toEntity();
-      expect(entity.id, '29');
-      expect(entity.ticketId, '6');
-      expect(entity.ticketNumber, 'SM-VKBVQ9LO');
-      expect(entity.isSupport, isTrue);
-    });
+        final entity = model.toEntity();
+        expect(entity.id, '29');
+        expect(entity.ticketId, '6');
+        expect(entity.ticketNumber, 'SM-VKBVQ9LO');
+        expect(entity.isSupport, isTrue);
+      },
+    );
 
     test('NotificationModelMapper conversions work as expected', () {
       const model = NotificationModel(
@@ -216,51 +219,60 @@ void main() {
       repository = NotificationRepositoryImpl(mockRemote, mockLocal);
     });
 
-    test('GetNotificationsUseCase returns Right and updates local cache', () async {
-      mockRemote.mockPayload = const NotificationsPayloadModel(
-        notifications: [
-          NotificationModel(id: 'n1', title: 'Order update', body: 'Dispatched', isRead: false),
-        ],
-        unreadCount: 1,
-        hasMore: true,
-      );
+    test(
+      'GetNotificationsUseCase returns Right and updates local cache',
+      () async {
+        mockRemote.mockPayload = const NotificationsPayloadModel(
+          notifications: [
+            NotificationModel(
+              id: 'n1',
+              title: 'Order update',
+              body: 'Dispatched',
+              isRead: false,
+            ),
+          ],
+          unreadCount: 1,
+          hasMore: true,
+        );
 
-      final useCase = GetNotificationsUseCase(repository);
-      final result = await useCase();
+        final useCase = GetNotificationsUseCase(repository);
+        final result = await useCase();
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (payload) {
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Should be right'), (payload) {
           expect(payload.notifications.length, 1);
           expect(payload.unreadCount, 1);
           expect(payload.hasMore, isTrue);
           expect(payload.notifications.first.id, 'n1');
-        },
-      );
-      expect(mockLocal.cached.length, 1);
-      expect(mockLocal.unread, 1);
-    });
+        });
+        expect(mockLocal.cached.length, 1);
+        expect(mockLocal.unread, 1);
+      },
+    );
 
-    test('GetNotificationsUseCase falls back to local cache on network error', () async {
-      mockLocal.cached = [
-        const NotificationModel(id: 'cached_1', title: 'Cached notif', body: 'Body'),
-      ];
-      mockLocal.unread = 1;
-      mockRemote.shouldThrow = true;
+    test(
+      'GetNotificationsUseCase falls back to local cache on network error',
+      () async {
+        mockLocal.cached = [
+          const NotificationModel(
+            id: 'cached_1',
+            title: 'Cached notif',
+            body: 'Body',
+          ),
+        ];
+        mockLocal.unread = 1;
+        mockRemote.shouldThrow = true;
 
-      final useCase = GetNotificationsUseCase(repository);
-      final result = await useCase();
+        final useCase = GetNotificationsUseCase(repository);
+        final result = await useCase();
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right from cache'),
-        (payload) {
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Should be right from cache'), (payload) {
           expect(payload.notifications.length, 1);
           expect(payload.notifications.first.id, 'cached_1');
-        },
-      );
-    });
+        });
+      },
+    );
 
     test('GetUnreadCountUseCase returns count and caches it', () async {
       mockRemote.mockUnreadCount = 5;
@@ -275,7 +287,12 @@ void main() {
 
     test('MarkAsReadUseCase updates cache and calls remote', () async {
       mockLocal.cached = [
-        const NotificationModel(id: 'n123', title: 'Title', body: 'Body', isRead: false),
+        const NotificationModel(
+          id: 'n123',
+          title: 'Title',
+          body: 'Body',
+          isRead: false,
+        ),
       ];
       mockLocal.unread = 1;
 
@@ -294,17 +311,24 @@ void main() {
       expect(mockRemote.markAllCalled, isTrue);
     });
 
-    test('DeleteNotificationUseCase removes from cache and calls remote', () async {
-      mockLocal.cached = [
-        const NotificationModel(id: 'del_1', title: 'Delete me', body: 'Body'),
-      ];
+    test(
+      'DeleteNotificationUseCase removes from cache and calls remote',
+      () async {
+        mockLocal.cached = [
+          const NotificationModel(
+            id: 'del_1',
+            title: 'Delete me',
+            body: 'Body',
+          ),
+        ];
 
-      final useCase = DeleteNotificationUseCase(repository);
-      final result = await useCase('del_1');
+        final useCase = DeleteNotificationUseCase(repository);
+        final result = await useCase('del_1');
 
-      expect(result.isRight(), isTrue);
-      expect(mockRemote.deletedId, 'del_1');
-      expect(mockLocal.cached.isEmpty, isTrue);
-    });
+        expect(result.isRight(), isTrue);
+        expect(mockRemote.deletedId, 'del_1');
+        expect(mockLocal.cached.isEmpty, isTrue);
+      },
+    );
   });
 }

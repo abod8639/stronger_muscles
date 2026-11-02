@@ -2,9 +2,7 @@
 class AppValidators {
   const AppValidators._();
 
-  static final RegExp _emailRegex = RegExp(
-    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-  );
+  static final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   /// Validates email address format.
   static String? validateEmail(
@@ -43,7 +41,9 @@ class AppValidators {
     required String emptyMessage,
     int minLength = 2,
   }) {
-    if (value == null || value.trim().isEmpty || value.trim().length < minLength) {
+    if (value == null ||
+        value.trim().isEmpty ||
+        value.trim().length < minLength) {
       return emptyMessage;
     }
     return null;

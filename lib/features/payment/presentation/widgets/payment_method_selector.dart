@@ -18,7 +18,8 @@ class PaymentMethodSelector extends StatelessWidget {
     this.showSecurityBadge = true,
   });
 
-  static IconData _resolveIcon(Object? icon) => icon is IconData ? icon : Icons.payments_outlined;
+  static IconData _resolveIcon(Object? icon) =>
+      icon is IconData ? icon : Icons.payments_outlined;
 
   @override
   Widget build(BuildContext context) {

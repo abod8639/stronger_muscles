@@ -43,13 +43,12 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _apiService
-          .post(
-            ApiConfig.orders,
-            data: params.toPayload(),
-            cancelToken: cancelToken,
-            timeout: const Duration(seconds: 30),
-          );
+      final response = await _apiService.post(
+        ApiConfig.orders,
+        data: params.toPayload(),
+        cancelToken: cancelToken,
+        timeout: const Duration(seconds: 30),
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final rawData = response.data;
@@ -103,17 +102,16 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
     CancelToken? cancelToken,
   }) async {
     try {
-      final response = await _apiService
-          .post(
-            ApiConfig.payOrder(orderId),
-            data: {
-              'gateway': gateway,
-              if (customerName != null && customerName.isNotEmpty)
-                'first_name': customerName,
-            },
-            cancelToken: cancelToken,
-            timeout: const Duration(seconds: 30),
-          );
+      final response = await _apiService.post(
+        ApiConfig.payOrder(orderId),
+        data: {
+          'gateway': gateway,
+          if (customerName != null && customerName.isNotEmpty)
+            'first_name': customerName,
+        },
+        cancelToken: cancelToken,
+        timeout: const Duration(seconds: 30),
+      );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -171,11 +169,13 @@ class CheckoutRemoteDataSourceImpl implements CheckoutRemoteDataSource {
         ApiConfig.orderQuote,
         data: {
           'items': items
-              .map((i) => {
-                    'product_id': i.productId,
-                    'quantity': i.quantity,
-                    if (i.selectedSize != null) 'selected_size': i.selectedSize,
-                  })
+              .map(
+                (i) => {
+                  'product_id': i.productId,
+                  'quantity': i.quantity,
+                  if (i.selectedSize != null) 'selected_size': i.selectedSize,
+                },
+              )
               .toList(),
         },
         cancelToken: cancelToken,

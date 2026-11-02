@@ -14,10 +14,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationRemoteDataSource _remoteDataSource;
   final NotificationLocalDataSource _localDataSource;
 
-  NotificationRepositoryImpl(
-    this._remoteDataSource,
-    this._localDataSource,
-  );
+  NotificationRepositoryImpl(this._remoteDataSource, this._localDataSource);
 
   @override
   Future<Either<Failure, NotificationsPayloadEntity>> getNotifications({
@@ -40,8 +37,12 @@ class NotificationRepositoryImpl implements NotificationRepository {
         );
 
         if (page == 1) {
-          unawaited(_localDataSource.cacheNotifications(payloadModel.notifications));
-          unawaited(_localDataSource.cacheUnreadCount(payloadModel.unreadCount));
+          unawaited(
+            _localDataSource.cacheNotifications(payloadModel.notifications),
+          );
+          unawaited(
+            _localDataSource.cacheUnreadCount(payloadModel.unreadCount),
+          );
         }
 
         return payloadModel.toEntity();

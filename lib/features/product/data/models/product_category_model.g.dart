@@ -48,17 +48,14 @@ class ProductCategoryAdapter extends TypeAdapter<ProductCategory> {
 // **************************************************************************
 
 _$ProductCategoryImpl _$$ProductCategoryImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ProductCategoryImpl(
-      id: json['id'] as String,
-      name: json['name'] == null
-          ? null
-          : LocalizedString.fromJson(json['name'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => _$ProductCategoryImpl(
+  id: json['id'] as String,
+  name: json['name'] == null
+      ? null
+      : LocalizedString.fromJson(json['name'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$$ProductCategoryImplToJson(
-        _$ProductCategoryImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
+  _$ProductCategoryImpl instance,
+) => <String, dynamic>{'id': instance.id, 'name': instance.name};

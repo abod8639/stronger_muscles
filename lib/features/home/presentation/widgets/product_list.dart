@@ -16,9 +16,13 @@ class ProductList extends ConsumerWidget {
 
   /// Category id of the currently selected section (`null` = all products).
   static String? _selectedCategoryId(WidgetRef ref) {
-    final selectedIndex = ref.read(homeControllerProvider.notifier).selectedSectionIndex;
+    final selectedIndex = ref
+        .read(homeControllerProvider.notifier)
+        .selectedSectionIndex;
     final sections = ref.read(categoriesSectionsControllerProvider).valueOrNull;
-    if (sections == null || selectedIndex < 0 || selectedIndex >= sections.length) {
+    if (sections == null ||
+        selectedIndex < 0 ||
+        selectedIndex >= sections.length) {
       return null;
     }
     final id = sections[selectedIndex].id;
@@ -47,16 +51,19 @@ class ProductList extends ConsumerWidget {
       return SliverMainAxisGroup(
         slivers: [
           if (isSwitching)
-            const SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2.5)),
+            const SliverToBoxAdapter(
+              child: LinearProgressIndicator(minHeight: 2.5),
+            ),
           AppProductGrid(
             products: currentProducts,
             isLoadingMore: isLoadingMore,
             onNearEnd: hasMore
                 ? () => ref
-                    .read(homeControllerProvider.notifier)
-                    .loadMoreProducts(categoryId: _selectedCategoryId(ref))
+                      .read(homeControllerProvider.notifier)
+                      .loadMoreProducts(categoryId: _selectedCategoryId(ref))
                 : null,
-            onProductTap: (product) => context.push(AppRoutes.productDetails, extra: product),
+            onProductTap: (product) =>
+                context.push(AppRoutes.productDetails, extra: product),
           ),
         ],
       );
@@ -76,7 +83,8 @@ class ProductList extends ConsumerWidget {
                   child: AppEmptyState(
                     fillHeight: false,
                     icon: Icons.inventory_2_outlined,
-                    title: l10n?.noProductsFound ?? 'لا توجد منتجات متوفرة حالياً',
+                    title:
+                        l10n?.noProductsFound ?? 'لا توجد منتجات متوفرة حالياً',
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppDimens.spacingXl,
                       vertical: 48.0,
@@ -97,16 +105,19 @@ class ProductList extends ConsumerWidget {
             // A thin progress bar hints that a section switch is loading,
             // without hiding any product cards.
             if (isSwitching)
-              const SliverToBoxAdapter(child: LinearProgressIndicator(minHeight: 2.5)),
+              const SliverToBoxAdapter(
+                child: LinearProgressIndicator(minHeight: 2.5),
+              ),
             AppProductGrid(
               products: products,
               isLoadingMore: isLoadingMore,
               onNearEnd: hasMore
                   ? () => ref
-                      .read(homeControllerProvider.notifier)
-                      .loadMoreProducts(categoryId: _selectedCategoryId(ref))
+                        .read(homeControllerProvider.notifier)
+                        .loadMoreProducts(categoryId: _selectedCategoryId(ref))
                   : null,
-              onProductTap: (product) => context.push(AppRoutes.productDetails, extra: product),
+              onProductTap: (product) =>
+                  context.push(AppRoutes.productDetails, extra: product),
             ),
           ],
         );
@@ -123,7 +134,9 @@ class ProductList extends ConsumerWidget {
           title: AppErrorCard.messageFor(error, l10n),
           actionText: l10n?.retry ?? 'إعادة المحاولة',
           actionIcon: Icons.refresh_rounded,
-          onActionTap: () => ref.read(homeControllerProvider.notifier).fetchProductsForSection(
+          onActionTap: () => ref
+              .read(homeControllerProvider.notifier)
+              .fetchProductsForSection(
                 ref.read(homeControllerProvider.notifier).selectedSectionIndex,
                 categoryId: _selectedCategoryId(ref),
               ),

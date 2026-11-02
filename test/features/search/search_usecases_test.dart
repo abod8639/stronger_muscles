@@ -16,7 +16,9 @@ class FakeSearchRepository implements SearchRepository {
   FakeSearchRepository({this.searchResults = const []});
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> searchProducts(String query) async {
+  Future<Either<Failure, List<ProductEntity>>> searchProducts(
+    String query,
+  ) async {
     return Right(searchResults);
   }
 
@@ -44,7 +46,8 @@ class FakeSearchRepository implements SearchRepository {
   }
 
   @override
-  Either<Failure, List<String>> getSearchHistory() => Right(List.unmodifiable(history));
+  Either<Failure, List<String>> getSearchHistory() =>
+      Right(List.unmodifiable(history));
 
   @override
   Future<Either<Failure, List<String>>> addSearchTerm(String term) async {
@@ -80,18 +83,21 @@ void main() {
       price: 600.0,
     );
 
-    test('SearchProductsUseCase delegates to repository.searchProducts', () async {
-      final repo = FakeSearchRepository(searchResults: [p1, p2]);
-      final useCase = SearchProductsUseCase(repo);
+    test(
+      'SearchProductsUseCase delegates to repository.searchProducts',
+      () async {
+        final repo = FakeSearchRepository(searchResults: [p1, p2]);
+        final useCase = SearchProductsUseCase(repo);
 
-      final result = await useCase('protein');
+        final result = await useCase('protein');
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected Right but got Left'),
-        (products) => expect(products, [p1, p2]),
-      );
-    });
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected Right but got Left'),
+          (products) => expect(products, [p1, p2]),
+        );
+      },
+    );
 
     test('FilterByPriceUseCase filters products by range correctly', () {
       final repo = FakeSearchRepository();

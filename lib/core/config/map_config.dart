@@ -15,7 +15,8 @@ class MapConfig {
   static const String userAgentPackageName = 'com.example.stronger_muscles';
 
   /// Arabic-first regions tile provider.
-  static const String arabicTileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+  static const String arabicTileUrl =
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   /// English / International tile provider.
   static const String englishTileUrl =

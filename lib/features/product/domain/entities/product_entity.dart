@@ -217,8 +217,7 @@ class ProductEntity {
       averageRating: averageRating ?? this.averageRating,
       reviewCount: reviewCount ?? this.reviewCount,
       servingSize: servingSize ?? this.servingSize,
-      servingsPerContainer:
-          servingsPerContainer ?? this.servingsPerContainer,
+      servingsPerContainer: servingsPerContainer ?? this.servingsPerContainer,
       nutritionFacts: nutritionFacts ?? this.nutritionFacts,
       flavors: flavors ?? this.flavors,
       productSizes: productSizes ?? this.productSizes,

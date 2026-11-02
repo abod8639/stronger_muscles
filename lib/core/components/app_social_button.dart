@@ -21,7 +21,8 @@ class AppSocialButton extends StatelessWidget {
     this.borderRadius,
   });
 
-  static const String googleLogoAsset = 'assets/icon/google-icon-logo-svgrepo-com.svg';
+  static const String googleLogoAsset =
+      'assets/icon/google-icon-logo-svgrepo-com.svg';
 
   /// "Sign in with Google" style button with the official Google logo.
   AppSocialButton.google({

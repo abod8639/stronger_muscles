@@ -22,9 +22,9 @@ class CartRepositoryImpl implements CartRepository {
     required CartLocalDataSource localDataSource,
     CartRemoteDataSource? remoteDataSource,
     String Function()? getUserId,
-  })  : _localDataSource = localDataSource,
-        _remoteDataSource = remoteDataSource,
-        _getUserId = getUserId;
+  }) : _localDataSource = localDataSource,
+       _remoteDataSource = remoteDataSource,
+       _getUserId = getUserId;
 
   bool get _isAuthenticated {
     final uid = _getUserId?.call();
@@ -137,9 +137,7 @@ class CartRepositoryImpl implements CartRepository {
       await _localDataSource.removeCartItem(itemId);
 
       if (_remoteDataSource != null && _isAuthenticated) {
-        unawaited(
-          _remoteDataSource.removeFromCart(itemId).catchError((_) {}),
-        );
+        unawaited(_remoteDataSource.removeFromCart(itemId).catchError((_) {}));
       }
 
       return unit;
@@ -179,9 +177,7 @@ class CartRepositoryImpl implements CartRepository {
 
       if (_remoteDataSource != null && _isAuthenticated) {
         unawaited(
-          _remoteDataSource
-              .updateQuantity(itemId, quantity)
-              .catchError((_) {}),
+          _remoteDataSource.updateQuantity(itemId, quantity).catchError((_) {}),
         );
       }
 
@@ -195,9 +191,7 @@ class CartRepositoryImpl implements CartRepository {
       await _localDataSource.clearCart();
 
       if (_remoteDataSource != null && _isAuthenticated) {
-        unawaited(
-          _remoteDataSource.clearCart().catchError((_) {}),
-        );
+        unawaited(_remoteDataSource.clearCart().catchError((_) {}));
       }
 
       return unit;

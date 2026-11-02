@@ -58,11 +58,14 @@ class OrderView extends ConsumerWidget {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(AppDimens.spacingLg),
               itemCount: orders.length + (isLoadingMore ? 1 : 0),
-              separatorBuilder: (_, _) => const SizedBox(height: AppDimens.spacingMd),
+              separatorBuilder: (_, _) =>
+                  const SizedBox(height: AppDimens.spacingMd),
               itemBuilder: (context, index) {
                 if (index >= orders.length) {
                   return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppDimens.spacingLg),
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimens.spacingLg,
+                    ),
                     child: Center(
                       child: SizedBox.square(
                         dimension: 24.0,
@@ -82,7 +85,8 @@ class OrderView extends ConsumerWidget {
                 final order = orders[index];
                 return OrderCard(
                   order: order,
-                  onTap: () => context.push(AppRoutes.orderDetails, extra: order),
+                  onTap: () =>
+                      context.push(AppRoutes.orderDetails, extra: order),
                 );
               },
             ),

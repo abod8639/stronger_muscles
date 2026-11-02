@@ -47,7 +47,9 @@ class _ProductSizeSelectorState extends State<ProductSizeSelector> {
       return const SizedBox.shrink();
     }
 
-    final sizes = productSizes.isNotEmpty ? productSizes.map((ps) => ps.size).toList() : legacySizes;
+    final sizes = productSizes.isNotEmpty
+        ? productSizes.map((ps) => ps.size).toList()
+        : legacySizes;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

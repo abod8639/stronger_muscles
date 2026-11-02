@@ -30,29 +30,29 @@ class ProductDetailsFamilyParams {
       (product?.id).hashCode ^ initialFlavor.hashCode ^ initialSize.hashCode;
 }
 
-final _productDetailsControllerFamily = StateNotifierProvider.autoDispose.family<
-    ProductDetailsController,
-    ProductDetailsState,
-    ProductDetailsFamilyParams
->((ref, params) {
-  return ProductDetailsController(
-    params.product,
-    ref: ref,
-    initialFlavor: params.initialFlavor,
-    initialSize: params.initialSize,
-  );
-});
+final _productDetailsControllerFamily = StateNotifierProvider.autoDispose
+    .family<
+      ProductDetailsController,
+      ProductDetailsState,
+      ProductDetailsFamilyParams
+    >((ref, params) {
+      return ProductDetailsController(
+        params.product,
+        ref: ref,
+        initialFlavor: params.initialFlavor,
+        initialSize: params.initialSize,
+      );
+    });
 
 /// Family wrapper for [productDetailsControllerProvider] supporting flexible arguments.
 class ProductDetailsControllerFamilyWrapper {
   const ProductDetailsControllerFamilyWrapper();
 
-  AutoDisposeStateNotifierProvider<ProductDetailsController, ProductDetailsState>
-      call(
-    dynamic product, {
-    String? initialFlavor,
-    String? initialSize,
-  }) {
+  AutoDisposeStateNotifierProvider<
+    ProductDetailsController,
+    ProductDetailsState
+  >
+  call(dynamic product, {String? initialFlavor, String? initialSize}) {
     return _productDetailsControllerFamily(
       ProductDetailsFamilyParams(
         product: product,
@@ -63,7 +63,8 @@ class ProductDetailsControllerFamilyWrapper {
   }
 }
 
-const productDetailsControllerProvider = ProductDetailsControllerFamilyWrapper();
+const productDetailsControllerProvider =
+    ProductDetailsControllerFamilyWrapper();
 
 /// StateNotifier responsible for Product Details UI logic, selections, and price computations.
 class ProductDetailsController extends StateNotifier<ProductDetailsState> {
@@ -76,16 +77,16 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
     WishlistController? wishlistController,
     String? initialFlavor,
     String? initialSize,
-  })  : _ref = ref,
-        super(
-          _computeInitialState(
-            product,
-            ref: ref,
-            wishlistController: wishlistController,
-            initialFlavor: initialFlavor,
-            initialSize: initialSize,
-          ),
-        );
+  }) : _ref = ref,
+       super(
+         _computeInitialState(
+           product,
+           ref: ref,
+           wishlistController: wishlistController,
+           initialFlavor: initialFlavor,
+           initialSize: initialSize,
+         ),
+       );
 
   static ProductDetailsState _computeInitialState(
     dynamic product, {
@@ -152,9 +153,7 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
       wishlistCtrl.addToWishlist(target);
     }
 
-    state = state.copyWith(
-      isInWishlist: wishlistCtrl.isInWishlist(productId),
-    );
+    state = state.copyWith(isInWishlist: wishlistCtrl.isInWishlist(productId));
   }
 
   void updateFlavor(String flavor) {
@@ -205,8 +204,9 @@ class ProductDetailsController extends StateNotifier<ProductDetailsState> {
   static List<String> _getFlavors(dynamic prod, [dynamic sizeObj]) {
     if (sizeObj != null) {
       try {
-        final sizeFlavors =
-            (sizeObj.flavors as List?)?.map((e) => e.toString()).toList();
+        final sizeFlavors = (sizeObj.flavors as List?)
+            ?.map((e) => e.toString())
+            .toList();
         if (sizeFlavors != null && sizeFlavors.isNotEmpty) {
           return sizeFlavors;
         }

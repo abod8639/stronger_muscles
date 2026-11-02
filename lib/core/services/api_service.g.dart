@@ -13,8 +13,9 @@ String _$apiServiceHash() => r'a16c90b59bd8b93f3015af0c827e2140bc7192c4';
 final apiServiceProvider = Provider<ApiService>.internal(
   apiService,
   name: r'apiServiceProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$apiServiceHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$apiServiceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );

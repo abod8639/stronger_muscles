@@ -18,9 +18,7 @@ abstract class PaymentRemoteDataSource {
     String? lastName,
   });
 
-  Future<List<PaymentMethodModel>> getPaymentMethods({
-    String lang = 'ar',
-  });
+  Future<List<PaymentMethodModel>> getPaymentMethods({String lang = 'ar'});
 }
 
 /// Concrete implementation of [PaymentRemoteDataSource] using [ApiService] and Dio.
@@ -52,9 +50,7 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
 
       final data = response.data;
       if (data is Map<String, dynamic> && data['data'] != null) {
-        return PaymentInitResult.fromJson(
-          data['data'] as Map<String, dynamic>,
-        );
+        return PaymentInitResult.fromJson(data['data'] as Map<String, dynamic>);
       }
 
       throw const ServerFailure(
@@ -69,7 +65,8 @@ class PaymentRemoteDataSourceImpl implements PaymentRemoteDataSource {
         throw const NetworkFailure();
       }
       throw ServerFailure(
-        message: e.response?.data?['message']?.toString() ??
+        message:
+            e.response?.data?['message']?.toString() ??
             e.message ??
             'فشل في بدء عملية الدفع عبر الخادم',
         statusCode: e.response?.statusCode,

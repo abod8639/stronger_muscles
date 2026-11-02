@@ -26,7 +26,9 @@ class CheckoutPaymentStep extends ConsumerWidget {
         ),
         PaymentMethodSelector(
           selectedMethodId: selectedMethod,
-          onMethodSelected: ref.read(checkoutControllerProvider.notifier).setPaymentMethod,
+          onMethodSelected: ref
+              .read(checkoutControllerProvider.notifier)
+              .setPaymentMethod,
           methods: [
             PaymentMethodEntity(
               id: 'cash',

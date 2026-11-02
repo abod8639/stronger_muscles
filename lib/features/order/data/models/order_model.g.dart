@@ -194,7 +194,8 @@ _$OrderModelImpl _$$OrderModelImplFromJson(Map<String, dynamic> json) =>
       shippingAddress: json['shipping_address'] == null
           ? null
           : AddressModel.fromJson(
-              json['shipping_address'] as Map<String, dynamic>),
+              json['shipping_address'] as Map<String, dynamic>,
+            ),
       phoneNumber: json['phone_number'] as String?,
       userName: json['user_name'] as String?,
       taxAmount: (json['taxAmount'] as num?)?.toDouble() ?? 0,
@@ -242,7 +243,8 @@ _$OrderItemModelImpl _$$OrderItemModelImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$OrderItemModelImplToJson(
-    _$OrderItemModelImpl instance) {
+  _$OrderItemModelImpl instance,
+) {
   final val = <String, dynamic>{
     'id': instance.id,
     'order_id': instance.orderId,

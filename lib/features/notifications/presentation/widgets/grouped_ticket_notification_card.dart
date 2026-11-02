@@ -27,15 +27,14 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
           .markNotificationsAsRead(item.allNotificationIds);
     }
 
-    context.push(
-      AppRoutes.supportChat,
-      extra: {'ticket_id': item.ticketId},
-    );
+    context.push(AppRoutes.supportChat, extra: {'ticket_id': item.ticketId});
   }
 
   void _copyTicketNumber(BuildContext context) {
     Clipboard.setData(ClipboardData(text: item.ticketNumber));
-    final copied = AppLocalizations.of(context)?.copiedToClipboard ?? 'تم النسخ إلى الحافظة';
+    final copied =
+        AppLocalizations.of(context)?.copiedToClipboard ??
+        'تم النسخ إلى الحافظة';
     AppSnackBar.showInfo(context, '$copied: ${item.ticketNumber}');
   }
 
@@ -44,14 +43,22 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
   static ({String label, String status}) _statusOf(String? rawStatus) {
     final s = (rawStatus ?? '').toLowerCase().trim();
     return switch (s) {
-      'waiting_user' || 'waiting_customer' || 'بانتظار العميل' || 'بانتظار ردك' =>
-        (label: 'بانتظار العميل', status: 'waiting_user'),
-      'waiting_admin' || 'waiting_agent' || 'بانتظار الدعم' || 'بانتظار الرد' =>
-        (label: 'بانتظار الدعم', status: 'in_progress'),
-      'open' || 'in_progress' || 'مفتوحة' || 'قيد المعالجة' =>
-        (label: 'مفتوحة', status: 'open'),
-      'closed' || 'resolved' || 'مغلقة' || 'تم الحل' =>
-        (label: 'مغلقة', status: 'closed'),
+      'waiting_user' ||
+      'waiting_customer' ||
+      'بانتظار العميل' ||
+      'بانتظار ردك' => (label: 'بانتظار العميل', status: 'waiting_user'),
+      'waiting_admin' ||
+      'waiting_agent' ||
+      'بانتظار الدعم' ||
+      'بانتظار الرد' => (label: 'بانتظار الدعم', status: 'in_progress'),
+      'open' ||
+      'in_progress' ||
+      'مفتوحة' ||
+      'قيد المعالجة' => (label: 'مفتوحة', status: 'open'),
+      'closed' ||
+      'resolved' ||
+      'مغلقة' ||
+      'تم الحل' => (label: 'مغلقة', status: 'closed'),
       _ => (label: rawStatus ?? 'تذكرة دعم', status: 'open'),
     };
   }
@@ -120,7 +127,9 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
                       children: [
                         Flexible(
                           child: Text(
-                            item.senderName ?? l10n?.supportTeam ?? 'الدعم الفني',
+                            item.senderName ??
+                                l10n?.supportTeam ??
+                                'الدعم الفني',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: textTheme.titleSmall?.copyWith(
@@ -161,13 +170,20 @@ class GroupedTicketNotificationCard extends ConsumerWidget {
                   spacing: AppDimens.spacingSm,
                   runSpacing: AppDimens.spacingXs,
                   children: [
-                    AppBadge(label: status.label, color: ticketStatusColor(status.status)),
+                    AppBadge(
+                      label: status.label,
+                      color: ticketStatusColor(status.status),
+                    ),
                     if (category != null && category.isNotEmpty)
                       AppBadge(label: category, color: mutedColor, alpha: 0.1),
                   ],
                 ),
               ),
-              Icon(Icons.chat_bubble_outline_rounded, size: 16.0, color: mutedColor),
+              Icon(
+                Icons.chat_bubble_outline_rounded,
+                size: 16.0,
+                color: mutedColor,
+              ),
               const SizedBox(width: 6.0),
               Text(
                 '${item.totalMessagesCount}',

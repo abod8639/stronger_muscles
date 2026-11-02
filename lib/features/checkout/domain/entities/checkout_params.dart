@@ -99,10 +99,8 @@ class CheckoutParams {
 
   String get gateway => paymentMethod == 'stripe' ? 'stripe' : 'paymob';
 
-  double get totalAmount => items.fold(
-        0.0,
-        (sum, item) => sum + (item.unitPrice * item.quantity),
-      );
+  double get totalAmount =>
+      items.fold(0.0, (sum, item) => sum + (item.unitPrice * item.quantity));
 
   CheckoutParams copyWith({
     dynamic addressId,

@@ -18,26 +18,36 @@ class AppTheme {
     final primary = isDark ? AppColors.primaryDark : AppColors.primary;
     final onSurface = isDark ? AppColors.white : AppColors.black;
 
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: brightness,
-    ).copyWith(
-      primary: primary,
-      onPrimary: AppColors.white,
-      secondary: AppColors.accent,
-      onSecondary: AppColors.white,
-      error: AppColors.error,
-      onError: AppColors.white,
-      surface: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-      onSurface: onSurface,
-      onSurfaceVariant: isDark ? const Color(0xFF9E9E9E) : AppColors.greyDark,
-      surfaceContainerLowest: isDark ? AppColors.backgroundDark : AppColors.white,
-      surfaceContainerHighest: isDark ? const Color(0xFF2A2A2A) : AppColors.greyLight,
-      outline: isDark ? const Color(0xFF5C5C5C) : const Color(0xFFBDBDBD),
-      outlineVariant: isDark ? const Color(0x1FFFFFFF) : AppColors.greyMedium,
-    );
+    final colorScheme =
+        ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          brightness: brightness,
+        ).copyWith(
+          primary: primary,
+          onPrimary: AppColors.white,
+          secondary: AppColors.accent,
+          onSecondary: AppColors.white,
+          error: AppColors.error,
+          onError: AppColors.white,
+          surface: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+          onSurface: onSurface,
+          onSurfaceVariant: isDark
+              ? const Color(0xFF9E9E9E)
+              : AppColors.greyDark,
+          surfaceContainerLowest: isDark
+              ? AppColors.backgroundDark
+              : AppColors.white,
+          surfaceContainerHighest: isDark
+              ? const Color(0xFF2A2A2A)
+              : AppColors.greyLight,
+          outline: isDark ? const Color(0xFF5C5C5C) : const Color(0xFFBDBDBD),
+          outlineVariant: isDark
+              ? const Color(0x1FFFFFFF)
+              : AppColors.greyMedium,
+        );
 
-    OutlineInputBorder inputBorder(Color color, [double width = 1.0]) => OutlineInputBorder(
+    OutlineInputBorder inputBorder(Color color, [double width = 1.0]) =>
+        OutlineInputBorder(
           borderRadius: AppRadius.allMd,
           borderSide: BorderSide(color: color, width: width),
         );
@@ -46,13 +56,18 @@ class AppTheme {
       brightness: brightness,
       colorScheme: colorScheme,
       primaryColor: primary,
-      scaffoldBackgroundColor: isDark ? AppColors.backgroundDark : AppColors.backgroundLight,
+      scaffoldBackgroundColor: isDark
+          ? AppColors.backgroundDark
+          : AppColors.backgroundLight,
       appBarTheme: AppBarTheme(
         backgroundColor: colorScheme.surface,
         foregroundColor: onSurface,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
-        titleTextStyle: AppTextStyles.h3.copyWith(color: onSurface, fontWeight: FontWeight.bold),
+        titleTextStyle: AppTextStyles.h3.copyWith(
+          color: onSurface,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       textTheme: TextTheme(
         displayLarge: AppTextStyles.h1.copyWith(color: onSurface),
@@ -60,7 +75,9 @@ class AppTheme {
         displaySmall: AppTextStyles.h3.copyWith(color: onSurface),
         bodyLarge: AppTextStyles.bodyLarge.copyWith(color: onSurface),
         bodyMedium: AppTextStyles.bodyMedium.copyWith(color: onSurface),
-        bodySmall: AppTextStyles.bodySmall.copyWith(color: colorScheme.onSurfaceVariant),
+        bodySmall: AppTextStyles.bodySmall.copyWith(
+          color: colorScheme.onSurfaceVariant,
+        ),
         labelLarge: AppTextStyles.button,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -75,8 +92,13 @@ class AppTheme {
         filled: true,
         fillColor: isDark ? const Color(0xFF242424) : AppColors.greyLight,
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 13.0),
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: colorScheme.onSurfaceVariant),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14.0,
+          vertical: 13.0,
+        ),
+        hintStyle: AppTextStyles.bodyMedium.copyWith(
+          color: colorScheme.onSurfaceVariant,
+        ),
         border: inputBorder(colorScheme.outlineVariant),
         enabledBorder: inputBorder(colorScheme.outlineVariant),
         focusedBorder: inputBorder(AppColors.primary, 1.5),
@@ -95,7 +117,10 @@ class AppTheme {
         shape: AppRadius.shapeLg,
         elevation: 0,
       ),
-      dividerTheme: DividerThemeData(color: colorScheme.outlineVariant, thickness: 1),
+      dividerTheme: DividerThemeData(
+        color: colorScheme.outlineVariant,
+        thickness: 1,
+      ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         shape: AppRadius.shapeMd,
@@ -104,7 +129,10 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: AppRadius.topBottomSheet),
         showDragHandle: false,
       ),
-      dialogTheme: DialogThemeData(shape: AppRadius.shapeXl, backgroundColor: colorScheme.surface),
+      dialogTheme: DialogThemeData(
+        shape: AppRadius.shapeXl,
+        backgroundColor: colorScheme.surface,
+      ),
     );
   }
 }

@@ -23,6 +23,8 @@ DeleteAddressUseCase deleteAddressUseCase(DeleteAddressUseCaseRef ref) {
 }
 
 @riverpod
-SetDefaultAddressUseCase setDefaultAddressUseCase(SetDefaultAddressUseCaseRef ref) {
+SetDefaultAddressUseCase setDefaultAddressUseCase(
+  SetDefaultAddressUseCaseRef ref,
+) {
   return SetDefaultAddressUseCase(ref.watch(addressRepositoryProvider));
 }

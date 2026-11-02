@@ -5,23 +5,14 @@ class ProductCategoryEntity {
   final String id;
   final LocalizedStringEntity? name;
 
-  const ProductCategoryEntity({
-    required this.id,
-    this.name,
-  });
+  const ProductCategoryEntity({required this.id, this.name});
 
   String getLocalizedName({String locale = 'en'}) {
     return name?.getValue(locale: locale) ?? '';
   }
 
-  ProductCategoryEntity copyWith({
-    String? id,
-    LocalizedStringEntity? name,
-  }) {
-    return ProductCategoryEntity(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
+  ProductCategoryEntity copyWith({String? id, LocalizedStringEntity? name}) {
+    return ProductCategoryEntity(id: id ?? this.id, name: name ?? this.name);
   }
 
   @override

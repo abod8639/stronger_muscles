@@ -38,35 +38,32 @@ class CategoryModel with _$CategoryModel {
   }
 
   CategoryEntity toEntity() => CategoryEntity(
-        id: id,
-        name: name?.toEntity(),
-        description: description?.toEntity(),
-        imageUrl: imageUrl,
-        sortOrder: sortOrder,
-        isActive: isActive,
-        createdAt: createdAt,
-        icon: icon,
-        parentId: parentId,
-        children: children.map((c) => c.toEntity()).toList(),
-      );
+    id: id,
+    name: name?.toEntity(),
+    description: description?.toEntity(),
+    imageUrl: imageUrl,
+    sortOrder: sortOrder,
+    isActive: isActive,
+    createdAt: createdAt,
+    icon: icon,
+    parentId: parentId,
+    children: children.map((c) => c.toEntity()).toList(),
+  );
 
   static CategoryModel fromEntity(CategoryEntity entity) => CategoryModel(
-        id: entity.id,
-        name: entity.name != null
-            ? LocalizedString.fromEntity(entity.name!)
-            : null,
-        description: entity.description != null
-            ? LocalizedString.fromEntity(entity.description!)
-            : null,
-        imageUrl: entity.imageUrl,
-        sortOrder: entity.sortOrder,
-        isActive: entity.isActive,
-        createdAt: entity.createdAt,
-        icon: entity.icon,
-        parentId: entity.parentId,
-        children:
-            entity.children.map((c) => CategoryModel.fromEntity(c)).toList(),
-      );
+    id: entity.id,
+    name: entity.name != null ? LocalizedString.fromEntity(entity.name!) : null,
+    description: entity.description != null
+        ? LocalizedString.fromEntity(entity.description!)
+        : null,
+    imageUrl: entity.imageUrl,
+    sortOrder: entity.sortOrder,
+    isActive: entity.isActive,
+    createdAt: entity.createdAt,
+    icon: entity.icon,
+    parentId: entity.parentId,
+    children: entity.children.map((c) => CategoryModel.fromEntity(c)).toList(),
+  );
 }
 
 /// Predefined categories for the supplements store

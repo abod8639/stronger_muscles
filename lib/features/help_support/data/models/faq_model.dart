@@ -29,12 +29,13 @@ class FaqModel {
       questionAr: (json['question_ar'] ?? json['questionAr'] ?? '').toString(),
       answerEn: (json['answer_en'] ?? json['answerEn'] ?? '').toString(),
       answerAr: (json['answer_ar'] ?? json['answerAr'] ?? '').toString(),
-      category: (json['category'] ?? FaqCategory.ordersShipping.name).toString(),
+      category: (json['category'] ?? FaqCategory.ordersShipping.name)
+          .toString(),
       tags: (json['tags'] is List)
           ? (json['tags'] as List)
-              .map((e) => e?.toString() ?? '')
-              .where((s) => s.isNotEmpty)
-              .toList()
+                .map((e) => e?.toString() ?? '')
+                .where((s) => s.isNotEmpty)
+                .toList()
           : const [],
     );
   }

@@ -45,21 +45,29 @@ class PaymentLocalDataSourceImpl implements PaymentLocalDataSource {
         final dynamic rawList = box.get(_cachedMethodsKey);
         if (rawList is List) {
           return rawList
-              .map((item) =>
-                  PaymentMethodModel.fromJson(Map<String, dynamic>.from(item as Map)))
+              .map(
+                (item) => PaymentMethodModel.fromJson(
+                  Map<String, dynamic>.from(item as Map),
+                ),
+              )
               .toList();
         }
       }
       final dynamic fallbackList = _inMemoryFallback[_cachedMethodsKey];
       if (fallbackList is List) {
         return fallbackList
-            .map((item) =>
-                PaymentMethodModel.fromJson(Map<String, dynamic>.from(item as Map)))
+            .map(
+              (item) => PaymentMethodModel.fromJson(
+                Map<String, dynamic>.from(item as Map),
+              ),
+            )
             .toList();
       }
       return [];
     } catch (e) {
-      debugPrint('[PaymentLocalDataSource] Error reading cached payment methods: $e');
+      debugPrint(
+        '[PaymentLocalDataSource] Error reading cached payment methods: $e',
+      );
       return [];
     }
   }
@@ -75,7 +83,9 @@ class PaymentLocalDataSourceImpl implements PaymentLocalDataSource {
       _inMemoryFallback[_cachedMethodsKey] = jsonList;
     } catch (e) {
       debugPrint('[PaymentLocalDataSource] Error caching payment methods: $e');
-      _inMemoryFallback[_cachedMethodsKey] = methods.map((m) => m.toJson()).toList();
+      _inMemoryFallback[_cachedMethodsKey] = methods
+          .map((m) => m.toJson())
+          .toList();
     }
   }
 

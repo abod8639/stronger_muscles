@@ -40,7 +40,10 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
     final effectiveMax = maxData > minData ? maxData : minData + 0.1;
 
     // Clamp values to current bounds and guarantee start <= end to prevent assertion errors
-    final rawStart = _currentRangeValues.start.clamp(effectiveMin, effectiveMax);
+    final rawStart = _currentRangeValues.start.clamp(
+      effectiveMin,
+      effectiveMax,
+    );
     final rawEnd = _currentRangeValues.end.clamp(effectiveMin, effectiveMax);
     final startValue = rawStart <= rawEnd ? rawStart : rawEnd;
     final endValue = rawEnd >= rawStart ? rawEnd : rawStart;
@@ -53,8 +56,14 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AppBadge(label: format(effectiveValues.start), color: AppColors.primary),
-            AppBadge(label: format(effectiveValues.end), color: AppColors.primary),
+            AppBadge(
+              label: format(effectiveValues.start),
+              color: AppColors.primary,
+            ),
+            AppBadge(
+              label: format(effectiveValues.end),
+              color: AppColors.primary,
+            ),
           ],
         ),
         if (maxData > minData)
@@ -66,18 +75,25 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
             divisions: (effectiveMax - effectiveMin) > 50
                 ? 50
                 : ((effectiveMax - effectiveMin) >= 1
-                    ? (effectiveMax - effectiveMin).toInt()
-                    : 1),
-            labels: RangeLabels(format(effectiveValues.start), format(effectiveValues.end)),
+                      ? (effectiveMax - effectiveMin).toInt()
+                      : 1),
+            labels: RangeLabels(
+              format(effectiveValues.start),
+              format(effectiveValues.end),
+            ),
             onChanged: (values) => setState(() => _currentRangeValues = values),
           )
         else
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingLg + 4),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppDimens.spacingLg + 4,
+            ),
             child: Text(
               '${l10n?.price ?? 'Price'}: ${format(minData)}',
               textAlign: TextAlign.center,
-              style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: context.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         const SizedBox(height: AppDimens.spacingXl),
@@ -86,12 +102,16 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
             Expanded(
               child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingMd),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppDimens.spacingMd,
+                  ),
                   side: BorderSide(color: context.colorScheme.outlineVariant),
                   shape: AppRadius.shapeMd,
                 ),
                 onPressed: () {
-                  ref.read(productSearchControllerProvider.notifier).resetPriceFilter();
+                  ref
+                      .read(productSearchControllerProvider.notifier)
+                      .resetPriceFilter();
                   Navigator.pop(context);
                 },
                 child: Text(
@@ -107,7 +127,9 @@ class PriceFilterSliderState extends ConsumerState<PriceFilterSlider> {
                 text: l10n?.apply ?? 'Apply',
                 icon: Icons.check_rounded,
                 onPressed: () {
-                  ref.read(productSearchControllerProvider.notifier).applyPriceFilter(
+                  ref
+                      .read(productSearchControllerProvider.notifier)
+                      .applyPriceFilter(
                         effectiveValues.start,
                         effectiveValues.end,
                       );

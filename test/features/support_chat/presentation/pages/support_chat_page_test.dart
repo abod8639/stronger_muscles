@@ -15,7 +15,8 @@ class FakeSupportChatRepository implements SupportChatRepository {
 
   @override
   Future<Either<Failure, SupportTicketEntity>> getTicketDetails(
-      String ticketId) async {
+    String ticketId,
+  ) async {
     return Right(
       SupportTicketEntity(
         id: ticketId,
@@ -67,7 +68,8 @@ class FakeSupportChatRepository implements SupportChatRepository {
 
   @override
   Future<Either<Failure, SupportTicketEntity>> closeTicket(
-      String ticketId) async {
+    String ticketId,
+  ) async {
     return Right(
       SupportTicketEntity(
         id: ticketId,
@@ -82,45 +84,47 @@ class FakeSupportChatRepository implements SupportChatRepository {
 }
 
 void main() {
-  testWidgets('SupportChatPage renders ticket details, messages, and allows sending replies', (tester) async {
-    final fakeRepo = FakeSupportChatRepository();
+  testWidgets(
+    'SupportChatPage renders ticket details, messages, and allows sending replies',
+    (tester) async {
+      final fakeRepo = FakeSupportChatRepository();
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          supportChatRepositoryProvider.overrideWithValue(fakeRepo),
-        ],
-        child: MaterialApp(
-          locale: const Locale('ar'),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: const SupportChatPage(ticketId: '99'),
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            supportChatRepositoryProvider.overrideWithValue(fakeRepo),
+          ],
+          child: MaterialApp(
+            locale: const Locale('ar'),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const SupportChatPage(ticketId: '99'),
+          ),
         ),
-      ),
-    );
+      );
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    // Verify header and subject
-    expect(find.textContaining('99'), findsWidgets);
-    expect(find.textContaining('مشكلة تجريبية'), findsWidgets);
+      // Verify header and subject
+      expect(find.textContaining('99'), findsWidgets);
+      expect(find.textContaining('مشكلة تجريبية'), findsWidgets);
 
-    // Verify messages
-    expect(find.text('مرحباً، كيف نساعدك؟'), findsOneWidget);
-    expect(find.text('أريد الاستفسار عن الشحنة'), findsOneWidget);
+      // Verify messages
+      expect(find.text('مرحباً، كيف نساعدك؟'), findsOneWidget);
+      expect(find.text('أريد الاستفسار عن الشحنة'), findsOneWidget);
 
-    // Enter message in input bar and submit
-    final inputFinder = find.byType(TextField);
-    expect(inputFinder, findsOneWidget);
-    await tester.enterText(inputFinder, 'رسالة تجربة جديدة');
-    await tester.pump();
+      // Enter message in input bar and submit
+      final inputFinder = find.byType(TextField);
+      expect(inputFinder, findsOneWidget);
+      await tester.enterText(inputFinder, 'رسالة تجربة جديدة');
+      await tester.pump();
 
-    final sendFinder = find.byIcon(Icons.send_rounded);
-    expect(sendFinder, findsOneWidget);
-    await tester.tap(sendFinder);
-    await tester.pumpAndSettle();
+      final sendFinder = find.byIcon(Icons.send_rounded);
+      expect(sendFinder, findsOneWidget);
+      await tester.tap(sendFinder);
+      await tester.pumpAndSettle();
 
-    expect(fakeRepo.sentText, 'رسالة تجربة جديدة');
-  });
+      expect(fakeRepo.sentText, 'رسالة تجربة جديدة');
+    },
+  );
 }
-

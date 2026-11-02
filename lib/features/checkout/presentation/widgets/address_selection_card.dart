@@ -7,10 +7,7 @@ import '../controllers/checkout_controller.dart';
 
 /// Clean Architecture widget for selecting a shipping address during checkout.
 class AddressSelectionCard extends ConsumerWidget {
-  const AddressSelectionCard({
-    super.key,
-    required this.address,
-  });
+  const AddressSelectionCard({super.key, required this.address});
 
   final AddressEntity address;
 

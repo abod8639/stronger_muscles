@@ -6,7 +6,9 @@ Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
 void main() {
   group('AppEmptyState', () {
-    testWidgets('renders inside a scroll view (unbounded height)', (tester) async {
+    testWidgets('renders inside a scroll view (unbounded height)', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         _wrap(
           ListView(
@@ -31,12 +33,19 @@ void main() {
       await tester.pumpWidget(
         _wrap(
           const Dialog(
-            child: AppEmptyState(icon: Icons.check, title: 'Done', fillHeight: false),
+            child: AppEmptyState(
+              icon: Icons.check,
+              title: 'Done',
+              fillHeight: false,
+            ),
           ),
         ),
       );
 
-      final dialogCard = find.descendant(of: find.byType(Dialog), matching: find.byType(Material));
+      final dialogCard = find.descendant(
+        of: find.byType(Dialog),
+        matching: find.byType(Material),
+      );
       final dialogHeight = tester.getSize(dialogCard.first).height;
       expect(dialogHeight, lessThan(400));
     });
@@ -78,7 +87,10 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.text('Title'), findsOneWidget);
       expect(find.text('body'), findsOneWidget);
-      expect(tester.getSize(find.byType(AppBottomSheetScaffold)).height, lessThan(400));
+      expect(
+        tester.getSize(find.byType(AppBottomSheetScaffold)).height,
+        lessThan(400),
+      );
     });
 
     testWidgets('fills the given fraction with heightFactor', (tester) async {
@@ -95,7 +107,8 @@ void main() {
         ),
       );
 
-      final screenHeight = tester.view.physicalSize.height / tester.view.devicePixelRatio;
+      final screenHeight =
+          tester.view.physicalSize.height / tester.view.devicePixelRatio;
       expect(
         tester.getSize(find.byType(AppBottomSheetScaffold)).height,
         moreOrLessEquals(screenHeight * 0.5),
@@ -147,7 +160,9 @@ void main() {
   });
 
   group('AppAvatar', () {
-    testWidgets('shows the initial when there is a name but no photo', (tester) async {
+    testWidgets('shows the initial when there is a name but no photo', (
+      tester,
+    ) async {
       await tester.pumpWidget(_wrap(const AppAvatar(name: 'sara')));
       expect(find.text('S'), findsOneWidget);
     });
@@ -162,7 +177,13 @@ void main() {
     testWidgets('AppListTile reports taps and shows a chevron', (tester) async {
       var taps = 0;
       await tester.pumpWidget(
-        _wrap(AppListTile(icon: Icons.language, title: 'Language', onTap: () => taps++)),
+        _wrap(
+          AppListTile(
+            icon: Icons.language,
+            title: 'Language',
+            onTap: () => taps++,
+          ),
+        ),
       );
       await tester.tap(find.text('Language'));
       expect(taps, 1);
@@ -171,7 +192,14 @@ void main() {
 
     testWidgets('AppStatCard shows value and label', (tester) async {
       await tester.pumpWidget(
-        _wrap(const AppStatCard(icon: Icons.favorite, value: '7', label: 'Wishlist', color: Colors.red)),
+        _wrap(
+          const AppStatCard(
+            icon: Icons.favorite,
+            value: '7',
+            label: 'Wishlist',
+            color: Colors.red,
+          ),
+        ),
       );
       expect(find.text('7'), findsOneWidget);
       expect(find.text('Wishlist'), findsOneWidget);
@@ -183,9 +211,10 @@ void main() {
       await tester.pumpWidget(
         _wrap(const AppShimmer(child: AppSkeletonBox(width: 50, height: 10))),
       );
-      Color colorNow() => ((tester.widget<Container>(find.byType(Container).last).decoration
-              as BoxDecoration)
-          .color)!;
+      Color colorNow() =>
+          ((tester.widget<Container>(find.byType(Container).last).decoration
+                  as BoxDecoration)
+              .color)!;
       final first = colorNow();
       await tester.pump(const Duration(milliseconds: 600));
       expect(colorNow(), isNot(first));
@@ -193,10 +222,18 @@ void main() {
   });
 
   group('AppCircleIconButton & AppSearchField', () {
-    testWidgets('circle button shows a capped badge and reports taps', (tester) async {
+    testWidgets('circle button shows a capped badge and reports taps', (
+      tester,
+    ) async {
       var taps = 0;
       await tester.pumpWidget(
-        _wrap(AppCircleIconButton(icon: Icons.notifications, badgeCount: 120, onPressed: () => taps++)),
+        _wrap(
+          AppCircleIconButton(
+            icon: Icons.notifications,
+            badgeCount: 120,
+            onPressed: () => taps++,
+          ),
+        ),
       );
       expect(find.text('99+'), findsOneWidget);
       await tester.tap(find.byIcon(Icons.notifications));
@@ -205,7 +242,9 @@ void main() {
 
     testWidgets('search field forwards submitted text', (tester) async {
       String? submitted;
-      await tester.pumpWidget(_wrap(AppSearchField(onSubmitted: (v) => submitted = v)));
+      await tester.pumpWidget(
+        _wrap(AppSearchField(onSubmitted: (v) => submitted = v)),
+      );
       await tester.enterText(find.byType(TextField), 'whey');
       await tester.testTextInput.receiveAction(TextInputAction.search);
       expect(submitted, 'whey');

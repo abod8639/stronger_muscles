@@ -5,14 +5,16 @@ import 'package:stronger_muscles/features/payment/presentation/pages/payment_gat
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: child,
-    );
+  locale: const Locale('en'),
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: child,
+);
 
 void main() {
-  testWidgets('shows transaction details and the proceed button', (tester) async {
+  testWidgets('shows transaction details and the proceed button', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       _wrap(
         const PaymentGatewayView(
@@ -37,21 +39,24 @@ void main() {
     expect(find.text('100% Secure & Encrypted Payments'), findsOneWidget);
   });
 
-  testWidgets('warns instead of showing the button when there is no payment link', (tester) async {
-    await tester.pumpWidget(
-      _wrap(
-        const PaymentGatewayView(
-          paymentResult: PaymentResultEntity(
-            success: false,
-            paymentUrl: '',
-            transactionId: '',
-            reference: '',
+  testWidgets(
+    'warns instead of showing the button when there is no payment link',
+    (tester) async {
+      await tester.pumpWidget(
+        _wrap(
+          const PaymentGatewayView(
+            paymentResult: PaymentResultEntity(
+              success: false,
+              paymentUrl: '',
+              transactionId: '',
+              reference: '',
+            ),
           ),
         ),
-      ),
-    );
+      );
 
-    expect(find.text('Proceed to Payment'), findsNothing);
-    expect(find.byIcon(Icons.link_off_rounded), findsOneWidget);
-  });
+      expect(find.text('Proceed to Payment'), findsNothing);
+      expect(find.byIcon(Icons.link_off_rounded), findsOneWidget);
+    },
+  );
 }

@@ -23,20 +23,25 @@ class AddReviewBottomSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required String productId,
     ReviewEntity? existingReview,
-  }) =>
-      AppBottomSheetScaffold.show<void>(
-        context,
-        (_) => AddReviewBottomSheet(productId: productId, existingReview: existingReview),
-      );
+  }) => AppBottomSheetScaffold.show<void>(
+    context,
+    (_) => AddReviewBottomSheet(
+      productId: productId,
+      existingReview: existingReview,
+    ),
+  );
 
   @override
-  ConsumerState<AddReviewBottomSheet> createState() => _AddReviewBottomSheetState();
+  ConsumerState<AddReviewBottomSheet> createState() =>
+      _AddReviewBottomSheetState();
 }
 
 class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   late double _rating = widget.existingReview?.rating ?? 5.0;
-  late final _commentController = TextEditingController(text: widget.existingReview?.comment ?? '');
+  late final _commentController = TextEditingController(
+    text: widget.existingReview?.comment ?? '',
+  );
   bool _isLoading = false;
 
   bool get _isEditing => widget.existingReview != null;
@@ -61,7 +66,10 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
 
     if (success) {
       Navigator.of(context).pop();
-      AppSnackBar.showSuccess(context, _isEditing ? l10n.reviewUpdated : l10n.reviewAdded);
+      AppSnackBar.showSuccess(
+        context,
+        _isEditing ? l10n.reviewUpdated : l10n.reviewAdded,
+      );
     } else {
       AppSnackBar.showError(context, l10n.reviewSaveFailed);
     }
@@ -88,8 +96,12 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     onPressed: () => setState(() => _rating = star.toDouble()),
                     icon: Icon(
-                      star <= _rating ? Icons.star_rounded : Icons.star_outline_rounded,
-                      color: star <= _rating ? AppColors.warning : context.colorScheme.outlineVariant,
+                      star <= _rating
+                          ? Icons.star_rounded
+                          : Icons.star_outline_rounded,
+                      color: star <= _rating
+                          ? AppColors.warning
+                          : context.colorScheme.outlineVariant,
                     ),
                   ),
               ],
@@ -110,8 +122,9 @@ class _AddReviewBottomSheetState extends ConsumerState<AddReviewBottomSheet> {
               maxLines: 4,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
-              validator: (value) =>
-                  value == null || value.trim().isEmpty ? l10n.reviewCommentRequired : null,
+              validator: (value) => value == null || value.trim().isEmpty
+                  ? l10n.reviewCommentRequired
+                  : null,
             ),
             const SizedBox(height: AppDimens.spacingXl),
             AppPrimaryButton(

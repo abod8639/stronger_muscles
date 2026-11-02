@@ -4,30 +4,33 @@ import 'package:stronger_muscles/features/profile/data/models/user_model.dart';
 
 void main() {
   group('AddressModel Tests', () {
-    test('fullAddress joins present fields with comma and skips empty or null', () {
-      const fullAddr = AddressModel(
-        id: 1,
-        street: 'King Fahd Rd',
-        city: 'Riyadh',
-        state: 'Riyadh Province',
-        postalCode: '12345',
-        country: 'Saudi Arabia',
-      );
-      expect(
-        fullAddr.fullAddress,
-        'King Fahd Rd, Riyadh, Riyadh Province, 12345, Saudi Arabia',
-      );
+    test(
+      'fullAddress joins present fields with comma and skips empty or null',
+      () {
+        const fullAddr = AddressModel(
+          id: 1,
+          street: 'King Fahd Rd',
+          city: 'Riyadh',
+          state: 'Riyadh Province',
+          postalCode: '12345',
+          country: 'Saudi Arabia',
+        );
+        expect(
+          fullAddr.fullAddress,
+          'King Fahd Rd, Riyadh, Riyadh Province, 12345, Saudi Arabia',
+        );
 
-      const partialAddr = AddressModel(
-        id: 2,
-        street: 'Main Street',
-        city: 'Jeddah',
-        state: '',
-        postalCode: null,
-        country: 'Saudi Arabia',
-      );
-      expect(partialAddr.fullAddress, 'Main Street, Jeddah, Saudi Arabia');
-    });
+        const partialAddr = AddressModel(
+          id: 2,
+          street: 'Main Street',
+          city: 'Jeddah',
+          state: '',
+          postalCode: null,
+          country: 'Saudi Arabia',
+        );
+        expect(partialAddr.fullAddress, 'Main Street, Jeddah, Saudi Arabia');
+      },
+    );
 
     test('shortAddress returns city and country', () {
       const addr = AddressModel(
@@ -117,7 +120,7 @@ void main() {
             'street': 'Street A',
             'city': 'Riyadh',
             'is_default': true,
-          }
+          },
         ],
       };
 

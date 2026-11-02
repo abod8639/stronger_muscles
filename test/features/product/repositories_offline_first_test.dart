@@ -38,40 +38,49 @@ void main() {
   });
 
   group('CategoryLocalDataSource Offline Cache Tests', () {
-    test('cacheCategories stores and getCachedCategories retrieves list', () async {
-      const sampleCategories = [
-        CategoryModel(
-          id: 'cat-prot',
-          name: LocalizedString(ar: 'بروتين', en: 'Protein'),
-          sortOrder: 1,
-        ),
-        CategoryModel(
-          id: 'cat-vit',
-          name: LocalizedString(ar: 'فيتامينات', en: 'Vitamins'),
-          sortOrder: 2,
-        ),
-      ];
+    test(
+      'cacheCategories stores and getCachedCategories retrieves list',
+      () async {
+        const sampleCategories = [
+          CategoryModel(
+            id: 'cat-prot',
+            name: LocalizedString(ar: 'بروتين', en: 'Protein'),
+            sortOrder: 1,
+          ),
+          CategoryModel(
+            id: 'cat-vit',
+            name: LocalizedString(ar: 'فيتامينات', en: 'Vitamins'),
+            sortOrder: 2,
+          ),
+        ];
 
-      expect(localDataSource.getCachedCategories(), isEmpty);
+        expect(localDataSource.getCachedCategories(), isEmpty);
 
-      await localDataSource.cacheCategories(sampleCategories);
+        await localDataSource.cacheCategories(sampleCategories);
 
-      final cached = localDataSource.getCachedCategories();
-      expect(cached.length, 2);
-      expect(cached.first.id, 'cat-prot');
-      expect(cached.first.getLocalizedName(locale: 'ar'), 'بروتين');
-      expect(cached.last.id, 'cat-vit');
-    });
+        final cached = localDataSource.getCachedCategories();
+        expect(cached.length, 2);
+        expect(cached.first.id, 'cat-prot');
+        expect(cached.first.getLocalizedName(locale: 'ar'), 'بروتين');
+        expect(cached.last.id, 'cat-vit');
+      },
+    );
 
     test('cacheCategories clears previous items when updating cache', () async {
       const initial = [
-        CategoryModel(id: 'old-1', name: LocalizedString(en: 'Old')),
+        CategoryModel(
+          id: 'old-1',
+          name: LocalizedString(en: 'Old'),
+        ),
       ];
       await localDataSource.cacheCategories(initial);
       expect(localDataSource.getCachedCategories().length, 1);
 
       const updated = [
-        CategoryModel(id: 'new-1', name: LocalizedString(en: 'New')),
+        CategoryModel(
+          id: 'new-1',
+          name: LocalizedString(en: 'New'),
+        ),
       ];
       await localDataSource.cacheCategories(updated);
 

@@ -7,13 +7,15 @@ import '../../domain/repositories/checkout_repository.dart';
 import '../../domain/usecases/get_checkout_quote_usecase.dart';
 import '../../domain/usecases/place_order_usecase.dart';
 
-final checkoutLocalDataSourceProvider =
-    Provider<CheckoutLocalDataSource>((ref) {
+final checkoutLocalDataSourceProvider = Provider<CheckoutLocalDataSource>((
+  ref,
+) {
   return CheckoutLocalDataSourceImpl();
 });
 
-final checkoutRemoteDataSourceProvider =
-    Provider<CheckoutRemoteDataSource>((ref) {
+final checkoutRemoteDataSourceProvider = Provider<CheckoutRemoteDataSource>((
+  ref,
+) {
   final apiService = ref.watch(apiServiceProvider);
   return CheckoutRemoteDataSourceImpl(apiService);
 });
@@ -33,7 +35,9 @@ final placeOrderUseCaseProvider = Provider<PlaceOrderUseCase>((ref) {
   return PlaceOrderUseCase(repository);
 });
 
-final getCheckoutQuoteUseCaseProvider = Provider<GetCheckoutQuoteUseCase>((ref) {
+final getCheckoutQuoteUseCaseProvider = Provider<GetCheckoutQuoteUseCase>((
+  ref,
+) {
   final repository = ref.watch(checkoutRepositoryProvider);
   return GetCheckoutQuoteUseCase(repository);
 });

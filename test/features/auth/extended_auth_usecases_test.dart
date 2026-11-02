@@ -58,16 +58,14 @@ class MockAuthRepository implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity?>> getCurrentUser({
     CancelToken? cancelToken,
-  }) async =>
-      const Right(null);
+  }) async => const Right(null);
 
   @override
   Future<Either<Failure, UserEntity>> login({
     required String email,
     required String password,
     CancelToken? cancelToken,
-  }) async =>
-      throw UnimplementedError();
+  }) async => throw UnimplementedError();
 
   @override
   Future<Either<Failure, Unit>> logout({CancelToken? cancelToken}) async =>
@@ -79,8 +77,7 @@ class MockAuthRepository implements AuthRepository {
     required String email,
     required String password,
     CancelToken? cancelToken,
-  }) async =>
-      throw UnimplementedError();
+  }) async => throw UnimplementedError();
 }
 
 void main() {
@@ -118,32 +115,26 @@ void main() {
       final result = await useCase();
 
       expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (user) {
-          expect(user.id, 5);
-          expect(mockRepo.googleSignInCalled, isTrue);
-        },
-      );
+      result.fold((_) => fail('Expected Right'), (user) {
+        expect(user.id, 5);
+        expect(mockRepo.googleSignInCalled, isTrue);
+      });
     });
 
-    test('UpdateProfileUseCase delegates updated parameters to repository', () async {
-      final useCase = UpdateProfileUseCase(mockRepo);
+    test(
+      'UpdateProfileUseCase delegates updated parameters to repository',
+      () async {
+        final useCase = UpdateProfileUseCase(mockRepo);
 
-      final result = await useCase(
-        name: 'New Name',
-        phone: '+966500000000',
-      );
+        final result = await useCase(name: 'New Name', phone: '+966500000000');
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (updatedUser) {
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected Right'), (updatedUser) {
           expect(updatedUser.name, 'New Name');
           expect(mockRepo.lastUpdatedName, 'New Name');
           expect(mockRepo.lastUpdatedPhone, '+966500000000');
-        },
-      );
-    });
+        });
+      },
+    );
   });
 }

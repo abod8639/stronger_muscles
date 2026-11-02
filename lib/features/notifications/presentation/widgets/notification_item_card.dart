@@ -18,20 +18,20 @@ class NotificationItemCard extends ConsumerWidget {
   const NotificationItemCard({super.key, required this.notification});
 
   static Color _typeColor(String type) => switch (type) {
-        'promo' => AppColors.warning,
-        'order' => AppColors.primary,
-        'system' => AppColors.error,
-        'support' || 'support_ticket' => AppColors.info,
-        _ => AppColors.success,
-      };
+    'promo' => AppColors.warning,
+    'order' => AppColors.primary,
+    'system' => AppColors.error,
+    'support' || 'support_ticket' => AppColors.info,
+    _ => AppColors.success,
+  };
 
   static IconData _typeIcon(String type) => switch (type) {
-        'promo' => Icons.local_offer_outlined,
-        'order' => Icons.local_shipping_outlined,
-        'system' => Icons.security_outlined,
-        'support' || 'support_ticket' => Icons.support_agent_outlined,
-        _ => Icons.campaign_outlined,
-      };
+    'promo' => Icons.local_offer_outlined,
+    'order' => Icons.local_shipping_outlined,
+    'system' => Icons.security_outlined,
+    'support' || 'support_ticket' => Icons.support_agent_outlined,
+    _ => Icons.campaign_outlined,
+  };
 
   void _handleTap(BuildContext context, WidgetRef ref) {
     if (!notification.isRead) {
@@ -46,10 +46,7 @@ class NotificationItemCard extends ConsumerWidget {
 
     if (isSupport) {
       if (ticketId != null && ticketId.isNotEmpty) {
-        context.push(
-          AppRoutes.supportChat,
-          extra: {'ticket_id': ticketId},
-        );
+        context.push(AppRoutes.supportChat, extra: {'ticket_id': ticketId});
       } else {
         context.push(
           AppRoutes.helpSupport,
@@ -73,10 +70,7 @@ class NotificationItemCard extends ConsumerWidget {
     // 3. Products navigation
     final productId = notification.productId;
     if (productId != null && productId.isNotEmpty) {
-      context.push(
-        AppRoutes.productDetails,
-        extra: {'productId': productId},
-      );
+      context.push(AppRoutes.productDetails, extra: {'productId': productId});
       return;
     }
   }
@@ -114,7 +108,9 @@ class NotificationItemCard extends ConsumerWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: textTheme.titleSmall?.copyWith(
-                          fontWeight: notification.isRead ? FontWeight.w600 : FontWeight.bold,
+                          fontWeight: notification.isRead
+                              ? FontWeight.w600
+                              : FontWeight.bold,
                           color: context.colorScheme.onSurface,
                         ),
                       ),

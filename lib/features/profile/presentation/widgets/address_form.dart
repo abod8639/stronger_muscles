@@ -91,7 +91,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     });
 
     if (data != null) {
-      AppSnackBar.showSuccess(context, AppLocalizations.of(context)!.addressUpdatedSuccessfully);
+      AppSnackBar.showSuccess(
+        context,
+        AppLocalizations.of(context)!.addressUpdatedSuccessfully,
+      );
     }
   }
 
@@ -132,7 +135,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     });
 
     if (data != null) {
-      AppSnackBar.showSuccess(context, AppLocalizations.of(context)!.addressUpdatedSuccessfully);
+      AppSnackBar.showSuccess(
+        context,
+        AppLocalizations.of(context)!.addressUpdatedSuccessfully,
+      );
     }
   }
 
@@ -154,10 +160,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
       longitude: _longitude,
     );
 
-    await ref.read(addressControllerProvider.notifier).saveAddressEntity(
-          id: widget.address?.id,
-          address: entity,
-        );
+    await ref
+        .read(addressControllerProvider.notifier)
+        .saveAddressEntity(id: widget.address?.id, address: entity);
 
     if (mounted) Navigator.of(context).pop();
   }
@@ -170,16 +175,22 @@ class _AddressFormState extends ConsumerState<AddressForm> {
     const gap = SizedBox(height: AppDimens.spacingLg);
     const hGap = SizedBox(width: AppDimens.spacingMd);
 
-    Widget field(TextEditingController controller, String label, {TextInputType? keyboardType}) =>
-        AppTextFormField(
-          controller: controller,
-          label: label,
-          keyboardType: keyboardType ?? TextInputType.text,
-          validator: (v) => v == null || v.trim().isEmpty ? l10n.thisFieldIsRequired : null,
-        );
+    Widget field(
+      TextEditingController controller,
+      String label, {
+      TextInputType? keyboardType,
+    }) => AppTextFormField(
+      controller: controller,
+      label: label,
+      keyboardType: keyboardType ?? TextInputType.text,
+      validator: (v) =>
+          v == null || v.trim().isEmpty ? l10n.thisFieldIsRequired : null,
+    );
 
     return AppBottomSheetScaffold(
-      icon: widget.address == null ? Icons.add_location_alt_outlined : Icons.edit_location_alt_outlined,
+      icon: widget.address == null
+          ? Icons.add_location_alt_outlined
+          : Icons.edit_location_alt_outlined,
       title: widget.address == null ? l10n.addNewAddress : l10n.editAddress,
       child: Form(
         key: _formKey,
@@ -190,7 +201,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               children: [
                 Expanded(
                   child: AppSocialButton(
-                    icon: const Icon(Icons.my_location_rounded, size: AppDimens.iconSm),
+                    icon: const Icon(
+                      Icons.my_location_rounded,
+                      size: AppDimens.iconSm,
+                    ),
                     label: l10n.useCurrentLocation,
                     isLoading: _isLocating,
                     onPressed: isBusy ? null : _handleGetCurrentLocation,
@@ -199,7 +213,10 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                 hGap,
                 Expanded(
                   child: AppSocialButton(
-                    icon: const Icon(Icons.map_outlined, size: AppDimens.iconSm),
+                    icon: const Icon(
+                      Icons.map_outlined,
+                      size: AppDimens.iconSm,
+                    ),
                     label: l10n.selectOnMap,
                     isLoading: false,
                     onPressed: isBusy ? null : _handleSelectOnMap,
@@ -217,7 +234,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                   child: Stack(
                     children: [
                       FlutterMap(
-                        key: ValueKey('preview_${_latitude}_${_longitude}_${l10n.localeName}'),
+                        key: ValueKey(
+                          'preview_${_latitude}_${_longitude}_${l10n.localeName}',
+                        ),
                         options: MapOptions(
                           initialCenter: ll.LatLng(_latitude!, _longitude!),
                           initialZoom: 15.0,
@@ -226,7 +245,9 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                           ),
                         ),
                         children: [
-                          MapConfig.buildTileLayer(Localizations.localeOf(context)),
+                          MapConfig.buildTileLayer(
+                            Localizations.localeOf(context),
+                          ),
                           MarkerLayer(
                             markers: [
                               Marker(
@@ -256,16 +277,25 @@ class _AddressFormState extends ConsumerState<AddressForm> {
                         top: 8,
                         end: 8,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: context.colorScheme.surface.withValues(alpha: 0.85),
+                            color: context.colorScheme.surface.withValues(
+                              alpha: 0.85,
+                            ),
                             borderRadius: AppRadius.allPill,
                             boxShadow: context.subtleShadow,
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.edit_location_alt_outlined, size: 14, color: AppColors.primary),
+                              const Icon(
+                                Icons.edit_location_alt_outlined,
+                                size: 14,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 l10n.editAddress,
@@ -286,7 +316,11 @@ class _AddressFormState extends ConsumerState<AddressForm> {
             const SizedBox(height: AppDimens.spacingXl),
             field(_fullNameController, l10n.fullName),
             gap,
-            field(_phoneController, l10n.phoneNumber, keyboardType: TextInputType.phone),
+            field(
+              _phoneController,
+              l10n.phoneNumber,
+              keyboardType: TextInputType.phone,
+            ),
             gap,
             field(_streetController, l10n.streetAddress),
             gap,
@@ -316,8 +350,8 @@ class _AddressFormState extends ConsumerState<AddressForm> {
               iconOf: (label) => label == l10n.home
                   ? Icons.home_outlined
                   : label == l10n.work
-                      ? Icons.work_outline_rounded
-                      : Icons.place_outlined,
+                  ? Icons.work_outline_rounded
+                  : Icons.place_outlined,
               onSelected: (label) => setState(() => _selectedLabel = label),
             ),
             const SizedBox(height: AppDimens.spacingXl),

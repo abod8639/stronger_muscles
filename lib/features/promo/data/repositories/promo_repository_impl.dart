@@ -40,12 +40,7 @@ class PromoRepositoryImpl implements PromoRepository {
         ),
       );
     } on FormatException catch (e, st) {
-      return Left(
-        ParsingFailure(
-          originalError: e,
-          stackTrace: st,
-        ),
-      );
+      return Left(ParsingFailure(originalError: e, stackTrace: st));
     } catch (e, st) {
       return _fallbackCachedPromosOrFailure(
         Failure(
@@ -81,7 +76,8 @@ class PromoRepositoryImpl implements PromoRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم أثناء جلب العروض الترويجية',
       statusCode: e.response?.statusCode,

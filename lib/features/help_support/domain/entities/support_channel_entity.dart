@@ -1,9 +1,4 @@
-enum SupportChannelType {
-  whatsapp,
-  phone,
-  email,
-  ticket,
-}
+enum SupportChannelType { whatsapp, phone, email, ticket }
 
 class SupportChannelEntity {
   final String id;
@@ -32,5 +27,6 @@ class SupportChannelEntity {
 
   String getTitle(bool isArabic) => isArabic ? titleAr : titleEn;
   String getSubtitle(bool isArabic) => isArabic ? subtitleAr : subtitleEn;
-  String getAvailability(bool isArabic) => isArabic ? availabilityAr : availabilityEn;
+  String getAvailability(bool isArabic) =>
+      isArabic ? availabilityAr : availabilityEn;
 }

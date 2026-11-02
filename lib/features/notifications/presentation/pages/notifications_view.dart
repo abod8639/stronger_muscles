@@ -28,7 +28,10 @@ class NotificationsView extends ConsumerWidget {
           if (unreadCount > 0)
             IconButton(
               tooltip: l10n.markAllAsRead,
-              icon: const Icon(Icons.done_all_rounded, color: AppColors.primary),
+              icon: const Icon(
+                Icons.done_all_rounded,
+                color: AppColors.primary,
+              ),
               onPressed: notifier.markAllAsRead,
             ),
         ],
@@ -58,7 +61,9 @@ class NotificationsView extends ConsumerWidget {
           }
 
           final isLoadingMore = ref.watch(
-            notificationControllerProvider.notifier.select((n) => n.isLoadingMore),
+            notificationControllerProvider.notifier.select(
+              (n) => n.isLoadingMore,
+            ),
           );
           final hasMore = ref.watch(
             notificationControllerProvider.notifier.select((n) => n.hasMore),
@@ -69,12 +74,16 @@ class NotificationsView extends ConsumerWidget {
             onRefresh: notifier.refresh,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingMd),
+              padding: const EdgeInsets.symmetric(
+                vertical: AppDimens.spacingMd,
+              ),
               itemCount: feedItems.length + (isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index >= feedItems.length) {
                   return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppDimens.spacingLg),
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimens.spacingLg,
+                    ),
                     child: Center(
                       child: SizedBox.square(
                         dimension: 24.0,
@@ -85,23 +94,31 @@ class NotificationsView extends ConsumerWidget {
                 }
 
                 // Trigger pagination when reaching near bottom
-                if (index == feedItems.length - 3 && hasMore && !isLoadingMore) {
+                if (index == feedItems.length - 3 &&
+                    hasMore &&
+                    !isLoadingMore) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     notifier.loadMoreNotifications();
                   });
                 }
 
                 return switch (feedItems[index]) {
-                  SingleNotificationFeedItem(:final notification) => AppSwipeToDelete(
+                  SingleNotificationFeedItem(:final notification) =>
+                    AppSwipeToDelete(
                       dismissKey: ValueKey('notification_${notification.id}'),
                       margin: NotificationCardFrame.margin,
-                      onDeleted: () => notifier.deleteNotification(notification.id),
+                      onDeleted: () =>
+                          notifier.deleteNotification(notification.id),
                       child: NotificationItemCard(notification: notification),
                     ),
-                  final GroupedTicketNotificationFeedItem item => AppSwipeToDelete(
-                      dismissKey: ValueKey('ticket_group_${item.ticketId}_${item.ticketNumber}'),
+                  final GroupedTicketNotificationFeedItem item =>
+                    AppSwipeToDelete(
+                      dismissKey: ValueKey(
+                        'ticket_group_${item.ticketId}_${item.ticketNumber}',
+                      ),
                       margin: NotificationCardFrame.margin,
-                      onDeleted: () => notifier.deleteNotifications(item.allNotificationIds),
+                      onDeleted: () =>
+                          notifier.deleteNotifications(item.allNotificationIds),
                       child: GroupedTicketNotificationCard(item: item),
                     ),
                 };

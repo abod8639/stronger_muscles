@@ -35,7 +35,9 @@ class FakeWishlistRepository implements WishlistRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> removeFromWishlist(ProductEntity product) async {
+  Future<Either<Failure, Unit>> removeFromWishlist(
+    ProductEntity product,
+  ) async {
     if (failure != null) return Left(failure!);
     items.removeWhere((p) => p.id == product.id);
     return const Right(unit);
@@ -136,14 +138,17 @@ void main() {
       expect(repository.items, contains(testProduct));
     });
 
-    test('AddToWishlistUseCase does not duplicate product when already added', () async {
-      repository.items.add(testProduct);
+    test(
+      'AddToWishlistUseCase does not duplicate product when already added',
+      () async {
+        repository.items.add(testProduct);
 
-      final result = await addToWishlistUseCase(testProduct);
+        final result = await addToWishlistUseCase(testProduct);
 
-      expect(result.isRight(), isTrue);
-      expect(repository.items.length, 1);
-    });
+        expect(result.isRight(), isTrue);
+        expect(repository.items.length, 1);
+      },
+    );
 
     test('RemoveFromWishlistUseCase removes product from repository', () async {
       repository.items.add(testProduct);
@@ -163,11 +168,14 @@ void main() {
       expect(result.getOrElse((_) => false), isTrue);
     });
 
-    test('IsInWishlistUseCase returns false when product is not in wishlist', () {
-      final result = isInWishlistUseCase('prod-999');
+    test(
+      'IsInWishlistUseCase returns false when product is not in wishlist',
+      () {
+        final result = isInWishlistUseCase('prod-999');
 
-      expect(result.isRight(), isTrue);
-      expect(result.getOrElse((_) => true), isFalse);
-    });
+        expect(result.isRight(), isTrue);
+        expect(result.getOrElse((_) => true), isFalse);
+      },
+    );
   });
 }

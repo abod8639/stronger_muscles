@@ -9,7 +9,9 @@ class GetAddressesUseCase {
 
   const GetAddressesUseCase(this.repository);
 
-  Future<Either<Failure, List<AddressEntity>>> call() => repository.getAddresses();
+  Future<Either<Failure, List<AddressEntity>>> call() =>
+      repository.getAddresses();
 
-  Either<Failure, List<AddressEntity>> getCached() => repository.getCachedAddresses();
+  Either<Failure, List<AddressEntity>> getCached() =>
+      repository.getCachedAddresses();
 }

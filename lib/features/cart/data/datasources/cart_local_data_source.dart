@@ -80,10 +80,7 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
       final map = {for (final item in items) item.id: item};
       await box.putAll(map);
     } catch (e) {
-      throw ServerException(
-        message: 'تعذر تحديث ذاكرة السلة المحلية',
-        data: e,
-      );
+      throw ServerException(message: 'تعذر تحديث ذاكرة السلة المحلية', data: e);
     }
   }
 
@@ -93,10 +90,7 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
       final box = await _ensureBox();
       await box.delete(itemId);
     } catch (e) {
-      throw ServerException(
-        message: 'تعذر حذف العنصر من السلة',
-        data: e,
-      );
+      throw ServerException(message: 'تعذر حذف العنصر من السلة', data: e);
     }
   }
 
@@ -106,10 +100,7 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
       final box = await _ensureBox();
       await box.clear();
     } catch (e) {
-      throw ServerException(
-        message: 'تعذر تفريغ السلة',
-        data: e,
-      );
+      throw ServerException(message: 'تعذر تفريغ السلة', data: e);
     }
   }
 }

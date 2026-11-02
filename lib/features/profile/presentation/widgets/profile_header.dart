@@ -54,13 +54,20 @@ class ProfileHeader extends ConsumerWidget {
                   user.email,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: context.colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
           ),
           if (onTap != null)
-            AppIconTile(icon: Icons.edit_outlined, iconSize: 18.0, padding: 8.0, circular: true),
+            AppIconTile(
+              icon: Icons.edit_outlined,
+              iconSize: 18.0,
+              padding: 8.0,
+              circular: true,
+            ),
         ],
       ),
     );

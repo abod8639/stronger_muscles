@@ -15,8 +15,12 @@ class CheckoutStepControls extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
-    final isProcessing = ref.watch(checkoutControllerProvider.select((s) => s.isProcessing));
+    final currentStep = ref.watch(
+      checkoutControllerProvider.select((s) => s.currentStep),
+    );
+    final isProcessing = ref.watch(
+      checkoutControllerProvider.select((s) => s.isProcessing),
+    );
     final hasAddress = ref.watch(
       checkoutControllerProvider.select((s) => s.selectedAddress != null),
     );
@@ -30,7 +34,10 @@ class CheckoutStepControls extends ConsumerWidget {
           if (currentStep > 0) ...[
             Expanded(
               child: AppSocialButton(
-                icon: const Icon(Icons.arrow_back_rounded, size: AppDimens.iconSm),
+                icon: const Icon(
+                  Icons.arrow_back_rounded,
+                  size: AppDimens.iconSm,
+                ),
                 label: l10n.back,
                 height: _buttonHeight,
                 onPressed: isProcessing ? null : notifier.previousStep,
@@ -42,7 +49,9 @@ class CheckoutStepControls extends ConsumerWidget {
             flex: 2,
             child: AppPrimaryButton(
               text: isLastStep ? l10n.placeOrder : l10n.next,
-              icon: isLastStep ? Icons.check_circle_outline_rounded : Icons.arrow_forward_rounded,
+              icon: isLastStep
+                  ? Icons.check_circle_outline_rounded
+                  : Icons.arrow_forward_rounded,
               height: _buttonHeight,
               isLoading: isProcessing,
               onPressed: !canContinue

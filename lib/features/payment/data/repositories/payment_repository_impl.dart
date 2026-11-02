@@ -46,7 +46,8 @@ class PaymentRepositoryImpl implements PaymentRepository {
       }
       return Left(
         ServerFailure(
-          message: e.response?.data?['message']?.toString() ??
+          message:
+              e.response?.data?['message']?.toString() ??
               e.message ??
               'حدث خطأ أثناء معالجة الدفع',
           statusCode: e.response?.statusCode,
@@ -65,13 +66,13 @@ class PaymentRepositoryImpl implements PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, List<PaymentMethodEntity>>> getAvailablePaymentMethods({
-    String lang = 'ar',
-  }) async {
+  Future<Either<Failure, List<PaymentMethodEntity>>>
+  getAvailablePaymentMethods({String lang = 'ar'}) async {
     try {
       // 1. Fetch remote available payment methods
-      final remoteModels =
-          await _remoteDataSource.getPaymentMethods(lang: lang);
+      final remoteModels = await _remoteDataSource.getPaymentMethods(
+        lang: lang,
+      );
 
       // 2. Cache in Hive for offline access
       await _localDataSource.cachePaymentMethods(remoteModels);

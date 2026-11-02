@@ -29,7 +29,8 @@ class AppGuard {
         _showError(
           ref.context,
           title: l10n?.noInternetConnectionTitle ?? "لا يوجد اتصال",
-          message: l10n?.noInternetConnectionMessage ??
+          message:
+              l10n?.noInternetConnectionMessage ??
               "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
           isCritical: true,
@@ -128,7 +129,8 @@ class AppGuard {
         _showError(
           ref.context,
           title: l10n?.noInternetConnectionTitle ?? "لا يوجد اتصال",
-          message: l10n?.noInternetConnectionMessage ??
+          message:
+              l10n?.noInternetConnectionMessage ??
               "يرجى التحقق من اتصالك بالإنترنت للمتابعة",
           icon: Icons.wifi_off_rounded,
           isCritical: true,

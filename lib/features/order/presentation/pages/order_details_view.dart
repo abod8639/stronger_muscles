@@ -42,7 +42,10 @@ class OrderDetailsView extends StatelessWidget {
                 children: [
                   AppInfoRow(label: l10n.orderId, value: '#${order.id}'),
                   AppInfoRow(label: l10n.orderDate, value: formattedDate),
-                  AppInfoRow(label: l10n.paymentMethod, value: order.paymentMethodLabel(l10n)),
+                  AppInfoRow(
+                    label: l10n.paymentMethod,
+                    value: order.paymentMethodLabel(l10n),
+                  ),
                   AppInfoRow(
                     label: l10n.paymentStatus,
                     value: '',
@@ -50,12 +53,17 @@ class OrderDetailsView extends StatelessWidget {
                       alignment: AlignmentDirectional.centerEnd,
                       child: AppBadge(
                         label: order.isPaid ? l10n.paid : l10n.pending,
-                        color: order.isPaid ? AppColors.success : AppColors.warning,
+                        color: order.isPaid
+                            ? AppColors.success
+                            : AppColors.warning,
                       ),
                     ),
                   ),
                   if (trackingNumber != null && trackingNumber.isNotEmpty)
-                    AppInfoRow(label: l10n.trackingNumber, value: trackingNumber),
+                    AppInfoRow(
+                      label: l10n.trackingNumber,
+                      value: trackingNumber,
+                    ),
                 ],
               ),
             ),
@@ -82,7 +90,12 @@ class OrderDetailsView extends StatelessWidget {
                 children: [
                   for (final (index, item) in items.indexed) ...[
                     if (index > 0)
-                      Divider(height: 1.0, color: context.colorScheme.outlineVariant.withValues(alpha: 0.5)),
+                      Divider(
+                        height: 1.0,
+                        color: context.colorScheme.outlineVariant.withValues(
+                          alpha: 0.5,
+                        ),
+                      ),
                     AppOrderItemTile(
                       imageUrl: item.imageUrl,
                       title: item.productName,
@@ -105,12 +118,24 @@ class OrderDetailsView extends StatelessWidget {
               child: Column(
                 children: [
                   AppPriceRow(label: l10n.subtotal, amount: order.subtotal),
-                  AppPriceRow(label: l10n.shippingCost, amount: order.shippingCost),
-                  if (order.taxAmount > 0) AppPriceRow(label: l10n.tax, amount: order.taxAmount),
+                  AppPriceRow(
+                    label: l10n.shippingCost,
+                    amount: order.shippingCost,
+                  ),
+                  if (order.taxAmount > 0)
+                    AppPriceRow(label: l10n.tax, amount: order.taxAmount),
                   if (order.discount > 0)
-                    AppPriceRow(label: l10n.discount, amount: order.discount, isDiscount: true),
+                    AppPriceRow(
+                      label: l10n.discount,
+                      amount: order.discount,
+                      isDiscount: true,
+                    ),
                   const Divider(height: AppDimens.spacingLg + 4),
-                  AppPriceRow(label: l10n.totalAmount, amount: order.totalAmount, isTotal: true),
+                  AppPriceRow(
+                    label: l10n.totalAmount,
+                    amount: order.totalAmount,
+                    isTotal: true,
+                  ),
                 ],
               ),
             ),

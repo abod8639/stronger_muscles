@@ -86,14 +86,14 @@ class ProductSize with _$ProductSize {
   }
 
   ProductSizeEntity toEntity() => ProductSizeEntity(
-        size: size,
-        price: price,
-        discountPrice: discountPrice,
-        servings: servings,
-        weight: weight,
-        stockQuantity: stockQuantity,
-        flavors: flavors,
-      );
+    size: size,
+    price: price,
+    discountPrice: discountPrice,
+    servings: servings,
+    weight: weight,
+    stockQuantity: stockQuantity,
+    flavors: flavors,
+  );
 
   static ProductSize fromEntity(ProductSizeEntity entity) {
     final s = ProductSize(

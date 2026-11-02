@@ -14,10 +14,7 @@ part 'promo_controller.g.dart';
 @riverpod
 Future<List<PromoEntity>> promos(PromosRef ref) async {
   final result = await ref.watch(getPromosUseCaseProvider).call();
-  return result.fold(
-    (failure) => throw failure,
-    (promos) => promos,
-  );
+  return result.fold((failure) => throw failure, (promos) => promos);
 }
 
 @riverpod

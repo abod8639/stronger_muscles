@@ -35,8 +35,9 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
     if (text.isEmpty) return;
 
     _messageController.clear();
-    final notifier =
-        ref.read(supportChatControllerProvider(widget.ticketId).notifier);
+    final notifier = ref.read(
+      supportChatControllerProvider(widget.ticketId).notifier,
+    );
     final success = await notifier.sendMessage(text);
 
     if (success && mounted) {
@@ -101,8 +102,9 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
 
     // Auto-scroll when new messages arrive via WebSocket or polling
     ref.listen<int?>(
-      supportChatControllerProvider(widget.ticketId)
-          .select((s) => s.ticket?.messages.length),
+      supportChatControllerProvider(
+        widget.ticketId,
+      ).select((s) => s.ticket?.messages.length),
       (prev, next) {
         if (next != null && (prev == null || next > prev)) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -114,8 +116,9 @@ class _SupportChatPageState extends ConsumerState<SupportChatPage> {
 
     // Error feedback
     ref.listen<AsyncValue>(
-      supportChatControllerProvider(widget.ticketId)
-          .select((s) => s.messageState),
+      supportChatControllerProvider(
+        widget.ticketId,
+      ).select((s) => s.messageState),
       (prev, next) {
         next.whenOrNull(
           error: (error, _) => AppSnackBar.showError(

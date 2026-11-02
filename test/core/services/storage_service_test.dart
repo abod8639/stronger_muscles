@@ -50,12 +50,18 @@ void main() {
       await StorageService.saveData('username', 'dexter');
       await StorageService.saveData('age', 28);
       await StorageService.saveData('is_active', true);
-      await StorageService.saveData('settings', {'notifications': true, 'theme': 'dark'});
+      await StorageService.saveData('settings', {
+        'notifications': true,
+        'theme': 'dark',
+      });
 
       expect(StorageService.getData('username'), 'dexter');
       expect(StorageService.getData('age'), 28);
       expect(StorageService.getData('is_active'), true);
-      expect(StorageService.getData('settings'), {'notifications': true, 'theme': 'dark'});
+      expect(StorageService.getData('settings'), {
+        'notifications': true,
+        'theme': 'dark',
+      });
     });
 
     test('clearAll wipes all data from the auth box', () async {

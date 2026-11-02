@@ -19,15 +19,12 @@ class ImageUrl with _$ImageUrl {
   factory ImageUrl.fromJson(Map<String, dynamic> json) =>
       _$ImageUrlFromJson(json);
 
-  ImageUrlEntity toEntity() => ImageUrlEntity(
-        thumbnail: thumbnail,
-        medium: medium,
-        original: original,
-      );
+  ImageUrlEntity toEntity() =>
+      ImageUrlEntity(thumbnail: thumbnail, medium: medium, original: original);
 
   static ImageUrl fromEntity(ImageUrlEntity entity) => ImageUrl(
-        thumbnail: entity.thumbnail,
-        medium: entity.medium,
-        original: entity.original,
-      );
+    thumbnail: entity.thumbnail,
+    medium: entity.medium,
+    original: entity.original,
+  );
 }

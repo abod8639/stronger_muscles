@@ -31,7 +31,8 @@ List<CartItemModel> parseCartItemsList(dynamic rawData) {
   }
 
   if (targetData is Map) {
-    targetData = targetData['items'] ?? targetData['data'] ?? targetData['cart'];
+    targetData =
+        targetData['items'] ?? targetData['data'] ?? targetData['cart'];
   }
 
   if (targetData is! List) return [];
@@ -40,7 +41,9 @@ List<CartItemModel> parseCartItemsList(dynamic rawData) {
   for (final element in targetData) {
     if (element is Map) {
       try {
-        items.add(CartItemModel.safeFromJson(Map<String, dynamic>.from(element)));
+        items.add(
+          CartItemModel.safeFromJson(Map<String, dynamic>.from(element)),
+        );
       } catch (_) {
         // Skip malformed individual items rather than crashing the entire list
       }
@@ -78,7 +81,9 @@ class CartItemModel with _$CartItemModel {
         _normalizeProductJson(Map<String, dynamic>.from(rawProduct)),
       );
     } else {
-      throw const ParsingException(message: 'بيانات المنتج في السلة غير متوفرة أو تالفة');
+      throw const ParsingException(
+        message: 'بيانات المنتج في السلة غير متوفرة أو تالفة',
+      );
     }
 
     final rawQuantity = json['quantity'];
@@ -87,13 +92,19 @@ class CartItemModel with _$CartItemModel {
         : (int.tryParse(rawQuantity?.toString() ?? '') ?? 1);
 
     return CartItemModel(
-      id: json['id']?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      id:
+          json['id']?.toString() ??
+          DateTime.now().millisecondsSinceEpoch.toString(),
       userId: json['user_id']?.toString() ?? json['userId']?.toString() ?? '',
       product: parsedProduct,
       quantity: parsedQty > 0 ? parsedQty : 1,
-      addedAt: json['added_at'] != null ? DateTime.tryParse(json['added_at'].toString()) : null,
-      selectedFlavor: json['selected_flavor']?.toString() ?? json['flavor']?.toString(),
-      selectedSize: json['selected_size']?.toString() ?? json['size']?.toString(),
+      addedAt: json['added_at'] != null
+          ? DateTime.tryParse(json['added_at'].toString())
+          : null,
+      selectedFlavor:
+          json['selected_flavor']?.toString() ?? json['flavor']?.toString(),
+      selectedSize:
+          json['selected_size']?.toString() ?? json['size']?.toString(),
     );
   }
 
@@ -107,11 +118,12 @@ class CartItemModel with _$CartItemModel {
     }
 
     if (cleanMap['discount_price'] is String) {
-      cleanMap['discount_price'] =
-          double.tryParse(cleanMap['discount_price'] as String);
+      cleanMap['discount_price'] = double.tryParse(
+        cleanMap['discount_price'] as String,
+      );
     } else if (cleanMap['discount_price'] is num) {
-      cleanMap['discount_price'] =
-          (cleanMap['discount_price'] as num).toDouble();
+      cleanMap['discount_price'] = (cleanMap['discount_price'] as num)
+          .toDouble();
     }
 
     if (cleanMap['stock_quantity'] is String) {
@@ -140,16 +152,15 @@ class CartItemModel with _$CartItemModel {
         cleanMap['imageUrls'] = rawImages.map((img) {
           if (img is Map) {
             return {
-              'thumbnail': img['thumbnail'] ?? img['original'] ?? img['medium'] ?? '',
-              'medium': img['medium'] ?? img['original'] ?? img['thumbnail'] ?? '',
-              'original': img['original'] ?? img['medium'] ?? img['thumbnail'] ?? '',
+              'thumbnail':
+                  img['thumbnail'] ?? img['original'] ?? img['medium'] ?? '',
+              'medium':
+                  img['medium'] ?? img['original'] ?? img['thumbnail'] ?? '',
+              'original':
+                  img['original'] ?? img['medium'] ?? img['thumbnail'] ?? '',
             };
           } else if (img is String) {
-            return {
-              'thumbnail': img,
-              'medium': img,
-              'original': img,
-            };
+            return {'thumbnail': img, 'medium': img, 'original': img};
           }
           return {'thumbnail': '', 'medium': '', 'original': ''};
         }).toList();

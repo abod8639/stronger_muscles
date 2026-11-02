@@ -19,10 +19,7 @@ class SearchRemoteDataSourceImpl implements SearchRemoteDataSource {
     try {
       final response = await _apiService.get(
         ApiConfig.products,
-        queryParameters: {
-          'search': query,
-          'limit': 50,
-        },
+        queryParameters: {'search': query, 'limit': 50},
       );
 
       final data = response.data;

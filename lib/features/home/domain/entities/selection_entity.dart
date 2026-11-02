@@ -5,11 +5,7 @@ class SelectionEntity {
   final String label;
   final String? iconKey;
 
-  const SelectionEntity({
-    required this.id,
-    required this.label,
-    this.iconKey,
-  });
+  const SelectionEntity({required this.id, required this.label, this.iconKey});
 
   @override
   bool operator ==(Object other) =>

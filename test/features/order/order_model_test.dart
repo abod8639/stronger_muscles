@@ -41,12 +41,18 @@ void main() {
       expect(cancelledOrder.isCompleted, isFalse);
     });
 
-    test('formattedDate formats date correctly or returns empty string when null', () {
-      expect(baseOrder.formattedDate, DateFormat('d MMMM yyyy').format(testDate));
+    test(
+      'formattedDate formats date correctly or returns empty string when null',
+      () {
+        expect(
+          baseOrder.formattedDate,
+          DateFormat('d MMMM yyyy').format(testDate),
+        );
 
-      final orderWithoutDate = baseOrder.copyWith(orderDate: null);
-      expect(orderWithoutDate.formattedDate, isEmpty);
-    });
+        final orderWithoutDate = baseOrder.copyWith(orderDate: null);
+        expect(orderWithoutDate.formattedDate, isEmpty);
+      },
+    );
 
     test('fromJson and toJson maintain data integrity', () {
       final json = {
@@ -71,7 +77,7 @@ void main() {
             'quantity': 2,
             'subtotal': 300.0,
             'selected_flavor': 'Fruit Punch',
-          }
+          },
         ],
       };
 
@@ -112,19 +118,21 @@ void main() {
       expect(item.price, 125.0);
     });
 
-    test('fromJson reads the tax charged and defaults it to 0 for older orders', () {
-      final base = {
-        'id': 'order-202',
-        'user_id': 'user-001',
-        'address_id': 'addr-01',
-        'subtotal': 100,
-        'shippingCost': 50,
-        'total_amount': 164,
-      };
+    test(
+      'fromJson reads the tax charged and defaults it to 0 for older orders',
+      () {
+        final base = {
+          'id': 'order-202',
+          'user_id': 'user-001',
+          'address_id': 'addr-01',
+          'subtotal': 100,
+          'shippingCost': 50,
+          'total_amount': 164,
+        };
 
-      expect(OrderModel.fromJson({...base, 'taxAmount': 14}).taxAmount, 14.0);
-      expect(OrderModel.fromJson(base).taxAmount, 0.0);
-    });
+        expect(OrderModel.fromJson({...base, 'taxAmount': 14}).taxAmount, 14.0);
+        expect(OrderModel.fromJson(base).taxAmount, 0.0);
+      },
+    );
   });
 }
-

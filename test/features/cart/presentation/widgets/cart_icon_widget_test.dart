@@ -25,11 +25,7 @@ void main() {
       overrides: [
         cartControllerProvider.overrideWith(() => FakeCartController(items)),
       ],
-      child: const MaterialApp(
-        home: Scaffold(
-          body: CartIcon(),
-        ),
-      ),
+      child: const MaterialApp(home: Scaffold(body: CartIcon())),
     );
   }
 
@@ -49,7 +45,9 @@ void main() {
       expect(badge.isLabelVisible, isFalse);
     });
 
-    testWidgets('shows badge with item count when cart contains items', (tester) async {
+    testWidgets('shows badge with item count when cart contains items', (
+      tester,
+    ) async {
       const sampleProduct = ProductEntity(
         id: 'p1',
         name: LocalizedStringEntity(en: 'Whey'),

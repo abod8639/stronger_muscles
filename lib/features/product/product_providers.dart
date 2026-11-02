@@ -27,15 +27,21 @@ final productLocalDataSourceProvider = Provider<ProductLocalDataSource>((ref) {
   return ProductLocalDataSource();
 });
 
-final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((ref) {
+final productRemoteDataSourceProvider = Provider<ProductRemoteDataSource>((
+  ref,
+) {
   return ProductRemoteDataSource(ref.watch(apiServiceProvider));
 });
 
-final categoryLocalDataSourceProvider = Provider<CategoryLocalDataSource>((ref) {
+final categoryLocalDataSourceProvider = Provider<CategoryLocalDataSource>((
+  ref,
+) {
   return CategoryLocalDataSource();
 });
 
-final categoryRemoteDataSourceProvider = Provider<CategoryRemoteDataSource>((ref) {
+final categoryRemoteDataSourceProvider = Provider<CategoryRemoteDataSource>((
+  ref,
+) {
   return CategoryRemoteDataSource(ref.watch(apiServiceProvider));
 });
 
@@ -62,9 +68,7 @@ final categoryRepositoryProvider = Provider<CategoryRepository>((ref) {
 });
 
 final reviewRepositoryProvider = Provider<ReviewRepository>((ref) {
-  return ReviewRepositoryImpl(
-    ref.watch(reviewRemoteDataSourceProvider),
-  );
+  return ReviewRepositoryImpl(ref.watch(reviewRemoteDataSourceProvider));
 });
 
 // ---------------------------------------------------------------------------
@@ -83,25 +87,34 @@ final searchProductsUseCaseProvider = Provider<SearchProductsUseCase>((ref) {
   return SearchProductsUseCase(ref.watch(productRepositoryProvider));
 });
 
-final getCachedProductsUseCaseProvider = Provider<GetCachedProductsUseCase>((ref) {
+final getCachedProductsUseCaseProvider = Provider<GetCachedProductsUseCase>((
+  ref,
+) {
   return GetCachedProductsUseCase(ref.watch(productRepositoryProvider));
 });
 
-final getAllCategoriesUseCaseProvider = Provider<GetAllCategoriesUseCase>((ref) {
+final getAllCategoriesUseCaseProvider = Provider<GetAllCategoriesUseCase>((
+  ref,
+) {
   return GetAllCategoriesUseCase(ref.watch(categoryRepositoryProvider));
 });
 
-final getCachedCategoriesUseCaseProvider = Provider<GetCachedCategoriesUseCase>((ref) {
-  return GetCachedCategoriesUseCase(ref.watch(categoryRepositoryProvider));
-});
+final getCachedCategoriesUseCaseProvider = Provider<GetCachedCategoriesUseCase>(
+  (ref) {
+    return GetCachedCategoriesUseCase(ref.watch(categoryRepositoryProvider));
+  },
+);
 
-final getProductReviewsUseCaseProvider = Provider<GetProductReviewsUseCase>((ref) {
+final getProductReviewsUseCaseProvider = Provider<GetProductReviewsUseCase>((
+  ref,
+) {
   return GetProductReviewsUseCase(ref.watch(reviewRepositoryProvider));
 });
 
-final getUserProductReviewUseCaseProvider = Provider<GetUserProductReviewUseCase>((ref) {
-  return GetUserProductReviewUseCase(ref.watch(reviewRepositoryProvider));
-});
+final getUserProductReviewUseCaseProvider =
+    Provider<GetUserProductReviewUseCase>((ref) {
+      return GetUserProductReviewUseCase(ref.watch(reviewRepositoryProvider));
+    });
 
 final submitReviewUseCaseProvider = Provider<SubmitReviewUseCase>((ref) {
   return SubmitReviewUseCase(ref.watch(reviewRepositoryProvider));

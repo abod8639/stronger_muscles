@@ -12,7 +12,8 @@ part of 'category_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 CategoryModel _$CategoryModelFromJson(Map<String, dynamic> json) {
   return _CategoryModel.fromJson(json);
@@ -50,20 +51,22 @@ mixin _$CategoryModel {
 /// @nodoc
 abstract class $CategoryModelCopyWith<$Res> {
   factory $CategoryModelCopyWith(
-          CategoryModel value, $Res Function(CategoryModel) then) =
-      _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
+    CategoryModel value,
+    $Res Function(CategoryModel) then,
+  ) = _$CategoryModelCopyWithImpl<$Res, CategoryModel>;
   @useResult
-  $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) LocalizedString? name,
-      @HiveField(2) LocalizedString? description,
-      @HiveField(3) String? imageUrl,
-      @HiveField(4) int sortOrder,
-      @HiveField(5) bool isActive,
-      @HiveField(6) DateTime? createdAt,
-      @HiveField(7) String? icon,
-      @HiveField(8) String? parentId,
-      @HiveField(9) List<CategoryModel> children});
+  $Res call({
+    @HiveField(0) String id,
+    @HiveField(1) LocalizedString? name,
+    @HiveField(2) LocalizedString? description,
+    @HiveField(3) String? imageUrl,
+    @HiveField(4) int sortOrder,
+    @HiveField(5) bool isActive,
+    @HiveField(6) DateTime? createdAt,
+    @HiveField(7) String? icon,
+    @HiveField(8) String? parentId,
+    @HiveField(9) List<CategoryModel> children,
+  });
 
   $LocalizedStringCopyWith<$Res>? get name;
   $LocalizedStringCopyWith<$Res>? get description;
@@ -93,48 +96,51 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
     Object? parentId = freezed,
     Object? children = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sortOrder: null == sortOrder
-          ? _value.sortOrder
-          : sortOrder // ignore: cast_nullable_to_non_nullable
-              as int,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      parentId: freezed == parentId
-          ? _value.parentId
-          : parentId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      children: null == children
-          ? _value.children
-          : children // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            name: freezed == name
+                ? _value.name
+                : name // ignore: cast_nullable_to_non_nullable
+                      as LocalizedString?,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as LocalizedString?,
+            imageUrl: freezed == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            sortOrder: null == sortOrder
+                ? _value.sortOrder
+                : sortOrder // ignore: cast_nullable_to_non_nullable
+                      as int,
+            isActive: null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            icon: freezed == icon
+                ? _value.icon
+                : icon // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            parentId: freezed == parentId
+                ? _value.parentId
+                : parentId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            children: null == children
+                ? _value.children
+                : children // ignore: cast_nullable_to_non_nullable
+                      as List<CategoryModel>,
+          )
+          as $Val,
+    );
   }
 
   @override
@@ -166,21 +172,23 @@ class _$CategoryModelCopyWithImpl<$Res, $Val extends CategoryModel>
 abstract class _$$CategoryModelImplCopyWith<$Res>
     implements $CategoryModelCopyWith<$Res> {
   factory _$$CategoryModelImplCopyWith(
-          _$CategoryModelImpl value, $Res Function(_$CategoryModelImpl) then) =
-      __$$CategoryModelImplCopyWithImpl<$Res>;
+    _$CategoryModelImpl value,
+    $Res Function(_$CategoryModelImpl) then,
+  ) = __$$CategoryModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@HiveField(0) String id,
-      @HiveField(1) LocalizedString? name,
-      @HiveField(2) LocalizedString? description,
-      @HiveField(3) String? imageUrl,
-      @HiveField(4) int sortOrder,
-      @HiveField(5) bool isActive,
-      @HiveField(6) DateTime? createdAt,
-      @HiveField(7) String? icon,
-      @HiveField(8) String? parentId,
-      @HiveField(9) List<CategoryModel> children});
+  $Res call({
+    @HiveField(0) String id,
+    @HiveField(1) LocalizedString? name,
+    @HiveField(2) LocalizedString? description,
+    @HiveField(3) String? imageUrl,
+    @HiveField(4) int sortOrder,
+    @HiveField(5) bool isActive,
+    @HiveField(6) DateTime? createdAt,
+    @HiveField(7) String? icon,
+    @HiveField(8) String? parentId,
+    @HiveField(9) List<CategoryModel> children,
+  });
 
   @override
   $LocalizedStringCopyWith<$Res>? get name;
@@ -193,8 +201,9 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
     extends _$CategoryModelCopyWithImpl<$Res, _$CategoryModelImpl>
     implements _$$CategoryModelImplCopyWith<$Res> {
   __$$CategoryModelImplCopyWithImpl(
-      _$CategoryModelImpl _value, $Res Function(_$CategoryModelImpl) _then)
-      : super(_value, _then);
+    _$CategoryModelImpl _value,
+    $Res Function(_$CategoryModelImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -210,67 +219,69 @@ class __$$CategoryModelImplCopyWithImpl<$Res>
     Object? parentId = freezed,
     Object? children = null,
   }) {
-    return _then(_$CategoryModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: freezed == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as LocalizedString?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sortOrder: null == sortOrder
-          ? _value.sortOrder
-          : sortOrder // ignore: cast_nullable_to_non_nullable
-              as int,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      parentId: freezed == parentId
-          ? _value.parentId
-          : parentId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      children: null == children
-          ? _value._children
-          : children // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>,
-    ));
+    return _then(
+      _$CategoryModelImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        name: freezed == name
+            ? _value.name
+            : name // ignore: cast_nullable_to_non_nullable
+                  as LocalizedString?,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as LocalizedString?,
+        imageUrl: freezed == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        sortOrder: null == sortOrder
+            ? _value.sortOrder
+            : sortOrder // ignore: cast_nullable_to_non_nullable
+                  as int,
+        isActive: null == isActive
+            ? _value.isActive
+            : isActive // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        icon: freezed == icon
+            ? _value.icon
+            : icon // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        parentId: freezed == parentId
+            ? _value.parentId
+            : parentId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        children: null == children
+            ? _value._children
+            : children // ignore: cast_nullable_to_non_nullable
+                  as List<CategoryModel>,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$CategoryModelImpl extends _CategoryModel {
-  const _$CategoryModelImpl(
-      {@HiveField(0) required this.id,
-      @HiveField(1) this.name,
-      @HiveField(2) this.description,
-      @HiveField(3) this.imageUrl,
-      @HiveField(4) this.sortOrder = 0,
-      @HiveField(5) this.isActive = true,
-      @HiveField(6) this.createdAt,
-      @HiveField(7) this.icon,
-      @HiveField(8) this.parentId,
-      @HiveField(9) final List<CategoryModel> children = const []})
-      : _children = children,
-        super._();
+  const _$CategoryModelImpl({
+    @HiveField(0) required this.id,
+    @HiveField(1) this.name,
+    @HiveField(2) this.description,
+    @HiveField(3) this.imageUrl,
+    @HiveField(4) this.sortOrder = 0,
+    @HiveField(5) this.isActive = true,
+    @HiveField(6) this.createdAt,
+    @HiveField(7) this.icon,
+    @HiveField(8) this.parentId,
+    @HiveField(9) final List<CategoryModel> children = const [],
+  }) : _children = children,
+       super._();
 
   factory _$CategoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryModelImplFromJson(json);
@@ -345,17 +356,18 @@ class _$CategoryModelImpl extends _CategoryModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      description,
-      imageUrl,
-      sortOrder,
-      isActive,
-      createdAt,
-      icon,
-      parentId,
-      const DeepCollectionEquality().hash(_children));
+    runtimeType,
+    id,
+    name,
+    description,
+    imageUrl,
+    sortOrder,
+    isActive,
+    createdAt,
+    icon,
+    parentId,
+    const DeepCollectionEquality().hash(_children),
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -365,24 +377,23 @@ class _$CategoryModelImpl extends _CategoryModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CategoryModelImplToJson(
-      this,
-    );
+    return _$$CategoryModelImplToJson(this);
   }
 }
 
 abstract class _CategoryModel extends CategoryModel {
-  const factory _CategoryModel(
-      {@HiveField(0) required final String id,
-      @HiveField(1) final LocalizedString? name,
-      @HiveField(2) final LocalizedString? description,
-      @HiveField(3) final String? imageUrl,
-      @HiveField(4) final int sortOrder,
-      @HiveField(5) final bool isActive,
-      @HiveField(6) final DateTime? createdAt,
-      @HiveField(7) final String? icon,
-      @HiveField(8) final String? parentId,
-      @HiveField(9) final List<CategoryModel> children}) = _$CategoryModelImpl;
+  const factory _CategoryModel({
+    @HiveField(0) required final String id,
+    @HiveField(1) final LocalizedString? name,
+    @HiveField(2) final LocalizedString? description,
+    @HiveField(3) final String? imageUrl,
+    @HiveField(4) final int sortOrder,
+    @HiveField(5) final bool isActive,
+    @HiveField(6) final DateTime? createdAt,
+    @HiveField(7) final String? icon,
+    @HiveField(8) final String? parentId,
+    @HiveField(9) final List<CategoryModel> children,
+  }) = _$CategoryModelImpl;
   const _CategoryModel._() : super._();
 
   factory _CategoryModel.fromJson(Map<String, dynamic> json) =

@@ -44,13 +44,13 @@ class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   UserEntity toEntity() => UserEntity(
-        id: id,
-        name: name,
-        email: email,
-        phone: phone,
-        photoUrl: photoUrl,
-        token: token ?? '',
-      );
+    id: id,
+    name: name,
+    email: email,
+    phone: phone,
+    photoUrl: photoUrl,
+    token: token ?? '',
+  );
 }
 
 int _parseInt(dynamic value) {

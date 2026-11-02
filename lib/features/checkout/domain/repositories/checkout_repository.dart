@@ -9,8 +9,12 @@ import '../entities/checkout_result_entity.dart';
 /// Follows Dependency Inversion Principle (DIP). Returns [Either<Failure, T>]
 /// for functional error handling.
 abstract class CheckoutRepository {
-  Future<Either<Failure, CheckoutResultEntity>> placeOrder(CheckoutParams params);
+  Future<Either<Failure, CheckoutResultEntity>> placeOrder(
+    CheckoutParams params,
+  );
 
   /// Prices [items] with the store's current delivery fee and tax rate.
-  Future<Either<Failure, CheckoutQuote>> getQuote(List<CheckoutItemEntity> items);
+  Future<Either<Failure, CheckoutQuote>> getQuote(
+    List<CheckoutItemEntity> items,
+  );
 }

@@ -45,7 +45,9 @@ class LoginPromptCard extends ConsumerWidget {
                 label: l10n.signInWithGoogle,
                 onPressed: () => AppGuard.runSafeInternet(
                   ref,
-                  () => ref.read(profileControllerProvider.notifier).signInWithGoogle(),
+                  () => ref
+                      .read(profileControllerProvider.notifier)
+                      .signInWithGoogle(),
                 ),
               ),
             ],

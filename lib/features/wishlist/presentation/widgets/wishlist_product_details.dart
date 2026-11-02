@@ -13,7 +13,9 @@ class WishlistProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
-    final productName = product.getLocalizedName(locale: Localizations.localeOf(context).languageCode);
+    final productName = product.getLocalizedName(
+      locale: Localizations.localeOf(context).languageCode,
+    );
     final brand = product.brand;
 
     return Column(

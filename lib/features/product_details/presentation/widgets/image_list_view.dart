@@ -88,9 +88,9 @@ class ImageListView extends ConsumerWidget {
   }
 
   Widget _buildThumbnailImage(int index) => AppNetworkImage(
-        imageUrl: product.imageUrls[index].thumbnail,
-        width: _thumbnailSize,
-        height: _thumbnailSize,
-        borderRadius: AppRadius.allSm,
-      );
+    imageUrl: product.imageUrls[index].thumbnail,
+    width: _thumbnailSize,
+    height: _thumbnailSize,
+    borderRadius: AppRadius.allSm,
+  );
 }

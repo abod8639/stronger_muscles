@@ -41,7 +41,9 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
       return _box;
     } catch (e) {
       _hiveFailed = true;
-      debugPrint('[NotificationLocalDataSource] Hive storage fallback active: $e');
+      debugPrint(
+        '[NotificationLocalDataSource] Hive storage fallback active: $e',
+      );
       return null;
     }
   }
@@ -60,13 +62,16 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
       if (raw is List) {
         return raw.map((item) {
           if (item is NotificationModel) return item;
-          if (item is Map) return NotificationModel.fromJson(Map<String, dynamic>.from(item));
+          if (item is Map)
+            return NotificationModel.fromJson(Map<String, dynamic>.from(item));
           return NotificationModel.fromJson(item);
         }).toList();
       }
       return const [];
     } catch (e) {
-      debugPrint('[NotificationLocalDataSource] Error getting cached notifications: $e');
+      debugPrint(
+        '[NotificationLocalDataSource] Error getting cached notifications: $e',
+      );
       return const [];
     }
   }
@@ -81,8 +86,12 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
       }
       _inMemoryFallback[_notificationsKey] = serialized;
     } catch (e) {
-      debugPrint('[NotificationLocalDataSource] Error caching notifications: $e');
-      _inMemoryFallback[_notificationsKey] = notifications.map((n) => n.toJson()).toList();
+      debugPrint(
+        '[NotificationLocalDataSource] Error caching notifications: $e',
+      );
+      _inMemoryFallback[_notificationsKey] = notifications
+          .map((n) => n.toJson())
+          .toList();
     }
   }
 
@@ -102,7 +111,9 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
       }
       return 0;
     } catch (e) {
-      debugPrint('[NotificationLocalDataSource] Error getting cached unread count: $e');
+      debugPrint(
+        '[NotificationLocalDataSource] Error getting cached unread count: $e',
+      );
       return 0;
     }
   }
@@ -116,7 +127,9 @@ class NotificationLocalDataSourceImpl implements NotificationLocalDataSource {
       }
       _inMemoryFallback[_unreadCountKey] = count;
     } catch (e) {
-      debugPrint('[NotificationLocalDataSource] Error caching unread count: $e');
+      debugPrint(
+        '[NotificationLocalDataSource] Error caching unread count: $e',
+      );
       _inMemoryFallback[_unreadCountKey] = count;
     }
   }

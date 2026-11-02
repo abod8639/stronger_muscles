@@ -4,7 +4,8 @@ import 'package:stronger_muscles/features/product/domain/entities/category_entit
 import 'package:stronger_muscles/features/product/product_providers.dart';
 
 /// AsyncNotifier managing category list state with caching fallback.
-class CategoryController extends AutoDisposeAsyncNotifier<List<CategoryEntity>> {
+class CategoryController
+    extends AutoDisposeAsyncNotifier<List<CategoryEntity>> {
   @override
   FutureOr<List<CategoryEntity>> build() async {
     final cachedResult = ref.watch(getCachedCategoriesUseCaseProvider)();
@@ -14,10 +15,7 @@ class CategoryController extends AutoDisposeAsyncNotifier<List<CategoryEntity>> 
     }
 
     final result = await ref.watch(getAllCategoriesUseCaseProvider)();
-    return result.fold(
-      (failure) => throw failure,
-      (categories) => categories,
-    );
+    return result.fold((failure) => throw failure, (categories) => categories);
   }
 
   Future<void> fetchCategories() async {
@@ -33,5 +31,5 @@ class CategoryController extends AutoDisposeAsyncNotifier<List<CategoryEntity>> 
 /// Global provider for [CategoryController].
 final categoryControllerProvider =
     AutoDisposeAsyncNotifierProvider<CategoryController, List<CategoryEntity>>(
-  CategoryController.new,
-);
+      CategoryController.new,
+    );

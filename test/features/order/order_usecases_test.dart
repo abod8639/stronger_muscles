@@ -41,9 +41,9 @@ class MockOrderRepository implements OrderRepository {
       return left(const ServerFailure(message: 'Failed to fetch order'));
     }
     final match = orders.cast<OrderEntity?>().firstWhere(
-          (o) => o?.id == id,
-          orElse: () => null,
-        );
+      (o) => o?.id == id,
+      orElse: () => null,
+    );
     return right(match);
   }
 
@@ -94,9 +94,9 @@ class FakeOrderRemoteDatasource implements OrderRemoteDatasource {
   }) async {
     if (shouldThrow) throw const NetworkFailure(message: 'Network error');
     return remoteOrders.cast<OrderModel?>().firstWhere(
-          (o) => o?.id == id,
-          orElse: () => null,
-        );
+      (o) => o?.id == id,
+      orElse: () => null,
+    );
   }
 
   @override
@@ -109,10 +109,7 @@ class FakeOrderRemoteDatasource implements OrderRemoteDatasource {
   }
 
   @override
-  Future<void> cancelOrder(
-    String id, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<void> cancelOrder(String id, {CancelToken? cancelToken}) async {
     if (shouldThrow) throw const NetworkFailure(message: 'Network error');
     cancelledId = id;
   }
@@ -127,9 +124,9 @@ class FakeOrderLocalDatasource implements OrderLocalDatasource {
   @override
   Future<OrderModel?> getCachedOrderById(String id) async {
     return cachedOrders.cast<OrderModel?>().firstWhere(
-          (o) => o?.id == id,
-          orElse: () => null,
-        );
+      (o) => o?.id == id,
+      orElse: () => null,
+    );
   }
 
   @override
@@ -202,30 +199,27 @@ void main() {
       cancelOrderUseCase = CancelOrderUseCase(mockRepository);
     });
 
-    test('GetUserOrdersUseCase returns Right with list of OrderEntity', () async {
-      final result = await getUserOrdersUseCase();
+    test(
+      'GetUserOrdersUseCase returns Right with list of OrderEntity',
+      () async {
+        final result = await getUserOrdersUseCase();
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (orders) {
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Should be right'), (orders) {
           expect(orders.length, 1);
           expect(orders.first.id, 'order-1');
           expect(orders.first.items?.first.productName, 'Whey Protein 1kg');
-        },
-      );
-    });
+        });
+      },
+    );
 
     test('GetOrderByIdUseCase returns Right with order or null', () async {
       final result = await getOrderByIdUseCase('order-1');
       expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (order) {
-          expect(order, isNotNull);
-          expect(order!.id, 'order-1');
-        },
-      );
+      result.fold((failure) => fail('Should be right'), (order) {
+        expect(order, isNotNull);
+        expect(order!.id, 'order-1');
+      });
 
       final nonExistent = await getOrderByIdUseCase('non-existent');
       expect(nonExistent.isRight(), isTrue);
@@ -243,21 +237,21 @@ void main() {
       final result = await createOrderUseCase(payload);
 
       expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (data) {
-          expect(data['status'], 'success');
-          expect(data['order_id'], 'order-2');
-        },
-      );
+      result.fold((failure) => fail('Should be right'), (data) {
+        expect(data['status'], 'success');
+        expect(data['order_id'], 'order-2');
+      });
     });
 
-    test('CancelOrderUseCase calls repository and returns Right Unit', () async {
-      final result = await cancelOrderUseCase('order-1');
+    test(
+      'CancelOrderUseCase calls repository and returns Right Unit',
+      () async {
+        final result = await cancelOrderUseCase('order-1');
 
-      expect(result.isRight(), isTrue);
-      expect(mockRepository.cancelledOrderId, 'order-1');
-    });
+        expect(result.isRight(), isTrue);
+        expect(mockRepository.cancelledOrderId, 'order-1');
+      },
+    );
 
     test('OrderEntity computed properties work as expected', () {
       expect(testOrder.canBeCancelled, isTrue);
@@ -333,57 +327,57 @@ void main() {
       expect(reconstructedModel.items?.first.productName, 'BCAA');
     });
 
-    test('OrderRepositoryImpl fetches from remote and caches locally', () async {
-      final remote = FakeOrderRemoteDatasource();
-      final local = FakeOrderLocalDatasource();
-      final repository = OrderRepositoryImpl(remote, local);
+    test(
+      'OrderRepositoryImpl fetches from remote and caches locally',
+      () async {
+        final remote = FakeOrderRemoteDatasource();
+        final local = FakeOrderLocalDatasource();
+        final repository = OrderRepositoryImpl(remote, local);
 
-      final model = OrderModel(
-        id: 'order-test-1',
-        userId: 'user-1',
-        addressId: 'addr-1',
-        subtotal: 100.0,
-        totalAmount: 100.0,
-      );
-      remote.remoteOrders = [model];
+        final model = OrderModel(
+          id: 'order-test-1',
+          userId: 'user-1',
+          addressId: 'addr-1',
+          subtotal: 100.0,
+          totalAmount: 100.0,
+        );
+        remote.remoteOrders = [model];
 
-      final result = await repository.getUserOrders();
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (orders) {
+        final result = await repository.getUserOrders();
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Should be right'), (orders) {
           expect(orders.length, 1);
           expect(orders.first.id, 'order-test-1');
-        },
-      );
-      expect(local.cachedOrders.length, 1);
-      expect(local.cachedOrders.first.id, 'order-test-1');
-    });
+        });
+        expect(local.cachedOrders.length, 1);
+        expect(local.cachedOrders.first.id, 'order-test-1');
+      },
+    );
 
-    test('OrderRepositoryImpl falls back to local cache when remote fails', () async {
-      final remote = FakeOrderRemoteDatasource();
-      final local = FakeOrderLocalDatasource();
-      final repository = OrderRepositoryImpl(remote, local);
+    test(
+      'OrderRepositoryImpl falls back to local cache when remote fails',
+      () async {
+        final remote = FakeOrderRemoteDatasource();
+        final local = FakeOrderLocalDatasource();
+        final repository = OrderRepositoryImpl(remote, local);
 
-      final cachedModel = OrderModel(
-        id: 'order-cached-1',
-        userId: 'user-1',
-        addressId: 'addr-1',
-        subtotal: 80.0,
-        totalAmount: 80.0,
-      );
-      local.cachedOrders = [cachedModel];
-      remote.shouldThrow = true;
+        final cachedModel = OrderModel(
+          id: 'order-cached-1',
+          userId: 'user-1',
+          addressId: 'addr-1',
+          subtotal: 80.0,
+          totalAmount: 80.0,
+        );
+        local.cachedOrders = [cachedModel];
+        remote.shouldThrow = true;
 
-      final result = await repository.getUserOrders();
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Should be right'),
-        (orders) {
+        final result = await repository.getUserOrders();
+        expect(result.isRight(), isTrue);
+        result.fold((failure) => fail('Should be right'), (orders) {
           expect(orders.length, 1);
           expect(orders.first.id, 'order-cached-1');
-        },
-      );
-    });
+        });
+      },
+    );
   });
 }

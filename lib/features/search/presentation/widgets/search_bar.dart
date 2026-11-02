@@ -29,10 +29,7 @@ class SearchBar extends StatelessWidget {
       titleSpacing: AppDimens.spacingLg,
       title: Hero(
         tag: 'searchBar',
-        child: Material(
-          color: Colors.transparent,
-          child: SearchInputGroup(),
-        ),
+        child: Material(color: Colors.transparent, child: SearchInputGroup()),
       ),
     );
   }
@@ -51,12 +48,14 @@ Future<void> showFilterBottomSheet(BuildContext context) {
         builder: (context, ref, _) {
           final notifier = ref.read(productSearchControllerProvider.notifier);
           final brands = ref.watch(
-            productSearchControllerProvider.notifier
-                .select((n) => n.availableBrands),
+            productSearchControllerProvider.notifier.select(
+              (n) => n.availableBrands,
+            ),
           );
           final selectedBrand = ref.watch(
-            productSearchControllerProvider.notifier
-                .select((n) => n.selectedBrand),
+            productSearchControllerProvider.notifier.select(
+              (n) => n.selectedBrand,
+            ),
           );
 
           return Column(
@@ -73,11 +72,13 @@ Future<void> showFilterBottomSheet(BuildContext context) {
                   children: [
                     for (final brand in brands)
                       FilterChip(
-                        selected: selectedBrand != null &&
+                        selected:
+                            selectedBrand != null &&
                             selectedBrand.toLowerCase() == brand.toLowerCase(),
                         label: Text(brand),
-                        selectedColor:
-                            AppColors.primary.withValues(alpha: 0.15),
+                        selectedColor: AppColors.primary.withValues(
+                          alpha: 0.15,
+                        ),
                         checkmarkColor: AppColors.primary,
                         onSelected: (selected) {
                           if (selected) {

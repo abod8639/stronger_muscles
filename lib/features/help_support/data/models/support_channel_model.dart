@@ -36,10 +36,15 @@ class SupportChannelModel {
       titleAr: (json['title_ar'] ?? json['titleAr'] ?? '').toString(),
       subtitleEn: (json['subtitle_en'] ?? json['subtitleEn'] ?? '').toString(),
       subtitleAr: (json['subtitle_ar'] ?? json['subtitleAr'] ?? '').toString(),
-      actionValue: (json['action_value'] ?? json['actionValue'] ?? '').toString(),
-      availabilityEn: (json['availability_en'] ?? json['availabilityEn'] ?? '').toString(),
-      availabilityAr: (json['availability_ar'] ?? json['availabilityAr'] ?? '').toString(),
-      isAvailable: json['is_available'] as bool? ?? (json['isAvailable'] as bool? ?? true),
+      actionValue: (json['action_value'] ?? json['actionValue'] ?? '')
+          .toString(),
+      availabilityEn: (json['availability_en'] ?? json['availabilityEn'] ?? '')
+          .toString(),
+      availabilityAr: (json['availability_ar'] ?? json['availabilityAr'] ?? '')
+          .toString(),
+      isAvailable:
+          json['is_available'] as bool? ??
+          (json['isAvailable'] as bool? ?? true),
     );
   }
 
@@ -64,9 +69,13 @@ class SupportChannelModel {
   }
 }
 
-List<SupportChannelModel> _parseSupportChannelListIsolate(List<dynamic> rawList) {
+List<SupportChannelModel> _parseSupportChannelListIsolate(
+  List<dynamic> rawList,
+) {
   return rawList
       .whereType<Map>()
-      .map((item) => SupportChannelModel.fromJson(Map<String, dynamic>.from(item)))
+      .map(
+        (item) => SupportChannelModel.fromJson(Map<String, dynamic>.from(item)),
+      )
       .toList();
 }

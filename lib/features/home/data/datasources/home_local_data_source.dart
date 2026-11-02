@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:stronger_muscles/features/home/data/models/selection_model.dart';
-import 'package:stronger_muscles/features/product/data/datasources/product_local_datasource.dart';
 import 'package:stronger_muscles/features/product/product_feature.dart';
 
 /// Local data source contract for Home feature caching.
@@ -30,9 +29,9 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   HomeLocalDataSourceImpl([
     Box? box,
     ProductLocalDataSource? productLocalDataSource,
-  ])  : _box = box,
-        _productLocalDataSource =
-            productLocalDataSource ?? ProductLocalDataSource();
+  ]) : _box = box,
+       _productLocalDataSource =
+           productLocalDataSource ?? ProductLocalDataSource();
 
   Future<Box?> _getBoxSafe() async {
     if (_box != null && _box!.isOpen) return _box;
@@ -65,7 +64,8 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       if (raw is List) {
         return raw.map((item) {
           if (item is SelectionsModel) return item;
-          if (item is Map) return SelectionsModel.fromJson(Map<String, dynamic>.from(item));
+          if (item is Map)
+            return SelectionsModel.fromJson(Map<String, dynamic>.from(item));
           return SelectionsModel.fromJson(item);
         }).toList();
       }
@@ -87,7 +87,9 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
       _inMemoryFallback[_shortcutsKey] = serialized;
     } catch (e) {
       debugPrint('[HomeLocalDataSource] Error caching shortcuts: $e');
-      _inMemoryFallback[_shortcutsKey] = shortcuts.map((s) => s.toJson()).toList();
+      _inMemoryFallback[_shortcutsKey] = shortcuts
+          .map((s) => s.toJson())
+          .toList();
     }
   }
 
@@ -105,14 +107,38 @@ class HomeLocalDataSourceImpl implements HomeLocalDataSource {
   List<SelectionsModel> getDefaultShortcuts(String langCode) {
     return const [
       SelectionsModel(id: '', label: 'categoryHome', iconKey: 'home'),
-      SelectionsModel(id: 'protein', label: 'categoryProtein', iconKey: 'protein'),
-      SelectionsModel(id: 'creatine', label: 'categoryCreatine', iconKey: 'creatine'),
+      SelectionsModel(
+        id: 'protein',
+        label: 'categoryProtein',
+        iconKey: 'protein',
+      ),
+      SelectionsModel(
+        id: 'creatine',
+        label: 'categoryCreatine',
+        iconKey: 'creatine',
+      ),
       SelectionsModel(id: 'amino', label: 'categoryAmino', iconKey: 'amino'),
       SelectionsModel(id: 'bcaa', label: 'categoryBcaa', iconKey: 'bcaa'),
-      SelectionsModel(id: 'preworkout', label: 'categoryPreWorkout', iconKey: 'preworkout'),
-      SelectionsModel(id: 'massgainer', label: 'categoryMassGainer', iconKey: 'massgainer'),
-      SelectionsModel(id: 'vitamins', label: 'categoryVitamins', iconKey: 'vitamins'),
-      SelectionsModel(id: 'accessories', label: 'categoryAccessories', iconKey: 'accessories'),
+      SelectionsModel(
+        id: 'preworkout',
+        label: 'categoryPreWorkout',
+        iconKey: 'preworkout',
+      ),
+      SelectionsModel(
+        id: 'massgainer',
+        label: 'categoryMassGainer',
+        iconKey: 'massgainer',
+      ),
+      SelectionsModel(
+        id: 'vitamins',
+        label: 'categoryVitamins',
+        iconKey: 'vitamins',
+      ),
+      SelectionsModel(
+        id: 'accessories',
+        label: 'categoryAccessories',
+        iconKey: 'accessories',
+      ),
     ];
   }
 

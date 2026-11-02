@@ -73,7 +73,10 @@ class _SignUpFormState extends State<SignUpForm> {
               controller: _nameController,
               label: l10n.fullName,
               hintText: 'John Doe',
-              prefixIcon: const Icon(Icons.person_outline_rounded, size: AppDimens.iconSm),
+              prefixIcon: const Icon(
+                Icons.person_outline_rounded,
+                size: AppDimens.iconSm,
+              ),
               keyboardType: TextInputType.name,
               autofillHints: const [AutofillHints.name],
               onFieldSubmitted: (_) => _emailFocusNode.requestFocus(),

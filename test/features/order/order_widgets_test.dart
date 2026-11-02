@@ -7,11 +7,11 @@ import 'package:stronger_muscles/features/order/presentation/widgets/order_card.
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
 Widget _wrap(Widget child) => MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      home: child,
-    );
+  locale: const Locale('en'),
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: child,
+);
 
 const _items = [
   OrderItemEntity(
@@ -35,24 +35,33 @@ const _items = [
   ),
 ];
 
-OrderEntity _order({String status = 'shipped', String paymentStatus = 'paid'}) => OrderEntity(
-      id: 'order-123456',
-      userId: 'u1',
-      addressId: 'a1',
-      status: status,
-      paymentStatus: paymentStatus,
-      subtotal: 250.0,
-      shippingCost: 20.0,
-      totalAmount: 270.0,
-      orderDate: DateTime(2026, 10, 1, 14, 30),
-      items: _items,
-    );
+OrderEntity _order({
+  String status = 'shipped',
+  String paymentStatus = 'paid',
+}) => OrderEntity(
+  id: 'order-123456',
+  userId: 'u1',
+  addressId: 'a1',
+  status: status,
+  paymentStatus: paymentStatus,
+  subtotal: 250.0,
+  shippingCost: 20.0,
+  totalAmount: 270.0,
+  orderDate: DateTime(2026, 10, 1, 14, 30),
+  items: _items,
+);
 
 void main() {
-  testWidgets('OrderCard shows short id, status, first item and total', (tester) async {
+  testWidgets('OrderCard shows short id, status, first item and total', (
+    tester,
+  ) async {
     var tapped = false;
     await tester.pumpWidget(
-      _wrap(Scaffold(body: OrderCard(order: _order(), onTap: () => tapped = true))),
+      _wrap(
+        Scaffold(
+          body: OrderCard(order: _order(), onTap: () => tapped = true),
+        ),
+      ),
     );
 
     expect(find.text('#order-'), findsOneWidget);
@@ -64,8 +73,12 @@ void main() {
     expect(tapped, isTrue);
   });
 
-  testWidgets('OrderDetailsView renders tracker, items and payment summary', (tester) async {
-    await tester.pumpWidget(_wrap(OrderDetailsView(order: _order(paymentStatus: 'pending'))));
+  testWidgets('OrderDetailsView renders tracker, items and payment summary', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _wrap(OrderDetailsView(order: _order(paymentStatus: 'pending'))),
+    );
 
     expect(tester.takeException(), isNull);
     expect(find.text('Whey Isolate'), findsOneWidget);
@@ -77,9 +90,14 @@ void main() {
     expect(find.text('LE 270.00'), findsOneWidget);
   });
 
-  testWidgets('OrderDetailsView shows the cancelled notice for cancelled orders', (tester) async {
-    await tester.pumpWidget(_wrap(OrderDetailsView(order: _order(status: 'cancelled'))));
+  testWidgets(
+    'OrderDetailsView shows the cancelled notice for cancelled orders',
+    (tester) async {
+      await tester.pumpWidget(
+        _wrap(OrderDetailsView(order: _order(status: 'cancelled'))),
+      );
 
-    expect(find.byIcon(Icons.cancel), findsOneWidget);
-  });
+      expect(find.byIcon(Icons.cancel), findsOneWidget);
+    },
+  );
 }

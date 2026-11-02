@@ -24,10 +24,7 @@ export 'order_routes.dart';
 
 // Presentation State & Controllers
 export 'presentation/controllers/orders_controller.dart'
-    show
-        ordersControllerProvider,
-        orderRepositoryProvider,
-        OrdersController;
+    show ordersControllerProvider, orderRepositoryProvider, OrdersController;
 
 // Presentation Views & Widgets
 export 'presentation/pages/order_view.dart';

@@ -13,14 +13,14 @@ String _$getAddressesUseCaseHash() =>
 @ProviderFor(getAddressesUseCase)
 final getAddressesUseCaseProvider =
     AutoDisposeProvider<GetAddressesUseCase>.internal(
-  getAddressesUseCase,
-  name: r'getAddressesUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$getAddressesUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      getAddressesUseCase,
+      name: r'getAddressesUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$getAddressesUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef GetAddressesUseCaseRef = AutoDisposeProviderRef<GetAddressesUseCase>;
 String _$saveAddressUseCaseHash() =>
@@ -30,14 +30,14 @@ String _$saveAddressUseCaseHash() =>
 @ProviderFor(saveAddressUseCase)
 final saveAddressUseCaseProvider =
     AutoDisposeProvider<SaveAddressUseCase>.internal(
-  saveAddressUseCase,
-  name: r'saveAddressUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$saveAddressUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      saveAddressUseCase,
+      name: r'saveAddressUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$saveAddressUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef SaveAddressUseCaseRef = AutoDisposeProviderRef<SaveAddressUseCase>;
 String _$deleteAddressUseCaseHash() =>
@@ -47,14 +47,14 @@ String _$deleteAddressUseCaseHash() =>
 @ProviderFor(deleteAddressUseCase)
 final deleteAddressUseCaseProvider =
     AutoDisposeProvider<DeleteAddressUseCase>.internal(
-  deleteAddressUseCase,
-  name: r'deleteAddressUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$deleteAddressUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      deleteAddressUseCase,
+      name: r'deleteAddressUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$deleteAddressUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef DeleteAddressUseCaseRef = AutoDisposeProviderRef<DeleteAddressUseCase>;
 String _$setDefaultAddressUseCaseHash() =>
@@ -64,16 +64,16 @@ String _$setDefaultAddressUseCaseHash() =>
 @ProviderFor(setDefaultAddressUseCase)
 final setDefaultAddressUseCaseProvider =
     AutoDisposeProvider<SetDefaultAddressUseCase>.internal(
-  setDefaultAddressUseCase,
-  name: r'setDefaultAddressUseCaseProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$setDefaultAddressUseCaseHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      setDefaultAddressUseCase,
+      name: r'setDefaultAddressUseCaseProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$setDefaultAddressUseCaseHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef SetDefaultAddressUseCaseRef
-    = AutoDisposeProviderRef<SetDefaultAddressUseCase>;
+typedef SetDefaultAddressUseCaseRef =
+    AutoDisposeProviderRef<SetDefaultAddressUseCase>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

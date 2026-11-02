@@ -42,11 +42,16 @@ class MockProductRepository implements ProductRepository {
   }
 
   @override
-  Future<Either<Failure, List<ProductEntity>>> searchProducts(String query) async {
+  Future<Either<Failure, List<ProductEntity>>> searchProducts(
+    String query,
+  ) async {
     return Right(
       products
-          .where((p) =>
-              p.getLocalizedName().toLowerCase().contains(query.toLowerCase()))
+          .where(
+            (p) => p.getLocalizedName().toLowerCase().contains(
+              query.toLowerCase(),
+            ),
+          )
           .toList(),
     );
   }
@@ -146,27 +151,33 @@ void main() {
       expect(result.first.getLocalizedName(locale: 'ar'), 'بروتين');
     });
 
-    test('GetCachedCategoriesUseCase returns synchronous cached categories', () {
-      final useCase = GetCachedCategoriesUseCase(mockCategoryRepository);
-      final either = useCase();
+    test(
+      'GetCachedCategoriesUseCase returns synchronous cached categories',
+      () {
+        final useCase = GetCachedCategoriesUseCase(mockCategoryRepository);
+        final either = useCase();
 
-      expect(either.isRight(), isTrue);
-      final result = either.getOrElse((_) => []);
-      expect(result.length, 1);
-      expect(result.first.id, 'cat-1');
-    });
+        expect(either.isRight(), isTrue);
+        final result = either.getOrElse((_) => []);
+        expect(result.length, 1);
+        expect(result.first.id, 'cat-1');
+      },
+    );
 
-    test('ProductModel toEntity and fromEntity round-trip conversion preserves fields', () {
-      final model = ProductModel.fromEntity(sampleProduct);
-      expect(model.id, sampleProduct.id);
-      expect(model.price, sampleProduct.price);
-      expect(model.discountPrice, sampleProduct.discountPrice);
+    test(
+      'ProductModel toEntity and fromEntity round-trip conversion preserves fields',
+      () {
+        final model = ProductModel.fromEntity(sampleProduct);
+        expect(model.id, sampleProduct.id);
+        expect(model.price, sampleProduct.price);
+        expect(model.discountPrice, sampleProduct.discountPrice);
 
-      final entity = model.toEntity();
-      expect(entity.id, sampleProduct.id);
-      expect(entity.price, sampleProduct.price);
-      expect(entity.discountPrice, sampleProduct.discountPrice);
-      expect(entity.getLocalizedName(locale: 'en'), 'Whey Protein');
-    });
+        final entity = model.toEntity();
+        expect(entity.id, sampleProduct.id);
+        expect(entity.price, sampleProduct.price);
+        expect(entity.discountPrice, sampleProduct.discountPrice);
+        expect(entity.getLocalizedName(locale: 'en'), 'Whey Protein');
+      },
+    );
   });
 }

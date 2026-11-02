@@ -12,14 +12,14 @@ String _$authControllerHash() => r'dafa941bf83efd33d3bbff0cac2fdf6fc6eb01f1';
 @ProviderFor(AuthController)
 final authControllerProvider =
     AutoDisposeAsyncNotifierProvider<AuthController, UserEntity?>.internal(
-  AuthController.new,
-  name: r'authControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AuthController.new,
+      name: r'authControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$authControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AuthController = AutoDisposeAsyncNotifier<UserEntity?>;
 // ignore_for_file: type=lint

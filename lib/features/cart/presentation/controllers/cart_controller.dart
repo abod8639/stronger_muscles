@@ -26,11 +26,11 @@ class CartController extends _$CartController {
   final ClearCartUseCase? _testClearCartUseCase;
 
   CartController()
-      : _testGetCartItemsUseCase = null,
-        _testAddToCartUseCase = null,
-        _testRemoveFromCartUseCase = null,
-        _testUpdateCartQuantityUseCase = null,
-        _testClearCartUseCase = null;
+    : _testGetCartItemsUseCase = null,
+      _testAddToCartUseCase = null,
+      _testRemoveFromCartUseCase = null,
+      _testUpdateCartQuantityUseCase = null,
+      _testClearCartUseCase = null;
 
   @visibleForTesting
   CartController.test({
@@ -39,11 +39,11 @@ class CartController extends _$CartController {
     required RemoveFromCartUseCase removeFromCartUseCase,
     required UpdateCartQuantityUseCase updateCartQuantityUseCase,
     required ClearCartUseCase clearCartUseCase,
-  })  : _testGetCartItemsUseCase = getCartItemsUseCase,
-        _testAddToCartUseCase = addToCartUseCase,
-        _testRemoveFromCartUseCase = removeFromCartUseCase,
-        _testUpdateCartQuantityUseCase = updateCartQuantityUseCase,
-        _testClearCartUseCase = clearCartUseCase;
+  }) : _testGetCartItemsUseCase = getCartItemsUseCase,
+       _testAddToCartUseCase = addToCartUseCase,
+       _testRemoveFromCartUseCase = removeFromCartUseCase,
+       _testUpdateCartQuantityUseCase = updateCartQuantityUseCase,
+       _testClearCartUseCase = clearCartUseCase;
 
   GetCartItemsUseCase get _getCartItemsUseCase =>
       _testGetCartItemsUseCase ?? ref.read(getCartItemsUseCaseProvider);
@@ -63,13 +63,10 @@ class CartController extends _$CartController {
         _testGetCartItemsUseCase ?? ref.watch(getCartItemsUseCaseProvider);
     final result = await useCase();
 
-    return result.fold(
-      (failure) {
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-        return [];
-      },
-      (items) => items,
-    );
+    return result.fold((failure) {
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+      return [];
+    }, (items) => items);
   }
 
   /// List of current items in the cart as pure domain entities.
@@ -109,8 +106,9 @@ class CartController extends _$CartController {
     );
 
     if (product.stockQuantity > 0) {
-      final currentQty =
-          existingIndex != -1 ? previousItems[existingIndex].quantity : 0;
+      final currentQty = existingIndex != -1
+          ? previousItems[existingIndex].quantity
+          : 0;
       if (currentQty + quantity > product.stockQuantity) {
         state = AsyncError(
           ValidationFailure(
@@ -127,8 +125,9 @@ class CartController extends _$CartController {
     if (existingIndex != -1) {
       optimisticItems = List<CartItemEntity>.from(previousItems);
       final existing = optimisticItems[existingIndex];
-      optimisticItems[existingIndex] =
-          existing.copyWith(quantity: existing.quantity + quantity);
+      optimisticItems[existingIndex] = existing.copyWith(
+        quantity: existing.quantity + quantity,
+      );
     } else {
       final newItem = CartItemEntity(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -153,13 +152,10 @@ class CartController extends _$CartController {
       quantity: quantity,
     );
 
-    result.fold(
-      (failure) {
-        state = AsyncData(previousItems);
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      state = AsyncData(previousItems);
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (_) {});
   }
 
   /// Removes an item from the cart instantly (optimistic UI), then persists changes.
@@ -170,13 +166,10 @@ class CartController extends _$CartController {
 
     final result = await _removeFromCartUseCase(itemId);
 
-    result.fold(
-      (failure) {
-        state = AsyncData(previousItems);
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      state = AsyncData(previousItems);
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (_) {});
   }
 
   /// Increases quantity of an item by 1 instantly with optimistic UI response.
@@ -201,18 +194,12 @@ class CartController extends _$CartController {
     optimisticItems[itemIndex] = item.copyWith(quantity: item.quantity + 1);
     state = AsyncData(optimisticItems);
 
-    final result = await _updateCartQuantityUseCase(
-      item.id,
-      item.quantity + 1,
-    );
+    final result = await _updateCartQuantityUseCase(item.id, item.quantity + 1);
 
-    result.fold(
-      (failure) {
-        state = AsyncData(previousItems);
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      state = AsyncData(previousItems);
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (_) {});
   }
 
   /// Decreases quantity of an item by 1 instantly, or removes it if quantity drops below 1.
@@ -229,18 +216,12 @@ class CartController extends _$CartController {
     }
     state = AsyncData(optimisticItems);
 
-    final result = await _updateCartQuantityUseCase(
-      item.id,
-      item.quantity - 1,
-    );
+    final result = await _updateCartQuantityUseCase(item.id, item.quantity - 1);
 
-    result.fold(
-      (failure) {
-        state = AsyncData(previousItems);
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      state = AsyncData(previousItems);
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (_) {});
   }
 
   /// Clears the entire cart instantly with optimistic UI response.
@@ -250,13 +231,10 @@ class CartController extends _$CartController {
 
     final result = await _clearCartUseCase();
 
-    result.fold(
-      (failure) {
-        state = AsyncData(previousItems);
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (_) {},
-    );
+    result.fold((failure) {
+      state = AsyncData(previousItems);
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (_) {});
   }
 
   /// Checks if a product with the specified flavor and size is in the cart.
@@ -281,12 +259,15 @@ class CartController extends _$CartController {
     String? selectedSize,
   }) {
     final currentItems = state.valueOrNull ?? [];
-    return currentItems.where(
-      (item) =>
-          item.product.id == productId &&
-          (selectedFlavor == null || item.selectedFlavor == selectedFlavor) &&
-          (selectedSize == null || item.selectedSize == selectedSize),
-    ).firstOrNull;
+    return currentItems
+        .where(
+          (item) =>
+              item.product.id == productId &&
+              (selectedFlavor == null ||
+                  item.selectedFlavor == selectedFlavor) &&
+              (selectedSize == null || item.selectedSize == selectedSize),
+        )
+        .firstOrNull;
   }
 
   Future<void> refreshCart() async {

@@ -10,7 +10,10 @@ void main() {
     const testProduct = ProductModel(
       id: 'prod-1',
       name: LocalizedString(en: 'Whey Isolate', ar: 'واي ايزوليت'),
-      description: LocalizedString(en: 'Pure protein powder', ar: 'مسحوق بروتين نقي'),
+      description: LocalizedString(
+        en: 'Pure protein powder',
+        ar: 'مسحوق بروتين نقي',
+      ),
       price: 250.0,
       discountPrice: 200.0,
       stockQuantity: 10,
@@ -18,7 +21,9 @@ void main() {
       reviewCount: 12,
     );
 
-    testWidgets('renders product name, price, discount and rating', (tester) async {
+    testWidgets('renders product name, price, discount and rating', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(
@@ -26,10 +31,7 @@ void main() {
               body: SizedBox(
                 height: 350,
                 width: 200,
-                child: AppProductCard(
-                  product: testProduct,
-                  showName: true,
-                ),
+                child: AppProductCard(product: testProduct, showName: true),
               ),
             ),
           ),
@@ -44,7 +46,9 @@ void main() {
       expect(find.text(' (12)'), findsOneWidget);
     });
 
-    testWidgets('instantiates from entity via factory constructor', (tester) async {
+    testWidgets('instantiates from entity via factory constructor', (
+      tester,
+    ) async {
       final entity = testProduct.toEntity();
 
       await tester.pumpWidget(
@@ -68,7 +72,9 @@ void main() {
       expect(find.text('LE 200.00'), findsOneWidget);
     });
 
-    testWidgets('whole card is tappable, including the details area', (tester) async {
+    testWidgets('whole card is tappable, including the details area', (
+      tester,
+    ) async {
       var taps = 0;
       await tester.pumpWidget(
         ProviderScope(
@@ -77,7 +83,10 @@ void main() {
               body: SizedBox(
                 height: 350,
                 width: 200,
-                child: AppProductCard(product: testProduct, onTap: () => taps++),
+                child: AppProductCard(
+                  product: testProduct,
+                  onTap: () => taps++,
+                ),
               ),
             ),
           ),
@@ -88,7 +97,9 @@ void main() {
       expect(taps, 1);
     });
 
-    testWidgets('out-of-stock product shows the badge and no struck price', (tester) async {
+    testWidgets('out-of-stock product shows the badge and no struck price', (
+      tester,
+    ) async {
       const outOfStock = ProductModel(
         id: 'prod-2',
         name: LocalizedString(en: 'Creatine', ar: 'كرياتين'),

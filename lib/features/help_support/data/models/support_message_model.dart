@@ -29,16 +29,27 @@ class SupportMessageModel {
           : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       ticketId: json['ticket_id'] is int
           ? json['ticket_id'] as int
-          : int.tryParse(json['ticket_id']?.toString() ?? json['ticketId']?.toString() ?? '0') ?? 0,
-      senderType: (json['sender_type'] ?? json['senderType'] ?? 'user').toString(),
-      senderName: (json['sender_name'] ?? json['senderName'] ?? 'مستخدم').toString(),
+          : int.tryParse(
+                  json['ticket_id']?.toString() ??
+                      json['ticketId']?.toString() ??
+                      '0',
+                ) ??
+                0,
+      senderType: (json['sender_type'] ?? json['senderType'] ?? 'user')
+          .toString(),
+      senderName: (json['sender_name'] ?? json['senderName'] ?? 'مستخدم')
+          .toString(),
       message: (json['message'] ?? '').toString(),
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
           : (json['createdAt'] != null
-              ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
-              : DateTime.now()),
-      isRead: json['is_read'] == true || json['is_read'] == 1 || json['isRead'] == true,
+                ? DateTime.tryParse(json['createdAt'].toString()) ??
+                      DateTime.now()
+                : DateTime.now()),
+      isRead:
+          json['is_read'] == true ||
+          json['is_read'] == 1 ||
+          json['isRead'] == true,
     );
   }
 
@@ -72,6 +83,8 @@ SupportMessageModel _parseMessageIsolate(Map<String, dynamic> json) {
 List<SupportMessageModel> _parseMessageListIsolate(List<dynamic> rawList) {
   return rawList
       .whereType<Map>()
-      .map((item) => SupportMessageModel.fromJson(Map<String, dynamic>.from(item)))
+      .map(
+        (item) => SupportMessageModel.fromJson(Map<String, dynamic>.from(item)),
+      )
       .toList();
 }

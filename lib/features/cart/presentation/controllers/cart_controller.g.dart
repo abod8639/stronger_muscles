@@ -10,16 +10,19 @@ String _$cartControllerHash() => r'bd8942614961f9ec1b00d066bf86001dd68c0314';
 
 /// See also [CartController].
 @ProviderFor(CartController)
-final cartControllerProvider = AutoDisposeAsyncNotifierProvider<CartController,
-    List<CartItemEntity>>.internal(
-  CartController.new,
-  name: r'cartControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$cartControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final cartControllerProvider =
+    AutoDisposeAsyncNotifierProvider<
+      CartController,
+      List<CartItemEntity>
+    >.internal(
+      CartController.new,
+      name: r'cartControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$cartControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$CartController = AutoDisposeAsyncNotifier<List<CartItemEntity>>;
 // ignore_for_file: type=lint

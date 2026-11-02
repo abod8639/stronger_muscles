@@ -24,14 +24,18 @@ class ShortcutItem extends ConsumerWidget {
     final item = ref.watch(
       categoriesSectionsControllerProvider.select((s) {
         final list = s.valueOrNull;
-        return list != null && index >= 0 && index < list.length ? list[index] : null;
+        return list != null && index >= 0 && index < list.length
+            ? list[index]
+            : null;
       }),
     );
 
     if (item == null) return const SizedBox.shrink();
 
     final label = item.localizedLabel(AppLocalizations.of(context));
-    final activeColor = isSelected ? AppColors.primary : context.colorScheme.onSurfaceVariant;
+    final activeColor = isSelected
+        ? AppColors.primary
+        : context.colorScheme.onSurfaceVariant;
 
     return Semantics(
       label: label,
@@ -41,7 +45,9 @@ class ShortcutItem extends ConsumerWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         borderRadius: AppRadius.allMd,
-        onTap: () => ref.read(categoriesSectionsControllerProvider.notifier).updateIndex(index),
+        onTap: () => ref
+            .read(categoriesSectionsControllerProvider.notifier)
+            .updateIndex(index),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

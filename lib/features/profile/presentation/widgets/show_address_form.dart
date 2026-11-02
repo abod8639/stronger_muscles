@@ -5,4 +5,7 @@ import 'package:stronger_muscles/features/profile/presentation/widgets/address_f
 
 /// Opens the add/edit address sheet.
 Future<void> showAddressForm(BuildContext context, {AddressEntity? address}) =>
-    AppBottomSheetScaffold.show<void>(context, (_) => AddressForm(address: address));
+    AppBottomSheetScaffold.show<void>(
+      context,
+      (_) => AddressForm(address: address),
+    );

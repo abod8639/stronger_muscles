@@ -28,9 +28,15 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
     final user = ref.read(authControllerProvider).valueOrNull;
     final firebaseUser = FirebaseAuth.instance.currentUser;
 
-    _nameController = TextEditingController(text: user?.name ?? firebaseUser?.displayName ?? '');
-    _emailController = TextEditingController(text: user?.email ?? firebaseUser?.email ?? '');
-    _phoneController = TextEditingController(text: user?.phone ?? firebaseUser?.phoneNumber ?? '');
+    _nameController = TextEditingController(
+      text: user?.name ?? firebaseUser?.displayName ?? '',
+    );
+    _emailController = TextEditingController(
+      text: user?.email ?? firebaseUser?.email ?? '',
+    );
+    _phoneController = TextEditingController(
+      text: user?.phone ?? firebaseUser?.phoneNumber ?? '',
+    );
   }
 
   @override
@@ -45,7 +51,9 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
     if (!_formKey.currentState!.validate()) return;
     FocusScope.of(context).unfocus();
 
-    await ref.read(authControllerProvider.notifier).updateUserProfile(
+    await ref
+        .read(authControllerProvider.notifier)
+        .updateUserProfile(
           name: _nameController.text.trim(),
           email: _emailController.text.trim(),
           phone: _phoneController.text.trim(),
@@ -55,7 +63,10 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
     final l10n = AppLocalizations.of(context)!;
     final result = ref.read(authControllerProvider);
     if (result.hasError) {
-      AppSnackBar.showError(context, AppErrorCard.messageFor(result.error, l10n));
+      AppSnackBar.showError(
+        context,
+        AppErrorCard.messageFor(result.error, l10n),
+      );
     } else {
       AppSnackBar.showSuccess(context, l10n.profileUpdated);
     }
@@ -73,7 +84,8 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
       if (user == null) return;
       if (_nameController.text.isEmpty) _nameController.text = user.name;
       if (_emailController.text.isEmpty) _emailController.text = user.email;
-      if (_phoneController.text.isEmpty && user.phone != null) _phoneController.text = user.phone!;
+      if (_phoneController.text.isEmpty && user.phone != null)
+        _phoneController.text = user.phone!;
     });
 
     return Scaffold(
@@ -99,11 +111,23 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
                       end: 0,
                       child: Material(
                         color: AppColors.primary,
-                        shape: CircleBorder(side: BorderSide(color: context.colorScheme.surface, width: 3)),
+                        shape: CircleBorder(
+                          side: BorderSide(
+                            color: context.colorScheme.surface,
+                            width: 3,
+                          ),
+                        ),
                         child: IconButton(
                           tooltip: l10n.changePhotoComingSoon,
-                          icon: const Icon(Icons.camera_alt_rounded, color: AppColors.white, size: 20),
-                          onPressed: () => AppSnackBar.showInfo(context, l10n.changePhotoComingSoon),
+                          icon: const Icon(
+                            Icons.camera_alt_rounded,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
+                          onPressed: () => AppSnackBar.showInfo(
+                            context,
+                            l10n.changePhotoComingSoon,
+                          ),
                         ),
                       ),
                     ),
@@ -114,15 +138,24 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
               AppTextFormField(
                 controller: _nameController,
                 label: l10n.fullName,
-                prefixIcon: const Icon(Icons.person_outline_rounded, size: AppDimens.iconSm),
+                prefixIcon: const Icon(
+                  Icons.person_outline_rounded,
+                  size: AppDimens.iconSm,
+                ),
                 keyboardType: TextInputType.name,
-                validator: (value) => AppValidators.validateName(value, emptyMessage: l10n.enterName),
+                validator: (value) => AppValidators.validateName(
+                  value,
+                  emptyMessage: l10n.enterName,
+                ),
               ),
               gap,
               AppTextFormField(
                 controller: _emailController,
                 label: l10n.email,
-                prefixIcon: const Icon(Icons.email_outlined, size: AppDimens.iconSm),
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  size: AppDimens.iconSm,
+                ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) => AppValidators.validateEmail(
                   value,
@@ -134,10 +167,14 @@ class _EditUserInfoViewState extends ConsumerState<EditUserInfoView> {
               AppTextFormField(
                 controller: _phoneController,
                 label: l10n.phoneNumber,
-                prefixIcon: const Icon(Icons.phone_outlined, size: AppDimens.iconSm),
+                prefixIcon: const Icon(
+                  Icons.phone_outlined,
+                  size: AppDimens.iconSm,
+                ),
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.done,
-                validator: (value) => value != null && value.isNotEmpty && value.length < 10
+                validator: (value) =>
+                    value != null && value.isNotEmpty && value.length < 10
                     ? l10n.pleaseEnterValidPhone
                     : null,
               ),

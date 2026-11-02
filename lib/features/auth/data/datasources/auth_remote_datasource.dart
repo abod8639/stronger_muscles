@@ -54,7 +54,8 @@ UserModel parseUserFromResponse(dynamic rawData) {
 
   // Safe token extraction
   final String? token =
-      (dataMap['token'] ?? dataMap['access_token'] ?? userMap['token'])?.toString();
+      (dataMap['token'] ?? dataMap['access_token'] ?? userMap['token'])
+          ?.toString();
   if (token != null && token.isNotEmpty) {
     userMap['token'] = token;
   }
@@ -64,10 +65,7 @@ UserModel parseUserFromResponse(dynamic rawData) {
 
 /// Abstract contract for remote authentication data source.
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login({
-    required String email,
-    required String password,
-  });
+  Future<UserModel> login({required String email, required String password});
 
   Future<UserModel> register({
     required String name,
@@ -101,11 +99,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required ApiService apiService,
     GoogleSignIn? googleSignIn,
     Duration authTimeout = const Duration(seconds: 20),
-  })  : _apiService = apiService,
-        _googleSignInInstance = googleSignIn,
-        _authTimeout = authTimeout;
+  }) : _apiService = apiService,
+       _googleSignInInstance = googleSignIn,
+       _authTimeout = authTimeout;
 
-  GoogleSignIn get _googleSignIn => _googleSignInInstance ?? GoogleSignIn.instance;
+  GoogleSignIn get _googleSignIn =>
+      _googleSignInInstance ?? GoogleSignIn.instance;
 
   @override
   Future<UserModel> login({
@@ -163,7 +162,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on AuthException {
       rethrow;
     } catch (e) {
-      throw AuthException(message: 'فشلت عملية تسجيل الدخول باستخدام Google: $e');
+      throw AuthException(
+        message: 'فشلت عملية تسجيل الدخول باستخدام Google: $e',
+      );
     }
   }
 

@@ -8,19 +8,16 @@ class HomeRoutes {
 
   /// Primary shell branch integrated into app indexed navigation.
   static StatefulShellBranch get branch => StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: AppRoutes.main,
-            builder: (context, state) => const HomeView(),
-          ),
-        ],
-      );
+    routes: [
+      GoRoute(
+        path: AppRoutes.main,
+        builder: (context, state) => const HomeView(),
+      ),
+    ],
+  );
 
   /// Standalone routes and redirects for Home.
   static final List<RouteBase> standaloneRoutes = [
-    GoRoute(
-      path: AppRoutes.home,
-      redirect: (context, state) => AppRoutes.main,
-    ),
+    GoRoute(path: AppRoutes.home, redirect: (context, state) => AppRoutes.main),
   ];
 }

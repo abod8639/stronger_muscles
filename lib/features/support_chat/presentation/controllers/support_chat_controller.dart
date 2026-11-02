@@ -62,11 +62,11 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
     required SendTicketChatMessageUseCase sendMessageUseCase,
     required CloseTicketChatUseCase closeTicketUseCase,
     WebSocketService? webSocketService,
-  })  : _getTicketDetailsUseCase = getTicketDetailsUseCase,
-        _sendMessageUseCase = sendMessageUseCase,
-        _closeTicketUseCase = closeTicketUseCase,
-        _webSocketService = webSocketService ?? WebSocketService(),
-        super(const SupportChatState()) {
+  }) : _getTicketDetailsUseCase = getTicketDetailsUseCase,
+       _sendMessageUseCase = sendMessageUseCase,
+       _closeTicketUseCase = closeTicketUseCase,
+       _webSocketService = webSocketService ?? WebSocketService(),
+       super(const SupportChatState()) {
     init();
   }
 
@@ -150,7 +150,7 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
         message: (rawMsg['message'] ?? '').toString(),
         createdAt: rawMsg['created_at'] != null
             ? DateTime.tryParse(rawMsg['created_at'].toString()) ??
-                DateTime.now()
+                  DateTime.now()
             : DateTime.now(),
         isRead: rawMsg['is_read'] == true || rawMsg['is_read'] == 1,
       );
@@ -159,8 +159,8 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
       if (current != null) {
         final exists = current.messages.any((m) => m.id == newMsg.id);
         if (!exists) {
-          final updatedMsgs =
-              List<SupportMessageEntity>.from(current.messages)..add(newMsg);
+          final updatedMsgs = List<SupportMessageEntity>.from(current.messages)
+            ..add(newMsg);
           final updatedTicket = current.copyWith(
             messages: updatedMsgs,
             messagesCount: current.messagesCount + 1,
@@ -267,4 +267,3 @@ class SupportChatNotifier extends StateNotifier<SupportChatState> {
     super.dispose();
   }
 }
-

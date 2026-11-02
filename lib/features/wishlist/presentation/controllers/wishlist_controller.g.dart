@@ -11,16 +11,19 @@ String _$wishlistControllerHash() =>
 
 /// See also [WishlistController].
 @ProviderFor(WishlistController)
-final wishlistControllerProvider = AutoDisposeNotifierProvider<
-    WishlistController, List<ProductEntity>>.internal(
-  WishlistController.new,
-  name: r'wishlistControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$wishlistControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final wishlistControllerProvider =
+    AutoDisposeNotifierProvider<
+      WishlistController,
+      List<ProductEntity>
+    >.internal(
+      WishlistController.new,
+      name: r'wishlistControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$wishlistControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$WishlistController = AutoDisposeNotifier<List<ProductEntity>>;
 // ignore_for_file: type=lint

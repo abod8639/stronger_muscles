@@ -13,9 +13,6 @@ class GetHomeProductsUseCase {
     String? categoryId,
     int page = 1,
   }) {
-    return _repository.getHomeProducts(
-      categoryId: categoryId,
-      page: page,
-    );
+    return _repository.getHomeProducts(categoryId: categoryId, page: page);
   }
 }

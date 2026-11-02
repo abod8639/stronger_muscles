@@ -16,20 +16,21 @@ import 'package:stronger_muscles/features/product_details/domain/usecases/submit
 
 final productDetailsLocalDataSourceProvider =
     Provider<ProductDetailsLocalDataSource>((ref) {
-  return ProductDetailsLocalDataSource();
-});
+      return ProductDetailsLocalDataSource();
+    });
 
 final productDetailsRemoteDataSourceProvider =
     Provider<ProductDetailsRemoteDataSource>((ref) {
-  return ProductDetailsRemoteDataSource(ref.watch(apiServiceProvider));
-});
+      return ProductDetailsRemoteDataSource(ref.watch(apiServiceProvider));
+    });
 
 // ---------------------------------------------------------------------------
 // Repository
 // ---------------------------------------------------------------------------
 
-final productDetailsRepositoryProvider =
-    Provider<ProductDetailsRepository>((ref) {
+final productDetailsRepositoryProvider = Provider<ProductDetailsRepository>((
+  ref,
+) {
   return ProductDetailsRepositoryImpl(
     ref.watch(productDetailsRemoteDataSourceProvider),
     ref.watch(productDetailsLocalDataSourceProvider),
@@ -40,27 +41,37 @@ final productDetailsRepositoryProvider =
 // Use Cases
 // ---------------------------------------------------------------------------
 
-final getProductDetailsUseCaseProvider =
-    Provider<GetProductDetailsUseCase>((ref) {
+final getProductDetailsUseCaseProvider = Provider<GetProductDetailsUseCase>((
+  ref,
+) {
   return GetProductDetailsUseCase(ref.watch(productDetailsRepositoryProvider));
 });
 
-final getProductReviewsUseCaseProvider =
-    Provider<GetProductReviewsUseCase>((ref) {
+final getProductReviewsUseCaseProvider = Provider<GetProductReviewsUseCase>((
+  ref,
+) {
   return GetProductReviewsUseCase(ref.watch(productDetailsRepositoryProvider));
 });
 
 final getUserProductReviewUseCaseProvider =
     Provider<GetUserProductReviewUseCase>((ref) {
-  return GetUserProductReviewUseCase(ref.watch(productDetailsRepositoryProvider));
-});
+      return GetUserProductReviewUseCase(
+        ref.watch(productDetailsRepositoryProvider),
+      );
+    });
 
-final submitProductReviewUseCaseProvider =
-    Provider<SubmitProductReviewUseCase>((ref) {
-  return SubmitProductReviewUseCase(ref.watch(productDetailsRepositoryProvider));
-});
+final submitProductReviewUseCaseProvider = Provider<SubmitProductReviewUseCase>(
+  (ref) {
+    return SubmitProductReviewUseCase(
+      ref.watch(productDetailsRepositoryProvider),
+    );
+  },
+);
 
-final deleteProductReviewUseCaseProvider =
-    Provider<DeleteProductReviewUseCase>((ref) {
-  return DeleteProductReviewUseCase(ref.watch(productDetailsRepositoryProvider));
-});
+final deleteProductReviewUseCaseProvider = Provider<DeleteProductReviewUseCase>(
+  (ref) {
+    return DeleteProductReviewUseCase(
+      ref.watch(productDetailsRepositoryProvider),
+    );
+  },
+);

@@ -19,7 +19,11 @@ class WishlistDeleteButton extends ConsumerWidget {
       label: '${l10n.removeFromWishlist}: $productName',
       button: true,
       child: IconButton(
-        icon: const Icon(Icons.favorite_rounded, size: 26.0, color: AppColors.primary),
+        icon: const Icon(
+          Icons.favorite_rounded,
+          size: 26.0,
+          color: AppColors.primary,
+        ),
         onPressed: () => handleDeleteFromWishlist(context, ref, product),
         tooltip: l10n.removeFromWishlist,
         splashRadius: 24.0,

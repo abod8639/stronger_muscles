@@ -39,7 +39,8 @@ class ProductDetailsState {
       selectedSizeObject: selectedSizeObject ?? this.selectedSizeObject,
       isInWishlist: isInWishlist ?? this.isInWishlist,
       displayPrice: displayPrice ?? this.displayPrice,
-      displayEffectivePrice: displayEffectivePrice ?? this.displayEffectivePrice,
+      displayEffectivePrice:
+          displayEffectivePrice ?? this.displayEffectivePrice,
       displayHasDiscount: displayHasDiscount ?? this.displayHasDiscount,
       isPriceZero: isPriceZero ?? this.isPriceZero,
     );

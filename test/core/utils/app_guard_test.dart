@@ -68,9 +68,8 @@ void main() {
         ),
         GoRoute(
           path: AppRoutes.auth,
-          builder: (context, state) => const Scaffold(
-            body: Center(child: Text('Auth Screen')),
-          ),
+          builder: (context, state) =>
+              const Scaffold(body: Center(child: Text('Auth Screen'))),
         ),
       ],
     );
@@ -82,21 +81,23 @@ void main() {
   }) {
     return ProviderScope(
       overrides: [
-        internetConnectionControllerProvider.overrideWith(internetNotifierBuilder),
+        internetConnectionControllerProvider.overrideWith(
+          internetNotifierBuilder,
+        ),
         authControllerProvider.overrideWith(authNotifierBuilder),
         authStateProvider.overrideWith(
           (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
         ),
         routerProvider.overrideWithValue(testRouter),
       ],
-      child: MaterialApp.router(
-        routerConfig: testRouter,
-      ),
+      child: MaterialApp.router(routerConfig: testRouter),
     );
   }
 
   group('AppGuard runSafe Tests', () {
-    testWidgets('executes action when user is online and authenticated', (tester) async {
+    testWidgets('executes action when user is online and authenticated', (
+      tester,
+    ) async {
       bool actionExecuted = false;
       currentTrigger = (ref) => AppGuard.runSafe(ref, () async {
         actionExecuted = true;
@@ -118,7 +119,9 @@ void main() {
       expect(find.text('تنبيه'), findsNothing);
     });
 
-    testWidgets('blocks action and displays dialog when offline', (tester) async {
+    testWidgets('blocks action and displays dialog when offline', (
+      tester,
+    ) async {
       bool actionExecuted = false;
       currentTrigger = (ref) => AppGuard.runSafe(ref, () async {
         actionExecuted = true;
@@ -137,7 +140,10 @@ void main() {
 
       expect(actionExecuted, isFalse);
       expect(find.text('لا يوجد اتصال'), findsOneWidget);
-      expect(find.text('يرجى التحقق من اتصالك بالإنترنت للمتابعة'), findsOneWidget);
+      expect(
+        find.text('يرجى التحقق من اتصالك بالإنترنت للمتابعة'),
+        findsOneWidget,
+      );
 
       // Dismiss dialog
       await tester.tap(find.text('حسناً'));
@@ -145,7 +151,9 @@ void main() {
       expect(find.text('لا يوجد اتصال'), findsNothing);
     });
 
-    testWidgets('blocks action and routes to auth when unauthenticated', (tester) async {
+    testWidgets('blocks action and routes to auth when unauthenticated', (
+      tester,
+    ) async {
       bool actionExecuted = false;
       currentTrigger = (ref) => AppGuard.runSafe(ref, () async {
         actionExecuted = true;
@@ -166,34 +174,37 @@ void main() {
       expect(find.text('Auth Screen'), findsOneWidget);
     });
 
-    testWidgets('triggers custom onUnauthenticated callback when unauthenticated', (tester) async {
-      bool actionExecuted = false;
-      bool customRedirectTriggered = false;
+    testWidgets(
+      'triggers custom onUnauthenticated callback when unauthenticated',
+      (tester) async {
+        bool actionExecuted = false;
+        bool customRedirectTriggered = false;
 
-      currentTrigger = (ref) => AppGuard.runSafe(
-        ref,
-        () async {
-          actionExecuted = true;
-        },
-        onUnauthenticated: () {
-          customRedirectTriggered = true;
-        },
-      );
+        currentTrigger = (ref) => AppGuard.runSafe(
+          ref,
+          () async {
+            actionExecuted = true;
+          },
+          onUnauthenticated: () {
+            customRedirectTriggered = true;
+          },
+        );
 
-      await tester.pumpWidget(
-        buildAppGuardTester(
-          internetNotifierBuilder: () => MockOnlineNotifier(),
-          authNotifierBuilder: () => MockLoggedOutAuthNotifier(),
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildAppGuardTester(
+            internetNotifierBuilder: () => MockOnlineNotifier(),
+            authNotifierBuilder: () => MockLoggedOutAuthNotifier(),
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const Key('guard_trigger_button')));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('guard_trigger_button')));
+        await tester.pumpAndSettle();
 
-      expect(actionExecuted, isFalse);
-      expect(customRedirectTriggered, isTrue);
-    });
+        expect(actionExecuted, isFalse);
+        expect(customRedirectTriggered, isTrue);
+      },
+    );
   });
 
   group('AppGuard specialized runners', () {
@@ -216,7 +227,9 @@ void main() {
       expect(actionExecuted, isTrue);
     });
 
-    testWidgets('runSafeInternet blocks action and shows dialog when offline', (tester) async {
+    testWidgets('runSafeInternet blocks action and shows dialog when offline', (
+      tester,
+    ) async {
       bool actionExecuted = false;
       currentTrigger = (ref) => AppGuard.runSafeInternet(ref, () async {
         actionExecuted = true;
@@ -236,23 +249,26 @@ void main() {
       expect(find.text('لا يوجد اتصال'), findsOneWidget);
     });
 
-    testWidgets('runSafeAuth allows action when authenticated and redirects when unauthenticated', (tester) async {
-      bool actionExecuted = false;
-      currentTrigger = (ref) => AppGuard.runSafeAuth(ref, () async {
-        actionExecuted = true;
-      });
+    testWidgets(
+      'runSafeAuth allows action when authenticated and redirects when unauthenticated',
+      (tester) async {
+        bool actionExecuted = false;
+        currentTrigger = (ref) => AppGuard.runSafeAuth(ref, () async {
+          actionExecuted = true;
+        });
 
-      await tester.pumpWidget(
-        buildAppGuardTester(
-          internetNotifierBuilder: () => MockOfflineNotifier(),
-          authNotifierBuilder: () => MockLoggedInAuthNotifier(),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('guard_trigger_button')));
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          buildAppGuardTester(
+            internetNotifierBuilder: () => MockOfflineNotifier(),
+            authNotifierBuilder: () => MockLoggedInAuthNotifier(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(const Key('guard_trigger_button')));
+        await tester.pumpAndSettle();
 
-      expect(actionExecuted, isTrue);
-    });
+        expect(actionExecuted, isTrue);
+      },
+    );
   });
 }

@@ -161,7 +161,10 @@ class NetworkErrorHandler {
   }
 
   /// Handles HTTP responses with error status codes (4xx, 5xx) with safe payload inspection.
-  static Failure _handleHttpResponse(Response response, [StackTrace? stackTrace]) {
+  static Failure _handleHttpResponse(
+    Response response, [
+    StackTrace? stackTrace,
+  ]) {
     final statusCode = response.statusCode ?? 500;
     final dynamic data = response.data;
 
@@ -173,13 +176,16 @@ class NetworkErrorHandler {
       if (data['errors'] is Map) {
         validationErrors = Map<String, dynamic>.from(data['errors']);
       }
-    } else if (data is String && data.isNotEmpty && !data.trim().startsWith('<')) {
+    } else if (data is String &&
+        data.isNotEmpty &&
+        !data.trim().startsWith('<')) {
       serverMessage = data;
     }
 
     if (statusCode == 401 || statusCode == 403) {
       final isLoginRoute = response.requestOptions.path.contains('login');
-      final msg = serverMessage ??
+      final msg =
+          serverMessage ??
           (isLoginRoute
               ? 'بيانات تسجيل الدخول غير صحيحة، يرجى التأكد والمحاولة مجدداً'
               : 'انتهت صلاحية الجلسة، يرجى تسجيل الدخول من جديد');
@@ -218,7 +224,9 @@ class NetworkErrorHandler {
 
     if (statusCode >= 500) {
       return ServerFailure(
-        message: serverMessage ?? 'الخادم يواجه مشكلة مؤقتة. يرجى المحاولة لاحقاً ($statusCode)',
+        message:
+            serverMessage ??
+            'الخادم يواجه مشكلة مؤقتة. يرجى المحاولة لاحقاً ($statusCode)',
         statusCode: statusCode,
         originalError: response,
         stackTrace: stackTrace,

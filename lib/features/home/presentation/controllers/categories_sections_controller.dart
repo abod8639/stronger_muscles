@@ -26,15 +26,12 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
 
     final result = await getHomeShortcuts(langCode: langCode);
 
-    return result.fold(
-      (failure) {
-        if (failure is CancelFailure) {
-          return const [];
-        }
-        throw failure;
-      },
-      (shortcuts) => shortcuts,
-    );
+    return result.fold((failure) {
+      if (failure is CancelFailure) {
+        return const [];
+      }
+      throw failure;
+    }, (shortcuts) => shortcuts);
   }
 
   int get selectedIndex => ref.read(selectedCategoryIndexProvider);
@@ -45,14 +42,11 @@ class CategoriesSectionsController extends _$CategoriesSectionsController {
 
     final result = await getHomeShortcuts(langCode: langCode);
 
-    result.fold(
-      (failure) {
-        if (failure is CancelFailure) return;
-        if (state.hasValue && (state.value?.isNotEmpty ?? false)) return;
-        state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
-      },
-      (fetched) => state = AsyncData(fetched),
-    );
+    result.fold((failure) {
+      if (failure is CancelFailure) return;
+      if (state.hasValue && (state.value?.isNotEmpty ?? false)) return;
+      state = AsyncError(failure, failure.stackTrace ?? StackTrace.current);
+    }, (fetched) => state = AsyncData(fetched));
   }
 
   void updateIndex(int index) {

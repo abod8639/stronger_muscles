@@ -28,7 +28,9 @@ final homeRepositoryProvider = Provider<HomeRepository>((ref) {
 
 // ── Domain UseCase Providers ─────────────────────────────────────────────────
 
-final getHomeShortcutsUseCaseProvider = Provider<GetHomeShortcutsUseCase>((ref) {
+final getHomeShortcutsUseCaseProvider = Provider<GetHomeShortcutsUseCase>((
+  ref,
+) {
   final homeRepository = ref.watch(homeRepositoryProvider);
   return GetHomeShortcutsUseCase(homeRepository);
 });

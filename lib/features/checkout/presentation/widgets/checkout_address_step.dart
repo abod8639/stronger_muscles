@@ -32,10 +32,14 @@ class CheckoutAddressStep extends ConsumerWidget {
                   title: l10n.pleaseSelectShippingAddress,
                   padding: const EdgeInsets.only(bottom: AppDimens.spacingSm),
                 ),
-                for (final address in addresses) AddressSelectionCard(address: address),
+                for (final address in addresses)
+                  AddressSelectionCard(address: address),
                 const SizedBox(height: AppDimens.spacingMd),
                 AppSocialButton(
-                  icon: const Icon(Icons.add_location_alt_outlined, size: AppDimens.iconSm),
+                  icon: const Icon(
+                    Icons.add_location_alt_outlined,
+                    size: AppDimens.iconSm,
+                  ),
                   label: l10n.addNewAddress,
                   onPressed: () => showAddressForm(context),
                 ),

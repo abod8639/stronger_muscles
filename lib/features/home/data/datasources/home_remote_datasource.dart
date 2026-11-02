@@ -62,7 +62,9 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   HomeRemoteDataSourceImpl(this._apiService);
 
   @override
-  Future<List<SelectionsModel>> getCategories({CancelToken? cancelToken}) async {
+  Future<List<SelectionsModel>> getCategories({
+    CancelToken? cancelToken,
+  }) async {
     try {
       final response = await _apiService.get(
         ApiConfig.categories,
@@ -88,10 +90,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
     CancelToken? cancelToken,
   }) async {
     try {
-      final queryParams = <String, dynamic>{
-        'page': page,
-        'limit': limit,
-      };
+      final queryParams = <String, dynamic>{'page': page, 'limit': limit};
 
       if (categoryId != null && categoryId.isNotEmpty) {
         queryParams['category'] = categoryId;

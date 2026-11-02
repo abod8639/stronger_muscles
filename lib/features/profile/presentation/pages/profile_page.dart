@@ -33,7 +33,11 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void _scrollToAddresses() {
     final target = _addressesKey.currentContext;
     if (target != null) {
-      Scrollable.ensureVisible(target, duration: const Duration(milliseconds: 350), curve: Curves.easeOut);
+      Scrollable.ensureVisible(
+        target,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+      );
     }
   }
 

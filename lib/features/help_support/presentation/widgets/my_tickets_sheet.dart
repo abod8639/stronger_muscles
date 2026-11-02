@@ -43,7 +43,8 @@ class MyTicketsSheet extends ConsumerWidget {
               )
             : ListView.separated(
                 itemCount: tickets.length,
-                separatorBuilder: (_, _) => const SizedBox(height: AppDimens.spacingSm + 2),
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: AppDimens.spacingSm + 2),
                 itemBuilder: (context, index) {
                   final ticket = tickets[index];
                   return SupportTicketCard(

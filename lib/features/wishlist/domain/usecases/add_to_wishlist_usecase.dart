@@ -11,14 +11,13 @@ class AddToWishlistUseCase {
 
   Future<Either<Failure, Unit>> call(ProductEntity product) async {
     final checkResult = repository.isInWishlist(product.id);
-    return checkResult.fold(
-      (failure) => repository.addToWishlist(product),
-      (isInWishlist) {
-        if (!isInWishlist) {
-          return repository.addToWishlist(product);
-        }
-        return const Right(unit);
-      },
-    );
+    return checkResult.fold((failure) => repository.addToWishlist(product), (
+      isInWishlist,
+    ) {
+      if (!isInWishlist) {
+        return repository.addToWishlist(product);
+      }
+      return const Right(unit);
+    });
   }
 }

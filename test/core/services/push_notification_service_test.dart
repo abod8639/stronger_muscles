@@ -44,8 +44,7 @@ class MockApiService implements ApiService {
     bool includeAuth = true,
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<Response> put(
@@ -54,16 +53,14 @@ class MockApiService implements ApiService {
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<Response> delete(
     String path, {
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 }
 
 void main() {
@@ -76,61 +73,87 @@ void main() {
       service = PushNotificationService(mockApi);
     });
 
-    test('registerDeviceToken returns false immediately for empty or whitespace-only token', () async {
-      final emptyResult = await service.registerDeviceToken('');
-      final whitespaceResult = await service.registerDeviceToken('   \n  \t ');
+    test(
+      'registerDeviceToken returns false immediately for empty or whitespace-only token',
+      () async {
+        final emptyResult = await service.registerDeviceToken('');
+        final whitespaceResult = await service.registerDeviceToken(
+          '   \n  \t ',
+        );
 
-      expect(emptyResult, isFalse);
-      expect(whitespaceResult, isFalse);
-      expect(mockApi.capturedPath, isNull);
-    });
+        expect(emptyResult, isFalse);
+        expect(whitespaceResult, isFalse);
+        expect(mockApi.capturedPath, isNull);
+      },
+    );
 
-    test('registerDeviceToken posts trimmed token to ApiConfig.fcmToken and returns true on success', () async {
-      mockApi.mockResponseData = {
-        'status': 'success',
-        'message': 'Token registered successfully',
-      };
+    test(
+      'registerDeviceToken posts trimmed token to ApiConfig.fcmToken and returns true on success',
+      () async {
+        mockApi.mockResponseData = {
+          'status': 'success',
+          'message': 'Token registered successfully',
+        };
 
-      final result = await service.registerDeviceToken('  device_token_xyz_123  ');
+        final result = await service.registerDeviceToken(
+          '  device_token_xyz_123  ',
+        );
 
-      expect(result, isTrue);
-      expect(mockApi.capturedPath, ApiConfig.fcmToken);
-      expect(mockApi.capturedData, {'fcm_token': 'device_token_xyz_123'});
-    });
+        expect(result, isTrue);
+        expect(mockApi.capturedPath, ApiConfig.fcmToken);
+        expect(mockApi.capturedData, {'fcm_token': 'device_token_xyz_123'});
+      },
+    );
 
-    test('registerDeviceToken returns false when server response status is not success', () async {
-      mockApi.mockResponseData = {
-        'status': 'failed',
-        'message': 'Invalid token',
-      };
+    test(
+      'registerDeviceToken returns false when server response status is not success',
+      () async {
+        mockApi.mockResponseData = {
+          'status': 'failed',
+          'message': 'Invalid token',
+        };
 
-      final result = await service.registerDeviceToken('device_token_fail');
+        final result = await service.registerDeviceToken('device_token_fail');
 
-      expect(result, isFalse);
-    });
+        expect(result, isFalse);
+      },
+    );
 
-    test('registerDeviceToken returns false when response data is not a map', () async {
-      mockApi.mockResponseData = 'non-map string payload';
+    test(
+      'registerDeviceToken returns false when response data is not a map',
+      () async {
+        mockApi.mockResponseData = 'non-map string payload';
 
-      final result = await service.registerDeviceToken('device_token_abc');
+        final result = await service.registerDeviceToken('device_token_abc');
 
-      expect(result, isFalse);
-    });
+        expect(result, isFalse);
+      },
+    );
 
-    test('registerDeviceToken catches Failure gracefully and returns false', () async {
-      mockApi.shouldThrowFailure = true;
+    test(
+      'registerDeviceToken catches Failure gracefully and returns false',
+      () async {
+        mockApi.shouldThrowFailure = true;
 
-      final result = await service.registerDeviceToken('device_token_network_err');
+        final result = await service.registerDeviceToken(
+          'device_token_network_err',
+        );
 
-      expect(result, isFalse);
-    });
+        expect(result, isFalse);
+      },
+    );
 
-    test('registerDeviceToken catches unexpected Exceptions gracefully and returns false', () async {
-      mockApi.shouldThrowException = true;
+    test(
+      'registerDeviceToken catches unexpected Exceptions gracefully and returns false',
+      () async {
+        mockApi.shouldThrowException = true;
 
-      final result = await service.registerDeviceToken('device_token_unexpected');
+        final result = await service.registerDeviceToken(
+          'device_token_unexpected',
+        );
 
-      expect(result, isFalse);
-    });
+        expect(result, isFalse);
+      },
+    );
   });
 }

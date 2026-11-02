@@ -49,7 +49,10 @@ class AppProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final triggerIndex = (products.length - loadMoreThreshold).clamp(0, products.length);
+    final triggerIndex = (products.length - loadMoreThreshold).clamp(
+      0,
+      products.length,
+    );
 
     return SliverMainAxisGroup(
       slivers: [
@@ -59,8 +62,12 @@ class AppProductGrid extends StatelessWidget {
             gridDelegate: AppProductGridLayout.delegate(context),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                if (index == triggerIndex && onNearEnd != null && !isLoadingMore) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) => onNearEnd!());
+                if (index == triggerIndex &&
+                    onNearEnd != null &&
+                    !isLoadingMore) {
+                  WidgetsBinding.instance.addPostFrameCallback(
+                    (_) => onNearEnd!(),
+                  );
                 }
                 final product = products[index];
                 return AppProductCard.fromEntity(

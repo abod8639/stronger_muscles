@@ -13,8 +13,9 @@ String _$promosHash() => r'06135c9bc704aa4172951c078dea4b037a1c1d2d';
 final promosProvider = AutoDisposeFutureProvider<List<PromoEntity>>.internal(
   promos,
   name: r'promosProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$promosHash,
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$promosHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
@@ -26,14 +27,14 @@ String _$promoControllerHash() => r'9944d95dbdd5cf702e6f0008e9437b1a9227d192';
 @ProviderFor(PromoController)
 final promoControllerProvider =
     AutoDisposeNotifierProvider<PromoController, int>.internal(
-  PromoController.new,
-  name: r'promoControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$promoControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      PromoController.new,
+      name: r'promoControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$promoControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$PromoController = AutoDisposeNotifier<int>;
 // ignore_for_file: type=lint

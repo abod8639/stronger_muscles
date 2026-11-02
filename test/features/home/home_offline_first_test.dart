@@ -19,7 +19,9 @@ class FakeHomeRemoteDataSource implements HomeRemoteDataSource {
   List<ProductModel> mockProducts = [];
 
   @override
-  Future<List<SelectionsModel>> getCategories({CancelToken? cancelToken}) async {
+  Future<List<SelectionsModel>> getCategories({
+    CancelToken? cancelToken,
+  }) async {
     return [];
   }
 
@@ -97,7 +99,10 @@ void main() {
     fakeRemoteDataSource = FakeHomeRemoteDataSource();
     productLocalDataSource = ProductLocalDataSource();
     homeLocalDataSource = HomeLocalDataSourceImpl(null, productLocalDataSource);
-    homeRepository = HomeRepositoryImpl(fakeRemoteDataSource, homeLocalDataSource);
+    homeRepository = HomeRepositoryImpl(
+      fakeRemoteDataSource,
+      homeLocalDataSource,
+    );
   });
 
   tearDownAll(() async {
@@ -108,52 +113,68 @@ void main() {
   });
 
   group('Home Offline-First & Cache Tests', () {
-    test('homeLocalDataSource caches and retrieves products via ProductLocalDataSource', () async {
-      await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
+    test(
+      'homeLocalDataSource caches and retrieves products via ProductLocalDataSource',
+      () async {
+        await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
 
-      final allCached = await homeLocalDataSource.getCachedProducts();
-      expect(allCached.length, 2);
-      expect(allCached.any((p) => p.id == 'prod-1'), isTrue);
-      expect(allCached.any((p) => p.id == 'prod-2'), isTrue);
+        final allCached = await homeLocalDataSource.getCachedProducts();
+        expect(allCached.length, 2);
+        expect(allCached.any((p) => p.id == 'prod-1'), isTrue);
+        expect(allCached.any((p) => p.id == 'prod-2'), isTrue);
 
-      final proteinOnly = await homeLocalDataSource.getCachedProducts(categoryId: 'cat-protein');
-      expect(proteinOnly.length, 1);
-      expect(proteinOnly.first.id, 'prod-1');
-    });
+        final proteinOnly = await homeLocalDataSource.getCachedProducts(
+          categoryId: 'cat-protein',
+        );
+        expect(proteinOnly.length, 1);
+        expect(proteinOnly.first.id, 'prod-1');
+      },
+    );
 
-    test('getHomeProducts returns cached products when remote data source fails with NetworkFailure', () async {
-      await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
+    test(
+      'getHomeProducts returns cached products when remote data source fails with NetworkFailure',
+      () async {
+        await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
 
-      fakeRemoteDataSource.errorToThrow = const NetworkFailure();
+        fakeRemoteDataSource.errorToThrow = const NetworkFailure();
 
-      final result = await homeRepository.getHomeProducts(page: 1);
+        final result = await homeRepository.getHomeProducts(page: 1);
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected cached products, but got failure: $failure'),
-        (products) {
-          expect(products.length, 2);
-          expect(products.first.id, 'prod-1');
-          expect(products.first.name?.ar, 'واي بروتين');
-        },
-      );
-    });
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) =>
+              fail('Expected cached products, but got failure: $failure'),
+          (products) {
+            expect(products.length, 2);
+            expect(products.first.id, 'prod-1');
+            expect(products.first.name?.ar, 'واي بروتين');
+          },
+        );
+      },
+    );
 
-    test('getHomeProducts returns category-specific cached products when offline', () async {
-      await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
+    test(
+      'getHomeProducts returns category-specific cached products when offline',
+      () async {
+        await homeLocalDataSource.cacheProducts([testProduct, testProduct2]);
 
-      fakeRemoteDataSource.errorToThrow = const NetworkFailure();
+        fakeRemoteDataSource.errorToThrow = const NetworkFailure();
 
-      final result = await homeRepository.getHomeProducts(categoryId: 'cat-protein', page: 1);
+        final result = await homeRepository.getHomeProducts(
+          categoryId: 'cat-protein',
+          page: 1,
+        );
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected cached products for protein, but got: $failure'),
-        (products) {
-          expect(products.length, 1);
-          expect(products.first.id, 'prod-1');
-        },
-      );
-    });
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) =>
+              fail('Expected cached products for protein, but got: $failure'),
+          (products) {
+            expect(products.length, 1);
+            expect(products.first.id, 'prod-1');
+          },
+        );
+      },
+    );
   });
 }

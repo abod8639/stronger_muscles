@@ -12,19 +12,17 @@ class CheckoutRoutes {
   static const String orderSuccess = AppRoutes.orderSuccess;
 
   static List<RouteBase> get routes => [
-        GoRoute(
-          path: checkout,
-          name: checkout,
-          pageBuilder: (context, state) => const MaterialPage(
-            child: CheckoutView(),
-          ),
-        ),
-        GoRoute(
-          path: orderSuccess,
-          name: orderSuccess,
-          pageBuilder: (context, state) => const MaterialPage(
-            child: OrderSuccessView(),
-          ),
-        ),
-      ];
+    GoRoute(
+      path: checkout,
+      name: checkout,
+      pageBuilder: (context, state) =>
+          const MaterialPage(child: CheckoutView()),
+    ),
+    GoRoute(
+      path: orderSuccess,
+      name: orderSuccess,
+      pageBuilder: (context, state) =>
+          const MaterialPage(child: OrderSuccessView()),
+    ),
+  ];
 }

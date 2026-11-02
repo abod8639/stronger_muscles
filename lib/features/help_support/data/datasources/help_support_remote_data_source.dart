@@ -9,7 +9,10 @@ abstract class HelpSupportRemoteDataSource {
   Future<SupportTicketModel> submitTicket(SupportTicketModel ticket);
   Future<List<SupportTicketModel>> getUserTickets();
   Future<SupportTicketModel> getTicketDetails(String ticketId);
-  Future<SupportMessageModel> sendTicketMessage(String ticketId, String message);
+  Future<SupportMessageModel> sendTicketMessage(
+    String ticketId,
+    String message,
+  );
   Future<SupportTicketModel> closeTicket(String ticketId);
 }
 
@@ -40,7 +43,9 @@ class HelpSupportRemoteDataSourceImpl implements HelpSupportRemoteDataSource {
       return SupportTicketModel.fromJsonAsync(ticketMap);
     }
 
-    throw const ServerException(message: 'استجابة غير صالحة من خادم الدعم الفني');
+    throw const ServerException(
+      message: 'استجابة غير صالحة من خادم الدعم الفني',
+    );
   }
 
   @override

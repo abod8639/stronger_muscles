@@ -38,7 +38,8 @@ class CheckoutLocalDataSourceImpl implements CheckoutLocalDataSource {
         return _box!;
       } catch (recoveryError) {
         throw CacheException(
-          message: 'Failed to initialize or recover checkout Hive box: $recoveryError',
+          message:
+              'Failed to initialize or recover checkout Hive box: $recoveryError',
         );
       }
     }

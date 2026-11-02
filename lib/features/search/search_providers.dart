@@ -40,11 +40,12 @@ final filterByPriceUseCaseProvider = Provider<FilterByPriceUseCase>((ref) {
 
 final calculatePriceBoundsUseCaseProvider =
     Provider<CalculatePriceBoundsUseCase>((ref) {
-  return CalculatePriceBoundsUseCase(ref.watch(searchRepositoryProvider));
-});
+      return CalculatePriceBoundsUseCase(ref.watch(searchRepositoryProvider));
+    });
 
-final getSearchHistoryUseCaseProvider =
-    Provider<GetSearchHistoryUseCase>((ref) {
+final getSearchHistoryUseCaseProvider = Provider<GetSearchHistoryUseCase>((
+  ref,
+) {
   return GetSearchHistoryUseCase(ref.watch(searchRepositoryProvider));
 });
 
@@ -52,12 +53,14 @@ final addSearchTermUseCaseProvider = Provider<AddSearchTermUseCase>((ref) {
   return AddSearchTermUseCase(ref.watch(searchRepositoryProvider));
 });
 
-final removeSearchTermUseCaseProvider =
-    Provider<RemoveSearchTermUseCase>((ref) {
+final removeSearchTermUseCaseProvider = Provider<RemoveSearchTermUseCase>((
+  ref,
+) {
   return RemoveSearchTermUseCase(ref.watch(searchRepositoryProvider));
 });
 
-final clearSearchHistoryUseCaseProvider =
-    Provider<ClearSearchHistoryUseCase>((ref) {
+final clearSearchHistoryUseCaseProvider = Provider<ClearSearchHistoryUseCase>((
+  ref,
+) {
   return ClearSearchHistoryUseCase(ref.watch(searchRepositoryProvider));
 });

@@ -32,7 +32,8 @@ class _SignInPageState extends ConsumerState<SignInPage> with AuthActionsMixin {
       formBuilder: (isLoading) => LoginForm(
         isLoading: isLoading,
         onLogin: (email, password) => runAuthAction(
-          () => authController.signInWithEmail(email: email, password: password),
+          () =>
+              authController.signInWithEmail(email: email, password: password),
         ),
         onGoogleSignIn: signInWithGoogle,
         onForgotPassword: () =>

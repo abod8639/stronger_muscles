@@ -8,17 +8,12 @@ class CartRoutes {
 
   /// Dedicated StatefulShellBranch for nested bottom navigation tabs.
   static StatefulShellBranch get branch => StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: cartPath,
-            builder: (context, state) => const CartView(),
-          ),
-        ],
-      );
+    routes: [
+      GoRoute(path: cartPath, builder: (context, state) => const CartView()),
+    ],
+  );
 
   /// Standalone GoRoute if used outside a shell branch.
-  static GoRoute get route => GoRoute(
-        path: cartPath,
-        builder: (context, state) => const CartView(),
-      );
+  static GoRoute get route =>
+      GoRoute(path: cartPath, builder: (context, state) => const CartView());
 }

@@ -15,8 +15,9 @@ final addressLocalDataSourceProvider = Provider<AddressLocalDataSource>((ref) {
   return AddressLocalDataSourceImpl();
 });
 
-final addressRemoteDataSourceProvider =
-    Provider<AddressRemoteDataSource>((ref) {
+final addressRemoteDataSourceProvider = Provider<AddressRemoteDataSource>((
+  ref,
+) {
   return AddressRemoteDataSourceImpl(ref.watch(apiServiceProvider));
 });
 
@@ -41,8 +42,9 @@ final deleteAddressUseCaseProvider = Provider<DeleteAddressUseCase>((ref) {
   return DeleteAddressUseCase(ref.watch(profileAddressRepositoryProvider));
 });
 
-final setDefaultAddressUseCaseProvider =
-    Provider<SetDefaultAddressUseCase>((ref) {
+final setDefaultAddressUseCaseProvider = Provider<SetDefaultAddressUseCase>((
+  ref,
+) {
   return SetDefaultAddressUseCase(ref.watch(profileAddressRepositoryProvider));
 });
 
@@ -51,20 +53,14 @@ class ProfileStats {
   final double totalSpent;
   final int deliveredOrders;
 
-  const ProfileStats({
-    required this.totalSpent,
-    required this.deliveredOrders,
-  });
+  const ProfileStats({required this.totalSpent, required this.deliveredOrders});
 }
 
 final profileStatsProvider = Provider<ProfileStats>((ref) {
   final orders = ref.watch(ordersControllerProvider).valueOrNull ?? [];
-  final totalSpent =
-      orders.fold(0.0, (sum, order) => sum + order.totalAmount);
-  final deliveredOrders =
-      orders.where((o) => o.status.toLowerCase() == 'delivered').length;
-  return ProfileStats(
-    totalSpent: totalSpent,
-    deliveredOrders: deliveredOrders,
-  );
+  final totalSpent = orders.fold(0.0, (sum, order) => sum + order.totalAmount);
+  final deliveredOrders = orders
+      .where((o) => o.status.toLowerCase() == 'delivered')
+      .length;
+  return ProfileStats(totalSpent: totalSpent, deliveredOrders: deliveredOrders);
 });

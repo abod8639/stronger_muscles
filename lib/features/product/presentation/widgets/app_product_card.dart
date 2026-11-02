@@ -96,7 +96,9 @@ class _AppProductCardState extends State<AppProductCard>
                   children: [
                     _ProductTitle(
                       name: product.getLocalizedName(locale: locale),
-                      description: product.getLocalizedDescription(locale: locale),
+                      description: product.getLocalizedDescription(
+                        locale: locale,
+                      ),
                       query: widget.query,
                     ),
                     Wrap(
@@ -107,11 +109,14 @@ class _AppProductCardState extends State<AppProductCard>
                       children: [
                         AppPriceText(
                           price: product.baseEffectivePrice,
-                          originalPrice: !isOutOfStock && product.baseHasDiscount
+                          originalPrice:
+                              !isOutOfStock && product.baseHasDiscount
                               ? product.basePrice
                               : null,
                           fontSize: 13.0,
-                          color: isOutOfStock ? context.colorScheme.onSurfaceVariant : null,
+                          color: isOutOfStock
+                              ? context.colorScheme.onSurfaceVariant
+                              : null,
                         ),
                         if (isOutOfStock)
                           AppBadge(
@@ -142,7 +147,11 @@ class _ProductTitle extends StatelessWidget {
   final String description;
   final String? query;
 
-  const _ProductTitle({required this.name, required this.description, this.query});
+  const _ProductTitle({
+    required this.name,
+    required this.description,
+    this.query,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +177,9 @@ class _ProductTitle extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: textTheme.bodySmall?.copyWith(
-              color: context.colorScheme.onSurfaceVariant.withValues(alpha: 0.75),
+              color: context.colorScheme.onSurfaceVariant.withValues(
+                alpha: 0.75,
+              ),
               height: 1.25,
             ),
           ),
@@ -193,7 +204,9 @@ class _CompactRating extends StatelessWidget {
         const SizedBox(width: 2.0),
         Text(
           rating.toStringAsFixed(1),
-          style: context.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold),
+          style: context.textTheme.labelMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           ' ($count)',

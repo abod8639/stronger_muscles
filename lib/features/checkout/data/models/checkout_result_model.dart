@@ -22,14 +22,16 @@ class CheckoutResultModel {
     final dynamic rawId = (rawData is Map) ? rawData['id'] : json['id'];
     final String orderId = rawId != null ? rawId.toString() : '';
 
-    final String status = (json['status'] ??
-            (rawData is Map ? rawData['status'] : null) ??
-            'success')
-        .toString();
+    final String status =
+        (json['status'] ??
+                (rawData is Map ? rawData['status'] : null) ??
+                'success')
+            .toString();
 
     final String? message = json['message']?.toString();
     final String? resolvedUrl =
-        paymentUrl ?? (rawData is Map ? rawData['payment_url'] : null)?.toString();
+        paymentUrl ??
+        (rawData is Map ? rawData['payment_url'] : null)?.toString();
 
     return CheckoutResultModel(
       orderId: orderId,

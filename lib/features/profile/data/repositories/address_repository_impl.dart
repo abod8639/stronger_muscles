@@ -31,8 +31,8 @@ class AddressRepositoryImpl implements AddressRepository {
   AddressRepositoryImpl({
     required AddressRemoteDataSource remoteDataSource,
     AddressLocalDataSource? localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource ?? AddressLocalDataSourceImpl();
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource ?? AddressLocalDataSourceImpl();
 
   Completer<Either<Failure, List<AddressEntity>>>? _fetchCompleter;
 
@@ -278,7 +278,8 @@ class AddressRepositoryImpl implements AddressRepository {
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode;
         final message = e.response?.data is Map<String, dynamic>
-            ? (e.response?.data['message'] as String? ?? 'خطأ في استجابة الخادم')
+            ? (e.response?.data['message'] as String? ??
+                  'خطأ في استجابة الخادم')
             : 'خطأ في استجابة الخادم ($statusCode)';
         return ServerFailure(
           message: message,

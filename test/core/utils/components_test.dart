@@ -19,32 +19,38 @@ class FakeInternetDisconnectedNotifier extends InternetConnectionController {
 
 void main() {
   group('BaseAppBar Component Tests', () {
-    testWidgets('renders baseAppBar with correct title and centered title alignment', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Builder(
-            builder: (context) => Scaffold(
-              appBar: baseAppBar(context, 'Test Header'),
+    testWidgets(
+      'renders baseAppBar with correct title and centered title alignment',
+      (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Builder(
+              builder: (context) =>
+                  Scaffold(appBar: baseAppBar(context, 'Test Header')),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Test Header'), findsOneWidget);
-      final appBarFinder = find.byType(AppBar);
-      expect(appBarFinder, findsOneWidget);
+        expect(find.text('Test Header'), findsOneWidget);
+        final appBarFinder = find.byType(AppBar);
+        expect(appBarFinder, findsOneWidget);
 
-      final AppBar appBar = tester.widget<AppBar>(appBarFinder);
-      expect(appBar.centerTitle, isTrue);
-    });
+        final AppBar appBar = tester.widget<AppBar>(appBarFinder);
+        expect(appBar.centerTitle, isTrue);
+      },
+    );
   });
 
   group('InternetConnectionBanner Component Tests', () {
-    testWidgets('renders SizedBox.shrink when internet is connected', (tester) async {
+    testWidgets('renders SizedBox.shrink when internet is connected', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            internetConnectionControllerProvider.overrideWith(() => FakeInternetConnectedNotifier()),
+            internetConnectionControllerProvider.overrideWith(
+              () => FakeInternetConnectedNotifier(),
+            ),
           ],
           child: const MaterialApp(
             home: Scaffold(
@@ -58,37 +64,47 @@ void main() {
       expect(find.byIcon(Icons.wifi_off_rounded), findsNothing);
     });
 
-    testWidgets('renders alert banner with title and wifi_off icon when disconnected', (tester) async {
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            internetConnectionControllerProvider.overrideWith(() => FakeInternetDisconnectedNotifier()),
-          ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: InternetConnectionBanner(title: 'لا يوجد اتصال بالإنترنت'),
+    testWidgets(
+      'renders alert banner with title and wifi_off icon when disconnected',
+      (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              internetConnectionControllerProvider.overrideWith(
+                () => FakeInternetDisconnectedNotifier(),
+              ),
+            ],
+            child: const MaterialApp(
+              home: Scaffold(
+                body: InternetConnectionBanner(
+                  title: 'لا يوجد اتصال بالإنترنت',
+                ),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('لا يوجد اتصال بالإنترنت'), findsOneWidget);
-      expect(find.byIcon(Icons.wifi_off_rounded), findsOneWidget);
-    });
+        expect(find.text('لا يوجد اتصال بالإنترنت'), findsOneWidget);
+        expect(find.byIcon(Icons.wifi_off_rounded), findsOneWidget);
+      },
+    );
   });
 
   group('FlavorsData and CustomCacheManager Tests', () {
-    test('flavorsData map contains all required flavours with non-empty attributes', () {
-      expect(flavorsData.containsKey('vanilla'), isTrue);
-      expect(flavorsData.containsKey('chocolate'), isTrue);
-      expect(flavorsData.containsKey('strawberry'), isTrue);
-      expect(flavorsData.containsKey('banana'), isTrue);
+    test(
+      'flavorsData map contains all required flavours with non-empty attributes',
+      () {
+        expect(flavorsData.containsKey('vanilla'), isTrue);
+        expect(flavorsData.containsKey('chocolate'), isTrue);
+        expect(flavorsData.containsKey('strawberry'), isTrue);
+        expect(flavorsData.containsKey('banana'), isTrue);
 
-      for (final entry in flavorsData.entries) {
-        expect(entry.value.name.isNotEmpty, isTrue);
-        expect(entry.value.image.startsWith('http'), isTrue);
-      }
-    });
+        for (final entry in flavorsData.entries) {
+          expect(entry.value.name.isNotEmpty, isTrue);
+          expect(entry.value.image.startsWith('http'), isTrue);
+        }
+      },
+    );
 
     test('CustomCacheManager has defined cache key and instance', () {
       expect(CustomCacheManager.key, 'customCacheKey');

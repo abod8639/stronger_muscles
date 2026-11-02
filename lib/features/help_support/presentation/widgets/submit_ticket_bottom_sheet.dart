@@ -5,12 +5,13 @@ import 'package:stronger_muscles/core/constants/app_dimens.dart';
 import 'package:stronger_muscles/features/help_support/domain/entities/support_ticket_entity.dart';
 import 'package:stronger_muscles/l10n/generated/app_localizations.dart';
 
-typedef SubmitTicketCallback = Future<SupportTicketEntity?> Function({
-  required String subject,
-  required String category,
-  required String message,
-  TicketPriority priority,
-});
+typedef SubmitTicketCallback =
+    Future<SupportTicketEntity?> Function({
+      required String subject,
+      required String category,
+      required String message,
+      TicketPriority priority,
+    });
 
 /// Form sheet for opening a new support ticket.
 ///
@@ -24,14 +25,14 @@ class SubmitTicketBottomSheet extends StatefulWidget {
   static Future<SupportTicketEntity?> show(
     BuildContext context, {
     required SubmitTicketCallback onSubmit,
-  }) =>
-      AppBottomSheetScaffold.show<SupportTicketEntity>(
-        context,
-        (_) => SubmitTicketBottomSheet(onSubmit: onSubmit),
-      );
+  }) => AppBottomSheetScaffold.show<SupportTicketEntity>(
+    context,
+    (_) => SubmitTicketBottomSheet(onSubmit: onSubmit),
+  );
 
   @override
-  State<SubmitTicketBottomSheet> createState() => _SubmitTicketBottomSheetState();
+  State<SubmitTicketBottomSheet> createState() =>
+      _SubmitTicketBottomSheetState();
 }
 
 class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
@@ -112,7 +113,10 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
               controller: _subjectController,
               label: l10n?.ticketSubject ?? 'عنوان الموضوع',
               hintText: l10n?.ticketSubjectHint,
-              prefixIcon: const Icon(Icons.title_rounded, size: AppDimens.iconSm),
+              prefixIcon: const Icon(
+                Icons.title_rounded,
+                size: AppDimens.iconSm,
+              ),
               validator: (val) => val == null || val.trim().isEmpty
                   ? l10n?.pleaseFillAllFields ?? 'يرجى إدخال عنوان الموضوع'
                   : null,
@@ -124,7 +128,8 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
               items: _categories,
               selected: _selectedCategory,
               labelOf: (category) => category,
-              onSelected: (category) => setState(() => _selectedCategory = category),
+              onSelected: (category) =>
+                  setState(() => _selectedCategory = category),
             ),
             const SizedBox(height: AppDimens.spacingLg),
             AppFieldLabel(l10n?.ticketPriority ?? 'الأهمية'),
@@ -135,11 +140,14 @@ class _SubmitTicketBottomSheetState extends State<SubmitTicketBottomSheet> {
               labelOf: (priority) => priority == TicketPriority.urgent
                   ? l10n?.priorityUrgent ?? 'عاجل'
                   : l10n?.priorityNormal ?? 'عادي',
-              iconOf: (priority) =>
-                  priority == TicketPriority.urgent ? Icons.flash_on_rounded : null,
-              colorOf: (priority) =>
-                  priority == TicketPriority.urgent ? AppColors.error : AppColors.primary,
-              onSelected: (priority) => setState(() => _selectedPriority = priority),
+              iconOf: (priority) => priority == TicketPriority.urgent
+                  ? Icons.flash_on_rounded
+                  : null,
+              colorOf: (priority) => priority == TicketPriority.urgent
+                  ? AppColors.error
+                  : AppColors.primary,
+              onSelected: (priority) =>
+                  setState(() => _selectedPriority = priority),
             ),
             const SizedBox(height: AppDimens.spacingLg),
             AppTextFormField(

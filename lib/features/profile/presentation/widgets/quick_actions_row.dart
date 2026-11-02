@@ -20,11 +20,19 @@ class QuickActionsRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final ordersCount =
-        ref.watch(ordersControllerProvider.select((state) => state.valueOrNull?.length ?? 0));
-    final wishlistCount = ref.watch(wishlistControllerProvider.select((items) => items.length));
-    final addressesCount =
-        ref.watch(addressControllerProvider.select((state) => state.valueOrNull?.length ?? 0));
+    final ordersCount = ref.watch(
+      ordersControllerProvider.select(
+        (state) => state.valueOrNull?.length ?? 0,
+      ),
+    );
+    final wishlistCount = ref.watch(
+      wishlistControllerProvider.select((items) => items.length),
+    );
+    final addressesCount = ref.watch(
+      addressControllerProvider.select(
+        (state) => state.valueOrNull?.length ?? 0,
+      ),
+    );
 
     final stats = [
       AppStatCard(

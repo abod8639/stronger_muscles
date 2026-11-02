@@ -41,9 +41,12 @@ class ApiService {
           options.headers['Accept'] = 'application/json';
           options.headers['Accept-Language'] = languageCode;
 
-          final bool includeAuth = options.headers.remove('includeAuth') != false;
+          final bool includeAuth =
+              options.headers.remove('includeAuth') != false;
 
-          if (includeAuth && token != null && !options.headers.containsKey('Authorization')) {
+          if (includeAuth &&
+              token != null &&
+              !options.headers.containsKey('Authorization')) {
             options.headers['Authorization'] = 'Bearer $token';
           }
 
@@ -96,10 +99,7 @@ class ApiService {
     Duration? timeout,
   }) async {
     try {
-      final options = Options(
-        sendTimeout: timeout,
-        receiveTimeout: timeout,
-      );
+      final options = Options(sendTimeout: timeout, receiveTimeout: timeout);
       final response = await _dio.post(
         path,
         data: data,
@@ -123,10 +123,7 @@ class ApiService {
     Duration? timeout,
   }) async {
     try {
-      final options = Options(
-        sendTimeout: timeout,
-        receiveTimeout: timeout,
-      );
+      final options = Options(sendTimeout: timeout, receiveTimeout: timeout);
       final response = await _dio.put(
         path,
         data: data,
@@ -148,10 +145,7 @@ class ApiService {
     Duration? timeout,
   }) async {
     try {
-      final options = Options(
-        sendTimeout: timeout,
-        receiveTimeout: timeout,
-      );
+      final options = Options(sendTimeout: timeout, receiveTimeout: timeout);
       final response = await _dio.delete(
         path,
         options: options,

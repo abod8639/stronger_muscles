@@ -11,16 +11,19 @@ String _$productSearchControllerHash() =>
 
 /// See also [ProductSearchController].
 @ProviderFor(ProductSearchController)
-final productSearchControllerProvider = AsyncNotifierProvider<
-    ProductSearchController, List<ProductEntity>>.internal(
-  ProductSearchController.new,
-  name: r'productSearchControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$productSearchControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final productSearchControllerProvider =
+    AsyncNotifierProvider<
+      ProductSearchController,
+      List<ProductEntity>
+    >.internal(
+      ProductSearchController.new,
+      name: r'productSearchControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$productSearchControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$ProductSearchController = AsyncNotifier<List<ProductEntity>>;
 // ignore_for_file: type=lint

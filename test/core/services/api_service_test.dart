@@ -26,31 +26,46 @@ void main() {
   });
 
   group('Failure Model Tests', () {
-    test('creates Failure with default unknown type and preserves original error', () {
-      final originalEx = Exception('Low level socket crash');
-      final failure = Failure(
-        message: 'Something went wrong',
-        originalError: originalEx,
-      );
+    test(
+      'creates Failure with default unknown type and preserves original error',
+      () {
+        final originalEx = Exception('Low level socket crash');
+        final failure = Failure(
+          message: 'Something went wrong',
+          originalError: originalEx,
+        );
 
-      expect(failure.message, 'Something went wrong');
-      expect(failure.type, FailureType.unknown);
-      expect(failure.isConnectionError, false);
-      expect(failure.originalError, originalEx);
-      expect(failure.toString(), 'Something went wrong');
-    });
+        expect(failure.message, 'Something went wrong');
+        expect(failure.type, FailureType.unknown);
+        expect(failure.isConnectionError, false);
+        expect(failure.originalError, originalEx);
+        expect(failure.toString(), 'Something went wrong');
+      },
+    );
 
     test('isConnectionError returns true only for network type', () {
-      final netFailure = Failure(message: 'Network down', type: FailureType.network);
+      final netFailure = Failure(
+        message: 'Network down',
+        type: FailureType.network,
+      );
       expect(netFailure.isConnectionError, true);
 
-      final authFailure = Failure(message: 'Unauthorized', type: FailureType.auth);
+      final authFailure = Failure(
+        message: 'Unauthorized',
+        type: FailureType.auth,
+      );
       expect(authFailure.isConnectionError, false);
 
-      final serverFailure = Failure(message: 'Server error', type: FailureType.server);
+      final serverFailure = Failure(
+        message: 'Server error',
+        type: FailureType.server,
+      );
       expect(serverFailure.isConnectionError, false);
 
-      final unknownFailure = Failure(message: 'Unknown error', type: FailureType.unknown);
+      final unknownFailure = Failure(
+        message: 'Unknown error',
+        type: FailureType.unknown,
+      );
       expect(unknownFailure.isConnectionError, false);
     });
   });
@@ -68,66 +83,72 @@ void main() {
     });
 
     test('defaults includeAuth to true when omitted', () {
-      final options = RequestOptions(
-        path: '/test',
-        headers: {},
-      );
+      final options = RequestOptions(path: '/test', headers: {});
 
       final bool includeAuth = options.headers.remove('includeAuth') != false;
       expect(includeAuth, true);
     });
 
-    test('injects Bearer token when token exists and includeAuth is true', () async {
-      await StorageService.saveToken('jwt_valid_token_xyz');
+    test(
+      'injects Bearer token when token exists and includeAuth is true',
+      () async {
+        await StorageService.saveToken('jwt_valid_token_xyz');
 
-      final options = RequestOptions(
-        path: '/customer/profile',
-        headers: {'includeAuth': true},
-      );
+        final options = RequestOptions(
+          path: '/customer/profile',
+          headers: {'includeAuth': true},
+        );
 
-      final bool includeAuth = options.headers.remove('includeAuth') != false;
-      final token = StorageService.getToken();
+        final bool includeAuth = options.headers.remove('includeAuth') != false;
+        final token = StorageService.getToken();
 
-      if (includeAuth && token != null && !options.headers.containsKey('Authorization')) {
-        options.headers['Authorization'] = 'Bearer $token';
-      }
+        if (includeAuth &&
+            token != null &&
+            !options.headers.containsKey('Authorization')) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
 
-      expect(options.headers['Authorization'], 'Bearer jwt_valid_token_xyz');
-    });
+        expect(options.headers['Authorization'], 'Bearer jwt_valid_token_xyz');
+      },
+    );
 
-    test('does not inject Bearer token when includeAuth is false even if token exists', () async {
-      await StorageService.saveToken('jwt_valid_token_xyz');
+    test(
+      'does not inject Bearer token when includeAuth is false even if token exists',
+      () async {
+        await StorageService.saveToken('jwt_valid_token_xyz');
 
-      final options = RequestOptions(
-        path: '/shop/products',
-        headers: {'includeAuth': false},
-      );
+        final options = RequestOptions(
+          path: '/shop/products',
+          headers: {'includeAuth': false},
+        );
 
-      final bool includeAuth = options.headers.remove('includeAuth') != false;
-      final token = StorageService.getToken();
+        final bool includeAuth = options.headers.remove('includeAuth') != false;
+        final token = StorageService.getToken();
 
-      if (includeAuth && token != null && !options.headers.containsKey('Authorization')) {
-        options.headers['Authorization'] = 'Bearer $token';
-      }
+        if (includeAuth &&
+            token != null &&
+            !options.headers.containsKey('Authorization')) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
 
-      expect(options.headers.containsKey('Authorization'), isFalse);
-    });
+        expect(options.headers.containsKey('Authorization'), isFalse);
+      },
+    );
 
     test('does not overwrite existing custom Authorization header', () async {
       await StorageService.saveToken('jwt_valid_token_xyz');
 
       final options = RequestOptions(
         path: '/custom/endpoint',
-        headers: {
-          'includeAuth': true,
-          'Authorization': 'CustomApiKey 123456',
-        },
+        headers: {'includeAuth': true, 'Authorization': 'CustomApiKey 123456'},
       );
 
       final bool includeAuth = options.headers.remove('includeAuth') != false;
       final token = StorageService.getToken();
 
-      if (includeAuth && token != null && !options.headers.containsKey('Authorization')) {
+      if (includeAuth &&
+          token != null &&
+          !options.headers.containsKey('Authorization')) {
         options.headers['Authorization'] = 'Bearer $token';
       }
 
@@ -144,14 +165,17 @@ void main() {
       );
 
       final dynamic data = response.data;
-      String? serverMessage = data is Map ? (data['message'] ?? data['error']) : null;
+      String? serverMessage = data is Map
+          ? (data['message'] ?? data['error'])
+          : null;
       String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
       FailureType failureType = FailureType.server;
 
       if (response.statusCode == 401 || response.statusCode == 403) {
         failureType = FailureType.auth;
         if (response.requestOptions.path.contains('login')) {
-          errorDescription = serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+          errorDescription =
+              serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
         }
       }
 
@@ -159,35 +183,42 @@ void main() {
       expect(errorDescription, "البريد الإلكتروني أو كلمة المرور غير صحيحة");
     });
 
-    test('maps 401 on non-login route to expired session and deletes local token', () async {
-      await StorageService.saveToken('stale_token');
-      expect(StorageService.hasToken, isTrue);
+    test(
+      'maps 401 on non-login route to expired session and deletes local token',
+      () async {
+        await StorageService.saveToken('stale_token');
+        expect(StorageService.hasToken, isTrue);
 
-      final response = Response(
-        requestOptions: RequestOptions(path: '/customer/orders'),
-        statusCode: 401,
-        data: null,
-      );
+        final response = Response(
+          requestOptions: RequestOptions(path: '/customer/orders'),
+          statusCode: 401,
+          data: null,
+        );
 
-      final dynamic data = response.data;
-      String? serverMessage = data is Map ? (data['message'] ?? data['error']) : null;
-      String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
-      FailureType failureType = FailureType.server;
+        final dynamic data = response.data;
+        String? serverMessage = data is Map
+            ? (data['message'] ?? data['error'])
+            : null;
+        String errorDescription = "خطأ غير متوقع: ${response.statusCode}";
+        FailureType failureType = FailureType.server;
 
-      if (response.statusCode == 401 || response.statusCode == 403) {
-        failureType = FailureType.auth;
-        if (response.requestOptions.path.contains('login')) {
-          errorDescription = serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
-        } else {
-          errorDescription = serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
-          await StorageService.deleteToken();
+        if (response.statusCode == 401 || response.statusCode == 403) {
+          failureType = FailureType.auth;
+          if (response.requestOptions.path.contains('login')) {
+            errorDescription =
+                serverMessage ?? "البريد الإلكتروني أو كلمة المرور غير صحيحة";
+          } else {
+            errorDescription =
+                serverMessage ?? "انتهت الجلسة، يرجى تسجيل الدخول مجدداً";
+            await StorageService.deleteToken();
+          }
         }
-      }
 
-      expect(failureType, FailureType.auth);
-      expect(errorDescription, "انتهت الجلسة، يرجى تسجيل الدخول مجدداً");
-      expect(StorageService.hasToken, isFalse);
-    });
+        expect(failureType, FailureType.auth);
+        expect(errorDescription, "انتهت الجلسة، يرجى تسجيل الدخول مجدداً");
+        expect(StorageService.hasToken, isFalse);
+      },
+    );
 
     test('maps 422 validation errors map to multi-line aggregated message', () {
       final response = Response(
@@ -215,7 +246,9 @@ void main() {
             allErrors.add(value.toString());
           }
         });
-        errorDescription = allErrors.isNotEmpty ? allErrors.join('\n') : "بيانات المدخلات غير صالحة";
+        errorDescription = allErrors.isNotEmpty
+            ? allErrors.join('\n')
+            : "بيانات المدخلات غير صالحة";
       }
 
       expect(failureType, FailureType.server);

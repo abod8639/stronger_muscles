@@ -41,11 +41,14 @@ class SavedAddressesList extends ConsumerWidget {
                   ),
                 )
               : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimens.spacingLg,
+                  ),
                   child: Column(
                     children: [
                       for (final (index, address) in addresses.indexed) ...[
-                        if (index > 0) const SizedBox(height: AppDimens.spacingLg),
+                        if (index > 0)
+                          const SizedBox(height: AppDimens.spacingLg),
                         AddressCard(address: address),
                       ],
                     ],
@@ -58,7 +61,9 @@ class SavedAddressesList extends ConsumerWidget {
             message: AppErrorCard.messageFor(error, l10n),
             margin: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
             actionLabel: l10n.retry,
-            onAction: ref.read(addressControllerProvider.notifier).fetchAddresses,
+            onAction: ref
+                .read(addressControllerProvider.notifier)
+                .fetchAddresses,
           ),
         ),
       ],

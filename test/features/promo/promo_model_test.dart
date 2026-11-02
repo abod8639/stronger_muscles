@@ -42,23 +42,23 @@ void main() {
       expect(promo.backgroundColor, Colors.white);
     });
 
-    test('fromJson applies default values when optional attributes omitted', () {
-      final json = {
-        'id': 10,
-        'image_url': 'https://example.com/image.jpg',
-      };
+    test(
+      'fromJson applies default values when optional attributes omitted',
+      () {
+        final json = {'id': 10, 'image_url': 'https://example.com/image.jpg'};
 
-      final promo = PromoModel.fromJson(json);
+        final promo = PromoModel.fromJson(json);
 
-      expect(promo.id, 10);
-      expect(promo.imageUrl, 'https://example.com/image.jpg');
-      expect(promo.buttonText, 'عرض الآن');
-      expect(promo.hexBackgroundColor, '#FFFFFF');
-      expect(promo.targetType, 'none');
-      expect(promo.title, isNull);
-      expect(promo.subtitle, isNull);
-      expect(promo.targetId, isNull);
-    });
+        expect(promo.id, 10);
+        expect(promo.imageUrl, 'https://example.com/image.jpg');
+        expect(promo.buttonText, 'عرض الآن');
+        expect(promo.hexBackgroundColor, '#FFFFFF');
+        expect(promo.targetType, 'none');
+        expect(promo.title, isNull);
+        expect(promo.subtitle, isNull);
+        expect(promo.targetId, isNull);
+      },
+    );
 
     test('toJson produces expected map structure', () {
       const promo = PromoModel(

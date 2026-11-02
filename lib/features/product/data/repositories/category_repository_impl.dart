@@ -81,7 +81,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم أثناء جلب الأقسام',
       statusCode: e.response?.statusCode,

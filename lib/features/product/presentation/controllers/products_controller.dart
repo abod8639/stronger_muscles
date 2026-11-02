@@ -19,23 +19,20 @@ class ProductsController extends StateNotifier<ProductsState> {
     required GetProductsUseCase getProductsUseCase,
     required SearchProductsUseCase searchProductsUseCase,
     required GetCachedProductsUseCase getCachedProductsUseCase,
-  })  : _getProductsUseCase = getProductsUseCase,
-        _searchProductsUseCase = searchProductsUseCase,
-        _getCachedProductsUseCase = getCachedProductsUseCase,
-        super(const ProductsState()) {
+  }) : _getProductsUseCase = getProductsUseCase,
+       _searchProductsUseCase = searchProductsUseCase,
+       _getCachedProductsUseCase = getCachedProductsUseCase,
+       super(const ProductsState()) {
     _initialize();
   }
 
   void _initialize() {
     final cachedResult = _getCachedProductsUseCase();
-    cachedResult.fold(
-      (failure) {},
-      (cached) {
-        if (cached.isNotEmpty) {
-          state = state.copyWith(products: cached, isLoading: false);
-        }
-      },
-    );
+    cachedResult.fold((failure) {}, (cached) {
+      if (cached.isNotEmpty) {
+        state = state.copyWith(products: cached, isLoading: false);
+      }
+    });
     fetchProducts();
   }
 
@@ -102,28 +99,29 @@ class ProductsController extends StateNotifier<ProductsState> {
     state = state.copyWith(isLoadingMore: true);
 
     final result = await _getProductsUseCase(
-      categoryId:
-          state.selectedCategoryId.isEmpty ? null : state.selectedCategoryId,
+      categoryId: state.selectedCategoryId.isEmpty
+          ? null
+          : state.selectedCategoryId,
       page: nextPage,
     );
 
-    result.fold(
-      (failure) => state = state.copyWith(isLoadingMore: false),
-      (newProducts) {
-        state = state.copyWith(
-          isLoadingMore: false,
-          page: nextPage,
-          hasMore: newProducts.isNotEmpty,
-          products: [...state.products, ...newProducts],
-        );
-      },
-    );
+    result.fold((failure) => state = state.copyWith(isLoadingMore: false), (
+      newProducts,
+    ) {
+      state = state.copyWith(
+        isLoadingMore: false,
+        page: nextPage,
+        hasMore: newProducts.isNotEmpty,
+        products: [...state.products, ...newProducts],
+      );
+    });
   }
 
   /// Toggles or updates category filter.
   void filterByCategory(String categoryId) {
-    final newCategory =
-        (state.selectedCategoryId == categoryId) ? '' : categoryId;
+    final newCategory = (state.selectedCategoryId == categoryId)
+        ? ''
+        : categoryId;
     fetchProducts(categoryId: newCategory, refresh: true);
   }
 
@@ -148,9 +146,9 @@ class ProductsController extends StateNotifier<ProductsState> {
 /// Global provider for [ProductsController].
 final productsControllerProvider =
     StateNotifierProvider<ProductsController, ProductsState>((ref) {
-  return ProductsController(
-    getProductsUseCase: ref.watch(getProductsUseCaseProvider),
-    searchProductsUseCase: ref.watch(searchProductsUseCaseProvider),
-    getCachedProductsUseCase: ref.watch(getCachedProductsUseCaseProvider),
-  );
-});
+      return ProductsController(
+        getProductsUseCase: ref.watch(getProductsUseCaseProvider),
+        searchProductsUseCase: ref.watch(searchProductsUseCaseProvider),
+        getCachedProductsUseCase: ref.watch(getCachedProductsUseCaseProvider),
+      );
+    });

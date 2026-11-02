@@ -14,10 +14,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
   final WishlistLocalDataSource _localDataSource;
   final WishlistRemoteDataSource _remoteDataSource;
 
-  WishlistRepositoryImpl(
-    this._localDataSource,
-    this._remoteDataSource,
-  );
+  WishlistRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
   @override
   Future<Either<Failure, List<ProductEntity>>> getWishlistItems() async {
@@ -32,7 +29,9 @@ class WishlistRepositoryImpl implements WishlistRepository {
               id: item.productId,
               name: LocalizedStringEntity(en: item.productName ?? ''),
               price: item.productPrice ?? 0.0,
-              imageUrls: item.productImageUrl != null && item.productImageUrl!.isNotEmpty
+              imageUrls:
+                  item.productImageUrl != null &&
+                      item.productImageUrl!.isNotEmpty
                   ? [
                       ImageUrlEntity(
                         thumbnail: item.productImageUrl!,
@@ -68,12 +67,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
         ),
       );
     } on FormatException catch (e, st) {
-      return Left(
-        ParsingFailure(
-          originalError: e,
-          stackTrace: st,
-        ),
-      );
+      return Left(ParsingFailure(originalError: e, stackTrace: st));
     } catch (e, st) {
       return _fallbackCachedOrFailure(
         Failure(
@@ -146,7 +140,9 @@ class WishlistRepositoryImpl implements WishlistRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> removeFromWishlist(ProductEntity product) async {
+  Future<Either<Failure, Unit>> removeFromWishlist(
+    ProductEntity product,
+  ) async {
     try {
       _localDataSource.remove(product.id);
 
@@ -199,10 +195,7 @@ class WishlistRepositoryImpl implements WishlistRepository {
 
   List<ProductEntity> _loadCachedProducts() {
     final rawList = _localDataSource.getAllRaw();
-    return rawList
-        .map(_deserializeProduct)
-        .whereType<ProductEntity>()
-        .toList();
+    return rawList.map(_deserializeProduct).whereType<ProductEntity>().toList();
   }
 
   Either<Failure, List<ProductEntity>> _fallbackCachedOrFailure(
@@ -245,7 +238,8 @@ class WishlistRepositoryImpl implements WishlistRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم أثناء مزامنة قائمة الرغبات',
       statusCode: e.response?.statusCode,

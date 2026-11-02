@@ -36,7 +36,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       final notifier = ref.read(productSearchControllerProvider.notifier);
       if (widget.initialBrand != null && widget.initialBrand!.isNotEmpty) {
         notifier.searchByBrand(widget.initialBrand!);
-      } else if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
+      } else if (widget.initialQuery != null &&
+          widget.initialQuery!.isNotEmpty) {
         notifier.onSearchChanged(widget.initialQuery!);
       }
     });
@@ -84,9 +85,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   )
                 : null,
           ),
-          const SliverToBoxAdapter(
-            child: _SearchFilterChipsRow(),
-          ),
+          const SliverToBoxAdapter(child: _SearchFilterChipsRow()),
           searchState.when(
             data: (products) {
               if (searchNotifier.hasSearched && products.isEmpty) {
@@ -171,8 +170,9 @@ class _SearchFilterChipsRow extends ConsumerWidget {
       productSearchControllerProvider.notifier.select((n) => n.searchQuery),
     );
     final isPriceActive = ref.watch(
-      productSearchControllerProvider.notifier
-          .select((n) => n.isPriceFilterActive),
+      productSearchControllerProvider.notifier.select(
+        (n) => n.isPriceFilterActive,
+      ),
     );
 
     final minPrice = notifier.filterMinPrice;
@@ -184,14 +184,17 @@ class _SearchFilterChipsRow extends ConsumerWidget {
     if (brand != null && brand.isNotEmpty) {
       chips.add(
         InputChip(
-          avatar: const Icon(Icons.verified_outlined,
-              size: 16, color: AppColors.info ),
+          avatar: const Icon(
+            Icons.verified_outlined,
+            size: 16,
+            color: AppColors.info,
+          ),
           label: Text('${l10n.brand}: $brand'),
           labelStyle: context.textTheme.labelMedium?.copyWith(
             color: AppColors.info,
             fontWeight: FontWeight.w600,
           ),
-          backgroundColor: AppColors.primary .withValues(alpha: 0.1),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
           side: BorderSide(color: AppColors.primary.withValues(alpha: 0.3)),
           shape: AppRadius.shapePill,
           deleteIconColor: AppColors.primary,
@@ -202,11 +205,15 @@ class _SearchFilterChipsRow extends ConsumerWidget {
       // 2. Query Chip (when not already represented by brand)
       chips.add(
         InputChip(
-          avatar: const Icon(Icons.search_rounded,
-              size: 16, color: AppColors.primary),
+          avatar: const Icon(
+            Icons.search_rounded,
+            size: 16,
+            color: AppColors.primary,
+          ),
           label: Text('${l10n.searchForProducts}: $query'),
-          labelStyle:
-              context.textTheme.labelMedium?.copyWith(color: AppColors.primary),
+          labelStyle: context.textTheme.labelMedium?.copyWith(
+            color: AppColors.primary,
+          ),
           backgroundColor: AppColors.primary.withValues(alpha: 0.08),
           side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
           shape: AppRadius.shapePill,
@@ -222,11 +229,15 @@ class _SearchFilterChipsRow extends ConsumerWidget {
           '${AppPriceText.format(minPrice, decimals: 0)} - ${AppPriceText.format(maxPrice, decimals: 0)}';
       chips.add(
         InputChip(
-          avatar: const Icon(Icons.attach_money_rounded,
-              size: 16, color: AppColors.primary),
+          avatar: const Icon(
+            Icons.attach_money_rounded,
+            size: 16,
+            color: AppColors.primary,
+          ),
           label: Text(priceLabel),
-          labelStyle:
-              context.textTheme.labelMedium?.copyWith(color: AppColors.primary),
+          labelStyle: context.textTheme.labelMedium?.copyWith(
+            color: AppColors.primary,
+          ),
           backgroundColor: AppColors.primary.withValues(alpha: 0.08),
           side: BorderSide(color: AppColors.primary.withValues(alpha: 0.2)),
           shape: AppRadius.shapePill,
@@ -255,8 +266,9 @@ class _SearchFilterChipsRow extends ConsumerWidget {
               TextButton(
                 onPressed: () => notifier.clearSearch(),
                 style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppDimens.spacingSm),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimens.spacingSm,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),

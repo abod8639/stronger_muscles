@@ -26,9 +26,7 @@ class PaymentRoutes {
           }
         }
         return const Scaffold(
-          body: Center(
-            child: Text('Invalid payment parameters'),
-          ),
+          body: Center(child: Text('Invalid payment parameters')),
         );
       },
     ),

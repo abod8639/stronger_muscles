@@ -66,19 +66,20 @@ class CheckoutState {
 
   @override
   int get hashCode => Object.hash(
-        currentStep,
-        selectedAddress,
-        selectedPaymentMethod,
-        notes,
-        orderSubmission,
-      );
+    currentStep,
+    selectedAddress,
+    selectedPaymentMethod,
+    notes,
+    orderSubmission,
+  );
 }
 
 /// Converts cart lines into the items sent to the server for pricing and ordering.
 List<CheckoutItemEntity> checkoutItemsFromCart(List<CartItemEntity> cartItems) {
   return cartItems.map((cartItem) {
-    final unitPrice =
-        cartItem.product.getEffectivePriceForSize(cartItem.selectedSize);
+    final unitPrice = cartItem.product.getEffectivePriceForSize(
+      cartItem.selectedSize,
+    );
     return CheckoutItemEntity(
       productId: cartItem.product.id,
       productName: cartItem.product.getLocalizedName(),
@@ -94,8 +95,9 @@ List<CheckoutItemEntity> checkoutItemsFromCart(List<CartItemEntity> cartItems) {
 /// Server price for the current cart (subtotal, delivery fee, tax, total).
 ///
 /// Re-fetched whenever the cart changes; `null` while the cart is empty.
-final checkoutQuoteProvider =
-    FutureProvider.autoDispose<CheckoutQuote?>((ref) async {
+final checkoutQuoteProvider = FutureProvider.autoDispose<CheckoutQuote?>((
+  ref,
+) async {
   final cartItems = ref.watch(
     cartControllerProvider.select((cart) => cart.valueOrNull),
   );
@@ -110,15 +112,15 @@ final checkoutQuoteProvider =
 
 final checkoutControllerProvider =
     StateNotifierProvider<CheckoutController, CheckoutState>((ref) {
-  return CheckoutController(ref);
-});
+      return CheckoutController(ref);
+    });
 
 class CheckoutController extends StateNotifier<CheckoutState> {
   CheckoutController(this._ref)
-      : _testPlaceOrderUseCase = null,
-        _testCartItems = null,
-        _onClearCart = null,
-        super(const CheckoutState()) {
+    : _testPlaceOrderUseCase = null,
+      _testCartItems = null,
+      _onClearCart = null,
+      super(const CheckoutState()) {
     _initialize();
   }
 
@@ -127,11 +129,11 @@ class CheckoutController extends StateNotifier<CheckoutState> {
     AddressEntity? initialAddress,
     List<CartItemEntity>? testCartItems,
     Future<void> Function()? onClearCart,
-  })  : _ref = null,
-        _testPlaceOrderUseCase = placeOrderUseCase,
-        _testCartItems = testCartItems,
-        _onClearCart = onClearCart,
-        super(CheckoutState(selectedAddress: initialAddress));
+  }) : _ref = null,
+       _testPlaceOrderUseCase = placeOrderUseCase,
+       _testCartItems = testCartItems,
+       _onClearCart = onClearCart,
+       super(CheckoutState(selectedAddress: initialAddress));
 
   final Ref? _ref;
   final PlaceOrderUseCase? _testPlaceOrderUseCase;
@@ -144,36 +146,37 @@ class CheckoutController extends StateNotifier<CheckoutState> {
   void _initialize() {
     if (_ref == null) return;
 
-    _ref.listen<AsyncValue<List<AddressEntity>>>(
-      addressControllerProvider,
-      (previous, next) {
-        final addresses = next.valueOrNull ?? [];
-        if (state.selectedAddress == null && addresses.isNotEmpty) {
-          final defaultAddr = addresses.where((a) => a.isDefault).firstOrNull ??
-              addresses.first;
-          state = state.copyWith(selectedAddress: defaultAddr);
-        } else if (state.selectedAddress != null) {
-          final exists =
-              addresses.any((a) => a.id == state.selectedAddress!.id);
-          if (!exists) {
-            final fallback = addresses.where((a) => a.isDefault).firstOrNull ??
-                (addresses.isNotEmpty ? addresses.first : null);
-            state = state.copyWith(selectedAddress: fallback);
-          } else {
-            final updated =
-                addresses.firstWhere((a) => a.id == state.selectedAddress!.id);
-            state = state.copyWith(selectedAddress: updated);
-          }
+    _ref.listen<AsyncValue<List<AddressEntity>>>(addressControllerProvider, (
+      previous,
+      next,
+    ) {
+      final addresses = next.valueOrNull ?? [];
+      if (state.selectedAddress == null && addresses.isNotEmpty) {
+        final defaultAddr =
+            addresses.where((a) => a.isDefault).firstOrNull ?? addresses.first;
+        state = state.copyWith(selectedAddress: defaultAddr);
+      } else if (state.selectedAddress != null) {
+        final exists = addresses.any((a) => a.id == state.selectedAddress!.id);
+        if (!exists) {
+          final fallback =
+              addresses.where((a) => a.isDefault).firstOrNull ??
+              (addresses.isNotEmpty ? addresses.first : null);
+          state = state.copyWith(selectedAddress: fallback);
+        } else {
+          final updated = addresses.firstWhere(
+            (a) => a.id == state.selectedAddress!.id,
+          );
+          state = state.copyWith(selectedAddress: updated);
         }
-      },
-    );
+      }
+    });
 
     final initialAddresses =
         _ref.read(addressControllerProvider).valueOrNull ?? [];
     if (initialAddresses.isNotEmpty) {
       final defaultAddr =
           initialAddresses.where((a) => a.isDefault).firstOrNull ??
-              initialAddresses.first;
+          initialAddresses.first;
       state = state.copyWith(selectedAddress: defaultAddr);
     }
   }
@@ -225,7 +228,8 @@ class CheckoutController extends StateNotifier<CheckoutState> {
       return;
     }
 
-    final cartItems = _testCartItems ??
+    final cartItems =
+        _testCartItems ??
         (_ref?.read(cartControllerProvider).valueOrNull ?? <CartItemEntity>[]);
 
     if (cartItems.isEmpty) {
@@ -273,9 +277,7 @@ class CheckoutController extends StateNotifier<CheckoutState> {
           await _ref.read(cartControllerProvider.notifier).clearCart();
         }
 
-        state = state.copyWith(
-          orderSubmission: AsyncData(resultEntity),
-        );
+        state = state.copyWith(orderSubmission: AsyncData(resultEntity));
       },
     );
   }

@@ -10,18 +10,15 @@ class PromoCard extends StatelessWidget {
   final PromoEntity promo;
   final VoidCallback onTap;
 
-  const PromoCard({
-    super.key,
-    required this.promo,
-    required this.onTap,
-  });
+  const PromoCard({super.key, required this.promo, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final textTheme = context.textTheme;
     final title = promo.title;
     final subtitle = promo.subtitle;
-    final hasText = (title?.isNotEmpty ?? false) || (subtitle?.isNotEmpty ?? false);
+    final hasText =
+        (title?.isNotEmpty ?? false) || (subtitle?.isNotEmpty ?? false);
 
     return AppCard(
       onTap: onTap,
@@ -75,7 +72,9 @@ class PromoCard extends StatelessWidget {
                     subtitle,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: textTheme.bodyMedium?.copyWith(color: AppColors.white.withValues(alpha: 0.9)),
+                    style: textTheme.bodyMedium?.copyWith(
+                      color: AppColors.white.withValues(alpha: 0.9),
+                    ),
                   ),
                 ],
                 if (promo.targetId != null) ...[

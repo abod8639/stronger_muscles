@@ -39,13 +39,16 @@ class SupportTicketModel {
     if (rawMessages is List) {
       parsedMessages = rawMessages
           .whereType<Map>()
-          .map((m) => SupportMessageModel.fromJson(Map<String, dynamic>.from(m)))
+          .map(
+            (m) => SupportMessageModel.fromJson(Map<String, dynamic>.from(m)),
+          )
           .toList();
     }
 
     final String? idStr = json['id']?.toString();
-    final String fallbackTicketNum =
-        idStr != null && idStr.isNotEmpty ? 'SM-$idStr' : 'SM-TICKET';
+    final String fallbackTicketNum = idStr != null && idStr.isNotEmpty
+        ? 'SM-$idStr'
+        : 'SM-TICKET';
 
     return SupportTicketModel(
       id: idStr,
@@ -60,23 +63,24 @@ class SupportTicketModel {
       createdAt: json['created_at'] != null
           ? DateTime.tryParse(json['created_at'].toString()) ?? DateTime.now()
           : (json['createdAt'] != null
-              ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
-              : DateTime.now()),
+                ? DateTime.tryParse(json['createdAt'].toString()) ??
+                      DateTime.now()
+                : DateTime.now()),
       lastReplyAt: json['last_reply_at'] != null
           ? DateTime.tryParse(json['last_reply_at'].toString())
           : (json['lastReplyAt'] != null
-              ? DateTime.tryParse(json['lastReplyAt'].toString())
-              : null),
+                ? DateTime.tryParse(json['lastReplyAt'].toString())
+                : null),
       messagesCount: json['messages_count'] is num
           ? (json['messages_count'] as num).toInt()
           : (json['messagesCount'] is num
-              ? (json['messagesCount'] as num).toInt()
-              : parsedMessages.length),
+                ? (json['messagesCount'] as num).toInt()
+                : parsedMessages.length),
       unreadMessagesCount: json['unread_messages_count'] is num
           ? (json['unread_messages_count'] as num).toInt()
           : (json['unreadMessagesCount'] is num
-              ? (json['unreadMessagesCount'] as num).toInt()
-              : 0),
+                ? (json['unreadMessagesCount'] as num).toInt()
+                : 0),
       messages: parsedMessages,
     );
   }
@@ -116,6 +120,8 @@ SupportTicketModel _parseTicketIsolate(Map<String, dynamic> json) {
 List<SupportTicketModel> _parseTicketListIsolate(List<dynamic> rawList) {
   return rawList
       .whereType<Map>()
-      .map((item) => SupportTicketModel.fromJson(Map<String, dynamic>.from(item)))
+      .map(
+        (item) => SupportTicketModel.fromJson(Map<String, dynamic>.from(item)),
+      )
       .toList();
 }

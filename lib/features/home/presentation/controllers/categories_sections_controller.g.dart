@@ -13,14 +13,14 @@ String _$selectedCategoryIndexHash() =>
 @ProviderFor(SelectedCategoryIndex)
 final selectedCategoryIndexProvider =
     AutoDisposeNotifierProvider<SelectedCategoryIndex, int>.internal(
-  SelectedCategoryIndex.new,
-  name: r'selectedCategoryIndexProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$selectedCategoryIndexHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      SelectedCategoryIndex.new,
+      name: r'selectedCategoryIndexProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$selectedCategoryIndexHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$SelectedCategoryIndex = AutoDisposeNotifier<int>;
 String _$categoriesSectionsControllerHash() =>
@@ -28,18 +28,21 @@ String _$categoriesSectionsControllerHash() =>
 
 /// See also [CategoriesSectionsController].
 @ProviderFor(CategoriesSectionsController)
-final categoriesSectionsControllerProvider = AutoDisposeAsyncNotifierProvider<
-    CategoriesSectionsController, List<SelectionEntity>>.internal(
-  CategoriesSectionsController.new,
-  name: r'categoriesSectionsControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$categoriesSectionsControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final categoriesSectionsControllerProvider =
+    AutoDisposeAsyncNotifierProvider<
+      CategoriesSectionsController,
+      List<SelectionEntity>
+    >.internal(
+      CategoriesSectionsController.new,
+      name: r'categoriesSectionsControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$categoriesSectionsControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
-typedef _$CategoriesSectionsController
-    = AutoDisposeAsyncNotifier<List<SelectionEntity>>;
+typedef _$CategoriesSectionsController =
+    AutoDisposeAsyncNotifier<List<SelectionEntity>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

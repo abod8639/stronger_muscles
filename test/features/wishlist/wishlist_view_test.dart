@@ -44,7 +44,9 @@ void main() {
       stockQuantity: 5,
     );
 
-    testWidgets('displays AppEmptyState when wishlist is empty', (tester) async {
+    testWidgets('displays AppEmptyState when wishlist is empty', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -67,8 +69,9 @@ void main() {
       expect(find.byIcon(Icons.favorite_border_rounded), findsOneWidget);
     });
 
-    testWidgets('displays WishlistItemCard and AppCard when items exist',
-        (tester) async {
+    testWidgets('displays WishlistItemCard and AppCard when items exist', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -92,12 +95,18 @@ void main() {
       expect(find.text('Whey Isolate'), findsOneWidget);
     });
 
-    testWidgets('swiping a row removes it right away (no Dismissible error)', (tester) async {
+    testWidgets('swiping a row removes it right away (no Dismissible error)', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            wishlistControllerProvider.overrideWith(() => _FakeWishlistController([testProduct])),
-            removeFromWishlistUseCaseProvider.overrideWithValue(_SlowRemoveUseCase()),
+            wishlistControllerProvider.overrideWith(
+              () => _FakeWishlistController([testProduct]),
+            ),
+            removeFromWishlistUseCaseProvider.overrideWithValue(
+              _SlowRemoveUseCase(),
+            ),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,

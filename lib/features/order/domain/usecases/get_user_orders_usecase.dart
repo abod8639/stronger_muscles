@@ -9,10 +9,7 @@ class GetUserOrdersUseCase {
 
   const GetUserOrdersUseCase(this._repository);
 
-  Future<Either<Failure, List<OrderEntity>>> call({
-    int page = 1,
-    int? limit,
-  }) {
+  Future<Either<Failure, List<OrderEntity>>> call({int page = 1, int? limit}) {
     return _repository.getUserOrders(page: page, limit: limit);
   }
 }

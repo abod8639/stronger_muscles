@@ -101,10 +101,7 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
       throw NetworkErrorHandler.handle(e);
     } catch (e) {
       if (e is Failure) rethrow;
-      throw ServerException(
-        message: 'فشل في حذف العنصر من الخادم',
-        data: e,
-      );
+      throw ServerException(message: 'فشل في حذف العنصر من الخادم', data: e);
     }
   }
 
@@ -134,18 +131,12 @@ class CartRemoteDataSourceImpl implements CartRemoteDataSource {
   @override
   Future<void> clearCart({CancelToken? cancelToken}) async {
     try {
-      await _apiService.delete(
-        ApiConfig.cart,
-        cancelToken: cancelToken,
-      );
+      await _apiService.delete(ApiConfig.cart, cancelToken: cancelToken);
     } on DioException catch (e) {
       throw NetworkErrorHandler.handle(e);
     } catch (e) {
       if (e is Failure) rethrow;
-      throw ServerException(
-        message: 'فشل في تفريغ السلة على الخادم',
-        data: e,
-      );
+      throw ServerException(message: 'فشل في تفريغ السلة على الخادم', data: e);
     }
   }
 }

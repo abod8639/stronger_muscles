@@ -4,13 +4,11 @@ import 'package:stronger_muscles/core/components/app_rating_stars.dart';
 
 void main() {
   group('RatingStars Widget Tests', () {
-    testWidgets('renders correct number of full, half, and empty star icons', (tester) async {
+    testWidgets('renders correct number of full, half, and empty star icons', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: RatingStars(rating: 3.5),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: RatingStars(rating: 3.5))),
       );
 
       // Rating 3.5: 3 full stars, 1 half star, 1 empty star
@@ -19,7 +17,9 @@ void main() {
       expect(find.byIcon(Icons.star_outline_rounded), findsOneWidget);
     });
 
-    testWidgets('displays rating value and suffix text when requested', (tester) async {
+    testWidgets('displays rating value and suffix text when requested', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -37,11 +37,7 @@ void main() {
 
     testWidgets('clamps rating between 0.0 and 5.0 gracefully', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: RatingStars(rating: 6.0),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: RatingStars(rating: 6.0))),
       );
 
       expect(find.byIcon(Icons.star_rounded), findsNWidgets(5));

@@ -42,7 +42,8 @@ extension ProductToWishlistItemMapper on ProductEntity {
       addedAt: DateTime.now(),
       productName: name?.en ?? name?.ar ?? '',
       productPrice: baseEffectivePrice,
-      productImageUrl: primaryImageUrl ??
+      productImageUrl:
+          primaryImageUrl ??
           (imageUrls.isNotEmpty ? imageUrls.first.medium : null),
     );
   }

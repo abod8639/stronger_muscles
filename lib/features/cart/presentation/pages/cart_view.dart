@@ -26,19 +26,19 @@ class CartView extends ConsumerWidget {
     final hasItems = cartState.valueOrNull?.isNotEmpty ?? false;
 
     // Listen to transient cart mutation errors (e.g. stock limit exceeded)
-    ref.listen<AsyncValue<List<CartItemEntity>>>(
-      cartControllerProvider,
-      (previous, next) {
-        if (next is AsyncError && previous is AsyncData) {
-          AppSnackBar.showError(
-            context,
-            AppErrorCard.messageFor(next.error, l10n),
-            actionLabel: l10n.ok,
-            onAction: ref.read(cartControllerProvider.notifier).clearError,
-          );
-        }
-      },
-    );
+    ref.listen<AsyncValue<List<CartItemEntity>>>(cartControllerProvider, (
+      previous,
+      next,
+    ) {
+      if (next is AsyncError && previous is AsyncData) {
+        AppSnackBar.showError(
+          context,
+          AppErrorCard.messageFor(next.error, l10n),
+          actionLabel: l10n.ok,
+          onAction: ref.read(cartControllerProvider.notifier).clearError,
+        );
+      }
+    });
 
     void goShopping() => context.go(AppRoutes.home);
 

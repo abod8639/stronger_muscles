@@ -59,8 +59,7 @@ class CartItemEntity {
           selectedSize == other.selectedSize;
 
   @override
-  int get hashCode =>
-      Object.hash(id, quantity, selectedFlavor, selectedSize);
+  int get hashCode => Object.hash(id, quantity, selectedFlavor, selectedSize);
 
   @override
   String toString() =>

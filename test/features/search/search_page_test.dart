@@ -57,50 +57,44 @@ void main() {
     );
 
     testWidgets(
-        'renders search grid with AppProductCard when products available',
-        (tester) async {
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            productSearchControllerProvider.overrideWith(
-              () => _FakeProductSearchController([sampleProduct]),
+      'renders search grid with AppProductCard when products available',
+      (tester) async {
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              productSearchControllerProvider.overrideWith(
+                () => _FakeProductSearchController([sampleProduct]),
+              ),
+              searchHistoryProvider.overrideWith(() => _FakeSearchHistory()),
+              homeControllerProvider.overrideWith(() => _FakeHomeController()),
+            ],
+            child: const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: SearchPage(),
             ),
-            searchHistoryProvider.overrideWith(
-              () => _FakeSearchHistory(),
-            ),
-            homeControllerProvider.overrideWith(
-              () => _FakeHomeController(),
-            ),
-          ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: SearchPage(),
           ),
-        ),
-      );
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.byType(SearchPage), findsOneWidget);
-      expect(find.byType(AppProductCard), findsOneWidget);
-      expect(find.byType(AppEmptyState), findsNothing);
-    });
+        expect(find.byType(SearchPage), findsOneWidget);
+        expect(find.byType(AppProductCard), findsOneWidget);
+        expect(find.byType(AppEmptyState), findsNothing);
+      },
+    );
 
-    testWidgets('renders AppEmptyState when search has no results',
-        (tester) async {
+    testWidgets('renders AppEmptyState when search has no results', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             productSearchControllerProvider.overrideWith(
               () => _FakeProductSearchController([], initialHasSearched: true),
             ),
-            searchHistoryProvider.overrideWith(
-              () => _FakeSearchHistory(),
-            ),
-            homeControllerProvider.overrideWith(
-              () => _FakeHomeController(),
-            ),
+            searchHistoryProvider.overrideWith(() => _FakeSearchHistory()),
+            homeControllerProvider.overrideWith(() => _FakeHomeController()),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -115,8 +109,9 @@ void main() {
       expect(find.byType(AppEmptyState), findsOneWidget);
     });
 
-    testWidgets('renders brand filter chip when brand search is active',
-        (tester) async {
+    testWidgets('renders brand filter chip when brand search is active', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -127,12 +122,8 @@ void main() {
                 initialBrand: 'Optimum Nutrition',
               ),
             ),
-            searchHistoryProvider.overrideWith(
-              () => _FakeSearchHistory(),
-            ),
-            homeControllerProvider.overrideWith(
-              () => _FakeHomeController(),
-            ),
+            searchHistoryProvider.overrideWith(() => _FakeSearchHistory()),
+            homeControllerProvider.overrideWith(() => _FakeHomeController()),
           ],
           child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,

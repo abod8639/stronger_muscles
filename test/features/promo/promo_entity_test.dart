@@ -71,10 +71,7 @@ void main() {
         targetId: '99',
       );
 
-      final updated = original.copyWith(
-        title: 'New Title',
-        targetId: '100',
-      );
+      final updated = original.copyWith(title: 'New Title', targetId: '100');
 
       expect(updated.id, 1);
       expect(updated.title, 'New Title');

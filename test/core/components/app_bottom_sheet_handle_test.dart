@@ -5,23 +5,22 @@ import 'package:stronger_muscles/core/theme/app_radius.dart';
 
 void main() {
   group('AppBottomSheetHandle Widget Tests', () {
-    testWidgets('renders handle with default dimensions and AppRadius.allPill', (tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: AppBottomSheetHandle(),
-          ),
-        ),
-      );
+    testWidgets(
+      'renders handle with default dimensions and AppRadius.allPill',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(home: Scaffold(body: AppBottomSheetHandle())),
+        );
 
-      final containerFinder = find.byType(Container);
-      expect(containerFinder, findsOneWidget);
+        final containerFinder = find.byType(Container);
+        expect(containerFinder, findsOneWidget);
 
-      final container = tester.widget<Container>(containerFinder);
-      expect(container.constraints?.maxWidth ?? 40.0, equals(40.0));
-      final decoration = container.decoration as BoxDecoration;
-      expect(decoration.borderRadius, equals(AppRadius.allPill));
-    });
+        final container = tester.widget<Container>(containerFinder);
+        expect(container.constraints?.maxWidth ?? 40.0, equals(40.0));
+        final decoration = container.decoration as BoxDecoration;
+        expect(decoration.borderRadius, equals(AppRadius.allPill));
+      },
+    );
 
     testWidgets('respects custom width, height, and color', (tester) async {
       await tester.pumpWidget(

@@ -10,25 +10,25 @@ class ProfileRoutes {
 
   /// Dedicated StatefulShellBranch for nested bottom navigation tabs.
   static StatefulShellBranch get branch => StatefulShellBranch(
-        routes: [
-          GoRoute(
-            path: profilePath,
-            builder: (context, state) => const ProfilePage(),
-          ),
-        ],
-      );
+    routes: [
+      GoRoute(
+        path: profilePath,
+        builder: (context, state) => const ProfilePage(),
+      ),
+    ],
+  );
 
   /// Standalone routes for the Profile feature.
   static List<RouteBase> get standaloneRoutes => [
-        GoRoute(
-          path: editUserInfoPath,
-          builder: (context, state) => const EditUserInfoView(),
-        ),
-      ];
+    GoRoute(
+      path: editUserInfoPath,
+      builder: (context, state) => const EditUserInfoView(),
+    ),
+  ];
 
   /// Standalone GoRoute for profile page if used outside shell branch.
   static GoRoute get route => GoRoute(
-        path: profilePath,
-        builder: (context, state) => const ProfilePage(),
-      );
+    path: profilePath,
+    builder: (context, state) => const ProfilePage(),
+  );
 }

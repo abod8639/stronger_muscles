@@ -12,9 +12,6 @@ class GetFaqsUseCase {
     FaqCategory? category,
     String? query,
   }) {
-    return _repository.getFaqs(
-      category: category,
-      query: query,
-    );
+    return _repository.getFaqs(category: category, query: query);
   }
 }

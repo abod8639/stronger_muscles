@@ -24,7 +24,9 @@ class AccountSettingsList extends ConsumerWidget {
     final isDarkMode = ref.watch(themeControllerProvider);
     final themeNotifier = ref.read(themeControllerProvider.notifier);
     ref.watch(languageControllerProvider);
-    final languageName = ref.read(languageControllerProvider.notifier).currentLanguageName;
+    final languageName = ref
+        .read(languageControllerProvider.notifier)
+        .currentLanguageName;
     final unreadNotifications = ref.watch(unreadNotificationCountProvider);
 
     final tiles = <Widget>[
@@ -65,7 +67,9 @@ class AccountSettingsList extends ConsumerWidget {
         onTap: () => _showLanguagePicker(context, ref),
         trailing: Text(
           languageName,
-          style: context.textTheme.bodyMedium?.copyWith(color: context.colorScheme.onSurfaceVariant),
+          style: context.textTheme.bodyMedium?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+          ),
         ),
       ),
       AppListTile(
@@ -79,7 +83,9 @@ class AccountSettingsList extends ConsumerWidget {
         onTap: () => showAboutDialog(
           context: context,
           applicationName: l10n.appTitle,
-          applicationIcon: const AppIconTile(icon: Icons.fitness_center_rounded),
+          applicationIcon: const AppIconTile(
+            icon: Icons.fitness_center_rounded,
+          ),
         ),
       ),
     ];
@@ -105,7 +111,9 @@ class AccountSettingsList extends ConsumerWidget {
                 height: 1,
                 indent: AppDimens.spacingLg,
                 endIndent: AppDimens.spacingLg,
-                color: context.colorScheme.outlineVariant.withValues(alpha: 0.4),
+                color: context.colorScheme.outlineVariant.withValues(
+                  alpha: 0.4,
+                ),
               ),
             tile,
           ],
@@ -117,34 +125,36 @@ class AccountSettingsList extends ConsumerWidget {
   void _showLanguagePicker(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
 
-    AppBottomSheetScaffold.show<void>(
-      context,
-      (sheetContext) {
-        final current = ref.read(languageControllerProvider).languageCode;
-        void select(String code) {
-          ref.read(languageControllerProvider.notifier).changeLanguage(Locale(code));
-          Navigator.pop(sheetContext);
-        }
+    AppBottomSheetScaffold.show<void>(context, (sheetContext) {
+      final current = ref.read(languageControllerProvider).languageCode;
+      void select(String code) {
+        ref
+            .read(languageControllerProvider.notifier)
+            .changeLanguage(Locale(code));
+        Navigator.pop(sheetContext);
+      }
 
-        return AppBottomSheetScaffold(
-          icon: Icons.language_outlined,
-          title: l10n.language,
-          child: Column(
-            children: [
-              for (final (code, name) in [('en', l10n.english), ('ar', l10n.arabic)])
-                AppSelectableCard<String>(
-                  value: code,
-                  groupValue: current,
-                  title: name,
-                  leadingIcon: Icons.translate_rounded,
-                  onChanged: (value) {
-                    if (value != null) select(value);
-                  },
-                ),
-            ],
-          ),
-        );
-      },
-    );
+      return AppBottomSheetScaffold(
+        icon: Icons.language_outlined,
+        title: l10n.language,
+        child: Column(
+          children: [
+            for (final (code, name) in [
+              ('en', l10n.english),
+              ('ar', l10n.arabic),
+            ])
+              AppSelectableCard<String>(
+                value: code,
+                groupValue: current,
+                title: name,
+                leadingIcon: Icons.translate_rounded,
+                onChanged: (value) {
+                  if (value != null) select(value);
+                },
+              ),
+          ],
+        ),
+      );
+    });
   }
 }

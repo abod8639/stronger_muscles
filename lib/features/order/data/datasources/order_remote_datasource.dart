@@ -11,20 +11,14 @@ abstract class OrderRemoteDatasource {
     CancelToken? cancelToken,
   });
 
-  Future<OrderModel?> getOrderById(
-    String id, {
-    CancelToken? cancelToken,
-  });
+  Future<OrderModel?> getOrderById(String id, {CancelToken? cancelToken});
 
   Future<Map<String, dynamic>> createOrder(
     Map<String, dynamic> payload, {
     CancelToken? cancelToken,
   });
 
-  Future<void> cancelOrder(
-    String id, {
-    CancelToken? cancelToken,
-  });
+  Future<void> cancelOrder(String id, {CancelToken? cancelToken});
 }
 
 class OrderRemoteDatasourceImpl implements OrderRemoteDatasource {
@@ -141,10 +135,7 @@ class OrderRemoteDatasourceImpl implements OrderRemoteDatasource {
   }
 
   @override
-  Future<void> cancelOrder(
-    String id, {
-    CancelToken? cancelToken,
-  }) async {
+  Future<void> cancelOrder(String id, {CancelToken? cancelToken}) async {
     try {
       await _apiService.post(
         '${ApiConfig.orders}/$id/cancel',

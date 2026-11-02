@@ -4,7 +4,9 @@ import 'package:stronger_muscles/core/components/app_info_row.dart';
 
 void main() {
   group('AppInfoRow and AppPriceRow Tests', () {
-    testWidgets('AppInfoRow renders label and value with optional icon', (tester) async {
+    testWidgets('AppInfoRow renders label and value with optional icon', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -22,7 +24,9 @@ void main() {
       expect(find.byIcon(Icons.receipt), findsOneWidget);
     });
 
-    testWidgets('AppPriceRow renders amount, label, and formatted currency', (tester) async {
+    testWidgets('AppPriceRow renders amount, label, and formatted currency', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -40,7 +44,9 @@ void main() {
       expect(find.text('250.00 EGP'), findsOneWidget);
     });
 
-    testWidgets('AppPriceRow renders discount with prefix minus', (tester) async {
+    testWidgets('AppPriceRow renders discount with prefix minus', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(

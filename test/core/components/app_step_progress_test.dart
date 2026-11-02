@@ -9,12 +9,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(
-            body: AppStepProgress(
-              steps: steps,
-              activeIndex: 1,
-            ),
-          ),
+          home: Scaffold(body: AppStepProgress(steps: steps, activeIndex: 1)),
         ),
       );
 

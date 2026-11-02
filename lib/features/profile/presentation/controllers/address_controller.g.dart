@@ -13,14 +13,14 @@ String _$addressFormLoadingHash() =>
 @ProviderFor(AddressFormLoading)
 final addressFormLoadingProvider =
     AutoDisposeNotifierProvider<AddressFormLoading, bool>.internal(
-  AddressFormLoading.new,
-  name: r'addressFormLoadingProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$addressFormLoadingHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AddressFormLoading.new,
+      name: r'addressFormLoadingProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$addressFormLoadingHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AddressFormLoading = AutoDisposeNotifier<bool>;
 String _$addressFormSelectedLabelHash() =>
@@ -30,30 +30,33 @@ String _$addressFormSelectedLabelHash() =>
 @ProviderFor(AddressFormSelectedLabel)
 final addressFormSelectedLabelProvider =
     AutoDisposeNotifierProvider<AddressFormSelectedLabel, String>.internal(
-  AddressFormSelectedLabel.new,
-  name: r'addressFormSelectedLabelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$addressFormSelectedLabelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      AddressFormSelectedLabel.new,
+      name: r'addressFormSelectedLabelProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$addressFormSelectedLabelHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AddressFormSelectedLabel = AutoDisposeNotifier<String>;
 String _$addressControllerHash() => r'5544322cee8500a0a302ba6b415d5292fbac5e3c';
 
 /// See also [AddressController].
 @ProviderFor(AddressController)
-final addressControllerProvider = AutoDisposeAsyncNotifierProvider<
-    AddressController, List<AddressEntity>>.internal(
-  AddressController.new,
-  name: r'addressControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$addressControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final addressControllerProvider =
+    AutoDisposeAsyncNotifierProvider<
+      AddressController,
+      List<AddressEntity>
+    >.internal(
+      AddressController.new,
+      name: r'addressControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$addressControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$AddressController = AutoDisposeAsyncNotifier<List<AddressEntity>>;
 // ignore_for_file: type=lint

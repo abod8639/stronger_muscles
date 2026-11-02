@@ -6,7 +6,10 @@ import 'package:stronger_muscles/features/help_support/data/models/support_ticke
 
 abstract class SupportChatRemoteDataSource {
   Future<SupportTicketModel> getTicketDetails(String ticketId);
-  Future<SupportMessageModel> sendTicketMessage(String ticketId, String message);
+  Future<SupportMessageModel> sendTicketMessage(
+    String ticketId,
+    String message,
+  );
   Future<SupportTicketModel> closeTicket(String ticketId);
 }
 
@@ -64,4 +67,3 @@ class SupportChatRemoteDataSourceImpl implements SupportChatRemoteDataSource {
     throw const ServerException(message: 'تعذر إغلاق تذكرة الدعم الفني');
   }
 }
-

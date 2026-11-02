@@ -18,8 +18,8 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
   const CheckoutRepositoryImpl({
     required CheckoutRemoteDataSource remoteDataSource,
     required CheckoutLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   final CheckoutRemoteDataSource _remoteDataSource;
   final CheckoutLocalDataSource _localDataSource;
@@ -52,7 +52,8 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
           final finalResult = CheckoutResultModel(
             orderId: orderResult.orderId,
             status: orderResult.status,
-            message: 'تم تأكيد طلبك رقم (${orderResult.orderId}) بنجاح، لكن تعذر إكمال الدفع الإلكتروني تلقائياً.',
+            message:
+                'تم تأكيد طلبك رقم (${orderResult.orderId}) بنجاح، لكن تعذر إكمال الدفع الإلكتروني تلقائياً.',
             rawData: orderResult.rawData,
           );
           await _localDataSource.saveLastResult(finalResult);
@@ -85,7 +86,9 @@ class CheckoutRepositoryImpl implements CheckoutRepository {
     } on HiveError catch (e) {
       return left(CacheFailure(message: e.message));
     } on FormatException catch (e) {
-      return left(ServerFailure(message: 'خطأ في تنسيق استجابة الخادم: ${e.message}'));
+      return left(
+        ServerFailure(message: 'خطأ في تنسيق استجابة الخادم: ${e.message}'),
+      );
     } catch (e) {
       return left(GeneralFailure(message: e.toString()));
     }

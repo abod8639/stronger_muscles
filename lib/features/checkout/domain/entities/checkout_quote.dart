@@ -45,16 +45,16 @@ class CheckoutQuote {
 
   @override
   int get hashCode => Object.hash(
-        subtotal,
-        shippingCost,
-        taxAmount,
-        discount,
-        totalAmount,
-        taxRate,
-        freeDeliveryThreshold,
-        currency,
-        isAcceptingOrders,
-      );
+    subtotal,
+    shippingCost,
+    taxAmount,
+    discount,
+    totalAmount,
+    taxRate,
+    freeDeliveryThreshold,
+    currency,
+    isAcceptingOrders,
+  );
 
   @override
   String toString() {

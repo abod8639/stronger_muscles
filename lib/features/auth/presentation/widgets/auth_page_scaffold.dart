@@ -89,7 +89,9 @@ class AuthPageScaffold extends ConsumerWidget {
                         ? const SizedBox(width: double.infinity)
                         : AppErrorCard(
                             error: error,
-                            margin: const EdgeInsets.only(bottom: AppDimens.spacingLg),
+                            margin: const EdgeInsets.only(
+                              bottom: AppDimens.spacingLg,
+                            ),
                             onRetry: onRetry,
                             onDismiss: ref
                                 .read(authControllerProvider.notifier)

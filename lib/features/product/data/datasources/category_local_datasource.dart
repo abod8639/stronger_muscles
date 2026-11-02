@@ -35,7 +35,9 @@ class CategoryLocalDataSource {
       }
       return _inMemoryFallback.values.toList();
     } catch (e) {
-      debugPrint('[CategoryLocalDataSource] Error getting cached categories: $e');
+      debugPrint(
+        '[CategoryLocalDataSource] Error getting cached categories: $e',
+      );
       return _inMemoryFallback.values.toList();
     }
   }

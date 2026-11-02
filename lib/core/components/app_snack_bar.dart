@@ -8,41 +8,39 @@ class AppSnackBar {
   AppSnackBar._();
 
   static void showSuccess(BuildContext context, String message) => _show(
-        context,
-        message: message,
-        icon: Icons.check_circle_rounded,
-        color: AppColors.success,
-      );
+    context,
+    message: message,
+    icon: Icons.check_circle_rounded,
+    color: AppColors.success,
+  );
 
   static void showError(
     BuildContext context,
     String message, {
     String? actionLabel,
     VoidCallback? onAction,
-  }) =>
-      _show(
-        context,
-        message: message,
-        icon: Icons.error_outline_rounded,
-        color: AppColors.error,
-        actionLabel: actionLabel,
-        onAction: onAction,
-      );
+  }) => _show(
+    context,
+    message: message,
+    icon: Icons.error_outline_rounded,
+    color: AppColors.error,
+    actionLabel: actionLabel,
+    onAction: onAction,
+  );
 
   static void showInfo(
     BuildContext context,
     String message, {
     String? actionLabel,
     VoidCallback? onAction,
-  }) =>
-      _show(
-        context,
-        message: message,
-        icon: Icons.info_outline_rounded,
-        color: AppColors.greyDark,
-        actionLabel: actionLabel,
-        onAction: onAction,
-      );
+  }) => _show(
+    context,
+    message: message,
+    icon: Icons.info_outline_rounded,
+    color: AppColors.greyDark,
+    actionLabel: actionLabel,
+    onAction: onAction,
+  );
 
   static void _show(
     BuildContext context, {

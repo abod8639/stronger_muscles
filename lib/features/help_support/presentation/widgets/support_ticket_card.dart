@@ -29,7 +29,9 @@ class SupportTicketCard extends StatelessWidget {
     return AppCard(
       onTap: onTap,
       padding: const EdgeInsets.all(14.0),
-      border: hasUnread ? Border.all(color: AppColors.primary, width: 1.5) : null,
+      border: hasUnread
+          ? Border.all(color: AppColors.primary, width: 1.5)
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,7 +55,10 @@ class SupportTicketCard extends StatelessWidget {
               else
                 Text(
                   DateFormat('yyyy/MM/dd • h:mm a').format(ticket.createdAt),
-                  style: textTheme.bodySmall?.copyWith(fontSize: 10.5, color: mutedColor),
+                  style: textTheme.bodySmall?.copyWith(
+                    fontSize: 10.5,
+                    color: mutedColor,
+                  ),
                 ),
             ],
           ),
@@ -72,7 +77,10 @@ class SupportTicketCard extends StatelessWidget {
             ticket.message,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: textTheme.bodySmall?.copyWith(color: mutedColor, height: 1.4),
+            style: textTheme.bodySmall?.copyWith(
+              color: mutedColor,
+              height: 1.4,
+            ),
           ),
           const SizedBox(height: AppDimens.spacingSm),
           Row(
@@ -84,10 +92,17 @@ class SupportTicketCard extends StatelessWidget {
                   ticket.category,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: textTheme.bodySmall?.copyWith(fontSize: 11.0, color: mutedColor),
+                  style: textTheme.bodySmall?.copyWith(
+                    fontSize: 11.0,
+                    color: mutedColor,
+                  ),
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios_rounded, size: 14.0, color: AppColors.primary),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 14.0,
+                color: AppColors.primary,
+              ),
             ],
           ),
         ],

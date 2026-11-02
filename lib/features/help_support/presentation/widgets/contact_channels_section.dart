@@ -18,18 +18,18 @@ class ContactChannelsSection extends StatelessWidget {
   });
 
   static IconData _iconFor(SupportChannelType type) => switch (type) {
-        SupportChannelType.whatsapp => Icons.chat_bubble_outline_rounded,
-        SupportChannelType.phone => Icons.phone_in_talk_rounded,
-        SupportChannelType.email => Icons.mark_email_read_outlined,
-        SupportChannelType.ticket => Icons.confirmation_number_outlined,
-      };
+    SupportChannelType.whatsapp => Icons.chat_bubble_outline_rounded,
+    SupportChannelType.phone => Icons.phone_in_talk_rounded,
+    SupportChannelType.email => Icons.mark_email_read_outlined,
+    SupportChannelType.ticket => Icons.confirmation_number_outlined,
+  };
 
   static Color _colorFor(SupportChannelType type) => switch (type) {
-        SupportChannelType.whatsapp => const Color(0xFF25D366),
-        SupportChannelType.phone => AppColors.info,
-        SupportChannelType.email => AppColors.warning,
-        SupportChannelType.ticket => AppColors.primary,
-      };
+    SupportChannelType.whatsapp => const Color(0xFF25D366),
+    SupportChannelType.phone => AppColors.info,
+    SupportChannelType.email => AppColors.warning,
+    SupportChannelType.ticket => AppColors.primary,
+  };
 
   @override
   Widget build(BuildContext context) {

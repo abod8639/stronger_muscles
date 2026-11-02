@@ -31,14 +31,14 @@ String _$notificationControllerHash() =>
 @ProviderFor(NotificationController)
 final notificationControllerProvider =
     AsyncNotifierProvider<NotificationController, NotificationsState>.internal(
-  NotificationController.new,
-  name: r'notificationControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$notificationControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      NotificationController.new,
+      name: r'notificationControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$notificationControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$NotificationController = AsyncNotifier<NotificationsState>;
 // ignore_for_file: type=lint

@@ -55,12 +55,11 @@ class NotificationEntity {
   String? get promoId => data?['promo_id']?.toString();
   String? get productId => data?['product_id']?.toString();
   String? get ticketId =>
-      data?['ticket_id']?.toString() ??
-      data?['ticketId']?.toString();
+      data?['ticket_id']?.toString() ?? data?['ticketId']?.toString();
 
   String? get ticketNumber {
-    final explicit = data?['ticket_number']?.toString() ??
-        data?['ticketNumber']?.toString();
+    final explicit =
+        data?['ticket_number']?.toString() ?? data?['ticketNumber']?.toString();
     if (explicit != null && explicit.isNotEmpty) return explicit;
 
     final match = RegExp(r'#([A-Za-z0-9_-]+)').firstMatch(title);
@@ -69,16 +68,13 @@ class NotificationEntity {
   }
 
   String? get ticketPriority =>
-      data?['priority']?.toString() ??
-      data?['ticket_priority']?.toString();
+      data?['priority']?.toString() ?? data?['ticket_priority']?.toString();
 
   String? get ticketStatus =>
-      data?['status']?.toString() ??
-      data?['ticket_status']?.toString();
+      data?['status']?.toString() ?? data?['ticket_status']?.toString();
 
   String? get ticketCategory =>
-      data?['category']?.toString() ??
-      data?['ticket_category']?.toString();
+      data?['category']?.toString() ?? data?['ticket_category']?.toString();
 
   String? get ticketSenderName =>
       data?['user_name']?.toString() ??

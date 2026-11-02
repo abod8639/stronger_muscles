@@ -18,7 +18,9 @@ class _CheckoutNotesInputState extends ConsumerState<CheckoutNotesInput> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: ref.read(checkoutControllerProvider).notes);
+    _controller = TextEditingController(
+      text: ref.read(checkoutControllerProvider).notes,
+    );
   }
 
   @override

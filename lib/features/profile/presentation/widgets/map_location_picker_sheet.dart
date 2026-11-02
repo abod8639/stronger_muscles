@@ -55,7 +55,10 @@ class _MapLocationPickerSheetState extends State<MapLocationPickerSheet> {
     super.initState();
     _mapController = MapController();
     if (widget.initialLatitude != null && widget.initialLongitude != null) {
-      _currentCenter = ll.LatLng(widget.initialLatitude!, widget.initialLongitude!);
+      _currentCenter = ll.LatLng(
+        widget.initialLatitude!,
+        widget.initialLongitude!,
+      );
     } else {
       _currentCenter = _defaultLocation;
       _moveToCurrentGpsLocation();

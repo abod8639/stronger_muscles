@@ -41,7 +41,9 @@ class ProductDetailsLocalDataSource {
       }
       return _productInMemoryFallback[id];
     } catch (e) {
-      debugPrint('[ProductDetailsLocalDataSource] Error getting cached product: $e');
+      debugPrint(
+        '[ProductDetailsLocalDataSource] Error getting cached product: $e',
+      );
       return _productInMemoryFallback[id];
     }
   }
@@ -72,7 +74,9 @@ class ProductDetailsLocalDataSource {
       }
       return _reviewsInMemoryFallback[productId];
     } catch (e) {
-      debugPrint('[ProductDetailsLocalDataSource] Error getting cached reviews: $e');
+      debugPrint(
+        '[ProductDetailsLocalDataSource] Error getting cached reviews: $e',
+      );
       return _reviewsInMemoryFallback[productId];
     }
   }

@@ -57,7 +57,8 @@ class GroupedTicketNotificationFeedItem extends NotificationFeedItem {
   });
 
   bool get isRead => unreadCount == 0;
-  List<String> get allNotificationIds => notifications.map((n) => n.id).toList();
+  List<String> get allNotificationIds =>
+      notifications.map((n) => n.id).toList();
 
   @override
   bool operator ==(Object other) =>
@@ -78,18 +79,18 @@ class GroupedTicketNotificationFeedItem extends NotificationFeedItem {
 
   @override
   int get hashCode => Object.hash(
-        ticketId,
-        ticketNumber,
-        priority,
-        status,
-        category,
-        senderName,
-        senderAvatar,
-        totalMessagesCount,
-        unreadCount,
-        latestMessage,
-        Object.hashAll(notifications),
-      );
+    ticketId,
+    ticketNumber,
+    priority,
+    status,
+    category,
+    senderName,
+    senderAvatar,
+    totalMessagesCount,
+    unreadCount,
+    latestMessage,
+    Object.hashAll(notifications),
+  );
 }
 
 /// Groups notifications so that multiple messages belonging to the same support ticket
@@ -130,11 +131,17 @@ List<NotificationFeedItem> groupNotificationsIntoFeedItems(
 
         final ticketId = group
             .map((n) => n.ticketId)
-            .firstWhere((id) => id != null && id.isNotEmpty, orElse: () => key)!;
+            .firstWhere(
+              (id) => id != null && id.isNotEmpty,
+              orElse: () => key,
+            )!;
 
         final ticketNumber = group
             .map((n) => n.ticketNumber)
-            .firstWhere((tNum) => tNum != null && tNum.isNotEmpty, orElse: () => key)!;
+            .firstWhere(
+              (tNum) => tNum != null && tNum.isNotEmpty,
+              orElse: () => key,
+            )!;
 
         final priority = group
             .map((n) => n.ticketPriority)
@@ -150,15 +157,22 @@ List<NotificationFeedItem> groupNotificationsIntoFeedItems(
 
         final senderName = group
             .map((n) => n.ticketSenderName)
-            .firstWhere((name) => name != null && name.isNotEmpty, orElse: () => null);
+            .firstWhere(
+              (name) => name != null && name.isNotEmpty,
+              orElse: () => null,
+            );
 
         final senderAvatar = group
             .map((n) => n.ticketSenderAvatar)
-            .firstWhere((avatar) => avatar != null && avatar.isNotEmpty, orElse: () => null);
+            .firstWhere(
+              (avatar) => avatar != null && avatar.isNotEmpty,
+              orElse: () => null,
+            );
 
-        final totalMessages = group
-            .map((n) => n.ticketMessagesCount)
-            .firstWhere((c) => c != null && c > 0, orElse: () => null) ??
+        final totalMessages =
+            group
+                .map((n) => n.ticketMessagesCount)
+                .firstWhere((c) => c != null && c > 0, orElse: () => null) ??
             group.length;
 
         final unreadCount = group.where((n) => !n.isRead).length;

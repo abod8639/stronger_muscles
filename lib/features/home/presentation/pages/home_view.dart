@@ -30,7 +30,8 @@ class HomeView extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: _maxContentWidth),
             child: RefreshIndicator(
               color: AppColors.primary,
-              onRefresh: () => ref.read(homeControllerProvider.notifier).refreshHome(),
+              onRefresh: () =>
+                  ref.read(homeControllerProvider.notifier).refreshHome(),
               child: CustomScrollView(
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
@@ -42,7 +43,8 @@ class HomeView extends ConsumerWidget {
                     const SliverToBoxAdapter(child: PromoBanner()),
                     SliverToBoxAdapter(
                       child: AppSectionTitle(
-                        title: l10n?.mostPopularOffers ?? 'الأكثر طلباً والعروض',
+                        title:
+                            l10n?.mostPopularOffers ?? 'الأكثر طلباً والعروض',
                         actionText: l10n?.seeAll ?? 'عرض الكل',
                         onActionTap: () => context.push(AppRoutes.products),
                         padding: const EdgeInsets.fromLTRB(
@@ -55,7 +57,9 @@ class HomeView extends ConsumerWidget {
                     ),
                   ],
                   const ProductList(),
-                  const SliverToBoxAdapter(child: SizedBox(height: AppDimens.spacingLg + 4)),
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: AppDimens.spacingLg + 4),
+                  ),
                 ],
               ),
             ),

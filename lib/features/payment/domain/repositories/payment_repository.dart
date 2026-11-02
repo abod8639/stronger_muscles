@@ -14,7 +14,6 @@ abstract class PaymentRepository {
   });
 
   /// Retrieves the list of supported and enabled payment methods.
-  Future<Either<Failure, List<PaymentMethodEntity>>> getAvailablePaymentMethods({
-    String lang = 'ar',
-  });
+  Future<Either<Failure, List<PaymentMethodEntity>>>
+  getAvailablePaymentMethods({String lang = 'ar'});
 }

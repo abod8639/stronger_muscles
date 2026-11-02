@@ -3,11 +3,7 @@ class ServerException implements Exception {
   final int? statusCode;
   final dynamic data;
 
-  const ServerException({
-    required this.message,
-    this.statusCode,
-    this.data,
-  });
+  const ServerException({required this.message, this.statusCode, this.data});
 
   @override
   String toString() => message;
@@ -37,10 +33,7 @@ class ValidationException implements Exception {
   final String message;
   final Map<String, dynamic>? errors;
 
-  const ValidationException({
-    required this.message,
-    this.errors,
-  });
+  const ValidationException({required this.message, this.errors});
 
   @override
   String toString() => message;
@@ -73,9 +66,7 @@ class TimeoutAppException implements Exception {
 class CancelAppException implements Exception {
   final String message;
 
-  const CancelAppException({
-    this.message = 'تم إلغاء العملية',
-  });
+  const CancelAppException({this.message = 'تم إلغاء العملية'});
 
   @override
   String toString() => message;
@@ -84,11 +75,8 @@ class CancelAppException implements Exception {
 class CacheException implements Exception {
   final String message;
 
-  const CacheException({
-    required this.message,
-  });
+  const CacheException({required this.message});
 
   @override
   String toString() => message;
 }
-

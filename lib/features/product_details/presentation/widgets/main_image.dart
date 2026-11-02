@@ -59,7 +59,9 @@ class _MainImageState extends ConsumerState<MainImage> {
 
     final images = widget.product.imageUrls;
     final selectedIndex = ref.watch(
-      productDetailsControllerProvider(widget.product).select((s) => s.selectedImageIndex),
+      productDetailsControllerProvider(
+        widget.product,
+      ).select((s) => s.selectedImageIndex),
     );
 
     return SizedBox(
@@ -103,7 +105,9 @@ class _MainImageState extends ConsumerState<MainImage> {
         child: Hero(
           tag: 'product_image_${widget.product.id}_$index',
           child: ColoredBox(
-            color: widget.product.isBackgroundWhite ? AppColors.white : Colors.transparent,
+            color: widget.product.isBackgroundWhite
+                ? AppColors.white
+                : Colors.transparent,
             child: AppNetworkImage(
               imageUrl: widget.product.imageUrls[index].medium,
               fit: BoxFit.contain,

@@ -13,14 +13,16 @@ class SupportChatRoutes {
         if (extra is String) {
           ticketId = extra;
         } else if (extra is Map) {
-          ticketId = extra['ticket_id']?.toString() ??
+          ticketId =
+              extra['ticket_id']?.toString() ??
               extra['ticketId']?.toString() ??
               extra['id']?.toString() ??
               '';
         }
 
         if (ticketId.isEmpty) {
-          ticketId = state.uri.queryParameters['ticket_id'] ??
+          ticketId =
+              state.uri.queryParameters['ticket_id'] ??
               state.uri.queryParameters['ticketId'] ??
               '';
         }
@@ -30,4 +32,3 @@ class SupportChatRoutes {
     ),
   ];
 }
-

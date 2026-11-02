@@ -42,7 +42,12 @@ class ProfilePageSkeleton extends StatelessWidget {
               children: [
                 for (var i = 0; i < 3; i++) ...[
                   if (i > 0) const SizedBox(width: AppDimens.spacingMd),
-                  Expanded(child: AppSkeletonBox(height: 100, borderRadius: AppRadius.allLg)),
+                  Expanded(
+                    child: AppSkeletonBox(
+                      height: 100,
+                      borderRadius: AppRadius.allLg,
+                    ),
+                  ),
                 ],
               ],
             ),

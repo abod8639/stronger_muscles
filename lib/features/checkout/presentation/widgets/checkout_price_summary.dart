@@ -21,9 +21,8 @@ class CheckoutPriceSummary extends ConsumerWidget {
     final quoteState = ref.watch(checkoutQuoteProvider);
 
     return quoteState.when(
-      data: (quote) => quote == null
-          ? const SizedBox.shrink()
-          : _QuoteRows(quote: quote),
+      data: (quote) =>
+          quote == null ? const SizedBox.shrink() : _QuoteRows(quote: quote),
       loading: () => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

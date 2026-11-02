@@ -34,14 +34,17 @@ class RecentOrdersList extends ConsumerWidget {
               onActionTap: () => context.push(AppRoutes.orderView),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppDimens.spacingLg),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimens.spacingLg,
+              ),
               child: Column(
                 children: [
                   for (final (index, order) in recentOrders.indexed) ...[
                     if (index > 0) const SizedBox(height: AppDimens.spacingMd),
                     OrderCard(
                       order: order,
-                      onTap: () => context.push(AppRoutes.orderDetails, extra: order),
+                      onTap: () =>
+                          context.push(AppRoutes.orderDetails, extra: order),
                     ),
                   ],
                 ],

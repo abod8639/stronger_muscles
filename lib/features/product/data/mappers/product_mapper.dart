@@ -14,41 +14,41 @@ import 'package:stronger_muscles/features/product/domain/entities/review_entity.
 /// Extension mappers to convert between Product data models (DTOs) and domain entities.
 extension ProductModelMapper on ProductModel {
   ProductEntity toEntity() => ProductEntity(
-        id: id,
-        name: name?.toEntity(),
-        description: description?.toEntity(),
-        brand: brand,
-        category: category?.toEntity(),
-        imageUrls: imageUrls.map((i) => i.toEntity()).toList(),
-        hasVariants: hasVariants,
-        price: price,
-        discountPrice: discountPrice,
-        stockQuantity: stockQuantity,
-        averageRating: averageRating,
-        reviewCount: reviewCount,
-        servingSize: servingSize,
-        servingsPerContainer: servingsPerContainer,
-        nutritionFacts: nutritionFacts,
-        flavors: flavors,
-        productSizes: productSizes.map((s) => s.toEntity()).toList(),
-        size: size,
-        tags: tags,
-        weight: weight,
-        isActive: isActive,
-        isBackgroundWhite: isBackgroundWhite,
-        featured: featured,
-        newArrival: newArrival,
-        bestSeller: bestSeller,
-        sku: sku,
-        totalSales: totalSales,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-        ingredients: ingredients,
-        manufacturer: manufacturer,
-        countryOfOrigin: countryOfOrigin,
-        usageInstructions: usageInstructions,
-        warnings: warnings,
-      );
+    id: id,
+    name: name?.toEntity(),
+    description: description?.toEntity(),
+    brand: brand,
+    category: category?.toEntity(),
+    imageUrls: imageUrls.map((i) => i.toEntity()).toList(),
+    hasVariants: hasVariants,
+    price: price,
+    discountPrice: discountPrice,
+    stockQuantity: stockQuantity,
+    averageRating: averageRating,
+    reviewCount: reviewCount,
+    servingSize: servingSize,
+    servingsPerContainer: servingsPerContainer,
+    nutritionFacts: nutritionFacts,
+    flavors: flavors,
+    productSizes: productSizes.map((s) => s.toEntity()).toList(),
+    size: size,
+    tags: tags,
+    weight: weight,
+    isActive: isActive,
+    isBackgroundWhite: isBackgroundWhite,
+    featured: featured,
+    newArrival: newArrival,
+    bestSeller: bestSeller,
+    sku: sku,
+    totalSales: totalSales,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    ingredients: ingredients,
+    manufacturer: manufacturer,
+    countryOfOrigin: countryOfOrigin,
+    usageInstructions: usageInstructions,
+    warnings: warnings,
+  );
 }
 
 extension ProductEntityMapper on ProductEntity {
@@ -57,17 +57,17 @@ extension ProductEntityMapper on ProductEntity {
 
 extension CategoryModelMapper on CategoryModel {
   CategoryEntity toEntity() => CategoryEntity(
-        id: id,
-        name: name?.toEntity(),
-        description: description?.toEntity(),
-        imageUrl: imageUrl,
-        sortOrder: sortOrder,
-        isActive: isActive,
-        createdAt: createdAt,
-        icon: icon,
-        parentId: parentId,
-        children: children.map((c) => c.toEntity()).toList(),
-      );
+    id: id,
+    name: name?.toEntity(),
+    description: description?.toEntity(),
+    imageUrl: imageUrl,
+    sortOrder: sortOrder,
+    isActive: isActive,
+    createdAt: createdAt,
+    icon: icon,
+    parentId: parentId,
+    children: children.map((c) => c.toEntity()).toList(),
+  );
 }
 
 extension CategoryEntityMapper on CategoryEntity {
@@ -75,11 +75,8 @@ extension CategoryEntityMapper on CategoryEntity {
 }
 
 extension ImageUrlModelMapper on ImageUrl {
-  ImageUrlEntity toEntity() => ImageUrlEntity(
-        thumbnail: thumbnail,
-        medium: medium,
-        original: original,
-      );
+  ImageUrlEntity toEntity() =>
+      ImageUrlEntity(thumbnail: thumbnail, medium: medium, original: original);
 }
 
 extension ImageUrlEntityMapper on ImageUrlEntity {
@@ -87,10 +84,8 @@ extension ImageUrlEntityMapper on ImageUrlEntity {
 }
 
 extension ProductCategoryModelMapper on ProductCategory {
-  ProductCategoryEntity toEntity() => ProductCategoryEntity(
-        id: id,
-        name: name?.toEntity(),
-      );
+  ProductCategoryEntity toEntity() =>
+      ProductCategoryEntity(id: id, name: name?.toEntity());
 }
 
 extension ProductCategoryEntityMapper on ProductCategoryEntity {
@@ -99,13 +94,13 @@ extension ProductCategoryEntityMapper on ProductCategoryEntity {
 
 extension ProductSizeModelMapper on ProductSize {
   ProductSizeEntity toEntity() => ProductSizeEntity(
-        size: size,
-        price: price,
-        discountPrice: discountPrice,
-        servings: servings,
-        weight: weight,
-        stockQuantity: stockQuantity,
-      );
+    size: size,
+    price: price,
+    discountPrice: discountPrice,
+    servings: servings,
+    weight: weight,
+    stockQuantity: stockQuantity,
+  );
 }
 
 extension ProductSizeEntityMapper on ProductSizeEntity {
@@ -114,17 +109,17 @@ extension ProductSizeEntityMapper on ProductSizeEntity {
 
 extension ReviewModelMapper on ReviewModel {
   ReviewEntity toEntity() => ReviewEntity(
-        id: id,
-        productId: productId,
-        userId: userId,
-        userName: userName,
-        userPhotoUrl: userPhotoUrl,
-        comment: comment,
-        rating: rating,
-        isVerifiedPurchase: isVerifiedPurchase,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-      );
+    id: id,
+    productId: productId,
+    userId: userId,
+    userName: userName,
+    userPhotoUrl: userPhotoUrl,
+    comment: comment,
+    rating: rating,
+    isVerifiedPurchase: isVerifiedPurchase,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+  );
 }
 
 extension ReviewEntityMapper on ReviewEntity {

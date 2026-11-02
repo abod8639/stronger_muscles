@@ -39,7 +39,9 @@ class PaymentController extends StateNotifier<PaymentState> {
         // Automatically default selected method to first enabled if none selected
         String selected = state.selectedMethodId;
         if (methods.isNotEmpty && !methods.any((m) => m.id == selected)) {
-          selected = methods.firstWhere((m) => m.isEnabled, orElse: () => methods.first).id;
+          selected = methods
+              .firstWhere((m) => m.isEnabled, orElse: () => methods.first)
+              .id;
         }
 
         state = state.copyWith(
@@ -87,10 +89,7 @@ class PaymentController extends StateNotifier<PaymentState> {
         return null;
       },
       (paymentResult) {
-        state = state.copyWith(
-          isInitiating: false,
-          result: paymentResult,
-        );
+        state = state.copyWith(isInitiating: false, result: paymentResult);
         return paymentResult;
       },
     );

@@ -16,19 +16,22 @@ void main() {
       isActive: true,
     );
 
-    test('getLocalizedName and getLocalizedDescription return correct language text', () {
-      expect(category.getLocalizedName(locale: 'ar'), 'فيتامينات');
-      expect(category.getLocalizedName(locale: 'en'), 'Vitamins');
+    test(
+      'getLocalizedName and getLocalizedDescription return correct language text',
+      () {
+        expect(category.getLocalizedName(locale: 'ar'), 'فيتامينات');
+        expect(category.getLocalizedName(locale: 'en'), 'Vitamins');
 
-      expect(
-        category.getLocalizedDescription(locale: 'ar'),
-        'مكملات الفيتامينات والمعادن',
-      );
-      expect(
-        category.getLocalizedDescription(locale: 'en'),
-        'Vitamin and mineral supplements',
-      );
-    });
+        expect(
+          category.getLocalizedDescription(locale: 'ar'),
+          'مكملات الفيتامينات والمعادن',
+        );
+        expect(
+          category.getLocalizedDescription(locale: 'en'),
+          'Vitamin and mineral supplements',
+        );
+      },
+    );
 
     test('returns empty string when name or description is null', () {
       const emptyCat = CategoryModel(id: 'cat-empty');

@@ -26,7 +26,10 @@ class FakeApiService implements ApiService {
     lastPostData = data;
 
     if (shouldThrow) {
-      throw const Failure(message: 'Network request failed', type: FailureType.network);
+      throw const Failure(
+        message: 'Network request failed',
+        type: FailureType.network,
+      );
     }
 
     return Response(
@@ -43,8 +46,7 @@ class FakeApiService implements ApiService {
     bool includeAuth = true,
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<Response> put(
@@ -53,16 +55,14 @@ class FakeApiService implements ApiService {
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 
   @override
   Future<Response> delete(
     String path, {
     CancelToken? cancelToken,
     Duration? timeout,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 }
 
 void main() {
@@ -140,12 +140,15 @@ void main() {
       expect(result.reference, '45');
     });
 
-    test('initiatePayment returns Left(Failure) on invalid server response', () async {
-      fakeApi.mockPostResponse = {'status': 'error', 'data': null};
+    test(
+      'initiatePayment returns Left(Failure) on invalid server response',
+      () async {
+        fakeApi.mockPostResponse = {'status': 'error', 'data': null};
 
-      final either = await repo.initiatePayment(orderId: 10);
-      expect(either.isLeft(), true);
-    });
+        final either = await repo.initiatePayment(orderId: 10);
+        expect(either.isLeft(), true);
+      },
+    );
 
     test('initiatePayment returns Left(Failure) on network error', () async {
       fakeApi.shouldThrow = true;
@@ -177,19 +180,25 @@ void main() {
       expect(fakeApi.lastPostData, {'fcm_token': 'fcm_token_sample_123'});
     });
 
-    test('registerDeviceToken skips call and returns false on empty token', () async {
-      final result = await service.registerDeviceToken('   ');
+    test(
+      'registerDeviceToken skips call and returns false on empty token',
+      () async {
+        final result = await service.registerDeviceToken('   ');
 
-      expect(result, false);
-      expect(fakeApi.lastPostPath, isNull);
-    });
+        expect(result, false);
+        expect(fakeApi.lastPostPath, isNull);
+      },
+    );
 
-    test('registerDeviceToken returns false safely on network failure', () async {
-      fakeApi.shouldThrow = true;
+    test(
+      'registerDeviceToken returns false safely on network failure',
+      () async {
+        fakeApi.shouldThrow = true;
 
-      final result = await service.registerDeviceToken('token_abc');
+        final result = await service.registerDeviceToken('token_abc');
 
-      expect(result, false);
-    });
+        expect(result, false);
+      },
+    );
   });
 }

@@ -3,18 +3,12 @@ import 'package:stronger_muscles/features/home/domain/entities/selection_entity.
 
 /// Extension mapper to convert [SelectionsModel] DTO to domain [SelectionEntity].
 extension SelectionsModelMapper on SelectionsModel {
-  SelectionEntity toEntity() => SelectionEntity(
-        id: id,
-        label: label,
-        iconKey: iconKey,
-      );
+  SelectionEntity toEntity() =>
+      SelectionEntity(id: id, label: label, iconKey: iconKey);
 }
 
 /// Extension mapper to convert domain [SelectionEntity] to data [SelectionsModel] DTO.
 extension SelectionEntityMapper on SelectionEntity {
-  SelectionsModel toModel() => SelectionsModel(
-        id: id,
-        label: label,
-        iconKey: iconKey,
-      );
+  SelectionsModel toModel() =>
+      SelectionsModel(id: id, label: label, iconKey: iconKey);
 }

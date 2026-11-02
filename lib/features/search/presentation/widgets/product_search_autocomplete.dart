@@ -29,10 +29,12 @@ class ProductSearchAutocomplete extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ProductSearchAutocomplete> createState() => _ProductSearchAutocompleteState();
+  ConsumerState<ProductSearchAutocomplete> createState() =>
+      _ProductSearchAutocompleteState();
 }
 
-class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocomplete> {
+class _ProductSearchAutocompleteState
+    extends ConsumerState<ProductSearchAutocomplete> {
   static const double _maxOptionsHeight = 400.0;
 
   late final FocusNode _focusNode;
@@ -42,8 +44,9 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-    final initialQuery =
-        ref.read(productSearchControllerProvider.notifier).searchQuery;
+    final initialQuery = ref
+        .read(productSearchControllerProvider.notifier)
+        .searchQuery;
     _textController = TextEditingController(text: initialQuery);
   }
 
@@ -54,7 +57,11 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
     super.dispose();
   }
 
-  List<Object> _suggestions(String rawQuery, List<ProductEntity> products, String locale) {
+  List<Object> _suggestions(
+    String rawQuery,
+    List<ProductEntity> products,
+    String locale,
+  ) {
     final query = rawQuery.toLowerCase().trim();
     if (query.isEmpty) return ref.read(searchHistoryProvider);
 
@@ -66,7 +73,8 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
       final fields = [
         product.getLocalizedName(locale: locale).toLowerCase(),
         (product.brand ?? '').toLowerCase(),
-        (product.category?.getLocalizedName(locale: locale) ?? '').toLowerCase(),
+        (product.category?.getLocalizedName(locale: locale) ?? '')
+            .toLowerCase(),
       ];
       if (fields.any((f) => f == query)) {
         exactMatches.add(product);
@@ -85,7 +93,11 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
       products,
       options: FuzzyOptions(
         keys: [
-          WeightedKey(name: 'name', getter: (p) => p.getLocalizedName(locale: locale), weight: 1.0),
+          WeightedKey(
+            name: 'name',
+            getter: (p) => p.getLocalizedName(locale: locale),
+            weight: 1.0,
+          ),
           WeightedKey(name: 'brand', getter: (p) => p.brand ?? '', weight: 0.7),
         ],
         threshold: 0.35,
@@ -140,7 +152,8 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
     );
 
     final products =
-        ref.watch(homeControllerProvider).valueOrNull ?? const <ProductEntity>[];
+        ref.watch(homeControllerProvider).valueOrNull ??
+        const <ProductEntity>[];
 
     ref.watch(searchHistoryProvider);
     final controller = ref.read(productSearchControllerProvider.notifier);
@@ -149,29 +162,32 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
       builder: (context, constraints) => RawAutocomplete<Object>(
         textEditingController: _textController,
         focusNode: _focusNode,
-        displayStringForOption: (option) =>
-            option is ProductEntity ? option.getLocalizedName(locale: locale) : '$option',
+        displayStringForOption: (option) => option is ProductEntity
+            ? option.getLocalizedName(locale: locale)
+            : '$option',
         optionsBuilder: (value) => _suggestions(value.text, products, locale),
         onSelected: (selection) => _onSelected(selection, locale),
-        fieldViewBuilder: (context, textController, focusNode, onFieldSubmitted) => AppSearchField(
-          controller: textController,
-          focusNode: focusNode,
-          autofocus: widget.autofocus,
-          hintText: l10n.searchProducts,
-          onTap: widget.onTap,
-          onChanged: controller.onSearchChanged,
-          onClear: () {
-            controller.clearSearch();
-          },
-          onSubmitted: (value) {
-            final trimmed = value.trim();
-            if (trimmed.isNotEmpty) {
-              ref.read(searchHistoryProvider.notifier).add(trimmed);
-              controller.executeSearch(trimmed);
-            }
-            onFieldSubmitted();
-          },
-        ),
+        fieldViewBuilder:
+            (context, textController, focusNode, onFieldSubmitted) =>
+                AppSearchField(
+                  controller: textController,
+                  focusNode: focusNode,
+                  autofocus: widget.autofocus,
+                  hintText: l10n.searchProducts,
+                  onTap: widget.onTap,
+                  onChanged: controller.onSearchChanged,
+                  onClear: () {
+                    controller.clearSearch();
+                  },
+                  onSubmitted: (value) {
+                    final trimmed = value.trim();
+                    if (trimmed.isNotEmpty) {
+                      ref.read(searchHistoryProvider.notifier).add(trimmed);
+                      controller.executeSearch(trimmed);
+                    }
+                    onFieldSubmitted();
+                  },
+                ),
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: AlignmentDirectional.topStart,
           child: Padding(
@@ -182,16 +198,23 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
               color: context.colorScheme.surface,
               clipBehavior: Clip.antiAlias,
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: _maxOptionsHeight, maxWidth: constraints.maxWidth),
+                constraints: BoxConstraints(
+                  maxHeight: _maxOptionsHeight,
+                  maxWidth: constraints.maxWidth,
+                ),
                 child: ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: AppDimens.spacingSm),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: AppDimens.spacingSm,
+                  ),
                   shrinkWrap: true,
                   itemCount: options.length,
                   separatorBuilder: (_, _) => Divider(
                     height: 1,
                     indent: AppDimens.spacingLg,
                     endIndent: AppDimens.spacingLg,
-                    color: context.colorScheme.outlineVariant.withValues(alpha: 0.4),
+                    color: context.colorScheme.outlineVariant.withValues(
+                      alpha: 0.4,
+                    ),
                   ),
                   itemBuilder: (context, index) {
                     final option = options.elementAt(index);
@@ -205,7 +228,9 @@ class _ProductSearchAutocompleteState extends ConsumerState<ProductSearchAutocom
                         : _HistorySuggestion(
                             term: '$option',
                             onTap: () => onSelected(option),
-                            onRemove: () => ref.read(searchHistoryProvider.notifier).remove('$option'),
+                            onRemove: () => ref
+                                .read(searchHistoryProvider.notifier)
+                                .remove('$option'),
                           );
                   },
                 ),
@@ -223,7 +248,11 @@ class _HistorySuggestion extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onRemove;
 
-  const _HistorySuggestion({required this.term, required this.onTap, required this.onRemove});
+  const _HistorySuggestion({
+    required this.term,
+    required this.onTap,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +260,11 @@ class _HistorySuggestion extends StatelessWidget {
 
     return ListTile(
       dense: true,
-      leading: Icon(Icons.history_rounded, size: AppDimens.iconSm, color: mutedColor),
+      leading: Icon(
+        Icons.history_rounded,
+        size: AppDimens.iconSm,
+        color: mutedColor,
+      ),
       title: Text(term, style: context.textTheme.bodyMedium),
       trailing: IconButton(
         icon: Icon(Icons.close_rounded, size: 16, color: mutedColor),
@@ -286,12 +319,16 @@ class _ProductSuggestion extends StatelessWidget {
                   AppHighlightText(
                     text: product.getLocalizedName(locale: locale),
                     query: query,
-                    style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                    style: textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   if (brand != null && brand.isNotEmpty)
                     Text(
                       brand,
-                      style: textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+                      style: textTheme.bodySmall?.copyWith(
+                        color: context.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                 ],
               ),

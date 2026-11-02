@@ -46,7 +46,9 @@ class AppStatCard extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: context.textTheme.bodySmall?.copyWith(color: context.colorScheme.onSurfaceVariant),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),

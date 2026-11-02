@@ -14,7 +14,10 @@ abstract class AddressRepository {
   Future<Either<Failure, AddressEntity>> createAddress(AddressEntity address);
 
   /// Updates an existing address by [id].
-  Future<Either<Failure, AddressEntity>> updateAddress(int id, AddressEntity address);
+  Future<Either<Failure, AddressEntity>> updateAddress(
+    int id,
+    AddressEntity address,
+  );
 
   /// Deletes a saved address by [id].
   Future<Either<Failure, Unit>> deleteAddress(int id);

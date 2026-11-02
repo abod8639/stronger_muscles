@@ -45,7 +45,9 @@ class OrderCard extends StatelessWidget {
                   children: [
                     Text(
                       order.shortId,
-                      style: textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     if (orderDate != null)
                       Text(
@@ -83,12 +85,16 @@ class OrderCard extends StatelessWidget {
                       firstItem?.productName ?? '',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                      style: textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     if (items.length > 1)
                       Text(
                         '+${items.length - 1} ${l10n.itemsMore}',
-                        style: textTheme.labelSmall?.copyWith(color: AppColors.primary),
+                        style: textTheme.labelSmall?.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                   ],
                 ),

@@ -24,10 +24,16 @@ class CheckoutView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentStep = ref.watch(checkoutControllerProvider.select((s) => s.currentStep));
-    final isProcessing = ref.watch(checkoutControllerProvider.select((s) => s.isProcessing));
+    final currentStep = ref.watch(
+      checkoutControllerProvider.select((s) => s.currentStep),
+    );
+    final isProcessing = ref.watch(
+      checkoutControllerProvider.select((s) => s.isProcessing),
+    );
     final failure = ref.watch(
-      checkoutControllerProvider.select((s) => s.hasError ? s.orderSubmission.error : null),
+      checkoutControllerProvider.select(
+        (s) => s.hasError ? s.orderSubmission.error : null,
+      ),
     );
     final notifier = ref.read(checkoutControllerProvider.notifier);
 
@@ -84,7 +90,8 @@ class CheckoutView extends ConsumerWidget {
                 duration: const Duration(milliseconds: 250),
                 child: SingleChildScrollView(
                   key: ValueKey(currentStep),
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: const EdgeInsets.all(AppDimens.spacingLg),
                   child: _steps[currentStep],
                 ),

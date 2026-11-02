@@ -45,13 +45,13 @@ class AuthController extends _$AuthController {
     GoogleSignInUseCase? googleSignInUseCase,
     UpdateProfileUseCase? updateProfileUseCase,
     PushNotificationService? pushNotificationService,
-  })  : _loginUseCaseOverride = loginUseCase,
-        _registerUseCaseOverride = registerUseCase,
-        _logoutUseCaseOverride = logoutUseCase,
-        _getCurrentUserUseCaseOverride = getCurrentUserUseCase,
-        _googleSignInUseCaseOverride = googleSignInUseCase,
-        _updateProfileUseCaseOverride = updateProfileUseCase,
-        _pushNotificationServiceOverride = pushNotificationService {
+  }) : _loginUseCaseOverride = loginUseCase,
+       _registerUseCaseOverride = registerUseCase,
+       _logoutUseCaseOverride = logoutUseCase,
+       _getCurrentUserUseCaseOverride = getCurrentUserUseCase,
+       _googleSignInUseCaseOverride = googleSignInUseCase,
+       _updateProfileUseCaseOverride = updateProfileUseCase,
+       _pushNotificationServiceOverride = pushNotificationService {
     registerAuthStateChecker(
       (ref) => ref.read(authControllerProvider.notifier).isLoggedIn,
     );
@@ -70,21 +70,20 @@ class AuthController extends _$AuthController {
   UpdateProfileUseCase get _updateProfileUseCase =>
       _updateProfileUseCaseOverride ?? ref.read(updateProfileUseCaseProvider);
   PushNotificationService get _pushNotificationService =>
-      _pushNotificationServiceOverride ?? ref.read(pushNotificationServiceProvider);
+      _pushNotificationServiceOverride ??
+      ref.read(pushNotificationServiceProvider);
 
   @override
   FutureOr<UserEntity?> build() async {
     final result = await _getCurrentUserUseCase();
 
-    return result.fold(
-      (failure) {
-        if (failure.type == FailureType.auth || failure.type == FailureType.cancel) {
-          return null;
-        }
-        throw failure;
-      },
-      (user) => user,
-    );
+    return result.fold((failure) {
+      if (failure.type == FailureType.auth ||
+          failure.type == FailureType.cancel) {
+        return null;
+      }
+      throw failure;
+    }, (user) => user);
   }
 
   UserEntity? get currentUser => state.valueOrNull;
@@ -104,10 +103,7 @@ class AuthController extends _$AuthController {
   }) async {
     state = const AsyncLoading();
 
-    final result = await _loginUseCase(
-      email: email,
-      password: password,
-    );
+    final result = await _loginUseCase(email: email, password: password);
 
     result.fold(
       (failure) {

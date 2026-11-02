@@ -64,12 +64,12 @@ class NotificationsState {
 
   @override
   int get hashCode => Object.hash(
-        unreadCount,
-        isLoading,
-        isLoadingMore,
-        hasMore,
-        currentPage,
-        errorMessage,
-        Object.hashAll(notifications),
-      );
+    unreadCount,
+    isLoading,
+    isLoadingMore,
+    hasMore,
+    currentPage,
+    errorMessage,
+    Object.hashAll(notifications),
+  );
 }

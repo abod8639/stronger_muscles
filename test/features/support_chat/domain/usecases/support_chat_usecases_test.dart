@@ -15,7 +15,8 @@ class MockSupportChatRepository implements SupportChatRepository {
 
   @override
   Future<Either<Failure, SupportTicketEntity>> getTicketDetails(
-      String ticketId) async {
+    String ticketId,
+  ) async {
     if (failureToReturn != null) return Left(failureToReturn!);
     return Right(
       mockTicket ??
@@ -51,7 +52,8 @@ class MockSupportChatRepository implements SupportChatRepository {
 
   @override
   Future<Either<Failure, SupportTicketEntity>> closeTicket(
-      String ticketId) async {
+    String ticketId,
+  ) async {
     if (failureToReturn != null) return Left(failureToReturn!);
     return Right(
       (mockTicket ??
@@ -81,39 +83,39 @@ void main() {
       closeTicketUseCase = CloseTicketChatUseCase(mockRepository);
     });
 
-    test('GetTicketChatDetailsUseCase returns Right with ticket details', () async {
-      final result = await getTicketDetailsUseCase('10');
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (ticket) {
+    test(
+      'GetTicketChatDetailsUseCase returns Right with ticket details',
+      () async {
+        final result = await getTicketDetailsUseCase('10');
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected Right'), (ticket) {
           expect(ticket.id, '10');
           expect(ticket.ticketNumber, 'SM-1234');
-        },
-      );
-    });
+        });
+      },
+    );
 
-    test('SendTicketChatMessageUseCase returns Right with sent message', () async {
-      final result = await sendMessageUseCase(ticketId: '10', message: 'Hello');
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (msg) {
+    test(
+      'SendTicketChatMessageUseCase returns Right with sent message',
+      () async {
+        final result = await sendMessageUseCase(
+          ticketId: '10',
+          message: 'Hello',
+        );
+        expect(result.isRight(), isTrue);
+        result.fold((_) => fail('Expected Right'), (msg) {
           expect(msg.message, 'Hello');
           expect(msg.senderType, 'user');
-        },
-      );
-    });
+        });
+      },
+    );
 
     test('CloseTicketChatUseCase returns Right with closed status', () async {
       final result = await closeTicketUseCase('10');
       expect(result.isRight(), isTrue);
-      result.fold(
-        (_) => fail('Expected Right'),
-        (ticket) {
-          expect(ticket.status, 'closed');
-        },
-      );
+      result.fold((_) => fail('Expected Right'), (ticket) {
+        expect(ticket.status, 'closed');
+      });
     });
 
     test('Propagates failure properly on error', () async {
@@ -123,4 +125,3 @@ void main() {
     });
   });
 }
-

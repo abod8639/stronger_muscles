@@ -28,11 +28,7 @@ class NotificationModel {
   /// Robust, fault-tolerant JSON parser.
   factory NotificationModel.fromJson(dynamic json) {
     if (json is! Map) {
-      return const NotificationModel(
-        id: '',
-        title: '',
-        body: '',
-      );
+      return const NotificationModel(id: '', title: '', body: '');
     }
 
     final id = json['id']?.toString() ?? json['_id']?.toString() ?? '';
@@ -54,10 +50,8 @@ class NotificationModel {
     final imageUrl = json['image_url']?.toString() ?? json['image']?.toString();
 
     final rawRead = json['is_read'] ?? json['read'];
-    final isRead = rawRead == true ||
-        rawRead == 1 ||
-        rawRead == '1' ||
-        rawRead == 'true';
+    final isRead =
+        rawRead == true || rawRead == 1 || rawRead == '1' || rawRead == 'true';
 
     DateTime? createdAt;
     final rawDate = json['created_at'];
@@ -80,27 +74,25 @@ class NotificationModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'body': body,
-        'type': type,
-        'target_type': targetType,
-        'user_id': userId,
-        'data': data,
-        'image_url': imageUrl,
-        'is_read': isRead,
-        'created_at': createdAt?.toIso8601String(),
-      };
+    'id': id,
+    'title': title,
+    'body': body,
+    'type': type,
+    'target_type': targetType,
+    'user_id': userId,
+    'data': data,
+    'image_url': imageUrl,
+    'is_read': isRead,
+    'created_at': createdAt?.toIso8601String(),
+  };
 
   String? get orderId => data?['order_id']?.toString();
   String? get promoId => data?['promo_id']?.toString();
   String? get productId => data?['product_id']?.toString();
   String? get ticketId =>
-      data?['ticket_id']?.toString() ??
-      data?['ticketId']?.toString();
+      data?['ticket_id']?.toString() ?? data?['ticketId']?.toString();
   String? get ticketNumber =>
-      data?['ticket_number']?.toString() ??
-      data?['ticketNumber']?.toString();
+      data?['ticket_number']?.toString() ?? data?['ticketNumber']?.toString();
   bool get isSupport =>
       type == 'support' ||
       type == 'support_ticket' ||

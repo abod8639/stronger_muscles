@@ -45,7 +45,9 @@ class ReviewRemoteDataSource {
       );
 
       final raw = response.data;
-      if (raw is Map && raw['data'] != null && raw['data'] is Map<String, dynamic>) {
+      if (raw is Map &&
+          raw['data'] != null &&
+          raw['data'] is Map<String, dynamic>) {
         return ReviewModel.fromJson(raw['data'] as Map<String, dynamic>);
       }
       return null;
@@ -62,10 +64,7 @@ class ReviewRemoteDataSource {
   }) async {
     final response = await _apiService.post(
       ApiConfig.submitReview(productId),
-      data: {
-        'rating': rating,
-        'comment': comment,
-      },
+      data: {'rating': rating, 'comment': comment},
     );
 
     final raw = response.data;

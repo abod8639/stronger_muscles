@@ -28,7 +28,8 @@ class PaymentState {
   PaymentResultEntity? get value => result;
 
   bool get isLoading => isInitiating || isLoadingMethods;
-  bool get hasError => failure != null || (errorMessage != null && errorMessage!.isNotEmpty);
+  bool get hasError =>
+      failure != null || (errorMessage != null && errorMessage!.isNotEmpty);
 
   PaymentState copyWith({
     bool? isInitiating,
@@ -49,7 +50,9 @@ class PaymentState {
       methods: methods ?? this.methods,
       result: clearResult ? null : (result ?? this.result),
       failure: clearFailure ? null : (failure ?? this.failure),
-      errorMessage: clearErrorMessage ? null : (errorMessage ?? this.errorMessage),
+      errorMessage: clearErrorMessage
+          ? null
+          : (errorMessage ?? this.errorMessage),
     );
   }
 
@@ -68,14 +71,14 @@ class PaymentState {
 
   @override
   int get hashCode => Object.hash(
-        isInitiating,
-        isLoadingMethods,
-        selectedMethodId,
-        Object.hashAll(methods),
-        result,
-        failure,
-        errorMessage,
-      );
+    isInitiating,
+    isLoadingMethods,
+    selectedMethodId,
+    Object.hashAll(methods),
+    result,
+    failure,
+    errorMessage,
+  );
 
   @override
   String toString() =>

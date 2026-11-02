@@ -39,119 +39,127 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         locale: const Locale('en'),
-        home: Scaffold(
-          body: SingleChildScrollView(child: child),
-        ),
+        home: Scaffold(body: SingleChildScrollView(child: child)),
       ),
     );
   }
 
   group('Profile Widgets Clean Architecture & Theme Tests', () {
-    testWidgets('SavedAddressesList renders AppEmptyState when address list is empty', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          child: const SavedAddressesList(),
-          overrides: [
-            addressControllerProvider.overrideWith(
-              () => _FakeAddressController(const AsyncData([])),
-            ),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+    testWidgets(
+      'SavedAddressesList renders AppEmptyState when address list is empty',
+      (tester) async {
+        await tester.pumpWidget(
+          createTestWidget(
+            child: const SavedAddressesList(),
+            overrides: [
+              addressControllerProvider.overrideWith(
+                () => _FakeAddressController(const AsyncData([])),
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.byType(AppEmptyState), findsOneWidget);
-      expect(find.byIcon(Icons.location_off_outlined), findsOneWidget);
-    });
+        expect(find.byType(AppEmptyState), findsOneWidget);
+        expect(find.byIcon(Icons.location_off_outlined), findsOneWidget);
+      },
+    );
 
-    testWidgets('PurchaseStatsCard calculates total spent and delivered orders', (tester) async {
-      final orders = [
-        OrderEntity(
-          id: '1',
-          userId: 'u1',
-          addressId: 'a1',
-          subtotal: 250.0,
-          totalAmount: 250.0,
-          status: 'delivered',
-          createdAt: DateTime(2026, 1, 1),
-        ),
-        OrderEntity(
-          id: '2',
-          userId: 'u1',
-          addressId: 'a1',
-          subtotal: 150.0,
-          totalAmount: 150.0,
-          status: 'pending',
-          createdAt: DateTime(2026, 1, 2),
-        ),
-      ];
+    testWidgets(
+      'PurchaseStatsCard calculates total spent and delivered orders',
+      (tester) async {
+        final orders = [
+          OrderEntity(
+            id: '1',
+            userId: 'u1',
+            addressId: 'a1',
+            subtotal: 250.0,
+            totalAmount: 250.0,
+            status: 'delivered',
+            createdAt: DateTime(2026, 1, 1),
+          ),
+          OrderEntity(
+            id: '2',
+            userId: 'u1',
+            addressId: 'a1',
+            subtotal: 150.0,
+            totalAmount: 150.0,
+            status: 'pending',
+            createdAt: DateTime(2026, 1, 2),
+          ),
+        ];
 
-      await tester.pumpWidget(
-        createTestWidget(
-          child: const PurchaseStatsCard(),
-          overrides: [
-            ordersControllerProvider.overrideWith(
-              () => _FakeOrdersController(AsyncData(orders)),
-            ),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          createTestWidget(
+            child: const PurchaseStatsCard(),
+            overrides: [
+              ordersControllerProvider.overrideWith(
+                () => _FakeOrdersController(AsyncData(orders)),
+              ),
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('LE 400'), findsOneWidget);
-      expect(find.text('1'), findsOneWidget);
-    });
+        expect(find.text('LE 400'), findsOneWidget);
+        expect(find.text('1'), findsOneWidget);
+      },
+    );
 
-    testWidgets('QuickActionsRow displays orders, wishlist, and addresses counts', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          child: const QuickActionsRow(),
-          overrides: [
-            ordersControllerProvider.overrideWith(
-              () => _FakeOrdersController(
-                AsyncData([
-                  OrderEntity(
-                    id: '1',
-                    userId: 'u1',
-                    addressId: 'a1',
-                    subtotal: 100,
-                    totalAmount: 100,
-                    status: 'completed',
-                    createdAt: DateTime(2026, 1, 1),
-                  ),
+    testWidgets(
+      'QuickActionsRow displays orders, wishlist, and addresses counts',
+      (tester) async {
+        await tester.pumpWidget(
+          createTestWidget(
+            child: const QuickActionsRow(),
+            overrides: [
+              ordersControllerProvider.overrideWith(
+                () => _FakeOrdersController(
+                  AsyncData([
+                    OrderEntity(
+                      id: '1',
+                      userId: 'u1',
+                      addressId: 'a1',
+                      subtotal: 100,
+                      totalAmount: 100,
+                      status: 'completed',
+                      createdAt: DateTime(2026, 1, 1),
+                    ),
+                  ]),
+                ),
+              ),
+              wishlistControllerProvider.overrideWith(
+                () => _FakeWishlistController([
+                  const ProductEntity(id: 'prod-1', price: 10),
+                  const ProductEntity(id: 'prod-2', price: 20),
                 ]),
               ),
-            ),
-            wishlistControllerProvider.overrideWith(
-              () => _FakeWishlistController([
-                const ProductEntity(id: 'prod-1', price: 10),
-                const ProductEntity(id: 'prod-2', price: 20),
-              ]),
-            ),
-            addressControllerProvider.overrideWith(
-              () => _FakeAddressController(
-                const AsyncData([
-                  AddressEntity(
-                    id: 1,
-                    street: 'Street 1',
-                    city: 'Cairo',
-                  ),
-                ]),
+              addressControllerProvider.overrideWith(
+                () => _FakeAddressController(
+                  const AsyncData([
+                    AddressEntity(id: 1, street: 'Street 1', city: 'Cairo'),
+                  ]),
+                ),
               ),
-            ),
-          ],
-        ),
-      );
-      await tester.pumpAndSettle();
+            ],
+          ),
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('1'), findsNWidgets(2)); // ordersCount & addressesCount
-      expect(find.text('2'), findsOneWidget); // wishlistCount
-      expect(find.text('Orders'), findsOneWidget);
-      expect(find.text('Wishlist'), findsOneWidget);
-      expect(find.text('Addresses'), findsOneWidget);
-    });
+        expect(
+          find.text('1'),
+          findsNWidgets(2),
+        ); // ordersCount & addressesCount
+        expect(find.text('2'), findsOneWidget); // wishlistCount
+        expect(find.text('Orders'), findsOneWidget);
+        expect(find.text('Wishlist'), findsOneWidget);
+        expect(find.text('Addresses'), findsOneWidget);
+      },
+    );
 
-    testWidgets('ProfileHeader displays user name, email and avatar', (tester) async {
+    testWidgets('ProfileHeader displays user name, email and avatar', (
+      tester,
+    ) async {
       const user = UserEntity(
         id: 1,
         name: 'John Doe',
@@ -176,12 +184,10 @@ void main() {
       expect(find.byIcon(Icons.person), findsOneWidget);
     });
 
-    testWidgets('LoginPromptCard displays prompt and sign in buttons', (tester) async {
-      await tester.pumpWidget(
-        createTestWidget(
-          child: const LoginPromptCard(),
-        ),
-      );
+    testWidgets('LoginPromptCard displays prompt and sign in buttons', (
+      tester,
+    ) async {
+      await tester.pumpWidget(createTestWidget(child: const LoginPromptCard()));
       await tester.pumpAndSettle();
 
       expect(find.text('Sign in to Your Account'), findsOneWidget);
@@ -192,9 +198,7 @@ void main() {
 
     testWidgets('AccountSettingsList renders settings items', (tester) async {
       await tester.pumpWidget(
-        createTestWidget(
-          child: const AccountSettingsList(),
-        ),
+        createTestWidget(child: const AccountSettingsList()),
       );
       await tester.pumpAndSettle();
 

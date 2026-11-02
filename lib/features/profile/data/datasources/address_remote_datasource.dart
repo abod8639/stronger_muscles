@@ -88,7 +88,9 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        return const Left(Failure(message: 'خدمات الموقع معطلة. يرجى تفعيلها.'));
+        return const Left(
+          Failure(message: 'خدمات الموقع معطلة. يرجى تفعيلها.'),
+        );
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
@@ -104,8 +106,9 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
       }
 
       final position = await Geolocator.getCurrentPosition(
-        locationSettings:
-            const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
       return Right(position);
     } catch (e, st) {
@@ -126,12 +129,9 @@ class AddressRemoteDataSourceImpl implements AddressRemoteDataSource {
     Locale? locale,
   }) async {
     try {
-      final List<Placemark> placemarks =
-          await Geocoding(locale: locale).placemarkFromCoordinates(
-        lat,
-        lng,
+      final List<Placemark> placemarks = await Geocoding(
         locale: locale,
-      );
+      ).placemarkFromCoordinates(lat, lng, locale: locale);
       return Right(placemarks.isNotEmpty ? placemarks.first : null);
     } catch (e, st) {
       return Left(

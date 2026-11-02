@@ -39,7 +39,8 @@ class BottomIconsRow extends ConsumerWidget {
     final cartNotifier = ref.read(cartControllerProvider.notifier);
     final selectedFlavor = detailsState.selectedFlavor;
     final selectedSize = detailsState.selectedSizeObject?.size;
-    final isInCart = cartNotifier.getCartItem(
+    final isInCart =
+        cartNotifier.getCartItem(
           product.id,
           selectedFlavor: selectedFlavor,
           selectedSize: selectedSize,
@@ -105,8 +106,8 @@ class _AddToCartButton extends StatelessWidget {
     final (label, icon) = isOutOfStock
         ? (l10n.outOfStock, Icons.remove_shopping_cart_outlined)
         : isPriceZero
-            ? (l10n.contactUs, Icons.mail_outline)
-            : (l10n.addToCart, Icons.add_shopping_cart_rounded);
+        ? (l10n.contactUs, Icons.mail_outline)
+        : (l10n.addToCart, Icons.add_shopping_cart_rounded);
 
     return AppPrimaryButton(
       text: label,
@@ -134,16 +135,23 @@ class _WishlistButton extends StatelessWidget {
         shape: AppRadius.shapeLg,
         backgroundColor: isInWishlist
             ? AppColors.primary.withValues(alpha: 0.1)
-            : context.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+            : context.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.5,
+              ),
       ),
       icon: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
+        transitionBuilder: (child, animation) =>
+            ScaleTransition(scale: animation, child: child),
         child: Icon(
-          isInWishlist ? Icons.favorite_rounded : Icons.favorite_outline_rounded,
+          isInWishlist
+              ? Icons.favorite_rounded
+              : Icons.favorite_outline_rounded,
           key: ValueKey(isInWishlist),
           size: 26.0,
-          color: isInWishlist ? AppColors.primary : context.colorScheme.onSurfaceVariant,
+          color: isInWishlist
+              ? AppColors.primary
+              : context.colorScheme.onSurfaceVariant,
         ),
       ),
     );

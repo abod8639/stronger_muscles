@@ -41,7 +41,8 @@ class SupportTicketEntity {
   final String category;
   final String message;
   final TicketPriority priority;
-  final String status; // 'open', 'in_progress', 'waiting_user', 'resolved', 'closed'
+  final String
+  status; // 'open', 'in_progress', 'waiting_user', 'resolved', 'closed'
   final DateTime createdAt;
   final DateTime? lastReplyAt;
   final int messagesCount;
@@ -93,7 +94,8 @@ class SupportTicketEntity {
     );
   }
 
-  bool get isOpen => status == 'open' || status == 'in_progress' || status == 'waiting_user';
+  bool get isOpen =>
+      status == 'open' || status == 'in_progress' || status == 'waiting_user';
   bool get isResolved => status == 'resolved';
   bool get isClosed => status == 'closed';
   bool get isWaitingUser => status == 'waiting_user';

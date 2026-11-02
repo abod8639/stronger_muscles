@@ -14,10 +14,7 @@ class OrderRepositoryImpl implements OrderRepository {
   final OrderRemoteDatasource _remoteDatasource;
   final OrderLocalDatasource _localDatasource;
 
-  OrderRepositoryImpl(
-    this._remoteDatasource,
-    this._localDatasource,
-  );
+  OrderRepositoryImpl(this._remoteDatasource, this._localDatasource);
 
   @override
   Future<Either<Failure, List<OrderEntity>>> getUserOrders({

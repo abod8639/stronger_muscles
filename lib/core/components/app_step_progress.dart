@@ -24,7 +24,8 @@ class AppStepProgress extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final inactiveColor = this.inactiveColor ?? theme.colorScheme.outlineVariant;
+    final inactiveColor =
+        this.inactiveColor ?? theme.colorScheme.outlineVariant;
     final mutedColor = theme.colorScheme.onSurfaceVariant;
 
     if (isCancelled) {

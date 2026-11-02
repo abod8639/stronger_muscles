@@ -12,11 +12,7 @@ class FaqListSection extends StatelessWidget {
   final List<FaqEntity> faqs;
   final VoidCallback? onResetSearch;
 
-  const FaqListSection({
-    super.key,
-    required this.faqs,
-    this.onResetSearch,
-  });
+  const FaqListSection({super.key, required this.faqs, this.onResetSearch});
 
   @override
   Widget build(BuildContext context) {

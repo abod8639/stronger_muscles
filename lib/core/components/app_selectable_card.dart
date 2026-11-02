@@ -43,7 +43,9 @@ class AppSelectableCard<T> extends StatelessWidget {
     final theme = Theme.of(context);
     final effectiveRadius = borderRadius ?? AppRadius.allMd;
 
-    final selectedBg = AppColors.primary.withValues(alpha: context.isDark ? 0.15 : 0.06);
+    final selectedBg = AppColors.primary.withValues(
+      alpha: context.isDark ? 0.15 : 0.06,
+    );
 
     final unselectedBg = theme.colorScheme.surface;
 
@@ -73,7 +75,8 @@ class AppSelectableCard<T> extends StatelessWidget {
               : AppRadius.allMd,
           onTap: enabled && onChanged != null ? () => onChanged!(value) : null,
           child: Padding(
-            padding: padding ??
+            padding:
+                padding ??
                 const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
             child: Row(
               children: [
@@ -84,8 +87,12 @@ class AppSelectableCard<T> extends StatelessWidget {
                   Icon(
                     leadingIcon,
                     color: enabled
-                        ? (isSelected ? AppColors.primary : theme.colorScheme.onSurfaceVariant)
-                        : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                        ? (isSelected
+                              ? AppColors.primary
+                              : theme.colorScheme.onSurfaceVariant)
+                        : theme.colorScheme.onSurfaceVariant.withValues(
+                            alpha: 0.5,
+                          ),
                     size: 24.0,
                   ),
                   const SizedBox(width: 12.0),
@@ -98,7 +105,9 @@ class AppSelectableCard<T> extends StatelessWidget {
                       Text(
                         title,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w600,
                           color: effectiveTextColor,
                         ),
                       ),
@@ -109,7 +118,9 @@ class AppSelectableCard<T> extends StatelessWidget {
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: enabled
                                 ? theme.colorScheme.onSurfaceVariant
-                                : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                                : theme.colorScheme.onSurfaceVariant.withValues(
+                                    alpha: 0.5,
+                                  ),
                           ),
                         ),
                       ],

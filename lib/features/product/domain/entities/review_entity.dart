@@ -68,17 +68,17 @@ class ReviewEntity {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        productId,
-        userId,
-        userName,
-        userPhotoUrl,
-        comment,
-        rating,
-        isVerifiedPurchase,
-        createdAt,
-        updatedAt,
-      );
+    id,
+    productId,
+    userId,
+    userName,
+    userPhotoUrl,
+    comment,
+    rating,
+    isVerifiedPurchase,
+    createdAt,
+    updatedAt,
+  );
 
   @override
   String toString() =>

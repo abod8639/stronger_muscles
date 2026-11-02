@@ -15,21 +15,16 @@ class AuthRoutes {
   static const String signUp = '/signup';
 
   static final List<RouteBase> routes = [
-    GoRoute(
-      path: auth,
-      builder: (context, state) => const AuthView(),
-    ),
+    GoRoute(path: auth, builder: (context, state) => const AuthView()),
     GoRoute(
       path: signIn,
-      builder: (context, state) => SignInPage(
-        onSignUpTap: () => context.go(signUp),
-      ),
+      builder: (context, state) =>
+          SignInPage(onSignUpTap: () => context.go(signUp)),
     ),
     GoRoute(
       path: signUp,
-      builder: (context, state) => SignUpPage(
-        onSignInTap: () => context.go(signIn),
-      ),
+      builder: (context, state) =>
+          SignUpPage(onSignInTap: () => context.go(signIn)),
     ),
   ];
 }

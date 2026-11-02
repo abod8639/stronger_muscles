@@ -9,10 +9,7 @@ class FakePromoRepository implements PromoRepository {
   final List<PromoEntity> promosToReturn;
   final Failure? failure;
 
-  FakePromoRepository({
-    this.promosToReturn = const [],
-    this.failure,
-  });
+  FakePromoRepository({this.promosToReturn = const [], this.failure});
 
   @override
   Future<Either<Failure, List<PromoEntity>>> getPromos() async {
@@ -25,39 +22,47 @@ class FakePromoRepository implements PromoRepository {
 
 void main() {
   group('GetPromosUseCase Tests', () {
-    test('calls repository.getPromos and returns promo entities on success', () async {
-      const samplePromos = [
-        PromoEntity(
-          id: 1,
-          title: 'Mega Deal',
-          imageUrl: 'https://example.com/banner.jpg',
-        ),
-        PromoEntity(
-          id: 2,
-          title: 'Summer Offer',
-          imageUrl: 'https://example.com/banner2.jpg',
-        ),
-      ];
+    test(
+      'calls repository.getPromos and returns promo entities on success',
+      () async {
+        const samplePromos = [
+          PromoEntity(
+            id: 1,
+            title: 'Mega Deal',
+            imageUrl: 'https://example.com/banner.jpg',
+          ),
+          PromoEntity(
+            id: 2,
+            title: 'Summer Offer',
+            imageUrl: 'https://example.com/banner2.jpg',
+          ),
+        ];
 
-      final fakeRepository = FakePromoRepository(promosToReturn: samplePromos);
-      final useCase = GetPromosUseCase(fakeRepository);
+        final fakeRepository = FakePromoRepository(
+          promosToReturn: samplePromos,
+        );
+        final useCase = GetPromosUseCase(fakeRepository);
 
-      final result = await useCase.call();
+        final result = await useCase.call();
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected Right but got Left: $failure'),
-        (promos) {
-          expect(promos, equals(samplePromos));
-          expect(promos.length, 2);
-          expect(promos.first.id, 1);
-        },
-      );
-    });
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected Right but got Left: $failure'),
+          (promos) {
+            expect(promos, equals(samplePromos));
+            expect(promos.length, 2);
+            expect(promos.first.id, 1);
+          },
+        );
+      },
+    );
 
     test('propagates failure when repository fails', () async {
       final fakeRepository = FakePromoRepository(
-        failure: const Failure(message: 'Network failure', type: FailureType.network),
+        failure: const Failure(
+          message: 'Network failure',
+          type: FailureType.network,
+        ),
       );
       final useCase = GetPromosUseCase(fakeRepository);
 

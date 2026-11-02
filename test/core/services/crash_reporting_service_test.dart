@@ -19,7 +19,10 @@ void main() {
     });
 
     test('log records debug message without throw', () {
-      expect(() => CrashReportingService.log('Test debug message'), returnsNormally);
+      expect(
+        () => CrashReportingService.log('Test debug message'),
+        returnsNormally,
+      );
     });
   });
 }

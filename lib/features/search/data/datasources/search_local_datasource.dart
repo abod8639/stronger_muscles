@@ -66,9 +66,9 @@ class SearchLocalDataSourceImpl implements SearchLocalDataSource {
     try {
       final box = _getHistoryBoxSafe();
       if (box != null && box.isOpen) {
-        final existingIndex = box.values
-            .toList()
-            .indexWhere((e) => e.toLowerCase() == normalized);
+        final existingIndex = box.values.toList().indexWhere(
+          (e) => e.toLowerCase() == normalized,
+        );
         if (existingIndex != -1) {
           await box.deleteAt(existingIndex);
         }

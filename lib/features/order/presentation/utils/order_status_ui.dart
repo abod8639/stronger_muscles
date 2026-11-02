@@ -12,31 +12,32 @@ extension OrderStatusUi on OrderEntity {
 
   /// Index in the tracker steps: pending → processing → shipped → delivered.
   int get statusStep => switch (_status) {
-        'processing' => 1,
-        'shipped' => 2,
-        'delivered' => 3,
-        _ => 0,
-      };
+    'processing' => 1,
+    'shipped' => 2,
+    'delivered' => 3,
+    _ => 0,
+  };
 
   Color get statusColor => switch (_status) {
-        'pending' => AppColors.warning,
-        'processing' => AppColors.primary,
-        'shipped' => AppColors.info,
-        'delivered' => AppColors.success,
-        'cancelled' || 'canceled' => AppColors.error,
-        _ => AppColors.greyDark,
-      };
+    'pending' => AppColors.warning,
+    'processing' => AppColors.primary,
+    'shipped' => AppColors.info,
+    'delivered' => AppColors.success,
+    'cancelled' || 'canceled' => AppColors.error,
+    _ => AppColors.greyDark,
+  };
 
   String statusLabel(AppLocalizations l10n) => switch (_status) {
-        'pending' => l10n.pending,
-        'processing' => l10n.processing,
-        'shipped' => l10n.shipped,
-        'delivered' => l10n.delivered,
-        'cancelled' || 'canceled' => l10n.cancelled,
-        _ => status.toUpperCase(),
-      };
+    'pending' => l10n.pending,
+    'processing' => l10n.processing,
+    'shipped' => l10n.shipped,
+    'delivered' => l10n.delivered,
+    'cancelled' || 'canceled' => l10n.cancelled,
+    _ => status.toUpperCase(),
+  };
 
-  String paymentMethodLabel(AppLocalizations l10n) => switch (paymentMethod.toLowerCase()) {
+  String paymentMethodLabel(AppLocalizations l10n) =>
+      switch (paymentMethod.toLowerCase()) {
         'cash' => l10n.cashOnDelivery,
         'card' => l10n.creditCardOrOnline,
         _ => paymentMethod.toUpperCase(),

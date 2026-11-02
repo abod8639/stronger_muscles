@@ -51,9 +51,12 @@ class ApiConfig {
   static const String categories = '/shop/categories';
 
   // Reviews (Public & Customer)
-  static String productReviews(String productId) => '/shop/products/$productId/reviews';
-  static String submitReview(String productId) => '/customer/products/$productId/reviews';
-  static String userProductReview(String productId) => '/customer/products/$productId/user-review';
+  static String productReviews(String productId) =>
+      '/shop/products/$productId/reviews';
+  static String submitReview(String productId) =>
+      '/customer/products/$productId/reviews';
+  static String userProductReview(String productId) =>
+      '/customer/products/$productId/user-review';
   static String deleteReview(String reviewId) => '/customer/reviews/$reviewId';
 
   // Customer (Protected)
@@ -66,16 +69,22 @@ class ApiConfig {
 
   // Notifications (Customer Protected)
   static const String customerNotifications = '/customer/notifications';
-  static const String customerNotificationsUnreadCount = '/customer/notifications/unread-count';
-  static String markNotificationAsRead(dynamic id) => '/customer/notifications/$id/read';
-  static const String markAllNotificationsAsRead = '/customer/notifications/read-all';
+  static const String customerNotificationsUnreadCount =
+      '/customer/notifications/unread-count';
+  static String markNotificationAsRead(dynamic id) =>
+      '/customer/notifications/$id/read';
+  static const String markAllNotificationsAsRead =
+      '/customer/notifications/read-all';
 
   // Support & Complaints
   static const String customerSupportTickets = '/customer/support/tickets';
   static const String publicSupportTicket = '/shop/support/tickets';
-  static String customerSupportTicketDetails(dynamic id) => '/customer/support/tickets/$id';
-  static String customerSupportTicketMessages(dynamic id) => '/customer/support/tickets/$id/messages';
-  static String customerCloseSupportTicket(dynamic id) => '/customer/support/tickets/$id/close';
+  static String customerSupportTicketDetails(dynamic id) =>
+      '/customer/support/tickets/$id';
+  static String customerSupportTicketMessages(dynamic id) =>
+      '/customer/support/tickets/$id/messages';
+  static String customerCloseSupportTicket(dynamic id) =>
+      '/customer/support/tickets/$id/close';
 
   // Legacy/Deprecated - Keep for compatibility until services are updated
   static const String usersStats = '/customer/profile';

@@ -86,14 +86,14 @@ class WishlistItemModel extends HiveObject {
 
   /// Map to pure domain WishlistItemEntity
   WishlistItemEntity toEntity() => WishlistItemEntity(
-        id: id,
-        userId: userId,
-        productId: productId,
-        addedAt: addedAt,
-        productName: productName,
-        productPrice: productPrice,
-        productImageUrl: productImageUrl,
-      );
+    id: id,
+    userId: userId,
+    productId: productId,
+    addedAt: addedAt,
+    productName: productName,
+    productPrice: productPrice,
+    productImageUrl: productImageUrl,
+  );
 
   /// Create WishlistItemModel from domain WishlistItemEntity
   factory WishlistItemModel.fromEntity(WishlistItemEntity entity) =>

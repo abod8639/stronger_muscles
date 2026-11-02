@@ -20,10 +20,14 @@ class HelpSupportHeroHeader extends StatelessWidget {
     return AppGradientBanner(
       icon: Icons.support_agent_rounded,
       title: l10n?.howCanWeHelp ?? 'كيف يمكننا مساعدتك اليوم؟',
-      subtitle: l10n?.helpSupportSubtitle ?? 'اعثر على إجابات سريعة أو تواصل مع فريق خبرائنا',
+      subtitle:
+          l10n?.helpSupportSubtitle ??
+          'اعثر على إجابات سريعة أو تواصل مع فريق خبرائنا',
       child: AppSearchField(
         controller: searchController,
-        hintText: l10n?.searchFaqPlaceholder ?? 'ابحث عن الأسئلة، المواضيع، المكملات...',
+        hintText:
+            l10n?.searchFaqPlaceholder ??
+            'ابحث عن الأسئلة، المواضيع، المكملات...',
         onChanged: onSearchChanged,
       ),
     );

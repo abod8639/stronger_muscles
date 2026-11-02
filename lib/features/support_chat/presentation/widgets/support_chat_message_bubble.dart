@@ -31,7 +31,9 @@ class SupportChatMessageBubble extends StatelessWidget {
           maxWidth: MediaQuery.sizeOf(context).width * 0.76,
         ),
         decoration: BoxDecoration(
-          color: isUser ? AppColors.primary : colorScheme.surfaceContainerHighest,
+          color: isUser
+              ? AppColors.primary
+              : colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.only(
             topLeft: AppRadius.rLg,
             topRight: AppRadius.rLg,
@@ -41,8 +43,9 @@ class SupportChatMessageBubble extends StatelessWidget {
           boxShadow: context.subtleShadow,
         ),
         child: Column(
-          crossAxisAlignment:
-              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: isUser
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
           children: [
             if (!isUser)
               Padding(
@@ -90,8 +93,8 @@ class SupportChatMessageBubble extends StatelessWidget {
                     message.id < 0
                         ? Icons.access_time_rounded
                         : (message.isRead
-                            ? Icons.done_all_rounded
-                            : Icons.done_rounded),
+                              ? Icons.done_all_rounded
+                              : Icons.done_rounded),
                     size: message.id < 0 ? 11.0 : 13.0,
                     color: metaColor,
                   ),

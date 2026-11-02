@@ -13,14 +13,14 @@ String _$internetConnectionControllerHash() =>
 @ProviderFor(InternetConnectionController)
 final internetConnectionControllerProvider =
     NotifierProvider<InternetConnectionController, bool>.internal(
-  InternetConnectionController.new,
-  name: r'internetConnectionControllerProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$internetConnectionControllerHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+      InternetConnectionController.new,
+      name: r'internetConnectionControllerProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$internetConnectionControllerHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
 
 typedef _$InternetConnectionController = Notifier<bool>;
 // ignore_for_file: type=lint

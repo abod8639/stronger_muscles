@@ -23,12 +23,17 @@ class PaymentGatewayView extends StatelessWidget {
     final uri = Uri.parse(paymentResult.paymentUrl);
     var opened = false;
     try {
-      opened = await canLaunchUrl(uri) && await launchUrl(uri, mode: LaunchMode.externalApplication);
+      opened =
+          await canLaunchUrl(uri) &&
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (_) {
       opened = false;
     }
     if (!opened && context.mounted) {
-      AppSnackBar.showError(context, AppLocalizations.of(context)!.paymentGatewayOpenFailed);
+      AppSnackBar.showError(
+        context,
+        AppLocalizations.of(context)!.paymentGatewayOpenFailed,
+      );
     }
   }
 
@@ -67,14 +72,25 @@ class PaymentGatewayView extends StatelessWidget {
               icon: Icons.receipt_long_outlined,
               child: Column(
                 children: [
-                  if (orderId != null) AppInfoRow(label: l10n.orderId, value: '#$orderId'),
+                  if (orderId != null)
+                    AppInfoRow(label: l10n.orderId, value: '#$orderId'),
                   if (paymentResult.transactionId.isNotEmpty)
-                    AppInfoRow(label: l10n.transactionId, value: paymentResult.transactionId),
+                    AppInfoRow(
+                      label: l10n.transactionId,
+                      value: paymentResult.transactionId,
+                    ),
                   if (paymentResult.reference.isNotEmpty)
-                    AppInfoRow(label: l10n.paymentReference, value: paymentResult.reference),
+                    AppInfoRow(
+                      label: l10n.paymentReference,
+                      value: paymentResult.reference,
+                    ),
                   if (amount != null) ...[
                     const Divider(height: AppDimens.spacingLg + 4),
-                    AppPriceRow(label: l10n.amountDue, amount: amount, isTotal: true),
+                    AppPriceRow(
+                      label: l10n.amountDue,
+                      amount: amount,
+                      isTotal: true,
+                    ),
                   ],
                 ],
               ),

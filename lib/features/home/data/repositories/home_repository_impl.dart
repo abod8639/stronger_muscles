@@ -15,10 +15,7 @@ class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource _remoteDataSource;
   final HomeLocalDataSource _localDataSource;
 
-  HomeRepositoryImpl(
-    this._remoteDataSource,
-    this._localDataSource,
-  );
+  HomeRepositoryImpl(this._remoteDataSource, this._localDataSource);
 
   @override
   Future<Either<Failure, List<SelectionEntity>>> getHomeShortcuts({
@@ -143,7 +140,9 @@ class HomeRepositoryImpl implements HomeRepository {
             return allCached.map((p) => p.toEntity()).toList();
           }
           // Filter from all cached products if category-specific fetch didn't find any
-          final filtered = allCached.where((p) => p.categoryId == categoryId).toList();
+          final filtered = allCached
+              .where((p) => p.categoryId == categoryId)
+              .toList();
           return filtered.map((p) => p.toEntity()).toList();
         }
 

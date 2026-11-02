@@ -46,8 +46,9 @@ class ProductSearchController extends _$ProductSearchController {
       (_filterMinPrice > _dataMinPrice || _filterMaxPrice < _dataMaxPrice);
 
   List<String> get availableBrands {
-    final source =
-        _combinedResults.isNotEmpty ? _combinedResults : _localProducts;
+    final source = _combinedResults.isNotEmpty
+        ? _combinedResults
+        : _localProducts;
     final brands = source
         .map((p) => p.brand?.trim())
         .where((b) => b != null && b.isNotEmpty)
@@ -243,7 +244,8 @@ class ProductSearchController extends _$ProductSearchController {
     final result = await _searchProductsUseCase(trimmed);
 
     // If query has changed or a newer search was started while this was in flight, discard!
-    if (currentRequestId != _searchRequestId || _searchQuery.trim() != trimmed) {
+    if (currentRequestId != _searchRequestId ||
+        _searchQuery.trim() != trimmed) {
       return;
     }
 
@@ -303,11 +305,12 @@ class ProductSearchController extends _$ProductSearchController {
     for (var p in products) {
       final name = p.getLocalizedName(locale: locale).toLowerCase();
       final brand = (p.brand ?? "").toLowerCase().trim();
-      final category =
-          (p.category?.getLocalizedName(locale: locale) ?? "").toLowerCase();
+      final category = (p.category?.getLocalizedName(locale: locale) ?? "")
+          .toLowerCase();
       final tags = p.tags.map((t) => t.toLowerCase()).toList();
 
-      final isExactBrand = brand == lowerQuery ||
+      final isExactBrand =
+          brand == lowerQuery ||
           (_selectedBrand != null &&
               brand == _selectedBrand!.toLowerCase().trim());
 
@@ -374,11 +377,7 @@ class ProductSearchController extends _$ProductSearchController {
             getter: (p) => p.getLocalizedName(locale: locale),
             weight: 1.0,
           ),
-          WeightedKey(
-            name: 'brand',
-            getter: (p) => p.brand ?? "",
-            weight: 0.7,
-          ),
+          WeightedKey(name: 'brand', getter: (p) => p.brand ?? "", weight: 0.7),
         ],
         threshold: 0.35,
       ),
@@ -404,17 +403,21 @@ class ProductSearchController extends _$ProductSearchController {
   void applyPriceFilter(double min, double max) {
     _filterMinPrice = min;
     _filterMaxPrice = max;
-    _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched
-        ? _localProducts
-        : _combinedResults);
+    _applyFiltersToResults(
+      _combinedResults.isEmpty && !_hasSearched
+          ? _localProducts
+          : _combinedResults,
+    );
   }
 
   void resetPriceFilter() {
     _filterMinPrice = _dataMinPrice;
     _filterMaxPrice = _dataMaxPrice;
-    _applyFiltersToResults(_combinedResults.isEmpty && !_hasSearched
-        ? _localProducts
-        : _combinedResults);
+    _applyFiltersToResults(
+      _combinedResults.isEmpty && !_hasSearched
+          ? _localProducts
+          : _combinedResults,
+    );
   }
 
   void _applyFilters() {
@@ -422,8 +425,11 @@ class ProductSearchController extends _$ProductSearchController {
   }
 
   void _applyFiltersToResults(List<ProductEntity> results) {
-    final filtered =
-        _filterByPriceUseCase(results, _filterMinPrice, _filterMaxPrice);
+    final filtered = _filterByPriceUseCase(
+      results,
+      _filterMinPrice,
+      _filterMaxPrice,
+    );
     state = AsyncData(filtered);
   }
 }

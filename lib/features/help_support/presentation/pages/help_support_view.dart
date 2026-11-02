@@ -100,10 +100,7 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
 
     if (target != null && target.id != null && target.id!.isNotEmpty) {
       _hasHandledInitialTicket = true;
-      context.push(
-        AppRoutes.supportChat,
-        extra: {'ticket_id': target.id!},
-      );
+      context.push(AppRoutes.supportChat, extra: {'ticket_id': target.id!});
     } else if (widget.openActiveTicket) {
       _hasHandledInitialTicket = true;
       MyTicketsSheet.show(context);
@@ -117,46 +114,41 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
   }
 
   Future<void> _openTicketBottomSheet() async {
-    await AppGuard.runSafeAuth(
-      ref,
-      () async {
-        final ticket = await SubmitTicketBottomSheet.show(
-          context,
-          onSubmit: ({
-            required String subject,
-            required String category,
-            required String message,
-            priority = TicketPriority.normal,
-          }) async {
-            final ticket = await ref
-                .read(helpSupportControllerProvider.notifier)
-                .submitTicket(
-                  subject: subject,
-                  category: category,
-                  message: message,
-                  priority: priority,
-                );
-            // Surface the controller's failure inline in the sheet.
-            final failure = ref.read(helpSupportControllerProvider).failure;
-            if (ticket == null && failure != null) throw failure;
-            return ticket;
-          },
-        );
+    await AppGuard.runSafeAuth(ref, () async {
+      final ticket = await SubmitTicketBottomSheet.show(
+        context,
+        onSubmit:
+            ({
+              required String subject,
+              required String category,
+              required String message,
+              priority = TicketPriority.normal,
+            }) async {
+              final ticket = await ref
+                  .read(helpSupportControllerProvider.notifier)
+                  .submitTicket(
+                    subject: subject,
+                    category: category,
+                    message: message,
+                    priority: priority,
+                  );
+              // Surface the controller's failure inline in the sheet.
+              final failure = ref.read(helpSupportControllerProvider).failure;
+              if (ticket == null && failure != null) throw failure;
+              return ticket;
+            },
+      );
 
-        if (ticket != null && mounted) {
-          await TicketSuccessDialog.show(context, ticket);
-        }
-      },
-    );
+      if (ticket != null && mounted) {
+        await TicketSuccessDialog.show(context, ticket);
+      }
+    });
   }
 
   void _openMyTickets() {
-    AppGuard.runSafeAuth(
-      ref,
-      () async {
-        MyTicketsSheet.show(context);
-      },
-    );
+    AppGuard.runSafeAuth(ref, () async {
+      MyTicketsSheet.show(context);
+    });
   }
 
   Future<void> _onChannelTap(SupportChannelEntity channel) async {
@@ -166,7 +158,10 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
         .launchChannel(channel, _openTicketBottomSheet);
 
     if (!opened && channel.type != SupportChannelType.ticket && mounted) {
-      AppSnackBar.showError(context, '${l10n.couldNotOpenChannel}: ${channel.actionValue}');
+      AppSnackBar.showError(
+        context,
+        '${l10n.couldNotOpenChannel}: ${channel.actionValue}',
+      );
     }
   }
 
@@ -198,7 +193,9 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
     final notifier = ref.read(helpSupportControllerProvider.notifier);
     final l10n = AppLocalizations.of(context)!;
     final tickets = state.userTickets;
-    final unreadTicketsCount = tickets.where((t) => t.unreadMessagesCount > 0).length;
+    final unreadTicketsCount = tickets
+        .where((t) => t.unreadMessagesCount > 0)
+        .length;
 
     return Scaffold(
       appBar: baseAppBar(
@@ -228,79 +225,78 @@ class _HelpSupportViewState extends ConsumerState<HelpSupportView> {
       body: state.isLoading && state.faqs.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : state.faqsState.hasError && state.faqs.isEmpty
-              ? AppEmptyState(
-                  icon: AppErrorCard.iconFor(state.failure),
-                  iconColor: AppColors.error,
-                  title: l10n.helpLoadError,
-                  subtitle: state.failure?.toMessage() ?? l10n.checkConnectionAndRetry,
-                  actionText: l10n.retry,
-                  actionIcon: Icons.refresh_rounded,
-                  onActionTap: notifier.init,
-                )
-              : RefreshIndicator(
-                  color: AppColors.primary,
-                  onRefresh: () async {
-                    _searchController.clear();
-                    await notifier.init();
-                  },
-                  child: ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: const EdgeInsets.only(bottom: 32.0),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(AppDimens.spacingLg),
-                        child: HelpSupportHeroHeader(
-                          searchController: _searchController,
-                          onSearchChanged: notifier.search,
-                        ),
-                      ),
-                      if (tickets.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                            AppDimens.spacingLg,
-                            0,
-                            AppDimens.spacingLg,
-                            AppDimens.spacingLg,
-                          ),
-                          child: AppActionCard(
-                            icon: Icons.confirmation_number_rounded,
-                            iconColor: AppColors.warning,
-                            title: l10n.activeTicketsCount(tickets.length),
-                            subtitle: l10n.activeTicketsSubtitle,
-                            badge: unreadTicketsCount > 0
-                                ? AppBadge(
-                                    label: l10n.newReply,
-                                    color: AppColors.primary,
-                                    borderRadius: AppRadius.allPill,
-                                  )
-                                : null,
-                            onTap: _openMyTickets,
-                          ),
-                        ),
-                      ContactChannelsSection(
-                        channels: state.channels,
-                        onChannelTap: _onChannelTap,
-                      ),
-                      const SizedBox(height: AppDimens.spacingXl),
-                      AppSectionTitle(title: l10n.faqTitle),
-                      FaqCategoriesChips(
-                        selectedCategory: state.selectedCategory,
-                        onSelectCategory: notifier.selectCategory,
-                      ),
-                      const SizedBox(height: AppDimens.spacingMd),
-                      FaqListSection(
-                        faqs: state.faqs,
-                        onResetSearch: _resetSearch,
-                      ),
-                      const SizedBox(height: AppDimens.spacingLg + 4),
-                      StillNeedHelpCard(
-                        onSubmitTicket: _openTicketBottomSheet,
-                        onOpenMyTickets: tickets.isNotEmpty ? _openMyTickets : null,
-                      ),
-                    ],
+          ? AppEmptyState(
+              icon: AppErrorCard.iconFor(state.failure),
+              iconColor: AppColors.error,
+              title: l10n.helpLoadError,
+              subtitle:
+                  state.failure?.toMessage() ?? l10n.checkConnectionAndRetry,
+              actionText: l10n.retry,
+              actionIcon: Icons.refresh_rounded,
+              onActionTap: notifier.init,
+            )
+          : RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () async {
+                _searchController.clear();
+                await notifier.init();
+              },
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                padding: const EdgeInsets.only(bottom: 32.0),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(AppDimens.spacingLg),
+                    child: HelpSupportHeroHeader(
+                      searchController: _searchController,
+                      onSearchChanged: notifier.search,
+                    ),
                   ),
-                ),
+                  if (tickets.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        AppDimens.spacingLg,
+                        0,
+                        AppDimens.spacingLg,
+                        AppDimens.spacingLg,
+                      ),
+                      child: AppActionCard(
+                        icon: Icons.confirmation_number_rounded,
+                        iconColor: AppColors.warning,
+                        title: l10n.activeTicketsCount(tickets.length),
+                        subtitle: l10n.activeTicketsSubtitle,
+                        badge: unreadTicketsCount > 0
+                            ? AppBadge(
+                                label: l10n.newReply,
+                                color: AppColors.primary,
+                                borderRadius: AppRadius.allPill,
+                              )
+                            : null,
+                        onTap: _openMyTickets,
+                      ),
+                    ),
+                  ContactChannelsSection(
+                    channels: state.channels,
+                    onChannelTap: _onChannelTap,
+                  ),
+                  const SizedBox(height: AppDimens.spacingXl),
+                  AppSectionTitle(title: l10n.faqTitle),
+                  FaqCategoriesChips(
+                    selectedCategory: state.selectedCategory,
+                    onSelectCategory: notifier.selectCategory,
+                  ),
+                  const SizedBox(height: AppDimens.spacingMd),
+                  FaqListSection(faqs: state.faqs, onResetSearch: _resetSearch),
+                  const SizedBox(height: AppDimens.spacingLg + 4),
+                  StillNeedHelpCard(
+                    onSubmitTicket: _openTicketBottomSheet,
+                    onOpenMyTickets: tickets.isNotEmpty ? _openMyTickets : null,
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

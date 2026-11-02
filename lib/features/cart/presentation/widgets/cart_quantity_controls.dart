@@ -85,8 +85,9 @@ class CartQuantityControls extends ConsumerWidget {
             selectedSize: selectedSize,
           ),
         ),
-        tooltip:
-            item.quantity > 1 ? l10n.decreaseQuantity : l10n.removeFromCart,
+        tooltip: item.quantity > 1
+            ? l10n.decreaseQuantity
+            : l10n.removeFromCart,
         splashRadius: 20.0,
         padding: const EdgeInsets.all(4.0),
         constraints: BoxConstraints(
@@ -118,10 +119,14 @@ class CartQuantityControls extends ConsumerWidget {
       child: IconButton(
         icon: Icon(
           Icons.add_circle_outline,
-          color: canIncrease ? AppColors.primary : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+          color: canIncrease
+              ? AppColors.primary
+              : theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
           size: iconSize,
         ),
-        onPressed: canIncrease ? () => cartNotifier.increaseQuantity(item) : null,
+        onPressed: canIncrease
+            ? () => cartNotifier.increaseQuantity(item)
+            : null,
         tooltip: l10n.increaseQuantity,
         splashRadius: 20.0,
         padding: const EdgeInsets.all(4.0),
@@ -135,28 +140,19 @@ class CartQuantityControls extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .4),
-        borderRadius: borderRadius ??
-            (axis == Axis.horizontal
-                ? AppRadius.allMd
-                : AppRadius.allSm),
+        borderRadius:
+            borderRadius ??
+            (axis == Axis.horizontal ? AppRadius.allMd : AppRadius.allSm),
         border: Border.all(color: AppColors.primary.withValues(alpha: .2)),
       ),
       child: axis == Axis.vertical
           ? Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                increaseButton,
-                quantityBadge,
-                decreaseButton,
-              ],
+              children: [increaseButton, quantityBadge, decreaseButton],
             )
           : Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                decreaseButton,
-                quantityBadge,
-                increaseButton,
-              ],
+              children: [decreaseButton, quantityBadge, increaseButton],
             ),
     );
   }

@@ -20,7 +20,9 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
   ]) : _localDataSource = localDataSource ?? ProductDetailsLocalDataSource();
 
   @override
-  Future<Either<Failure, ProductEntity>> getProductDetails(String productId) async {
+  Future<Either<Failure, ProductEntity>> getProductDetails(
+    String productId,
+  ) async {
     try {
       final model = await _remoteDataSource.getProductDetails(productId);
       await _localDataSource.cacheProduct(model);
@@ -108,7 +110,9 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
   }
 
   @override
-  Future<Either<Failure, ReviewEntity?>> getUserProductReview(String productId) async {
+  Future<Either<Failure, ReviewEntity?>> getUserProductReview(
+    String productId,
+  ) async {
     try {
       final model = await _remoteDataSource.getUserProductReview(productId);
       return Right(model?.toDomainEntity());
@@ -211,7 +215,8 @@ class ProductDetailsRepositoryImpl implements ProductDetailsRepository {
       return const NetworkFailure();
     }
     return ServerFailure(
-      message: e.response?.data?['message']?.toString() ??
+      message:
+          e.response?.data?['message']?.toString() ??
           e.message ??
           'حدث خطأ في الاتصال بالخادم',
       statusCode: e.response?.statusCode,

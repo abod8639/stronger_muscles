@@ -141,23 +141,20 @@ class OrdersController extends _$OrdersController {
     final result = await cancelUseCase(id);
     _isMutating = false;
 
-    result.fold(
-      (_) {},
-      (_) {
-        // Optimistically update status to cancelled
-        final current = state.valueOrNull;
-        if (current != null) {
-          state = AsyncData(
-            current.map((order) {
-              if (order.id == id) {
-                return order.copyWith(status: 'cancelled');
-              }
-              return order;
-            }).toList(),
-          );
-        }
-      },
-    );
+    result.fold((_) {}, (_) {
+      // Optimistically update status to cancelled
+      final current = state.valueOrNull;
+      if (current != null) {
+        state = AsyncData(
+          current.map((order) {
+            if (order.id == id) {
+              return order.copyWith(status: 'cancelled');
+            }
+            return order;
+          }).toList(),
+        );
+      }
+    });
 
     return result;
   }
@@ -167,7 +164,9 @@ class OrdersController extends _$OrdersController {
     Map<String, dynamic> payload,
   ) async {
     if (_isMutating) {
-      return left(const ValidationFailure(message: 'Order submission in progress'));
+      return left(
+        const ValidationFailure(message: 'Order submission in progress'),
+      );
     }
 
     _isMutating = true;
@@ -175,10 +174,7 @@ class OrdersController extends _$OrdersController {
     final result = await createUseCase(payload);
     _isMutating = false;
 
-    result.fold(
-      (_) {},
-      (_) => refreshOrders(),
-    );
+    result.fold((_) {}, (_) => refreshOrders());
 
     return result;
   }

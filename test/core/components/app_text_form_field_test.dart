@@ -22,7 +22,10 @@ void main() {
       expect(find.text('Email Address'), findsOneWidget);
       expect(find.byIcon(Icons.email), findsOneWidget);
 
-      await tester.enterText(find.byType(TextFormField), 'user@strongermuscles.com');
+      await tester.enterText(
+        find.byType(TextFormField),
+        'user@strongermuscles.com',
+      );
       await tester.pump();
 
       expect(controller.text, 'user@strongermuscles.com');
@@ -45,11 +48,15 @@ void main() {
         ),
       );
 
-      final editableText = tester.widget<EditableText>(find.byType(EditableText));
+      final editableText = tester.widget<EditableText>(
+        find.byType(EditableText),
+      );
       expect(editableText.obscureText, isTrue);
     });
 
-    testWidgets('displays validation error message when invalid', (tester) async {
+    testWidgets('displays validation error message when invalid', (
+      tester,
+    ) async {
       final formKey = GlobalKey<FormState>();
       final controller = TextEditingController();
 
@@ -84,14 +91,18 @@ void main() {
     testWidgets('password visibility toggle reveals text', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(body: AppTextFormField(label: 'Password', isPassword: true)),
+          home: Scaffold(
+            body: AppTextFormField(label: 'Password', isPassword: true),
+          ),
         ),
       );
 
       await tester.tap(find.byIcon(Icons.visibility_off_outlined));
       await tester.pump();
 
-      final editableText = tester.widget<EditableText>(find.byType(EditableText));
+      final editableText = tester.widget<EditableText>(
+        find.byType(EditableText),
+      );
       expect(editableText.obscureText, isFalse);
     });
 

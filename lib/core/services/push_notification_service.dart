@@ -18,7 +18,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-final pushNotificationServiceProvider = Provider<PushNotificationService>((ref) {
+final pushNotificationServiceProvider = Provider<PushNotificationService>((
+  ref,
+) {
   final apiService = ref.read(apiServiceProvider);
   return PushNotificationService(apiService);
 });
@@ -40,15 +42,18 @@ class PushNotificationService {
     this._apiService, {
     FirebaseMessaging? messaging,
     FlutterLocalNotificationsPlugin? localNotifications,
-  })  : _messagingInstance = messaging,
-        _localNotificationsInstance = localNotifications;
+  }) : _messagingInstance = messaging,
+       _localNotificationsInstance = localNotifications;
 
-  FirebaseMessaging get _messaging => _messagingInstance ?? FirebaseMessaging.instance;
+  FirebaseMessaging get _messaging =>
+      _messagingInstance ?? FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin get _localNotifications =>
       _localNotificationsInstance ?? FlutterLocalNotificationsPlugin();
 
   /// Initialize Firebase Messaging, permissions, local notifications channel, and listeners.
-  Future<void> initialize({void Function(RemoteMessage)? onForegroundMessage}) async {
+  Future<void> initialize({
+    void Function(RemoteMessage)? onForegroundMessage,
+  }) async {
     try {
       // 1. Request system notification permission (Android 13+ & iOS)
       await _messaging.requestPermission(
@@ -62,7 +67,9 @@ class PushNotificationService {
       );
 
       // 2. Setup local notification channel for heads-up foreground notifications
-      const androidInitSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidInitSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
       const darwinInitSettings = DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,
@@ -76,7 +83,9 @@ class PushNotificationService {
       await _localNotifications.initialize(settings: initSettings);
 
       await _localNotifications
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
           ?.createNotificationChannel(_channel);
 
       // 3. Synchronize device token with backend if user is already logged in

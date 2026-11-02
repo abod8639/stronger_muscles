@@ -13,9 +13,9 @@ import 'support_chat_controller.dart';
 
 final supportChatRemoteDataSourceProvider =
     Provider<SupportChatRemoteDataSource>((ref) {
-  final apiService = ref.watch(apiServiceProvider);
-  return SupportChatRemoteDataSourceImpl(apiService);
-});
+      final apiService = ref.watch(apiServiceProvider);
+      return SupportChatRemoteDataSourceImpl(apiService);
+    });
 
 final supportChatRepositoryProvider = Provider<SupportChatRepository>((ref) {
   final remoteDataSource = ref.watch(supportChatRemoteDataSourceProvider);
@@ -26,15 +26,15 @@ final supportChatRepositoryProvider = Provider<SupportChatRepository>((ref) {
 
 final getTicketChatDetailsUseCaseProvider =
     Provider<GetTicketChatDetailsUseCase>((ref) {
-  final repository = ref.watch(supportChatRepositoryProvider);
-  return GetTicketChatDetailsUseCase(repository);
-});
+      final repository = ref.watch(supportChatRepositoryProvider);
+      return GetTicketChatDetailsUseCase(repository);
+    });
 
 final sendTicketChatMessageUseCaseProvider =
     Provider<SendTicketChatMessageUseCase>((ref) {
-  final repository = ref.watch(supportChatRepositoryProvider);
-  return SendTicketChatMessageUseCase(repository);
-});
+      final repository = ref.watch(supportChatRepositoryProvider);
+      return SendTicketChatMessageUseCase(repository);
+    });
 
 final closeTicketChatUseCaseProvider = Provider<CloseTicketChatUseCase>((ref) {
   final repository = ref.watch(supportChatRepositoryProvider);
@@ -45,18 +45,20 @@ final closeTicketChatUseCaseProvider = Provider<CloseTicketChatUseCase>((ref) {
 
 final supportChatControllerProvider = StateNotifierProvider.autoDispose
     .family<SupportChatNotifier, SupportChatState, String>((ref, ticketId) {
-  final getTicketDetailsUseCase =
-      ref.watch(getTicketChatDetailsUseCaseProvider);
-  final sendMessageUseCase = ref.watch(sendTicketChatMessageUseCaseProvider);
-  final closeTicketUseCase = ref.watch(closeTicketChatUseCaseProvider);
-  final webSocketService = ref.watch(webSocketServiceProvider);
+      final getTicketDetailsUseCase = ref.watch(
+        getTicketChatDetailsUseCaseProvider,
+      );
+      final sendMessageUseCase = ref.watch(
+        sendTicketChatMessageUseCaseProvider,
+      );
+      final closeTicketUseCase = ref.watch(closeTicketChatUseCaseProvider);
+      final webSocketService = ref.watch(webSocketServiceProvider);
 
-  return SupportChatNotifier(
-    ticketId: ticketId,
-    getTicketDetailsUseCase: getTicketDetailsUseCase,
-    sendMessageUseCase: sendMessageUseCase,
-    closeTicketUseCase: closeTicketUseCase,
-    webSocketService: webSocketService,
-  );
-});
-
+      return SupportChatNotifier(
+        ticketId: ticketId,
+        getTicketDetailsUseCase: getTicketDetailsUseCase,
+        sendMessageUseCase: sendMessageUseCase,
+        closeTicketUseCase: closeTicketUseCase,
+        webSocketService: webSocketService,
+      );
+    });

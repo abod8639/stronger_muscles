@@ -23,65 +23,66 @@ class FakeNotificationController extends NotificationController {
 }
 
 void main() {
-  testWidgets('NotificationItemCard navigates to helpSupport with ticketId on tap', (tester) async {
-    final fakeController = FakeNotificationController();
-    String? navigatedRoute;
-    Object? navigatedExtra;
+  testWidgets(
+    'NotificationItemCard navigates to helpSupport with ticketId on tap',
+    (tester) async {
+      final fakeController = FakeNotificationController();
+      String? navigatedRoute;
+      Object? navigatedExtra;
 
-    final router = GoRouter(
-      initialLocation: '/notifications',
-      routes: [
-        GoRoute(
-          path: '/notifications',
-          builder: (context, state) => Scaffold(
-            body: NotificationItemCard(
-              notification: NotificationEntity(
-                id: '29',
-                title: 'رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)',
-                body: 'zz',
-                type: 'support',
-                data: const {
-                  'ticket_id': 6,
-                  'ticket_number': 'SM-VKBVQ9LO',
-                },
-                isRead: false,
+      final router = GoRouter(
+        initialLocation: '/notifications',
+        routes: [
+          GoRoute(
+            path: '/notifications',
+            builder: (context, state) => Scaffold(
+              body: NotificationItemCard(
+                notification: NotificationEntity(
+                  id: '29',
+                  title: 'رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)',
+                  body: 'zz',
+                  type: 'support',
+                  data: const {'ticket_id': 6, 'ticket_number': 'SM-VKBVQ9LO'},
+                  isRead: false,
+                ),
               ),
             ),
           ),
-        ),
-        GoRoute(
-          path: AppRoutes.supportChat,
-          builder: (context, state) {
-            navigatedRoute = state.matchedLocation;
-            navigatedExtra = state.extra;
-            return const Scaffold(body: Text('SupportChatScreen'));
-          },
-        ),
-      ],
-    );
-
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          notificationControllerProvider.overrideWith(() => fakeController),
+          GoRoute(
+            path: AppRoutes.supportChat,
+            builder: (context, state) {
+              navigatedRoute = state.matchedLocation;
+              navigatedExtra = state.extra;
+              return const Scaffold(body: Text('SupportChatScreen'));
+            },
+          ),
         ],
-        child: MaterialApp.router(
-          routerConfig: router,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            notificationControllerProvider.overrideWith(() => fakeController),
+          ],
+          child: MaterialApp.router(routerConfig: router),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    expect(find.text('رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)'), findsOneWidget);
-    expect(find.byIcon(Icons.support_agent_outlined), findsOneWidget);
+      expect(
+        find.text('رد جديد على تذكرة الدعم (#SM-VKBVQ9LO)'),
+        findsOneWidget,
+      );
+      expect(find.byIcon(Icons.support_agent_outlined), findsOneWidget);
 
-    await tester.tap(find.byType(NotificationItemCard));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byType(NotificationItemCard));
+      await tester.pumpAndSettle();
 
-    expect(fakeController.markedReadId, '29');
-    expect(navigatedRoute, AppRoutes.supportChat);
-    expect(navigatedExtra, isA<Map>());
-    final extraMap = navigatedExtra as Map;
-    expect(extraMap['ticket_id'], '6');
-  });
+      expect(fakeController.markedReadId, '29');
+      expect(navigatedRoute, AppRoutes.supportChat);
+      expect(navigatedExtra, isA<Map>());
+      final extraMap = navigatedExtra as Map;
+      expect(extraMap['ticket_id'], '6');
+    },
+  );
 }

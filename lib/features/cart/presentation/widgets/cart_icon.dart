@@ -9,11 +9,7 @@ class CartIcon extends ConsumerWidget {
   final Color? color;
   final double? size;
 
-  const CartIcon({
-    super.key,
-    this.color,
-    this.size,
-  });
+  const CartIcon({super.key, this.color, this.size});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,11 +29,7 @@ class CartIcon extends ConsumerWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      child: Icon(
-        Icons.shopping_cart,
-        color: color,
-        size: size,
-      ),
+      child: Icon(Icons.shopping_cart, color: color, size: size),
     );
   }
 }

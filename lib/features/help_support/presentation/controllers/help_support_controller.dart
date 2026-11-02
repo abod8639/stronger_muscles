@@ -62,7 +62,8 @@ class HelpSupportState {
 
   /// Safely extracts any active failure across the state slices
   Failure? get failure {
-    final err = submissionState.error ??
+    final err =
+        submissionState.error ??
         selectedTicketState.error ??
         ticketsState.error ??
         messageState.error ??
@@ -174,18 +175,18 @@ class HelpSupportState {
 
   @override
   int get hashCode => Object.hash(
-        faqsState,
-        channelsState,
-        ticketsState,
-        selectedTicketState,
-        submissionState,
-        messageState,
-        closeTicketState,
-        selectedCategory,
-        searchQuery,
-        lastSubmittedTicketId,
-        lastSubmittedTicketNumber,
-      );
+    faqsState,
+    channelsState,
+    ticketsState,
+    selectedTicketState,
+    submissionState,
+    messageState,
+    closeTicketState,
+    selectedCategory,
+    searchQuery,
+    lastSubmittedTicketId,
+    lastSubmittedTicketNumber,
+  );
 }
 
 class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
@@ -210,15 +211,15 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     required SendTicketMessageUseCase sendTicketMessageUseCase,
     required CloseTicketUseCase closeTicketUseCase,
     WebSocketService? webSocketService,
-  })  : _getFaqsUseCase = getFaqsUseCase,
-        _getChannelsUseCase = getChannelsUseCase,
-        _submitTicketUseCase = submitTicketUseCase,
-        _getUserTicketsUseCase = getUserTicketsUseCase,
-        _getTicketDetailsUseCase = getTicketDetailsUseCase,
-        _sendTicketMessageUseCase = sendTicketMessageUseCase,
-        _closeTicketUseCase = closeTicketUseCase,
-        _webSocketService = webSocketService ?? WebSocketService(),
-        super(const HelpSupportState()) {
+  }) : _getFaqsUseCase = getFaqsUseCase,
+       _getChannelsUseCase = getChannelsUseCase,
+       _submitTicketUseCase = submitTicketUseCase,
+       _getUserTicketsUseCase = getUserTicketsUseCase,
+       _getTicketDetailsUseCase = getTicketDetailsUseCase,
+       _sendTicketMessageUseCase = sendTicketMessageUseCase,
+       _closeTicketUseCase = closeTicketUseCase,
+       _webSocketService = webSocketService ?? WebSocketService(),
+       super(const HelpSupportState()) {
     init();
   }
 
@@ -235,7 +236,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     faqsResult.fold(
       (failure) {
         state = state.copyWith(
-          faqsState: AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          faqsState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
       },
       (faqs) {
@@ -246,8 +250,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     channelsResult.fold(
       (failure) {
         state = state.copyWith(
-          channelsState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          channelsState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
       },
       (channels) {
@@ -268,8 +274,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     result.fold(
       (failure) {
         state = state.copyWith(
-          ticketsState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          ticketsState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
       },
       (tickets) {
@@ -349,8 +357,9 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       _activeWsSubscriptions.add(subAll);
 
       // Also listen on global support.tickets for redundancy
-      final globalChannel =
-          _webSocketService.subscribeToChannel('support.tickets');
+      final globalChannel = _webSocketService.subscribeToChannel(
+        'support.tickets',
+      );
       final subGlobal = globalChannel.bindToAll().listen(
         (event) {
           final eventName = event.name;
@@ -366,7 +375,9 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       );
       _activeWsSubscriptions.add(subGlobal);
     } catch (e, stack) {
-      debugPrint('[HelpSupportController] Realtime subscription error: $e\n$stack');
+      debugPrint(
+        '[HelpSupportController] Realtime subscription error: $e\n$stack',
+      );
     }
   }
 
@@ -390,9 +401,9 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
       final msgTicketId = rawMsg['ticket_id'] is int
           ? rawMsg['ticket_id'] as int
           : int.tryParse(rawMsg['ticket_id']?.toString() ?? '') ??
-              (map['ticket_id'] is int
-                  ? map['ticket_id'] as int
-                  : int.tryParse(map['ticket_id']?.toString() ?? '') ?? 0);
+                (map['ticket_id'] is int
+                    ? map['ticket_id'] as int
+                    : int.tryParse(map['ticket_id']?.toString() ?? '') ?? 0);
 
       final cleanTicketId = ticketId.trim();
       if (msgTicketId != 0 && msgTicketId.toString() != cleanTicketId) {
@@ -411,9 +422,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
         message: (rawMsg['message'] ?? '').toString(),
         createdAt: rawMsg['created_at'] != null
             ? DateTime.tryParse(rawMsg['created_at'].toString()) ??
-                DateTime.now()
+                  DateTime.now()
             : DateTime.now(),
-        isRead: rawMsg['is_read'] == true ||
+        isRead:
+            rawMsg['is_read'] == true ||
             rawMsg['is_read'] == 1 ||
             rawMsg['is_read'] == '1',
       );
@@ -424,16 +436,14 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
               newMsg.ticketId.toString() == cleanTicketId)) {
         final exists = current.messages.any((m) => m.id == newMsg.id);
         if (!exists) {
-          final updatedMsgs =
-              List<SupportMessageEntity>.from(current.messages)..add(newMsg);
+          final updatedMsgs = List<SupportMessageEntity>.from(current.messages)
+            ..add(newMsg);
           final updatedTicket = current.copyWith(
             messages: updatedMsgs,
             messagesCount: current.messagesCount + 1,
             lastReplyAt: newMsg.createdAt,
           );
-          state = state.copyWith(
-            selectedTicketState: AsyncData(updatedTicket),
-          );
+          state = state.copyWith(selectedTicketState: AsyncData(updatedTicket));
           debugPrint(
             '[HelpSupportController] Realtime message delivered: #${newMsg.id} (${newMsg.senderType})',
           );
@@ -442,7 +452,9 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
         loadTicketDetails(cleanTicketId, isSilentRefresh: true);
       }
     } catch (e, stack) {
-      debugPrint('[HelpSupportController] Error handling message event: $e\n$stack');
+      debugPrint(
+        '[HelpSupportController] Error handling message event: $e\n$stack',
+      );
     }
   }
 
@@ -479,13 +491,13 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
               ? TicketPriority.fromString(newPriority)
               : current.priority,
         );
-        state = state.copyWith(
-          selectedTicketState: AsyncData(updatedTicket),
-        );
+        state = state.copyWith(selectedTicketState: AsyncData(updatedTicket));
       }
       loadUserTickets();
     } catch (e, stack) {
-      debugPrint('[HelpSupportController] Error handling ticket update event: $e\n$stack');
+      debugPrint(
+        '[HelpSupportController] Error handling ticket update event: $e\n$stack',
+      );
     }
   }
 
@@ -542,8 +554,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     return result.fold(
       (failure) {
         state = state.copyWith(
-          messageState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          messageState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
         return false;
       },
@@ -566,8 +580,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     return result.fold(
       (failure) {
         state = state.copyWith(
-          closeTicketState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          closeTicketState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
         return false;
       },
@@ -598,8 +614,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     result.fold(
       (failure) {
         state = state.copyWith(
-          faqsState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          faqsState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
       },
       (faqs) {
@@ -620,8 +638,10 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
     result.fold(
       (failure) {
         state = state.copyWith(
-          faqsState:
-              AsyncError(failure, failure.stackTrace ?? StackTrace.current),
+          faqsState: AsyncError(
+            failure,
+            failure.stackTrace ?? StackTrace.current,
+          ),
         );
       },
       (faqs) {
@@ -720,25 +740,25 @@ class HelpSupportNotifier extends StateNotifier<HelpSupportState> {
 
 final helpSupportControllerProvider =
     StateNotifierProvider<HelpSupportNotifier, HelpSupportState>((ref) {
-  final getFaqs = ref.watch(getFaqsUseCaseProvider);
-  final getChannels = ref.watch(getSupportChannelsUseCaseProvider);
-  final submitTicket = ref.watch(submitTicketUseCaseProvider);
-  final getUserTickets = ref.watch(getUserTicketsUseCaseProvider);
-  final getTicketDetails = ref.watch(getTicketDetailsUseCaseProvider);
-  final sendTicketMessage = ref.watch(sendTicketMessageUseCaseProvider);
-  final closeTicket = ref.watch(closeTicketUseCaseProvider);
-  final wsService = ref.watch(webSocketServiceProvider);
+      final getFaqs = ref.watch(getFaqsUseCaseProvider);
+      final getChannels = ref.watch(getSupportChannelsUseCaseProvider);
+      final submitTicket = ref.watch(submitTicketUseCaseProvider);
+      final getUserTickets = ref.watch(getUserTicketsUseCaseProvider);
+      final getTicketDetails = ref.watch(getTicketDetailsUseCaseProvider);
+      final sendTicketMessage = ref.watch(sendTicketMessageUseCaseProvider);
+      final closeTicket = ref.watch(closeTicketUseCaseProvider);
+      final wsService = ref.watch(webSocketServiceProvider);
 
-  final notifier = HelpSupportNotifier(
-    getFaqsUseCase: getFaqs,
-    getChannelsUseCase: getChannels,
-    submitTicketUseCase: submitTicket,
-    getUserTicketsUseCase: getUserTickets,
-    getTicketDetailsUseCase: getTicketDetails,
-    sendTicketMessageUseCase: sendTicketMessage,
-    closeTicketUseCase: closeTicket,
-    webSocketService: wsService,
-  );
+      final notifier = HelpSupportNotifier(
+        getFaqsUseCase: getFaqs,
+        getChannelsUseCase: getChannels,
+        submitTicketUseCase: submitTicket,
+        getUserTicketsUseCase: getUserTickets,
+        getTicketDetailsUseCase: getTicketDetails,
+        sendTicketMessageUseCase: sendTicketMessage,
+        closeTicketUseCase: closeTicket,
+        webSocketService: wsService,
+      );
 
-  return notifier;
-});
+      return notifier;
+    });

@@ -40,9 +40,8 @@ class MockPaymentRepository implements PaymentRepository {
   }
 
   @override
-  Future<Either<Failure, List<PaymentMethodEntity>>> getAvailablePaymentMethods({
-    String lang = 'ar',
-  }) async {
+  Future<Either<Failure, List<PaymentMethodEntity>>>
+  getAvailablePaymentMethods({String lang = 'ar'}) async {
     if (shouldThrow) {
       return const Left(Failure(message: 'Failed to load payment methods'));
     }
@@ -74,27 +73,40 @@ void main() {
       getPaymentMethodsUseCase = GetPaymentMethodsUseCase(mockRepository);
     });
 
-    test('InitiatePaymentUseCase returns PaymentResultEntity on success', () async {
-      final either = await initiatePaymentUseCase(orderId: 101, gateway: 'stripe');
+    test(
+      'InitiatePaymentUseCase returns PaymentResultEntity on success',
+      () async {
+        final either = await initiatePaymentUseCase(
+          orderId: 101,
+          gateway: 'stripe',
+        );
 
-      expect(either.isRight(), true);
-      final result = either.getOrElse((_) => throw Exception('Expected Right'));
-      expect(result.success, true);
-      expect(result.paymentUrl, 'https://paymob.com/iframe/123');
-      expect(result.hasPaymentUrl, true);
-      expect(result.transactionId, 'txn_123');
-      expect(result.reference, 'ref_123');
-    });
+        expect(either.isRight(), true);
+        final result = either.getOrElse(
+          (_) => throw Exception('Expected Right'),
+        );
+        expect(result.success, true);
+        expect(result.paymentUrl, 'https://paymob.com/iframe/123');
+        expect(result.hasPaymentUrl, true);
+        expect(result.transactionId, 'txn_123');
+        expect(result.reference, 'ref_123');
+      },
+    );
 
-    test('GetPaymentMethodsUseCase returns list of PaymentMethodEntity', () async {
-      final either = await getPaymentMethodsUseCase(lang: 'ar');
+    test(
+      'GetPaymentMethodsUseCase returns list of PaymentMethodEntity',
+      () async {
+        final either = await getPaymentMethodsUseCase(lang: 'ar');
 
-      expect(either.isRight(), true);
-      final methods = either.getOrElse((_) => throw Exception('Expected Right'));
-      expect(methods.length, 2);
-      expect(methods.first.id, 'cash');
-      expect(methods.first.title, 'الدفع عند الاستلام');
-    });
+        expect(either.isRight(), true);
+        final methods = either.getOrElse(
+          (_) => throw Exception('Expected Right'),
+        );
+        expect(methods.length, 2);
+        expect(methods.first.id, 'cash');
+        expect(methods.first.title, 'الدفع عند الاستلام');
+      },
+    );
 
     test('PaymentResultEntity equality and copyWith work properly', () {
       const entity1 = PaymentResultEntity(
@@ -134,67 +146,79 @@ void main() {
       expect(updated.id, 'card');
     });
 
-    test('PaymentMethodModel fromJson and toJson maintain data consistency', () {
-      final json = {
-        'id': 'card',
-        'title': 'بطاقة بنكية',
-        'subtitle': 'الدفع بالفيزا',
-        'gateway': 'paymob',
-        'is_enabled': true,
-      };
+    test(
+      'PaymentMethodModel fromJson and toJson maintain data consistency',
+      () {
+        final json = {
+          'id': 'card',
+          'title': 'بطاقة بنكية',
+          'subtitle': 'الدفع بالفيزا',
+          'gateway': 'paymob',
+          'is_enabled': true,
+        };
 
-      final model = PaymentMethodModel.fromJson(json);
-      expect(model.id, 'card');
-      expect(model.title, 'بطاقة بنكية');
-      expect(model.subtitle, 'الدفع بالفيزا');
-      expect(model.icon, Icons.credit_card);
-      expect(model.isEnabled, true);
+        final model = PaymentMethodModel.fromJson(json);
+        expect(model.id, 'card');
+        expect(model.title, 'بطاقة بنكية');
+        expect(model.subtitle, 'الدفع بالفيزا');
+        expect(model.icon, Icons.credit_card);
+        expect(model.isEnabled, true);
 
-      final serialized = model.toJson();
-      expect(serialized['id'], 'card');
-      expect(serialized['title'], 'بطاقة بنكية');
-      expect(serialized['is_enabled'], true);
-    });
+        final serialized = model.toJson();
+        expect(serialized['id'], 'card');
+        expect(serialized['title'], 'بطاقة بنكية');
+        expect(serialized['is_enabled'], true);
+      },
+    );
 
-    test('PaymentInitResult model maps to and from PaymentResultEntity via mappers', () {
-      final model = PaymentInitResult(
-        success: true,
-        paymentUrl: 'https://example.com/pay',
-        transactionId: 'tx_55',
-        reference: 'ref_55',
-        clientSecret: 'secret',
-      );
+    test(
+      'PaymentInitResult model maps to and from PaymentResultEntity via mappers',
+      () {
+        final model = PaymentInitResult(
+          success: true,
+          paymentUrl: 'https://example.com/pay',
+          transactionId: 'tx_55',
+          reference: 'ref_55',
+          clientSecret: 'secret',
+        );
 
-      final entity = model.toEntity();
-      expect(entity.success, true);
-      expect(entity.paymentUrl, 'https://example.com/pay');
-      expect(entity.transactionId, 'tx_55');
-      expect(entity.clientSecret, 'secret');
+        final entity = model.toEntity();
+        expect(entity.success, true);
+        expect(entity.paymentUrl, 'https://example.com/pay');
+        expect(entity.transactionId, 'tx_55');
+        expect(entity.clientSecret, 'secret');
 
-      final reconstructedModel = entity.toModel();
-      expect(reconstructedModel.success, true);
-      expect(reconstructedModel.paymentUrl, 'https://example.com/pay');
-      expect(reconstructedModel.transactionId, 'tx_55');
-      expect(reconstructedModel.clientSecret, 'secret');
-    });
+        final reconstructedModel = entity.toModel();
+        expect(reconstructedModel.success, true);
+        expect(reconstructedModel.paymentUrl, 'https://example.com/pay');
+        expect(reconstructedModel.transactionId, 'tx_55');
+        expect(reconstructedModel.clientSecret, 'secret');
+      },
+    );
 
-    test('PaymentController manages state transitions and value access', () async {
-      final container = ProviderContainer(
-        overrides: [
-          paymentRepositoryProvider.overrideWithValue(mockRepository),
-        ],
-      );
-      addTearDown(container.dispose);
+    test(
+      'PaymentController manages state transitions and value access',
+      () async {
+        final container = ProviderContainer(
+          overrides: [
+            paymentRepositoryProvider.overrideWithValue(mockRepository),
+          ],
+        );
+        addTearDown(container.dispose);
 
-      final controller = container.read(paymentControllerProvider.notifier);
-      expect(container.read(paymentControllerProvider).value, isNull);
+        final controller = container.read(paymentControllerProvider.notifier);
+        expect(container.read(paymentControllerProvider).value, isNull);
 
-      final result = await controller.initiatePayment(orderId: 50);
-      expect(result?.success, isTrue);
-      expect(container.read(paymentControllerProvider).value?.transactionId, 'txn_123');
+        final result = await controller.initiatePayment(orderId: 50);
+        expect(result?.success, isTrue);
+        expect(
+          container.read(paymentControllerProvider).value?.transactionId,
+          'txn_123',
+        );
 
-      controller.reset();
-      expect(container.read(paymentControllerProvider).value, isNull);
-    });
+        controller.reset();
+        expect(container.read(paymentControllerProvider).value, isNull);
+      },
+    );
   });
 }

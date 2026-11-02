@@ -10,7 +10,10 @@ class FakeReviewRemoteDataSource implements ReviewRemoteDataSource {
   ReviewModel? userReview;
 
   @override
-  Future<List<ReviewModel>> getProductReviews(String productId, {int page = 1}) async {
+  Future<List<ReviewModel>> getProductReviews(
+    String productId, {
+    int page = 1,
+  }) async {
     return reviews.where((r) => r.productId == productId).toList();
   }
 

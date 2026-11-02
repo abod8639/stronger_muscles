@@ -21,7 +21,8 @@ class CartItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final product = item.product;
-    final cacheSize = (_imageSize * MediaQuery.devicePixelRatioOf(context)).round();
+    final cacheSize = (_imageSize * MediaQuery.devicePixelRatioOf(context))
+        .round();
 
     return AppCard(
       padding: const EdgeInsets.all(AppDimens.spacingMd),
@@ -40,8 +41,11 @@ class CartItemCard extends StatelessWidget {
           Hero(
             tag: 'cart_product_${item.id}',
             child: AppNetworkImage(
-              imageUrl: item.primaryImageUrl ??
-                  (product.imageUrls.isNotEmpty ? product.imageUrls.first.thumbnail : null),
+              imageUrl:
+                  item.primaryImageUrl ??
+                  (product.imageUrls.isNotEmpty
+                      ? product.imageUrls.first.thumbnail
+                      : null),
               width: _imageSize,
               height: _imageSize,
               memCacheWidth: cacheSize,
@@ -64,8 +68,9 @@ class CartItemCard extends StatelessWidget {
                         children: [
                           AppPriceText(
                             price: product.baseEffectivePrice,
-                            originalPrice:
-                                product.baseHasDiscount ? product.basePrice : null,
+                            originalPrice: product.baseHasDiscount
+                                ? product.basePrice
+                                : null,
                             direction: Axis.vertical,
                           ),
                           if (item.quantity > 1)

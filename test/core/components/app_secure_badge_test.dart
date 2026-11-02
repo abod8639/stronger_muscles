@@ -21,13 +21,11 @@ void main() {
       expect(find.byIcon(Icons.verified_user_outlined), findsOneWidget);
     });
 
-    testWidgets('renders default text when title and subtitle are omitted', (tester) async {
+    testWidgets('renders default text when title and subtitle are omitted', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: AppSecureBadge(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: AppSecureBadge())),
       );
 
       expect(find.text('100% Secure & Encrypted Payments'), findsOneWidget);

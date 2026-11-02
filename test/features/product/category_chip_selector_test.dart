@@ -19,7 +19,9 @@ void main() {
       ),
     ];
 
-    testWidgets('renders all category chips and handles selection', (tester) async {
+    testWidgets('renders all category chips and handles selection', (
+      tester,
+    ) async {
       String? selectedId;
 
       await tester.pumpWidget(

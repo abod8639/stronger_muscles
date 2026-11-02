@@ -62,71 +62,76 @@ void main() {
       ),
     ];
 
-    test('getPromos fetches from remote data source and caches locally on success', () async {
-      final fakeRemote = FakePromoRemoteDataSource(modelsToReturn: sampleModels);
-      final fakeLocal = FakePromoLocalDataSource();
-      final repository = PromoRepositoryImpl(fakeRemote, fakeLocal);
+    test(
+      'getPromos fetches from remote data source and caches locally on success',
+      () async {
+        final fakeRemote = FakePromoRemoteDataSource(
+          modelsToReturn: sampleModels,
+        );
+        final fakeLocal = FakePromoLocalDataSource();
+        final repository = PromoRepositoryImpl(fakeRemote, fakeLocal);
 
-      final result = await repository.getPromos();
+        final result = await repository.getPromos();
 
-      expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected Right but got Left: $failure'),
-        (entities) {
-          expect(entities.length, 2);
-          expect(entities[0].id, 1);
-          expect(entities[0].title, 'Offer 1');
-          expect(entities[0].subtitle, 'Discount');
-          expect(entities[0].imageUrl, 'https://example.com/1.jpg');
-          expect(entities[0].buttonText, 'Buy');
-          expect(entities[0].hexBackgroundColor, '#FF0000');
-          expect(entities[0].targetType, 'product');
-          expect(entities[0].targetId, 'prod_1');
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected Right but got Left: $failure'),
+          (entities) {
+            expect(entities.length, 2);
+            expect(entities[0].id, 1);
+            expect(entities[0].title, 'Offer 1');
+            expect(entities[0].subtitle, 'Discount');
+            expect(entities[0].imageUrl, 'https://example.com/1.jpg');
+            expect(entities[0].buttonText, 'Buy');
+            expect(entities[0].hexBackgroundColor, '#FF0000');
+            expect(entities[0].targetType, 'product');
+            expect(entities[0].targetId, 'prod_1');
 
-          expect(entities[1].id, 2);
-          expect(entities[1].title, isNull);
-          expect(entities[1].targetType, 'none');
-        },
-      );
+            expect(entities[1].id, 2);
+            expect(entities[1].title, isNull);
+            expect(entities[1].targetType, 'none');
+          },
+        );
 
-      expect(fakeLocal.cached.length, 2);
-    });
+        expect(fakeLocal.cached.length, 2);
+      },
+    );
 
     test('getPromos falls back to cached promos when remote fails', () async {
       final fakeRemote = FakePromoRemoteDataSource(
         exceptionToThrow: Exception('Server error'),
       );
-      final fakeLocal = FakePromoLocalDataSource()..cached = List.from(sampleModels);
+      final fakeLocal = FakePromoLocalDataSource()
+        ..cached = List.from(sampleModels);
       final repository = PromoRepositoryImpl(fakeRemote, fakeLocal);
 
       final result = await repository.getPromos();
 
       expect(result.isRight(), isTrue);
-      result.fold(
-        (failure) => fail('Expected Right but got Left: $failure'),
-        (entities) {
-          expect(entities.length, 2);
-          expect(entities[0].id, 1);
-        },
-      );
+      result.fold((failure) => fail('Expected Right but got Left: $failure'), (
+        entities,
+      ) {
+        expect(entities.length, 2);
+        expect(entities[0].id, 1);
+      });
     });
 
-    test('getPromos returns Failure when remote fails and no cache exists', () async {
-      final fakeRemote = FakePromoRemoteDataSource(
-        exceptionToThrow: Exception('Server error'),
-      );
-      final fakeLocal = FakePromoLocalDataSource();
-      final repository = PromoRepositoryImpl(fakeRemote, fakeLocal);
+    test(
+      'getPromos returns Failure when remote fails and no cache exists',
+      () async {
+        final fakeRemote = FakePromoRemoteDataSource(
+          exceptionToThrow: Exception('Server error'),
+        );
+        final fakeLocal = FakePromoLocalDataSource();
+        final repository = PromoRepositoryImpl(fakeRemote, fakeLocal);
 
-      final result = await repository.getPromos();
+        final result = await repository.getPromos();
 
-      expect(result.isLeft(), isTrue);
-      result.fold(
-        (failure) {
+        expect(result.isLeft(), isTrue);
+        result.fold((failure) {
           expect(failure, isA<Failure>());
-        },
-        (_) => fail('Expected Left but got Right'),
-      );
-    });
+        }, (_) => fail('Expected Left but got Right'));
+      },
+    );
   });
 }

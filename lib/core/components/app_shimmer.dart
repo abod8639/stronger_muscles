@@ -24,12 +24,16 @@ class AppShimmer extends StatefulWidget {
   State<AppShimmer> createState() => _AppShimmerState();
 }
 
-class _AppShimmerState extends State<AppShimmer> with SingleTickerProviderStateMixin {
+class _AppShimmerState extends State<AppShimmer>
+    with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1200),
   )..repeat(reverse: true);
-  late final Animation<double> _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOut,
+  );
 
   @override
   void dispose() {

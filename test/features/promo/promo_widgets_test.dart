@@ -22,17 +22,13 @@ void main() {
       targetId: 'prod_123',
     );
 
-    testWidgets('renders title, subtitle, and AppBadge button',
-        (tester) async {
+    testWidgets('renders title, subtitle, and AppBadge button', (tester) async {
       var tapped = false;
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PromoCard(
-              promo: testPromo,
-              onTap: () => tapped = true,
-            ),
+            body: PromoCard(promo: testPromo, onTap: () => tapped = true),
           ),
         ),
       );
@@ -57,10 +53,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: PromoCard(
-              promo: promoNoTarget,
-              onTap: () {},
-            ),
+            body: PromoCard(promo: promoNoTarget, onTap: () {}),
           ),
         ),
       );
@@ -68,16 +61,14 @@ void main() {
       expect(find.byType(AppBadge), findsNothing);
     });
 
-    testWidgets('uses AppRadius.allLg and AppShadows for container styling',
-        (tester) async {
+    testWidgets('uses AppRadius.allLg and AppShadows for container styling', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData.light(),
           home: Scaffold(
-            body: PromoCard(
-              promo: testPromo,
-              onTap: () {},
-            ),
+            body: PromoCard(promo: testPromo, onTap: () {}),
           ),
         ),
       );
@@ -95,18 +86,13 @@ void main() {
   });
 
   group('PromoBanner Widget Tests', () {
-    testWidgets('renders empty shrink box when promos list is empty',
-        (tester) async {
+    testWidgets('renders empty shrink box when promos list is empty', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            promosProvider.overrideWith((ref) => Future.value([])),
-          ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: PromoBanner(),
-            ),
-          ),
+          overrides: [promosProvider.overrideWith((ref) => Future.value([]))],
+          child: const MaterialApp(home: Scaffold(body: PromoBanner())),
         ),
       );
 
@@ -115,8 +101,9 @@ void main() {
       expect(find.byType(AppDotsIndicator), findsNothing);
     });
 
-    testWidgets('renders PageView and AppDotsIndicator when promos exist',
-        (tester) async {
+    testWidgets('renders PageView and AppDotsIndicator when promos exist', (
+      tester,
+    ) async {
       final samplePromos = [
         const PromoEntity(
           id: 1,
@@ -135,11 +122,7 @@ void main() {
           overrides: [
             promosProvider.overrideWith((ref) => Future.value(samplePromos)),
           ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: PromoBanner(),
-            ),
-          ),
+          child: const MaterialApp(home: Scaffold(body: PromoBanner())),
         ),
       );
 
@@ -149,19 +132,17 @@ void main() {
       expect(find.byType(PromoCard), findsWidgets);
     });
 
-    testWidgets('renders shimmer placeholder when promos are loading',
-        (tester) async {
+    testWidgets('renders shimmer placeholder when promos are loading', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
             promosProvider.overrideWith(
-                (ref) => Completer<List<PromoEntity>>().future),
-          ],
-          child: const MaterialApp(
-            home: Scaffold(
-              body: PromoBanner(),
+              (ref) => Completer<List<PromoEntity>>().future,
             ),
-          ),
+          ],
+          child: const MaterialApp(home: Scaffold(body: PromoBanner())),
         ),
       );
 
