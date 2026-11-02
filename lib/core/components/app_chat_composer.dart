@@ -45,7 +45,9 @@ class AppChatComposer extends StatelessWidget {
                 minLines: 1,
                 maxLines: maxLines,
                 textInputAction: TextInputAction.send,
-                style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   hintText: hintText,
                   hintStyle: textTheme.bodySmall?.copyWith(
