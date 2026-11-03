@@ -176,5 +176,37 @@ void main() {
         );
       },
     );
+
+    test(
+      'getHomeProducts returns fresh remote products when online and updates cache',
+      () async {
+        await homeLocalDataSource.cacheProducts([testProduct]);
+
+        const updatedProduct = ProductModel(
+          id: 'prod-1',
+          name: LocalizedString(ar: 'واي بروتين معدل', en: 'Updated Whey'),
+          brand: 'Optimum',
+          price: 99.0,
+          category: ProductCategory(
+            id: 'cat-protein',
+            name: LocalizedString(ar: 'بروتين', en: 'Protein'),
+          ),
+        );
+        fakeRemoteDataSource.mockProducts = [updatedProduct];
+
+        final result = await homeRepository.getHomeProducts(page: 1);
+
+        expect(result.isRight(), isTrue);
+        result.fold(
+          (failure) => fail('Expected updated products, got failure: $failure'),
+          (products) {
+            expect(products.length, 1);
+            expect(products.first.id, 'prod-1');
+            expect(products.first.name?.ar, 'واي بروتين معدل');
+            expect(products.first.price, 99.0);
+          },
+        );
+      },
+    );
   });
 }
