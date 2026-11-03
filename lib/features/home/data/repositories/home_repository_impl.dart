@@ -88,28 +88,6 @@ class HomeRepositoryImpl implements HomeRepository {
     int page = 1,
   }) async {
     return NetworkErrorHandler.execute<List<ProductEntity>>(() async {
-      // Offline-first: return cache immediately for page-1 to avoid loading flash
-      if (page == 1) {
-        final cached = await _localDataSource.getCachedProducts(
-          categoryId: categoryId,
-        );
-        if (cached.isNotEmpty) {
-          // Kick off a background refresh so the UI stays fresh without blocking
-          Future.microtask(() async {
-            try {
-              final fresh = await _remoteDataSource.getProducts(
-                categoryId: categoryId,
-                page: 1,
-              );
-              if (fresh.isNotEmpty) {
-                unawaited(_localDataSource.cacheProducts(fresh));
-              }
-            } catch (_) {}
-          });
-          return cached.map((p) => p.toEntity()).toList();
-        }
-      }
-
       try {
         final remoteProducts = await _remoteDataSource.getProducts(
           categoryId: categoryId,
